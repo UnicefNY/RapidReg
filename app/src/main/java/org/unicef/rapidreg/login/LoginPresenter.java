@@ -2,43 +2,39 @@ package org.unicef.rapidreg.login;
 
 import com.hannesdorfmann.mosby.mvp.MvpBasePresenter;
 
-import org.unicef.rapidreg.tasks.LoginTask;
+import org.unicef.rapidreg.model.LoginBody;
+import org.unicef.rapidreg.model.LoginResponse;
+import org.unicef.rapidreg.network.NetworkServiceGenerator;
+import org.unicef.rapidreg.network.PrimeroClient;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class LoginPresenter extends MvpBasePresenter<LoginView> {
 
-    private LoginTask loginTask;
-
-    private void cancelLoginTaskIfRunning() {
-        if (loginTask != null){
-            loginTask.cancel(true);
-        }
-    }
+    private PrimeroClient client = NetworkServiceGenerator.createService(PrimeroClient.class);
+    public static final String LOGIN_SUCCESS_MESSAGE = "Login success!";
+    public static final String LOGIN_FAILED_MESSAGE = "Login failed!";
 
     public void doLogin(){
-        cancelLoginTaskIfRunning();
 
-        loginTask = new LoginTask(new LoginTask.LoginTaskListener(){
+        Call<LoginResponse> call = client.login(new LoginBody("15555215554", "qu01n23!", "primero", "android_id"));
+        call.enqueue(new Callback<LoginResponse>() {
             @Override
-            public void onLoginSuccess(String messages) {
+            public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
                 if (isViewAttached()) {
-                    getView().showLoginSuccessMessages(messages);
+                    getView().showContent();
                 }
             }
 
             @Override
-            public void onLoginFailed(String messages) {
+            public void onFailure(Call<LoginResponse> call, Throwable t) {
                 if (isViewAttached()) {
-                    getView().showLoginFailedMessages(messages);
+                    getView().showError(t, false);
                 }
             }
         });
-        loginTask.execute();
     }
 
-    public void detachView(boolean retainPresenterInstance){
-        super.detachView(retainPresenterInstance);
-        if (!retainPresenterInstance){
-            cancelLoginTaskIfRunning();
-        }
-    }
 }

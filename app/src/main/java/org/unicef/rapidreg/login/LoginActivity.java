@@ -8,10 +8,12 @@ import android.widget.Toast;
 import com.hannesdorfmann.mosby.mvp.MvpActivity;
 
 import org.unicef.rapidreg.R;
+import org.unicef.rapidreg.model.LoginResponse;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import retrofit2.Call;
 
 public class LoginActivity extends MvpActivity<LoginView, LoginPresenter> implements LoginView{
 
@@ -29,19 +31,34 @@ public class LoginActivity extends MvpActivity<LoginView, LoginPresenter> implem
         presenter.doLogin();
     }
 
-    @Override
-    public void showLoginSuccessMessages(String messages) {
-        Toast.makeText(LoginActivity.this, messages, Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
-    public void showLoginFailedMessages(String messages) {
-        Toast.makeText(LoginActivity.this, messages, Toast.LENGTH_SHORT).show();
-    }
-
     @NonNull
     @Override
     public LoginPresenter createPresenter() {
         return new LoginPresenter();
+    }
+
+    @Override
+    public void showLoading(boolean pullToRefresh) {
+
+    }
+
+    @Override
+    public void showContent() {
+        Toast.makeText(LoginActivity.this, LoginPresenter.LOGIN_SUCCESS_MESSAGE, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void showError(Throwable e, boolean pullToRefresh) {
+        Toast.makeText(LoginActivity.this, LoginPresenter.LOGIN_FAILED_MESSAGE, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void setData(Call<LoginResponse> data) {
+
+    }
+
+    @Override
+    public void loadData(boolean pullToRefresh) {
+
     }
 }

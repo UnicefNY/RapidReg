@@ -1,8 +1,10 @@
 package org.unicef.rapidreg.login;
 
-import com.hannesdorfmann.mosby.mvp.MvpView;
+import com.hannesdorfmann.mosby.mvp.lce.MvpLceView;
 
-public interface LoginView extends MvpView{
-    void showLoginSuccessMessages(String messages);
-    void showLoginFailedMessages(String messages);
+import org.unicef.rapidreg.model.LoginResponse;
+
+import retrofit2.Call;
+
+public interface LoginView extends MvpLceView<Call<LoginResponse>> {
 }

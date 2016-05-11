@@ -1,6 +1,6 @@
 package org.unicef.rapidreg.model;
 
-public class Root {
+public class LoginResponse {
     private Session session;
 
     private String db_key;
