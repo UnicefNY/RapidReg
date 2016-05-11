@@ -20,14 +20,8 @@ public class NetworkService {
 
     static PrimeroApi service = retrofit.create(PrimeroApi.class);
 
-    public static Root doLogin() {
-        Call<Root> call = service.login(new LoginBody("15555215554", "qu01n23!", "primero", "android_id"));
-        Root root = new Root();
-        try {
-            root = call.execute().body();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return root;
+    public static Call<Root> doLogin() {
+        Call<Root> call = service.login(new LoginBody("15555215554", "qu01n23!1", "primero", "android_id"));
+        return call;
     }
 }
