@@ -29,6 +29,11 @@ android {
     lintOptions {
         abortOnError false
     }
+    packagingOptions {
+        exclude 'META-INF/ASL2.0'
+        exclude 'META-INF/LICENSE'
+        exclude 'META-INF/NOTICE'
+    }
 }
 
 dependencies {
@@ -51,6 +56,9 @@ dependencies {
 
     compile 'com.hannesdorfmann.mosby:mvp:2.0.1'
     compile 'com.hannesdorfmann.mosby:viewstate:2.0.1'
+
+    compile 'com.couchbase.lite:couchbase-lite-android:1.2.1'
+    compile 'commons-io:commons-io:2.5'
 
     testCompile 'junit:junit:4.12'
 }
