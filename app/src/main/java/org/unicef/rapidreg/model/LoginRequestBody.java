@@ -11,7 +11,7 @@ public class LoginRequestBody {
     public LoginRequestBody() {
     }
 
-    public LoginRequestBody(String password, String userName, String mobileNumber, String imei) {
+    public LoginRequestBody(String userName, String password, String mobileNumber, String imei) {
         this.userName = userName;
         this.password = password;
         this.mobileNumber = mobileNumber;

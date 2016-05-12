@@ -50,8 +50,8 @@ public class LoginActivity extends MvpActivity<LoginView, LoginPresenter> implem
     }
 
     @Override
-    public void showLoading(boolean pullToRefresh) {
-        if (pullToRefresh) {
+    public void showLoading(boolean active) {
+        if (active) {
             showProgressDialog();
         } else {
             dismissProgressDialog();
