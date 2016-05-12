@@ -38,9 +38,9 @@ public class LoginActivity extends MvpActivity<LoginView, LoginPresenter> implem
     @OnClick(R.id.button_login)
     public void onLoginButtonClicked() {
         presenter.doLogin(this,
-                            usernameEditview.getText().toString(),
-                            passwordEditview.getText().toString(),
-                            urlEditview.getText().toString());
+                            usernameEditview.getText().toString().trim(),
+                            passwordEditview.getText().toString().trim(),
+                            urlEditview.getText().toString().trim());
     }
 
     @NonNull
@@ -52,11 +52,9 @@ public class LoginActivity extends MvpActivity<LoginView, LoginPresenter> implem
     @Override
     public void showLoading(boolean pullToRefresh) {
         if (pullToRefresh) {
-            loginProgressDialog.setMessage(getResources().getString(R.string.loading_login_text));
-            loginProgressDialog.setCancelable(false);
-            loginProgressDialog.show();
+            showProgressDialog();
         } else {
-            loginProgressDialog.hide();
+            dismissProgressDialog();
         }
     }
 
@@ -82,6 +80,18 @@ public class LoginActivity extends MvpActivity<LoginView, LoginPresenter> implem
     @Override
     public void showLoginResult(String message) {
         Toast.makeText(LoginActivity.this, message, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void showProgressDialog() {
+        loginProgressDialog.setMessage(getResources().getString(R.string.loading_login_text));
+        loginProgressDialog.setCancelable(false);
+        loginProgressDialog.show();
+    }
+
+    @Override
+    public void dismissProgressDialog() {
+        loginProgressDialog.dismiss();
     }
 
 }

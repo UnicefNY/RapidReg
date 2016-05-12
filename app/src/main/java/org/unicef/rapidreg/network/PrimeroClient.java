@@ -1,6 +1,6 @@
 package org.unicef.rapidreg.network;
 
-import org.unicef.rapidreg.model.LoginBody;
+import org.unicef.rapidreg.model.LoginRequestBody;
 import org.unicef.rapidreg.model.LoginResponse;
 
 import retrofit2.Call;
@@ -13,5 +13,5 @@ public interface PrimeroClient {
 
     @POST("/api/login")
     @Headers("Content-Type: application/json")
-    public Call<Response<LoginResponse>> login(@Body LoginBody body);
+    public Call<Response<LoginResponse>> login(@Body LoginRequestBody body);
 }

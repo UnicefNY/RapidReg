@@ -8,4 +8,6 @@ import retrofit2.Call;
 
 public interface LoginView extends MvpLceView<Call<LoginResponse>> {
     public void showLoginResult(String message);
+    public void showProgressDialog();
+    public void dismissProgressDialog();
 }
