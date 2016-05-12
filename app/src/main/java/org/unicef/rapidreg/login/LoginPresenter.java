@@ -6,7 +6,7 @@ import android.telephony.TelephonyManager;
 
 import com.hannesdorfmann.mosby.mvp.MvpBasePresenter;
 
-import org.unicef.rapidreg.model.LoginBody;
+import org.unicef.rapidreg.model.LoginRequestBody;
 import org.unicef.rapidreg.model.LoginResponse;
 import org.unicef.rapidreg.network.HttpStatusCodeHandler;
 import org.unicef.rapidreg.network.NetworkServiceGenerator;
@@ -29,9 +29,9 @@ public class LoginPresenter extends MvpBasePresenter<LoginView> {
                     Settings.Secure.ANDROID_ID);
 
 //        Call<Response<LoginResponse>> call =
-//              client.login(new LoginBody("15555215554", "qu01n23!", "primero", "android_id"));
+//              client.login(new LoginRequestBody("15555215554", "qu01n23!", "primero", "android_id"));
             Call<Response<LoginResponse>> call =
-                    client.login(new LoginBody(username, password, telephonyManager.getLine1Number(),
+                    client.login(new LoginRequestBody(username, password, telephonyManager.getLine1Number(),
                             android_id));
             call.enqueue(new Callback<Response<LoginResponse>>() {
                 @Override
