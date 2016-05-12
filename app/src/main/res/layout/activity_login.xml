@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+
+    <EditText
+        android:id="@+id/editview_url"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:text="http://10.29.5.149:3000"
+        android:hint="@string/editview_URL_hint_text"/>
+
+    <EditText
+        android:id="@+id/editview_password"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/editview_url"
+        android:inputType="textPassword"
+        android:text="qu01n23!"
+        android:hint="@string/editview_password_hint_text"/>
+
+    <EditText
+        android:id="@+id/editview_username"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/editview_password"
+        android:text="primero"
+        android:hint="@string/editview_username_hint_text"/>
+
+    <TextView
+        android:id="@+id/app_logo_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/editview_username"
+        android:gravity="center_horizontal"
+        android:layout_centerHorizontal="true"
+        android:textSize="@dimen/text_size_48"
+        android:textStyle="bold"
+        android:text="@string/app_banner_text"/>
+
+    <Button
+        android:id="@+id/button_login"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/editview_url"
+        android:textSize="@dimen/text_size_16"
+        android:text="@string/button_login_text"/>
+
+</RelativeLayout>

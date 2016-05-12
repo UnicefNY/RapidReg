@@ -3,18 +3,18 @@ package org.unicef.rapidreg.model;
 import com.google.gson.annotations.SerializedName;
 
 public class LoginBody {
-    @SerializedName("mobile_number") String mobileNumber;
-    @SerializedName("password") String password;
     @SerializedName("user_name") String userName;
+    @SerializedName("password") String password;
+    @SerializedName("mobile_number") String mobileNumber;
     @SerializedName("imei") String imei;
 
     public LoginBody() {
     }
 
-    public LoginBody(String mobileNumber, String password, String userName, String imei) {
-        this.mobileNumber = mobileNumber;
-        this.password = password;
+    public LoginBody(String password, String userName, String mobileNumber, String imei) {
         this.userName = userName;
+        this.password = password;
+        this.mobileNumber = mobileNumber;
         this.imei = imei;
     }
 

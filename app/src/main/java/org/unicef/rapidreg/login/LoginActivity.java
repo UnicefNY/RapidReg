@@ -1,8 +1,11 @@
 package org.unicef.rapidreg.login;
 
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.view.Window;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import com.hannesdorfmann.mosby.mvp.MvpActivity;
@@ -17,18 +20,27 @@ import retrofit2.Call;
 
 public class LoginActivity extends MvpActivity<LoginView, LoginPresenter> implements LoginView{
 
-    @BindView(R.id.login_button) Button loginButton;
+    @BindView(R.id.button_login) Button loginButton;
+    @BindView(R.id.editview_username) EditText usernameEditview;
+    @BindView(R.id.editview_password) EditText passwordEditview;
+    @BindView(R.id.editview_url) EditText urlEditview;
+    private ProgressDialog loginProgressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
+        loginProgressDialog = new ProgressDialog(this);
     }
 
-    @OnClick(R.id.login_button)
+    @OnClick(R.id.button_login)
     public void onLoginButtonClicked() {
-        presenter.doLogin();
+        presenter.doLogin(this,
+                            usernameEditview.getText().toString(),
+                            passwordEditview.getText().toString(),
+                            urlEditview.getText().toString());
     }
 
     @NonNull
@@ -39,7 +51,13 @@ public class LoginActivity extends MvpActivity<LoginView, LoginPresenter> implem
 
     @Override
     public void showLoading(boolean pullToRefresh) {
-
+        if (pullToRefresh) {
+            loginProgressDialog.setMessage(getResources().getString(R.string.loading_login_text));
+            loginProgressDialog.setCancelable(false);
+            loginProgressDialog.show();
+        } else {
+            loginProgressDialog.hide();
+        }
     }
 
     @Override
