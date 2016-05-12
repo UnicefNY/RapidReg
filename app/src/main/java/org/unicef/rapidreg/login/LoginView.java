@@ -7,4 +7,5 @@ import org.unicef.rapidreg.model.LoginResponse;
 import retrofit2.Call;
 
 public interface LoginView extends MvpLceView<Call<LoginResponse>> {
+    public void showLoginResult(String message);
 }

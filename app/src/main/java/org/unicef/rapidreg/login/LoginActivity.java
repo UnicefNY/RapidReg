@@ -44,12 +44,11 @@ public class LoginActivity extends MvpActivity<LoginView, LoginPresenter> implem
 
     @Override
     public void showContent() {
-        Toast.makeText(LoginActivity.this, LoginPresenter.LOGIN_SUCCESS_MESSAGE, Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void showError(Throwable e, boolean pullToRefresh) {
-        Toast.makeText(LoginActivity.this, LoginPresenter.LOGIN_FAILED_MESSAGE, Toast.LENGTH_SHORT).show();
+        Toast.makeText(LoginActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -61,4 +60,10 @@ public class LoginActivity extends MvpActivity<LoginView, LoginPresenter> implem
     public void loadData(boolean pullToRefresh) {
 
     }
+
+    @Override
+    public void showLoginResult(String message) {
+        Toast.makeText(LoginActivity.this, message, Toast.LENGTH_SHORT).show();
+    }
+
 }
