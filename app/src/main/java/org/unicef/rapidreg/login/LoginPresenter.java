@@ -34,7 +34,7 @@ public class LoginPresenter extends MvpBasePresenter<LoginView> {
                 Settings.Secure.ANDROID_ID);
         Call<Response<LoginResponse>> call =
                 client.login(new LoginRequestBody(username, password, telephonyManager.getLine1Number(),
-                        "android_id"));
+                        android_id));
         call.enqueue(new Callback<Response<LoginResponse>>() {
             @Override
             public void onResponse(Call<Response<LoginResponse>> call,
