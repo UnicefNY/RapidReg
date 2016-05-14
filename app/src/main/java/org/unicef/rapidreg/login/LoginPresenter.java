@@ -3,6 +3,7 @@ package org.unicef.rapidreg.login;
 import android.content.Context;
 import android.provider.Settings;
 import android.telephony.TelephonyManager;
+import android.util.Log;
 
 import com.hannesdorfmann.mosby.mvp.MvpBasePresenter;
 
@@ -17,10 +18,10 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class LoginPresenter extends MvpBasePresenter<LoginView> {
+    public static final String TAG = LoginPresenter.class.getSimpleName();
+    private PrimeroClient client;
 
-    private PrimeroClient client = NetworkServiceGenerator.createService(PrimeroClient.class);
-
-    public void doLogin(Context context, String username, String password, String url){
+    public void doLogin(Context context, String username, String password, String url) {
         if (isViewAttached()) {
             getView().showLoading(true);
             doLoginOnline(context, username, password);
@@ -32,9 +33,21 @@ public class LoginPresenter extends MvpBasePresenter<LoginView> {
                 (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
         String android_id = Settings.Secure.getString(context.getContentResolver(),
                 Settings.Secure.ANDROID_ID);
-        Call<Response<LoginResponse>> call =
-                client.login(new LoginRequestBody(username, password, telephonyManager.getLine1Number(),
+
+        try {
+            client = NetworkServiceGenerator.createService(context, PrimeroClient.class);
+        } catch (Exception e) {
+            getView().showLoginResult(e.getMessage());
+            Log.e(TAG, e.getMessage());
+            return;
+        }
+
+        Call<Response<LoginResponse>> call = client.login(
+                new LoginRequestBody(username,
+                        password,
+                        telephonyManager.getLine1Number(),
                         android_id));
+
         call.enqueue(new Callback<Response<LoginResponse>>() {
             @Override
             public void onResponse(Call<Response<LoginResponse>> call,
@@ -59,5 +72,4 @@ public class LoginPresenter extends MvpBasePresenter<LoginView> {
             }
         });
     }
-
 }
