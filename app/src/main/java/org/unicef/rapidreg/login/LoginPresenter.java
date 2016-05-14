@@ -19,7 +19,6 @@ import retrofit2.Response;
 
 public class LoginPresenter extends MvpBasePresenter<LoginView> {
     public static final String TAG = LoginPresenter.class.getSimpleName();
-    private PrimeroClient client;
 
     public void doLogin(Context context, String username, String password, String url) {
         if (isViewAttached()) {
@@ -34,6 +33,7 @@ public class LoginPresenter extends MvpBasePresenter<LoginView> {
         String android_id = Settings.Secure.getString(context.getContentResolver(),
                 Settings.Secure.ANDROID_ID);
 
+        PrimeroClient client;
         try {
             client = NetworkServiceGenerator.createService(context, PrimeroClient.class);
         } catch (Exception e) {
