@@ -32,7 +32,7 @@ public class NetworkServiceGenerator {
         httpClientBuilder.hostnameVerifier(new HostnameVerifier() {
             @Override
             public boolean verify(String hostname, SSLSession session) {
-                return API_BASE_URL.contains(hostname);
+                return true;
             }
         });
         Retrofit retrofit = retrofitBuilder.client(httpClientBuilder.build()).build();
