@@ -84,7 +84,7 @@ public class LoginActivity extends MvpActivity<LoginView, LoginPresenter> implem
 
     @Override
     public void showProgressDialog() {
-        loginProgressDialog.setMessage(getResources().getString(R.string.loading_login_text));
+        loginProgressDialog.setMessage(getResources().getString(R.string.login_loading_text));
         loginProgressDialog.setCancelable(false);
         loginProgressDialog.show();
     }
