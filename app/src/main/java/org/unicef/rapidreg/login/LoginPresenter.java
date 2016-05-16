@@ -37,11 +37,6 @@ public class LoginPresenter extends MvpBasePresenter<LoginView> {
 
     public void doLogin(Context context, String username, String password, String url){
         primeroApplication = (PrimeroApplication) context.getApplicationContext();
-        try {
-            client = NetworkServiceGenerator.createService(context, PrimeroClient.class);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
         if (isViewAttached()) {
             getView().showLoading(true);
             if (NetworkStatusManager.isOnline(
@@ -58,7 +53,6 @@ public class LoginPresenter extends MvpBasePresenter<LoginView> {
                 (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
         String android_id = Settings.Secure.getString(context.getContentResolver(),
                 Settings.Secure.ANDROID_ID);
-        PrimeroClient client;
         try {
             client = NetworkServiceGenerator.createService(context, PrimeroClient.class);
         } catch (Exception e) {
