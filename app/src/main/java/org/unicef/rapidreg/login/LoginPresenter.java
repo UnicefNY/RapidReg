@@ -8,6 +8,7 @@ import android.telephony.TelephonyManager;
 
 import com.google.gson.Gson;
 import com.hannesdorfmann.mosby.mvp.MvpBasePresenter;
+import com.hannesdorfmann.mosby.mvp.MvpNullObjectBasePresenter;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -28,7 +29,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class LoginPresenter extends MvpBasePresenter<LoginView> {
+public class LoginPresenter extends MvpNullObjectBasePresenter<LoginView> {
     public static final String TAG = LoginPresenter.class.getSimpleName();
 
     private PrimeroApplication primeroApplication;
@@ -36,15 +37,13 @@ public class LoginPresenter extends MvpBasePresenter<LoginView> {
     private ConnectivityManager connectivityManager;
     private Gson gson;
 
-    public void doLogin(Context context, String username, String password, String url){
-        if (isViewAttached()) {
-            initContext(context, url);
-            showLoadingIndicator(true);
-            if (NetworkStatusManager.isOnline(connectivityManager)) {
-                doLoginOnline(context, username, password, url);
-            } else {
-                doLoginOffline(context, username, password);
-            }
+    public void doLogin(Context context, String username, String password, String url) {
+        initContext(context, url);
+        showLoadingIndicator(true);
+        if (NetworkStatusManager.isOnline(connectivityManager)) {
+            doLoginOnline(context, username, password, url);
+        } else {
+            doLoginOffline(context, username, password);
         }
     }
 
@@ -57,7 +56,6 @@ public class LoginPresenter extends MvpBasePresenter<LoginView> {
             client = NetworkServiceGenerator.createService(context, PrimeroClient.class);
         } catch (Exception e) {
             showLoginResultMessage(e.getMessage());
-            return;
         }
     }
 
@@ -68,37 +66,33 @@ public class LoginPresenter extends MvpBasePresenter<LoginView> {
                 Settings.Secure.ANDROID_ID);
 
         Call<LoginResponse> call = client.login(new LoginRequestBody(
-                                                            username,
-                                                            password,
-                                                            telephonyManager.getLine1Number(),
-                                                            android_id));
+                username,
+                password,
+                telephonyManager.getLine1Number(),
+                android_id));
         call.enqueue(new Callback<LoginResponse>() {
             @Override
             public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
-                if (isViewAttached()) {
-                    showLoadingIndicator(false);
-                    if (response.isSuccessful()) {
-                        User user = new User(username, password, true, url);
-                        user.setDbKey(response.body().getDb_key());
-                        user.setOrganisation(response.body().getOrganization());
-                        user.setLanguage(response.body().getLanguage());
-                        user.setVerified(response.body().getVerified());
-                        notifyEvent(new NeedCacheForOfflineEvent(user));
-                        showLoginResultMessage(HttpStatusCodeHandler.LOGIN_SUCCESS_MESSAGE);
-                    } else {
-                        showLoginResultMessage(HttpStatusCodeHandler.getHttpStatusMessage(response.code()));
-                        notifyEvent(new NeedDoLoginOffLineEvent(context, username, password));
-                    }
+                showLoadingIndicator(false);
+                if (response.isSuccessful()) {
+                    User user = new User(username, password, true, url);
+                    user.setDbKey(response.body().getDb_key());
+                    user.setOrganisation(response.body().getOrganization());
+                    user.setLanguage(response.body().getLanguage());
+                    user.setVerified(response.body().getVerified());
+                    notifyEvent(new NeedCacheForOfflineEvent(user));
+                    showLoginResultMessage(HttpStatusCodeHandler.LOGIN_SUCCESS_MESSAGE);
+                } else {
+                    showLoginResultMessage(HttpStatusCodeHandler.getHttpStatusMessage(response.code()));
+                    notifyEvent(new NeedDoLoginOffLineEvent(context, username, password));
                 }
             }
 
             @Override
             public void onFailure(Call<LoginResponse> call, Throwable t) {
-                if (isViewAttached()) {
-                    showNetworkErrorMessage(t, false);
-                    showLoadingIndicator(false);
-                    notifyEvent(new NeedDoLoginOffLineEvent(context, username, password));
-                }
+                showNetworkErrorMessage(t, false);
+                showLoadingIndicator(false);
+                notifyEvent(new NeedDoLoginOffLineEvent(context, username, password));
             }
         });
     }
@@ -134,7 +128,7 @@ public class LoginPresenter extends MvpBasePresenter<LoginView> {
         getView().showError(t, false);
     }
 
-    private void notifyEvent (Object event) {
+    private void notifyEvent(Object event) {
         EventBus.getDefault().post(event);
     }
 
