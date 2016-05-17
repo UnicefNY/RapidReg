@@ -20,12 +20,15 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class NetworkServiceGenerator {
 //    public static final String API_BASE_URL = "http://10.29.3.184:3000";
-    public static final String API_BASE_URL = "https://10.29.3.184:8443";
+    public static String apiBaseUrl = "https://10.29.3.184:8443";
+
+    public NetworkServiceGenerator() {
+    }
 
     private static OkHttpClient.Builder httpClientBuilder = new OkHttpClient().newBuilder();
     private static Retrofit.Builder retrofitBuilder =
             new Retrofit.Builder()
-                    .baseUrl(API_BASE_URL)
+                    .baseUrl(apiBaseUrl)
                     .addConverterFactory(GsonConverterFactory.create());
 
     public static <S> S createService(Context context, Class<S> serviceClass) throws Exception {
@@ -60,5 +63,13 @@ public class NetworkServiceGenerator {
         sslContext.init(null, tmf.getTrustManagers(), null);
 
         return sslContext;
+    }
+
+    public static void changeApiBaseUrl(String newApiBaseUrl) {
+        apiBaseUrl = newApiBaseUrl;
+
+        retrofitBuilder = new Retrofit.Builder()
+                                .addConverterFactory(GsonConverterFactory.create())
+                                .baseUrl(apiBaseUrl);
     }
 }
