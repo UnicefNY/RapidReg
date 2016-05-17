@@ -19,7 +19,8 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class NetworkServiceGenerator {
-    public static final String API_BASE_URL = "http://10.29.3.184:3000";
+//    public static final String API_BASE_URL = "http://10.29.3.184:3000";
+    public static final String API_BASE_URL = "https://10.29.3.184:8443";
 
     private static OkHttpClient.Builder httpClientBuilder = new OkHttpClient().newBuilder();
     private static Retrofit.Builder retrofitBuilder =
