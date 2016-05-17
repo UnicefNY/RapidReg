@@ -34,11 +34,11 @@ public class LoginPresenter extends MvpBasePresenter<LoginView> {
     private PrimeroApplication primeroApplication;
     private PrimeroClient client;
     private ConnectivityManager connectivityManager;
-    private Gson gson = new Gson();
+    private Gson gson;
 
     public void doLogin(Context context, String username, String password, String url){
-        initContext(context);
         if (isViewAttached()) {
+            initContext(context, url);
             showLoadingIndicator(true);
             if (NetworkStatusManager.isOnline(connectivityManager)) {
                 doLoginOnline(context, username, password, url);
@@ -48,20 +48,20 @@ public class LoginPresenter extends MvpBasePresenter<LoginView> {
         }
     }
 
-    private void initContext(Context context) {
+    private void initContext(Context context, String url) {
         primeroApplication = (PrimeroApplication) context.getApplicationContext();
         connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-    }
-
-    private void doLoginOnline(final Context context, final String username, final String password, final String url) {
-
+        gson = new Gson();
         try {
+            NetworkServiceGenerator.changeApiBaseUrl(url);
             client = NetworkServiceGenerator.createService(context, PrimeroClient.class);
         } catch (Exception e) {
             showLoginResultMessage(e.getMessage());
             return;
         }
+    }
 
+    private void doLoginOnline(final Context context, final String username, final String password, final String url) {
         TelephonyManager telephonyManager =
                 (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
         String android_id = Settings.Secure.getString(context.getContentResolver(),
