@@ -9,4 +9,9 @@
     <string name="login_loading_text">Logining, please wait...</string>
     <string name="login_offline_no_user_text">Login failed, first time users please login online to enable your account for offline mode</string>
     <string name="login_offline_success_text">Login offline, success!</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_settings">Settings</string>
 </resources>
