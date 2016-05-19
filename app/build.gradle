@@ -63,4 +63,5 @@ dependencies {
     compile 'commons-io:commons-io:2.5'
 
     testCompile 'junit:junit:4.12'
+    testCompile "org.robolectric:robolectric:3.1-SNAPSHOT"
 }
