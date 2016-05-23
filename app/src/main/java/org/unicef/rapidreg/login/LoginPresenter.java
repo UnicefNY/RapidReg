@@ -1,5 +1,6 @@
 package org.unicef.rapidreg.login;
 
+import android.app.Activity;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.provider.Settings;
@@ -12,10 +13,12 @@ import com.hannesdorfmann.mosby.mvp.MvpBasePresenter;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
+import org.unicef.rapidreg.IntentStarter;
 import org.unicef.rapidreg.PrimeroApplication;
 import org.unicef.rapidreg.R;
 import org.unicef.rapidreg.event.NeedCacheForOfflineEvent;
 import org.unicef.rapidreg.event.NeedDoLoginOffLineEvent;
+import org.unicef.rapidreg.event.NeedGoToLoginSuccessScreenEvent;
 import org.unicef.rapidreg.model.LoginRequestBody;
 import org.unicef.rapidreg.model.LoginResponse;
 import org.unicef.rapidreg.model.User;
@@ -35,6 +38,8 @@ public class LoginPresenter extends MvpBasePresenter<LoginView> {
     private PrimeroClient client;
     private ConnectivityManager connectivityManager;
     private Gson gson;
+    private Context context;
+    private IntentStarter intentStarter;
 
     public void doLogin(Context context, String username, String password, String url){
         if (isViewAttached()) {
@@ -49,6 +54,8 @@ public class LoginPresenter extends MvpBasePresenter<LoginView> {
     }
 
     private void initContext(Context context, String url) {
+        this.context = context;
+        intentStarter = new IntentStarter();
         primeroApplication = (PrimeroApplication) context.getApplicationContext();
         connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         gson = new Gson();
@@ -84,6 +91,7 @@ public class LoginPresenter extends MvpBasePresenter<LoginView> {
                         user.setLanguage(response.body().getLanguage());
                         user.setVerified(response.body().getVerified());
                         notifyEvent(new NeedCacheForOfflineEvent(user));
+                        notifyEvent(new NeedGoToLoginSuccessScreenEvent());
                         showLoginResultMessage(HttpStatusCodeHandler.LOGIN_SUCCESS_MESSAGE);
                     } else {
                         showLoginResultMessage(HttpStatusCodeHandler.getHttpStatusMessage(response.code()));
@@ -113,6 +121,8 @@ public class LoginPresenter extends MvpBasePresenter<LoginView> {
             cacheForOffline(user);
             showLoadingIndicator(false);
             showLoginResultMessage(context.getResources().getString(R.string.login_offline_success_text));
+            goToLoginSuccessScreen();
+
         }
     }
 
@@ -120,6 +130,10 @@ public class LoginPresenter extends MvpBasePresenter<LoginView> {
         String jsonForUser = gson.toJson(user);
         primeroApplication.getSharedPreferences().edit().putString(user.getUserName(), jsonForUser).commit();
         primeroApplication.setCurrentUser(user);
+    }
+
+    private void goToLoginSuccessScreen() {
+        intentStarter.showCasesActivity((Activity) context);
     }
 
     private void showLoadingIndicator(boolean active) {
@@ -158,6 +172,11 @@ public class LoginPresenter extends MvpBasePresenter<LoginView> {
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onNeedCacheForOfflineEvent(NeedCacheForOfflineEvent event) {
         cacheForOffline(event.user);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onNeedGoToLoginSuccessScreenEvent(NeedGoToLoginSuccessScreenEvent event) {
+        goToLoginSuccessScreen();
     }
 
 }
