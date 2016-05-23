@@ -19,8 +19,13 @@ import butterknife.ButterKnife;
 
 public class BaseActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
-    protected  @BindView(R.id.toolbar) Toolbar toolbar;
-    @BindView(R.id.drawer_layout) DrawerLayout drawer;
+    protected
+    @BindView(R.id.toolbar)
+    Toolbar toolbar;
+    @BindView(R.id.drawer_layout)
+    DrawerLayout drawer;
+    @BindView(R.id.nav_view)
+    NavigationView navigationView;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -32,6 +37,8 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
+        navigationView.setNavigationItemSelectedListener(this);
+        drawer.openDrawer(GravityCompat.START);
     }
 
     @Override
@@ -46,15 +53,15 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
-        // Handle navigation view item clicks here.
         int id = item.getItemId();
-
         if (id == R.id.nav_cases) {
-
+            navigationView.getMenu().getItem(0).setChecked(true);
         } else if (id == R.id.nav_tracing) {
-
+            navigationView.getMenu().getItem(1).setChecked(true);
         } else if (id == R.id.nav_sync) {
-
+            navigationView.getMenu().getItem(2).setChecked(true);
+        } else if (id == R.id.nav_logout) {
+            navigationView.getMenu().getItem(3).setChecked(true);
         }
         drawer.closeDrawer(GravityCompat.START);
         return true;
