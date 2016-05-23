@@ -93,4 +93,18 @@ public class LoginActivity extends MvpActivity<LoginView, LoginPresenter> implem
         loginProgressDialog.dismiss();
     }
 
+    @Override
+    public EditText getUsernameView() {
+        return usernameEditview;
+    }
+
+    @Override
+    public EditText getPasswordView() {
+        return passwordEditview;
+    }
+
+    @Override
+    public EditText getUrlView() {
+        return urlEditview;
+    }
 }

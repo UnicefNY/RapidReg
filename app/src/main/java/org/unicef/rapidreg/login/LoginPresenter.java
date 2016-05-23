@@ -6,6 +6,9 @@ import android.net.ConnectivityManager;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.telephony.TelephonyManager;
+import android.text.TextUtils;
+import android.util.Log;
+import android.util.Patterns;
 
 import com.google.gson.Gson;
 import com.hannesdorfmann.mosby.mvp.MvpBasePresenter;
@@ -26,6 +29,10 @@ import org.unicef.rapidreg.network.HttpStatusCodeHandler;
 import org.unicef.rapidreg.network.NetworkServiceGenerator;
 import org.unicef.rapidreg.network.NetworkStatusManager;
 import org.unicef.rapidreg.network.PrimeroClient;
+import org.unicef.rapidreg.utils.ValidatesUtils;
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -42,6 +49,9 @@ public class LoginPresenter extends MvpBasePresenter<LoginView> {
     private IntentStarter intentStarter;
 
     public void doLogin(Context context, String username, String password, String url){
+        if (!validate(context, username, password, url)) {
+            return;
+        }
         if (isViewAttached()) {
             initContext(context, url);
             showLoadingIndicator(true);
@@ -52,6 +62,32 @@ public class LoginPresenter extends MvpBasePresenter<LoginView> {
             }
         }
     }
+
+    private boolean validate(Context context, String username, String password, String url) {
+        boolean valid = true;
+            if (TextUtils.isEmpty(username) || username.length() > 254 || ValidatesUtils.containsSpecialCharactor(username)) {
+                getView().getUsernameView().setError(context.getResources().getString(R.string.login_username_invalid_text));
+            valid = false;
+        } else {
+                getView().getUsernameView().setError(null);
+        }
+
+        if (TextUtils.isEmpty(password)) {
+            getView().getPasswordView().setError(context.getResources().getString(R.string.login_password_invalid_text));
+            valid = false;
+        } else {
+            getView().getPasswordView().setError(null);
+        }
+
+        if (TextUtils.isEmpty(url) || !Patterns.WEB_URL.matcher(url).matches()) {
+            getView().getUrlView().setError(context.getResources().getString(R.string.login_url_invalid_text));
+            valid = false;
+        } else {
+            getView().getUrlView().setError(null);
+        }
+        return valid;
+    }
+
 
     private void initContext(Context context, String url) {
         this.context = context;
