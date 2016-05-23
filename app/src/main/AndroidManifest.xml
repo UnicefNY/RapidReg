@@ -13,8 +13,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".login.LoginActivity"></activity>
-        <activity android:name=".cases.CasesActivity"
-                  android:label="Cases">
+        <activity android:name=".cases.CasesActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
