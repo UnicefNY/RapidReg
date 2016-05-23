@@ -7,7 +7,6 @@ import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
-import android.util.Log;
 import android.util.Patterns;
 
 import com.google.gson.Gson;
@@ -30,9 +29,6 @@ import org.unicef.rapidreg.network.NetworkServiceGenerator;
 import org.unicef.rapidreg.network.NetworkStatusManager;
 import org.unicef.rapidreg.network.PrimeroClient;
 import org.unicef.rapidreg.utils.ValidatesUtils;
-
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -146,21 +142,36 @@ public class LoginPresenter extends MvpBasePresenter<LoginView> {
             }
         });
     }
-
+    //TODO: refactor doLoginOFFLine
     private void doLoginOffline(Context context, String username, String password) {
         if (!primeroApplication.getSharedPreferences().contains(username)) {
             showLoadingIndicator(false);
             showLoginResultMessage(context.getResources().getString(R.string.login_offline_no_user_text));
         } else {
-            String jsonForUser = primeroApplication.getSharedPreferences().getString(username, null);
-            User user = gson.fromJson(jsonForUser, User.class);
-            cacheForOffline(user);
-            showLoadingIndicator(false);
-            showLoginResultMessage(context.getResources().getString(R.string.login_offline_success_text));
-            goToLoginSuccessScreen();
+            User user = loadOffLine(username, password, context);
+            if (user != null) {
 
+                cacheForOffline(user);
+                showLoadingIndicator(false);
+                showLoginResultMessage(context.getResources().getString(R.string.login_offline_success_text));
+                goToLoginSuccessScreen();
+            }
         }
     }
+
+    private User loadOffLine(String username, String password, Context context) {
+            String jsonForUser = primeroApplication.getSharedPreferences().getString(username, null);
+            User user = gson.fromJson(jsonForUser, User.class);
+            if (user.getPassword().equals(password))
+                return user;
+            else {
+                showLoadingIndicator(false);
+                showLoginResultMessage(context.getResources().getString(R.string.login_failed_text));
+            }
+        return null;
+    }
+    //End TODO
+
 
     private void cacheForOffline(@NonNull User user) {
         String jsonForUser = gson.toJson(user);
