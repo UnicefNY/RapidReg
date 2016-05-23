@@ -2,6 +2,7 @@ package org.unicef.rapidreg.login;
 
 import android.app.Activity;
 import android.os.Build;
+import android.text.TextUtils;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -30,7 +31,6 @@ import static org.junit.Assert.*;
 
 @RunWith(RobolectricGradleTestRunner.class)
 @Config(constants = BuildConfig.class,sdk = Build.VERSION_CODES.JELLY_BEAN)
-
 public class LoginActivityTest {
 
     private EditText usernameEditview;
@@ -59,15 +59,19 @@ public class LoginActivityTest {
 //    }
 //
 //
-//    @Test
-//    public void emptyUserAndPasswordShouldShowError() {
-//        loginButton.performClick();
-//
-//        ShadowApplication application = shadowOf(RuntimeEnvironment.application);
-//        assertThat("Next activity should not started", application.getNextStartedActivity(), is(nullValue()));
-//        assertThat("Show error for user field ", usernameEditview.getError(), is(CoreMatchers.notNullValue()));
-//        assertThat("Show error for Password field ", passwordEditview.getError(), is(CoreMatchers.notNullValue()));
-//    }
+    @Test
+    public void emptyUserAndPasswordShouldShowError() {
+
+        usernameEditview.setText("");
+        passwordEditview.setText("");
+
+        loginButton.performClick();
+
+        ShadowApplication application = shadowOf(RuntimeEnvironment.application);
+        assertThat("Next activity should not started", application.getNextStartedActivity(), is(nullValue()));
+        assertThat("Show error for user field ", usernameEditview.getError(), is(CoreMatchers.notNullValue()));
+        assertThat("Show error for Password field ", passwordEditview.getError(), is(CoreMatchers.notNullValue()));
+    }
 
     @Test
     public void invalidUserNameFormatShouldShowError() {
@@ -81,7 +85,6 @@ public class LoginActivityTest {
 
 
     }
-
 //    @Test
 //    public void invalidAccountShouldLoginFail() {
 //        usernameEditview.setText("invalidUserName");
