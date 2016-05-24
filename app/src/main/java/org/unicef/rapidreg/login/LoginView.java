@@ -12,7 +12,7 @@ public interface LoginView extends MvpLceView<Call<LoginResponse>> {
     public void showLoginResult(String message);
     public void showProgressDialog();
     public void dismissProgressDialog();
-    public EditText getUsernameView();
-    public EditText getPasswordView();
-    public EditText getUrlView();
+    public void showUserNameError(String e);
+    public void showPasswordError(String e);
+    public void showUrlError(String e);
 }

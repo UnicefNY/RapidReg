@@ -48,18 +48,18 @@ public class LoginActivityTest {
         urlEditView = (EditText) activity.findViewById(R.id.editview_url);
     }
 
-    @Test @Ignore // TODO: loginButton.performClick() Not work, need mock to solve
-    public void correctUserAndPasswordShouldLoginSuccess() {
-        usernameEditView.setText("primero");
-        passwordEditView.setText("qu01n23!");
-        if (urlEditView != null) {
-            urlEditView.setText("http://10.29.3.184:3000");
-        }
-
-        loginButton.performClick();
-        ShadowApplication application = shadowOf(RuntimeEnvironment.application);
-        assertThat("Next activity has started", application.getNextStartedActivity(), is(notNullValue()));
-    }
+//    @Test // TODO: loginButton.performClick() Not work, need mock to solve
+//    public void correctUserAndPasswordShouldLoginSuccess() {
+//        usernameEditView.setText("primero");
+//        passwordEditView.setText("qu01n23!");
+//        if (urlEditView != null) {
+//            urlEditView.setText("http://10.29.3.184:3000");
+//        }
+//
+//        loginButton.performClick();
+//        ShadowApplication application = shadowOf(RuntimeEnvironment.application);
+//        assertThat("Next activity has started", application.getNextStartedActivity(), is(notNullValue()));
+//    }
 
     @Test
     public void emptyUserAndPasswordShouldShowError() {
