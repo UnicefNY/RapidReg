@@ -44,4 +44,8 @@ public class PrimeroApplication extends Application{
         String jsonForCurrentUser = getSharedPreferences().getString(CURRENT_USER_PREF, null);
         return jsonForCurrentUser == null ? null : gson.fromJson(jsonForCurrentUser, User.class);
     }
+    // TODO: need to realise get in progress Sychronization tasks
+    public Object getSyncTask() {
+        return null;
+    }
 }

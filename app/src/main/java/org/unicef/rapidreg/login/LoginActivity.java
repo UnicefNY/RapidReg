@@ -94,17 +94,17 @@ public class LoginActivity extends MvpActivity<LoginView, LoginPresenter> implem
     }
 
     @Override
-    public EditText getUsernameView() {
-        return usernameEditview;
+    public void showUserNameError(String e) {
+        usernameEditview.setError(e);
     }
 
     @Override
-    public EditText getPasswordView() {
-        return passwordEditview;
+    public void showPasswordError(String e) {
+        passwordEditview.setError(e);
     }
 
     @Override
-    public EditText getUrlView() {
-        return urlEditview;
+    public void showUrlError(String e) {
+        urlEditview.setError(e);
     }
 }

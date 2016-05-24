@@ -12,7 +12,7 @@
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="action_settings">Settings</string>
-    <string name="login_username_invalid_text">"Enter a valid username!"</string>
+    <string name="login_username_invalid_text">Enter a valid username!</string>
     <string name="login_password_invalid_text">Enter a valid password!</string>
     <string name="login_url_invalid_text">Enter a valid url!</string>
     <string name="login_failed_text">Invalid username or password</string>

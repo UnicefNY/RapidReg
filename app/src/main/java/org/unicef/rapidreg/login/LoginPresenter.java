@@ -59,27 +59,27 @@ public class LoginPresenter extends MvpBasePresenter<LoginView> {
         }
     }
 
-    private boolean validate(Context context, String username, String password, String url) {
+    boolean validate(Context context, String username, String password, String url) {
         boolean valid = true;
         if (TextUtils.isEmpty(username) || username.length() > 254 || ValidatesUtils.containsSpecialCharacter(username)) {
-            getView().getUsernameView().setError(context.getResources().getString(R.string.login_username_invalid_text));
+            getView().showUserNameError(context.getResources().getString(R.string.login_username_invalid_text));
             valid = false;
         } else {
-            getView().getUsernameView().setError(null);
+            getView().showUserNameError(null);
         }
 
         if (TextUtils.isEmpty(password)) {
-            getView().getPasswordView().setError(context.getResources().getString(R.string.login_password_invalid_text));
+            getView().showPasswordError(context.getResources().getString(R.string.login_password_invalid_text));
             valid = false;
         } else {
-            getView().getPasswordView().setError(null);
+            getView().showPasswordError(null);
         }
 
         if (TextUtils.isEmpty(url) || !Patterns.WEB_URL.matcher(url).matches()) {
-            getView().getUrlView().setError(context.getResources().getString(R.string.login_url_invalid_text));
+            getView().showUrlError(context.getResources().getString(R.string.login_url_invalid_text));
             valid = false;
         } else {
-            getView().getUrlView().setError(null);
+            getView().showUrlError(null);
         }
         return valid;
     }

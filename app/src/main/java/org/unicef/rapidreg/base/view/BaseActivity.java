@@ -75,9 +75,10 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+
     //TODO: Put logout into basePresenter in future
     private void attemptlogout(BaseActivity currentActivity) {
-        if (getSyncTask(currentActivity) != null) {
+        if (currentActivity.getContext().getSyncTask() != null) {
             createAlertDialog(currentActivity);
         } else {
             logOut(currentActivity);
@@ -85,7 +86,7 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
     }
 
     private void logOut(BaseActivity currentActivity) {
-        PrimeroApplication context = (PrimeroApplication) currentActivity.getApplication();
+        PrimeroApplication context = currentActivity.getContext();
         String message = context.getResources().getString(R.string.login_out_successful_text);
         context.setCurrentUser(null);
         Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
@@ -93,11 +94,11 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
     }
 
     private void createAlertDialog(BaseActivity currentActivity) {
-
+    //TODO: alert box
     }
 
-    // TODO: need to realise get in progress Sychronization tasks
-    private Object getSyncTask(BaseActivity currentActivity) {
-        return null;
+    public PrimeroApplication getContext() {
+        return (PrimeroApplication) getApplication();
     }
+
 }
