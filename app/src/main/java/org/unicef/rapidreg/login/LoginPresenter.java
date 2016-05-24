@@ -44,7 +44,7 @@ public class LoginPresenter extends MvpBasePresenter<LoginView> {
     private Context context;
     private IntentStarter intentStarter;
 
-    public void doLogin(Context context, String username, String password, String url){
+    public void doLogin(Context context, String username, String password, String url) {
         if (!validate(context, username, password, url)) {
             return;
         }
@@ -61,11 +61,11 @@ public class LoginPresenter extends MvpBasePresenter<LoginView> {
 
     private boolean validate(Context context, String username, String password, String url) {
         boolean valid = true;
-            if (TextUtils.isEmpty(username) || username.length() > 254 || ValidatesUtils.containsSpecialCharactor(username)) {
-                getView().getUsernameView().setError(context.getResources().getString(R.string.login_username_invalid_text));
+        if (TextUtils.isEmpty(username) || username.length() > 254 || ValidatesUtils.containsSpecialCharacter(username)) {
+            getView().getUsernameView().setError(context.getResources().getString(R.string.login_username_invalid_text));
             valid = false;
         } else {
-                getView().getUsernameView().setError(null);
+            getView().getUsernameView().setError(null);
         }
 
         if (TextUtils.isEmpty(password)) {
@@ -107,10 +107,10 @@ public class LoginPresenter extends MvpBasePresenter<LoginView> {
                 Settings.Secure.ANDROID_ID);
 
         Call<LoginResponse> call = client.login(new LoginRequestBody(
-                                                            username,
-                                                            password,
-                                                            telephonyManager.getLine1Number(),
-                                                            android_id));
+                username,
+                password,
+                telephonyManager.getLine1Number(),
+                android_id));
         call.enqueue(new Callback<LoginResponse>() {
             @Override
             public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
@@ -142,7 +142,8 @@ public class LoginPresenter extends MvpBasePresenter<LoginView> {
             }
         });
     }
-    //TODO: refactor doLoginOFFLine
+
+    //TODO: refactor doLoginOFFLine using encry password interface
     private void doLoginOffline(Context context, String username, String password) {
         if (!primeroApplication.getSharedPreferences().contains(username)) {
             showLoadingIndicator(false);
@@ -160,14 +161,13 @@ public class LoginPresenter extends MvpBasePresenter<LoginView> {
     }
 
     private User loadOffLine(String username, String password, Context context) {
-            String jsonForUser = primeroApplication.getSharedPreferences().getString(username, null);
-            User user = gson.fromJson(jsonForUser, User.class);
-            if (user.getPassword().equals(password))
-                return user;
-            else {
-                showLoadingIndicator(false);
-                showLoginResultMessage(context.getResources().getString(R.string.login_failed_text));
-            }
+        String jsonForUser = primeroApplication.getSharedPreferences().getString(username, null);
+        User user = gson.fromJson(jsonForUser, User.class);
+        if (user.getPassword().equals(password)) {
+            return user;
+        }
+        showLoadingIndicator(false);
+        showLoginResultMessage(context.getResources().getString(R.string.login_failed_text));
         return null;
     }
     //End TODO
@@ -195,7 +195,7 @@ public class LoginPresenter extends MvpBasePresenter<LoginView> {
         getView().showError(t, false);
     }
 
-    private void notifyEvent (Object event) {
+    private void notifyEvent(Object event) {
         EventBus.getDefault().post(event);
     }
 
