@@ -10,6 +10,7 @@ import android.widget.TextView;
 import org.apache.maven.artifact.ant.shaded.StringUtils;
 import org.hamcrest.CoreMatchers;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.Robolectric;
@@ -30,58 +31,58 @@ import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.*;
 
 @RunWith(RobolectricGradleTestRunner.class)
-@Config(constants = BuildConfig.class,sdk = Build.VERSION_CODES.JELLY_BEAN)
+@Config(constants = BuildConfig.class, sdk = Build.VERSION_CODES.JELLY_BEAN)
 public class LoginActivityTest {
 
-    private EditText usernameEditview;
-    private EditText passwordEditview;
+    private EditText usernameEditView;
+    private EditText passwordEditView;
     private Button loginButton;
-    private EditText urlEditview;
+    private EditText urlEditView;
 
     @Before
     public void setup() {
         Activity activity = Robolectric.setupActivity(LoginActivity.class);
-        usernameEditview = (EditText) activity.findViewById(R.id.editview_username);
-        passwordEditview = (EditText) activity.findViewById(R.id.editview_password);
+        usernameEditView = (EditText) activity.findViewById(R.id.editview_username);
+        passwordEditView = (EditText) activity.findViewById(R.id.editview_password);
         loginButton = (Button) activity.findViewById(R.id.button_login);
-        urlEditview = (EditText) activity.findViewById(R.id.editview_url);
+        urlEditView = (EditText) activity.findViewById(R.id.editview_url);
     }
-//    @Test
-//    public void correctUserandPasswordShouldLoginSuccess() {
-//        usernameEditview.setText("primero");
-//        passwordEditview.setText("qu01n23!");
-//        if (urlEditview != null)
-//            urlEditview.setText("http://10.29.3.184:3000");
-//
-//        loginButton.performClick();
-//        ShadowApplication application = shadowOf(RuntimeEnvironment.application);
-//        assertThat("Next activity has started", application.getNextStartedActivity(), is(notNullValue()));
-//    }
-//
-//
+
+    @Test @Ignore // TODO: loginButton.performClick() Not work, need mock to solve
+    public void correctUserAndPasswordShouldLoginSuccess() {
+        usernameEditView.setText("primero");
+        passwordEditView.setText("qu01n23!");
+        if (urlEditView != null) {
+            urlEditView.setText("http://10.29.3.184:3000");
+        }
+
+        loginButton.performClick();
+        ShadowApplication application = shadowOf(RuntimeEnvironment.application);
+        assertThat("Next activity has started", application.getNextStartedActivity(), is(notNullValue()));
+    }
+
     @Test
     public void emptyUserAndPasswordShouldShowError() {
 
-        usernameEditview.setText("");
-        passwordEditview.setText("");
+        usernameEditView.setText("");
+        passwordEditView.setText("");
 
         loginButton.performClick();
 
         ShadowApplication application = shadowOf(RuntimeEnvironment.application);
         assertThat("Next activity should not started", application.getNextStartedActivity(), is(nullValue()));
-        assertThat("Show error for user field ", usernameEditview.getError(), is(CoreMatchers.notNullValue()));
-        assertThat("Show error for Password field ", passwordEditview.getError(), is(CoreMatchers.notNullValue()));
+        assertThat("Show error for username field ", usernameEditView.getError(), is(CoreMatchers.notNullValue()));
+        assertThat("Show error for Password field ", passwordEditView.getError(), is(CoreMatchers.notNullValue()));
     }
 
     @Test
     public void invalidUserNameFormatShouldShowError() {
 
-        Map<String,String> nameList = new HashMap<String,String>();
-        nameList.put("NAME_CONTAINS_SPECAIL","primer@/?");
-        nameList.put("NAME_TOO_LONG",StringUtils.leftPad("", 255, "a"));
+        Map<String, String> nameList = new HashMap<String, String>();
+        nameList.put("NAME_CONTAINS_SPECAIL", "primer@/?");
+        nameList.put("NAME_TOO_LONG", StringUtils.leftPad("", 255, "a"));
 
         assertAllInvalidUserNameFormatShouldFail(nameList);
-
 
 
     }
@@ -98,17 +99,17 @@ public class LoginActivityTest {
 //    }
 
     private void assertAllInvalidUserNameFormatShouldFail(Map<String, String> nameList) {
-        for (Map.Entry<String, String> nameEntry : nameList.entrySet())
-        {
-            usernameEditview.setText(nameEntry.getValue());
-            passwordEditview.setText("qu01n23!");
-            if (urlEditview == null)
-                urlEditview.setText("http://10.29.3.184:3000");
+        for (Map.Entry<String, String> nameEntry : nameList.entrySet()) {
+            usernameEditView.setText(nameEntry.getValue());
+            passwordEditView.setText("qu01n23!");
+            if (urlEditView == null) {
+                urlEditView.setText("http://10.29.3.184:3000");
+            }
 
             loginButton.performClick();
             ShadowApplication application = shadowOf(RuntimeEnvironment.application);
             assertThat("Next activity should not started", application.getNextStartedActivity(), is(nullValue()));
-            assertThat("Show error for " + nameEntry.getKey(), usernameEditview.getError(), is(CoreMatchers.notNullValue()));
+            assertThat("Show error for " + nameEntry.getKey(), usernameEditView.getError(), is(CoreMatchers.notNullValue()));
         }
 
     }
