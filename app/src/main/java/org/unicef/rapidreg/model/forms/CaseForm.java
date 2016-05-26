@@ -4,20 +4,20 @@ import java.util.List;
 
 public class CaseForm {
 
-    private List<FormSection> formsections;
+    private List<FormSection> formSections;
 
     public CaseForm() {
     }
 
-    public CaseForm(List<FormSection> formsections) {
-        this.formsections = formsections;
+    public CaseForm(List<FormSection> formSections) {
+        this.formSections = formSections;
     }
 
-    public List<FormSection> getFormsections() {
-        return formsections;
+    public List<FormSection> getFormSections() {
+        return formSections;
     }
 
-    public void setFormsections(List<FormSection> formsections) {
-        this.formsections = formsections;
+    public void setFormSections(List<FormSection> formSections) {
+        this.formSections = formSections;
     }
 }
