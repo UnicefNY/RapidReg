@@ -27,15 +27,12 @@ necessary libraries and Android SDK but source code. You need to mount source co
 container.
 
 Here is a Jenkins sample:
-```
+``` docker
 docker rm -f $JOB_NAME || echo `no container to delete`
-
-docker build -t primero/$JOB_NAME .   
-
-echo $WORKSPACE   
-docker run --name $JOB_NAME \   
--v "$WORKSPACE:/opt/project" \   
--e "STORE_PASSWORD=$STORE_PASSWORD" \   
--e "KEY_PASSWORD=$KEY_PASSWORD" \   
--e "KEY_ALIAS=$KEY_ALIAS" \   
+docker build -t primero/$JOB_NAME .
+docker run --name $JOB_NAME \
+-v "$WORKSPACE:/opt/project" \
+-e "STORE_PASSWORD=$STORE_PASSWORD" \
+-e "KEY_PASSWORD=$KEY_PASSWORD" \
+-e "KEY_ALIAS=$KEY_ALIAS" \
 ```
