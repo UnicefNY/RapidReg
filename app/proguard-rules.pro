@@ -38,4 +38,6 @@
 -dontnote org.apache.http.*
 -dontwarn org.w3c.dom.bootstrap.DOMImplementationRegistry
 
+-keep class * extends com.raizlabs.android.dbflow.config.DatabaseHolder { *; }
+
 # Remember keeping your model classes below
