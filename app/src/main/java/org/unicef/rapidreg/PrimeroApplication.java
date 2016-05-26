@@ -5,10 +5,18 @@ import android.content.SharedPreferences;
 import android.text.TextUtils;
 
 import com.google.gson.Gson;
+import com.raizlabs.android.dbflow.config.DatabaseConfig;
+import com.raizlabs.android.dbflow.config.DatabaseDefinition;
+import com.raizlabs.android.dbflow.config.FlowConfig;
+import com.raizlabs.android.dbflow.config.FlowManager;
+import com.raizlabs.android.dbflow.structure.database.DatabaseHelperListener;
+import com.raizlabs.android.dbflow.structure.database.OpenHelper;
 
+import org.unicef.rapidreg.db.PrimeroDB;
+import org.unicef.rapidreg.db.SQLCipherHelperImpl;
 import org.unicef.rapidreg.model.User;
 
-public class PrimeroApplication extends Application{
+public class PrimeroApplication extends Application {
 
     public static final String SHARED_PREFERENCES_FILE = "RAPIDREG_PREFERENCES";
     public static final String CURRENT_USER_PREF = "CURRENT_USER";
@@ -19,11 +27,11 @@ public class PrimeroApplication extends Application{
     @Override
     public void onCreate() {
         super.onCreate();
+        initDB();
     }
 
     public SharedPreferences getSharedPreferences() {
-        SharedPreferences sharedPreferences =  getSharedPreferences(SHARED_PREFERENCES_FILE, MODE_PRIVATE);
-        return sharedPreferences;
+        return getSharedPreferences(SHARED_PREFERENCES_FILE, MODE_PRIVATE);
     }
 
     public User getCurrentUser() {
@@ -44,8 +52,22 @@ public class PrimeroApplication extends Application{
         String jsonForCurrentUser = getSharedPreferences().getString(CURRENT_USER_PREF, null);
         return jsonForCurrentUser == null ? null : gson.fromJson(jsonForCurrentUser, User.class);
     }
+
     // TODO: need to realise get in progress Sychronization tasks
     public Object getSyncTask() {
         return null;
+    }
+
+    private void initDB() {
+        FlowManager.init(new FlowConfig.Builder(this)
+                .addDatabaseConfig(new DatabaseConfig.Builder(PrimeroDB.class)
+                        .openHelper(new DatabaseConfig.OpenHelperCreator() {
+                            @Override
+                            public OpenHelper createHelper(DatabaseDefinition databaseDefinition,
+                                                           DatabaseHelperListener helperListener) {
+                                return new SQLCipherHelperImpl(databaseDefinition, helperListener);
+                            }
+                        }).build())
+                .build());
     }
 }
