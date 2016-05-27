@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<com.primero.view.fields.MultiSelectBox xmlns:android="http://schemas.android.com/apk/res/android"
+                                        android:orientation="vertical"
+                                        android:layout_width="fill_parent"
+                                        android:layout_height="wrap_content">
+
+    <include layout="@layout/form_label" />
+
+    <com.primero.utils.MultiSelectSpinner
+        android:id="@+id/field_options_multi"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"/>
+
+    <include layout="@layout/form_help_text" />
+
+</com.primero.view.fields.MultiSelectBox>

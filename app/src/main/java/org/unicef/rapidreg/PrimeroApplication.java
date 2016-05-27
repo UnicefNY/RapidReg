@@ -16,10 +16,11 @@ import org.unicef.rapidreg.db.PrimeroDB;
 import org.unicef.rapidreg.db.SQLCipherHelperImpl;
 import org.unicef.rapidreg.model.User;
 
-public class PrimeroApplication extends Application {
+public class PrimeroApplication extends Application{
 
     public static final String SHARED_PREFERENCES_FILE = "RAPIDREG_PREFERENCES";
     public static final String CURRENT_USER_PREF = "CURRENT_USER";
+    public static final String FORM_SECTIONS_PREF = "FORM_SECTION";
 
     private Gson gson = new Gson();
     private User currentUser;
@@ -69,5 +70,9 @@ public class PrimeroApplication extends Application {
                             }
                         }).build())
                 .build());
+    }
+
+    public void saveFormSections(String formSectionJson) {
+        getSharedPreferences().edit().putString(FORM_SECTIONS_PREF, formSectionJson).commit();
     }
 }
