@@ -1,7 +1,14 @@
 package org.unicef.rapidreg.widgets;
 
-/**
- * Created by cheny on 5/27/16.
- */
-public class TextArea {
+import android.content.Context;
+import android.util.AttributeSet;
+
+public class TextArea extends TextField{
+    public TextArea(Context context) {
+        super(context);
+    }
+
+    public TextArea(Context context, AttributeSet attrs) {
+        super(context, attrs);
+    }
 }

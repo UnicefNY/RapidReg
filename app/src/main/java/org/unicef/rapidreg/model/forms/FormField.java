@@ -16,11 +16,12 @@ public class FormField {
     @SerializedName("display_name") @Expose private Map<String, String> displayName;
     @SerializedName("help_text") @Expose private Map<String, String> helpText;
     @SerializedName("option_strings_text") @Expose private Map<String, List<SelectOption>> optionStringsText;
+    private Object value;
 
     public FormField() {
     }
 
-    public FormField(String name, String type, Boolean editable, Boolean multiSelect, Map<String, String> displayName, Map<String, String> helpText, Map<String, List<SelectOption>> optionStringsText) {
+    public FormField(String name, String type, Boolean editable, Boolean multiSelect, Map<String, String> displayName, Map<String, String> helpText, Map<String, List<SelectOption>> optionStringsText, Object value) {
         this.name = name;
         this.type = type;
         this.editable = editable;
@@ -28,6 +29,7 @@ public class FormField {
         this.displayName = displayName;
         this.helpText = helpText;
         this.optionStringsText = optionStringsText;
+        this.value = value;
     }
 
     public String getName() {
@@ -84,5 +86,13 @@ public class FormField {
 
     public void setOptionStringsText(Map<String, List<SelectOption>> optionStringsText) {
         this.optionStringsText = optionStringsText;
+    }
+
+    public Object getValue() {
+        return value;
+    }
+
+    public void setValue(Object value) {
+        this.value = value;
     }
 }

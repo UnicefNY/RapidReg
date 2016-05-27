@@ -1,16 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<com.primero.view.fields.RadioButtons xmlns:android="http://schemas.android.com/apk/res/android"
-                                      android:layout_width="fill_parent"
-                                      android:layout_height="wrap_content"
-                                      android:orientation="vertical">
+<org.unicef.rapidreg.widgets.RadioButtons
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
 
     <include layout="@layout/form_label" />
 
     <RadioGroup android:id="@+id/values"
                 android:layout_height="wrap_content"
-                android:layout_width="fill_parent" />
+                android:layout_width="match_parent" />
 
     <include layout="@layout/form_help_text" />
 
-</com.primero.view.fields.RadioButtons>
+</org.unicef.rapidreg.widgets.RadioButtons>

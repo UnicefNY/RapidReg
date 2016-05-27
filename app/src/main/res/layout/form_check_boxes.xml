@@ -1,18 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<com.primero.view.fields.CheckBoxes xmlns:android="http://schemas.android.com/apk/res/android"
-                                    android:layout_width="fill_parent"
-                                    android:layout_height="wrap_content"
-                                    android:orientation="vertical">
+<org.unicef.rapidreg.widgets.CheckBoxes
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
 
-    <include layout="@layout/form_label" />
+    <include layout="@layout/form_label"/>
 
     <LinearLayout
-              android:id="@+id/values"
-              android:layout_width="fill_parent"
-              android:layout_height="wrap_content"
-              android:orientation="vertical" />
+        android:id="@+id/values"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"/>
 
-    <include layout="@layout/form_help_text" />
+    <include layout="@layout/form_help_text"/>
 
-</com.primero.view.fields.CheckBoxes>
+</org.unicef.rapidreg.widgets.CheckBoxes>

@@ -76,4 +76,16 @@ public class FormSection {
     public void setBaseLanguage(String baseLanguage) {
         this.baseLanguage = baseLanguage;
     }
+
+    @Override
+    public String toString() {
+        return "FormSection{" +
+                "name=" + name +
+                ", order=" + order +
+                ", enabled=" + enabled +
+                ", helpText=" + helpText +
+                ", fields=" + fields +
+                ", baseLanguage='" + baseLanguage + '\'' +
+                '}';
+    }
 }

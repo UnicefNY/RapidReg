@@ -1,43 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<com.primero.view.fields.SubformField xmlns:android="http://schemas.android.com/apk/res/android"
-                                      android:layout_width="fill_parent"
-                                      android:layout_height="fill_parent">
+<org.unicef.rapidreg.widgets.SubformField
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
-    <LinearLayout android:orientation="vertical"
-                  android:layout_width="fill_parent"
-                  android:layout_height="fill_parent"
-                  android:scrollbars="vertical">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:scrollbars="vertical">
 
-        <ImageView android:layout_width="match_parent"
-                   android:layout_height="wrap_content"
-                   android:src="@drawable/line"/>
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:src="@drawable/line"/>
 
-        <RelativeLayout android:layout_width="fill_parent"
-                        android:layout_height="wrap_content">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
-            <LinearLayout android:id="@+id/display"
-                          android:orientation="vertical"
-                          android:layout_width="wrap_content"
-                          android:layout_height="wrap_content">
-            <include layout="@layout/form_label" />
-            <include layout="@layout/form_help_text" />
+            <LinearLayout
+                android:id="@+id/display"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <include layout="@layout/form_label"/>
+
+                <include layout="@layout/form_help_text"/>
             </LinearLayout>
 
-            <Button android:id="@+id/hide_expand_button"
-                    android:layout_height="17dp"
-                    android:layout_width="23dp"
-                    android:layout_alignParentTop="true"
-                    android:layout_alignParentRight="true"
-                    android:background="@drawable/hide_expand_button"/>
+            <Button
+                android:id="@+id/hide_expand_button"
+                android:layout_width="23dp"
+                android:layout_height="17dp"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentTop="true"
+                android:background="@drawable/hide_expand_button"/>
         </RelativeLayout>
 
-        <LinearLayout android:id="@+id/subContainer"
-                      android:orientation="vertical"
-                      android:layout_width="fill_parent"
-                      android:layout_height="fill_parent"
-                      android:scrollbars="vertical"/>
+        <LinearLayout
+            android:id="@+id/subContainer"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:scrollbars="vertical"/>
 
     </LinearLayout>
 
-</com.primero.view.fields.SubformField>
+</org.unicef.rapidreg.widgets.SubformField>
