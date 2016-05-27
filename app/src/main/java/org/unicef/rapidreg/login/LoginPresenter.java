@@ -7,6 +7,7 @@ import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
+import android.util.Log;
 import android.util.Patterns;
 
 import com.google.gson.Gson;
@@ -21,15 +22,20 @@ import org.unicef.rapidreg.R;
 import org.unicef.rapidreg.event.NeedCacheForOfflineEvent;
 import org.unicef.rapidreg.event.NeedDoLoginOffLineEvent;
 import org.unicef.rapidreg.event.NeedGoToLoginSuccessScreenEvent;
+import org.unicef.rapidreg.event.NeedLoadFormSectionsEvent;
 import org.unicef.rapidreg.model.LoginRequestBody;
 import org.unicef.rapidreg.model.LoginResponse;
 import org.unicef.rapidreg.model.User;
+import org.unicef.rapidreg.model.forms.CaseForm;
 import org.unicef.rapidreg.network.HttpStatusCodeHandler;
 import org.unicef.rapidreg.network.NetworkServiceGenerator;
 import org.unicef.rapidreg.network.NetworkStatusManager;
 import org.unicef.rapidreg.network.PrimeroClient;
 import org.unicef.rapidreg.utils.ValidatesUtils;
 
+import java.util.Locale;
+
+import okhttp3.Headers;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -96,7 +102,6 @@ public class LoginPresenter extends MvpBasePresenter<LoginView> {
             client = NetworkServiceGenerator.createService(context, PrimeroClient.class);
         } catch (Exception e) {
             showLoginResultMessage(e.getMessage());
-            return;
         }
     }
 
@@ -117,12 +122,14 @@ public class LoginPresenter extends MvpBasePresenter<LoginView> {
                 if (isViewAttached()) {
                     showLoadingIndicator(false);
                     if (response.isSuccessful()) {
+                        String cookie = response.headers().get("Set-Cookie");
                         User user = new User(username, password, true, url);
                         user.setDbKey(response.body().getDb_key());
                         user.setOrganisation(response.body().getOrganization());
                         user.setLanguage(response.body().getLanguage());
                         user.setVerified(response.body().getVerified());
                         notifyEvent(new NeedCacheForOfflineEvent(user));
+                        notifyEvent(new NeedLoadFormSectionsEvent(cookie));
                         notifyEvent(new NeedGoToLoginSuccessScreenEvent());
                         showLoginResultMessage(HttpStatusCodeHandler.LOGIN_SUCCESS_MESSAGE);
                     } else {
@@ -224,6 +231,36 @@ public class LoginPresenter extends MvpBasePresenter<LoginView> {
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onNeedGoToLoginSuccessScreenEvent(NeedGoToLoginSuccessScreenEvent event) {
         goToLoginSuccessScreen();
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onNeedLoadFormSectionsEvent(NeedLoadFormSectionsEvent event) {
+//        showLoadingIndicator(true);
+        Call<CaseForm> call = client.getForm(event.cookie, Locale.getDefault().getLanguage(), true, "case");
+        call.enqueue(new Callback<CaseForm>() {
+            @Override
+            public void onResponse(Call<CaseForm> call, Response<CaseForm> response) {
+//                    showLoadingIndicator(false);
+                    if (response.isSuccessful()) {
+                        CaseForm caseForm= response.body();
+                        String jsonFormCaseForm = gson.toJson(caseForm);
+                        primeroApplication.saveFormSections(jsonFormCaseForm);
+//                        showLoginResultMessage("Load From Success!");
+                        Log.e(TAG, "ok: " );
+                    } else {
+//                        showLoginResultMessage(HttpStatusCodeHandler.getHttpStatusMessage(response.code()));
+                        Log.e(TAG, "faild: ");
+                    }
+            }
+
+            @Override
+            public void onFailure(Call<CaseForm> call, Throwable t) {
+                if (isViewAttached()) {
+                    showNetworkErrorMessage(t, false);
+                    showLoadingIndicator(false);
+                }
+            }
+        });
     }
 
 }
