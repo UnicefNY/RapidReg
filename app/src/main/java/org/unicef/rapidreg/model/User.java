@@ -5,15 +5,31 @@ import com.google.gson.annotations.SerializedName;
 
 public class User {
 
-    @Expose @SerializedName("user_name") protected String userName;
+    @Expose
+    @SerializedName("user_name")
+    protected String userName;
     protected String password;
-    @Expose @SerializedName("verified") protected boolean verified;
-    @Expose @SerializedName("server_url") protected String serverUrl;
-    @Expose @SerializedName("db_key") protected String dbKey;
-    @Expose @SerializedName("organisation") protected String organisation;
-    @Expose @SerializedName("full_name") protected String fullName;
-    @Expose @SerializedName("unauthenticated_password") protected String unauthenticatedPassword;
-    @Expose @SerializedName("language") protected String language;
+    @Expose
+    @SerializedName("verified")
+    protected boolean verified;
+    @Expose
+    @SerializedName("server_url")
+    protected String serverUrl;
+    @Expose
+    @SerializedName("db_key")
+    protected String dbKey;
+    @Expose
+    @SerializedName("organisation")
+    protected String organisation;
+    @Expose
+    @SerializedName("full_name")
+    protected String fullName;
+    @Expose
+    @SerializedName("unauthenticated_password")
+    protected String unauthenticatedPassword;
+    @Expose
+    @SerializedName("language")
+    protected String language;
 
     public User() {
     }

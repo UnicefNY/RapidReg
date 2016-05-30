@@ -4,13 +4,15 @@ import com.google.gson.annotations.SerializedName;
 
 public class SelectOption {
 
-    @SerializedName("id") private String id;
-    @SerializedName("display_text") private String displayText;
+    @SerializedName("id")
+    private String id;
+    @SerializedName("display_text")
+    private String displayText;
 
     public SelectOption() {
     }
 
-    public SelectOption(String same){
+    public SelectOption(String same) {
         displayText = id = same;
     }
 

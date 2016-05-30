@@ -9,13 +9,16 @@ import java.util.Map;
 
 public class FormSection {
 
-    @SerializedName("name") private Map<String, String> name = new HashMap<String, String>();
+    @SerializedName("name")
+    private Map<String, String> name = new HashMap<String, String>();
     private int order;
     private boolean enabled;
     @SerializedName("help_text")
     private Map<String, String> helpText = new HashMap<String, String>();
-    @SerializedName("fields") private List<FormField> fields = new ArrayList<FormField>();
-    @SerializedName("base_language") private String baseLanguage;
+    @SerializedName("fields")
+    private List<FormField> fields = new ArrayList<FormField>();
+    @SerializedName("base_language")
+    private String baseLanguage;
 
     public FormSection() {
     }

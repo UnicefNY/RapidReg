@@ -5,16 +5,19 @@ public class Link {
 
     private String uri;
 
-    public void setRel(String rel){
+    public void setRel(String rel) {
         this.rel = rel;
     }
-    public String getRel(){
+
+    public String getRel() {
         return this.rel;
     }
-    public void setUri(String uri){
+
+    public void setUri(String uri) {
         this.uri = uri;
     }
-    public String getUri(){
+
+    public String getUri() {
         return this.uri;
     }
 

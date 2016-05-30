@@ -4,7 +4,7 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.widget.LinearLayout;
 
-public class RadioButtons extends LinearLayout{
+public class RadioButtons extends LinearLayout {
 
     public RadioButtons(Context context) {
         super(context);

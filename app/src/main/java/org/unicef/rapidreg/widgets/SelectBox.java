@@ -4,7 +4,7 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.widget.LinearLayout;
 
-public class SelectBox extends LinearLayout{
+public class SelectBox extends LinearLayout {
 
     public SelectBox(Context context) {
         super(context);
