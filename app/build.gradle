@@ -61,6 +61,10 @@ dependencies {
     compile 'com.couchbase.lite:couchbase-lite-android:1.2.1'
     compile 'commons-io:commons-io:2.5'
 
+    compile 'com.hannesdorfmann.annotatedadapter:annotation:1.1.1'
+    compile 'com.hannesdorfmann.annotatedadapter:support-recyclerview:1.1.1'
+    apt 'com.hannesdorfmann.annotatedadapter:processor:1.1.1'
+
     apt "com.github.Raizlabs.DBFlow:dbflow-processor:${dbflow_version}"
     compile "com.github.Raizlabs.DBFlow:dbflow-core:${dbflow_version}"
     compile "com.github.Raizlabs.DBFlow:dbflow:${dbflow_version}"
