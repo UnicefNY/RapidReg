@@ -11,8 +11,8 @@ import com.raizlabs.android.dbflow.config.DatabaseDefinition;
 import com.raizlabs.android.dbflow.structure.database.DatabaseHelperListener;
 import com.raizlabs.dbflow.android.sqlcipher.SQLCipherOpenHelper;
 
-import org.mindrot.jbcrypt.BCrypt;
 import org.unicef.rapidreg.PrimeroApplication;
+import org.unicef.rapidreg.utils.EncryptHelper;
 
 public class SQLCipherHelperImpl extends SQLCipherOpenHelper {
     public static final String TAG = SQLCipherHelperImpl.class.getSimpleName();
@@ -39,6 +39,6 @@ public class SQLCipherHelperImpl extends SQLCipherOpenHelper {
                 + Build.FINGERPRINT + Build.HOST + Build.ID + Build.MANUFACTURER + Build.MODEL
                 + Build.PRODUCT + Build.TAGS + Build.TYPE + Build.USER;
 
-        return BCrypt.hashpw(buildInfo + deviceId + androidId, BCrypt.gensalt(12));
+        return EncryptHelper.encrypt(buildInfo + deviceId + androidId);
     }
 }
