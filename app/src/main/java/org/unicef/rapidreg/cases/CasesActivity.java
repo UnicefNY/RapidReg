@@ -24,6 +24,13 @@ public class CasesActivity extends BaseActivity {
                             .commit();
                     return true;
                 }
+                if (menuItem.getItemId() == R.id.add_case) {
+                    getSupportFragmentManager().beginTransaction()
+                            .replace(R.id.fragment_content, new CasesRegisterFragment())
+                            .commit();
+                    return true;
+                }
+
                 return false;
             }
         });
