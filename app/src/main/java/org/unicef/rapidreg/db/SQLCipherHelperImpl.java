@@ -24,10 +24,10 @@ public class SQLCipherHelperImpl extends SQLCipherOpenHelper {
     @Override
     protected String getCipherSecret() {
         Log.d(TAG, String.valueOf(BuildConfig.DEBUG));
-        return PrimeroApplication.isDebugMode() ? "primero" : generateCipherKey();
+        return PrimeroApplication.isDebugMode() ? "primero" : generateEncryptionKey();
     }
 
-    private String generateCipherKey() {
+    private String generateEncryptionKey() {
         Context ctx = PrimeroApplication.getAppContext();
         String androidId = Settings.Secure.getString(ctx.getContentResolver(),
                 Settings.Secure.ANDROID_ID);
