@@ -3,9 +3,7 @@ package org.unicef.rapidreg.db;
 import android.content.Context;
 import android.os.Build;
 import android.provider.Settings;
-import android.support.v4.BuildConfig;
 import android.telephony.TelephonyManager;
-import android.util.Log;
 
 import com.raizlabs.android.dbflow.config.DatabaseDefinition;
 import com.raizlabs.android.dbflow.structure.database.DatabaseHelperListener;
@@ -15,7 +13,6 @@ import org.unicef.rapidreg.PrimeroApplication;
 import org.unicef.rapidreg.utils.EncryptHelper;
 
 public class SQLCipherHelperImpl extends SQLCipherOpenHelper {
-    public static final String TAG = SQLCipherHelperImpl.class.getSimpleName();
 
     public SQLCipherHelperImpl(DatabaseDefinition definition, DatabaseHelperListener listener) {
         super(definition, listener);
@@ -23,7 +20,6 @@ public class SQLCipherHelperImpl extends SQLCipherOpenHelper {
 
     @Override
     protected String getCipherSecret() {
-        Log.d(TAG, String.valueOf(BuildConfig.DEBUG));
         return PrimeroApplication.isDebugMode() ? "primero" : generateEncryptionKey();
     }
 
