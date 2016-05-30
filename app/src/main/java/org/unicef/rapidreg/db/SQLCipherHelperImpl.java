@@ -29,16 +29,16 @@ public class SQLCipherHelperImpl extends SQLCipherOpenHelper {
 
     private String generateCipherKey() {
         Context ctx = PrimeroApplication.getAppContext();
-        String android_id = Settings.Secure.getString(ctx.getContentResolver(),
+        String androidId = Settings.Secure.getString(ctx.getContentResolver(),
                 Settings.Secure.ANDROID_ID);
 
         TelephonyManager tm = (TelephonyManager) ctx.getSystemService(Context.TELEPHONY_SERVICE);
-        String device_id = tm.getDeviceId();
+        String deviceId = tm.getDeviceId();
 
-        String build_info = Build.BOARD + Build.BRAND + Build.DEVICE + Build.DISPLAY
+        String buildInfo = Build.BOARD + Build.BRAND + Build.DEVICE + Build.DISPLAY
                 + Build.FINGERPRINT + Build.HOST + Build.ID + Build.MANUFACTURER + Build.MODEL
                 + Build.PRODUCT + Build.TAGS + Build.TYPE + Build.USER;
 
-        return BCrypt.hashpw(build_info + device_id + android_id, BCrypt.gensalt(12));
+        return BCrypt.hashpw(buildInfo + deviceId + androidId, BCrypt.gensalt(12));
     }
 }
