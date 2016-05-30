@@ -181,9 +181,7 @@ public class LoginPresenter extends MvpBasePresenter<LoginView> {
 
 
     private void cacheForOffline(@NonNull User user) {
-        String jsonForUser = gson.toJson(user);
-        primeroApplication.getSharedPreferences().edit().putString(user.getUserName(), jsonForUser).commit();
-        primeroApplication.setCurrentUser(user);
+        user.save();
     }
 
     private void goToLoginSuccessScreen() {
