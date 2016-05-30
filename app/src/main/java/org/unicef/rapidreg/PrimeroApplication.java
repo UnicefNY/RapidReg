@@ -16,7 +16,7 @@ import org.unicef.rapidreg.db.PrimeroDB;
 import org.unicef.rapidreg.db.SQLCipherHelperImpl;
 import org.unicef.rapidreg.model.User;
 
-public class PrimeroApplication extends Application{
+public class PrimeroApplication extends Application {
 
     public static final String SHARED_PREFERENCES_FILE = "RAPIDREG_PREFERENCES";
     public static final String CURRENT_USER_PREF = "CURRENT_USER";

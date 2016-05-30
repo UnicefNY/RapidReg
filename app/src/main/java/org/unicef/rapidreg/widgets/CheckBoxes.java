@@ -4,7 +4,7 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.widget.LinearLayout;
 
-public class CheckBoxes extends LinearLayout{
+public class CheckBoxes extends LinearLayout {
     public CheckBoxes(Context context) {
         super(context);
     }

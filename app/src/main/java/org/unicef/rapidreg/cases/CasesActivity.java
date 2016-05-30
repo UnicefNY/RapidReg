@@ -16,7 +16,8 @@ public class CasesActivity extends BaseActivity {
         toolbar.inflateMenu(R.menu.toolbar_main);
 
         toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
-            @Override public boolean onMenuItemClick(MenuItem menuItem) {
+            @Override
+            public boolean onMenuItemClick(MenuItem menuItem) {
                 if (menuItem.getItemId() == R.id.search) {
                     getSupportFragmentManager().beginTransaction()
                             .replace(R.id.fragment_content, new CasesSearchFragment())
@@ -35,5 +36,4 @@ public class CasesActivity extends BaseActivity {
                     .commit();
         }
     }
-
 }

@@ -9,13 +9,27 @@ import java.util.Map;
 
 public class FormField {
 
-    @SerializedName("name") @Expose private String name;
-    @SerializedName("type") @Expose private String type;
-    @SerializedName("editable") @Expose private Boolean editable;
-    @SerializedName("multi_select") @Expose private Boolean multiSelect;
-    @SerializedName("display_name") @Expose private Map<String, String> displayName;
-    @SerializedName("help_text") @Expose private Map<String, String> helpText;
-    @SerializedName("option_strings_text") @Expose private Map<String, List<SelectOption>> optionStringsText;
+    @SerializedName("name")
+    @Expose
+    private String name;
+    @SerializedName("type")
+    @Expose
+    private String type;
+    @SerializedName("editable")
+    @Expose
+    private Boolean editable;
+    @SerializedName("multi_select")
+    @Expose
+    private Boolean multiSelect;
+    @SerializedName("display_name")
+    @Expose
+    private Map<String, String> displayName;
+    @SerializedName("help_text")
+    @Expose
+    private Map<String, String> helpText;
+    @SerializedName("option_strings_text")
+    @Expose
+    private Map<String, List<SelectOption>> optionStringsText;
     private Object value;
 
     public FormField() {

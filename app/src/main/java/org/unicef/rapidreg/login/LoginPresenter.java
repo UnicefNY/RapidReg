@@ -241,16 +241,16 @@ public class LoginPresenter extends MvpBasePresenter<LoginView> {
             @Override
             public void onResponse(Call<CaseForm> call, Response<CaseForm> response) {
 //                    showLoadingIndicator(false);
-                    if (response.isSuccessful()) {
-                        CaseForm caseForm= response.body();
-                        String jsonFormCaseForm = gson.toJson(caseForm);
-                        primeroApplication.saveFormSections(jsonFormCaseForm);
+                if (response.isSuccessful()) {
+                    CaseForm caseForm = response.body();
+                    String jsonFormCaseForm = gson.toJson(caseForm);
+                    primeroApplication.saveFormSections(jsonFormCaseForm);
 //                        showLoginResultMessage("Load From Success!");
-                        Log.e(TAG, "ok: " );
-                    } else {
+                    Log.e(TAG, "ok: ");
+                } else {
 //                        showLoginResultMessage(HttpStatusCodeHandler.getHttpStatusMessage(response.code()));
-                        Log.e(TAG, "faild: ");
-                    }
+                    Log.e(TAG, "faild: ");
+                }
             }
 
             @Override

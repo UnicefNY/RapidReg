@@ -18,12 +18,16 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import retrofit2.Call;
 
-public class LoginActivity extends MvpActivity<LoginView, LoginPresenter> implements LoginView{
+public class LoginActivity extends MvpActivity<LoginView, LoginPresenter> implements LoginView {
 
-    @BindView(R.id.button_login) Button loginButton;
-    @BindView(R.id.editview_username) EditText usernameEditview;
-    @BindView(R.id.editview_password) EditText passwordEditview;
-    @BindView(R.id.editview_url) EditText urlEditview;
+    @BindView(R.id.button_login)
+    Button loginButton;
+    @BindView(R.id.editview_username)
+    EditText usernameEditview;
+    @BindView(R.id.editview_password)
+    EditText passwordEditview;
+    @BindView(R.id.editview_url)
+    EditText urlEditview;
     private ProgressDialog loginProgressDialog;
 
     @Override
@@ -37,9 +41,9 @@ public class LoginActivity extends MvpActivity<LoginView, LoginPresenter> implem
     @OnClick(R.id.button_login)
     public void onLoginButtonClicked() {
         presenter.doLogin(this,
-                            usernameEditview.getText().toString().trim(),
-                            passwordEditview.getText().toString().trim(),
-                            urlEditview.getText().toString().trim());
+                usernameEditview.getText().toString().trim(),
+                passwordEditview.getText().toString().trim(),
+                urlEditview.getText().toString().trim());
     }
 
     @NonNull

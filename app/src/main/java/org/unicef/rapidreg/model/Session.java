@@ -5,16 +5,19 @@ public class Session {
 
     private Link link;
 
-    public void setToken(String token){
+    public void setToken(String token) {
         this.token = token;
     }
-    public String getToken(){
+
+    public String getToken() {
         return this.token;
     }
-    public void setLink(Link link){
+
+    public void setLink(Link link) {
         this.link = link;
     }
-    public Link getLink(){
+
+    public Link getLink() {
         return this.link;
     }
 

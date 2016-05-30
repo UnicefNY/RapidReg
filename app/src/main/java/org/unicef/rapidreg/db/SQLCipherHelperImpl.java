@@ -6,12 +6,12 @@ import com.raizlabs.dbflow.android.sqlcipher.SQLCipherOpenHelper;
 
 public class SQLCipherHelperImpl extends SQLCipherOpenHelper {
 
-    public SQLCipherHelperImpl(DatabaseDefinition databaseDefinition, DatabaseHelperListener listener) {
-        super(databaseDefinition, listener);
+    public SQLCipherHelperImpl(DatabaseDefinition definition, DatabaseHelperListener listener) {
+        super(definition, listener);
     }
 
     @Override
     protected String getCipherSecret() {
-        return "primero-dbflow-rules";
+        return "primero-db-rules";
     }
 }

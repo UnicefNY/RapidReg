@@ -94,7 +94,7 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
     }
 
     private void createAlertDialog(BaseActivity currentActivity) {
-    //TODO: alert box
+        //TODO: alert box
     }
 
     public PrimeroApplication getContext() {

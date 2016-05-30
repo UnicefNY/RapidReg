@@ -4,7 +4,7 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.widget.LinearLayout;
 
-public class SubformField extends LinearLayout{
+public class SubformField extends LinearLayout {
     public SubformField(Context context) {
         super(context);
     }

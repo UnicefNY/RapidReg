@@ -19,7 +19,7 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class NetworkServiceGenerator {
-//    public static final String API_BASE_URL = "http://10.29.3.184:3000";
+    //    public static final String API_BASE_URL = "http://10.29.3.184:3000";
     public static String apiBaseUrl = "https://10.29.3.184:8443";
 
     public NetworkServiceGenerator() {
@@ -69,7 +69,7 @@ public class NetworkServiceGenerator {
         apiBaseUrl = newApiBaseUrl;
 
         retrofitBuilder = new Retrofit.Builder()
-                                .addConverterFactory(GsonConverterFactory.create())
-                                .baseUrl(apiBaseUrl);
+                .addConverterFactory(GsonConverterFactory.create())
+                .baseUrl(apiBaseUrl);
     }
 }
