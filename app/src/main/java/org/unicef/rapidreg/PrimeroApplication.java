@@ -1,6 +1,7 @@
 package org.unicef.rapidreg;
 
 import android.app.Application;
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.text.TextUtils;
 
@@ -22,12 +23,25 @@ public class PrimeroApplication extends Application {
     public static final String CURRENT_USER_PREF = "CURRENT_USER";
     public static final String FORM_SECTIONS_PREF = "FORM_SECTION";
 
+    private static Context context;
+
     private Gson gson = new Gson();
     private User currentUser;
+
+    public static Context getAppContext() {
+        return context;
+    }
+
+    public static boolean isDebugMode() {
+        String pkgName = context.getPackageName();
+        return (pkgName != null && pkgName.endsWith(".debug"));
+    }
 
     @Override
     public void onCreate() {
         super.onCreate();
+        context = getApplicationContext();
+
         initDB();
     }
 
@@ -59,6 +73,10 @@ public class PrimeroApplication extends Application {
         return null;
     }
 
+    public void saveFormSections(String formSectionJson) {
+        getSharedPreferences().edit().putString(FORM_SECTIONS_PREF, formSectionJson).commit();
+    }
+
     private void initDB() {
         FlowManager.init(new FlowConfig.Builder(this)
                 .addDatabaseConfig(new DatabaseConfig.Builder(PrimeroDB.class)
@@ -70,9 +88,5 @@ public class PrimeroApplication extends Application {
                             }
                         }).build())
                 .build());
-    }
-
-    public void saveFormSections(String formSectionJson) {
-        getSharedPreferences().edit().putString(FORM_SECTIONS_PREF, formSectionJson).commit();
     }
 }
