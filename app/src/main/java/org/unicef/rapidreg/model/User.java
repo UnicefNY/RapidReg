@@ -19,37 +19,45 @@ public class User extends BaseModel {
 
     @Expose
     @SerializedName("user_name")
-    @Column
+    @Column(name = "user_name")
     protected String userName;
-    @Column
+
+    @Column(name = "user_password")
     protected String password;
+
     @Expose
     @SerializedName("verified")
-    @Column
+    @Column(name = "verified")
     protected boolean verified;
+
     @Expose
     @SerializedName("server_url")
-    @Column
+    @Column(name = "server_url")
     protected String serverUrl;
+
     @Expose
     @SerializedName("db_key")
-    @Column
+    @Column(name = "db_key")
     protected String dbKey;
+
     @Expose
     @SerializedName("organisation")
-    @Column
+    @Column(name = "organisation")
     protected String organisation;
+
     @Expose
     @SerializedName("full_name")
-    @Column
+    @Column(name = "full_name")
     protected String fullName;
+
     @Expose
     @SerializedName("unauthenticated_password")
-    @Column
+    @Column(name = "unauthenticated_password")
     protected String unauthenticatedPassword;
+
     @Expose
     @SerializedName("language")
-    @Column
+    @Column(name = "language")
     protected String language;
 
     public User() {
