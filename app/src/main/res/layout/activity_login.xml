@@ -29,16 +29,14 @@
         android:text="primero"
         android:hint="@string/editview_username_hint_text"/>
 
-    <TextView
-        android:id="@+id/app_logo_text"
+    <ImageView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_above="@id/editview_username"
-        android:gravity="center_horizontal"
+        android:layout_marginLeft="@dimen/logo_margin"
+        android:layout_marginRight="@dimen/logo_margin"
         android:layout_centerHorizontal="true"
-        android:textSize="@dimen/text_size_48"
-        android:textStyle="bold"
-        android:text="@string/app_banner_text"/>
+        android:layout_above="@id/editview_username"
+        android:src="@drawable/logo_huge"/>
 
     <Button
         android:id="@+id/button_login"
