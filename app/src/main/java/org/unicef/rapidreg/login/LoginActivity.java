@@ -3,7 +3,6 @@ package org.unicef.rapidreg.login;
 import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -23,11 +22,12 @@ public class LoginActivity extends MvpActivity<LoginView, LoginPresenter> implem
     @BindView(R.id.button_login)
     Button loginButton;
     @BindView(R.id.editview_username)
-    EditText usernameEditview;
+    EditText usernameEditView;
     @BindView(R.id.editview_password)
-    EditText passwordEditview;
+    EditText passwordEditView;
     @BindView(R.id.editview_url)
-    EditText urlEditview;
+    EditText urlEditView;
+
     private ProgressDialog loginProgressDialog;
 
     @Override
@@ -41,9 +41,9 @@ public class LoginActivity extends MvpActivity<LoginView, LoginPresenter> implem
     @OnClick(R.id.button_login)
     public void onLoginButtonClicked() {
         presenter.doLogin(this,
-                usernameEditview.getText().toString().trim(),
-                passwordEditview.getText().toString().trim(),
-                urlEditview.getText().toString().trim());
+                usernameEditView.getText().toString().trim(),
+                passwordEditView.getText().toString().trim(),
+                urlEditView.getText().toString().trim());
     }
 
     @NonNull
@@ -99,16 +99,16 @@ public class LoginActivity extends MvpActivity<LoginView, LoginPresenter> implem
 
     @Override
     public void showUserNameError(String e) {
-        usernameEditview.setError(e);
+        usernameEditView.setError(e);
     }
 
     @Override
     public void showPasswordError(String e) {
-        passwordEditview.setError(e);
+        passwordEditView.setError(e);
     }
 
     @Override
     public void showUrlError(String e) {
-        urlEditview.setError(e);
+        urlEditView.setError(e);
     }
 }

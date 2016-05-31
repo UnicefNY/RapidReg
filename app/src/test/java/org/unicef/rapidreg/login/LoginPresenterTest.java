@@ -31,7 +31,7 @@ public class LoginPresenterTest {
     }
 
     @Test
-    public void testValidateEmptyPasswordAndPassordShouldShowError() {
+    public void should_show_error_when_validate_empty_password_and_passord() {
         boolean valid = loginPresenter.validate(RuntimeEnvironment.application, "", "", "http://10.29.3.184:3000");
         verify(loginView).showUserNameError("Enter a valid username!");
         verify(loginView).showPasswordError("Enter a valid password!");
@@ -39,14 +39,14 @@ public class LoginPresenterTest {
     }
 
     @Test
-    public void testValidateInvalidUserFormatShouldShowError() {
+    public void should_show_error_when_invalid_user_format() {
         boolean valid = loginPresenter.validate(RuntimeEnvironment.application, "primer@##/", "password", "http://10.29.3.184:3000");
         verify(loginView).showUserNameError("Enter a valid username!");
         assertEquals(valid, false);
     }
 
     @Test
-    public void testValidateValidUserNameAndPassowrdShouldNotShowError() {
+    public void should_show_nothing_when_valid_username_and_password() {
         boolean valid = loginPresenter.validate(RuntimeEnvironment.application, "primero", "password", "http://10.29.3.184:3000");
         assertEquals(valid, true);
     }

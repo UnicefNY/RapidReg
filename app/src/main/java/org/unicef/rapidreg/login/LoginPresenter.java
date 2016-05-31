@@ -50,6 +50,8 @@ public class LoginPresenter extends MvpBasePresenter<LoginView> {
     private Context context;
     private IntentStarter intentStarter;
 
+
+
     public void doLogin(Context context, String username, String password, String url) {
         if (!validate(context, username, password, url)) {
             return;

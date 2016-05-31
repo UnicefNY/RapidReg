@@ -24,7 +24,6 @@ import org.unicef.rapidreg.R;
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.robolectric.Shadows.shadowOf;
 import static org.hamcrest.core.Is.is;
@@ -49,7 +48,7 @@ public class LoginActivityTest {
     }
 
 //    @Test // TODO: loginButton.performClick() Not work, need mock to solve
-//    public void correctUserAndPasswordShouldLoginSuccess() {
+//    public void should_login_success_when_correct_credential() {
 //        usernameEditView.setText("primero");
 //        passwordEditView.setText("qu01n23!");
 //        if (urlEditView != null) {
@@ -62,7 +61,7 @@ public class LoginActivityTest {
 //    }
 
     @Test
-    public void emptyUserAndPasswordShouldShowError() {
+    public void should_show_error_empty_user_and_password() {
 
         usernameEditView.setText("");
         passwordEditView.setText("");
@@ -76,7 +75,7 @@ public class LoginActivityTest {
     }
 
     @Test
-    public void invalidUserNameFormatShouldShowError() {
+    public void should_show_error_when_invalid_user_name_format() {
 
         Map<String, String> nameList = new HashMap<String, String>();
         nameList.put("NAME_CONTAINS_SPECAIL", "primer@/?");
@@ -87,11 +86,11 @@ public class LoginActivityTest {
 
     }
 //    @Test
-//    public void invalidAccountShouldLoginFail() {
-//        usernameEditview.setText("invalidUserName");
-//        passwordEditview.setText("invalidPassword");
-//        if (urlEditview == null)
-//            urlEditview.setText("http://10.29.3.184:3000");
+//    public void should_login_fail_when_invalid_account() {
+//        usernameEditView.setText("invalidUserName");
+//        passwordEditView.setText("invalidPassword");
+//        if (urlEditView == null)
+//            urlEditView.setText("http://10.29.3.184:3000");
 //
 //        loginButton.performClick();
 //        ShadowApplication application = shadowOf(RuntimeEnvironment.application);
