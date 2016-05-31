@@ -12,6 +12,7 @@ import android.util.Patterns;
 
 import com.google.gson.Gson;
 import com.hannesdorfmann.mosby.mvp.MvpBasePresenter;
+import com.raizlabs.android.dbflow.sql.language.SQLite;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -26,16 +27,18 @@ import org.unicef.rapidreg.event.NeedLoadFormSectionsEvent;
 import org.unicef.rapidreg.model.LoginRequestBody;
 import org.unicef.rapidreg.model.LoginResponse;
 import org.unicef.rapidreg.model.User;
+import org.unicef.rapidreg.model.User_Table;
 import org.unicef.rapidreg.model.forms.CaseForm;
 import org.unicef.rapidreg.network.HttpStatusCodeHandler;
 import org.unicef.rapidreg.network.NetworkServiceGenerator;
 import org.unicef.rapidreg.network.NetworkStatusManager;
 import org.unicef.rapidreg.network.PrimeroClient;
+import org.unicef.rapidreg.utils.EncryptHelper;
 import org.unicef.rapidreg.utils.ValidatesUtils;
 
+import java.util.List;
 import java.util.Locale;
 
-import okhttp3.Headers;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -150,35 +153,20 @@ public class LoginPresenter extends MvpBasePresenter<LoginView> {
         });
     }
 
-    //TODO: refactor doLoginOFFLine using encry password interface
     private void doLoginOffline(Context context, String username, String password) {
-        if (!primeroApplication.getSharedPreferences().contains(username)) {
+        User user = verifyUser(username, password);
+        if (user != null) {
+            cacheForOffline(user);
             showLoadingIndicator(false);
-            showLoginResultMessage(context.getResources().getString(R.string.login_offline_no_user_text));
+            showLoginResultMessage(context.getResources()
+                    .getString(R.string.login_offline_success_text));
+            goToLoginSuccessScreen();
         } else {
-            User user = loadOffLine(username, password, context);
-            if (user != null) {
-
-                cacheForOffline(user);
-                showLoadingIndicator(false);
-                showLoginResultMessage(context.getResources().getString(R.string.login_offline_success_text));
-                goToLoginSuccessScreen();
-            }
+            showLoadingIndicator(false);
+            showLoginResultMessage(context.getResources()
+                    .getString(R.string.login_offline_no_user_text));
         }
     }
-
-    private User loadOffLine(String username, String password, Context context) {
-        String jsonForUser = primeroApplication.getSharedPreferences().getString(username, null);
-        User user = gson.fromJson(jsonForUser, User.class);
-        if (user.getPassword().equals(password)) {
-            return user;
-        }
-        showLoadingIndicator(false);
-        showLoginResultMessage(context.getResources().getString(R.string.login_failed_text));
-        return null;
-    }
-    //End TODO
-
 
     private void cacheForOffline(@NonNull User user) {
         user.save();
@@ -261,4 +249,18 @@ public class LoginPresenter extends MvpBasePresenter<LoginView> {
         });
     }
 
+    private User verifyUser(String username, String password) {
+        List<User> users = SQLite.select()
+                .from(User.class)
+                .where(User_Table.user_name.eq(username))
+                .queryList();
+
+        for (User user : users) {
+            if (EncryptHelper.isMatched(password, user.getPassword())) {
+                return user;
+            }
+        }
+
+        return null;
+    }
 }
