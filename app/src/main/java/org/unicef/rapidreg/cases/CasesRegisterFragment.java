@@ -15,7 +15,7 @@ import org.unicef.rapidreg.R;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class CasesRegisterFragment extends MvpFragment<CasesRegisterView, CasesRegisterPresenter> implements CasesRegisterView{
+public class CasesRegisterFragment extends MvpFragment<CasesRegisterView, CasesRegisterPresenter> implements CasesRegisterView {
 
     @BindView(R.id.fragment_register_content) LinearLayout registerContent;
     @BindView(R.id.register_forms_content) ExpandableListView formsContent;
@@ -47,7 +47,7 @@ public class CasesRegisterFragment extends MvpFragment<CasesRegisterView, CasesR
     @Override
     public void expandAll(CasesRegisterAdapter adapter) {
         int count = adapter.getGroupCount();
-        for (int i = 0; i < count; i++){
+        for (int i = 0; i < count; i++) {
             formsContent.expandGroup(i);
         }
     }
