@@ -5,6 +5,7 @@ import com.google.gson.annotations.SerializedName;
 import com.raizlabs.android.dbflow.annotation.Column;
 import com.raizlabs.android.dbflow.annotation.PrimaryKey;
 import com.raizlabs.android.dbflow.annotation.Table;
+import com.raizlabs.android.dbflow.annotation.Unique;
 import com.raizlabs.android.dbflow.structure.BaseModel;
 
 import org.unicef.rapidreg.db.PrimeroDB;
@@ -20,6 +21,7 @@ public class User extends BaseModel {
     @Expose
     @SerializedName("user_name")
     @Column(name = "user_name")
+    @Unique
     protected String username;
 
     @Column(name = "user_password")

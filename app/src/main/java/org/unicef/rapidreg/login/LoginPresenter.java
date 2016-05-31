@@ -12,7 +12,6 @@ import android.util.Patterns;
 
 import com.google.gson.Gson;
 import com.hannesdorfmann.mosby.mvp.MvpBasePresenter;
-import com.raizlabs.android.dbflow.sql.language.SQLite;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -27,16 +26,14 @@ import org.unicef.rapidreg.event.NeedLoadFormSectionsEvent;
 import org.unicef.rapidreg.model.LoginRequestBody;
 import org.unicef.rapidreg.model.LoginResponse;
 import org.unicef.rapidreg.model.User;
-import org.unicef.rapidreg.model.User_Table;
 import org.unicef.rapidreg.model.forms.CaseFormRoot;
 import org.unicef.rapidreg.network.HttpStatusCodeHandler;
 import org.unicef.rapidreg.network.NetworkServiceGenerator;
 import org.unicef.rapidreg.network.NetworkStatusManager;
 import org.unicef.rapidreg.network.PrimeroClient;
-import org.unicef.rapidreg.utils.EncryptHelper;
+import org.unicef.rapidreg.utils.UserVerifier;
 import org.unicef.rapidreg.utils.ValidatesUtils;
 
-import java.util.List;
 import java.util.Locale;
 
 import retrofit2.Call;
@@ -210,17 +207,13 @@ public class LoginPresenter extends MvpBasePresenter<LoginView> {
     }
 
     private void doLoginOffline(Context context, String username, String password) {
-        User user = verifyUser(username, password);
-        if (user != null) {
-            cacheForOffline(user);
-            showLoadingIndicator(false);
-            showLoginResultMessage(context.getResources()
-                    .getString(R.string.login_offline_success_text));
+        UserVerifier.VerifiedCode verifiedCode = UserVerifier.verify(username, password);
+
+        showLoadingIndicator(false);
+        showLoginResultMessage(context.getResources().getString(verifiedCode.getResId()));
+
+        if (verifiedCode == UserVerifier.VerifiedCode.OK) {
             goToLoginSuccessScreen();
-        } else {
-            showLoadingIndicator(false);
-            showLoginResultMessage(context.getResources()
-                    .getString(R.string.login_offline_no_user_text));
         }
     }
 
@@ -246,20 +239,5 @@ public class LoginPresenter extends MvpBasePresenter<LoginView> {
 
     private void notifyEvent(Object event) {
         EventBus.getDefault().post(event);
-    }
-
-    private User verifyUser(String username, String password) {
-        List<User> users = SQLite.select()
-                .from(User.class)
-                .where(User_Table.user_name.eq(username))
-                .queryList();
-
-        for (User user : users) {
-            if (EncryptHelper.isMatched(password, user.getPassword())) {
-                return user;
-            }
-        }
-
-        return null;
     }
 }
