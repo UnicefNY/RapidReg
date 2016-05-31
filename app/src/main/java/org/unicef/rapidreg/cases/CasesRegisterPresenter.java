@@ -13,12 +13,13 @@ public class CasesRegisterPresenter extends MvpBasePresenter<CasesRegisterView> 
     private CaseFormRoot caseFormRoot;
     private CasesRegisterAdapter casesRegisterAdapter;
 
-
     public void initContext(Context context) {
         primeroApplication = (PrimeroApplication) context.getApplicationContext();
         if (isViewAttached()) {
             if ((caseFormRoot = loadCaseForms()) != null) {
-                casesRegisterAdapter = new CasesRegisterAdapter(context, caseFormRoot.getCaseFormSections());
+                casesRegisterAdapter = new CasesRegisterAdapter(context,
+                        caseFormRoot.getCaseFormSections());
+
                 getView().initView(casesRegisterAdapter);
                 getView().expandAll(casesRegisterAdapter);
             }
@@ -28,5 +29,4 @@ public class CasesRegisterPresenter extends MvpBasePresenter<CasesRegisterView> 
     private CaseFormRoot loadCaseForms() {
         return primeroApplication.getCaseFormSections();
     }
-
 }

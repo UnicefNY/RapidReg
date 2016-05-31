@@ -79,6 +79,13 @@ public class PrimeroApplication extends Application {
         getSharedPreferences().edit().putString(FORM_SECTIONS_PREF, formSectionJson).commit();
     }
 
+    public CaseFormRoot getCaseFormSections() {
+        String jsonForCaseFormSections = getSharedPreferences().getString(FORM_SECTIONS_PREF, null);
+        Log.e("TAG", "getCaseFormSections: " + jsonForCaseFormSections);
+        return TextUtils.isEmpty(jsonForCaseFormSections) ?
+                null : gson.fromJson(jsonForCaseFormSections, CaseFormRoot.class);
+    }
+
     private void initDB() {
         FlowManager.init(new FlowConfig.Builder(this)
                 .addDatabaseConfig(new DatabaseConfig.Builder(PrimeroDB.class)
@@ -90,11 +97,5 @@ public class PrimeroApplication extends Application {
                             }
                         }).build())
                 .build());
-    }
-
-    public CaseFormRoot getCaseFormSections() {
-        String jsonForCaseFormSections = getSharedPreferences().getString(FORM_SECTIONS_PREF, null);
-        Log.e("TAG", "getCaseFormSections: " + jsonForCaseFormSections);
-        return TextUtils.isEmpty(jsonForCaseFormSections) ? null : gson.fromJson(jsonForCaseFormSections, CaseFormRoot.class);
     }
 }
