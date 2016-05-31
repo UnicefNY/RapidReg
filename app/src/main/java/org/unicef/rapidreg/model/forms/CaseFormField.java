@@ -93,7 +93,10 @@ public class CaseFormField {
     @SerializedName("tick_box_label")
     @Expose
     private HashMap<String, String> tickBoxLabel;
-    
+    @SerializedName("subform")
+    @Expose
+    private CaseFormSection subForm;
+
     public String getName() {
         return name;
     }
@@ -319,4 +322,11 @@ public class CaseFormField {
         this.tickBoxLabel = tickBoxLabel;
     }
 
+    public CaseFormSection getSubForm() {
+        return subForm;
+    }
+
+    public void setSubForm(CaseFormSection subForm) {
+        this.subForm = subForm;
+    }
 }
