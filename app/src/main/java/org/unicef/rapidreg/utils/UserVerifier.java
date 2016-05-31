@@ -5,7 +5,6 @@ import com.raizlabs.android.dbflow.sql.language.SQLite;
 import org.unicef.rapidreg.R;
 import org.unicef.rapidreg.model.User;
 import org.unicef.rapidreg.model.User_Table;
-import org.unicef.rapidreg.utils.EncryptHelper;
 
 public class UserVerifier {
     public enum VerifiedCode {

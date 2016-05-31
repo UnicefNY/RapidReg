@@ -45,7 +45,7 @@ public class LoginPresenter extends MvpBasePresenter<LoginView> {
 
     private PrimeroApplication primeroApplication;
     private PrimeroClient client;
-    private ConnectivityManager connectivityManager;
+    private ConnectivityManager cm;
     private Gson gson;
     private Context context;
     private IntentStarter intentStarter;
@@ -57,7 +57,7 @@ public class LoginPresenter extends MvpBasePresenter<LoginView> {
         if (isViewAttached()) {
             initContext(context, url);
             showLoadingIndicator(true);
-            if (NetworkStatusManager.isOnline(connectivityManager)) {
+            if (NetworkStatusManager.isOnline(cm)) {
                 doLoginOnline(context, username, password, url);
             } else {
                 doLoginOffline(context, username, password);
@@ -67,22 +67,27 @@ public class LoginPresenter extends MvpBasePresenter<LoginView> {
 
     public boolean validate(Context context, String username, String password, String url) {
         boolean valid = true;
-        if (TextUtils.isEmpty(username) || username.length() > 254 || ValidatesUtils.containsSpecialCharacter(username)) {
-            getView().showUserNameError(context.getResources().getString(R.string.login_username_invalid_text));
+        if (TextUtils.isEmpty(username)
+                || username.length() > 254
+                || ValidatesUtils.containsSpecialCharacter(username)) {
+            getView().showUserNameError(context.getResources()
+                    .getString(R.string.login_username_invalid_text));
             valid = false;
         } else {
             getView().showUserNameError(null);
         }
 
         if (TextUtils.isEmpty(password)) {
-            getView().showPasswordError(context.getResources().getString(R.string.login_password_invalid_text));
+            getView().showPasswordError(context.getResources()
+                    .getString(R.string.login_password_invalid_text));
             valid = false;
         } else {
             getView().showPasswordError(null);
         }
 
         if (TextUtils.isEmpty(url) || !Patterns.WEB_URL.matcher(url).matches()) {
-            getView().showUrlError(context.getResources().getString(R.string.login_url_invalid_text));
+            getView().showUrlError(context.getResources()
+                    .getString(R.string.login_url_invalid_text));
             valid = false;
         } else {
             getView().showUrlError(null);
@@ -120,7 +125,9 @@ public class LoginPresenter extends MvpBasePresenter<LoginView> {
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onNeedLoadFormSectionsEvent(NeedLoadFormSectionsEvent event) {
 //        showLoadingIndicator(true);
-        Call<CaseFormRoot> call = client.getForm(event.cookie, Locale.getDefault().getLanguage(), true, "case");
+        Call<CaseFormRoot> call = client.getForm(event.cookie,
+                Locale.getDefault().getLanguage(), true, "case");
+
         call.enqueue(new Callback<CaseFormRoot>() {
             @Override
             public void onResponse(Call<CaseFormRoot> call, Response<CaseFormRoot> response) {
@@ -132,7 +139,8 @@ public class LoginPresenter extends MvpBasePresenter<LoginView> {
 //                        showLoginResultMessage("Load From Success!");
                     Log.e(TAG, "ok: ");
                 } else {
-//                        showLoginResultMessage(HttpStatusCodeHandler.getHttpStatusMessage(response.code()));
+//                  showLoginResultMessage(HttpStatusCodeHandler
+//                          .getHttpStatusMessage(response.code()));
                     Log.e(TAG, "faild: ");
                 }
             }
@@ -151,7 +159,7 @@ public class LoginPresenter extends MvpBasePresenter<LoginView> {
         this.context = context;
         intentStarter = new IntentStarter();
         primeroApplication = (PrimeroApplication) context.getApplicationContext();
-        connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         gson = new Gson();
         try {
             NetworkServiceGenerator.changeApiBaseUrl(url);
@@ -161,17 +169,20 @@ public class LoginPresenter extends MvpBasePresenter<LoginView> {
         }
     }
 
-    private void doLoginOnline(final Context context, final String username, final String password, final String url) {
-        TelephonyManager telephonyManager =
+    private void doLoginOnline(final Context context,
+                               final String username,
+                               final String password,
+                               final String url) {
+        TelephonyManager tm =
                 (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
-        String android_id = Settings.Secure.getString(context.getContentResolver(),
+        String androidId = Settings.Secure.getString(context.getContentResolver(),
                 Settings.Secure.ANDROID_ID);
 
         Call<LoginResponse> call = client.login(new LoginRequestBody(
                 username,
                 password,
-                telephonyManager.getLine1Number(),
-                android_id));
+                tm.getLine1Number(),
+                androidId));
         call.enqueue(new Callback<LoginResponse>() {
             @Override
             public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
@@ -189,7 +200,8 @@ public class LoginPresenter extends MvpBasePresenter<LoginView> {
                         notifyEvent(new NeedGoToLoginSuccessScreenEvent());
                         showLoginResultMessage(HttpStatusCodeHandler.LOGIN_SUCCESS_MESSAGE);
                     } else {
-                        showLoginResultMessage(HttpStatusCodeHandler.getHttpStatusMessage(response.code()));
+                        showLoginResultMessage(HttpStatusCodeHandler
+                                .getHttpStatusMessage(response.code()));
                         notifyEvent(new NeedDoLoginOffLineEvent(context, username, password));
                     }
                 }
