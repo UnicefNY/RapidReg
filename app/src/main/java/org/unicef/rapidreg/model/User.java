@@ -7,7 +7,6 @@ import com.raizlabs.android.dbflow.annotation.PrimaryKey;
 import com.raizlabs.android.dbflow.annotation.Table;
 import com.raizlabs.android.dbflow.structure.BaseModel;
 
-import org.mindrot.jbcrypt.BCrypt;
 import org.unicef.rapidreg.db.PrimeroDB;
 import org.unicef.rapidreg.utils.EncryptHelper;
 
@@ -21,7 +20,7 @@ public class User extends BaseModel {
     @Expose
     @SerializedName("user_name")
     @Column(name = "user_name")
-    protected String userName;
+    protected String username;
 
     @Column(name = "user_password")
     protected String password;
@@ -64,26 +63,26 @@ public class User extends BaseModel {
     public User() {
     }
 
-    public User(String userName) {
-        this(userName, null, false, null, null, null, null, null, null);
+    public User(String username) {
+        this(username, null, false, null, null, null, null, null, null);
     }
 
-    public User(String userName, String password) {
-        this(userName, password, false, null, null, null, null, null, null);
+    public User(String username, String password) {
+        this(username, password, false, null, null, null, null, null, null);
     }
 
-    public User(String userName, String password, boolean verified) {
-        this(userName, password, verified, null, null, null, null, null, null);
+    public User(String username, String password, boolean verified) {
+        this(username, password, verified, null, null, null, null, null, null);
     }
 
-    public User(String userName, String password, boolean verified, String serverUrl) {
-        this(userName, password, verified, serverUrl, null, null, null, null, null);
+    public User(String username, String password, boolean verified, String serverUrl) {
+        this(username, password, verified, serverUrl, null, null, null, null, null);
     }
 
-    public User(String userName, String password, boolean verified, String serverUrl,
+    public User(String username, String password, boolean verified, String serverUrl,
                 String dbKey, String organisation, String fullName, String unauthenticatedPassword,
                 String language) {
-        this.userName = userName;
+        this.username = username;
         this.password = EncryptHelper.encrypt(password);
         this.verified = verified;
         this.serverUrl = serverUrl;
@@ -94,12 +93,12 @@ public class User extends BaseModel {
         this.language = language;
     }
 
-    public String getUserName() {
-        return userName;
+    public String getUsername() {
+        return username;
     }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getPassword() {
@@ -164,5 +163,18 @@ public class User extends BaseModel {
 
     public void setLanguage(String language) {
         this.language = language;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder("<User>").append("\n");
+        sb.append("name:").append(username).append("\n");
+        sb.append("password:").append(password).append("\n");
+        sb.append("verified:").append(verified).append("\n");
+        sb.append("serverUrl:").append(serverUrl).append("\n");
+        sb.append("dbKey:").append(dbKey).append("\n");
+        sb.append("language:").append(language).append("\n");
+
+        return sb.toString();
     }
 }
