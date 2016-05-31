@@ -16,32 +16,32 @@ import java.util.List;
 public class CasesRegisterAdapter extends BaseExpandableListAdapter {
 
     private Context context;
-    private List<CaseFormSection> formSections;
+    private List<CaseFormSection> caseFormSections;
 
-    public CasesRegisterAdapter(Context context, List<CaseFormSection> formSections) {
+    public CasesRegisterAdapter(Context context, List<CaseFormSection> caseFormSections) {
         this.context = context;
-        this.formSections = formSections;
+        this.caseFormSections = caseFormSections;
     }
 
     @Override
     public int getGroupCount() {
-        return formSections.size();
+        return caseFormSections.size();
     }
 
     @Override
     public int getChildrenCount(int groupPosition) {
-        List<CaseFormField> formCaseFormFields = formSections.get(groupPosition).getCaseFormFields();
+        List<CaseFormField> formCaseFormFields = caseFormSections.get(groupPosition).getCaseFormFields();
         return formCaseFormFields.size();
     }
 
     @Override
     public Object getGroup(int groupPosition) {
-        return formSections.get(groupPosition);
+        return caseFormSections.get(groupPosition);
     }
 
     @Override
     public Object getChild(int groupPosition, int childPosition) {
-        List<CaseFormField> formCaseFormFields = formSections.get(groupPosition).getCaseFormFields();
+        List<CaseFormField> formCaseFormFields = caseFormSections.get(groupPosition).getCaseFormFields();
         return formCaseFormFields.get(childPosition);
     }
 
@@ -77,22 +77,23 @@ public class CasesRegisterAdapter extends BaseExpandableListAdapter {
         return true;
     }
 
-    private View createFormSectionView(CaseFormSection formSection, View convertView) {
+    private View createFormSectionView(CaseFormSection caseFormSection, View convertView) {
         if (convertView == null) {
             LayoutInflater inf = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = inf.inflate(R.layout.group_heading, null);
         }
         TextView heading = (TextView) convertView.findViewById(R.id.heading);
-        heading.setText(formSection.getName().get("en"));
+        heading.setText(caseFormSection.getName().get("en"));
 
         return convertView;
     }
 
-    private View createFormFieldView(CaseFormField formCaseFormField, View convertView) {
-        String fieldType = formCaseFormField.getType();
-        if(fieldType.equals("select_box") && formCaseFormField.getMultiSelect()){ fieldType = "multi_select_box"; }
+    private View createFormFieldView(CaseFormField caseFormField, View convertView) {
+        String fieldType = caseFormField.getType();
+        if (fieldType.equals("select_box") && caseFormField.getMultiSelect()) {
+            fieldType = "multi_select_box";
+        }
         int resourceId = getFieldLayoutId(fieldType);
-
         if (resourceId > 0) {
             LayoutInflater infalInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = infalInflater.inflate(resourceId, null);

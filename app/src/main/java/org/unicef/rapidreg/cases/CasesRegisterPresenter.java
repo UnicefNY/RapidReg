@@ -7,7 +7,7 @@ import com.hannesdorfmann.mosby.mvp.MvpBasePresenter;
 import org.unicef.rapidreg.PrimeroApplication;
 import org.unicef.rapidreg.model.forms.CaseFormRoot;
 
-public class CasesRegisterPresenter extends MvpBasePresenter<CasesRegisterView>{
+public class CasesRegisterPresenter extends MvpBasePresenter<CasesRegisterView> {
 
     private PrimeroApplication primeroApplication;
     private CaseFormRoot caseFormRoot;
