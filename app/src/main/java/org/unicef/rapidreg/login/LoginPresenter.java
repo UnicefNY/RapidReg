@@ -28,7 +28,7 @@ import org.unicef.rapidreg.model.LoginRequestBody;
 import org.unicef.rapidreg.model.LoginResponse;
 import org.unicef.rapidreg.model.User;
 import org.unicef.rapidreg.model.User_Table;
-import org.unicef.rapidreg.model.forms.CaseForm;
+import org.unicef.rapidreg.model.forms.CaseFormRoot;
 import org.unicef.rapidreg.network.HttpStatusCodeHandler;
 import org.unicef.rapidreg.network.NetworkServiceGenerator;
 import org.unicef.rapidreg.network.NetworkStatusManager;
@@ -221,15 +221,17 @@ public class LoginPresenter extends MvpBasePresenter<LoginView> {
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onNeedLoadFormSectionsEvent(NeedLoadFormSectionsEvent event) {
+        Log.e(TAG, "onNeedLoadFormSectionsEvent: ");
 //        showLoadingIndicator(true);
-        Call<CaseForm> call = client.getForm(event.cookie, Locale.getDefault().getLanguage(), true, "case");
-        call.enqueue(new Callback<CaseForm>() {
+        Call<CaseFormRoot> call = client.getForm(event.cookie, Locale.getDefault().getLanguage(), true, "case");
+        call.enqueue(new Callback<CaseFormRoot>() {
             @Override
-            public void onResponse(Call<CaseForm> call, Response<CaseForm> response) {
+            public void onResponse(Call<CaseFormRoot> call, Response<CaseFormRoot> response) {
 //                    showLoadingIndicator(false);
+                Log.e(TAG, "onResponse: " + (response.isSuccessful() ? "is Success" : "is faild"));
                 if (response.isSuccessful()) {
-                    CaseForm caseForm = response.body();
-                    String jsonFormCaseForm = gson.toJson(caseForm);
+                    CaseFormRoot caseFormRoot = response.body();
+                    String jsonFormCaseForm = gson.toJson(caseFormRoot);
                     primeroApplication.saveFormSections(jsonFormCaseForm);
 //                        showLoginResultMessage("Load From Success!");
                     Log.e(TAG, "ok: ");
@@ -240,7 +242,7 @@ public class LoginPresenter extends MvpBasePresenter<LoginView> {
             }
 
             @Override
-            public void onFailure(Call<CaseForm> call, Throwable t) {
+            public void onFailure(Call<CaseFormRoot> call, Throwable t) {
                 if (isViewAttached()) {
                     showNetworkErrorMessage(t, false);
                     showLoadingIndicator(false);

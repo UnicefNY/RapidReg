@@ -4,6 +4,7 @@ import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.text.TextUtils;
+import android.util.Log;
 
 import com.google.gson.Gson;
 import com.raizlabs.android.dbflow.config.DatabaseConfig;
@@ -16,6 +17,7 @@ import com.raizlabs.android.dbflow.structure.database.OpenHelper;
 import org.unicef.rapidreg.db.PrimeroDB;
 import org.unicef.rapidreg.db.SQLCipherHelperImpl;
 import org.unicef.rapidreg.model.User;
+import org.unicef.rapidreg.model.forms.CaseFormRoot;
 
 public class PrimeroApplication extends Application {
 
@@ -88,5 +90,11 @@ public class PrimeroApplication extends Application {
                             }
                         }).build())
                 .build());
+    }
+
+    public CaseFormRoot getCaseFormSections() {
+        String jsonForCaseFormSections = getSharedPreferences().getString(FORM_SECTIONS_PREF, null);
+        Log.e("TAG", "getCaseFormSections: " + jsonForCaseFormSections);
+        return TextUtils.isEmpty(jsonForCaseFormSections) ? null : gson.fromJson(jsonForCaseFormSections, CaseFormRoot.class);
     }
 }
