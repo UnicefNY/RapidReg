@@ -68,7 +68,7 @@ public class LoginPresenter extends MvpBasePresenter<LoginView> {
         }
     }
 
-    boolean validate(Context context, String username, String password, String url) {
+    public boolean validate(Context context, String username, String password, String url) {
         boolean valid = true;
         if (TextUtils.isEmpty(username) || username.length() > 254 || ValidatesUtils.containsSpecialCharacter(username)) {
             getView().showUserNameError(context.getResources().getString(R.string.login_username_invalid_text));
@@ -93,6 +93,62 @@ public class LoginPresenter extends MvpBasePresenter<LoginView> {
         return valid;
     }
 
+    @Override
+    public void attachView(LoginView view) {
+        super.attachView(view);
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void detachView(boolean retainInstance) {
+        super.detachView(retainInstance);
+        EventBus.getDefault().unregister(this);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onNeedDoLoginOffLineEvent(NeedDoLoginOffLineEvent event) {
+        doLoginOffline(event.context, event.username, event.password);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onNeedCacheForOfflineEvent(NeedCacheForOfflineEvent event) {
+        cacheForOffline(event.user);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onNeedGoToLoginSuccessScreenEvent(NeedGoToLoginSuccessScreenEvent event) {
+        goToLoginSuccessScreen();
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onNeedLoadFormSectionsEvent(NeedLoadFormSectionsEvent event) {
+//        showLoadingIndicator(true);
+        Call<CaseFormRoot> call = client.getForm(event.cookie, Locale.getDefault().getLanguage(), true, "case");
+        call.enqueue(new Callback<CaseFormRoot>() {
+            @Override
+            public void onResponse(Call<CaseFormRoot> call, Response<CaseFormRoot> response) {
+//                    showLoadingIndicator(false);
+                if (response.isSuccessful()) {
+                    CaseFormRoot caseForm = response.body();
+                    String jsonFormCaseForm = gson.toJson(caseForm);
+                    primeroApplication.saveFormSections(jsonFormCaseForm);
+//                        showLoginResultMessage("Load From Success!");
+                    Log.e(TAG, "ok: ");
+                } else {
+//                        showLoginResultMessage(HttpStatusCodeHandler.getHttpStatusMessage(response.code()));
+                    Log.e(TAG, "faild: ");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<CaseFormRoot> call, Throwable t) {
+                if (isViewAttached()) {
+                    showNetworkErrorMessage(t, false);
+                    showLoadingIndicator(false);
+                }
+            }
+        });
+    }
 
     private void initContext(Context context, String url) {
         this.context = context;
@@ -190,65 +246,6 @@ public class LoginPresenter extends MvpBasePresenter<LoginView> {
 
     private void notifyEvent(Object event) {
         EventBus.getDefault().post(event);
-    }
-
-    @Override
-    public void attachView(LoginView view) {
-        super.attachView(view);
-        EventBus.getDefault().register(this);
-    }
-
-    @Override
-    public void detachView(boolean retainInstance) {
-        super.detachView(retainInstance);
-        EventBus.getDefault().unregister(this);
-    }
-
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onNeedDoLoginOffLineEvent(NeedDoLoginOffLineEvent event) {
-        doLoginOffline(event.context, event.username, event.password);
-    }
-
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onNeedCacheForOfflineEvent(NeedCacheForOfflineEvent event) {
-        cacheForOffline(event.user);
-    }
-
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onNeedGoToLoginSuccessScreenEvent(NeedGoToLoginSuccessScreenEvent event) {
-        goToLoginSuccessScreen();
-    }
-
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onNeedLoadFormSectionsEvent(NeedLoadFormSectionsEvent event) {
-        Log.e(TAG, "onNeedLoadFormSectionsEvent: ");
-//        showLoadingIndicator(true);
-        Call<CaseFormRoot> call = client.getForm(event.cookie, Locale.getDefault().getLanguage(), true, "case");
-        call.enqueue(new Callback<CaseFormRoot>() {
-            @Override
-            public void onResponse(Call<CaseFormRoot> call, Response<CaseFormRoot> response) {
-//                    showLoadingIndicator(false);
-                Log.e(TAG, "onResponse: " + (response.isSuccessful() ? "is Success" : "is faild"));
-                if (response.isSuccessful()) {
-                    CaseFormRoot caseFormRoot = response.body();
-                    String jsonFormCaseForm = gson.toJson(caseFormRoot);
-                    primeroApplication.saveFormSections(jsonFormCaseForm);
-//                        showLoginResultMessage("Load From Success!");
-                    Log.e(TAG, "ok: ");
-                } else {
-//                        showLoginResultMessage(HttpStatusCodeHandler.getHttpStatusMessage(response.code()));
-                    Log.e(TAG, "faild: ");
-                }
-            }
-
-            @Override
-            public void onFailure(Call<CaseFormRoot> call, Throwable t) {
-                if (isViewAttached()) {
-                    showNetworkErrorMessage(t, false);
-                    showLoadingIndicator(false);
-                }
-            }
-        });
     }
 
     private User verifyUser(String username, String password) {
