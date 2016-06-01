@@ -1,6 +1,8 @@
 ![Logo](https://github.com/UnicefNY/RapidReg/blob/development/app/src/main/res/drawable/logo_medium.png?raw=true)
 ### RapidReg
 
+[![Build Status](http://10.29.3.184:8081/job/rapidreg-android/badge/icon)](http://10.29.3.184:8081/job/rapidreg-android/)
+
 **RapidReg** is an Android-based mobile application that lets aid workers collect, 
 sort and share information about children in emergency situations.
 
@@ -16,9 +18,9 @@ find information about their missing children. Because RapidFTR is designed spec
 and distribute information about children, data security is extremely important.
 
 #### Signing apk in release mode
-Currently the keystore is located under the root directory, it's protected by password.
+Currently the keystore is located under the root directory, it's protected by the password.
 All you need to do is give correct values to *storePassword*, *keyAlias*, *keyPassword* 
-in build.gradle.
+in build.gradle or config the values above as the environment variables in your CI. 
 
 Note: Never commit the real password into the codebase.
  
