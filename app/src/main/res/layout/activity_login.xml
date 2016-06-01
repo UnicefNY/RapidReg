@@ -1,49 +1,60 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:orientation="vertical"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent">
-
-    <EditText
-        android:id="@+id/editview_url"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:text="http://10.29.3.184:3000"
-        android:hint="@string/editview_URL_hint_text"/>
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
     <EditText
         android:id="@+id/editview_password"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_above="@id/editview_url"
+        android:layout_centerInParent="true"
+        android:hint="@string/editview_password_hint_text"
         android:inputType="textPassword"
-        android:text="qu01n23!"
-        android:hint="@string/editview_password_hint_text"/>
+        android:text="qu01n23!" />
+
 
     <EditText
         android:id="@+id/editview_username"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_above="@id/editview_password"
-        android:text="primero"
-        android:hint="@string/editview_username_hint_text"/>
+        android:hint="@string/editview_username_hint_text"
+        android:text="primero" />
+
 
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_above="@id/editview_username"
+        android:layout_centerHorizontal="true"
         android:layout_marginLeft="@dimen/logo_margin"
         android:layout_marginRight="@dimen/logo_margin"
-        android:layout_centerHorizontal="true"
-        android:layout_above="@id/editview_username"
-        android:src="@drawable/logo_huge"/>
+        android:src="@drawable/logo_huge" />
+
+
+    <EditText
+        android:id="@+id/editview_url"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/editview_password"
+        android:hint="@string/editview_URL_hint_text"
+        android:text="http://10.29.3.184:3000" />
+
 
     <Button
         android:id="@+id/button_login"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/editview_url"
-        android:textSize="@dimen/text_size_16"
-        android:text="@string/button_login_text"/>
+        android:text="@string/button_login_text"
+        android:textSize="@dimen/text_size_16" />
+
+    <TextView
+        android:id="@+id/text_view_change_url"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/button_login"
+        android:text="@string/text_view_change_url" />
 
 </RelativeLayout>

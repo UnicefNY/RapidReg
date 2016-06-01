@@ -3,14 +3,18 @@ package org.unicef.rapidreg.login;
 import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.view.View;
+import android.view.ViewManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.hannesdorfmann.mosby.mvp.MvpActivity;
 
 import org.unicef.rapidreg.R;
 import org.unicef.rapidreg.model.LoginResponse;
+import org.unicef.rapidreg.service.UserService;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -28,13 +32,25 @@ public class LoginActivity extends MvpActivity<LoginView, LoginPresenter> implem
     @BindView(R.id.editview_url)
     EditText urlEditView;
 
+    @BindView(R.id.text_view_change_url)
+    TextView changeUrlTextView;
+
+
     private ProgressDialog loginProgressDialog;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
+
+        changeUrlTextView.setVisibility(View.INVISIBLE);
+        if (UserService.getInstance().isUserEverLoginSuccessfully()) {
+            urlEditView.setVisibility(View.INVISIBLE);
+            changeUrlTextView.setVisibility(View.VISIBLE);
+        }
+
         loginProgressDialog = new ProgressDialog(this);
     }
 
@@ -44,6 +60,14 @@ public class LoginActivity extends MvpActivity<LoginView, LoginPresenter> implem
                 usernameEditView.getText().toString().trim(),
                 passwordEditView.getText().toString().trim(),
                 urlEditView.getText().toString().trim());
+    }
+
+    @OnClick(R.id.text_view_change_url)
+    public void onChangeUrlTextClicked() {
+        changeUrlTextView.setVisibility(View.INVISIBLE);
+        urlEditView.setVisibility(View.VISIBLE);
+        urlEditView.requestFocus();
+        urlEditView.setSelection(0, urlEditView.length());
     }
 
     @NonNull
