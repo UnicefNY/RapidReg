@@ -1,7 +1,5 @@
 package org.unicef.rapidreg.service;
 
-import android.text.TextUtils;
-
 import org.apache.commons.lang.StringUtils;
 import org.unicef.rapidreg.R;
 import org.unicef.rapidreg.db.UserDao;
