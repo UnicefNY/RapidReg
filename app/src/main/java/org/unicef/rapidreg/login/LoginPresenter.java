@@ -6,9 +6,7 @@ import android.net.ConnectivityManager;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.telephony.TelephonyManager;
-import android.text.TextUtils;
 import android.util.Log;
-import android.util.Patterns;
 
 import com.google.gson.Gson;
 import com.hannesdorfmann.mosby.mvp.MvpBasePresenter;
@@ -49,8 +47,6 @@ public class LoginPresenter extends MvpBasePresenter<LoginView> {
     private Context context;
     private IntentStarter intentStarter;
 
-
-
     public void doLogin(Context context, String username, String password, String url) {
         if (!validate(context, username, password, url)) {
             return;
@@ -67,31 +63,19 @@ public class LoginPresenter extends MvpBasePresenter<LoginView> {
     }
 
     public boolean validate(Context context, String username, String password, String url) {
-        boolean valid = true;
-        if (!UserService.getInstance().isNameValid(username)) {
-            getView().showUserNameError(context.getResources()
-                    .getString(R.string.login_username_invalid_text));
-            valid = false;
-        } else {
-            getView().showUserNameError(null);
-        }
+        UserService userService = UserService.getInstance();
+        boolean nameValid = userService.isNameValid(username);
+        boolean passwordValid = userService.isPasswordValid(password);
+        boolean urlValid = userService.isUrlValid(url);
 
-        if (TextUtils.isEmpty(password)) {
-            getView().showPasswordError(context.getResources()
-                    .getString(R.string.login_password_invalid_text));
-            valid = false;
-        } else {
-            getView().showPasswordError(null);
-        }
+        getView().showUserNameError(nameValid ?
+                null : context.getResources().getString(R.string.login_username_invalid_text));
+        getView().showPasswordError(passwordValid ?
+                null : context.getResources().getString(R.string.login_password_invalid_text));
+        getView().showUrlError(urlValid ?
+                null : context.getResources().getString(R.string.login_url_invalid_text));
 
-        if (TextUtils.isEmpty(url) || !Patterns.WEB_URL.matcher(url).matches()) {
-            getView().showUrlError(context.getResources()
-                    .getString(R.string.login_url_invalid_text));
-            valid = false;
-        } else {
-            getView().showUrlError(null);
-        }
-        return valid;
+        return nameValid && passwordValid && urlValid;
     }
 
     @Override

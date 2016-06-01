@@ -69,7 +69,6 @@ dependencies {
     compile 'com.android.support:design:23.3.0'
     compile 'com.android.support:recyclerview-v7:23.3.0'
 
-    compile 'commons-lang:commons-lang:2.6'
     compile 'com.rengwuxian.materialedittext:library:2.1.4'
     compile 'com.google.dagger:dagger:2.4'
     apt 'com.google.dagger:dagger-compiler:2.4'
