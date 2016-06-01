@@ -32,7 +32,6 @@ import org.unicef.rapidreg.network.NetworkServiceGenerator;
 import org.unicef.rapidreg.network.NetworkStatusManager;
 import org.unicef.rapidreg.network.PrimeroClient;
 import org.unicef.rapidreg.service.UserService;
-import org.unicef.rapidreg.utils.ValidatesUtils;
 
 import java.util.Locale;
 
@@ -69,9 +68,7 @@ public class LoginPresenter extends MvpBasePresenter<LoginView> {
 
     public boolean validate(Context context, String username, String password, String url) {
         boolean valid = true;
-        if (TextUtils.isEmpty(username)
-                || username.length() > 254
-                || ValidatesUtils.containsSpecialCharacter(username)) {
+        if (!UserService.getInstance().isNameValid(username)) {
             getView().showUserNameError(context.getResources()
                     .getString(R.string.login_username_invalid_text));
             valid = false;

@@ -14,7 +14,7 @@ import static org.mockito.Mockito.when;
 
 public class UserServiceTest {
     private static UserDao userDao;
-    private static UserService userVerifier;
+    private static UserService userService;
 
     private String username = "Jack";
     private String password = "123456";
@@ -23,28 +23,28 @@ public class UserServiceTest {
     @BeforeClass
     public static void setup() {
         userDao = mock(UserDaoImpl.class);
-        userVerifier = new UserService(userDao);
+        userService = new UserService(userDao);
     }
 
     @Test
     public void should_be_truthy_when_user_ever_login_successfully() {
         when(userDao.countUser()).thenReturn(1L);
 
-        assertThat(userVerifier.isUserEverLoginSuccessfully(), is(true));
+        assertThat(userService.isUserEverLoginSuccessfully(), is(true));
     }
 
     @Test
     public void should_be_false_when_user_never_login_successfully() {
         when(userDao.countUser()).thenReturn(0L);
 
-        assertThat(userVerifier.isUserEverLoginSuccessfully(), is(false));
+        assertThat(userService.isUserEverLoginSuccessfully(), is(false));
     }
 
     @Test
     public void should_verify_when_user_does_not_exist() {
         when(userDao.getUser(anyString())).thenReturn(null);
 
-        UserService.VerifiedCode verifiedCode = userVerifier.verify(username, password);
+        UserService.VerifiedCode verifiedCode = userService.verify(username, password);
 
         assertThat(verifiedCode, is(UserService.VerifiedCode.USER_DOES_NOT_EXIST));
     }
@@ -53,7 +53,7 @@ public class UserServiceTest {
     public void should_verify_when_user_password_is_incorrect() {
         when(userDao.getUser(username)).thenReturn(jack);
 
-        UserService.VerifiedCode verifiedCode = userVerifier.verify(username, "654321");
+        UserService.VerifiedCode verifiedCode = userService.verify(username, "654321");
 
         assertThat(verifiedCode, is(UserService.VerifiedCode.PASSWORD_INCORRECT));
     }
@@ -62,8 +62,58 @@ public class UserServiceTest {
     public void should_verify_when_both_username_and_password_are_correct() {
         when(userDao.getUser(username)).thenReturn(jack);
 
-        UserService.VerifiedCode verifiedCode = userVerifier.verify(username, password);
+        UserService.VerifiedCode verifiedCode = userService.verify(username, password);
 
         assertThat(verifiedCode, is(UserService.VerifiedCode.OK));
+    }
+
+    @Test
+    public void should_return_true_when_username_is_valid() {
+        assertThat(userService.isNameValid("Jack"), is(true));
+    }
+
+    @Test
+    public void should_return_false_when_username_is_empty() {
+        assertThat(userService.isNameValid(null), is(false));
+        assertThat(userService.isNameValid(""), is(false));
+    }
+
+    @Test
+    public void should_return_false_when_username_is_too_long() {
+        String name = "111111111111111111111111111111111111111111111111111111111111111111111111"
+                + "2222222222222222222222222222222222222222222222222222222222222222222222222222"
+                + "3333333333333333333333333333333333333333333333333333333333333333333333333333"
+                + "4444444444444444444444444444444444444444444444444444444444444444444444444444";
+
+        assertThat(userService.isNameValid(name), is(false));
+
+    }
+
+    @Test
+    public void should_return_false_when_username_is_invalid() {
+        assertThat(userService.isNameValid("Ja(ck"), is(false));
+        assertThat(userService.isNameValid("Ja)ck"), is(false));
+        assertThat(userService.isNameValid("Ja*ck"), is(false));
+        assertThat(userService.isNameValid("Ja@ck"), is(false));
+        assertThat(userService.isNameValid("Ja!ck"), is(false));
+        assertThat(userService.isNameValid("Ja#ck"), is(false));
+        assertThat(userService.isNameValid("Ja$ck"), is(false));
+        assertThat(userService.isNameValid("Ja%ck"), is(false));
+        assertThat(userService.isNameValid("Ja?ck"), is(false));
+        assertThat(userService.isNameValid("Ja&ck"), is(false));
+        assertThat(userService.isNameValid("Ja=ck"), is(false));
+        assertThat(userService.isNameValid("Ja;ck"), is(false));
+        assertThat(userService.isNameValid("Ja:ck"), is(false));
+        assertThat(userService.isNameValid("Ja{ck"), is(false));
+        assertThat(userService.isNameValid("Ja}ck"), is(false));
+        assertThat(userService.isNameValid("Ja[ck"), is(false));
+        assertThat(userService.isNameValid("Ja]ck"), is(false));
+        assertThat(userService.isNameValid("Ja|ck"), is(false));
+        assertThat(userService.isNameValid("Ja<ck"), is(false));
+        assertThat(userService.isNameValid("Ja>ck"), is(false));
+        assertThat(userService.isNameValid("Ja,ck"), is(false));
+        assertThat(userService.isNameValid("Ja.ck"), is(false));
+        assertThat(userService.isNameValid("Ja`ck"), is(false));
+        assertThat(userService.isNameValid("Ja\\ck"), is(false));
     }
 }
