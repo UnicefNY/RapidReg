@@ -2,6 +2,8 @@ package org.unicef.rapidreg.service;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.robolectric.RobolectricTestRunner;
 import org.unicef.rapidreg.db.UserDao;
 import org.unicef.rapidreg.db.impl.UserDaoImpl;
 import org.unicef.rapidreg.model.User;
@@ -12,6 +14,7 @@ import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+@RunWith(RobolectricTestRunner.class)
 public class UserServiceTest {
     private static UserDao userDao;
     private static UserService userService;
@@ -115,5 +118,19 @@ public class UserServiceTest {
         assertThat(userService.isNameValid("Ja.ck"), is(false));
         assertThat(userService.isNameValid("Ja`ck"), is(false));
         assertThat(userService.isNameValid("Ja\\ck"), is(false));
+    }
+
+    @Test
+    public void should_return_false_when_password_is_empty() {
+        assertThat(userService.isPasswordValid(null), is(false));
+        assertThat(userService.isPasswordValid(""), is(false));
+    }
+
+    @Test
+    public void should_return_false_when_url_is_invalid() {
+        assertThat(userService.isUrlValid(null), is(false));
+        assertThat(userService.isUrlValid(""), is(false));
+        assertThat(userService.isUrlValid("http//10.23.0.1"), is(false));
+        assertThat(userService.isUrlValid("http://10.23.0"), is(false));
     }
 }

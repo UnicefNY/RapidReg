@@ -1,6 +1,8 @@
 package org.unicef.rapidreg.service;
 
-import org.apache.commons.lang.StringUtils;
+import android.text.TextUtils;
+import android.util.Patterns;
+
 import org.unicef.rapidreg.R;
 import org.unicef.rapidreg.db.UserDao;
 import org.unicef.rapidreg.db.impl.UserDaoImpl;
@@ -58,7 +60,7 @@ public class UserService {
     }
 
     public boolean isNameValid(String username) {
-        if (StringUtils.isEmpty(username) || username.length() > 254) {
+        if (TextUtils.isEmpty(username) || username.length() > 254) {
             return false;
         }
 
@@ -67,5 +69,13 @@ public class UserService {
                 .matcher(username);
 
         return matcher.matches();
+    }
+
+    public boolean isPasswordValid(String password) {
+        return !TextUtils.isEmpty(password);
+    }
+
+    public boolean isUrlValid(String url) {
+        return !TextUtils.isEmpty(url) && Patterns.WEB_URL.matcher(url).matches();
     }
 }
