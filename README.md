@@ -1,7 +1,6 @@
 ![Logo](https://github.com/UnicefNY/RapidReg/blob/development/app/src/main/res/drawable/logo_medium.png?raw=true)
-### RapidReg
 
-[![Build Status](http://10.29.3.184:8081/job/rapidreg-android/badge/icon)](http://10.29.3.184:8081/job/rapidreg-android/)
+### RapidReg
 
 **RapidReg** is an Android-based mobile application that lets aid workers collect, 
 sort and share information about children in emergency situations.
