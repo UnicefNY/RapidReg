@@ -1,5 +1,7 @@
 package org.unicef.rapidreg.utils;
 
+import android.util.Log;
+
 import com.raizlabs.android.dbflow.sql.language.SQLite;
 
 import org.unicef.rapidreg.R;
@@ -23,11 +25,15 @@ public class UserVerifier {
         }
     }
 
-    public static VerifiedCode verify(String username, String password) {
-        User user = SQLite.select()
+    public static User getUser(String username) {
+        return SQLite.select()
                 .from(User.class)
                 .where(User_Table.user_name.eq(username))
                 .querySingle();
+    }
+
+    public static VerifiedCode verify(String username, String password) {
+        User user = getUser(username);
 
         if (user == null) {
             return VerifiedCode.USER_DOES_NOT_EXIST;

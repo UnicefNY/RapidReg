@@ -60,7 +60,8 @@ android {
     }
 }
 
-def dbflow_version = "3.0.1"
+def dbflow_version = '3.0.1'
+def powermock_version = '1.6.5'
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
@@ -97,6 +98,6 @@ dependencies {
 
     testCompile 'junit:junit:4.12'
     testCompile 'org.robolectric:robolectric:3.1-SNAPSHOT'
-    testCompile 'org.powermock:powermock:1.6.5'
-    testCompile 'org.mockito:mockito-core:1.+'
+    testCompile "org.powermock:powermock-module-junit4:${powermock_version}"
+    testCompile "org.powermock:powermock-api-mockito:${powermock_version}"
 }
