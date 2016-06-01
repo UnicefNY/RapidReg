@@ -81,8 +81,6 @@ dependencies {
     compile 'org.greenrobot:eventbus:3.0.0'
     compile 'com.hannesdorfmann.mosby:mvp:2.0.1'
     compile 'com.hannesdorfmann.mosby:viewstate:2.0.1'
-    compile 'com.couchbase.lite:couchbase-lite-android:1.2.1'
-    compile 'commons-io:commons-io:2.5'
 
     compile 'com.hannesdorfmann.annotatedadapter:annotation:1.1.1'
     compile 'com.hannesdorfmann.annotatedadapter:support-recyclerview:1.1.1'
