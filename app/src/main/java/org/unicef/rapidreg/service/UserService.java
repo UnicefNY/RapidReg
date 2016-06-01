@@ -1,29 +1,12 @@
 package org.unicef.rapidreg.service;
 
 import org.unicef.rapidreg.R;
-import org.unicef.rapidreg.db.helper.UserDao;
-import org.unicef.rapidreg.db.helper.impl.UserDaoImpl;
+import org.unicef.rapidreg.db.UserDao;
+import org.unicef.rapidreg.db.impl.UserDaoImpl;
 import org.unicef.rapidreg.model.User;
 import org.unicef.rapidreg.utils.EncryptHelper;
 
 public class UserService {
-    private UserDao userDBHelper;
-
-    private UserService() {
-    }
-
-    public static UserService getInstance() {
-        return new UserService(new UserDaoImpl());
-    }
-
-    public UserService(UserDao userDBHelper) {
-        this.userDBHelper = userDBHelper;
-    }
-
-    public boolean isUserEverLoginSuccessfully() {
-        return userDBHelper.countUser() > 0;
-    }
-
     public enum VerifiedCode {
         USER_DOES_NOT_EXIST(R.string.login_offline_no_user_text),
         PASSWORD_INCORRECT(R.string.login_failed_text),
@@ -40,8 +23,22 @@ public class UserService {
         }
     }
 
+    private UserDao userDao;
+
+    public static UserService getInstance() {
+        return new UserService(new UserDaoImpl());
+    }
+
+    public UserService(UserDao userDao) {
+        this.userDao = userDao;
+    }
+
+    public boolean isUserEverLoginSuccessfully() {
+        return userDao.countUser() > 0;
+    }
+
     public VerifiedCode verify(String username, String password) {
-        User user = userDBHelper.getUser(username);
+        User user = userDao.getUser(username);
 
         if (user == null) {
             return VerifiedCode.USER_DOES_NOT_EXIST;
