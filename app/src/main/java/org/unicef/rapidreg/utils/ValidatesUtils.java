@@ -4,11 +4,11 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class ValidatesUtils {
-    static public boolean containsSpecialCharacter(String username) {
-        Pattern pattern;
+     public static boolean containsSpecialCharacter(String username) {
         Matcher matcher;
-        pattern = Pattern.compile("[^@!#$%\\^?&*()=\\\\/;:'\"\\{\\}\\[\\]\\|<>,.`]{1,254}");
-        matcher = pattern.matcher(username);
+        matcher = Pattern.compile("[^@!#$%\\^?&*()=\\\\/;:'\"\\{\\}\\[\\]\\|<>,.`]{1,254}")
+                .matcher(username);
+
         return !matcher.matches();
     }
 }
