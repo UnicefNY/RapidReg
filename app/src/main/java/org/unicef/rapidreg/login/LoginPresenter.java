@@ -31,7 +31,7 @@ import org.unicef.rapidreg.network.HttpStatusCodeHandler;
 import org.unicef.rapidreg.network.NetworkServiceGenerator;
 import org.unicef.rapidreg.network.NetworkStatusManager;
 import org.unicef.rapidreg.network.PrimeroClient;
-import org.unicef.rapidreg.utils.UserVerifier;
+import org.unicef.rapidreg.service.UserService;
 import org.unicef.rapidreg.utils.ValidatesUtils;
 
 import java.util.Locale;
@@ -221,12 +221,12 @@ public class LoginPresenter extends MvpBasePresenter<LoginView> {
     }
 
     private void doLoginOffline(Context context, String username, String password) {
-        UserVerifier.VerifiedCode verifiedCode = UserVerifier.verify(username, password);
+        UserService.VerifiedCode verifiedCode = UserService.getInstance().verify(username, password);
 
         showLoadingIndicator(false);
         showLoginResultMessage(context.getResources().getString(verifiedCode.getResId()));
 
-        if (verifiedCode == UserVerifier.VerifiedCode.OK) {
+        if (verifiedCode == UserService.VerifiedCode.OK) {
             goToLoginSuccessScreen();
         }
     }
