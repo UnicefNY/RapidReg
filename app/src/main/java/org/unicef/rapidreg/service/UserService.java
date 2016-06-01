@@ -29,12 +29,14 @@ public class UserService {
 
     private UserDao userDao;
 
-    public static UserService getInstance() {
-        return new UserService(new UserDaoImpl());
-    }
+    private static final UserService USER_SERVICE = new UserService(new UserDaoImpl());
 
     public UserService(UserDao userDao) {
         this.userDao = userDao;
+    }
+
+    public static UserService getInstance() {
+        return USER_SERVICE;
     }
 
     public boolean isUserEverLoginSuccessfully() {
