@@ -23,7 +23,7 @@ public class UserVerifierTest {
     @Test
     public void should_verify_when_user_does_not_exist() {
         PowerMockito.mockStatic(UserDBHelper.class);
-        when(UserDBHelper.getUser(anyString())).thenReturn(null);
+        when(UserDBHelper.getUserByName(anyString())).thenReturn(null);
 
         UserVerifier.VerifiedCode verifiedCode = UserVerifier.verify(username, password);
 
@@ -33,7 +33,7 @@ public class UserVerifierTest {
     @Test
     public void should_verify_when_user_password_is_incorrect() {
         PowerMockito.mockStatic(UserDBHelper.class);
-        when(UserDBHelper.getUser(username)).thenReturn(jack);
+        when(UserDBHelper.getUserByName(username)).thenReturn(jack);
 
         UserVerifier.VerifiedCode verifiedCode = UserVerifier.verify(username, "654321");
 
@@ -43,7 +43,7 @@ public class UserVerifierTest {
     @Test
     public void should_verify_when_both_username_and_password_are_correct() {
         PowerMockito.mockStatic(UserDBHelper.class);
-        when(UserDBHelper.getUser(username)).thenReturn(jack);
+        when(UserDBHelper.getUserByName(username)).thenReturn(jack);
 
         UserVerifier.VerifiedCode verifiedCode = UserVerifier.verify(username, password);
 

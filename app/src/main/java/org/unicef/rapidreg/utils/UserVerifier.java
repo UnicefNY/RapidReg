@@ -22,7 +22,7 @@ public class UserVerifier {
     }
 
     public static VerifiedCode verify(String username, String password) {
-        User user = UserDBHelper.getUser(username);
+        User user = UserDBHelper.getUserByName(username);
 
         if (user == null) {
             return VerifiedCode.USER_DOES_NOT_EXIST;
