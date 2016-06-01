@@ -1,10 +1,16 @@
 package org.unicef.rapidreg.service;
 
+import android.text.TextUtils;
+
+import org.apache.commons.lang.StringUtils;
 import org.unicef.rapidreg.R;
 import org.unicef.rapidreg.db.UserDao;
 import org.unicef.rapidreg.db.impl.UserDaoImpl;
 import org.unicef.rapidreg.model.User;
 import org.unicef.rapidreg.utils.EncryptHelper;
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class UserService {
     public enum VerifiedCode {
@@ -49,5 +55,17 @@ public class UserService {
         } else {
             return VerifiedCode.PASSWORD_INCORRECT;
         }
+    }
+
+    public boolean isNameValid(String username) {
+        if (StringUtils.isEmpty(username) || username.length() > 254) {
+            return false;
+        }
+
+        Matcher matcher;
+        matcher = Pattern.compile("[^@!#$%\\^?&*()=\\\\/;:'\"\\{\\}\\[\\]\\|<>,.`]{1,254}")
+                .matcher(username);
+
+        return matcher.matches();
     }
 }
