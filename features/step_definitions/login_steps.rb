@@ -11,9 +11,14 @@ When /^I re-login RapidReg with "(.*?)" and "(.*?)"$/ do |username,password|
 end
 
 When /^I press "(.*?)"$/ do |button|
-  login_page.clickById(button)
+  base_page.clickById(button)
 end
 
 Then /^I should see "(.*?)"$/ do |text|
-  login_page.verifyPromptExist(text)
+  base_page.verifyPromptExist(text)
 end
+
+When /^I logout$/ do
+  login_page.logout
+end
+
