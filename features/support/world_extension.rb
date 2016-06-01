@@ -3,7 +3,7 @@ Dir.glob(File.join(File.dirname(__FILE__),'pages','**/*.rb')) {|file| require_re
 module AndroidPageDomain
 
   def base_page
-    @basePage = Screen::Android::BasePage.new
+    @basePage = RapidRegAppPage.new
   end
 
   def login_page

@@ -20,6 +20,10 @@ module LocatorModule
     waitElement { findById(id).click }
   end
 
+  def clickByXpath(xpath)
+    waitElement { findByXpath(xpath).click }
+  end
+
   def verifyTextNotExist(text)
     raise("Should not find text: #{text}") unless texts(text).empty?
   end

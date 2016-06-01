@@ -16,6 +16,7 @@ Feature: Login test
   Scenario Outline: Login with correct credential and network connected
     When I login RapidReg for the first time with "<Username>" and "<Password>" and "<URL>"
     Then I should see "Login success!"
+#    And I should see current user is "<Username>"
     Examples:
       | Username | Password | URL                     |
       | primero  | qu01n23  | http://10.29.3.184:3000 |
@@ -29,11 +30,18 @@ Feature: Login test
       | primeroo | qu01n23! |
       | primero  | qu01n234 |
 
-  Scenario: Re-login with correct credential and network connected
+  Scenario Outline: Re-login with correct credential and network connected
     When I re-login RapidReg with "<Username>" and "<Password>"
     Then I should see "Login success!"
+    Examples:
+      | Username | Password |
+      | primero  | qu01n23! |
 
-    Scenario: Logout
-      Given I re-login RapidReg with "<Username>" and "Password"
-      When I logout
-      Then I should see "Logout Successfully"
+  Scenario Outline: Logout
+    Given I re-login RapidReg with "<Username>" and "<Password>"
+    When I logout
+    Then I should see "Logout Successfully"
+#    And I should see current user is "<Username>"
+    Examples:
+      | Username | Password |
+      | primero  | qu01n23! |
