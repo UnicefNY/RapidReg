@@ -41,7 +41,7 @@ public class UserVerifierTest {
     }
 
     @Test
-    public void should_verify_when_user_password_is_correct() {
+    public void should_verify_when_both_username_and_password_are_correct() {
         PowerMockito.mockStatic(UserDBHelper.class);
         when(UserDBHelper.getUser(username)).thenReturn(jack);
 
