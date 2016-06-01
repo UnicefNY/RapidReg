@@ -5,6 +5,7 @@
     <string name="editview_username_hint_text">Username</string>
     <string name="editview_password_hint_text">Password</string>
     <string name="editview_URL_hint_text">URL</string>
+    <string name="text_view_change_url">change remote url</string>
     <string name="button_login_text">Login</string>
     <string name="login_loading_text">Logining, please wait...</string>
     <string name="login_offline_no_user_text">Sorry, your must be connected to the internet for the first-time login.</string>
