@@ -1,7 +1,4 @@
-package org.unicef.rapidreg.db.helper;
-
-
-import com.raizlabs.android.dbflow.sql.language.SQLite;
+package org.unicef.rapidreg.db;
 
 import org.unicef.rapidreg.model.User;
 
