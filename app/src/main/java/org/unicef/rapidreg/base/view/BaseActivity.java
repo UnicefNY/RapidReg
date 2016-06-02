@@ -11,6 +11,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import org.unicef.rapidreg.IntentStarter;
@@ -25,9 +27,15 @@ import butterknife.ButterKnife;
 public class BaseActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     private static final int REQUEST_LOGOUT = 0;
-    protected @BindView(R.id.toolbar) Toolbar toolbar;
-    @BindView(R.id.drawer_layout) DrawerLayout drawer;
-    @BindView(R.id.nav_view) NavigationView navigationView;
+    protected
+    @BindView(R.id.toolbar)
+    Toolbar toolbar;
+    @BindView(R.id.drawer_layout)
+    DrawerLayout drawer;
+    @BindView(R.id.nav_view)
+    NavigationView navigationView;
+
+    TextView textViewLoginUserLabel;
 
     IntentStarter intentStarter = new IntentStarter();
 
@@ -36,6 +44,10 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
+
+        View headerView = navigationView.getHeaderView(0);
+        textViewLoginUserLabel = (TextView) headerView.findViewById(R.id.login_user_label);
+        textViewLoginUserLabel.setText(getIntent().getStringExtra(IntentStarter.KEY_LOGIN_USER));
 
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);

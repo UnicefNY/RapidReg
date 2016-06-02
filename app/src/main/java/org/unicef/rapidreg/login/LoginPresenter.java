@@ -102,7 +102,7 @@ public class LoginPresenter extends MvpBasePresenter<LoginView> {
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onNeedGoToLoginSuccessScreenEvent(NeedGoToLoginSuccessScreenEvent event) {
-        goToLoginSuccessScreen();
+        goToLoginSuccessScreen(event.getUserName());
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -180,7 +180,7 @@ public class LoginPresenter extends MvpBasePresenter<LoginView> {
                         user.setVerified(response.body().getVerified());
                         notifyEvent(new NeedCacheForOfflineEvent(user));
                         notifyEvent(new NeedLoadFormSectionsEvent(cookie));
-                        notifyEvent(new NeedGoToLoginSuccessScreenEvent());
+                        notifyEvent(new NeedGoToLoginSuccessScreenEvent(username));
                         showLoginResultMessage(HttpStatusCodeHandler.LOGIN_SUCCESS_MESSAGE);
                     } else {
                         showLoginResultMessage(HttpStatusCodeHandler
@@ -208,7 +208,7 @@ public class LoginPresenter extends MvpBasePresenter<LoginView> {
         showLoginResultMessage(context.getResources().getString(verifiedCode.getResId()));
 
         if (verifiedCode == UserService.VerifiedCode.OK) {
-            goToLoginSuccessScreen();
+            goToLoginSuccessScreen(username);
         }
     }
 
@@ -216,8 +216,8 @@ public class LoginPresenter extends MvpBasePresenter<LoginView> {
         UserService.getInstance().saveOrUpdateUser(user);
     }
 
-    private void goToLoginSuccessScreen() {
-        intentStarter.showCasesActivity((Activity) context);
+    private void goToLoginSuccessScreen(String username) {
+        intentStarter.showCasesActivity((Activity) context, username);
     }
 
     private void showLoadingIndicator(boolean active) {

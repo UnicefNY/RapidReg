@@ -15,6 +15,7 @@ public class CasesActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         toolbar.inflateMenu(R.menu.toolbar_main);
 
+
         toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem menuItem) {
