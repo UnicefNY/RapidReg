@@ -55,6 +55,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/button_login"
+        android:textColor="@color/blue"
+        android:paddingTop="@dimen/text_size_24"
+        android:gravity="center"
         android:text="@string/text_view_change_url" />
 
 </RelativeLayout>

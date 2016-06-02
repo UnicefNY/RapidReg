@@ -18,4 +18,6 @@
     <string name="login_url_invalid_text">Enter a valid url!</string>
     <string name="login_failed_text">Sorry, please check your username or password or web URL.</string>
     <string name="login_out_successful_text">Logout Successfully</string>
+
+    <string name="login_user_label_key">login_user</string>
 </resources>

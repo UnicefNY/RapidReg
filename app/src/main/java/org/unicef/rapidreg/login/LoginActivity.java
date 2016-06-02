@@ -4,7 +4,6 @@ import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.view.View;
-import android.view.ViewManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -46,12 +45,20 @@ public class LoginActivity extends MvpActivity<LoginView, LoginPresenter> implem
         ButterKnife.bind(this);
 
         changeUrlTextView.setVisibility(View.INVISIBLE);
-        if (UserService.getInstance().isUserEverLoginSuccessfully()) {
-            urlEditView.setVisibility(View.INVISIBLE);
-            changeUrlTextView.setVisibility(View.VISIBLE);
-        }
+        hideUrlInputIfUserEverLoginSuccessfully();
 
         loginProgressDialog = new ProgressDialog(this);
+    }
+
+    private void hideUrlInputIfUserEverLoginSuccessfully() {
+        try {
+            if (UserService.getInstance().isUserEverLoginSuccessfully()) {
+                urlEditView.setVisibility(View.INVISIBLE);
+                changeUrlTextView.setVisibility(View.VISIBLE);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @OnClick(R.id.button_login)

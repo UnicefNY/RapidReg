@@ -94,10 +94,16 @@ dependencies {
     compile 'org.parceler:parceler-api:1.1.1'
     apt 'org.parceler:parceler:1.1.1'
 
-    compile group: 'org.mindrot', name: 'jbcrypt', version: '0.3m'
+    compile 'org.mindrot:jbcrypt:0.3m'
 
-    testCompile 'junit:junit:4.12'
-    testCompile 'org.robolectric:robolectric:3.1-SNAPSHOT'
-    testCompile "org.powermock:powermock-module-junit4:${powermock_version}"
-    testCompile "org.powermock:powermock-api-mockito:${powermock_version}"
+
+    testCompile 'junit:junit:4.12',
+            'org.robolectric:robolectric:3.1-SNAPSHOT',
+            "org.powermock:powermock-module-junit4:${powermock_version}",
+            "org.powermock:powermock-api-mockito:${powermock_version}"
+
+    androidTestCompile 'junit:junit:4.12',
+            'org.robolectric:robolectric:3.1-SNAPSHOT',
+            "org.powermock:powermock-module-junit4:${powermock_version}",
+            "org.powermock:powermock-api-mockito:${powermock_version}"
 }
