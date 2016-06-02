@@ -29,7 +29,7 @@ android {
                     def formattedDate = new Date().format('yyyyMMdd')
                     def newName = output.outputFile.name
                     newName = newName.replace("app-", "$project.ext.appName-")
-                    newName = newName.replace("-debug", "-debug-" + formattedDate)
+//                    newName = newName.replace("-debug", "-debug-" + formattedDate)
                     output.outputFile = new File(output.outputFile.parent, newName)
                 }
             }
@@ -44,7 +44,7 @@ android {
                     def formattedDate = new Date().format('yyyyMMdd')
                     def newName = output.outputFile.name
                     newName = newName.replace("app-", "$project.ext.appName-")
-                    newName = newName.replace("-release", "-release-" + formattedDate)
+//                    newName = newName.replace("-release", "-release-" + formattedDate)
                     output.outputFile = new File(output.outputFile.parent, newName)
                 }
             }
