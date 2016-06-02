@@ -1,6 +1,7 @@
 package org.unicef.rapidreg.service;
 
 import android.text.TextUtils;
+import android.util.Log;
 import android.util.Patterns;
 
 import org.unicef.rapidreg.R;
@@ -29,9 +30,10 @@ public class UserService {
         }
     }
 
-    private UserDao userDao;
+    public static final String TAG = UserService.class.getSimpleName();
 
     private static final UserService USER_SERVICE = new UserService(new UserDaoImpl());
+    private UserDao userDao;
 
     public UserService(UserDao userDao) {
         this.userDao = userDao;
@@ -77,5 +79,18 @@ public class UserService {
 
     public boolean isUrlValid(String url) {
         return !TextUtils.isEmpty(url) && Patterns.WEB_URL.matcher(url).matches();
+    }
+
+    public void saveOrUpdateUser(User user) {
+        User existingUser = userDao.getUser(user.getUsername());
+
+        if (existingUser == null) {
+            Log.d(TAG, "save new user");
+            user.save();
+        } else {
+            Log.d(TAG, "update existing user");
+            existingUser.updateFields(user);
+            existingUser.update();
+        }
     }
 }

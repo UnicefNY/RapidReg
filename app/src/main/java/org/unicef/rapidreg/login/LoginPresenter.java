@@ -213,7 +213,7 @@ public class LoginPresenter extends MvpBasePresenter<LoginView> {
     }
 
     private void cacheForOffline(@NonNull User user) {
-        user.save();
+        UserService.getInstance().saveOrUpdateUser(user);
     }
 
     private void goToLoginSuccessScreen() {
