@@ -167,6 +167,17 @@ public class User extends BaseModel {
         this.language = language;
     }
 
+    public void updateFields(User user) {
+        this.password = user.getPassword();
+        this.verified = user.isVerified();
+        this.serverUrl = user.getServerUrl();
+        this.dbKey = user.getDbKey();
+        this.language = user.getLanguage();
+        this.organisation = user.getOrganisation();
+        this.fullName = user.getFullName();
+        this.unauthenticatedPassword = user.getUnauthenticatedPassword();
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder("<User>").append("\n");
