@@ -24,7 +24,7 @@ import org.unicef.rapidreg.event.NeedLoadFormSectionsEvent;
 import org.unicef.rapidreg.model.LoginRequestBody;
 import org.unicef.rapidreg.model.LoginResponse;
 import org.unicef.rapidreg.model.User;
-import org.unicef.rapidreg.model.forms.cases.CaseFormRoot;
+import org.unicef.rapidreg.model.forms.cases.CaseFormBean;
 import org.unicef.rapidreg.network.HttpStatusCodeHandler;
 import org.unicef.rapidreg.network.NetworkServiceGenerator;
 import org.unicef.rapidreg.network.NetworkStatusManager;
@@ -108,16 +108,16 @@ public class LoginPresenter extends MvpBasePresenter<LoginView> {
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onNeedLoadFormSectionsEvent(NeedLoadFormSectionsEvent event) {
 //        showLoadingIndicator(true);
-        Call<CaseFormRoot> call = client.getForm(event.cookie,
+        Call<CaseFormBean> call = client.getForm(event.cookie,
                 Locale.getDefault().getLanguage(), true, "case");
 
-        call.enqueue(new Callback<CaseFormRoot>() {
+        call.enqueue(new Callback<CaseFormBean>() {
             @Override
-            public void onResponse(Call<CaseFormRoot> call, Response<CaseFormRoot> response) {
+            public void onResponse(Call<CaseFormBean> call, Response<CaseFormBean> response) {
 //                    showLoadingIndicator(false);
                 if (response.isSuccessful()) {
-                    CaseFormRoot caseForm = response.body();
-                    String jsonFormCaseForm = gson.toJson(caseForm);
+                    CaseFormBean form = response.body();
+                    String jsonFormCaseForm = gson.toJson(form);
                     primeroApplication.saveFormSections(jsonFormCaseForm);
 //                        showLoginResultMessage("Load From Success!");
                     Log.e(TAG, "ok: ");
@@ -129,7 +129,7 @@ public class LoginPresenter extends MvpBasePresenter<LoginView> {
             }
 
             @Override
-            public void onFailure(Call<CaseFormRoot> call, Throwable t) {
+            public void onFailure(Call<CaseFormBean> call, Throwable t) {
                 if (isViewAttached()) {
                     showNetworkErrorMessage(t, false);
                     showLoadingIndicator(false);

@@ -1,7 +1,8 @@
-package org.unicef.rapidreg.model.forms.cases.bean;
+package org.unicef.rapidreg.model.forms.cases;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -15,7 +16,7 @@ public class CaseSectionBean {
     @SerializedName("base_language")
     private String baseLanguage;
     @SerializedName("fields")
-    private List<CaseFieldBean> fields;
+    private List<CaseFieldBean> fields = new ArrayList<>();
 
     public Map<String, String> getName() {
         return name;
@@ -47,6 +48,14 @@ public class CaseSectionBean {
 
     public void setBaseLanguage(String baseLanguage) {
         this.baseLanguage = baseLanguage;
+    }
+
+    public List<CaseFieldBean> getFields() {
+        return fields;
+    }
+
+    public void setFields(List<CaseFieldBean> fields) {
+        this.fields = fields;
     }
 
     @Override

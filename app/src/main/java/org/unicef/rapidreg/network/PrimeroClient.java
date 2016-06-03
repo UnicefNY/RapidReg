@@ -2,7 +2,7 @@ package org.unicef.rapidreg.network;
 
 import org.unicef.rapidreg.model.LoginRequestBody;
 import org.unicef.rapidreg.model.LoginResponse;
-import org.unicef.rapidreg.model.forms.cases.CaseFormRoot;
+import org.unicef.rapidreg.model.forms.cases.CaseFormBean;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -14,10 +14,10 @@ import retrofit2.http.Query;
 public interface PrimeroClient {
 
     @POST("/api/login")
-    public Call<LoginResponse> login(@Body LoginRequestBody body);
+    Call<LoginResponse> login(@Body LoginRequestBody body);
 
     @GET("/api/form_sections")
-    public Call<CaseFormRoot> getForm(
+    Call<CaseFormBean> getForm(
             @Header("Cookie") String cookie,
             @Query("locale") String locale,
             @Query("mobile") Boolean isMobile,
