@@ -1,5 +1,5 @@
 
-package org.unicef.rapidreg.model.forms;
+package org.unicef.rapidreg.model.forms.cases;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
@@ -113,7 +113,7 @@ public class CaseFormField {
     public void setVisible(Boolean visible) {
         this.visible = visible;
     }
-    
+
     public Boolean getHideOnViewPage() {
         return hideOnViewPage;
     }

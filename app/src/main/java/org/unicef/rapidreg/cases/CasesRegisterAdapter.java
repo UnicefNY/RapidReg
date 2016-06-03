@@ -8,8 +8,8 @@ import android.widget.BaseExpandableListAdapter;
 import android.widget.TextView;
 
 import org.unicef.rapidreg.R;
-import org.unicef.rapidreg.model.forms.CaseFormSection;
-import org.unicef.rapidreg.model.forms.CaseFormField;
+import org.unicef.rapidreg.model.forms.cases.CaseFormSection;
+import org.unicef.rapidreg.model.forms.cases.CaseFormField;
 
 import java.util.List;
 

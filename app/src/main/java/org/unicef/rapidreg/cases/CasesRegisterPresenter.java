@@ -5,7 +5,7 @@ import android.content.Context;
 import com.hannesdorfmann.mosby.mvp.MvpBasePresenter;
 
 import org.unicef.rapidreg.PrimeroApplication;
-import org.unicef.rapidreg.model.forms.CaseFormRoot;
+import org.unicef.rapidreg.model.forms.cases.CaseFormRoot;
 
 public class CasesRegisterPresenter extends MvpBasePresenter<CasesRegisterView> {
 

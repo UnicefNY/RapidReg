@@ -17,7 +17,7 @@ import com.raizlabs.android.dbflow.structure.database.OpenHelper;
 import org.unicef.rapidreg.db.PrimeroDB;
 import org.unicef.rapidreg.db.SQLCipherHelperImpl;
 import org.unicef.rapidreg.model.User;
-import org.unicef.rapidreg.model.forms.CaseFormRoot;
+import org.unicef.rapidreg.model.forms.cases.CaseFormRoot;
 
 public class PrimeroApplication extends Application {
 

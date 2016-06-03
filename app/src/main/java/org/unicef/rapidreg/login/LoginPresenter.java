@@ -24,7 +24,7 @@ import org.unicef.rapidreg.event.NeedLoadFormSectionsEvent;
 import org.unicef.rapidreg.model.LoginRequestBody;
 import org.unicef.rapidreg.model.LoginResponse;
 import org.unicef.rapidreg.model.User;
-import org.unicef.rapidreg.model.forms.CaseFormRoot;
+import org.unicef.rapidreg.model.forms.cases.CaseFormRoot;
 import org.unicef.rapidreg.network.HttpStatusCodeHandler;
 import org.unicef.rapidreg.network.NetworkServiceGenerator;
 import org.unicef.rapidreg.network.NetworkStatusManager;

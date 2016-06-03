@@ -1,5 +1,5 @@
 
-package org.unicef.rapidreg.model.forms;
+package org.unicef.rapidreg.model.forms.cases;
 
 import java.util.ArrayList;
 import java.util.HashMap;
