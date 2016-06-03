@@ -93,25 +93,17 @@ public class CasesRegisterAdapter extends BaseExpandableListAdapter {
 
     private View createFormFieldView(CaseFieldBean caseFormField, View convertView) {
         String fieldType = caseFormField.getType();
-        LayoutInflater infalInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         int resourceId = getFieldLayoutId(fieldType);
         if (resourceId > 0) {
-<<<<<<< HEAD
-            convertView = infalInflater.inflate(resourceId, null);
-=======
-            LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = inflater.inflate(resourceId, null);
->>>>>>> refactor: change method's name
             return convertView;
         }
         return null;
     }
 
     protected int getFieldLayoutId(String fieldType) {
-<<<<<<< HEAD
 //        return context.getResources().getIdentifier("form_" + fieldType, "layout", context.getPackageName());
-=======
->>>>>>> refactor: change method's name
         if (fieldType.equals("tick_box")) {
             return context.getResources().getIdentifier("form_tick_box", "layout", context.getPackageName());
         }
