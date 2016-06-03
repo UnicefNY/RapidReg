@@ -15,7 +15,7 @@ import org.unicef.rapidreg.model.forms.cases.CaseSectionBean;
 import java.util.List;
 
 public class CasesRegisterAdapter extends BaseExpandableListAdapter {
-
+    public static final String TAG = CasesRegisterAdapter.class.getSimpleName();
     private Context context;
     private List<CaseSectionBean> sections;
 
@@ -31,8 +31,8 @@ public class CasesRegisterAdapter extends BaseExpandableListAdapter {
 
     @Override
     public int getChildrenCount(int groupPosition) {
-        List<CaseFieldBean> formCaseFieldBeen = sections.get(groupPosition).getFields();
-        return formCaseFieldBeen.size();
+        List<CaseFieldBean> fields = sections.get(groupPosition).getFields();
+        return fields.size();
     }
 
     @Override
@@ -42,8 +42,8 @@ public class CasesRegisterAdapter extends BaseExpandableListAdapter {
 
     @Override
     public Object getChild(int groupPosition, int childPosition) {
-        List<CaseFieldBean> formCaseFieldBeen = sections.get(groupPosition).getFields();
-        return formCaseFieldBeen.get(childPosition);
+        List<CaseFieldBean> fields = sections.get(groupPosition).getFields();
+        return fields.get(childPosition);
     }
 
     @Override
@@ -63,16 +63,16 @@ public class CasesRegisterAdapter extends BaseExpandableListAdapter {
 
     @Override
     public View getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
-        CaseSectionBean formSection = (CaseSectionBean) getGroup(groupPosition);
-        return createFormSectionView(formSection, convertView);
+        CaseSectionBean section = (CaseSectionBean) getGroup(groupPosition);
+        return createFormSectionView(section, convertView);
     }
 
     @Override
     public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
-        CaseFieldBean form = (CaseFieldBean) getChild(groupPosition, childPosition);
-        convertView = createFormFieldView(form, convertView);
+        CaseFieldBean field = (CaseFieldBean) getChild(groupPosition, childPosition);
+        convertView = createFormFieldView(field, convertView);
         TextView tvFormLable = (TextView) convertView.findViewById(R.id.label);
-        tvFormLable.setText(form.getDisplayName().get("en"));
+        tvFormLable.setText(field.getDisplayName().get("en"));
         return convertView;
     }
 
@@ -96,14 +96,22 @@ public class CasesRegisterAdapter extends BaseExpandableListAdapter {
         LayoutInflater infalInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         int resourceId = getFieldLayoutId(fieldType);
         if (resourceId > 0) {
+<<<<<<< HEAD
             convertView = infalInflater.inflate(resourceId, null);
+=======
+            LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            convertView = inflater.inflate(resourceId, null);
+>>>>>>> refactor: change method's name
             return convertView;
         }
         return null;
     }
 
     protected int getFieldLayoutId(String fieldType) {
+<<<<<<< HEAD
 //        return context.getResources().getIdentifier("form_" + fieldType, "layout", context.getPackageName());
+=======
+>>>>>>> refactor: change method's name
         if (fieldType.equals("tick_box")) {
             return context.getResources().getIdentifier("form_tick_box", "layout", context.getPackageName());
         }
