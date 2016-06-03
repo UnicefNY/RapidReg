@@ -13,9 +13,9 @@ import android.widget.LinearLayout;
 import com.hannesdorfmann.mosby.mvp.MvpFragment;
 
 import org.unicef.rapidreg.R;
-import org.unicef.rapidreg.model.forms.cases.CaseFormField;
-import org.unicef.rapidreg.model.forms.cases.CaseFormRoot;
-import org.unicef.rapidreg.model.forms.cases.CaseFormSection;
+import org.unicef.rapidreg.model.forms.cases.CaseFieldBean;
+import org.unicef.rapidreg.model.forms.cases.CaseFormBean;
+import org.unicef.rapidreg.model.forms.cases.CaseSectionBean;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,16 +51,16 @@ public class CasesRegisterFragment extends MvpFragment<CasesRegisterView, CasesR
     }
 
     @Override
-    public void initView(CasesRegisterAdapter adapter, final CaseFormRoot caseFormRoot) {
+    public void initView(CasesRegisterAdapter adapter, final CaseFormBean caseFormRoot) {
         formsContent.setAdapter(adapter);
         formsContent.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
             @Override
             public boolean onChildClick(ExpandableListView parent, View v, int groupPosition,
                                         int childPosition, long id) {
-                List<CaseFormSection> caseFormSections = caseFormRoot.getCaseFormSections();
-                List<CaseFormField> formCaseFormFields = caseFormSections.get(groupPosition).getCaseFormFields();
-                CaseFormField caseFormField = formCaseFormFields.get(childPosition);
-                showFieldDialog(caseFormField);
+                List<CaseSectionBean> caseFormSections = caseFormRoot.getSections();
+                List<CaseFieldBean> formCaseFormFields = caseFormSections.get(groupPosition).getFields();
+                CaseFieldBean field = formCaseFormFields.get(childPosition);
+                showFieldDialog(field);
                 return false;
             }
         });
@@ -74,19 +74,19 @@ public class CasesRegisterFragment extends MvpFragment<CasesRegisterView, CasesR
         }
     }
 
-    private void showFieldDialog(CaseFormField caseFormField) {
+    private void showFieldDialog(CaseFieldBean field) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         initDialogButton(builder);
-        builder.setTitle(caseFormField.getDisplayName().get("en"));
-        String fieldType = caseFormField.getType();
+        builder.setTitle(field.getDisplayName().get("en"));
+        String fieldType = field.getType();
         String[] optionItems = new String[0];
         if (fieldType.equals("select_box")) {
-            if (caseFormField.getMultiSelect()) {
+            if (field.isMultiSelect()) {
                 fieldType = "multi_select_box";
-                optionItems = getSelectOptions(fieldType,caseFormField);
+                optionItems = getSelectOptions(fieldType,field);
             } else {
                 fieldType = "single_select_box";
-                optionItems = getSelectOptions(fieldType,caseFormField);
+                optionItems = getSelectOptions(fieldType,field);
             }
         }
         switch (fieldType) {
@@ -137,15 +137,15 @@ public class CasesRegisterFragment extends MvpFragment<CasesRegisterView, CasesR
         });
     }
 
-    private String[] getSelectOptions(String fieldType, CaseFormField caseFormField) {
+    private String[] getSelectOptions(String fieldType, CaseFieldBean field) {
         List<CharSequence> items = new ArrayList<>();
         if (fieldType.equals("multi_select_box")) {
-            ArrayList<Map<String, String>> arrayList = caseFormField.getOptionStringsText().get("en");
+            List<Map<String, String>> arrayList = field.getOptionStringsText().get("en");
             for (Map<String, String> map : arrayList) {
                 items.add(map.get("display_text"));
             }
         } else {
-            items = caseFormField.getOptionStringsText().get("en");
+            items = field.getOptionStringsText().get("en");
         }
         return items.toArray(new String[0]);
     }
