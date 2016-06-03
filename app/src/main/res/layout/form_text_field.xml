@@ -8,10 +8,9 @@
 
         <include layout="@layout/form_label" />
 
-        <EditText android:id="@+id/value"
+        <TextView android:id="@+id/value"
                   android:layout_width="match_parent"
-                  android:layout_height="wrap_content"
-                  android:inputType="text" />
+                  android:layout_height="wrap_content"/>
 
         <include layout="@layout/form_help_text" />
 

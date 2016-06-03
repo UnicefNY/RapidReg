@@ -69,7 +69,10 @@ public class CasesRegisterAdapter extends BaseExpandableListAdapter {
     @Override
     public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
         CaseFormField formCaseFormField = (CaseFormField) getChild(groupPosition, childPosition);
-        return createFormFieldView(formCaseFormField, convertView);
+        convertView = createFormFieldView(formCaseFormField, convertView);
+        TextView tvFormLable = (TextView) convertView.findViewById(R.id.label);
+        tvFormLable.setText(formCaseFormField.getDisplayName().get("en"));
+        return convertView;
     }
 
     @Override
@@ -84,18 +87,14 @@ public class CasesRegisterAdapter extends BaseExpandableListAdapter {
         }
         TextView heading = (TextView) convertView.findViewById(R.id.heading);
         heading.setText(caseFormSection.getName().get("en"));
-
         return convertView;
     }
 
     private View createFormFieldView(CaseFormField caseFormField, View convertView) {
         String fieldType = caseFormField.getType();
-        if (fieldType.equals("select_box") && caseFormField.getMultiSelect()) {
-            fieldType = "multi_select_box";
-        }
+        LayoutInflater infalInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         int resourceId = getFieldLayoutId(fieldType);
         if (resourceId > 0) {
-            LayoutInflater infalInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = infalInflater.inflate(resourceId, null);
             return convertView;
         }
@@ -103,6 +102,11 @@ public class CasesRegisterAdapter extends BaseExpandableListAdapter {
     }
 
     protected int getFieldLayoutId(String fieldType) {
-        return context.getResources().getIdentifier("form_" + fieldType, "layout", context.getPackageName());
+//        return context.getResources().getIdentifier("form_" + fieldType, "layout", context.getPackageName());
+        if (fieldType.equals("tick_box")) {
+            return context.getResources().getIdentifier("form_tick_box", "layout", context.getPackageName());
+        }
+        return context.getResources().getIdentifier("form_text_field", "layout", context.getPackageName());
     }
+
 }
