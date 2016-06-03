@@ -20,7 +20,7 @@ import org.unicef.rapidreg.model.User;
 import org.unicef.rapidreg.model.forms.cases.CaseFormBean;
 
 public class PrimeroApplication extends Application {
-
+    public static final String TAG = PrimeroApplication.class.getSimpleName();
     public static final String SHARED_PREFERENCES_FILE = "RAPIDREG_PREFERENCES";
     public static final String CURRENT_USER_PREF = "CURRENT_USER";
     public static final String FORM_SECTIONS_PREF = "FORM_SECTION";
@@ -81,7 +81,7 @@ public class PrimeroApplication extends Application {
 
     public CaseFormBean getCaseFormSections() {
         String jsonForCaseFormSections = getSharedPreferences().getString(FORM_SECTIONS_PREF, null);
-        Log.e("TAG", "getCaseFormSections: " + jsonForCaseFormSections);
+        Log.e(TAG, "getCaseFormSections: " + jsonForCaseFormSections);
         return TextUtils.isEmpty(jsonForCaseFormSections) ?
                 null : gson.fromJson(jsonForCaseFormSections, CaseFormBean.class);
     }
