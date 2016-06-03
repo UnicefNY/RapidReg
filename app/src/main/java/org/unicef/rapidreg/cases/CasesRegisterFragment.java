@@ -7,16 +7,15 @@ import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
 import android.widget.ExpandableListView;
 import android.widget.LinearLayout;
 
 import com.hannesdorfmann.mosby.mvp.MvpFragment;
 
 import org.unicef.rapidreg.R;
-import org.unicef.rapidreg.model.forms.CaseFormField;
-import org.unicef.rapidreg.model.forms.CaseFormRoot;
-import org.unicef.rapidreg.model.forms.CaseFormSection;
+import org.unicef.rapidreg.model.forms.cases.CaseFormField;
+import org.unicef.rapidreg.model.forms.cases.CaseFormRoot;
+import org.unicef.rapidreg.model.forms.cases.CaseFormSection;
 
 import java.util.ArrayList;
 import java.util.List;

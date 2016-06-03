@@ -2,7 +2,7 @@ package org.unicef.rapidreg.cases;
 
 import com.hannesdorfmann.mosby.mvp.MvpView;
 
-import org.unicef.rapidreg.model.forms.CaseFormRoot;
+import org.unicef.rapidreg.model.forms.cases.CaseFormRoot;
 
 public interface CasesRegisterView extends MvpView {
 
