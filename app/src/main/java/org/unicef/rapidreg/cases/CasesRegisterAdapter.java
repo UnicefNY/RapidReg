@@ -8,41 +8,42 @@ import android.widget.BaseExpandableListAdapter;
 import android.widget.TextView;
 
 import org.unicef.rapidreg.R;
-import org.unicef.rapidreg.model.forms.cases.CaseFormSection;
-import org.unicef.rapidreg.model.forms.cases.CaseFormField;
+import org.unicef.rapidreg.model.forms.cases.CaseFieldBean;
+import org.unicef.rapidreg.model.forms.cases.CaseFormBean;
+import org.unicef.rapidreg.model.forms.cases.CaseSectionBean;
 
 import java.util.List;
 
 public class CasesRegisterAdapter extends BaseExpandableListAdapter {
 
     private Context context;
-    private List<CaseFormSection> caseFormSections;
+    private List<CaseSectionBean> sections;
 
-    public CasesRegisterAdapter(Context context, List<CaseFormSection> caseFormSections) {
+    public CasesRegisterAdapter(Context context, List<CaseSectionBean> sections) {
         this.context = context;
-        this.caseFormSections = caseFormSections;
+        this.sections = sections;
     }
 
     @Override
     public int getGroupCount() {
-        return caseFormSections.size();
+        return sections.size();
     }
 
     @Override
     public int getChildrenCount(int groupPosition) {
-        List<CaseFormField> formCaseFormFields = caseFormSections.get(groupPosition).getCaseFormFields();
-        return formCaseFormFields.size();
+        List<CaseFieldBean> formCaseFieldBeen = sections.get(groupPosition).getFields();
+        return formCaseFieldBeen.size();
     }
 
     @Override
     public Object getGroup(int groupPosition) {
-        return caseFormSections.get(groupPosition);
+        return sections.get(groupPosition);
     }
 
     @Override
     public Object getChild(int groupPosition, int childPosition) {
-        List<CaseFormField> formCaseFormFields = caseFormSections.get(groupPosition).getCaseFormFields();
-        return formCaseFormFields.get(childPosition);
+        List<CaseFieldBean> formCaseFieldBeen = sections.get(groupPosition).getFields();
+        return formCaseFieldBeen.get(childPosition);
     }
 
     @Override
@@ -62,16 +63,16 @@ public class CasesRegisterAdapter extends BaseExpandableListAdapter {
 
     @Override
     public View getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
-        CaseFormSection formSection = (CaseFormSection) getGroup(groupPosition);
+        CaseSectionBean formSection = (CaseSectionBean) getGroup(groupPosition);
         return createFormSectionView(formSection, convertView);
     }
 
     @Override
     public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
-        CaseFormField formCaseFormField = (CaseFormField) getChild(groupPosition, childPosition);
-        convertView = createFormFieldView(formCaseFormField, convertView);
+        CaseFieldBean form = (CaseFieldBean) getChild(groupPosition, childPosition);
+        convertView = createFormFieldView(form, convertView);
         TextView tvFormLable = (TextView) convertView.findViewById(R.id.label);
-        tvFormLable.setText(formCaseFormField.getDisplayName().get("en"));
+        tvFormLable.setText(form.getDisplayName().get("en"));
         return convertView;
     }
 
@@ -80,17 +81,17 @@ public class CasesRegisterAdapter extends BaseExpandableListAdapter {
         return true;
     }
 
-    private View createFormSectionView(CaseFormSection caseFormSection, View convertView) {
+    private View createFormSectionView(CaseSectionBean section, View convertView) {
         if (convertView == null) {
             LayoutInflater inf = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = inf.inflate(R.layout.group_heading, null);
         }
         TextView heading = (TextView) convertView.findViewById(R.id.heading);
-        heading.setText(caseFormSection.getName().get("en"));
+        heading.setText(section.getName().get("en"));
         return convertView;
     }
 
-    private View createFormFieldView(CaseFormField caseFormField, View convertView) {
+    private View createFormFieldView(CaseFieldBean caseFormField, View convertView) {
         String fieldType = caseFormField.getType();
         LayoutInflater infalInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         int resourceId = getFieldLayoutId(fieldType);
