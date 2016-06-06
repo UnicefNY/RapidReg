@@ -52,16 +52,12 @@ public class LoginPresenter extends MvpBasePresenter<LoginView> {
             User user = UserService.getInstance().getAllUsers().get(0);
             return user.getServerUrl();
         } catch (Exception e) {
-            Log.w("user login","No user ever login successfully, so url doesn't exist!");
+            Log.w("user login", "No user ever login successfully, so url doesn't exist!");
             return "";
         }
     }
 
     public void doLogin(Context context, String username, String password, String url) {
-        if ("".equals(url)) {
-            User user = UserService.getInstance().getUser(username);
-            url = (user != null) ? user.getServerUrl() : "";
-        }
         if (!validate(context, username, password, url)) {
             return;
         }

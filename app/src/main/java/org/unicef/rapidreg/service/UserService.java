@@ -80,10 +80,6 @@ public class UserService {
         return !TextUtils.isEmpty(password);
     }
 
-    public User getUser(String username) {
-        return userDao.getUser(username);
-    }
-
     public List<User> getAllUsers() {
         return userDao.getAllUsers();
     }
