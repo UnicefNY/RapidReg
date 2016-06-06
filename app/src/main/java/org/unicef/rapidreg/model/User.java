@@ -7,7 +7,6 @@ import com.raizlabs.android.dbflow.annotation.Unique;
 import com.raizlabs.android.dbflow.structure.BaseModel;
 
 import org.unicef.rapidreg.db.PrimeroDB;
-import org.unicef.rapidreg.utils.EncryptHelper;
 
 @Table(database = PrimeroDB.class)
 public class User extends BaseModel {
@@ -57,7 +56,7 @@ public class User extends BaseModel {
                 String dbKey, String organisation, String fullName, String unauthenticatedPassword,
                 String language) {
         this.username = username;
-        this.password = EncryptHelper.encrypt(password);
+        this.password = password;
         this.verified = verified;
         this.serverUrl = serverUrl;
         this.dbKey = dbKey;
@@ -88,7 +87,7 @@ public class User extends BaseModel {
     }
 
     public void setPassword(String password) {
-        this.password = EncryptHelper.encrypt(password);
+        this.password = password;
     }
 
     public boolean isVerified() {
