@@ -7,8 +7,7 @@ import android.os.Bundle;
 import org.unicef.rapidreg.cases.CasesActivity;
 import org.unicef.rapidreg.login.LoginActivity;
 
-public class IntentStarter {
-
+public class IntentSender {
     public static final String KEY_LOGIN_USER = "login_user";
 
     public void showCasesActivity(Activity context, String username) {

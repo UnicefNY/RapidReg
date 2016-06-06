@@ -13,7 +13,7 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import org.unicef.rapidreg.IntentStarter;
+import org.unicef.rapidreg.IntentSender;
 import org.unicef.rapidreg.PrimeroApplication;
 import org.unicef.rapidreg.R;
 import org.unicef.rapidreg.service.UserService;
@@ -32,7 +32,7 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
 
     TextView textViewLoginUserLabel;
 
-    IntentStarter intentStarter = new IntentStarter();
+    IntentSender intentSender = new IntentSender();
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -42,7 +42,7 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
 
         View headerView = navigationView.getHeaderView(0);
         textViewLoginUserLabel = (TextView) headerView.findViewById(R.id.login_user_label);
-        textViewLoginUserLabel.setText(getIntent().getStringExtra(IntentStarter.KEY_LOGIN_USER));
+        textViewLoginUserLabel.setText(getIntent().getStringExtra(IntentSender.KEY_LOGIN_USER));
 
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -93,7 +93,7 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
         String message = context.getResources().getString(R.string.login_out_successful_text);
         UserService.getInstance().setCurrentUser(null);
         Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
-        intentStarter.showLoginActivity(currentActivity);
+        intentSender.showLoginActivity(currentActivity);
     }
 
     private void createAlertDialog(BaseActivity currentActivity) {

@@ -14,8 +14,7 @@ import com.raizlabs.android.dbflow.data.Blob;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
-import org.unicef.rapidreg.IntentStarter;
-import org.unicef.rapidreg.PrimeroApplication;
+import org.unicef.rapidreg.IntentSender;
 import org.unicef.rapidreg.R;
 import org.unicef.rapidreg.event.NeedCacheForOfflineEvent;
 import org.unicef.rapidreg.event.NeedDoLoginOffLineEvent;
@@ -45,7 +44,7 @@ public class LoginPresenter extends MvpBasePresenter<LoginView> {
     private ConnectivityManager cm;
     private Gson gson;
     private Context context;
-    private IntentStarter intentStarter;
+    private IntentSender intentSender;
 
     public void doLogin(Context context, String username, String password, String url) {
         if (!validate(context, username, password, url)) {
@@ -139,7 +138,7 @@ public class LoginPresenter extends MvpBasePresenter<LoginView> {
 
     private void initContext(Context context, String url) {
         this.context = context;
-        intentStarter = new IntentStarter();
+        intentSender = new IntentSender();
         cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         gson = new Gson();
         try {
@@ -213,7 +212,7 @@ public class LoginPresenter extends MvpBasePresenter<LoginView> {
     }
 
     private void goToLoginSuccessScreen(String username) {
-        intentStarter.showCasesActivity((Activity) context, username);
+        intentSender.showCasesActivity((Activity) context, username);
     }
 
     private void showLoadingIndicator(boolean active) {
