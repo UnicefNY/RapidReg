@@ -120,9 +120,9 @@ public class LoginPresenter extends MvpBasePresenter<LoginView> {
                     ChildCase childCase = new ChildCase();
                     childCase.setForm(new Blob(formJson.getBytes()));
                     childCase.save();
-                    Log.e(TAG, "ok: ");
+                    Log.i(TAG, "login successfully");
                 } else {
-                    Log.e(TAG, "faild: ");
+                    Log.w(TAG, "login failed");
                 }
             }
 
