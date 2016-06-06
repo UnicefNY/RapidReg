@@ -1,7 +1,6 @@
 package org.unicef.rapidreg.login;
 
 import android.app.ProgressDialog;
-
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
@@ -17,7 +16,6 @@ import com.hannesdorfmann.mosby.mvp.MvpActivity;
 import org.unicef.rapidreg.R;
 import org.unicef.rapidreg.model.LoginResponse;
 import org.unicef.rapidreg.network.NetworkStatusManager;
-
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -38,19 +36,18 @@ public class LoginActivity extends MvpActivity<LoginView, LoginPresenter> implem
     @BindView(R.id.text_view_change_url)
     TextView changeUrlTextView;
 
-
     private ProgressDialog loginProgressDialog;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
-        loginProgressDialog = new ProgressDialog(this);
 
-        usernameEditView.requestFocus();
         hideUrlInputIfUserEverLoginSuccessfully();
+        loginProgressDialog = new ProgressDialog(this);
+        usernameEditView.requestFocus();
+
     }
 
     @OnClick(R.id.button_login)
@@ -74,13 +71,14 @@ public class LoginActivity extends MvpActivity<LoginView, LoginPresenter> implem
         urlEditView.setSelection(0, urlEditView.length());
     }
 
+
     private void hideUrlInputIfUserEverLoginSuccessfully() {
         changeUrlTextView.setVisibility(View.INVISIBLE);
         try {
-            String urlAfterEnterUsername = fetchURLByUsernameIfNotInput();
-            urlEditView.setText(urlAfterEnterUsername);
+            String url = fetchHistoryURL();
+            urlEditView.setText(url);
 
-            if (!"".equals(urlAfterEnterUsername)) {
+            if (!"".equals(url)) {
                 urlEditView.setVisibility(View.INVISIBLE);
                 changeUrlTextView.setVisibility(View.VISIBLE);
             }
@@ -89,7 +87,7 @@ public class LoginActivity extends MvpActivity<LoginView, LoginPresenter> implem
         }
     }
 
-    private String fetchURLByUsernameIfNotInput() {
+    private String fetchHistoryURL() {
         String url = urlEditView.getText().toString().trim();
         return "".equals(url) ? presenter.fetchURL() : url;
     }

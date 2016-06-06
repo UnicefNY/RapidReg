@@ -11,7 +11,7 @@
         android:layout_centerInParent="true"
         android:hint="@string/editview_password_hint_text"
         android:inputType="textPassword"
-        android:text="" />
+        android:text="qu01n23!" />
 
 
     <EditText
@@ -20,7 +20,7 @@
         android:layout_height="wrap_content"
         android:layout_above="@id/editview_password"
         android:hint="@string/editview_username_hint_text"
-        android:text="" />
+        android:text="primero" />
 
 
     <ImageView
@@ -39,6 +39,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/editview_password"
         android:hint="@string/editview_URL_hint_text"
+        android:text="http://10.29.2.106:3000"
         />
 
 
