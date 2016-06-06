@@ -17,7 +17,7 @@ import com.raizlabs.android.dbflow.structure.database.OpenHelper;
 import org.unicef.rapidreg.db.PrimeroDB;
 import org.unicef.rapidreg.db.SQLCipherHelperImpl;
 import org.unicef.rapidreg.model.User;
-import org.unicef.rapidreg.model.forms.cases.CaseFormBean;
+import org.unicef.rapidreg.model.forms.cases.CaseForm;
 
 public class PrimeroApplication extends Application {
     public static final String TAG = PrimeroApplication.class.getSimpleName();
@@ -79,11 +79,11 @@ public class PrimeroApplication extends Application {
         getSharedPreferences().edit().putString(FORM_SECTIONS_PREF, formSectionJson).commit();
     }
 
-    public CaseFormBean getCaseFormSections() {
+    public CaseForm getCaseFormSections() {
         String jsonForCaseFormSections = getSharedPreferences().getString(FORM_SECTIONS_PREF, null);
         Log.e(TAG, "getCaseFormSections: " + jsonForCaseFormSections);
         return TextUtils.isEmpty(jsonForCaseFormSections) ?
-                null : gson.fromJson(jsonForCaseFormSections, CaseFormBean.class);
+                null : gson.fromJson(jsonForCaseFormSections, CaseForm.class);
     }
 
     private void initDB() {
