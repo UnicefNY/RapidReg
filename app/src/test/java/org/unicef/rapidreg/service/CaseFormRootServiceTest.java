@@ -9,7 +9,7 @@ import org.robolectric.RobolectricTestRunner;
 import org.unicef.rapidreg.db.CaseFormDao;
 import org.unicef.rapidreg.db.impl.CaseFormDaoImpl;
 import org.unicef.rapidreg.model.form.childcase.CaseField;
-import org.unicef.rapidreg.model.form.childcase.CaseForm;
+import org.unicef.rapidreg.model.form.childcase.CaseFormRoot;
 import org.unicef.rapidreg.model.form.childcase.CaseSection;
 
 import java.io.IOException;
@@ -21,7 +21,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 @RunWith(RobolectricTestRunner.class)
-public class CaseFormServiceTest {
+public class CaseFormRootServiceTest {
     private static CaseFormService caseFormService;
     private static CaseFormDao caseFormDao;
 
@@ -66,7 +66,7 @@ public class CaseFormServiceTest {
     @Test
     public void should_get_case_form() throws IOException {
         when(caseFormDao.getForm()).thenReturn(new Blob(formForm.getBytes()));
-        CaseForm form = caseFormService.getCurrentForm();
+        CaseFormRoot form = caseFormService.getCurrentForm();
 
         assertThat(form.getSections().size(), is(1));
 

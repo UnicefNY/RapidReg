@@ -24,7 +24,7 @@ import org.unicef.rapidreg.model.ChildCase;
 import org.unicef.rapidreg.model.LoginRequestBody;
 import org.unicef.rapidreg.model.LoginResponse;
 import org.unicef.rapidreg.model.User;
-import org.unicef.rapidreg.model.form.childcase.CaseForm;
+import org.unicef.rapidreg.model.form.childcase.CaseFormRoot;
 import org.unicef.rapidreg.network.HttpStatusCodeHandler;
 import org.unicef.rapidreg.network.NetworkServiceGenerator;
 import org.unicef.rapidreg.network.NetworkStatusManager;
@@ -120,14 +120,14 @@ public class LoginPresenter extends MvpBasePresenter<LoginView> {
 
     @Subscribe(threadMode = ThreadMode.BACKGROUND)
     public void onNeedLoadFormSectionsEvent(NeedLoadFormSectionsEvent event) {
-        Call<CaseForm> call = client.getForm(event.getCookie(),
+        Call<CaseFormRoot> call = client.getForm(event.getCookie(),
                 Locale.getDefault().getLanguage(), true, "case");
 
-        call.enqueue(new Callback<CaseForm>() {
+        call.enqueue(new Callback<CaseFormRoot>() {
             @Override
-            public void onResponse(Call<CaseForm> call, Response<CaseForm> response) {
+            public void onResponse(Call<CaseFormRoot> call, Response<CaseFormRoot> response) {
                 if (response.isSuccessful()) {
-                    CaseForm form = response.body();
+                    CaseFormRoot form = response.body();
                     String formJson = gson.toJson(form);
                     ChildCase childCase = new ChildCase();
                     childCase.setForm(new Blob(formJson.getBytes()));
@@ -139,7 +139,7 @@ public class LoginPresenter extends MvpBasePresenter<LoginView> {
             }
 
             @Override
-            public void onFailure(Call<CaseForm> call, Throwable t) {
+            public void onFailure(Call<CaseFormRoot> call, Throwable t) {
                 if (isViewAttached()) {
                     showNetworkErrorMessage(t, false);
                     showLoadingIndicator(false);

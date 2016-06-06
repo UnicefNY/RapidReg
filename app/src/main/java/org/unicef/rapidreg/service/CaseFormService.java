@@ -7,7 +7,7 @@ import com.raizlabs.android.dbflow.data.Blob;
 
 import org.unicef.rapidreg.db.CaseFormDao;
 import org.unicef.rapidreg.db.impl.CaseFormDaoImpl;
-import org.unicef.rapidreg.model.form.childcase.CaseForm;
+import org.unicef.rapidreg.model.form.childcase.CaseFormRoot;
 
 public class CaseFormService {
     private static final CaseFormService CASE_FORM_SERVICE
@@ -22,10 +22,10 @@ public class CaseFormService {
         this.caseFormDao = caseFormDao;
     }
 
-    public CaseForm getCurrentForm() {
+    public CaseFormRoot getCurrentForm() {
         Blob form = caseFormDao.getForm();
         String formJson = new String(form.getBlob());
         return TextUtils.isEmpty(formJson) ?
-                null : new Gson().fromJson(formJson, CaseForm.class);
+                null : new Gson().fromJson(formJson, CaseFormRoot.class);
     }
 }
