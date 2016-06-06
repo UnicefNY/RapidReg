@@ -7,6 +7,7 @@ import org.robolectric.RobolectricTestRunner;
 import org.unicef.rapidreg.db.UserDao;
 import org.unicef.rapidreg.db.impl.UserDaoImpl;
 import org.unicef.rapidreg.model.User;
+import org.unicef.rapidreg.utils.EncryptHelper;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -21,7 +22,7 @@ public class UserServiceTest {
 
     private String username = "Jack";
     private String password = "123456";
-    private User jack = new User(username, password);
+    private User jack = new User(username, EncryptHelper.encrypt(password));
 
     @BeforeClass
     public static void setup() {
