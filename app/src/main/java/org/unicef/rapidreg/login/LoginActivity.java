@@ -22,7 +22,7 @@ import butterknife.OnClick;
 import retrofit2.Call;
 
 public class LoginActivity extends MvpActivity<LoginView, LoginPresenter> implements LoginView {
-    private static final String TAG = LoginActivity.class.getSimpleName();
+    public static final String TAG = LoginActivity.class.getSimpleName();
 
     @BindView(R.id.button_login)
     Button loginButton;
@@ -32,7 +32,6 @@ public class LoginActivity extends MvpActivity<LoginView, LoginPresenter> implem
     EditText passwordEditView;
     @BindView(R.id.editview_url)
     EditText urlEditView;
-
     @BindView(R.id.text_view_change_url)
     TextView changeUrlTextView;
 

@@ -1,4 +1,4 @@
-package org.unicef.rapidreg.model.forms.cases;
+package org.unicef.rapidreg.model.form.childcase;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;

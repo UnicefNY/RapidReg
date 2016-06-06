@@ -8,9 +8,9 @@ import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
 import org.unicef.rapidreg.db.CaseFormDao;
 import org.unicef.rapidreg.db.impl.CaseFormDaoImpl;
-import org.unicef.rapidreg.model.forms.cases.CaseField;
-import org.unicef.rapidreg.model.forms.cases.CaseForm;
-import org.unicef.rapidreg.model.forms.cases.CaseSection;
+import org.unicef.rapidreg.model.form.childcase.CaseField;
+import org.unicef.rapidreg.model.form.childcase.CaseForm;
+import org.unicef.rapidreg.model.form.childcase.CaseSection;
 
 import java.io.IOException;
 

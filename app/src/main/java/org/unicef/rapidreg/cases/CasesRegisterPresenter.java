@@ -5,19 +5,16 @@ import android.content.Context;
 import com.hannesdorfmann.mosby.mvp.MvpBasePresenter;
 
 import org.unicef.rapidreg.PrimeroApplication;
-import org.unicef.rapidreg.model.forms.cases.CaseForm;
+import org.unicef.rapidreg.model.form.childcase.CaseForm;
 import org.unicef.rapidreg.service.CaseFormService;
 
 public class CasesRegisterPresenter extends MvpBasePresenter<CasesRegisterView> {
-
-    private PrimeroApplication primeroApplication;
     private CaseForm form;
     private CasesRegisterAdapter casesRegisterAdapter;
 
     private String value;
 
     public void initContext(Context context) {
-        primeroApplication = (PrimeroApplication) context.getApplicationContext();
         if (isViewAttached()) {
             if ((form = loadCaseForms()) != null) {
                 casesRegisterAdapter = new CasesRegisterAdapter(context,

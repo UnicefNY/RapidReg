@@ -7,7 +7,7 @@ import com.raizlabs.android.dbflow.data.Blob;
 
 import org.unicef.rapidreg.db.CaseFormDao;
 import org.unicef.rapidreg.db.impl.CaseFormDaoImpl;
-import org.unicef.rapidreg.model.forms.cases.CaseForm;
+import org.unicef.rapidreg.model.form.childcase.CaseForm;
 
 public class CaseFormService {
     private static final CaseFormService CASE_FORM_SERVICE

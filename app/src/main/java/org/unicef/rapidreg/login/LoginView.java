@@ -1,7 +1,5 @@
 package org.unicef.rapidreg.login;
 
-import android.widget.EditText;
-
 import com.hannesdorfmann.mosby.mvp.lce.MvpLceView;
 
 import org.unicef.rapidreg.model.LoginResponse;

@@ -2,7 +2,7 @@ package org.unicef.rapidreg.network;
 
 import org.unicef.rapidreg.model.LoginRequestBody;
 import org.unicef.rapidreg.model.LoginResponse;
-import org.unicef.rapidreg.model.forms.cases.CaseForm;
+import org.unicef.rapidreg.model.form.childcase.CaseForm;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
