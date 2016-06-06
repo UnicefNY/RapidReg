@@ -6,6 +6,7 @@ import com.hannesdorfmann.mosby.mvp.MvpBasePresenter;
 
 import org.unicef.rapidreg.PrimeroApplication;
 import org.unicef.rapidreg.model.forms.cases.CaseForm;
+import org.unicef.rapidreg.service.CaseFormService;
 
 public class CasesRegisterPresenter extends MvpBasePresenter<CasesRegisterView> {
 
@@ -28,7 +29,7 @@ public class CasesRegisterPresenter extends MvpBasePresenter<CasesRegisterView> 
     }
 
     private CaseForm loadCaseForms() {
-        return primeroApplication.getCaseFormSections();
+        return CaseFormService.getInstance().getCurrentForm();
     }
 
     public String getValue() {

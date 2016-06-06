@@ -10,6 +10,7 @@ import android.util.Log;
 
 import com.google.gson.Gson;
 import com.hannesdorfmann.mosby.mvp.MvpBasePresenter;
+import com.raizlabs.android.dbflow.data.Blob;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -21,6 +22,7 @@ import org.unicef.rapidreg.event.NeedCacheForOfflineEvent;
 import org.unicef.rapidreg.event.NeedDoLoginOffLineEvent;
 import org.unicef.rapidreg.event.NeedGoToLoginSuccessScreenEvent;
 import org.unicef.rapidreg.event.NeedLoadFormSectionsEvent;
+import org.unicef.rapidreg.model.ChildCase;
 import org.unicef.rapidreg.model.LoginRequestBody;
 import org.unicef.rapidreg.model.LoginResponse;
 import org.unicef.rapidreg.model.User;
@@ -105,7 +107,7 @@ public class LoginPresenter extends MvpBasePresenter<LoginView> {
         goToLoginSuccessScreen(event.getUserName());
     }
 
-    @Subscribe(threadMode = ThreadMode.MAIN)
+    @Subscribe(threadMode = ThreadMode.BACKGROUND)
     public void onNeedLoadFormSectionsEvent(NeedLoadFormSectionsEvent event) {
 //        showLoadingIndicator(true);
         Call<CaseForm> call = client.getForm(event.cookie,
@@ -117,13 +119,12 @@ public class LoginPresenter extends MvpBasePresenter<LoginView> {
 //                    showLoadingIndicator(false);
                 if (response.isSuccessful()) {
                     CaseForm form = response.body();
-                    String jsonFormCaseForm = gson.toJson(form);
-                    primeroApplication.saveFormSections(jsonFormCaseForm);
-//                        showLoginResultMessage("Load From Success!");
+                    String formJson = gson.toJson(form);
+                    ChildCase childCase = new ChildCase();
+                    childCase.setForm(new Blob(formJson.getBytes()));
+                    childCase.save();
                     Log.e(TAG, "ok: ");
                 } else {
-//                  showLoginResultMessage(HttpStatusCodeHandler
-//                          .getHttpStatusMessage(response.code()));
                     Log.e(TAG, "faild: ");
                 }
             }
