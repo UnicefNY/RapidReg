@@ -30,6 +30,7 @@ import org.unicef.rapidreg.network.NetworkServiceGenerator;
 import org.unicef.rapidreg.network.NetworkStatusManager;
 import org.unicef.rapidreg.network.PrimeroClient;
 import org.unicef.rapidreg.service.UserService;
+import org.unicef.rapidreg.utils.EncryptHelper;
 
 import java.util.Locale;
 
@@ -181,7 +182,7 @@ public class LoginPresenter extends MvpBasePresenter<LoginView> {
                     showLoadingIndicator(false);
                     if (response.isSuccessful()) {
                         String cookie = response.headers().get("Set-Cookie");
-                        User user = new User(username, password, true, url);
+                        User user = new User(username, EncryptHelper.encrypt(password), true, url);
                         user.setDbKey(response.body().getDb_key());
                         user.setOrganisation(response.body().getOrganization());
                         user.setLanguage(response.body().getLanguage());
