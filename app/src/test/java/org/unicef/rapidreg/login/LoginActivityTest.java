@@ -2,10 +2,8 @@ package org.unicef.rapidreg.login;
 
 import android.app.Activity;
 import android.os.Build;
-import android.text.TextUtils;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 
 import org.apache.maven.artifact.ant.shaded.StringUtils;
 import org.hamcrest.CoreMatchers;
@@ -25,9 +23,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static org.hamcrest.CoreMatchers.nullValue;
-import static org.robolectric.Shadows.shadowOf;
 import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertThat;
+import static org.robolectric.Shadows.shadowOf;
 
 @RunWith(RobolectricGradleTestRunner.class)
 @Config(constants = BuildConfig.class, sdk = Build.VERSION_CODES.JELLY_BEAN)

@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.provider.Settings;
-import android.support.annotation.NonNull;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 
@@ -96,9 +95,11 @@ public class LoginPresenter extends MvpBasePresenter<LoginView> {
         doLoginOffline(event.context, event.username, event.password);
     }
 
-    @Subscribe(threadMode = ThreadMode.MAIN)
+    @Subscribe(threadMode = ThreadMode.BACKGROUND)
     public void onNeedCacheForOfflineEvent(NeedCacheForOfflineEvent event) {
-        cacheForOffline(event.user);
+        UserService service = UserService.getInstance();
+        service.setCurrentUser(event.getUser());
+        service.saveOrUpdateUser(event.getUser());
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -200,18 +201,16 @@ public class LoginPresenter extends MvpBasePresenter<LoginView> {
     }
 
     private void doLoginOffline(Context context, String username, String password) {
-        UserService.VerifiedCode verifiedCode = UserService.getInstance().verify(username, password);
+        UserService service = UserService.getInstance();
+        UserService.VerifiedCode verifiedCode = service.verify(username, password);
 
         showLoadingIndicator(false);
         showLoginResultMessage(context.getResources().getString(verifiedCode.getResId()));
 
         if (verifiedCode == UserService.VerifiedCode.OK) {
+            service.setCurrentUser(service.getUser(username));
             goToLoginSuccessScreen(username);
         }
-    }
-
-    private void cacheForOffline(@NonNull User user) {
-        UserService.getInstance().saveOrUpdateUser(user);
     }
 
     private void goToLoginSuccessScreen(String username) {
