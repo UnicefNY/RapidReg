@@ -161,10 +161,8 @@ public class LoginPresenter extends MvpBasePresenter<LoginView> {
         }
     }
 
-    private void doLoginOnline(final Context context,
-                               final String username,
-                               final String password,
-                               final String url) {
+    private void doLoginOnline(final Context context, final String username,
+                               final String password, final String url) {
         TelephonyManager tm =
                 (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
         String androidId = Settings.Secure.getString(context.getContentResolver(),
