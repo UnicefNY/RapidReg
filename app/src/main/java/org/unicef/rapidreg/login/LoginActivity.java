@@ -3,6 +3,7 @@ package org.unicef.rapidreg.login;
 import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -21,6 +22,7 @@ import butterknife.OnClick;
 import retrofit2.Call;
 
 public class LoginActivity extends MvpActivity<LoginView, LoginPresenter> implements LoginView {
+    private static final String TAG = LoginActivity.class.getSimpleName();
 
     @BindView(R.id.button_login)
     Button loginButton;
@@ -57,7 +59,7 @@ public class LoginActivity extends MvpActivity<LoginView, LoginPresenter> implem
                 changeUrlTextView.setVisibility(View.VISIBLE);
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            Log.d(TAG, "No user table in database");
         }
     }
 
