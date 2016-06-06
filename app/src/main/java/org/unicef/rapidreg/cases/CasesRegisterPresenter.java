@@ -4,11 +4,11 @@ import android.content.Context;
 
 import com.hannesdorfmann.mosby.mvp.MvpBasePresenter;
 
-import org.unicef.rapidreg.model.form.childcase.CaseForm;
+import org.unicef.rapidreg.model.form.childcase.CaseFormRoot;
 import org.unicef.rapidreg.service.CaseFormService;
 
 public class CasesRegisterPresenter extends MvpBasePresenter<CasesRegisterView> {
-    private CaseForm form;
+    private CaseFormRoot form;
     private CasesRegisterAdapter casesRegisterAdapter;
 
     private String value;
@@ -24,7 +24,7 @@ public class CasesRegisterPresenter extends MvpBasePresenter<CasesRegisterView> 
         }
     }
 
-    private CaseForm loadCaseForms() {
+    private CaseFormRoot loadCaseForms() {
         return CaseFormService.getInstance().getCurrentForm();
     }
 

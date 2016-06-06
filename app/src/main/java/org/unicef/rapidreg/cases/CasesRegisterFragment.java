@@ -14,7 +14,7 @@ import com.hannesdorfmann.mosby.mvp.MvpFragment;
 
 import org.unicef.rapidreg.R;
 import org.unicef.rapidreg.model.form.childcase.CaseField;
-import org.unicef.rapidreg.model.form.childcase.CaseForm;
+import org.unicef.rapidreg.model.form.childcase.CaseFormRoot;
 import org.unicef.rapidreg.model.form.childcase.CaseSection;
 
 import java.util.ArrayList;
@@ -53,13 +53,13 @@ public class CasesRegisterFragment extends MvpFragment<CasesRegisterView, CasesR
     }
 
     @Override
-    public void initView(CasesRegisterAdapter adapter, final CaseForm caseFormRoot) {
+    public void initView(CasesRegisterAdapter adapter, final CaseFormRoot caseFormRootRoot) {
         formsContent.setAdapter(adapter);
         formsContent.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
             @Override
             public boolean onChildClick(ExpandableListView parent, View v, int groupPosition,
                                         int childPosition, long id) {
-                List<CaseSection> sections = caseFormRoot.getSections();
+                List<CaseSection> sections = caseFormRootRoot.getSections();
                 List<CaseField> formCaseFormFields = sections.get(groupPosition).getFields();
                 CaseField field = formCaseFormFields.get(childPosition);
                 showFieldDialog(field);
