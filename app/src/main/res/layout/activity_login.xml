@@ -39,7 +39,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/editview_password"
         android:hint="@string/editview_URL_hint_text"
-        android:text="http://10.29.3.184:3000" />
+        android:text="http://10.29.2.106:3000" />
 
 
     <Button

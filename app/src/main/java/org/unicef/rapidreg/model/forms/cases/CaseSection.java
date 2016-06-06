@@ -1,22 +1,28 @@
 package org.unicef.rapidreg.model.forms.cases;
 
+import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class CaseSectionBean {
+public class CaseSection {
     @SerializedName("name")
+    @Expose
     private Map<String, String> name;
     @SerializedName("order")
+    @Expose
     private int order;
     @SerializedName("help_text")
+    @Expose
     private Map<String, String> helpText;
     @SerializedName("base_language")
+    @Expose
     private String baseLanguage;
     @SerializedName("fields")
-    private List<CaseFieldBean> fields = new ArrayList<>();
+    @Expose
+    private List<CaseField> fields = new ArrayList<>();
 
     public Map<String, String> getName() {
         return name;
@@ -50,11 +56,11 @@ public class CaseSectionBean {
         this.baseLanguage = baseLanguage;
     }
 
-    public List<CaseFieldBean> getFields() {
+    public List<CaseField> getFields() {
         return fields;
     }
 
-    public void setFields(List<CaseFieldBean> fields) {
+    public void setFields(List<CaseField> fields) {
         this.fields = fields;
     }
 
@@ -65,7 +71,7 @@ public class CaseSectionBean {
         sb.append("order: ").append(order).append("\n");
         sb.append("helpText: ").append(helpText).append("\n");
         sb.append("baseLanguage: ").append(baseLanguage).append("\n");
-        for (CaseFieldBean field : fields) {
+        for (CaseField field : fields) {
             sb.append(field);
         }
 

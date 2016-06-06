@@ -24,7 +24,7 @@ import org.unicef.rapidreg.event.NeedLoadFormSectionsEvent;
 import org.unicef.rapidreg.model.LoginRequestBody;
 import org.unicef.rapidreg.model.LoginResponse;
 import org.unicef.rapidreg.model.User;
-import org.unicef.rapidreg.model.forms.cases.CaseFormBean;
+import org.unicef.rapidreg.model.forms.cases.CaseForm;
 import org.unicef.rapidreg.network.HttpStatusCodeHandler;
 import org.unicef.rapidreg.network.NetworkServiceGenerator;
 import org.unicef.rapidreg.network.NetworkStatusManager;
@@ -108,15 +108,15 @@ public class LoginPresenter extends MvpBasePresenter<LoginView> {
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onNeedLoadFormSectionsEvent(NeedLoadFormSectionsEvent event) {
 //        showLoadingIndicator(true);
-        Call<CaseFormBean> call = client.getForm(event.cookie,
+        Call<CaseForm> call = client.getForm(event.cookie,
                 Locale.getDefault().getLanguage(), true, "case");
 
-        call.enqueue(new Callback<CaseFormBean>() {
+        call.enqueue(new Callback<CaseForm>() {
             @Override
-            public void onResponse(Call<CaseFormBean> call, Response<CaseFormBean> response) {
+            public void onResponse(Call<CaseForm> call, Response<CaseForm> response) {
 //                    showLoadingIndicator(false);
                 if (response.isSuccessful()) {
-                    CaseFormBean form = response.body();
+                    CaseForm form = response.body();
                     String jsonFormCaseForm = gson.toJson(form);
                     primeroApplication.saveFormSections(jsonFormCaseForm);
 //                        showLoginResultMessage("Load From Success!");
@@ -129,7 +129,7 @@ public class LoginPresenter extends MvpBasePresenter<LoginView> {
             }
 
             @Override
-            public void onFailure(Call<CaseFormBean> call, Throwable t) {
+            public void onFailure(Call<CaseForm> call, Throwable t) {
                 if (isViewAttached()) {
                     showNetworkErrorMessage(t, false);
                     showLoadingIndicator(false);

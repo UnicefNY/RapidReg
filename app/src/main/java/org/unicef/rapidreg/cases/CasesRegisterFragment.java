@@ -13,9 +13,9 @@ import android.widget.LinearLayout;
 import com.hannesdorfmann.mosby.mvp.MvpFragment;
 
 import org.unicef.rapidreg.R;
-import org.unicef.rapidreg.model.forms.cases.CaseFieldBean;
-import org.unicef.rapidreg.model.forms.cases.CaseFormBean;
-import org.unicef.rapidreg.model.forms.cases.CaseSectionBean;
+import org.unicef.rapidreg.model.forms.cases.CaseField;
+import org.unicef.rapidreg.model.forms.cases.CaseForm;
+import org.unicef.rapidreg.model.forms.cases.CaseSection;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,15 +51,15 @@ public class CasesRegisterFragment extends MvpFragment<CasesRegisterView, CasesR
     }
 
     @Override
-    public void initView(CasesRegisterAdapter adapter, final CaseFormBean caseFormRoot) {
+    public void initView(CasesRegisterAdapter adapter, final CaseForm caseFormRoot) {
         formsContent.setAdapter(adapter);
         formsContent.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
             @Override
             public boolean onChildClick(ExpandableListView parent, View v, int groupPosition,
                                         int childPosition, long id) {
-                List<CaseSectionBean> caseFormSections = caseFormRoot.getSections();
-                List<CaseFieldBean> formCaseFormFields = caseFormSections.get(groupPosition).getFields();
-                CaseFieldBean field = formCaseFormFields.get(childPosition);
+                List<CaseSection> caseFormSections = caseFormRoot.getSections();
+                List<CaseField> formCaseFormFields = caseFormSections.get(groupPosition).getFields();
+                CaseField field = formCaseFormFields.get(childPosition);
                 showFieldDialog(field);
                 return false;
             }
@@ -74,7 +74,7 @@ public class CasesRegisterFragment extends MvpFragment<CasesRegisterView, CasesR
         }
     }
 
-    private void showFieldDialog(CaseFieldBean field) {
+    private void showFieldDialog(CaseField field) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         initDialogButton(builder);
         builder.setTitle(field.getDisplayName().get("en"));
@@ -137,7 +137,7 @@ public class CasesRegisterFragment extends MvpFragment<CasesRegisterView, CasesR
         });
     }
 
-    private String[] getSelectOptions(String fieldType, CaseFieldBean field) {
+    private String[] getSelectOptions(String fieldType, CaseField field) {
         List<CharSequence> items = new ArrayList<>();
         if (fieldType.equals("multi_select_box")) {
             List<Map<String, String>> arrayList = field.getOptionStringsText().get("en");

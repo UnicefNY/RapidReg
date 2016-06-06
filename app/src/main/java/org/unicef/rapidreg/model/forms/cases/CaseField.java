@@ -1,27 +1,36 @@
 package org.unicef.rapidreg.model.forms.cases;
 
+import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 import java.util.Map;
 
-public class CaseFieldBean {
+public class CaseField {
     @SerializedName("name")
+    @Expose
     private String name;
     @SerializedName("editable")
+    @Expose
     private boolean editable;
     @SerializedName("multi_select")
+    @Expose
     private boolean multiSelect;
     @SerializedName("type")
+    @Expose
     private String type;
     @SerializedName("display_name")
+    @Expose
     private Map<String, String> displayName;
     @SerializedName("help_text")
+    @Expose
     private Map<String, String> helpText;
     @SerializedName("option_strings_text")
+    @Expose
     private Map<String, List> optionStringsText;
     @SerializedName("subform")
-    private CaseSectionBean subForm;
+    @Expose
+    private CaseSection subForm;
 
     public String getName() {
         return name;
@@ -79,11 +88,11 @@ public class CaseFieldBean {
         this.optionStringsText = optionStringsText;
     }
 
-    public CaseSectionBean getSubForm() {
+    public CaseSection getSubForm() {
         return subForm;
     }
 
-    public void setSubForm(CaseSectionBean subForm) {
+    public void setSubForm(CaseSection subForm) {
         this.subForm = subForm;
     }
 

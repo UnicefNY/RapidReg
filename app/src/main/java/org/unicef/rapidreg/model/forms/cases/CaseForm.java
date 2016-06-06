@@ -1,26 +1,28 @@
 package org.unicef.rapidreg.model.forms.cases;
 
+import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class CaseFormBean {
+public class CaseForm {
     @SerializedName("Children")
-    private List<CaseSectionBean> sections = new ArrayList<>();
+    @Expose
+    private List<CaseSection> sections = new ArrayList<>();
 
-    public List<CaseSectionBean> getSections() {
+    public List<CaseSection> getSections() {
         return sections;
     }
 
-    public void setSections(List<CaseSectionBean> sections) {
+    public void setSections(List<CaseSection> sections) {
         this.sections = sections;
     }
 
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder("<Children>").append("\n");
-        for (CaseSectionBean section : sections) {
+        for (CaseSection section : sections) {
             sb.append(section).append("\n");
         }
         return sb.toString();
