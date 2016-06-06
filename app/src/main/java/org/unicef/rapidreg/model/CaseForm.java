@@ -13,7 +13,7 @@ public class CaseForm extends BaseModel {
     @PrimaryKey(autoincrement = true)
     private long id;
 
-    @Column(name = "case_form")
+    @Column(name = "form_json")
     private Blob form;
 
     public CaseForm() {

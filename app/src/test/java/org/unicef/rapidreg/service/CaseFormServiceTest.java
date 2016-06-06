@@ -21,7 +21,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 @RunWith(RobolectricTestRunner.class)
-public class CaseFormRootServiceTest {
+public class CaseFormServiceTest {
     private static CaseFormService caseFormService;
     private static CaseFormDao caseFormDao;
 
