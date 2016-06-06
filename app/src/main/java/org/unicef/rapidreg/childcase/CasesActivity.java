@@ -1,4 +1,4 @@
-package org.unicef.rapidreg.cases;
+package org.unicef.rapidreg.childcase;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;

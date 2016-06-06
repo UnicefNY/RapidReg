@@ -4,7 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 
-import org.unicef.rapidreg.cases.CasesActivity;
+import org.unicef.rapidreg.childcase.CasesActivity;
 import org.unicef.rapidreg.login.LoginActivity;
 
 public class IntentSender {
