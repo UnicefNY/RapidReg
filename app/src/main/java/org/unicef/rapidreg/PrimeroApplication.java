@@ -21,7 +21,6 @@ public class PrimeroApplication extends Application {
     public static final String TAG = PrimeroApplication.class.getSimpleName();
     public static final String SHARED_PREFERENCES_FILE = "RAPIDREG_PREFERENCES";
     public static final String CURRENT_USER_PREF = "CURRENT_USER";
-    public static final String FORM_SECTIONS_PREF = "FORM_SECTION";
 
     private static Context context;
 
