@@ -1,7 +1,5 @@
 package org.unicef.rapidreg.model;
 
-import com.google.gson.annotations.Expose;
-import com.google.gson.annotations.SerializedName;
 import com.raizlabs.android.dbflow.annotation.Column;
 import com.raizlabs.android.dbflow.annotation.PrimaryKey;
 import com.raizlabs.android.dbflow.annotation.Table;
@@ -13,54 +11,28 @@ import org.unicef.rapidreg.utils.EncryptHelper;
 
 @Table(database = PrimeroDB.class)
 public class User extends BaseModel {
-
     @PrimaryKey(autoincrement = true)
     @Column
-    int id;
-
-    @Expose
-    @SerializedName("user_name")
+    private int id;
     @Column(name = "user_name")
     @Unique
-    protected String username;
-
+    private String username;
     @Column(name = "user_password")
-    protected String password;
-
-    @Expose
-    @SerializedName("verified")
+    private String password;
     @Column(name = "verified")
-    protected boolean verified;
-
-    @Expose
-    @SerializedName("server_url")
+    private boolean verified;
     @Column(name = "server_url")
-    protected String serverUrl;
-
-    @Expose
-    @SerializedName("db_key")
+    private String serverUrl;
     @Column(name = "db_key")
-    protected String dbKey;
-
-    @Expose
-    @SerializedName("organisation")
+    private String dbKey;
     @Column(name = "organisation")
-    protected String organisation;
-
-    @Expose
-    @SerializedName("full_name")
+    private String organisation;
     @Column(name = "full_name")
-    protected String fullName;
-
-    @Expose
-    @SerializedName("unauthenticated_password")
+    private String fullName;
     @Column(name = "unauthenticated_password")
-    protected String unauthenticatedPassword;
-
-    @Expose
-    @SerializedName("language")
+    private String unauthenticatedPassword;
     @Column(name = "language")
-    protected String language;
+    private String language;
 
     public User() {
     }
@@ -93,6 +65,14 @@ public class User extends BaseModel {
         this.fullName = fullName;
         this.unauthenticatedPassword = unauthenticatedPassword;
         this.language = language;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getUsername() {

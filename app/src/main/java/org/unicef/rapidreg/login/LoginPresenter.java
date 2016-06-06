@@ -26,7 +26,7 @@ import org.unicef.rapidreg.model.ChildCase;
 import org.unicef.rapidreg.model.LoginRequestBody;
 import org.unicef.rapidreg.model.LoginResponse;
 import org.unicef.rapidreg.model.User;
-import org.unicef.rapidreg.model.forms.cases.CaseForm;
+import org.unicef.rapidreg.model.form.childcase.CaseForm;
 import org.unicef.rapidreg.network.HttpStatusCodeHandler;
 import org.unicef.rapidreg.network.NetworkServiceGenerator;
 import org.unicef.rapidreg.network.NetworkStatusManager;
@@ -42,7 +42,6 @@ import retrofit2.Response;
 public class LoginPresenter extends MvpBasePresenter<LoginView> {
     public static final String TAG = LoginPresenter.class.getSimpleName();
 
-    private PrimeroApplication primeroApplication;
     private PrimeroClient client;
     private ConnectivityManager cm;
     private Gson gson;
@@ -109,14 +108,12 @@ public class LoginPresenter extends MvpBasePresenter<LoginView> {
 
     @Subscribe(threadMode = ThreadMode.BACKGROUND)
     public void onNeedLoadFormSectionsEvent(NeedLoadFormSectionsEvent event) {
-//        showLoadingIndicator(true);
         Call<CaseForm> call = client.getForm(event.cookie,
                 Locale.getDefault().getLanguage(), true, "case");
 
         call.enqueue(new Callback<CaseForm>() {
             @Override
             public void onResponse(Call<CaseForm> call, Response<CaseForm> response) {
-//                    showLoadingIndicator(false);
                 if (response.isSuccessful()) {
                     CaseForm form = response.body();
                     String formJson = gson.toJson(form);
@@ -142,7 +139,7 @@ public class LoginPresenter extends MvpBasePresenter<LoginView> {
     private void initContext(Context context, String url) {
         this.context = context;
         intentStarter = new IntentStarter();
-        primeroApplication = (PrimeroApplication) context.getApplicationContext();
+        PrimeroApplication primeroApplication = (PrimeroApplication) context.getApplicationContext();
         cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         gson = new Gson();
         try {

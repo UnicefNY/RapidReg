@@ -13,9 +13,9 @@ import android.widget.LinearLayout;
 import com.hannesdorfmann.mosby.mvp.MvpFragment;
 
 import org.unicef.rapidreg.R;
-import org.unicef.rapidreg.model.forms.cases.CaseField;
-import org.unicef.rapidreg.model.forms.cases.CaseForm;
-import org.unicef.rapidreg.model.forms.cases.CaseSection;
+import org.unicef.rapidreg.model.form.childcase.CaseField;
+import org.unicef.rapidreg.model.form.childcase.CaseForm;
+import org.unicef.rapidreg.model.form.childcase.CaseSection;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,8 +24,8 @@ import java.util.Map;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class CasesRegisterFragment extends MvpFragment<CasesRegisterView, CasesRegisterPresenter> implements CasesRegisterView {
-
+public class CasesRegisterFragment extends MvpFragment<CasesRegisterView, CasesRegisterPresenter>
+        implements CasesRegisterView {
     @BindView(R.id.fragment_register_content)
     LinearLayout registerContent;
     @BindView(R.id.register_forms_content)
@@ -33,7 +33,9 @@ public class CasesRegisterFragment extends MvpFragment<CasesRegisterView, CasesR
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater,
+                             @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         return inflater.inflate(R.layout.fragment_cases_register, container, false);
     }
@@ -57,8 +59,8 @@ public class CasesRegisterFragment extends MvpFragment<CasesRegisterView, CasesR
             @Override
             public boolean onChildClick(ExpandableListView parent, View v, int groupPosition,
                                         int childPosition, long id) {
-                List<CaseSection> caseFormSections = caseFormRoot.getSections();
-                List<CaseField> formCaseFormFields = caseFormSections.get(groupPosition).getFields();
+                List<CaseSection> sections = caseFormRoot.getSections();
+                List<CaseField> formCaseFormFields = sections.get(groupPosition).getFields();
                 CaseField field = formCaseFormFields.get(childPosition);
                 showFieldDialog(field);
                 return false;
@@ -103,7 +105,8 @@ public class CasesRegisterFragment extends MvpFragment<CasesRegisterView, CasesR
                 });
                 break;
             case "multi_select_box":
-                builder.setMultiChoiceItems(optionItems, null, new DialogInterface.OnMultiChoiceClickListener() {
+                builder.setMultiChoiceItems(optionItems, null,
+                        new DialogInterface.OnMultiChoiceClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which, boolean isChecked) {
 
