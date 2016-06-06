@@ -13,9 +13,9 @@ import android.widget.LinearLayout;
 import com.hannesdorfmann.mosby.mvp.MvpFragment;
 
 import org.unicef.rapidreg.R;
-import org.unicef.rapidreg.form.childcase.CaseField;
-import org.unicef.rapidreg.form.childcase.CaseFormRoot;
-import org.unicef.rapidreg.form.childcase.CaseSection;
+import org.unicef.rapidreg.forms.childcase.CaseField;
+import org.unicef.rapidreg.forms.childcase.CaseFormRoot;
+import org.unicef.rapidreg.forms.childcase.CaseSection;
 
 import java.util.ArrayList;
 import java.util.List;
