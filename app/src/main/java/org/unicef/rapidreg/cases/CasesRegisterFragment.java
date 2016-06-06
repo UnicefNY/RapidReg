@@ -13,9 +13,9 @@ import android.widget.LinearLayout;
 import com.hannesdorfmann.mosby.mvp.MvpFragment;
 
 import org.unicef.rapidreg.R;
-import org.unicef.rapidreg.model.form.childcase.CaseField;
-import org.unicef.rapidreg.model.form.childcase.CaseFormRoot;
-import org.unicef.rapidreg.model.form.childcase.CaseSection;
+import org.unicef.rapidreg.form.childcase.CaseField;
+import org.unicef.rapidreg.form.childcase.CaseFormRoot;
+import org.unicef.rapidreg.form.childcase.CaseSection;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -85,10 +85,10 @@ public class CasesRegisterFragment extends MvpFragment<CasesRegisterView, CasesR
         if (fieldType.equals("select_box")) {
             if (field.isMultiSelect()) {
                 fieldType = "multi_select_box";
-                optionItems = getSelectOptions(fieldType,field);
+                optionItems = getSelectOptions(fieldType, field);
             } else {
                 fieldType = "single_select_box";
-                optionItems = getSelectOptions(fieldType,field);
+                optionItems = getSelectOptions(fieldType, field);
             }
         }
         switch (fieldType) {
@@ -107,11 +107,11 @@ public class CasesRegisterFragment extends MvpFragment<CasesRegisterView, CasesR
             case "multi_select_box":
                 builder.setMultiChoiceItems(optionItems, null,
                         new DialogInterface.OnMultiChoiceClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which, boolean isChecked) {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which, boolean isChecked) {
 
-                    }
-                });
+                            }
+                        });
                 break;
             default:
                 break;

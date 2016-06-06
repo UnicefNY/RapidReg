@@ -1,8 +1,8 @@
 package org.unicef.rapidreg.network;
 
+import org.unicef.rapidreg.form.childcase.CaseFormRoot;
 import org.unicef.rapidreg.model.LoginRequestBody;
 import org.unicef.rapidreg.model.LoginResponse;
-import org.unicef.rapidreg.model.form.childcase.CaseFormRoot;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
