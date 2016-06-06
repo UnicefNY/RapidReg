@@ -129,8 +129,7 @@ public class LoginPresenter extends MvpBasePresenter<LoginView> {
             public void onResponse(Call<CaseFormRoot> call, Response<CaseFormRoot> response) {
                 if (response.isSuccessful()) {
                     CaseFormRoot form = response.body();
-                    CaseForm caseForm = new CaseForm();
-                    caseForm.setForm(new Blob(gson.toJson(form).getBytes()));
+                    CaseForm caseForm = new CaseForm(new Blob(gson.toJson(form).getBytes()));
                     CaseFormService.getInstance().saveOrUpdateCaseForm(caseForm);
                     Log.i(TAG, "login successfully");
                 } else {

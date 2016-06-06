@@ -16,6 +16,13 @@ public class CaseForm extends BaseModel {
     @Column(name = "case_form")
     private Blob form;
 
+    public CaseForm() {
+    }
+
+    public CaseForm(Blob form) {
+        this.form = form;
+    }
+
     public long getId() {
         return id;
     }
