@@ -92,7 +92,7 @@ public class LoginPresenter extends MvpBasePresenter<LoginView> {
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onNeedDoLoginOffLineEvent(NeedDoLoginOffLineEvent event) {
-        doLoginOffline(event.context, event.username, event.password);
+        doLoginOffline(event.getContext(), event.getUsername(), event.getPassword());
     }
 
     @Subscribe(threadMode = ThreadMode.BACKGROUND)
@@ -109,7 +109,7 @@ public class LoginPresenter extends MvpBasePresenter<LoginView> {
 
     @Subscribe(threadMode = ThreadMode.BACKGROUND)
     public void onNeedLoadFormSectionsEvent(NeedLoadFormSectionsEvent event) {
-        Call<CaseForm> call = client.getForm(event.cookie,
+        Call<CaseForm> call = client.getForm(event.getCookie(),
                 Locale.getDefault().getLanguage(), true, "case");
 
         call.enqueue(new Callback<CaseForm>() {
@@ -140,7 +140,6 @@ public class LoginPresenter extends MvpBasePresenter<LoginView> {
     private void initContext(Context context, String url) {
         this.context = context;
         intentStarter = new IntentStarter();
-        PrimeroApplication primeroApplication = (PrimeroApplication) context.getApplicationContext();
         cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         gson = new Gson();
         try {
