@@ -1,9 +1,11 @@
 package org.unicef.rapidreg.login;
 
 import android.app.ProgressDialog;
+
+import android.content.Context;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -14,7 +16,8 @@ import com.hannesdorfmann.mosby.mvp.MvpActivity;
 
 import org.unicef.rapidreg.R;
 import org.unicef.rapidreg.model.LoginResponse;
-import org.unicef.rapidreg.service.UserService;
+import org.unicef.rapidreg.network.NetworkStatusManager;
+
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -44,22 +47,10 @@ public class LoginActivity extends MvpActivity<LoginView, LoginPresenter> implem
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
-
-        changeUrlTextView.setVisibility(View.INVISIBLE);
-        hideUrlInputIfUserEverLoginSuccessfully();
-
         loginProgressDialog = new ProgressDialog(this);
-    }
 
-    private void hideUrlInputIfUserEverLoginSuccessfully() {
-        try {
-            if (UserService.getInstance().isUserEverLoginSuccessfully()) {
-                urlEditView.setVisibility(View.INVISIBLE);
-                changeUrlTextView.setVisibility(View.VISIBLE);
-            }
-        } catch (Exception e) {
-            Log.d(TAG, "No user table in database");
-        }
+        usernameEditView.requestFocus();
+        hideUrlInputIfUserEverLoginSuccessfully();
     }
 
     @OnClick(R.id.button_login)
@@ -72,10 +63,35 @@ public class LoginActivity extends MvpActivity<LoginView, LoginPresenter> implem
 
     @OnClick(R.id.text_view_change_url)
     public void onChangeUrlTextClicked() {
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        if (!NetworkStatusManager.isOnline(cm)) {
+            Toast.makeText(this, "Network is not accessible!", Toast.LENGTH_LONG).show();
+            return;
+        }
         changeUrlTextView.setVisibility(View.INVISIBLE);
         urlEditView.setVisibility(View.VISIBLE);
         urlEditView.requestFocus();
         urlEditView.setSelection(0, urlEditView.length());
+    }
+
+    private void hideUrlInputIfUserEverLoginSuccessfully() {
+        changeUrlTextView.setVisibility(View.INVISIBLE);
+        try {
+            String urlAfterEnterUsername = fetchURLByUsernameIfNotInput();
+            urlEditView.setText(urlAfterEnterUsername);
+
+            if (!"".equals(urlAfterEnterUsername)) {
+                urlEditView.setVisibility(View.INVISIBLE);
+                changeUrlTextView.setVisibility(View.VISIBLE);
+            }
+        } catch (Exception e) {
+            // do nothing while table doesn't exist
+        }
+    }
+
+    private String fetchURLByUsernameIfNotInput() {
+        String url = urlEditView.getText().toString().trim();
+        return "".equals(url) ? presenter.fetchURL() : url;
     }
 
     @NonNull

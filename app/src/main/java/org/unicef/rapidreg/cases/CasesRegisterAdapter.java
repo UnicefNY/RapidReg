@@ -70,8 +70,8 @@ public class CasesRegisterAdapter extends BaseExpandableListAdapter {
     public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
         CaseField field = (CaseField) getChild(groupPosition, childPosition);
         convertView = createFormFieldView(field, convertView);
-        TextView tvFormLable = (TextView) convertView.findViewById(R.id.label);
-        tvFormLable.setText(field.getDisplayName().get("en"));
+        TextView tvFormLabel = (TextView) convertView.findViewById(R.id.label);
+        tvFormLabel.setText(field.getDisplayName().get("en"));
         return convertView;
     }
 
