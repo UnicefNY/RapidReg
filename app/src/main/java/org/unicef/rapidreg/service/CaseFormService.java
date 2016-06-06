@@ -8,8 +8,8 @@ import com.raizlabs.android.dbflow.data.Blob;
 
 import org.unicef.rapidreg.db.CaseFormDao;
 import org.unicef.rapidreg.db.impl.CaseFormDaoImpl;
+import org.unicef.rapidreg.form.childcase.CaseFormRoot;
 import org.unicef.rapidreg.model.CaseForm;
-import org.unicef.rapidreg.model.form.childcase.CaseFormRoot;
 
 public class CaseFormService {
     public static final String TAG = CaseFormService.class.getSimpleName();
