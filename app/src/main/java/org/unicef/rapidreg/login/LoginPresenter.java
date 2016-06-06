@@ -20,7 +20,7 @@ import org.unicef.rapidreg.event.NeedCacheForOfflineEvent;
 import org.unicef.rapidreg.event.NeedDoLoginOffLineEvent;
 import org.unicef.rapidreg.event.NeedGoToLoginSuccessScreenEvent;
 import org.unicef.rapidreg.event.NeedLoadFormSectionsEvent;
-import org.unicef.rapidreg.model.ChildCase;
+import org.unicef.rapidreg.model.CaseForm;
 import org.unicef.rapidreg.model.LoginRequestBody;
 import org.unicef.rapidreg.model.LoginResponse;
 import org.unicef.rapidreg.model.User;
@@ -29,6 +29,7 @@ import org.unicef.rapidreg.network.HttpStatusCodeHandler;
 import org.unicef.rapidreg.network.NetworkServiceGenerator;
 import org.unicef.rapidreg.network.NetworkStatusManager;
 import org.unicef.rapidreg.network.PrimeroClient;
+import org.unicef.rapidreg.service.CaseFormService;
 import org.unicef.rapidreg.service.UserService;
 import org.unicef.rapidreg.utils.EncryptHelper;
 
@@ -128,10 +129,9 @@ public class LoginPresenter extends MvpBasePresenter<LoginView> {
             public void onResponse(Call<CaseFormRoot> call, Response<CaseFormRoot> response) {
                 if (response.isSuccessful()) {
                     CaseFormRoot form = response.body();
-                    String formJson = gson.toJson(form);
-                    ChildCase childCase = new ChildCase();
-                    childCase.setForm(new Blob(formJson.getBytes()));
-                    childCase.save();
+                    CaseForm caseForm = new CaseForm();
+                    caseForm.setForm(new Blob(gson.toJson(form).getBytes()));
+                    CaseFormService.getInstance().saveOrUpdateCaseForm(caseForm);
                     Log.i(TAG, "login successfully");
                 } else {
                     Log.w(TAG, "login failed");

@@ -9,7 +9,7 @@ import com.raizlabs.android.dbflow.structure.BaseModel;
 import org.unicef.rapidreg.db.PrimeroDB;
 
 @Table(database = PrimeroDB.class)
-public class ChildCase extends BaseModel {
+public class CaseForm extends BaseModel {
     @PrimaryKey(autoincrement = true)
     private long id;
 
