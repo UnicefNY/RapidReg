@@ -20,7 +20,7 @@ import org.unicef.rapidreg.event.NeedCacheForOfflineEvent;
 import org.unicef.rapidreg.event.NeedDoLoginOffLineEvent;
 import org.unicef.rapidreg.event.NeedGoToLoginSuccessScreenEvent;
 import org.unicef.rapidreg.event.NeedLoadFormSectionsEvent;
-import org.unicef.rapidreg.form.childcase.CaseFormRoot;
+import org.unicef.rapidreg.forms.childcase.CaseFormRoot;
 import org.unicef.rapidreg.model.CaseForm;
 import org.unicef.rapidreg.model.LoginRequestBody;
 import org.unicef.rapidreg.model.LoginResponse;
