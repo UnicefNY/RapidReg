@@ -34,6 +34,7 @@ public class UserService {
 
     private static final UserService USER_SERVICE = new UserService(new UserDaoImpl());
     private UserDao userDao;
+    private User currentUser;
 
     public UserService(UserDao userDao) {
         this.userDao = userDao;
@@ -92,5 +93,17 @@ public class UserService {
             existingUser.updateFields(user);
             existingUser.update();
         }
+    }
+
+    public User getUser(String username) {
+        return userDao.getUser(username);
+    }
+
+    public User getCurrentUser() {
+        return currentUser;
+    }
+
+    public void setCurrentUser(User user) {
+        this.currentUser = user;
     }
 }

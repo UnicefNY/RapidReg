@@ -1,6 +1,5 @@
 package org.unicef.rapidreg.base.view;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
@@ -9,7 +8,6 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
@@ -18,15 +16,12 @@ import android.widget.Toast;
 import org.unicef.rapidreg.IntentStarter;
 import org.unicef.rapidreg.PrimeroApplication;
 import org.unicef.rapidreg.R;
-import org.unicef.rapidreg.cases.CasesSearchFragment;
-import org.unicef.rapidreg.login.LoginActivity;
+import org.unicef.rapidreg.service.UserService;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class BaseActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
-
-    private static final int REQUEST_LOGOUT = 0;
     protected
     @BindView(R.id.toolbar)
     Toolbar toolbar;
@@ -96,7 +91,7 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
     private void logOut(BaseActivity currentActivity) {
         PrimeroApplication context = currentActivity.getContext();
         String message = context.getResources().getString(R.string.login_out_successful_text);
-        context.setCurrentUser(null);
+        UserService.getInstance().setCurrentUser(null);
         Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
         intentStarter.showLoginActivity(currentActivity);
     }

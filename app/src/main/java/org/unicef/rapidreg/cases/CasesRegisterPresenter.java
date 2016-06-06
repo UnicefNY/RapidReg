@@ -4,7 +4,6 @@ import android.content.Context;
 
 import com.hannesdorfmann.mosby.mvp.MvpBasePresenter;
 
-import org.unicef.rapidreg.PrimeroApplication;
 import org.unicef.rapidreg.model.form.childcase.CaseForm;
 import org.unicef.rapidreg.service.CaseFormService;
 
