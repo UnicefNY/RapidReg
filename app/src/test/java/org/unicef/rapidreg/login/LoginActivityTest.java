@@ -48,7 +48,6 @@ public class LoginActivityTest {
     @Test
     @Ignore
     public void should_show_error_empty_user_and_password() {
-
         usernameEditView.setText("");
         passwordEditView.setText("");
 

@@ -10,6 +10,7 @@ import org.unicef.rapidreg.db.impl.UserDaoImpl;
 import org.unicef.rapidreg.model.User;
 import org.unicef.rapidreg.utils.EncryptHelper;
 
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -33,6 +34,7 @@ public class UserService {
     public static final String TAG = UserService.class.getSimpleName();
 
     private static final UserService USER_SERVICE = new UserService(new UserDaoImpl());
+
     private UserDao userDao;
     private User currentUser;
 
@@ -76,6 +78,14 @@ public class UserService {
 
     public boolean isPasswordValid(String password) {
         return !TextUtils.isEmpty(password);
+    }
+
+    public User getUser(String username) {
+        return userDao.getUser(username);
+    }
+
+    public List<User> getAllUsers() {
+        return userDao.getAllUsers();
     }
 
     public boolean isUrlValid(String url) {

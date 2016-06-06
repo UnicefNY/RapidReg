@@ -10,4 +10,6 @@ public interface UserDao {
     long countUser();
 
     List<User> getAllUsers();
+
 }
+
