@@ -1,4 +1,4 @@
-package org.unicef.rapidreg.cases;
+package org.unicef.rapidreg.childcase;
 
 import android.content.Context;
 import android.view.LayoutInflater;

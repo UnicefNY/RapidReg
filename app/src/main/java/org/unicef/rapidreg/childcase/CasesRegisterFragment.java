@@ -1,4 +1,4 @@
-package org.unicef.rapidreg.cases;
+package org.unicef.rapidreg.childcase;
 
 import android.content.DialogInterface;
 import android.os.Bundle;
