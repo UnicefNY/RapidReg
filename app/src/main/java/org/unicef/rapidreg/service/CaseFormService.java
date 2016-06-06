@@ -26,7 +26,7 @@ public class CaseFormService {
     }
 
     public CaseFormRoot getCurrentForm() {
-        Blob form = caseFormDao.getForm();
+        Blob form = caseFormDao.getCaseFormContent();
         String formJson = new String(form.getBlob());
         return TextUtils.isEmpty(formJson) ?
                 null : new Gson().fromJson(formJson, CaseFormRoot.class);

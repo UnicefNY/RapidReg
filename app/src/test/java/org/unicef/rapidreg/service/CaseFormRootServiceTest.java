@@ -65,7 +65,7 @@ public class CaseFormRootServiceTest {
 
     @Test
     public void should_get_case_form() throws IOException {
-        when(caseFormDao.getForm()).thenReturn(new Blob(formForm.getBytes()));
+        when(caseFormDao.getCaseFormContent()).thenReturn(new Blob(formForm.getBytes()));
         CaseFormRoot form = caseFormService.getCurrentForm();
 
         assertThat(form.getSections().size(), is(1));

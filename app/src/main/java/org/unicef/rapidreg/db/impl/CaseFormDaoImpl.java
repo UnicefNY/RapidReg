@@ -9,14 +9,14 @@ import org.unicef.rapidreg.model.CaseForm;
 public class CaseFormDaoImpl implements CaseFormDao {
 
     @Override
-    public Blob getForm() {
-        CaseForm caseForm = SQLite.select().from(CaseForm.class).querySingle();
-
-        return caseForm == null ? null : caseForm.getForm();
+    public CaseForm getCaseForm() {
+        return SQLite.select().from(CaseForm.class).querySingle();
     }
 
     @Override
-    public CaseForm getCaseForm() {
-        return SQLite.select().from(CaseForm.class).querySingle();
+    public Blob getCaseFormContent() {
+        CaseForm caseForm = SQLite.select().from(CaseForm.class).querySingle();
+
+        return caseForm == null ? null : caseForm.getForm();
     }
 }
