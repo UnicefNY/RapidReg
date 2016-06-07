@@ -15,6 +15,7 @@ public class CaseFormService {
     public static final String TAG = CaseFormService.class.getSimpleName();
     private static final CaseFormService CASE_FORM_SERVICE
             = new CaseFormService(new CaseFormDaoImpl());
+    private static CaseFormRoot caseForm;
     private CaseFormDao caseFormDao;
 
     public static CaseFormService getInstance() {
@@ -32,14 +33,18 @@ public class CaseFormService {
     }
 
     public CaseFormRoot getCurrentForm() {
-        Blob form = caseFormDao.getCaseFormContent();
-        if (form == null) {
-            return null;
+        if (caseForm == null) {
+            Blob form = caseFormDao.getCaseFormContent();
+            if (form == null) {
+                return null;
+            }
+
+            String formJson = new String(form.getBlob());
+            caseForm = TextUtils.isEmpty(formJson) ?
+                    null : new Gson().fromJson(formJson, CaseFormRoot.class);
         }
 
-        String formJson = new String(form.getBlob());
-        return TextUtils.isEmpty(formJson) ?
-                null : new Gson().fromJson(formJson, CaseFormRoot.class);
+        return caseForm;
     }
 
     public void saveOrUpdateCaseForm(CaseForm caseForm) {

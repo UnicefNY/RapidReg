@@ -1,90 +1,37 @@
 package org.unicef.rapidreg.childcase;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseExpandableListAdapter;
+import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import org.unicef.rapidreg.R;
 import org.unicef.rapidreg.forms.childcase.CaseField;
-import org.unicef.rapidreg.forms.childcase.CaseSection;
 
 import java.util.List;
 
-public class CasesRegisterAdapter extends BaseExpandableListAdapter {
-    public static final String TAG = CasesRegisterAdapter.class.getSimpleName();
+public class CasesRegisterAdapter extends ArrayAdapter<CaseField> {
 
-    private Context context;
-    private List<CaseSection> sections;
-
-    public CasesRegisterAdapter(Context context, List<CaseSection> sections) {
-        this.context = context;
-        this.sections = sections;
+    public CasesRegisterAdapter(Context context, int resource, List<CaseField> objects) {
+        super(context, resource, objects);
     }
 
     @Override
-    public int getGroupCount() {
-        return sections.size();
-    }
+    public View getView(int position, View convertView, ViewGroup parent) {
+        CaseField field = getItem(position);
+        String fieldType = field.getType();
 
-    @Override
-    public int getChildrenCount(int groupPosition) {
-        List<CaseField> fields = sections.get(groupPosition).getFields();
-        return fields.size();
-    }
-
-    @Override
-    public Object getGroup(int groupPosition) {
-        return sections.get(groupPosition);
-    }
-
-    @Override
-    public Object getChild(int groupPosition, int childPosition) {
-        List<CaseField> fields = sections.get(groupPosition).getFields();
-        return fields.get(childPosition);
-    }
-
-    @Override
-    public long getGroupId(int groupPosition) {
-        return groupPosition;
-    }
-
-    @Override
-    public long getChildId(int groupPosition, int childPosition) {
-        return childPosition;
-    }
-
-    @Override
-    public boolean hasStableIds() {
-        return true;
-    }
-
-    @Override
-    public View getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
-        CaseSection section = (CaseSection) getGroup(groupPosition);
         if (convertView == null) {
-            LayoutInflater inf = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = inf.inflate(R.layout.group_heading, null);
+            LayoutInflater inflater = LayoutInflater.from(getContext());
+            int resourceId = getFieldLayoutId(fieldType);
+            if (resourceId > 0) {
+                convertView = inflater.inflate(resourceId, null);
+            }
         }
 
-        TextView heading = (TextView) convertView.findViewById(R.id.heading);
-        heading.setText(section.getName().get("en"));
-
-        if (isExpanded) {
-            convertView.setBackgroundResource(R.color.lightgrey);
-        } else {
-            convertView.setBackgroundResource(R.color.lavender);
-        }
-        return convertView;
-    }
-
-    @Override
-    public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
-        CaseField field = (CaseField) getChild(groupPosition, childPosition);
-
-        convertView = createFormFieldView(field, convertView);
         if ("separator".equals(field.getType())) {
             convertView.setVisibility(View.INVISIBLE);
         } else {
@@ -95,27 +42,15 @@ public class CasesRegisterAdapter extends BaseExpandableListAdapter {
         return convertView;
     }
 
-    @Override
-    public boolean isChildSelectable(int groupPosition, int childPosition) {
-        return true;
-    }
+    private int getFieldLayoutId(String fieldType) {
+        Resources resources = getContext().getResources();
+        String packageName = getContext().getPackageName();
 
-
-    private View createFormFieldView(CaseField caseFormField, View convertView) {
-        String fieldType = caseFormField.getType();
-        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        int resourceId = getFieldLayoutId(fieldType);
-        if (resourceId > 0) {
-            convertView = inflater.inflate(resourceId, null);
-            return convertView;
-        }
-        return null;
-    }
-
-    protected int getFieldLayoutId(String fieldType) {
         if (fieldType.equals("tick_box")) {
-            return context.getResources().getIdentifier("form_tick_box", "layout", context.getPackageName());
+            return resources.getIdentifier("form_tick_box", "layout",
+                    packageName);
         }
-        return context.getResources().getIdentifier("form_text_field", "layout", context.getPackageName());
+        return resources.getIdentifier("form_text_field", "layout",
+                packageName);
     }
 }

@@ -96,6 +96,8 @@ dependencies {
 
     compile 'org.mindrot:jbcrypt:0.3m'
 
+    compile 'com.ogaclejapan.smarttablayout:library:1.6.1@aar'
+    compile 'com.ogaclejapan.smarttablayout:utils-v4:1.6.1@aar'
 
     testCompile 'junit:junit:4.12',
             'org.robolectric:robolectric:3.1-SNAPSHOT',

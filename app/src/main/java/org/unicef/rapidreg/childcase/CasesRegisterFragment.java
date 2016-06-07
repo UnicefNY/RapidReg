@@ -12,16 +12,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.ExpandableListView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import com.hannesdorfmann.mosby.mvp.MvpFragment;
+import com.ogaclejapan.smarttablayout.utils.v4.FragmentPagerItem;
 
 import org.unicef.rapidreg.R;
 import org.unicef.rapidreg.forms.childcase.CaseField;
-import org.unicef.rapidreg.forms.childcase.CaseFormRoot;
-import org.unicef.rapidreg.forms.childcase.CaseSection;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,7 +37,7 @@ public class CasesRegisterFragment extends MvpFragment<CasesRegisterView, CasesR
     @BindView(R.id.fragment_register_content)
     LinearLayout registerContent;
     @BindView(R.id.register_forms_content)
-    ExpandableListView formsContent;
+    ListView formsContent;
 
     @Nullable
     @Override
@@ -53,7 +52,8 @@ public class CasesRegisterFragment extends MvpFragment<CasesRegisterView, CasesR
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         ButterKnife.bind(this, view);
-        presenter.initContext(getActivity());
+        int position = FragmentPagerItem.getPosition(getArguments());
+        presenter.initContext(getActivity(), position);
     }
 
     @Override
@@ -62,27 +62,8 @@ public class CasesRegisterFragment extends MvpFragment<CasesRegisterView, CasesR
     }
 
     @Override
-    public void initView(CasesRegisterAdapter adapter, final CaseFormRoot caseFormRootRoot) {
+    public void initView(CasesRegisterAdapter adapter) {
         formsContent.setAdapter(adapter);
-        formsContent.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
-            @Override
-            public boolean onChildClick(ExpandableListView parent, View v, int groupPosition,
-                                        int childPosition, long id) {
-                List<CaseSection> sections = caseFormRootRoot.getSections();
-                List<CaseField> formCaseFormFields = sections.get(groupPosition).getFields();
-                CaseField field = formCaseFormFields.get(childPosition);
-                showFieldDialog(field);
-                return false;
-            }
-        });
-    }
-
-    @Override
-    public void expandAll(CasesRegisterAdapter adapter) {
-        int count = adapter.getGroupCount();
-        for (int i = 0; i < count; i++) {
-            formsContent.expandGroup(i);
-        }
     }
 
     private void showFieldDialog(CaseField field) {
