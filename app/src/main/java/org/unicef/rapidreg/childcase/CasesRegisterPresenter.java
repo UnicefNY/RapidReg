@@ -4,7 +4,10 @@ import android.content.Context;
 
 import com.hannesdorfmann.mosby.mvp.MvpBasePresenter;
 
+import org.unicef.rapidreg.forms.childcase.CaseField;
 import org.unicef.rapidreg.forms.childcase.CaseFormRoot;
+
+import org.unicef.rapidreg.forms.childcase.CaseSection;
 import org.unicef.rapidreg.service.CaseFormService;
 
 public class CasesRegisterPresenter extends MvpBasePresenter<CasesRegisterView> {
@@ -16,8 +19,14 @@ public class CasesRegisterPresenter extends MvpBasePresenter<CasesRegisterView> 
     public void initContext(Context context) {
         if (isViewAttached()) {
             if ((form = loadCaseForms()) != null) {
-                casesRegisterAdapter = new CasesRegisterAdapter(context,
-                        form.getSections());
+                for (CaseSection caseSection : form.getSections()) {
+                    for (CaseField caseField : caseSection.getFields()) {
+                        if ("separator".equals(caseField.getType())){
+
+                        }
+                    }
+                }
+                casesRegisterAdapter = new CasesRegisterAdapter(context, form.getSections());
                 getView().initView(casesRegisterAdapter, form);
                 getView().expandAll(casesRegisterAdapter);
             }

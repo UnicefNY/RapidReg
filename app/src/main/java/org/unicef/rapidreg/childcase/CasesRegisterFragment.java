@@ -1,14 +1,20 @@
 package org.unicef.rapidreg.childcase;
 
 import android.content.DialogInterface;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
+import android.text.InputType;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.ExpandableListView;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.hannesdorfmann.mosby.mvp.MvpFragment;
 
@@ -26,6 +32,9 @@ import butterknife.ButterKnife;
 
 public class CasesRegisterFragment extends MvpFragment<CasesRegisterView, CasesRegisterPresenter>
         implements CasesRegisterView {
+
+    private static final String TAG = CasesRegisterFragment.class.getSimpleName();
+
     @BindView(R.id.fragment_register_content)
     LinearLayout registerContent;
     @BindView(R.id.register_forms_content)
@@ -83,19 +92,27 @@ public class CasesRegisterFragment extends MvpFragment<CasesRegisterView, CasesR
         String fieldType = field.getType();
         String[] optionItems = new String[0];
         if (fieldType.equals("select_box")) {
-            if (field.isMultiSelect()) {
-                fieldType = "multi_select_box";
-                optionItems = getSelectOptions(fieldType, field);
-            } else {
-                fieldType = "single_select_box";
-                optionItems = getSelectOptions(fieldType, field);
-            }
+            fieldType = field.isMultiSelect() ? "multi_select_box" : "single_select_box";
+            optionItems = getSelectOptions(fieldType, field);
         }
+        Log.i(TAG, fieldType);
+        Toast.makeText(getContext(), fieldType, Toast.LENGTH_SHORT).show();
         switch (fieldType) {
             case "text_field":
-            case "textarea":
-                builder.setView(R.layout.form_input);
+                EditText textSingle = new EditText(getContext());
+                builder.setView(textSingle);
                 break;
+
+            case "textarea":
+                EditText textMultiple = new EditText(getContext());
+                textMultiple.setSingleLine(false);
+                builder.setView(textMultiple);
+                break;
+
+            case "radio_button":
+                Log.i(TAG, field.toString());
+                optionItems = getSelectOptions(fieldType, field);
+
             case "single_select_box":
                 builder.setSingleChoiceItems(optionItems, 0, new DialogInterface.OnClickListener() {
                     @Override
@@ -104,6 +121,7 @@ public class CasesRegisterFragment extends MvpFragment<CasesRegisterView, CasesR
                     }
                 });
                 break;
+
             case "multi_select_box":
                 builder.setMultiChoiceItems(optionItems, null,
                         new DialogInterface.OnMultiChoiceClickListener() {
@@ -113,6 +131,21 @@ public class CasesRegisterFragment extends MvpFragment<CasesRegisterView, CasesR
                             }
                         });
                 break;
+
+
+            case "numeric_field":
+                final EditText input = new EditText(getContext());
+                input.setInputType(InputType.TYPE_CLASS_NUMBER);
+                input.setRawInputType(Configuration.KEYBOARD_12KEY);
+                builder.setView(input);
+                break;
+
+            case "date_field":
+                DatePicker picker = new DatePicker(getContext());
+                picker.setCalendarViewShown(false);
+                builder.setView(picker);
+                break;
+
             default:
                 break;
         }
@@ -129,13 +162,7 @@ public class CasesRegisterFragment extends MvpFragment<CasesRegisterView, CasesR
         builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-
-            }
-        });
-        builder.setNeutralButton("Clear", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-
+                dialog.dismiss();
             }
         });
     }

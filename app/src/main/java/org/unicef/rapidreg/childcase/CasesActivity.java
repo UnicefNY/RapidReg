@@ -14,27 +14,7 @@ public class CasesActivity extends BaseActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         toolbar.inflateMenu(R.menu.toolbar_main);
-
-
-        toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem menuItem) {
-                if (menuItem.getItemId() == R.id.search) {
-                    getSupportFragmentManager().beginTransaction()
-                            .replace(R.id.fragment_content, new CasesSearchFragment())
-                            .commit();
-                    return true;
-                }
-                if (menuItem.getItemId() == R.id.add_case) {
-                    getSupportFragmentManager().beginTransaction()
-                            .replace(R.id.fragment_content, new CasesRegisterFragment())
-                            .commit();
-                    return true;
-                }
-
-                return false;
-            }
-        });
+        toolbar.setOnMenuItemClickListener(new CaseMenuItemListener());
 
         toolbar.setTitle("Cases");
 
@@ -42,6 +22,25 @@ public class CasesActivity extends BaseActivity {
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.fragment_content, new CasesListFragment())
                     .commit();
+        }
+    }
+
+    private class CaseMenuItemListener implements Toolbar.OnMenuItemClickListener {
+        @Override
+        public boolean onMenuItemClick(MenuItem menuItem) {
+            if (R.id.search == menuItem.getItemId()) {
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.fragment_content, new CasesSearchFragment())
+                        .commit();
+                return true;
+            }
+            if (R.id.add_case == menuItem.getItemId()) {
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.fragment_content, new CasesRegisterFragment())
+                        .commit();
+                return true;
+            }
+            return false;
         }
     }
 }
