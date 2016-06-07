@@ -19,13 +19,6 @@ public class CasesRegisterPresenter extends MvpBasePresenter<CasesRegisterView> 
     public void initContext(Context context) {
         if (isViewAttached()) {
             if ((form = loadCaseForms()) != null) {
-                for (CaseSection caseSection : form.getSections()) {
-                    for (CaseField caseField : caseSection.getFields()) {
-                        if ("separator".equals(caseField.getType())){
-
-                        }
-                    }
-                }
                 casesRegisterAdapter = new CasesRegisterAdapter(context, form.getSections());
                 getView().initView(casesRegisterAdapter, form);
                 getView().expandAll(casesRegisterAdapter);
