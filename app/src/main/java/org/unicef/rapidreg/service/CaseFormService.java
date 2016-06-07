@@ -25,6 +25,12 @@ public class CaseFormService {
         this.caseFormDao = caseFormDao;
     }
 
+    public boolean isFormReady() {
+        Blob form = caseFormDao.getCaseFormContent();
+
+        return form != null;
+    }
+
     public CaseFormRoot getCurrentForm() {
         Blob form = caseFormDao.getCaseFormContent();
         if (form == null) {
