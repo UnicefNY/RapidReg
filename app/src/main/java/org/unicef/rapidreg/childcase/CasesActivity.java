@@ -8,9 +8,7 @@ import android.widget.Toast;
 
 import org.unicef.rapidreg.R;
 import org.unicef.rapidreg.base.view.BaseActivity;
-import org.unicef.rapidreg.forms.childcase.CaseFormRoot;
 import org.unicef.rapidreg.service.CaseFormService;
-import org.unicef.rapidreg.service.CaseService;
 
 public class CasesActivity extends BaseActivity {
 
@@ -46,7 +44,7 @@ public class CasesActivity extends BaseActivity {
                 }
 
                 getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.fragment_content, new CasesRegisterFragment())
+                        .replace(R.id.fragment_content, new CasesFragment())
                         .commit();
                 return true;
             }
