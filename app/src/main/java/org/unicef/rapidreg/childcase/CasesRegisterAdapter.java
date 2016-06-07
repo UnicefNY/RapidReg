@@ -73,6 +73,7 @@ public class CasesRegisterAdapter extends BaseExpandableListAdapter {
         heading.setText(section.getName().get("en"));
 
         if (isExpanded) {
+
             convertView.setBackgroundResource(R.color.lightgrey);
         } else {
             convertView.setBackgroundResource(R.color.lavender);

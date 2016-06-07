@@ -1,18 +1,23 @@
 package org.unicef.rapidreg.childcase;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Toast;
 
 import org.unicef.rapidreg.R;
 import org.unicef.rapidreg.base.view.BaseActivity;
-import org.unicef.rapidreg.forms.childcase.CaseFormRoot;
 import org.unicef.rapidreg.service.CaseFormService;
-import org.unicef.rapidreg.service.CaseService;
 
 public class CasesActivity extends BaseActivity {
+
+    private Menu menu;
+    private CasesRegisterFragment casesRegisterFragment;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -21,6 +26,9 @@ public class CasesActivity extends BaseActivity {
         toolbar.setOnMenuItemClickListener(new CaseMenuItemListener());
 
         toolbar.setTitle("Cases");
+
+        menu = toolbar.getMenu();
+        menu.getItem(1).setVisible(false);
 
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction()
@@ -45,12 +53,27 @@ public class CasesActivity extends BaseActivity {
                     return true;
                 }
 
+                casesRegisterFragment = new CasesRegisterFragment();
                 getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.fragment_content, new CasesRegisterFragment())
+                        .replace(R.id.fragment_content, casesRegisterFragment)
                         .commit();
+                menu.getItem(0).setVisible(false);
+                menu.getItem(1).setVisible(true);
+
+                return true;
+            }
+            if (R.id.save_case == menuItem.getItemId()) {
+                menu.getItem(0).setVisible(true);
+                menu.getItem(1).setVisible(false);
+                saveCase();
                 return true;
             }
             return false;
         }
+    }
+
+    private void saveCase() {
+        FragmentActivity activity = casesRegisterFragment.getActivity();
+
     }
 }
