@@ -73,14 +73,14 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
             navigationView.getMenu().getItem(2).setChecked(true);
         } else if (id == R.id.nav_logout) {
             navigationView.getMenu().getItem(3).setChecked(true);
-            attemptlogout(this);
+            attemptLogout(this);
         }
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
 
     //TODO: Put logout into basePresenter in future
-    private void attemptlogout(BaseActivity currentActivity) {
+    private void attemptLogout(BaseActivity currentActivity) {
         if (currentActivity.getContext().getSyncTask() != null) {
             createAlertDialog(currentActivity);
         } else {
