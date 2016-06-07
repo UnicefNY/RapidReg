@@ -119,7 +119,7 @@ public class LoginPresenter extends MvpBasePresenter<LoginView> {
         goToLoginSuccessScreen(event.getUserName());
     }
 
-    @Subscribe(threadMode = ThreadMode.BACKGROUND)
+    @Subscribe(threadMode = ThreadMode.MAIN)
     public void onNeedLoadFormSectionsEvent(NeedLoadFormSectionsEvent event) {
         Call<CaseFormRoot> call = client.getForm(event.getCookie(),
                 Locale.getDefault().getLanguage(), true, "case");
