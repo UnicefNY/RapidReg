@@ -30,8 +30,8 @@ public class Case extends BaseModel {
     private String internalId;
     @Column(name = "_rev")
     private String internalRev;
-    @Column(name = "unique_identifier")
-    private String uniqueIdentifier;
+    @Column(name = "unique_id")
+    private String uniqueId;
     @Column(name = "created_by")
     private String createdBy;
     @Column(name = "created_at")
@@ -113,12 +113,12 @@ public class Case extends BaseModel {
         this.internalRev = internalRev;
     }
 
-    public String getUniqueIdentifier() {
-        return uniqueIdentifier;
+    public String getUniqueId() {
+        return uniqueId;
     }
 
-    public void setUniqueIdentifier(String uniqueIdentifier) {
-        this.uniqueIdentifier = uniqueIdentifier;
+    public void setUniqueId(String uniqueId) {
+        this.uniqueId = uniqueId;
     }
 
     public String getCreatedBy() {
