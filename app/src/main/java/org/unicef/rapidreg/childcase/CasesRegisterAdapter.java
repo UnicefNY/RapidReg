@@ -21,8 +21,8 @@ public class CasesRegisterAdapter extends ArrayAdapter<CaseField> {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        CaseField field = getItem(position);
-        String fieldType = field.getType();
+        CaseField caseField = getItem(position);
+        String fieldType = caseField.getType();
 
         if (convertView == null) {
             LayoutInflater inflater = LayoutInflater.from(getContext());
@@ -32,12 +32,12 @@ public class CasesRegisterAdapter extends ArrayAdapter<CaseField> {
             }
         }
 
-        if ("separator".equals(field.getType())) {
+        if ("separator".equals(caseField.getType())) {
             convertView.setVisibility(View.INVISIBLE);
         } else {
-            TextView tvFormLabel = (TextView) convertView.findViewById(R.id.label);
-            tvFormLabel.setText(field.getDisplayName().get("en"));
-            tvFormLabel.setPadding(15, 15, 0, 0);
+            TextView field = (TextView) convertView.findViewById(R.id.label);
+            field.setText(caseField.getDisplayName().get("en"));
+            field.setPadding(15, 15, 0, 0);
         }
         return convertView;
     }

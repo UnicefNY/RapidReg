@@ -11,30 +11,14 @@ import org.unicef.rapidreg.service.CaseFormService;
 import java.util.List;
 
 public class CasesRegisterPresenter extends MvpBasePresenter<CasesRegisterView> {
-    private CaseFormRoot form;
-    private CasesRegisterAdapter casesRegisterAdapter;
-
-    private String value;
 
     public void initContext(Context context, int position) {
         if (isViewAttached()) {
-            if ((form = loadCaseForms()) != null) {
+            CaseFormRoot form = CaseFormService.getInstance().getCurrentForm();
+            if (form != null) {
                 List<CaseField> fields = form.getSections().get(position).getFields();
-                casesRegisterAdapter = new CasesRegisterAdapter(context, -1, fields);
-                getView().initView(casesRegisterAdapter);
+                getView().initView(new CasesRegisterAdapter(context, -1, fields));
             }
         }
-    }
-
-    private CaseFormRoot loadCaseForms() {
-        return CaseFormService.getInstance().getCurrentForm();
-    }
-
-    public String getValue() {
-        return value;
-    }
-
-    public void setValue(String value) {
-        this.value = value;
     }
 }
