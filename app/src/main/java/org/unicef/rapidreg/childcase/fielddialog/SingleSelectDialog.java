@@ -16,11 +16,11 @@ public class SingleSelectDialog extends BaseDialog {
 
     public SingleSelectDialog(Context context, CaseField caseField, TextView resultView) {
         super(context, caseField, resultView);
+        result = resultView.getText().toString().trim();
     }
 
     @Override
     public void initView() {
-        result = resultView.getText().toString().trim();
         String fieldType = caseField.getType();
         optionItems = getSelectOptions(fieldType, caseField);
 

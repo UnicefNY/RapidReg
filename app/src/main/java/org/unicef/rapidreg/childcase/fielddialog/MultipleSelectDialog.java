@@ -17,12 +17,11 @@ public class MultipleSelectDialog extends BaseDialog {
 
     public MultipleSelectDialog(Context context, CaseField caseField, TextView resultView) {
         super(context, caseField, resultView);
+        result = new ArrayList<>();
     }
 
     @Override
     public void initView() {
-        result = new ArrayList<>();
-
         String fieldType = caseField.getType();
         optionItems = getSelectOptions(fieldType, caseField);
 
