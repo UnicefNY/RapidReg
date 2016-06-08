@@ -7,5 +7,5 @@
     android:paddingBottom="@dimen/field_padding_top_bottom"
     android:paddingLeft="@dimen/field_padding_left"
     android:paddingTop="@dimen/field_padding_top_bottom"
-    android:textColor="@color/black"
+    android:textColor="@color/gray"
     android:textSize="@dimen/size_15" />

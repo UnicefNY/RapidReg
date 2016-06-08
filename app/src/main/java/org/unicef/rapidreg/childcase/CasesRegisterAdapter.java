@@ -104,71 +104,6 @@ public class CasesRegisterAdapter extends ArrayAdapter<CaseField> {
     }
 
 
-//        switch (fieldType) {
-//            case "text_field":
-//                EditText textSingle = new EditText(getContext());
-//                textSingle.setText(value);
-//                builder.setView(textSingle);
-//                break;
-//
-//            case "textarea":
-//                EditText textMultiple = new EditText(getContext());
-//                textMultiple.setText(value);
-//                textMultiple.setSingleLine(false);
-//                builder.setView(textMultiple);
-//                break;
-//
-//            case "radio_button":
-//                Log.i(TAG, "value1: " + value);
-//                optionItems = getSelectOptions(fieldType, field);
-//
-//            case "single_select_box":
-//                builder.setSingleChoiceItems(optionItems,
-//                        Integer.valueOf(value), new DialogInterface.OnClickListener() {
-//                            @Override
-//                            public void onClick(DialogInterface dialog, int which) {
-//                                Log.i(TAG, "value2: " + which);
-//                            }
-//                        });
-//                break;
-//
-//            case "multi_select_box":
-//                builder.setMultiChoiceItems(optionItems, null,
-//                        new DialogInterface.OnMultiChoiceClickListener() {
-//                            @Override
-//                            public void onClick(DialogInterface dialog, int which, boolean isChecked) {
-//
-//                            }
-//                        });
-//                break;
-//
-//
-//            case "numeric_field":
-//                final EditText input = new EditText(getContext());
-//                input.setInputType(InputType.TYPE_CLASS_NUMBER);
-//                input.setRawInputType(Configuration.KEYBOARD_12KEY);
-//                input.setText(value);
-//                builder.setView(input);
-//                break;
-//
-//            case "date_field":
-//                DatePicker picker = new DatePicker(getContext());
-//                picker.setCalendarViewShown(false);
-//                picker.updateDate(2016, 4, 7);
-//                builder.setView(picker);
-//                int year = picker.getYear();
-//                int month = picker.getMonth();
-//                int day = picker.getDayOfMonth();
-//
-//                break;
-//
-//            default:
-//                break;
-//        }
-//        builder.show();
-//    }
-//
-
     private int getFieldLayoutId(String fieldType) {
         Resources resources = getContext().getResources();
         String packageName = getContext().getPackageName();
@@ -180,5 +115,4 @@ public class CasesRegisterAdapter extends ArrayAdapter<CaseField> {
         return resources.getIdentifier("form_text_field", "layout",
                 packageName);
     }
-
 }
