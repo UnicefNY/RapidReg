@@ -75,7 +75,6 @@ public class CasesRegisterAdapter extends ArrayAdapter<CaseField> {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         builder.setTitle(field.getDisplayName().get("en"));
-        initDialogButton(builder, valueView);
 
         if (fieldType.equals("select_box")) {
             fieldType = field.isMultiSelect() ? "multi_select_box" : "single_select_box";
@@ -159,7 +158,8 @@ public class CasesRegisterAdapter extends ArrayAdapter<CaseField> {
 //        builder.show();
 //    }
 //
-    
+
+
     private int getFieldLayoutId(String fieldType) {
         Resources resources = getContext().getResources();
         String packageName = getContext().getPackageName();
