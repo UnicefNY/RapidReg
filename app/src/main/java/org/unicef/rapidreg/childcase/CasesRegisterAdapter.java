@@ -1,7 +1,6 @@
 package org.unicef.rapidreg.childcase;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.res.Resources;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
@@ -9,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.CheckBox;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -19,16 +19,14 @@ import org.unicef.rapidreg.exception.DialogException;
 import org.unicef.rapidreg.forms.childcase.CaseField;
 import org.unicef.rapidreg.model.Case;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 public class CasesRegisterAdapter extends ArrayAdapter<CaseField> {
-
-    private static final String TAG = CasesRegisterAdapter.class.getSimpleName();
+    public static final String TAG = CasesRegisterAdapter.class.getSimpleName();
 
     public CasesRegisterAdapter(Context context, int resource, List<CaseField> objects) {
         super(context, resource, objects);
+        CaseValues.clear();
     }
 
     @Override
@@ -36,19 +34,27 @@ public class CasesRegisterAdapter extends ArrayAdapter<CaseField> {
         final CaseField field = getItem(position);
         String fieldType = field.getType();
 
-        if (convertView == null) {
-            LayoutInflater inflater = LayoutInflater.from(getContext());
-            int resourceId = getFieldLayoutId(fieldType);
-            if (resourceId > 0) {
-                convertView = inflater.inflate(resourceId, null);
-            }
+        LayoutInflater inflater = LayoutInflater.from(getContext());
+        int resourceId = getFieldLayoutId(fieldType);
+        if (resourceId > 0) {
+            convertView = inflater.inflate(resourceId, null);
         }
 
         if ("separator".equals(field.getType())) {
             convertView.setVisibility(View.INVISIBLE);
         } else {
+            String label = field.getDisplayName().get("en");
+
             TextView tvFormLabel = (TextView) convertView.findViewById(R.id.label);
-            tvFormLabel.setText(field.getDisplayName().get("en"));
+            tvFormLabel.setText(label);
+
+            if (Case.FieldType.TICK_BOX.name().equalsIgnoreCase(fieldType)) {
+                CheckBox cbValue = (CheckBox) convertView.findViewById(R.id.value);
+                cbValue.setChecked(Boolean.valueOf(CaseValues.getInstance().get(label)));
+            } else {
+                TextView tvValue = (TextView) convertView.findViewById(R.id.value);
+                tvValue.setText(CaseValues.getInstance().get(label));
+            }
         }
 
         if (!Case.FieldType.TICK_BOX.name().equalsIgnoreCase(fieldType)) {
@@ -62,6 +68,15 @@ public class CasesRegisterAdapter extends ArrayAdapter<CaseField> {
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
+                }
+            });
+        } else {
+            CheckBox cbValue = (CheckBox) convertView.findViewById(R.id.value);
+            cbValue.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    CaseValues.getInstance().put(field.getDisplayName().get("en"),
+                            String.valueOf(((CheckBox) v).isChecked()));
                 }
             });
         }
