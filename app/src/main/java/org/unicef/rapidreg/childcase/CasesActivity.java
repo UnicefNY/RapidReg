@@ -49,12 +49,9 @@ public class CasesActivity extends BaseActivity {
                     return true;
                 }
 
-                Fragment caseFragment = getSupportFragmentManager().findFragmentByTag(CASE_REGISTRATION);
-                if (caseFragment == null || !caseFragment.isVisible()) {
-                    getSupportFragmentManager().beginTransaction()
-                            .replace(R.id.fragment_content, new CasesFragment(), CASE_REGISTRATION)
-                            .commit();
-                }
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.fragment_content, new CasesFragment(), CASE_REGISTRATION)
+                        .commit();
                 menu.getItem(0).setVisible(false);
                 menu.getItem(1).setVisible(true);
                 return true;
