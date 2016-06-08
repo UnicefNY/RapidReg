@@ -14,6 +14,7 @@ import com.ogaclejapan.smarttablayout.SmartTabLayout;
 import com.ogaclejapan.smarttablayout.utils.v4.FragmentPagerItem;
 import com.ogaclejapan.smarttablayout.utils.v4.FragmentPagerItemAdapter;
 import com.ogaclejapan.smarttablayout.utils.v4.FragmentPagerItems;
+import com.ogaclejapan.smarttablayout.utils.v4.FragmentStatePagerItemAdapter;
 
 import org.unicef.rapidreg.R;
 import org.unicef.rapidreg.forms.childcase.CaseFormRoot;
@@ -32,7 +33,7 @@ public class CasesFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_cases, container, false);
 
-        FragmentPagerItemAdapter adapter = new FragmentPagerItemAdapter(
+        FragmentStatePagerItemAdapter adapter = new FragmentStatePagerItemAdapter(
                 getActivity().getSupportFragmentManager(), getPages());
 
         ViewPager viewPager = (ViewPager) view.findViewById(R.id.viewpager);
