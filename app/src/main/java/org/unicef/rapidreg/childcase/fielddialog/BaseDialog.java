@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.widget.TextView;
 
+import org.unicef.rapidreg.childcase.CaseValues;
 import org.unicef.rapidreg.forms.childcase.CaseField;
 
 import java.util.ArrayList;
@@ -18,7 +19,7 @@ public abstract class BaseDialog {
     protected CaseField caseField;
     protected TextView resultView;
 
-    public BaseDialog(Context context, CaseField caseField, TextView resultView) {
+    public BaseDialog(final Context context, final CaseField caseField, final TextView resultView) {
         this.caseField = caseField;
         this.resultView = resultView;
         this.context = context;
@@ -32,6 +33,7 @@ public abstract class BaseDialog {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 BaseDialog.this.resultView.setText(getResult());
+                CaseValues.getInstance().put(caseField.getDisplayName().get("en"), getResult());
                 dialog.dismiss();
             }
         });
