@@ -4,14 +4,13 @@ import android.content.Context;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import org.unicef.rapidreg.R;
 import org.unicef.rapidreg.forms.childcase.CaseField;
 
-public class TextDialog extends BaseDialog {
+public class SingleTextDialog extends BaseDialog {
 
     private EditText editText;
 
-    public TextDialog(Context context, CaseField caseField, TextView resultView) {
+    public SingleTextDialog(Context context, CaseField caseField, TextView resultView) {
         super(context, caseField, resultView);
     }
 
@@ -19,7 +18,7 @@ public class TextDialog extends BaseDialog {
     public void initView() {
         editText = new EditText(getContext());
         editText.setText(resultView.getText().toString());
-        editText.setLines(20);
+        editText.setSingleLine();
         getBuilder().setView(editText);
     }
 
