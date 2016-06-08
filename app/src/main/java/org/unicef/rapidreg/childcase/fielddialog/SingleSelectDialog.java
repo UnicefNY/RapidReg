@@ -3,7 +3,6 @@ package org.unicef.rapidreg.childcase.fielddialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import org.unicef.rapidreg.forms.childcase.CaseField;
 

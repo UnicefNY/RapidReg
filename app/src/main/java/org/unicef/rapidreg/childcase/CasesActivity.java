@@ -2,7 +2,6 @@ package org.unicef.rapidreg.childcase;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -43,6 +42,8 @@ public class CasesActivity extends BaseActivity {
                 return true;
             }
             if (R.id.add_case == menuItem.getItemId()) {
+                CaseValues.getInstance().clear();
+
                 if (!CaseFormService.getInstance().isFormReady()) {
                     Toast.makeText(CasesActivity.this,
                             R.string.syncing_forms_text, Toast.LENGTH_LONG).show();
