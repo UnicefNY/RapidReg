@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
@@ -13,6 +14,8 @@ import org.unicef.rapidreg.service.CaseFormService;
 
 public class CasesActivity extends BaseActivity {
     private static final String CASE_REGISTRATION = "Case_Registration";
+    private Menu menu;
+    private CasesRegisterFragment casesRegisterFragment;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -21,6 +24,7 @@ public class CasesActivity extends BaseActivity {
         toolbar.setOnMenuItemClickListener(new CaseMenuItemListener());
 
         toolbar.setTitle("Cases");
+        menu = toolbar.getMenu();
 
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction()
@@ -51,9 +55,24 @@ public class CasesActivity extends BaseActivity {
                             .replace(R.id.fragment_content, new CasesFragment(), CASE_REGISTRATION)
                             .commit();
                 }
+                menu.getItem(0).setVisible(false);
+                menu.getItem(1).setVisible(true);
+                return true;
+            }
+
+            if (R.id.save_case == menuItem.getItemId()) {
+                menu.getItem(0).setVisible(true);
+                menu.getItem(1).setVisible(false);
+                saveCase();
                 return true;
             }
             return false;
         }
+    }
+
+    private void saveCase() {
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.fragment_content, new CasesListFragment())
+                .commit();
     }
 }
