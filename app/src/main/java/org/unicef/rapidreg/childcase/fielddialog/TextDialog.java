@@ -6,11 +6,11 @@ import android.widget.TextView;
 
 import org.unicef.rapidreg.forms.childcase.CaseField;
 
-public class TextFieldDialog extends BaseDialog {
+public class TextDialog extends BaseDialog {
 
     private EditText editText;
 
-    public TextFieldDialog(Context context, CaseField caseField, TextView resultView) {
+    public TextDialog(Context context, CaseField caseField, TextView resultView) {
         super(context, caseField, resultView);
     }
 
