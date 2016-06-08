@@ -11,6 +11,7 @@
     <dimen name="text_size_20">20sp</dimen>
     <dimen name="text_size_24">24sp</dimen>
     <dimen name="text_size_48">48sp</dimen>
+    <dimen name="text_size_200">200sp</dimen>
     <dimen name="logo_margin">60sp</dimen>
 
     <dimen name="field_padding_top_bottom">5sp</dimen>

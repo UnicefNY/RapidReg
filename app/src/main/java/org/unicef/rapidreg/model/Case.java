@@ -9,9 +9,10 @@ import com.raizlabs.android.dbflow.structure.BaseModel;
 import org.unicef.rapidreg.childcase.fielddialog.BaseDialog;
 import org.unicef.rapidreg.childcase.fielddialog.DateDialog;
 import org.unicef.rapidreg.childcase.fielddialog.MultipleSelectDialog;
+import org.unicef.rapidreg.childcase.fielddialog.MultipleTextDialog;
 import org.unicef.rapidreg.childcase.fielddialog.NumericDialog;
 import org.unicef.rapidreg.childcase.fielddialog.SingleSelectDialog;
-import org.unicef.rapidreg.childcase.fielddialog.TextDialog;
+import org.unicef.rapidreg.childcase.fielddialog.SingleTextDialog;
 import org.unicef.rapidreg.db.PrimeroDB;
 
 import java.sql.Date;
@@ -22,8 +23,8 @@ public class Case extends BaseModel {
         TICK_BOX(null),
         NUMERIC_FIELD(NumericDialog.class),
         DATE_FIELD(DateDialog.class),
-        TEXTAREA(TextDialog.class),
-        TEXT_FIELD(TextDialog.class),
+        TEXTAREA(MultipleTextDialog.class),
+        TEXT_FIELD(SingleTextDialog.class),
         RADIO_BUTTON(SingleSelectDialog.class),
         SINGLE_SELECT_BOX(SingleSelectDialog.class),
         MULTI_SELECT_BOX(MultipleSelectDialog.class);
