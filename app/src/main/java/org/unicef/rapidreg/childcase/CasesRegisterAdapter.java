@@ -3,14 +3,12 @@ package org.unicef.rapidreg.childcase;
 import android.content.Context;
 import android.content.res.Resources;
 import android.support.v7.app.AlertDialog;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import org.unicef.rapidreg.R;
 import org.unicef.rapidreg.childcase.fielddialog.BaseDialog;
@@ -26,7 +24,6 @@ public class CasesRegisterAdapter extends ArrayAdapter<CaseField> {
 
     public CasesRegisterAdapter(Context context, int resource, List<CaseField> objects) {
         super(context, resource, objects);
-        CaseValues.clear();
     }
 
     @Override
