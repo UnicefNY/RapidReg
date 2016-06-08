@@ -13,12 +13,11 @@ public class DateDialog extends BaseDialog {
 
     public DateDialog(Context context, CaseField caseField, TextView resultView) {
         super(context, caseField, resultView);
+        result = resultView.getText().toString().trim();
     }
 
     @Override
     public void initView() {
-        result = resultView.getText().toString().trim();
-
         datePicker = new DatePicker(getContext());
         datePicker.setCalendarViewShown(false);
         if (!"".equals(result)) {

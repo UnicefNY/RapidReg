@@ -27,8 +27,6 @@ public abstract class BaseDialog {
         builder = new AlertDialog.Builder(context);
         builder.setTitle(caseField.getDisplayName().get("en"));
 
-        initView();
-
         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -51,6 +49,7 @@ public abstract class BaseDialog {
     public abstract String getResult();
 
     public void show() {
+        initView();
         builder.show();
     }
 
