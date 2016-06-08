@@ -33,8 +33,6 @@ public class SingleSelectDialog extends BaseDialog {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         result = optionItems[which];
-                        Toast.makeText(getContext(), optionItems[which], Toast.LENGTH_SHORT).show();
-                        Toast.makeText(getContext(), Arrays.asList(optionItems).toString(), Toast.LENGTH_SHORT).show();
                     }
                 });
     }
