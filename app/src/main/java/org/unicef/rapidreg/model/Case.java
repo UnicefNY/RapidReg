@@ -6,12 +6,35 @@ import com.raizlabs.android.dbflow.annotation.Table;
 import com.raizlabs.android.dbflow.data.Blob;
 import com.raizlabs.android.dbflow.structure.BaseModel;
 
+import org.unicef.rapidreg.childcase.fielddialog.BaseDialog;
+import org.unicef.rapidreg.childcase.fielddialog.MultipleSelectDialog;
+import org.unicef.rapidreg.childcase.fielddialog.SingleSelectDialog;
+import org.unicef.rapidreg.childcase.fielddialog.TextFieldDialog;
 import org.unicef.rapidreg.db.PrimeroDB;
 
 import java.sql.Date;
 
 @Table(database = PrimeroDB.class)
 public class Case extends BaseModel {
+    public enum FieldType {
+        TICK_BOX(null),
+        TEXT_FIELD(TextFieldDialog.class),
+        RADIO_BUTTON(SingleSelectDialog.class),
+        SINGLE_SELECT_BOX(SingleSelectDialog.class),
+        MULTI_SELECT_BOX(MultipleSelectDialog.class);
+
+        private Class<? extends BaseDialog> clz;
+        private String typeName;
+
+        FieldType(Class<? extends BaseDialog> clz) {
+            this.clz = clz;
+        }
+
+        public Class<? extends BaseDialog> getClz() {
+            return clz;
+        }
+    }
+
     @PrimaryKey
     private long id;
     @Column(name = "name")
