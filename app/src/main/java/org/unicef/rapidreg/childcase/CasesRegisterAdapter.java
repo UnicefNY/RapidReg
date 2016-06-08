@@ -61,7 +61,6 @@ public class CasesRegisterAdapter extends ArrayAdapter<CaseField> {
             convertView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Toast.makeText(getContext(), view.getClass().getSimpleName(), Toast.LENGTH_SHORT).show();
                     TextView valueView = (TextView) view.findViewById(R.id.value);
                     try {
                         showFieldDialog(field, valueView);
@@ -84,8 +83,6 @@ public class CasesRegisterAdapter extends ArrayAdapter<CaseField> {
     }
 
     private void showFieldDialog(CaseField field, TextView valueView) {
-        String value = valueView.getText().toString();
-
         String fieldType = field.getType();
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
@@ -94,8 +91,6 @@ public class CasesRegisterAdapter extends ArrayAdapter<CaseField> {
         if (fieldType.equals("select_box")) {
             fieldType = field.isMultiSelect() ? "multi_select_box" : "single_select_box";
         }
-        Log.i(TAG, fieldType);
-        Toast.makeText(getContext(), fieldType, Toast.LENGTH_SHORT).show();
         try {
             BaseDialog dialog = FiledDialogFactory.createDialog(
                     Case.FieldType.valueOf(fieldType.toUpperCase()),
@@ -173,7 +168,6 @@ public class CasesRegisterAdapter extends ArrayAdapter<CaseField> {
 //        builder.show();
 //    }
 //
-
 
     private int getFieldLayoutId(String fieldType) {
         Resources resources = getContext().getResources();
