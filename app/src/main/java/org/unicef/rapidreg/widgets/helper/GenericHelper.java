@@ -11,7 +11,6 @@ import org.unicef.rapidreg.childcase.fielddialog.BaseDialog;
 import org.unicef.rapidreg.childcase.fielddialog.FiledDialogFactory;
 import org.unicef.rapidreg.exception.DialogException;
 import org.unicef.rapidreg.forms.childcase.CaseField;
-import org.unicef.rapidreg.model.Case;
 import org.unicef.rapidreg.service.CaseService;
 
 public class GenericHelper extends BaseWidgetHelper implements WidgetHelper {
@@ -26,7 +25,7 @@ public class GenericHelper extends BaseWidgetHelper implements WidgetHelper {
     @Override
     public View getConvertView() {
         if (convertView == null) {
-            int resId = resources.getIdentifier(Case.TYPE_TEXT_FIELD, "layout", packageName);
+            int resId = resources.getIdentifier(CaseField.TYPE_TEXT_FIELD, "layout", packageName);
             convertView = inflater.inflate(resId, null);
         }
 
@@ -63,13 +62,13 @@ public class GenericHelper extends BaseWidgetHelper implements WidgetHelper {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setTitle(getLabel());
 
-        if (fieldType.equals(Case.TYPE_SELECT_BOX)) {
-            fieldType = field.isMultiSelect() ? Case.TYPE_MULTI_SELECT_BOX :
-                    Case.TYPE_SINGLE_SELECT_BOX;
+        if (fieldType.equals(CaseField.TYPE_SELECT_BOX)) {
+            fieldType = field.isMultiSelect() ? CaseField.TYPE_MULTI_SELECT_BOX :
+                    CaseField.TYPE_SINGLE_SELECT_BOX;
         }
         try {
             BaseDialog dialog = FiledDialogFactory.createDialog(
-                    Case.FieldType.valueOf(fieldType.toUpperCase()),
+                    CaseField.FieldType.valueOf(fieldType.toUpperCase()),
                     context,
                     field,
                     valueView);

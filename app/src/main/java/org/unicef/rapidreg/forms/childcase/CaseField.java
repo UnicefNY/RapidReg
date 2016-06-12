@@ -3,10 +3,25 @@ package org.unicef.rapidreg.forms.childcase;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import org.unicef.rapidreg.childcase.fielddialog.BaseDialog;
+import org.unicef.rapidreg.childcase.fielddialog.DateDialog;
+import org.unicef.rapidreg.childcase.fielddialog.MultipleSelectDialog;
+import org.unicef.rapidreg.childcase.fielddialog.MultipleTextDialog;
+import org.unicef.rapidreg.childcase.fielddialog.NumericDialog;
+import org.unicef.rapidreg.childcase.fielddialog.SingleSelectDialog;
+import org.unicef.rapidreg.childcase.fielddialog.SingleTextDialog;
+
 import java.util.List;
 import java.util.Map;
 
 public class CaseField {
+    public static final String TYPE_SEPARATOR = "separator";
+    public static final String TYPE_TICK_BOX = "form_tick_box";
+    public static final String TYPE_TEXT_FIELD = "form_text_field";
+    public static final String TYPE_SELECT_BOX = "select_box";
+    public static final String TYPE_SINGLE_SELECT_BOX = "single_select_box";
+    public static final String TYPE_MULTI_SELECT_BOX = "multi_select_box";
+
     @SerializedName("name")
     @Expose
     private String name;
@@ -109,5 +124,26 @@ public class CaseField {
         sb.append("subForm: ").append(subForm).append("\n");
 
         return sb.toString();
+    }
+
+    public enum FieldType {
+        TICK_BOX(null),
+        NUMERIC_FIELD(NumericDialog.class),
+        DATE_FIELD(DateDialog.class),
+        TEXTAREA(MultipleTextDialog.class),
+        TEXT_FIELD(SingleTextDialog.class),
+        RADIO_BUTTON(SingleSelectDialog.class),
+        SINGLE_SELECT_BOX(SingleSelectDialog.class),
+        MULTI_SELECT_BOX(MultipleSelectDialog.class);
+
+        private Class<? extends BaseDialog> clz;
+
+        FieldType(Class<? extends BaseDialog> clz) {
+            this.clz = clz;
+        }
+
+        public Class<? extends BaseDialog> getClz() {
+            return clz;
+        }
     }
 }
