@@ -40,6 +40,13 @@ public class Case extends BaseModel {
         }
     }
 
+    public static final String TYPE_SEPARATOR = "separator";
+    public static final String TYPE_TICK_BOX = "form_tick_box";
+    public static final String TYPE_TEXT_FIELD = "form_text_field";
+    public static final String TYPE_SELECT_BOX = "select_box";
+    public static final String TYPE_SINGLE_SELECT_BOX = "single_select_box";
+    public static final String TYPE_MULTI_SELECT_BOX = "multi_select_box";
+
     @PrimaryKey
     private long id;
     @Column(name = "name")
