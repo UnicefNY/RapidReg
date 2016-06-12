@@ -7,13 +7,11 @@ import org.unicef.rapidreg.forms.childcase.CaseField;
 public class WidgetHelperFactory {
 
     public static WidgetHelper getWidgetHelper(Context context, CaseField field) {
-        String type = field.getType();
-
-        if (CaseField.TYPE_SEPARATOR.equalsIgnoreCase(type)) {
+        if (field.isSeperator()) {
             return new SeparatorHelper(context, field);
         }
 
-        if (CaseField.TYPE_TICK_BOX.equalsIgnoreCase(type)) {
+        if (field.isTickBox()) {
             return new TickBoxHelper(context, field);
         }
 

@@ -50,7 +50,7 @@ public class GenericHelper extends BaseWidgetHelper implements WidgetHelper {
                 try {
                     showFieldDialog(field, valueView);
                 } catch (Exception e) {
-                    e.printStackTrace();
+                    Log.e(TAG, String.format("show dialog error. Field: %s", field), e);
                 }
             }
         });
