@@ -5,12 +5,13 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.widget.TextView;
 
-import org.unicef.rapidreg.childcase.CaseValues;
 import org.unicef.rapidreg.forms.childcase.CaseField;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+
+import static org.unicef.rapidreg.service.CaseService.CaseValues;
 
 public abstract class BaseDialog {
     private AlertDialog.Builder builder;
@@ -31,7 +32,7 @@ public abstract class BaseDialog {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 BaseDialog.this.resultView.setText(getResult());
-                CaseValues.getInstance().put(caseField.getDisplayName().get("en"), getResult());
+                CaseValues.put(caseField.getDisplayName().get("en"), getResult());
                 dialog.dismiss();
             }
         });

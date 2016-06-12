@@ -12,6 +12,8 @@ import org.unicef.rapidreg.R;
 import org.unicef.rapidreg.base.view.BaseActivity;
 import org.unicef.rapidreg.service.CaseFormService;
 
+import static org.unicef.rapidreg.service.CaseService.CaseValues;
+
 public class CaseActivity extends BaseActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -35,7 +37,7 @@ public class CaseActivity extends BaseActivity {
                     return true;
 
                 case R.id.add_case:
-                    CaseValues.getInstance().clear();
+                    CaseValues.clear();
 
                     if (!CaseFormService.getInstance().isFormReady()) {
                         Toast.makeText(CaseActivity.this,
