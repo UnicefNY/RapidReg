@@ -7,7 +7,6 @@ import android.widget.TextView;
 import org.unicef.rapidreg.forms.childcase.CaseField;
 
 public class DateDialog extends BaseDialog {
-
     private String result;
     private DatePicker datePicker;
 

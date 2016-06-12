@@ -8,7 +8,6 @@ import org.unicef.rapidreg.forms.childcase.CaseField;
 import org.unicef.rapidreg.model.Case;
 
 public class FiledDialogFactory {
-
     public static BaseDialog createDialog(Case.FieldType fieldType, Context context,
                                           CaseField caseField,
                                           TextView resultView) throws DialogException {
