@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<TextView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/label"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_width="match_parent"/>
+    android:paddingBottom="@dimen/field_padding_top_bottom"
+    android:paddingLeft="@dimen/field_padding_left"
+    android:paddingTop="@dimen/field_padding_top_bottom"
+    android:textColor="@color/gray"
+    android:textSize="@dimen/size_15" />

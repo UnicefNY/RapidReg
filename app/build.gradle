@@ -29,7 +29,6 @@ android {
                     def formattedDate = new Date().format('yyyyMMdd')
                     def newName = output.outputFile.name
                     newName = newName.replace("app-", "$project.ext.appName-")
-//                    newName = newName.replace("-debug", "-debug-" + formattedDate)
                     output.outputFile = new File(output.outputFile.parent, newName)
                 }
             }
@@ -44,7 +43,6 @@ android {
                     def formattedDate = new Date().format('yyyyMMdd')
                     def newName = output.outputFile.name
                     newName = newName.replace("app-", "$project.ext.appName-")
-//                    newName = newName.replace("-release", "-release-" + formattedDate)
                     output.outputFile = new File(output.outputFile.parent, newName)
                 }
             }
@@ -60,8 +58,8 @@ android {
     }
 }
 
-def dbflow_version = '3.0.1'
-def powermock_version = '1.6.5'
+def dbFlowVersion = '3.0.1'
+def powerMockVersion = '1.6.5'
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
@@ -87,23 +85,25 @@ dependencies {
     compile 'com.hannesdorfmann.annotatedadapter:support-recyclerview:1.1.1'
     apt 'com.hannesdorfmann.annotatedadapter:processor:1.1.1'
 
-    apt "com.github.Raizlabs.DBFlow:dbflow-processor:${dbflow_version}"
-    compile "com.github.Raizlabs.DBFlow:dbflow-core:${dbflow_version}"
-    compile "com.github.Raizlabs.DBFlow:dbflow:${dbflow_version}"
-    compile "com.github.Raizlabs.DBFlow:dbflow-sqlcipher:${dbflow_version}"
+    apt "com.github.Raizlabs.DBFlow:dbflow-processor:${dbFlowVersion}"
+    compile "com.github.Raizlabs.DBFlow:dbflow-core:${dbFlowVersion}"
+    compile "com.github.Raizlabs.DBFlow:dbflow:${dbFlowVersion}"
+    compile "com.github.Raizlabs.DBFlow:dbflow-sqlcipher:${dbFlowVersion}"
     compile 'org.parceler:parceler-api:1.1.1'
     apt 'org.parceler:parceler:1.1.1'
 
     compile 'org.mindrot:jbcrypt:0.3m'
 
+    compile 'com.ogaclejapan.smarttablayout:library:1.6.1@aar'
+    compile 'com.ogaclejapan.smarttablayout:utils-v4:1.6.1@aar'
 
     testCompile 'junit:junit:4.12',
-            'org.robolectric:robolectric:3.1-SNAPSHOT',
-            "org.powermock:powermock-module-junit4:${powermock_version}",
-            "org.powermock:powermock-api-mockito:${powermock_version}"
+            'org.robolectric:robolectric:3.1',
+            "org.powermock:powermock-module-junit4:${powerMockVersion}",
+            "org.powermock:powermock-api-mockito:${powerMockVersion}"
 
     androidTestCompile 'junit:junit:4.12',
-            'org.robolectric:robolectric:3.1-SNAPSHOT',
-            "org.powermock:powermock-module-junit4:${powermock_version}",
-            "org.powermock:powermock-api-mockito:${powermock_version}"
+            'org.robolectric:robolectric:3.1',
+            "org.powermock:powermock-module-junit4:${powerMockVersion}",
+            "org.powermock:powermock-api-mockito:${powerMockVersion}"
 }

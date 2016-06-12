@@ -6,35 +6,19 @@ import com.hannesdorfmann.mosby.mvp.MvpBasePresenter;
 
 import org.unicef.rapidreg.forms.childcase.CaseField;
 import org.unicef.rapidreg.forms.childcase.CaseFormRoot;
-
-import org.unicef.rapidreg.forms.childcase.CaseSection;
 import org.unicef.rapidreg.service.CaseFormService;
 
+import java.util.List;
+
 public class CasesRegisterPresenter extends MvpBasePresenter<CasesRegisterView> {
-    private CaseFormRoot form;
-    private CasesRegisterAdapter casesRegisterAdapter;
 
-    private String value;
-
-    public void initContext(Context context) {
+    public void initContext(Context context, int position) {
         if (isViewAttached()) {
-            if ((form = loadCaseForms()) != null) {
-                casesRegisterAdapter = new CasesRegisterAdapter(context, form.getSections());
-                getView().initView(casesRegisterAdapter, form);
-                getView().expandAll(casesRegisterAdapter);
+            CaseFormRoot form = CaseFormService.getInstance().getCurrentForm();
+            if (form != null) {
+                List<CaseField> fields = form.getSections().get(position).getFields();
+                getView().initView(new CasesRegisterAdapter(context, -1, fields));
             }
         }
-    }
-
-    private CaseFormRoot loadCaseForms() {
-        return CaseFormService.getInstance().getCurrentForm();
-    }
-
-    public String getValue() {
-        return value;
-    }
-
-    public void setValue(String value) {
-        this.value = value;
     }
 }
