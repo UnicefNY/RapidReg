@@ -15,8 +15,8 @@ import org.unicef.rapidreg.R;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class CaseListFragment extends MvpFragment<CasesListView, CasesListPresenter>
-        implements CasesListView {
+public class CaseListFragment extends MvpFragment<CaseListView, CaseListPresenter>
+        implements CaseListView {
 
     @BindView(R.id.list_container)
     RecyclerView caseListContainer;
@@ -36,12 +36,12 @@ public class CaseListFragment extends MvpFragment<CasesListView, CasesListPresen
     }
 
     @Override
-    public CasesListPresenter createPresenter() {
-        return new CasesListPresenter();
+    public CaseListPresenter createPresenter() {
+        return new CaseListPresenter();
     }
 
     @Override
-    public void initView(CasesListAdapter adapter) {
+    public void initView(CaseListAdapter adapter) {
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         caseListContainer.setLayoutManager(layoutManager);
