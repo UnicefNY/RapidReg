@@ -21,6 +21,10 @@ module Screen
         clickByXpath("//android.widget.CheckedTextView[@text='Logout']")
       end
 
+      def getCurrentUser
+        findById("login_user_label")
+      end
+
       def set_login_username(username)
         findById("editview_username").send_keys("#{username}")
       end
@@ -43,3 +47,5 @@ end
 
 # type: # android.widget.CheckedTextView
 # text: Logout
+
+# login_user_label
