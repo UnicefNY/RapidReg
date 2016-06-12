@@ -1,4 +1,4 @@
-package org.unicef.rapidreg.childcase.fielddialog;
+package org.unicef.rapidreg.widgets.dialog;
 
 import android.content.Context;
 import android.content.DialogInterface;

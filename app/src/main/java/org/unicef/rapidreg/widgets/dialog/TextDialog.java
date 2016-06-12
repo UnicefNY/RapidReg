@@ -1,10 +1,9 @@
-package org.unicef.rapidreg.childcase.fielddialog;
+package org.unicef.rapidreg.widgets.dialog;
 
 import android.content.Context;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import org.unicef.rapidreg.R;
 import org.unicef.rapidreg.forms.childcase.CaseField;
 
 public class TextDialog extends BaseDialog {

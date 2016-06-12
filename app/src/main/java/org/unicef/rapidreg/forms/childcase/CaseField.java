@@ -3,13 +3,13 @@ package org.unicef.rapidreg.forms.childcase;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-import org.unicef.rapidreg.childcase.fielddialog.BaseDialog;
-import org.unicef.rapidreg.childcase.fielddialog.DateDialog;
-import org.unicef.rapidreg.childcase.fielddialog.MultipleSelectDialog;
-import org.unicef.rapidreg.childcase.fielddialog.MultipleTextDialog;
-import org.unicef.rapidreg.childcase.fielddialog.NumericDialog;
-import org.unicef.rapidreg.childcase.fielddialog.SingleSelectDialog;
-import org.unicef.rapidreg.childcase.fielddialog.SingleTextDialog;
+import org.unicef.rapidreg.widgets.dialog.BaseDialog;
+import org.unicef.rapidreg.widgets.dialog.DateDialog;
+import org.unicef.rapidreg.widgets.dialog.MultipleSelectDialog;
+import org.unicef.rapidreg.widgets.dialog.MultipleTextDialog;
+import org.unicef.rapidreg.widgets.dialog.NumericDialog;
+import org.unicef.rapidreg.widgets.dialog.SingleSelectDialog;
+import org.unicef.rapidreg.widgets.dialog.SingleTextDialog;
 
 import java.util.List;
 import java.util.Map;
