@@ -43,7 +43,7 @@ public class CasesActivity extends BaseActivity {
                         return true;
                     }
 
-                    changeFragmentTo(new CasesFragment());
+                    changeFragmentTo(new CasesRegisterWrapperFragment());
                     showSaveButton();
                     return true;
 

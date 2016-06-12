@@ -21,7 +21,7 @@ import org.unicef.rapidreg.service.CaseFormService;
 
 import java.util.List;
 
-public class CasesFragment extends Fragment {
+public class CasesRegisterWrapperFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater,
@@ -29,11 +29,10 @@ public class CasesFragment extends Fragment {
                              @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
 
-        View view = inflater.inflate(R.layout.fragment_cases, container, false);
+        View view = inflater.inflate(R.layout.fragment_cases_register_wrapper, container, false);
 
         FragmentStatePagerItemAdapter adapter = new FragmentStatePagerItemAdapter(
                 getActivity().getSupportFragmentManager(), getPages());
-
         ViewPager viewPager = (ViewPager) view.findViewById(R.id.viewpager);
         viewPager.setAdapter(adapter);
         SmartTabLayout viewPagerTab = (SmartTabLayout) view.findViewById(R.id.viewpagertab);
@@ -52,6 +51,7 @@ public class CasesFragment extends Fragment {
             String[] values = section.getName().values().toArray(new String[0]);
             pages.add(FragmentPagerItem.of(values[0], CasesRegisterFragment.class));
         }
+
         return pages;
     }
 }
