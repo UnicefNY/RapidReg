@@ -19,34 +19,6 @@ import java.sql.Date;
 
 @Table(database = PrimeroDB.class)
 public class Case extends BaseModel {
-    public enum FieldType {
-        TICK_BOX(null),
-        NUMERIC_FIELD(NumericDialog.class),
-        DATE_FIELD(DateDialog.class),
-        TEXTAREA(MultipleTextDialog.class),
-        TEXT_FIELD(SingleTextDialog.class),
-        RADIO_BUTTON(SingleSelectDialog.class),
-        SINGLE_SELECT_BOX(SingleSelectDialog.class),
-        MULTI_SELECT_BOX(MultipleSelectDialog.class);
-
-        private Class<? extends BaseDialog> clz;
-
-        FieldType(Class<? extends BaseDialog> clz) {
-            this.clz = clz;
-        }
-
-        public Class<? extends BaseDialog> getClz() {
-            return clz;
-        }
-    }
-
-    public static final String TYPE_SEPARATOR = "separator";
-    public static final String TYPE_TICK_BOX = "form_tick_box";
-    public static final String TYPE_TEXT_FIELD = "form_text_field";
-    public static final String TYPE_SELECT_BOX = "select_box";
-    public static final String TYPE_SINGLE_SELECT_BOX = "single_select_box";
-    public static final String TYPE_MULTI_SELECT_BOX = "multi_select_box";
-
     @PrimaryKey
     private long id;
     @Column(name = "name")

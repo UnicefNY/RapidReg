@@ -8,7 +8,6 @@ import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.RuntimeEnvironment;
 import org.unicef.rapidreg.forms.childcase.CaseField;
-import org.unicef.rapidreg.model.Case;
 
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.junit.Assert.assertThat;
@@ -25,7 +24,7 @@ public class WidgetHelperFactoryTest {
 
     @Test
     public void should_get_tick_box_helper() {
-        field.setType(Case.TYPE_TICK_BOX);
+        field.setType(CaseField.TYPE_TICK_BOX);
         WidgetHelper widgetHelper = WidgetHelperFactory.getWidgetHelper(context, field);
 
         assertThat(widgetHelper, instanceOf(TickBoxHelper.class));
@@ -33,7 +32,7 @@ public class WidgetHelperFactoryTest {
 
     @Test
     public void should_get_separator_helper() {
-        field.setType(Case.TYPE_SEPARATOR);
+        field.setType(CaseField.TYPE_SEPARATOR);
         WidgetHelper widgetHelper = WidgetHelperFactory.getWidgetHelper(context, field);
 
         assertThat(widgetHelper, instanceOf(SeparatorHelper.class));
@@ -41,11 +40,11 @@ public class WidgetHelperFactoryTest {
 
     @Test
     public void should_get_generic_helper() {
-        field.setType(Case.TYPE_SELECT_BOX);
+        field.setType(CaseField.TYPE_SELECT_BOX);
         WidgetHelper widgetHelper = WidgetHelperFactory.getWidgetHelper(context, field);
         assertThat(widgetHelper, instanceOf(GenericHelper.class));
 
-        field.setType(Case.TYPE_TEXT_FIELD);
+        field.setType(CaseField.TYPE_TEXT_FIELD);
         widgetHelper = WidgetHelperFactory.getWidgetHelper(context, field);
         assertThat(widgetHelper, instanceOf(GenericHelper.class));
 
