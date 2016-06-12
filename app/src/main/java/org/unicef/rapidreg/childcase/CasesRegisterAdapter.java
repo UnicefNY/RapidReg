@@ -1,122 +1,116 @@
 package org.unicef.rapidreg.childcase;
 
 import android.content.Context;
+import android.content.res.Resources;
+import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseExpandableListAdapter;
+import android.widget.ArrayAdapter;
+import android.widget.CheckBox;
 import android.widget.TextView;
 
 import org.unicef.rapidreg.R;
+import org.unicef.rapidreg.childcase.fielddialog.BaseDialog;
+import org.unicef.rapidreg.childcase.fielddialog.FiledDialogFactory;
+import org.unicef.rapidreg.exception.DialogException;
 import org.unicef.rapidreg.forms.childcase.CaseField;
-import org.unicef.rapidreg.forms.childcase.CaseSection;
+import org.unicef.rapidreg.model.Case;
 
 import java.util.List;
 
-public class CasesRegisterAdapter extends BaseExpandableListAdapter {
+public class CasesRegisterAdapter extends ArrayAdapter<CaseField> {
     public static final String TAG = CasesRegisterAdapter.class.getSimpleName();
 
-    private Context context;
-    private List<CaseSection> sections;
-
-    public CasesRegisterAdapter(Context context, List<CaseSection> sections) {
-        this.context = context;
-        this.sections = sections;
+    public CasesRegisterAdapter(Context context, int resource, List<CaseField> objects) {
+        super(context, resource, objects);
     }
 
     @Override
-    public int getGroupCount() {
-        return sections.size();
-    }
+    public View getView(int position, View convertView, ViewGroup parent) {
+        final CaseField field = getItem(position);
+        String fieldType = field.getType();
 
-    @Override
-    public int getChildrenCount(int groupPosition) {
-        List<CaseField> fields = sections.get(groupPosition).getFields();
-        return fields.size();
-    }
+        LayoutInflater inflater = LayoutInflater.from(getContext());
+        int resourceId = getFieldLayoutId(fieldType);
 
-    @Override
-    public Object getGroup(int groupPosition) {
-        return sections.get(groupPosition);
-    }
-
-    @Override
-    public Object getChild(int groupPosition, int childPosition) {
-        List<CaseField> fields = sections.get(groupPosition).getFields();
-        return fields.get(childPosition);
-    }
-
-    @Override
-    public long getGroupId(int groupPosition) {
-        return groupPosition;
-    }
-
-    @Override
-    public long getChildId(int groupPosition, int childPosition) {
-        return childPosition;
-    }
-
-    @Override
-    public boolean hasStableIds() {
-        return true;
-    }
-
-    @Override
-    public View getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
-        CaseSection section = (CaseSection) getGroup(groupPosition);
-        if (convertView == null) {
-            LayoutInflater inf = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = inf.inflate(R.layout.group_heading, null);
+        if (resourceId > 0) {
+            convertView = inflater.inflate(resourceId, null);
         }
 
-        TextView heading = (TextView) convertView.findViewById(R.id.heading);
-        heading.setText(section.getName().get("en"));
-
-        if (isExpanded) {
-
-            convertView.setBackgroundResource(R.color.lightgrey);
-        } else {
-            convertView.setBackgroundResource(R.color.lavender);
-        }
-        return convertView;
-    }
-
-    @Override
-    public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
-        CaseField field = (CaseField) getChild(groupPosition, childPosition);
-
-        convertView = createFormFieldView(field, convertView);
         if ("separator".equals(field.getType())) {
             convertView.setVisibility(View.INVISIBLE);
         } else {
+            String label = field.getDisplayName().get("en");
+
             TextView tvFormLabel = (TextView) convertView.findViewById(R.id.label);
-            tvFormLabel.setText(field.getDisplayName().get("en"));
-            tvFormLabel.setPadding(15, 15, 0, 0);
+            tvFormLabel.setText(label);
+
+            if (Case.FieldType.TICK_BOX.name().equalsIgnoreCase(fieldType)) {
+                CheckBox cbValue = (CheckBox) convertView.findViewById(R.id.value);
+                cbValue.setChecked(Boolean.valueOf(CaseValues.getInstance().get(label)));
+            } else {
+                TextView tvValue = (TextView) convertView.findViewById(R.id.value);
+                tvValue.setText(CaseValues.getInstance().get(label));
+            }
+        }
+
+        if (!Case.FieldType.TICK_BOX.name().equalsIgnoreCase(fieldType)) {
+            convertView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    TextView valueView = (TextView) view.findViewById(R.id.value);
+                    try {
+                        showFieldDialog(field, valueView);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+        } else {
+            CheckBox cbValue = (CheckBox) convertView.findViewById(R.id.value);
+            cbValue.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    CaseValues.getInstance().put(field.getDisplayName().get("en"),
+                            String.valueOf(((CheckBox) v).isChecked()));
+                }
+            });
         }
         return convertView;
     }
 
-    @Override
-    public boolean isChildSelectable(int groupPosition, int childPosition) {
-        return true;
+    private void showFieldDialog(CaseField field, TextView valueView) {
+        String fieldType = field.getType();
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        builder.setTitle(field.getDisplayName().get("en"));
+
+        if (fieldType.equals("select_box")) {
+            fieldType = field.isMultiSelect() ? "multi_select_box" : "single_select_box";
+        }
+        try {
+            BaseDialog dialog = FiledDialogFactory.createDialog(
+                    Case.FieldType.valueOf(fieldType.toUpperCase()),
+                    getContext(),
+                    field,
+                    valueView);
+            dialog.show();
+        } catch (DialogException e) {
+            e.printStackTrace();
+        }
     }
 
 
-    private View createFormFieldView(CaseField caseFormField, View convertView) {
-        String fieldType = caseFormField.getType();
-        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        int resourceId = getFieldLayoutId(fieldType);
-        if (resourceId > 0) {
-            convertView = inflater.inflate(resourceId, null);
-            return convertView;
-        }
-        return null;
-    }
+    private int getFieldLayoutId(String fieldType) {
+        Resources resources = getContext().getResources();
+        String packageName = getContext().getPackageName();
 
-    protected int getFieldLayoutId(String fieldType) {
-        if (fieldType.equals("tick_box")) {
-            return context.getResources().getIdentifier("form_tick_box", "layout", context.getPackageName());
+        if (Case.FieldType.TICK_BOX.name().equalsIgnoreCase(fieldType)) {
+            return resources.getIdentifier("form_tick_box", "layout",
+                    packageName);
         }
-        return context.getResources().getIdentifier("form_text_field", "layout", context.getPackageName());
+        return resources.getIdentifier("form_text_field", "layout",
+                packageName);
     }
 }

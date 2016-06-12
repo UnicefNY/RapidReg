@@ -9,8 +9,8 @@
         app:showAsAction="always" />
     <item
         android:id="@+id/save_case"
-        android:icon="@drawable/done"
-        android:title="Save Case"
+        android:title="Save"
+        android:visible="false"
         app:showAsAction="always" />
 
     <item

@@ -3,10 +3,18 @@
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
     <!--Text size-->
+
+    <dimen name="size_2">2sp</dimen>
+    <dimen name="size_5">5sp</dimen>
+    <dimen name="size_15">15sp</dimen>
     <dimen name="text_size_16">16sp</dimen>
     <dimen name="text_size_20">20sp</dimen>
     <dimen name="text_size_24">24sp</dimen>
     <dimen name="text_size_48">48sp</dimen>
-
+    <dimen name="text_size_200">200sp</dimen>
     <dimen name="logo_margin">60sp</dimen>
+
+    <dimen name="field_padding_top_bottom">5sp</dimen>
+    <dimen name="field_padding_left">15sp</dimen>
+
 </resources>

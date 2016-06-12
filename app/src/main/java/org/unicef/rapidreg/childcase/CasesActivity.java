@@ -15,6 +15,7 @@ import org.unicef.rapidreg.base.view.BaseActivity;
 import org.unicef.rapidreg.service.CaseFormService;
 
 public class CasesActivity extends BaseActivity {
+    private static final String CASE_REGISTRATION = "Case_Registration";
 
     private Menu menu;
     private CasesRegisterFragment casesRegisterFragment;
@@ -26,6 +27,7 @@ public class CasesActivity extends BaseActivity {
         toolbar.setOnMenuItemClickListener(new CaseMenuItemListener());
 
         toolbar.setTitle("Cases");
+        menu = toolbar.getMenu();
 
         menu = toolbar.getMenu();
         menu.getItem(1).setVisible(false);
@@ -47,6 +49,8 @@ public class CasesActivity extends BaseActivity {
                 return true;
             }
             if (R.id.add_case == menuItem.getItemId()) {
+                CaseValues.getInstance().clear();
+
                 if (!CaseFormService.getInstance().isFormReady()) {
                     Toast.makeText(CasesActivity.this,
                             R.string.syncing_forms_text, Toast.LENGTH_LONG).show();
@@ -55,13 +59,14 @@ public class CasesActivity extends BaseActivity {
 
                 casesRegisterFragment = new CasesRegisterFragment();
                 getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.fragment_content, casesRegisterFragment)
+
+                        .replace(R.id.fragment_content, new CasesFragment(), CASE_REGISTRATION)
                         .commit();
                 menu.getItem(0).setVisible(false);
                 menu.getItem(1).setVisible(true);
-
                 return true;
             }
+
             if (R.id.save_case == menuItem.getItemId()) {
                 menu.getItem(0).setVisible(true);
                 menu.getItem(1).setVisible(false);
@@ -73,7 +78,8 @@ public class CasesActivity extends BaseActivity {
     }
 
     private void saveCase() {
-        FragmentActivity activity = casesRegisterFragment.getActivity();
-
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.fragment_content, new CasesListFragment())
+                .commit();
     }
 }

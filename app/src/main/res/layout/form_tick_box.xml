@@ -9,6 +9,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
+        android:layout_gravity="center_vertical"
+        android:paddingBottom="@dimen/size_5"
         android:weightSum="10">
 
         <include layout="@layout/form_label"
@@ -25,7 +27,4 @@
             android:layout_gravity="center_vertical">
         </CheckBox>
     </LinearLayout>
-
-    <include layout="@layout/form_help_text" />
-
 </org.unicef.rapidreg.widgets.TickBox>
