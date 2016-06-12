@@ -1,11 +1,11 @@
 package org.unicef.rapidreg.childcase;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 
 import com.hannesdorfmann.mosby.mvp.MvpFragment;
@@ -19,12 +19,8 @@ import butterknife.ButterKnife;
 public class CaseRegisterFragment extends MvpFragment<CaseRegisterView, CaseRegisterPresenter>
         implements CaseRegisterView {
 
-    private static final String TAG = CaseRegisterFragment.class.getSimpleName();
-
-    @BindView(R.id.fragment_register_content)
-    LinearLayout registerContent;
     @BindView(R.id.register_forms_content)
-    ListView formsContent;
+    ListView fieldList;
 
     @Nullable
     @Override
@@ -32,6 +28,7 @@ public class CaseRegisterFragment extends MvpFragment<CaseRegisterView, CaseRegi
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
+
         return inflater.inflate(R.layout.fragment_cases_register, container, false);
     }
 
@@ -39,10 +36,12 @@ public class CaseRegisterFragment extends MvpFragment<CaseRegisterView, CaseRegi
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         ButterKnife.bind(this, view);
+
         int position = FragmentPagerItem.getPosition(getArguments());
         presenter.initContext(getActivity(), position);
     }
 
+    @NonNull
     @Override
     public CaseRegisterPresenter createPresenter() {
         return new CaseRegisterPresenter();
@@ -50,6 +49,6 @@ public class CaseRegisterFragment extends MvpFragment<CaseRegisterView, CaseRegi
 
     @Override
     public void initView(CaseRegisterAdapter adapter) {
-        formsContent.setAdapter(adapter);
+        fieldList.setAdapter(adapter);
     }
 }
