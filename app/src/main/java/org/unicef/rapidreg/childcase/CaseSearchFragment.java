@@ -9,7 +9,7 @@ import android.view.ViewGroup;
 
 import org.unicef.rapidreg.R;
 
-public class CasesSearchFragment extends Fragment {
+public class CaseSearchFragment extends Fragment {
 
     @Nullable
     @Override

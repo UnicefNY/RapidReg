@@ -12,7 +12,7 @@ import org.unicef.rapidreg.R;
 import org.unicef.rapidreg.base.view.BaseActivity;
 import org.unicef.rapidreg.service.CaseFormService;
 
-public class CasesActivity extends BaseActivity {
+public class CaseActivity extends BaseActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -21,7 +21,7 @@ public class CasesActivity extends BaseActivity {
         toolbar.setTitle("Cases");
 
         if (savedInstanceState == null) {
-            changeFragmentTo(new CasesListFragment());
+            changeFragmentTo(new CaseListFragment());
             showAddButton();
         }
     }
@@ -31,24 +31,24 @@ public class CasesActivity extends BaseActivity {
         public boolean onMenuItemClick(MenuItem menuItem) {
             switch (menuItem.getItemId()) {
                 case R.id.search:
-                    changeFragmentTo(new CasesSearchFragment());
+                    changeFragmentTo(new CaseSearchFragment());
                     return true;
 
                 case R.id.add_case:
                     CaseValues.getInstance().clear();
 
                     if (!CaseFormService.getInstance().isFormReady()) {
-                        Toast.makeText(CasesActivity.this,
+                        Toast.makeText(CaseActivity.this,
                                 R.string.syncing_forms_text, Toast.LENGTH_LONG).show();
                         return true;
                     }
 
-                    changeFragmentTo(new CasesRegisterWrapperFragment());
+                    changeFragmentTo(new CaseRegisterWrapperFragment());
                     showSaveButton();
                     return true;
 
                 case R.id.save_case:
-                    changeFragmentTo(new CasesListFragment());
+                    changeFragmentTo(new CaseListFragment());
                     showAddButton();
                     return true;
 

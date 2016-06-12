@@ -16,10 +16,10 @@ import org.unicef.rapidreg.R;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class CasesRegisterFragment extends MvpFragment<CasesRegisterView, CasesRegisterPresenter>
-        implements CasesRegisterView {
+public class CaseRegisterFragment extends MvpFragment<CaseRegisterView, CaseRegisterPresenter>
+        implements CaseRegisterView {
 
-    private static final String TAG = CasesRegisterFragment.class.getSimpleName();
+    private static final String TAG = CaseRegisterFragment.class.getSimpleName();
 
     @BindView(R.id.fragment_register_content)
     LinearLayout registerContent;
@@ -44,12 +44,12 @@ public class CasesRegisterFragment extends MvpFragment<CasesRegisterView, CasesR
     }
 
     @Override
-    public CasesRegisterPresenter createPresenter() {
-        return new CasesRegisterPresenter();
+    public CaseRegisterPresenter createPresenter() {
+        return new CaseRegisterPresenter();
     }
 
     @Override
-    public void initView(CasesRegisterAdapter adapter) {
+    public void initView(CaseRegisterAdapter adapter) {
         formsContent.setAdapter(adapter);
     }
 }
