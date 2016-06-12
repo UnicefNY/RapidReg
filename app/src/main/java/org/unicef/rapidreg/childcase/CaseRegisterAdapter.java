@@ -19,6 +19,8 @@ import org.unicef.rapidreg.model.Case;
 
 import java.util.List;
 
+import static org.unicef.rapidreg.service.CaseService.CaseValues;
+
 public class CaseRegisterAdapter extends ArrayAdapter<CaseField> {
     public static final String TAG = CaseRegisterAdapter.class.getSimpleName();
 
@@ -48,10 +50,10 @@ public class CaseRegisterAdapter extends ArrayAdapter<CaseField> {
 
             if (Case.FieldType.TICK_BOX.name().equalsIgnoreCase(fieldType)) {
                 CheckBox cbValue = (CheckBox) convertView.findViewById(R.id.value);
-                cbValue.setChecked(Boolean.valueOf(CaseValues.getInstance().get(label)));
+                cbValue.setChecked(Boolean.valueOf(CaseValues.get(label)));
             } else {
                 TextView tvValue = (TextView) convertView.findViewById(R.id.value);
-                tvValue.setText(CaseValues.getInstance().get(label));
+                tvValue.setText(CaseValues.get(label));
             }
         }
 
@@ -72,7 +74,7 @@ public class CaseRegisterAdapter extends ArrayAdapter<CaseField> {
             cbValue.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    CaseValues.getInstance().put(field.getDisplayName().get("en"),
+                    CaseValues.put(field.getDisplayName().get("en"),
                             String.valueOf(((CheckBox) v).isChecked()));
                 }
             });
