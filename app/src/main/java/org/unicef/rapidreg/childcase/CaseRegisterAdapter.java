@@ -19,10 +19,10 @@ import org.unicef.rapidreg.model.Case;
 
 import java.util.List;
 
-public class CasesRegisterAdapter extends ArrayAdapter<CaseField> {
-    public static final String TAG = CasesRegisterAdapter.class.getSimpleName();
+public class CaseRegisterAdapter extends ArrayAdapter<CaseField> {
+    public static final String TAG = CaseRegisterAdapter.class.getSimpleName();
 
-    public CasesRegisterAdapter(Context context, int resource, List<CaseField> objects) {
+    public CaseRegisterAdapter(Context context, int resource, List<CaseField> objects) {
         super(context, resource, objects);
     }
 

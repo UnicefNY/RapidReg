@@ -8,7 +8,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-
 import com.hannesdorfmann.mosby.mvp.MvpFragment;
 
 import org.unicef.rapidreg.R;
@@ -16,7 +15,7 @@ import org.unicef.rapidreg.R;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class CasesListFragment extends MvpFragment<CasesListView, CasesListPresenter>
+public class CaseListFragment extends MvpFragment<CasesListView, CasesListPresenter>
         implements CasesListView {
 
     @BindView(R.id.list_container)
