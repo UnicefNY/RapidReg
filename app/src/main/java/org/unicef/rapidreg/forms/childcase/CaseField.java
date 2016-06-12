@@ -111,6 +111,14 @@ public class CaseField {
         this.subForm = subForm;
     }
 
+    public boolean isSeperator() {
+        return CaseField.TYPE_SEPARATOR.equalsIgnoreCase(type);
+    }
+
+    public boolean isTickBox() {
+        return CaseField.TYPE_TICK_BOX.equalsIgnoreCase(type);
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder("<Field>").append("\n");
