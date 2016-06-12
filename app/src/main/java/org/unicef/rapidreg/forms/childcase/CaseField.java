@@ -15,12 +15,11 @@ import java.util.List;
 import java.util.Map;
 
 public class CaseField {
-    public static final String TYPE_SEPARATOR = "separator";
-    public static final String TYPE_TICK_BOX = "form_tick_box";
-    public static final String TYPE_TEXT_FIELD = "form_text_field";
     public static final String TYPE_SELECT_BOX = "select_box";
     public static final String TYPE_SINGLE_SELECT_BOX = "single_select_box";
     public static final String TYPE_MULTI_SELECT_BOX = "multi_select_box";
+    public static final String TYPE_TICK_BOX = "form_tick_box";
+    public static final String TYPE_TEXT_FIELD = "form_text_field";
 
     @SerializedName("name")
     @Expose
@@ -111,12 +110,12 @@ public class CaseField {
         this.subForm = subForm;
     }
 
-    public boolean isSeperator() {
-        return CaseField.TYPE_SEPARATOR.equalsIgnoreCase(type);
+    public boolean isSeparator() {
+        return FieldType.SEPARATOR.name().equalsIgnoreCase(type);
     }
 
     public boolean isTickBox() {
-        return CaseField.TYPE_TICK_BOX.equalsIgnoreCase(type);
+        return FieldType.TICK_BOX.name().equalsIgnoreCase(type);
     }
 
     @Override
@@ -135,6 +134,7 @@ public class CaseField {
     }
 
     public enum FieldType {
+        SEPARATOR(null),
         TICK_BOX(null),
         NUMERIC_FIELD(NumericDialog.class),
         DATE_FIELD(DateDialog.class),

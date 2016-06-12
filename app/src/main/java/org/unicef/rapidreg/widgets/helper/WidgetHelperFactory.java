@@ -7,7 +7,7 @@ import org.unicef.rapidreg.forms.childcase.CaseField;
 public class WidgetHelperFactory {
 
     public static WidgetHelper getWidgetHelper(Context context, CaseField field) {
-        if (field.isSeperator()) {
+        if (field.isSeparator()) {
             return new SeparatorHelper(context, field);
         }
 
