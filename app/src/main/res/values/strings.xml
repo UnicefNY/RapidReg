@@ -20,5 +20,5 @@
     <string name="login_out_successful_text">Logout Successfully</string>
 
     <string name="login_user_label_key">login_user</string>
-    <string name="syncing_forms_text">Syncing forms, please wait...</string>
+    <string name="syncing_forms_text">Syncing forms, please try it later</string>
 </resources>
