@@ -14,11 +14,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class CasesListAdapter extends RecyclerView.Adapter<CasesListAdapter.CaseListHolder>{
+public class CaseListAdapter extends RecyclerView.Adapter<CaseListAdapter.CaseListHolder>{
 
     private List<Map<String, String>> caseList;
 
-    public CasesListAdapter() {
+    public CaseListAdapter() {
         caseList = new ArrayList<>();
         initCaseListData();
     }
