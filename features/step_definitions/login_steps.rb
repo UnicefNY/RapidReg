@@ -1,7 +1,3 @@
-Given /^I launch primero$/ do
-  sleep 10
-end
-
 When /^I login RapidReg for the first time with "(.*?)" and "(.*?)" and "(.*?)"$/ do |username,password,url|
   login_page.loginAs(username,password,url)
 end
@@ -22,3 +18,6 @@ When /^I logout$/ do
   login_page.logout
 end
 
+And /^I should see current user is "(.*?)"$/ do |username|
+  login_page.getCurrentUser.equal?("#{username}")
+end
