@@ -1,4 +1,4 @@
-package org.unicef.rapidreg.childcase.fielddialog;
+package org.unicef.rapidreg.widgets.dialog;
 
 import android.app.AlertDialog;
 import android.content.Context;
@@ -14,11 +14,11 @@ import java.util.Map;
 import static org.unicef.rapidreg.service.CaseService.CaseValues;
 
 public abstract class BaseDialog {
-    private AlertDialog.Builder builder;
-    private Context context;
-
     protected CaseField caseField;
     protected TextView resultView;
+
+    private AlertDialog.Builder builder;
+    private Context context;
 
     public BaseDialog(final Context context, final CaseField caseField, final TextView resultView) {
         this.caseField = caseField;
@@ -45,26 +45,14 @@ public abstract class BaseDialog {
         });
     }
 
-    public abstract void initView();
-
-    public abstract String getResult();
-
     public void show() {
         initView();
         builder.show();
     }
 
-    protected Context getContext() {
-        return context;
-    }
-
-    protected AlertDialog.Builder getBuilder() {
-        return builder;
-    }
-
     public static String[] getSelectOptions(String fieldType, CaseField field) {
         List<CharSequence> items = new ArrayList<>();
-        if (fieldType.equals("multi_select_box")) {
+        if (fieldType.equals(CaseField.TYPE_MULTI_SELECT_BOX)) {
             List<Map<String, String>> arrayList = field.getOptionStringsText().get("en");
             for (Map<String, String> map : arrayList) {
                 items.add(map.get("display_text"));
@@ -74,4 +62,16 @@ public abstract class BaseDialog {
         }
         return items.toArray(new String[0]);
     }
+
+    protected AlertDialog.Builder getBuilder() {
+        return builder;
+    }
+
+    protected Context getContext() {
+        return context;
+    }
+
+    public abstract void initView();
+
+    public abstract String getResult();
 }

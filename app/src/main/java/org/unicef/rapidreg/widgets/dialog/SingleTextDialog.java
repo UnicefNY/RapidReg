@@ -1,17 +1,16 @@
-package org.unicef.rapidreg.childcase.fielddialog;
+package org.unicef.rapidreg.widgets.dialog;
 
 import android.content.Context;
-import android.view.Gravity;
 import android.widget.EditText;
 import android.widget.TextView;
 
 import org.unicef.rapidreg.forms.childcase.CaseField;
 
-public class MultipleTextDialog extends BaseDialog {
+public class SingleTextDialog extends BaseDialog {
 
     private EditText editText;
 
-    public MultipleTextDialog(Context context, CaseField caseField, TextView resultView) {
+    public SingleTextDialog(Context context, CaseField caseField, TextView resultView) {
         super(context, caseField, resultView);
     }
 
@@ -19,8 +18,7 @@ public class MultipleTextDialog extends BaseDialog {
     public void initView() {
         editText = new EditText(getContext());
         editText.setText(resultView.getText().toString());
-        editText.setLines(20);
-        editText.setGravity(Gravity.TOP);
+        editText.setSingleLine();
         getBuilder().setView(editText);
     }
 

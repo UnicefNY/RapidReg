@@ -6,13 +6,6 @@ import com.raizlabs.android.dbflow.annotation.Table;
 import com.raizlabs.android.dbflow.data.Blob;
 import com.raizlabs.android.dbflow.structure.BaseModel;
 
-import org.unicef.rapidreg.childcase.fielddialog.BaseDialog;
-import org.unicef.rapidreg.childcase.fielddialog.DateDialog;
-import org.unicef.rapidreg.childcase.fielddialog.MultipleSelectDialog;
-import org.unicef.rapidreg.childcase.fielddialog.MultipleTextDialog;
-import org.unicef.rapidreg.childcase.fielddialog.NumericDialog;
-import org.unicef.rapidreg.childcase.fielddialog.SingleSelectDialog;
-import org.unicef.rapidreg.childcase.fielddialog.SingleTextDialog;
 import org.unicef.rapidreg.db.PrimeroDB;
 
 import java.sql.Date;

@@ -7,8 +7,8 @@ import android.view.View;
 import android.widget.TextView;
 
 import org.unicef.rapidreg.R;
-import org.unicef.rapidreg.childcase.fielddialog.BaseDialog;
-import org.unicef.rapidreg.childcase.fielddialog.FiledDialogFactory;
+import org.unicef.rapidreg.widgets.dialog.BaseDialog;
+import org.unicef.rapidreg.widgets.dialog.FiledDialogFactory;
 import org.unicef.rapidreg.exception.DialogException;
 import org.unicef.rapidreg.forms.childcase.CaseField;
 import org.unicef.rapidreg.service.CaseService;
