@@ -11,6 +11,7 @@ import android.widget.Toast;
 import org.unicef.rapidreg.R;
 import org.unicef.rapidreg.base.view.BaseActivity;
 import org.unicef.rapidreg.service.CaseFormService;
+import org.unicef.rapidreg.service.CaseService;
 
 import static org.unicef.rapidreg.service.CaseService.CaseValues;
 
@@ -50,6 +51,7 @@ public class CaseActivity extends BaseActivity {
                     return true;
 
                 case R.id.save_case:
+                    CaseService.getInstance().saveOrUpdateCase(0);
                     changeFragmentTo(new CaseListFragment());
                     showAddButton();
                     return true;
