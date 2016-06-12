@@ -24,7 +24,7 @@ public class WidgetHelperFactoryTest {
 
     @Test
     public void should_get_tick_box_helper() {
-        field.setType(CaseField.TYPE_TICK_BOX);
+        field.setType(CaseField.FieldType.TICK_BOX.name());
         WidgetHelper widgetHelper = WidgetHelperFactory.getWidgetHelper(context, field);
 
         assertThat(widgetHelper, instanceOf(TickBoxHelper.class));
@@ -32,7 +32,7 @@ public class WidgetHelperFactoryTest {
 
     @Test
     public void should_get_separator_helper() {
-        field.setType(CaseField.TYPE_SEPARATOR);
+        field.setType(CaseField.FieldType.SEPARATOR.name());
         WidgetHelper widgetHelper = WidgetHelperFactory.getWidgetHelper(context, field);
 
         assertThat(widgetHelper, instanceOf(SeparatorHelper.class));
@@ -40,11 +40,11 @@ public class WidgetHelperFactoryTest {
 
     @Test
     public void should_get_generic_helper() {
-        field.setType(CaseField.TYPE_SELECT_BOX);
+        field.setType(CaseField.FieldType.DATE_FIELD.name());
         WidgetHelper widgetHelper = WidgetHelperFactory.getWidgetHelper(context, field);
         assertThat(widgetHelper, instanceOf(GenericHelper.class));
 
-        field.setType(CaseField.TYPE_TEXT_FIELD);
+        field.setType(CaseField.FieldType.RADIO_BUTTON.name());
         widgetHelper = WidgetHelperFactory.getWidgetHelper(context, field);
         assertThat(widgetHelper, instanceOf(GenericHelper.class));
 
