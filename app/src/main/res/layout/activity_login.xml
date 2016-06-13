@@ -20,6 +20,7 @@
         android:layout_height="wrap_content"
         android:layout_above="@id/editview_password"
         android:hint="@string/editview_username_hint_text"
+        android:text="primero"
         />
 
 
@@ -39,6 +40,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/editview_password"
         android:hint="@string/editview_URL_hint_text"
+        android:text="http://10.29.2.106:3000"
         />
 
 
