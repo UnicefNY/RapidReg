@@ -1,6 +1,7 @@
 package org.unicef.rapidreg.childcase;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -21,12 +22,9 @@ public class CaseRegisterAdapter extends ArrayAdapter<CaseField> {
     public View getView(int position, View convertView, ViewGroup parent) {
         final CaseField field = getItem(position);
         WidgetHelper widgetHelper = WidgetHelperFactory.getWidgetHelper(getContext(), field);
-        if (convertView == null) {
-            convertView = widgetHelper.getConvertView();
-        }
         widgetHelper.setValue();
         widgetHelper.setOnClickListener();
 
-        return convertView;
+        return widgetHelper.getConvertView();
     }
 }
