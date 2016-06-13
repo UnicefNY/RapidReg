@@ -33,17 +33,6 @@ public class CaseFormService {
     }
 
     public CaseFormRoot getCurrentForm() {
-        if (caseForm == null) {
-            Blob form = caseFormDao.getCaseFormContent();
-            if (form == null) {
-                return null;
-            }
-
-            String formJson = new String(form.getBlob());
-            caseForm = TextUtils.isEmpty(formJson) ?
-                    null : new Gson().fromJson(formJson, CaseFormRoot.class);
-        }
-
         return caseForm;
     }
 
@@ -58,5 +47,15 @@ public class CaseFormService {
             existingCaseForm.setForm(caseForm.getForm());
             existingCaseForm.update();
         }
+
+        updateCachedForm();
+    }
+
+    private void updateCachedForm() {
+        Blob form = caseFormDao.getCaseFormContent();
+
+        String formJson = new String(form.getBlob());
+        caseForm = TextUtils.isEmpty(formJson) ?
+                null : new Gson().fromJson(formJson, CaseFormRoot.class);
     }
 }
