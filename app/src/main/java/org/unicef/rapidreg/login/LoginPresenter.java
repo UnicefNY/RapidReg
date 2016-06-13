@@ -131,9 +131,9 @@ public class LoginPresenter extends MvpBasePresenter<LoginView> {
                     CaseFormRoot form = response.body();
                     CaseForm caseForm = new CaseForm(new Blob(gson.toJson(form).getBytes()));
                     CaseFormService.getInstance().saveOrUpdateCaseForm(caseForm);
-                    Log.i(TAG, "login successfully");
+                    Log.i(TAG, "load form successfully");
                 } else {
-                    Log.w(TAG, "login failed");
+                    Log.w(TAG, "load from failed");
                 }
             }
 
@@ -188,10 +188,12 @@ public class LoginPresenter extends MvpBasePresenter<LoginView> {
                         notifyEvent(new NeedLoadFormSectionsEvent(cookie));
                         notifyEvent(new NeedGoToLoginSuccessScreenEvent(username));
                         showLoginResultMessage(HttpStatusCodeHandler.LOGIN_SUCCESS_MESSAGE);
+                        Log.d(TAG, "login successfully");
                     } else {
                         showLoginResultMessage(HttpStatusCodeHandler
                                 .getHttpStatusMessage(response.code()));
                         notifyEvent(new NeedDoLoginOffLineEvent(context, username, password));
+                        Log.d(TAG, "login failed");
                     }
                 }
             }
