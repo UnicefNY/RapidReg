@@ -52,8 +52,7 @@ public class CaseActivity extends BaseActivity {
 
                 case R.id.save_case:
                     CaseService caseService = CaseService.getInstance();
-                    String uniqueId = caseService.createUniqueId();
-                    caseService.saveOrUpdateCase(uniqueId);
+                    caseService.saveOrUpdateCase(CaseValues.getValues());
                     changeFragmentTo(new CaseListFragment());
                     showAddButton();
                     return true;
