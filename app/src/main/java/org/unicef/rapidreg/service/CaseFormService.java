@@ -33,6 +33,9 @@ public class CaseFormService {
     }
 
     public CaseFormRoot getCurrentForm() {
+        if (caseForm == null) {
+            updateCachedForm();
+        }
         return caseForm;
     }
 
