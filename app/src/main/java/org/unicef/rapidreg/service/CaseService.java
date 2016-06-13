@@ -11,6 +11,8 @@ import org.unicef.rapidreg.db.impl.CaseDaoImpl;
 import org.unicef.rapidreg.model.Case;
 
 import java.lang.reflect.Type;
+import java.sql.Date;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -19,6 +21,7 @@ public class CaseService {
     public static final String TAG = CaseService.class.getSimpleName();
 
     private static final CaseService CASE_SERVICE = new CaseService(new CaseDaoImpl());
+    private static final String UNIQUE_ID = "unique_id";
     private CaseDao caseDao;
 
     public static CaseService getInstance() {
@@ -29,8 +32,8 @@ public class CaseService {
         this.caseDao = caseDao;
     }
 
-    public Map<String, String> getCaseMapByUniqueId(String id) {
-        Case child = caseDao.getCaseByUniqueId(id);
+    public Map<String, String> getCaseMapByUniqueId(String uniqueId) {
+        Case child = caseDao.getCaseByUniqueId(uniqueId);
         if (child == null) {
             return new HashMap<>();
         }
@@ -38,23 +41,32 @@ public class CaseService {
         String caseJson = new String(child.getContent().getBlob());
         Type type = new TypeToken<Map<String, String>>() {
         }.getType();
+        Map<String, String> values = new Gson().fromJson(caseJson, type);
 
-        return new Gson().fromJson(caseJson, type);
+        values.put(UNIQUE_ID, uniqueId);
+
+        return values;
     }
 
-    public void saveOrUpdateCase(String uniqueId) {
-        String caseJson = new Gson().toJson(CaseValues.values);
+    public void saveOrUpdateCase(Map<String, String> values) {
+        Date date = new Date(Calendar.getInstance().getTimeInMillis());
+
+        String caseJson = new Gson().toJson(values);
         Blob caseBlob = new Blob(caseJson.getBytes());
 
-        Case child = caseDao.getCaseByUniqueId(uniqueId);
-        if (child == null) {
+        String uniqueId = values.get(UNIQUE_ID);
+        if (uniqueId == null) {
             Log.d(TAG, "save a new case");
-            child = new Case();
-            child.setUniqueId(uniqueId);
+            Case child = new Case();
+            child.setUniqueId(createUniqueId());
+            child.setCreateAt(date);
+            child.setLastUpdatedAt(date);
             child.setContent(caseBlob);
             child.save();
         } else {
             Log.d(TAG, "update the existing case");
+            Case child = caseDao.getCaseByUniqueId(uniqueId);
+            child.setLastUpdatedAt(date);
             child.setContent(caseBlob);
             child.update();
         }
@@ -66,6 +78,14 @@ public class CaseService {
 
     public static class CaseValues {
         private static Map<String, String> values = new HashMap<>();
+
+        public static Map<String, String> getValues() {
+            return values;
+        }
+
+        public static void setValues(Map<String, String> valuesMap) {
+            values.putAll(valuesMap);
+        }
 
         public static void put(String key, String value) {
             values.put(key, value);

@@ -30,14 +30,15 @@ public class CaseServiceTest {
         String caseJson = "{\"name\": \"jack\"}";
         child.setContent(new Blob(caseJson.getBytes()));
         when(caseDao.getCaseByUniqueId("uuid")).thenReturn(child);
-        Map<String, String> caseMapByUniqueId = caseService.getCaseMapByUniqueId("uuid");
+        Map<String, String> cases = caseService.getCaseMapByUniqueId("uuid");
 
-        assertThat(caseMapByUniqueId.size(), is(1));
-        assertThat(caseMapByUniqueId.get("name"), is("jack"));
+        assertThat(cases.size(), is(2));
+        assertThat(cases.get("unique_id"), is("uuid"));
+        assertThat(cases.get("name"), is("jack"));
 
         when(caseDao.getCaseByUniqueId("uuid")).thenReturn(null);
-        caseMapByUniqueId = caseService.getCaseMapByUniqueId("uuid");
+        cases = caseService.getCaseMapByUniqueId("uuid");
 
-        assertThat(caseMapByUniqueId.size(), is(0));
+        assertThat(cases.size(), is(0));
     }
 }
