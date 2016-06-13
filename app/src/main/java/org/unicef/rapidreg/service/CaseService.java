@@ -13,6 +13,7 @@ import org.unicef.rapidreg.model.Case;
 import java.lang.reflect.Type;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 public class CaseService {
     public static final String TAG = CaseService.class.getSimpleName();
@@ -28,8 +29,12 @@ public class CaseService {
         this.caseDao = caseDao;
     }
 
-    public Map<String, String> getCaseMapById(long id) {
-        Case child = caseDao.getCaseById(id);
+    public Map<String, String> getCaseMapByUniqueId(String id) {
+        Case child = caseDao.getCaseByUniqueId(id);
+        if (child == null) {
+            return new HashMap<>();
+        }
+
         String caseJson = new String(child.getContent().getBlob());
         Type type = new TypeToken<Map<String, String>>() {
         }.getType();
@@ -37,14 +42,15 @@ public class CaseService {
         return new Gson().fromJson(caseJson, type);
     }
 
-    public void saveOrUpdateCase(long id) {
+    public void saveOrUpdateCase(String uniqueId) {
         String caseJson = new Gson().toJson(CaseValues.values);
         Blob caseBlob = new Blob(caseJson.getBytes());
 
-        Case child = caseDao.getCaseById(id);
+        Case child = caseDao.getCaseByUniqueId(uniqueId);
         if (child == null) {
             Log.d(TAG, "save a new case");
             child = new Case();
+            child.setUniqueId(uniqueId);
             child.setContent(caseBlob);
             child.save();
         } else {
@@ -52,6 +58,10 @@ public class CaseService {
             child.setContent(caseBlob);
             child.update();
         }
+    }
+
+    public String createUniqueId() {
+        return UUID.randomUUID().toString();
     }
 
     public static class CaseValues {

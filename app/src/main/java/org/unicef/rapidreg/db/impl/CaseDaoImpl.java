@@ -9,7 +9,8 @@ import org.unicef.rapidreg.model.Case_Table;
 public class CaseDaoImpl implements CaseDao {
 
     @Override
-    public Case getCaseById(long id) {
-        return SQLite.select().from(Case.class).where(Case_Table.id.eq(id)).querySingle();
+    public Case getCaseByUniqueId(String uniqueId) {
+        return SQLite.select().from(Case.class).where(Case_Table.unique_id.eq(uniqueId))
+                .querySingle();
     }
 }
