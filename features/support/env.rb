@@ -2,7 +2,7 @@ require 'rubygems'
 require 'appium_lib'
 require_relative 'base_page'
 
-APP_PATH = './app/build/outputs/apk/app-debug.apk'
+APP_PATH = './app/build/outputs/apk/RapidReg-debug.apk'
 desired_cps = {
     caps: {
         platformName: "android",

@@ -1,3 +1,7 @@
+Given /^I login RapidReg with "(.*?)" account$/ do |account|
+  login_page.login(test_account[account])
+end
+
 When /^I login RapidReg for the first time with "(.*?)" and "(.*?)" and "(.*?)"$/ do |username,password,url|
   login_page.loginAs(username,password,url)
 end
@@ -19,5 +23,6 @@ When /^I logout$/ do
 end
 
 And /^I should see current user is "(.*?)"$/ do |username|
+  sleep 10
   login_page.getCurrentUser.equal?("#{username}")
 end

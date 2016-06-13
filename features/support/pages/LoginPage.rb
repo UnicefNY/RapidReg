@@ -2,6 +2,15 @@ module Screen
   module Android
     class LoginPage < RapidRegAppPage
 
+      def login(account)
+        p account
+        raise("Account dose not exist...") if account.empty?
+        username = account["username"]
+        password = account["password"]
+        url = account["url"]
+        loginAs(username,password,url)
+      end
+
       def loginAs(username, password,url)
         set_login_username(username)
         set_login_password(password)
@@ -44,8 +53,3 @@ module Screen
     end
   end
 end
-
-# type: # android.widget.CheckedTextView
-# text: Logout
-
-# login_user_label

@@ -1,0 +1,15 @@
+{
+  "primero":
+  {
+    "username": "primero",
+    "password": "qu01n23!",
+    "url": "http://10.29.2.106:3000"
+  },
+
+  "primero_cp":
+  {
+    "username": "primero_cp",
+    "password": "qu01n23!",
+    "url": "http://10.29.2.106:3000"
+  }
+}

@@ -33,7 +33,7 @@ module LocatorModule
   end
 
   def verigyPromptNotExist(message)
-    raise("Should not find text: #{message}") unless waitElement{ texts(message).empty? }
+    raise("Should not find text: #{message}") unless waitElement { texts(message).empty? }
   end
 
   def verifyPromptExist(message)
@@ -62,9 +62,43 @@ module LocatorModule
       sleep polling_interval
     end
   end
+end
+
+module GestureModule
+
+  def scrollFullScreen(direction)
+    # screen_width = self.tag("android.widget.LinearLayout").size.width      #1080
+    # screen_height = self.tag("android.widget.LinearLayout").size.height     #1920
+
+    case direction.downcase
+      when "right"
+        # swipeOpts = {
+        #     :start_x => 0*screen_width,
+        #     :start_y => 0.5*screen_height,
+        #     :end_x => 1*screen_width,
+        #     :end_y => 0.5*screen_height,
+        #     :duration => 2000
+        # }
+        # self.swipe(swipeOpts)
+        self.swipe(:start_x => 1, :start_y => 1000, :end_x => 1000, :end_y => 1000, :duration => 2000)
+      when "left"
+        # swipeOpts = {
+        #     :start_x => 1*screen_width,
+        #     :start_y => 0.5*screen_height,
+        #     :end_x => 0*screen_width,
+        #     :end_y => 0.5*screen_height,
+        #     :duration => 2000
+        # }
+        # self.swipe(swipeOpts)
+        self.swipe(:start_x => 1000, :start_y => 1000, :end_x => 50, :end_y => 1000, :duration => 2000)
+      else
+        puts "Unknown scroll direction."
+    end
+  end
 
 end
 
 class RapidRegAppPage
   include LocatorModule
+  include GestureModule
 end
