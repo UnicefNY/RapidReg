@@ -38,3 +38,22 @@ docker run --name $JOB_NAME \
 -e "KEY_PASSWORD=$KEY_PASSWORD" \
 -e "KEY_ALIAS=$KEY_ALIAS" \
 ```
+
+
+#### String translation
+Android load strings from res/values/strings.xml by default. 
+- Create alternative resources: 
+  Refer to https://developer.android.com/reference/java/util/Locale.html to get UNICODE_LOCALE_EXTENSION.
+  For example: create resource for Chinese - *res/values-zh/strings.xml* 
+- Testing on an emulator:
+  Change the locale from the adb shell ``` adb shell ```
+  If you have a device attached, run ``` adb -e shell ```
+  At the adb shell prompt(#), run this command:
+  ``` setprop persist.sys.locale [BCP-47 language tag];stop;sleep 5;start ```
+  For instance, to test in China:
+  ``` setprop persist.sys.locale zh_CN;stop;sleep 5;start ```
+  This will cause the emulator to restart. Once the Home screen appears again, re-launch your application, 
+  and the application launches with the new locale.
+- Reset default locale in device Settings.
+  
+
