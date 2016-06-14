@@ -32,7 +32,7 @@ public class CaseListFragment extends MvpFragment<CaseListView, CaseListPresente
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         ButterKnife.bind(this, view);
-        presenter.initView();
+        presenter.initView(getActivity());
     }
 
     @Override
