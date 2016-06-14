@@ -12,7 +12,7 @@ import java.sql.Date;
 
 @Table(database = PrimeroDB.class)
 public class Case extends BaseModel {
-    @PrimaryKey
+    @PrimaryKey(autoincrement = true)
     private long id;
     @Column(name = "name")
     private String name;
