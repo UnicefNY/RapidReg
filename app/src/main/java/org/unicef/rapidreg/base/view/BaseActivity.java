@@ -16,6 +16,7 @@ import android.widget.Toast;
 import org.unicef.rapidreg.IntentSender;
 import org.unicef.rapidreg.PrimeroApplication;
 import org.unicef.rapidreg.R;
+import org.unicef.rapidreg.childcase.CaseListFragment;
 import org.unicef.rapidreg.service.UserService;
 
 import butterknife.BindView;
@@ -67,6 +68,9 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
         int id = item.getItemId();
         if (id == R.id.nav_cases) {
             navigationView.getMenu().getItem(0).setChecked(true);
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.fragment_content, new CaseListFragment())
+                    .commit();
         } else if (id == R.id.nav_tracing) {
             navigationView.getMenu().getItem(1).setChecked(true);
         } else if (id == R.id.nav_sync) {
