@@ -13,7 +13,9 @@ import org.unicef.rapidreg.model.Case;
 import java.lang.reflect.Type;
 import java.sql.Date;
 import java.util.Calendar;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -30,6 +32,22 @@ public class CaseService {
 
     public CaseService(CaseDao caseDao) {
         this.caseDao = caseDao;
+    }
+
+    public List<Map<String, String>> getAllCaseMap() {
+        List<Case> children = caseDao.getAllCases();
+        if (children == null) {
+            return new ArrayList<>();
+        }
+        List<Map<String, String>> allCaseMap = new ArrayList<>();
+        for (Case child : children) {
+            String caseJson = new String(child.getContent().getBlob());
+            Type type = new TypeToken<Map<String, String>>() {
+            }.getType();
+            Map<String, String> caseMap = new Gson().fromJson(caseJson, type);
+            allCaseMap.add(caseMap);
+        }
+        return allCaseMap;
     }
 
     public Map<String, String> getCaseMapByUniqueId(String uniqueId) {
