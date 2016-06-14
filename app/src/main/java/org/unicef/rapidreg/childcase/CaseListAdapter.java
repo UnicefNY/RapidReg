@@ -7,21 +7,26 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import org.unicef.rapidreg.R;
-import org.unicef.rapidreg.service.CaseService;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
+import org.unicef.rapidreg.R;
+import org.unicef.rapidreg.model.Case;
+import org.unicef.rapidreg.service.CaseService;
+import java.lang.reflect.Type;
+
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class CaseListAdapter extends RecyclerView.Adapter<CaseListAdapter.CaseListHolder>{
 
-    private List<Map<String, String>> caseList;
+    private List<Case> caseList;
+    private SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
 
     public CaseListAdapter() {
         caseList = new ArrayList<>();
-//        initCaseListData();
         caseList = getAllCaseData();
     }
 
@@ -33,12 +38,15 @@ public class CaseListAdapter extends RecyclerView.Adapter<CaseListAdapter.CaseLi
 
     @Override
     public void onBindViewHolder(CaseListHolder holder, int position) {
-        Map<String, String> caseInfo = caseList.get(position);
-        holder.caseTitle.setText(caseInfo.get("Case ID"));
+        Case caseItem = caseList.get(position);
+        String caseJson = new String(caseItem.getContent().getBlob());
+        Type type = new TypeToken<Map<String, String>>() {}.getType();
+        Map<String, String> caseInfo = new Gson().fromJson(caseJson, type);
+        holder.caseTitle.setText(caseItem.getUniqueId().substring(0, 7));
         holder.caseChildGender.setText(caseInfo.get("Sex"));
         holder.caseChildAge.setText(caseInfo.get("Age"));
-//        holder.caseCreateTime.setText(caseInfo.get(""));
-//        holder.caseTitle.setText(caseInfo.get("title"));
+        holder.caseCreateTime.setText(formatter.format(caseItem.getCreateAt()));
+
     }
 
     @Override
@@ -46,61 +54,9 @@ public class CaseListAdapter extends RecyclerView.Adapter<CaseListAdapter.CaseLi
         return caseList.size();
     }
 
-    private List<Map<String, String>> getAllCaseData() {
+    private List<Case> getAllCaseData() {
         CaseService caseService = CaseService.getInstance();
-        return caseService.getAllCaseMap();
-    }
-
-    private void initCaseListData() {
-        Map<String, String> case1 = new HashMap<>();
-        case1.put("title", "10xaby35");
-        case1.put("gender", "BOY");
-        case1.put("age", "7");
-        case1.put("image", "case_list_img_holder.jpg");
-
-        Map<String, String> case2 = new HashMap<>();
-        case2.put("title", "2rqw768d");
-        case2.put("gender", "BOY");
-        case2.put("age", "8");
-        case2.put("image", "case_list_img_holder.jpg");
-
-        Map<String, String> case3 = new HashMap<>();
-        case3.put("title", "3jvoip90");
-        case3.put("gender", "GIRL");
-        case3.put("age", "8");
-        case3.put("image", "case_list_img_holder.jpg");
-
-        Map<String, String> case4 = new HashMap<>();
-        case4.put("title", "4809s8fp");
-        case4.put("gender", "BOY");
-        case4.put("age", "9");
-        case4.put("image", "case_list_img_holder.jpg");
-
-        Map<String, String> case5 = new HashMap<>();
-        case5.put("title", "5rqw768d");
-        case5.put("gender", "BOY");
-        case5.put("age", "8");
-        case5.put("image", "case_list_img_holder.jpg");
-
-        Map<String, String> case6 = new HashMap<>();
-        case6.put("title", "6jvoip90");
-        case6.put("gender", "GIRL");
-        case6.put("age", "8");
-        case6.put("image", "case_list_img_holder.jpg");
-
-        Map<String, String> case7 = new HashMap<>();
-        case7.put("title", "7809s8fp");
-        case7.put("gender", "BOY");
-        case7.put("age", "9");
-        case7.put("image", "case_list_img_holder.jpg");
-
-        caseList.add(case1);
-        caseList.add(case2);
-        caseList.add(case3);
-        caseList.add(case4);
-        caseList.add(case5);
-        caseList.add(case6);
-        caseList.add(case7);
+        return caseService.getCaseList();
     }
 
     public static class CaseListHolder extends RecyclerView.ViewHolder {
