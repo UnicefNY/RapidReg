@@ -1,0 +1,24 @@
+<resources>
+    <!--<string name="app_name">RapidReg</string>-->
+    <!--Loging activity layout string-->
+    <!--<string name="app_banner_text">Primero</string>-->
+    <string name="editview_username_hint_text">用户名</string>
+    <string name="editview_password_hint_text">密码</string>
+    <string name="editview_URL_hint_text">网址</string>
+    <string name="text_view_change_url">切换网址</string>
+    <string name="button_login_text">登陆</string>
+    <string name="login_loading_text">正在登陆,请稍后...</string>
+    <string name="login_offline_no_user_text">首次登陆,请链接网络.</string>
+    <string name="login_offline_success_text">离线登陆成功.</string>
+    <string name="navigation_drawer_open">打开...</string>
+    <string name="navigation_drawer_close">关闭...</string>
+    <string name="action_settings">设置</string>
+    <string name="login_username_invalid_text">请输入有效用户名!</string>
+    <string name="login_password_invalid_text">请输入有效密码!</string>
+    <string name="login_url_invalid_text">请输入有效网址!</string>
+    <string name="login_failed_text">检查用户名,密码或网址!</string>
+    <string name="login_out_successful_text">退出</string>
+
+    <string name="login_user_label_key">用户</string>
+    <string name="syncing_forms_text">正在同步,请稍候...</string>
+</resources>
