@@ -8,6 +8,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import org.unicef.rapidreg.R;
+import org.unicef.rapidreg.service.CaseService;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -20,7 +21,8 @@ public class CaseListAdapter extends RecyclerView.Adapter<CaseListAdapter.CaseLi
 
     public CaseListAdapter() {
         caseList = new ArrayList<>();
-        initCaseListData();
+//        initCaseListData();
+        caseList = getAllCaseData();
     }
 
     @Override
@@ -32,15 +34,21 @@ public class CaseListAdapter extends RecyclerView.Adapter<CaseListAdapter.CaseLi
     @Override
     public void onBindViewHolder(CaseListHolder holder, int position) {
         Map<String, String> caseInfo = caseList.get(position);
-        holder.caseTitle.setText(caseInfo.get("title"));
-        holder.caseChildGender.setText(caseInfo.get("gender"));
-        holder.caseChildAge.setText(caseInfo.get("age"));
+        holder.caseTitle.setText(caseInfo.get("Case ID"));
+        holder.caseChildGender.setText(caseInfo.get("Sex"));
+        holder.caseChildAge.setText(caseInfo.get("Age"));
+//        holder.caseCreateTime.setText(caseInfo.get(""));
 //        holder.caseTitle.setText(caseInfo.get("title"));
     }
 
     @Override
     public int getItemCount() {
         return caseList.size();
+    }
+
+    private List<Map<String, String>> getAllCaseData() {
+        CaseService caseService = CaseService.getInstance();
+        return caseService.getAllCaseMap();
     }
 
     private void initCaseListData() {
@@ -99,6 +107,7 @@ public class CaseListAdapter extends RecyclerView.Adapter<CaseListAdapter.CaseLi
         protected TextView caseTitle;
         protected TextView caseChildGender;
         protected TextView caseChildAge;
+        protected TextView caseCreateTime;
         protected ImageView caseImage;
 
         public CaseListHolder(View itemView) {
@@ -106,6 +115,7 @@ public class CaseListAdapter extends RecyclerView.Adapter<CaseListAdapter.CaseLi
             caseTitle = (TextView) itemView.findViewById(R.id.case_title);
             caseChildGender = (TextView) itemView.findViewById(R.id.case_child_gender);
             caseChildAge = (TextView) itemView.findViewById(R.id.case_child_age);
+            caseCreateTime = (TextView) itemView.findViewById(R.id.case_create_time);
             caseImage = (ImageView) itemView.findViewById(R.id.case_image);
         }
     }
