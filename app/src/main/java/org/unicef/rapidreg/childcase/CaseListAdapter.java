@@ -63,6 +63,7 @@ public class CaseListAdapter extends RecyclerView.Adapter<CaseListAdapter.CaseLi
                 CaseService.CaseValues.setValues(caseInfo);
                 ((BaseActivity) context).getSupportFragmentManager().beginTransaction()
                         .replace(R.id.fragment_content, new CaseRegisterWrapperFragment())
+                        .addToBackStack(null)
                         .commit();
             }
         });
