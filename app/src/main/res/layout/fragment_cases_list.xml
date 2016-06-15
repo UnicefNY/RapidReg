@@ -13,16 +13,19 @@
         android:paddingLeft="@dimen/size_5"
         android:paddingRight="@dimen/size_5">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="5dp"
-            android:text="Order by: " />
-
         <Spinner
             android:id="@+id/order_spinner"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toLeftOf="@id/order_spinner"
+            android:layout_toStartOf="@id/order_spinner"
+            android:layout_marginLeft="5dp"
+            android:layout_marginStart="5dp"
+            android:text="Order by: " />
 
         <ImageButton
             android:id="@+id/toggle"
