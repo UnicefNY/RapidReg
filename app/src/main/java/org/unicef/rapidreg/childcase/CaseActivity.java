@@ -3,6 +3,7 @@ package org.unicef.rapidreg.childcase;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -24,7 +25,7 @@ public class CaseActivity extends BaseActivity {
         toolbar.setTitle("Cases");
 
         if (savedInstanceState == null) {
-            changeFragmentTo(new CaseListFragment());
+            changeFragmentTo(new CaseListFragment(), false);
             showAddButton();
         }
     }
@@ -34,7 +35,7 @@ public class CaseActivity extends BaseActivity {
         public boolean onMenuItemClick(MenuItem menuItem) {
             switch (menuItem.getItemId()) {
                 case R.id.search:
-                    changeFragmentTo(new CaseSearchFragment());
+                    changeFragmentTo(new CaseSearchFragment(), true);
                     return true;
 
                 case R.id.add_case:
@@ -46,14 +47,14 @@ public class CaseActivity extends BaseActivity {
                         return true;
                     }
 
-                    changeFragmentTo(new CaseRegisterWrapperFragment());
+                    changeFragmentTo(new CaseRegisterWrapperFragment(), true);
                     showSaveButton();
                     return true;
 
                 case R.id.save_case:
                     CaseService caseService = CaseService.getInstance();
                     caseService.saveOrUpdateCase(CaseValues.getValues());
-                    changeFragmentTo(new CaseListFragment());
+                    changeFragmentTo(new CaseListFragment(), false);
                     showAddButton();
                     return true;
 
@@ -75,9 +76,12 @@ public class CaseActivity extends BaseActivity {
         menu.getItem(1).setVisible(true);
     }
 
-    private void changeFragmentTo(Fragment fragment) {
-        getSupportFragmentManager().beginTransaction()
-                .replace(R.id.fragment_content, fragment)
-                .commit();
+    private void changeFragmentTo(Fragment fragment, boolean needToBack) {
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        if (needToBack) {
+            transaction.replace(R.id.fragment_content, fragment).addToBackStack(null).commit();
+        } else {
+            transaction.replace(R.id.fragment_content, fragment).commit();
+        }
     }
 }
