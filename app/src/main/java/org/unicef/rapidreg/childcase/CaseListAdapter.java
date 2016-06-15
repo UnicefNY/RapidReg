@@ -28,7 +28,7 @@ public class CaseListAdapter extends RecyclerView.Adapter<CaseListAdapter.CaseLi
     private CaseService caseService;
     private Context context;
     private SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-    private boolean showDetail = true;
+    private boolean isDetailShow = true;
 
     public CaseListAdapter(Context context) {
         this.context = context;
@@ -78,13 +78,13 @@ public class CaseListAdapter extends RecyclerView.Adapter<CaseListAdapter.CaseLi
         return getItemCount() == 0;
     }
 
-    public void toggleViews(boolean showDetail) {
-        this.showDetail = showDetail;
+    public void toggleViews(boolean isDetailShow) {
+        this.isDetailShow = isDetailShow;
         this.notifyDataSetChanged();
     }
 
     private void hideDetailIfNeeded(CaseListHolder holder) {
-        if (!showDetail) {
+        if (!isDetailShow) {
             holder.caseChildGender.setText("*****");
             holder.caseChildAge.setText("***");
             holder.caseCreateTime.setText("******");

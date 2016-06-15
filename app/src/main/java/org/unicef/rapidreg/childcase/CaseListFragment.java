@@ -100,7 +100,7 @@ public class CaseListFragment extends MvpFragment<CaseListView, CaseListPresente
 
         DetailState nextState = getNextToggleState();
         setToggle(nextState);
-        adapter.toggleViews(nextState.isShowDetail());
+        adapter.toggleViews(nextState.isDetailShow());
     }
 
     private boolean hideToggleIfNeeded() {
@@ -127,11 +127,11 @@ public class CaseListFragment extends MvpFragment<CaseListView, CaseListPresente
         INVISIBILITY(R.drawable.ic_invisibility, false);
 
         private final int resId;
-        private final boolean showDetail;
+        private final boolean isDetailShow;
 
-        DetailState(int resId, boolean showDetail) {
+        DetailState(int resId, boolean isDetailShow) {
             this.resId = resId;
-            this.showDetail = showDetail;
+            this.isDetailShow = isDetailShow;
         }
 
         public DetailState getNextState() {
@@ -142,9 +142,8 @@ public class CaseListFragment extends MvpFragment<CaseListView, CaseListPresente
             return resId;
         }
 
-        public boolean isShowDetail() {
-            return showDetail;
+        public boolean isDetailShow() {
+            return isDetailShow;
         }
     }
-
 }
