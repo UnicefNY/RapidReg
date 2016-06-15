@@ -77,11 +77,37 @@ public class CaseActivity extends BaseActivity {
     }
 
     private void changeFragmentTo(Fragment fragment, boolean needToBack) {
+        String name = fragment.getClass().getSimpleName();
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         if (needToBack) {
-            transaction.replace(R.id.fragment_content, fragment).addToBackStack(null).commit();
+            transaction.replace(R.id.fragment_content, fragment, name)
+                    .addToBackStack(null)
+                    .commit();
         } else {
-            transaction.replace(R.id.fragment_content, fragment).commit();
+            transaction.replace(R.id.fragment_content, fragment, name)
+                    .commit();
         }
+
+        resetBarButtonsIfNeeded();
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+
+        resetBarButtonsIfNeeded();
+    }
+
+    private void resetBarButtonsIfNeeded() {
+        if (isListFragmentVisible()) {
+            showAddButton();
+        }
+    }
+
+    private boolean isListFragmentVisible() {
+        Fragment listFragment = getSupportFragmentManager()
+                .findFragmentByTag(CaseListFragment.class.getSimpleName());
+
+        return listFragment != null && listFragment.isVisible();
     }
 }
