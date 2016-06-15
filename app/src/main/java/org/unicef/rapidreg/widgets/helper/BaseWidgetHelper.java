@@ -31,6 +31,10 @@ public abstract class BaseWidgetHelper implements WidgetHelper {
         return (TextView) getConvertView().findViewById(R.id.label);
     }
 
+    protected boolean unEditable() {
+       return !field.isEditable();
+    }
+
     private void initRes() {
         inflater = LayoutInflater.from(context);
         resources = context.getResources();

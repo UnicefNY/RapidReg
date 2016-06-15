@@ -29,6 +29,11 @@ public class GenericHelper extends BaseWidgetHelper implements WidgetHelper {
             convertView = inflater.inflate(resId, null);
         }
 
+        if (this.unEditable()) {
+            convertView.setEnabled(false);
+            convertView.setBackgroundResource(R.color.gainsboro);
+        }
+
         return convertView;
     }
 
