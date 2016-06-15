@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
 
 import com.hannesdorfmann.mosby.mvp.MvpFragment;
@@ -34,6 +35,9 @@ public class CaseListFragment extends MvpFragment<CaseListView, CaseListPresente
 
     @BindView(R.id.toggle)
     ImageButton toggle;
+
+    @BindView(R.id.header_bar)
+    RelativeLayout layout;
 
     private CaseListAdapter adapter;
 
@@ -89,12 +93,12 @@ public class CaseListFragment extends MvpFragment<CaseListView, CaseListPresente
             }
         });
 
-        hideToggleIfNeeded();
+        hideHeaderIfNeeded();
     }
 
     @OnClick(R.id.toggle)
     public void onToggleClicked() {
-        if (hideToggleIfNeeded()) {
+        if (hideHeaderIfNeeded()) {
             return;
         }
 
@@ -103,9 +107,9 @@ public class CaseListFragment extends MvpFragment<CaseListView, CaseListPresente
         adapter.toggleViews(nextState.isDetailShow());
     }
 
-    private boolean hideToggleIfNeeded() {
+    private boolean hideHeaderIfNeeded() {
         if (adapter == null || adapter.isListEmpty()) {
-            toggle.setVisibility(View.INVISIBLE);
+            layout.setVisibility(View.GONE);
             return true;
         }
 
