@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ImageButton;
 import android.widget.Spinner;
 
 import com.hannesdorfmann.mosby.mvp.MvpFragment;
@@ -18,6 +19,8 @@ import org.unicef.rapidreg.service.CaseService;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
+
 
 public class CaseListFragment extends MvpFragment<CaseListView, CaseListPresenter>
         implements CaseListView {
@@ -25,8 +28,15 @@ public class CaseListFragment extends MvpFragment<CaseListView, CaseListPresente
     @BindView(R.id.list_container)
     RecyclerView caseListContainer;
 
+
     @BindView(R.id.order_spinner)
     Spinner orderSpinner;
+
+    @BindView(R.id.toggle)
+    ImageButton toggle;
+
+    private CaseListAdapter adapter;
+
 
     @Nullable
     @Override
@@ -48,11 +58,13 @@ public class CaseListFragment extends MvpFragment<CaseListView, CaseListPresente
     }
 
     @Override
-    public void initView(final CaseListAdapter caseListAdapter) {
+    public void initView(final CaseListAdapter adapter) {
+        this.adapter = adapter;
+
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         caseListContainer.setLayoutManager(layoutManager);
-        caseListContainer.setAdapter(caseListAdapter);
+        caseListContainer.setAdapter(adapter);
         ArrayAdapter<CharSequence> adapterSnpinner = ArrayAdapter.createFromResource(getActivity(),
                 R.array.order_array, android.R.layout.simple_spinner_item);
         adapterSnpinner.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -62,12 +74,13 @@ public class CaseListFragment extends MvpFragment<CaseListView, CaseListPresente
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 CaseService caseService = CaseService.getInstance();
-                if(position == 0) {
-                    caseListAdapter.setCaseList(caseService.getCaseList());
+                if (position == 0) {
+                    adapter.setCaseList(caseService.getCaseList());
                 } else {
-                    caseListAdapter.setCaseList(caseService.getCaseListOrderByAge());
-                };
-                caseListAdapter.notifyDataSetChanged();
+                    adapter.setCaseList(caseService.getCaseListOrderByAge());
+                }
+                ;
+                adapter.notifyDataSetChanged();
             }
 
             @Override
@@ -75,5 +88,63 @@ public class CaseListFragment extends MvpFragment<CaseListView, CaseListPresente
 
             }
         });
+
+        hideToggleIfNeeded();
     }
+
+    @OnClick(R.id.toggle)
+    public void onToggleClicked() {
+        if (hideToggleIfNeeded()) {
+            return;
+        }
+
+        DetailState nextState = getNextToggleState();
+        setToggle(nextState);
+        adapter.toggleViews(nextState.isShowDetail());
+    }
+
+    private boolean hideToggleIfNeeded() {
+        if (adapter == null || adapter.isListEmpty()) {
+            toggle.setVisibility(View.INVISIBLE);
+            return true;
+        }
+
+        return false;
+    }
+
+    private DetailState getNextToggleState() {
+        DetailState currentState = DetailState.valueOf((String) toggle.getTag());
+        return currentState.getNextState();
+    }
+
+    private void setToggle(DetailState state) {
+        toggle.setBackgroundResource(state.getResId());
+        toggle.setTag(state.name());
+    }
+
+    public enum DetailState {
+        VISIBILITY(R.drawable.ic_visibility, true),
+        INVISIBILITY(R.drawable.ic_invisibility, false);
+
+        private final int resId;
+        private final boolean showDetail;
+
+        DetailState(int resId, boolean showDetail) {
+            this.resId = resId;
+            this.showDetail = showDetail;
+        }
+
+        public DetailState getNextState() {
+            return this == VISIBILITY ? INVISIBILITY : VISIBILITY;
+        }
+
+        public int getResId() {
+            return resId;
+        }
+
+        public boolean isShowDetail() {
+            return showDetail;
+        }
+    }
+
 }

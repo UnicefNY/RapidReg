@@ -28,9 +28,7 @@ public class CaseListAdapter extends RecyclerView.Adapter<CaseListAdapter.CaseLi
     private CaseService caseService;
     private Context context;
     private SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-
-    public CaseListAdapter() {
-    }
+    private boolean showDetail = true;
 
     public CaseListAdapter(Context context) {
         this.context = context;
@@ -67,11 +65,30 @@ public class CaseListAdapter extends RecyclerView.Adapter<CaseListAdapter.CaseLi
                         .commit();
             }
         });
+
+        hideDetailIfNeeded(holder);
     }
 
     @Override
     public int getItemCount() {
         return caseList.size();
+    }
+
+    public boolean isListEmpty() {
+        return getItemCount() == 0;
+    }
+
+    public void toggleViews(boolean showDetail) {
+        this.showDetail = showDetail;
+        this.notifyDataSetChanged();
+    }
+
+    private void hideDetailIfNeeded(CaseListHolder holder) {
+        if (!showDetail) {
+            holder.caseChildGender.setText("*****");
+            holder.caseChildAge.setText("***");
+            holder.caseCreateTime.setText("******");
+        }
     }
 
     private List<Case> getAllCaseData() {
@@ -90,6 +107,7 @@ public class CaseListAdapter extends RecyclerView.Adapter<CaseListAdapter.CaseLi
         public CaseListHolder(View itemView) {
             super(itemView);
             view = itemView;
+
             caseTitle = (TextView) itemView.findViewById(R.id.case_title);
             caseChildGender = (TextView) itemView.findViewById(R.id.case_child_gender);
             caseChildAge = (TextView) itemView.findViewById(R.id.case_child_age);
