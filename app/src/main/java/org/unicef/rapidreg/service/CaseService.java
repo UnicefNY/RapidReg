@@ -13,7 +13,6 @@ import org.unicef.rapidreg.model.Case;
 import java.lang.reflect.Type;
 import java.sql.Date;
 import java.util.Calendar;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -36,6 +35,9 @@ public class CaseService {
 
     public List<Case> getCaseList() {
         return caseDao.getAllCases();
+    }
+    public List<Case> getCaseListOrderByAge() {
+        return caseDao.getAllCasesOrderByAge();
     }
 
     public Map<String, String> getCaseMapByUniqueId(String uniqueId) {
@@ -68,12 +70,14 @@ public class CaseService {
             child.setCreateAt(date);
             child.setLastUpdatedAt(date);
             child.setContent(caseBlob);
+            child.setAge(Integer.parseInt(values.get("Age")));
             child.save();
         } else {
             Log.d(TAG, "update the existing case");
             Case child = caseDao.getCaseByUniqueId(uniqueId);
             child.setLastUpdatedAt(date);
             child.setContent(caseBlob);
+            child.setAge(Integer.parseInt(values.get("Age")));
             child.update();
         }
     }

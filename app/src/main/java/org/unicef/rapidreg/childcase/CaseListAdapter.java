@@ -38,6 +38,10 @@ public class CaseListAdapter extends RecyclerView.Adapter<CaseListAdapter.CaseLi
         caseList = getAllCaseData();
     }
 
+    public void setCaseList(List<Case> caseList) {
+        this.caseList = caseList;
+    }
+
     @Override
     public CaseListHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.case_list_layout, parent, false);

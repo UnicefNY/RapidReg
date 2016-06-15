@@ -40,6 +40,8 @@ public class Case extends BaseModel {
     private Date lastUpdatedAt;
     @Column(name = "last_synced_at")
     private Date lastSyncedAt;
+    @Column(name = "age")
+    private int age;
 
     public long getId() {
         return id;
@@ -151,6 +153,14 @@ public class Case extends BaseModel {
 
     public void setLastSyncedAt(Date lastSyncedAt) {
         this.lastSyncedAt = lastSyncedAt;
+    }
+
+    public int getAge() {
+        return age;
+    }
+
+    public void setAge(int age) {
+        this.age = age;
     }
 }
 
