@@ -15,14 +15,14 @@ import org.unicef.rapidreg.R;
 import org.unicef.rapidreg.base.view.BaseActivity;
 import org.unicef.rapidreg.model.Case;
 import org.unicef.rapidreg.service.CaseService;
-import java.lang.reflect.Type;
 
+import java.lang.reflect.Type;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class CaseListAdapter extends RecyclerView.Adapter<CaseListAdapter.CaseListHolder>{
+public class CaseListAdapter extends RecyclerView.Adapter<CaseListAdapter.CaseListHolder> {
 
     private List<Case> caseList;
     private CaseService caseService;
@@ -50,7 +50,8 @@ public class CaseListAdapter extends RecyclerView.Adapter<CaseListAdapter.CaseLi
     public void onBindViewHolder(CaseListHolder holder, int position) {
         Case caseItem = caseList.get(position);
         String caseJson = new String(caseItem.getContent().getBlob());
-        Type type = new TypeToken<Map<String, String>>() {}.getType();
+        Type type = new TypeToken<Map<String, String>>() {
+        }.getType();
         final Map<String, String> caseInfo = new Gson().fromJson(caseJson, type);
         holder.caseTitle.setText(caseItem.getUniqueId().substring(0, 7));
         holder.caseChildGender.setText(caseInfo.get("Sex"));
