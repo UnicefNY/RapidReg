@@ -21,4 +21,9 @@
 
     <string name="login_user_label_key">login_user</string>
     <string name="syncing_forms_text">Syncing forms, please try it later</string>
+
+    <string-array name="order_array">
+        <item>Create Time</item>
+        <item>Age</item>
+    </string-array>
 </resources>

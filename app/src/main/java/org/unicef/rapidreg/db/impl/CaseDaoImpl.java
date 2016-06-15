@@ -18,6 +18,12 @@ public class CaseDaoImpl implements CaseDao {
 
     @Override
     public List<Case> getAllCases() {
-        return SQLite.select().from(Case.class).queryList();
+        return SQLite.select().from(Case.class).orderBy(Case_Table.created_at, false).queryList();
     }
+
+    @Override
+    public List<Case> getAllCasesOrderByAge() {
+        return SQLite.select().from(Case.class).orderBy(Case_Table.age, true).queryList();
+    }
+
 }
