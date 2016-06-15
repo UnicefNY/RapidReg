@@ -133,7 +133,7 @@ public class LoginPresenter extends MvpBasePresenter<LoginView> {
                     CaseFormService.getInstance().saveOrUpdateCaseForm(caseForm);
                     Log.i(TAG, "load form successfully");
                 } else {
-                    Log.w(TAG, "load from failed");
+                    Log.w(TAG, String.format("load form failed: %s", response.code()));
                 }
             }
 
