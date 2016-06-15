@@ -24,6 +24,10 @@ public class TickBoxHelper extends BaseWidgetHelper implements WidgetHelper {
             convertView = inflater.inflate(resId, null);
         }
 
+        if (this.unEditable()) {
+            convertView.setBackgroundResource(R.color.gainsboro);
+        }
+
         return convertView;
     }
 
@@ -33,6 +37,9 @@ public class TickBoxHelper extends BaseWidgetHelper implements WidgetHelper {
         labelView.setText(getLabel());
 
         CheckBox valueView = getValueView();
+        if (this.unEditable()) {
+            valueView.setEnabled(false);
+        }
         valueView.setChecked(Boolean.valueOf(CaseService.CaseValues.get(getLabel())));
     }
 
