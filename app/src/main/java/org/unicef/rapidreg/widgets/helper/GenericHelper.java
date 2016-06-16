@@ -30,15 +30,19 @@ public class GenericHelper extends BaseWidgetHelper implements WidgetHelper {
         }
 
 
-
-
         return convertView;
     }
 
     @Override
     public void setValue() {
         TextView labelView = getLabelView();
-        labelView.setText(getLabel());
+        String labelText = getLabel();
+
+        if (isRequired()) {
+            labelText += " (Required)";
+        }
+
+        labelView.setText(labelText);
 
         TextView valueView = getValueView();
 

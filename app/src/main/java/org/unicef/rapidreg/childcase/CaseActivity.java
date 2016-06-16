@@ -5,13 +5,21 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.view.MenuItem;
 import android.widget.Toast;
 
 import org.unicef.rapidreg.R;
 import org.unicef.rapidreg.base.view.BaseActivity;
+import org.unicef.rapidreg.forms.childcase.CaseField;
+import org.unicef.rapidreg.forms.childcase.CaseFormRoot;
+import org.unicef.rapidreg.forms.childcase.CaseSection;
+import org.unicef.rapidreg.model.Case;
 import org.unicef.rapidreg.service.CaseFormService;
 import org.unicef.rapidreg.service.CaseService;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.unicef.rapidreg.service.CaseService.CaseValues;
 
@@ -89,12 +97,16 @@ public class CaseActivity extends BaseActivity {
                     return false;
             }
         }
+
+
     }
 
     private boolean saveCaseButtonAction() {
-        CaseService.getInstance().saveOrUpdateCase(CaseValues.getValues());
-        redirectFragment(new CaseListFragment());
-        setTopMenuItemsInCaseListPage();
+        if (validateRequiredField()) {
+            CaseService.getInstance().saveOrUpdateCase(CaseValues.getValues());
+            redirectFragment(new CaseListFragment());
+            setTopMenuItemsInCaseListPage();
+        }
         return true;
     }
 
@@ -126,12 +138,6 @@ public class CaseActivity extends BaseActivity {
         resetBarButtonsIfNeeded();
     }
 
-//    @Override
-//    public void onBackPressed() {
-//        super.onBackPressed();
-//        resetBarButtonsIfNeeded();
-//    }
-
     private void resetBarButtonsIfNeeded() {
         if (isListFragmentVisible()) {
             setAddCaseVisible(true);
@@ -144,5 +150,31 @@ public class CaseActivity extends BaseActivity {
                 .findFragmentByTag(CaseListFragment.class.getSimpleName());
 
         return listFragment != null && listFragment.isVisible();
+    }
+
+    private boolean validateRequiredField() {
+        CaseFormRoot caseForm = CaseFormService.getInstance().getCurrentForm();
+        List<CaseSection> sections = caseForm.getSections();
+        List<CaseField> fields;
+        List<CaseField> requiredFields = new ArrayList<CaseField>();
+
+        for (CaseSection section : sections) {
+            fields = section.getFields();
+            for (CaseField field : fields) {
+                if (field.isRequired()) {
+                    requiredFields.add(field);
+                }
+            }
+        }
+
+        for (CaseField field : requiredFields) {
+            String fieldValue = CaseValues.getValues().get(field.getDisplayName().get("en"));
+            if (TextUtils.isEmpty(fieldValue)) {
+                Toast.makeText(CaseActivity.this, "Some required field is not filled, please fill them", Toast.LENGTH_LONG).show();
+                return false;
+            }
+
+        }
+        return true;
     }
 }

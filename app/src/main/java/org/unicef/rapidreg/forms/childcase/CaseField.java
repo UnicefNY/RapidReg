@@ -27,6 +27,9 @@ public class CaseField {
     @SerializedName("editable")
     @Expose
     private boolean editable;
+    @SerializedName("required")
+    @Expose
+    private boolean required;
     @SerializedName("multi_select")
     @Expose
     private boolean multiSelect;
@@ -56,6 +59,14 @@ public class CaseField {
 
     public boolean isEditable() {
         return editable;
+    }
+
+    public boolean isRequired() {
+        return required;
+    }
+
+    public void setRequired(boolean required) {
+        this.required = required;
     }
 
     public void setEditable(boolean editable) {
@@ -123,6 +134,7 @@ public class CaseField {
         StringBuilder sb = new StringBuilder("<Field>").append("\n");
         sb.append("name: ").append(name).append("\n");
         sb.append("editable: ").append(editable).append("\n");
+        sb.append("required: ").append(required).append("\n");
         sb.append("multiSelect: ").append(multiSelect).append("\n");
         sb.append("type: ").append(type).append("\n");
         sb.append("displayName: ").append(displayName).append("\n");
