@@ -48,6 +48,9 @@ public class CaseField {
     @SerializedName("subform")
     @Expose
     private CaseSection subForm;
+    @SerializedName("show_on_minify_form")
+    @Expose
+    private boolean isShowOnMiniForm;
 
     public String getName() {
         return name;
@@ -129,6 +132,14 @@ public class CaseField {
         return FieldType.TICK_BOX.name().equalsIgnoreCase(type);
     }
 
+    public boolean isShowOnMiniForm() {
+        return isShowOnMiniForm;
+    }
+
+    public void setShowOnMiniForm(boolean showOnMiniForm) {
+        isShowOnMiniForm = showOnMiniForm;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder("<Field>").append("\n");
@@ -141,6 +152,7 @@ public class CaseField {
         sb.append("helpText: ").append(helpText).append("\n");
         sb.append("optionStringsText: ").append(optionStringsText).append("\n");
         sb.append("subForm: ").append(subForm).append("\n");
+        sb.append("show_on_minify_form").append(isShowOnMiniForm).append("\n");
 
         return sb.toString();
     }
