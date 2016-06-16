@@ -6,6 +6,8 @@ import java.util.List;
 
 public interface CaseDao {
     Case getCaseByUniqueId(String id);
+
     List<Case> getAllCases();
+
     List<Case> getAllCasesOrderByAge();
 }

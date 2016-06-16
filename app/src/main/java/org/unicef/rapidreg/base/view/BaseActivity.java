@@ -107,5 +107,4 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
     public PrimeroApplication getContext() {
         return (PrimeroApplication) getApplication();
     }
-
 }
