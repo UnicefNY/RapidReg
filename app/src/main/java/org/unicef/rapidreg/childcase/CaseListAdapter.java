@@ -1,6 +1,7 @@
 package org.unicef.rapidreg.childcase;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,7 +13,6 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import org.unicef.rapidreg.R;
-import org.unicef.rapidreg.base.view.BaseActivity;
 import org.unicef.rapidreg.model.Case;
 import org.unicef.rapidreg.service.CaseService;
 
@@ -50,9 +50,11 @@ public class CaseListAdapter extends RecyclerView.Adapter<CaseListAdapter.CaseLi
     public void onBindViewHolder(CaseListHolder holder, int position) {
         Case caseItem = caseList.get(position);
         String caseJson = new String(caseItem.getContent().getBlob());
-        Type type = new TypeToken<Map<String, String>>() {
+        final Type type = new TypeToken<Map<String, String>>() {
         }.getType();
+
         final Map<String, String> caseInfo = new Gson().fromJson(caseJson, type);
+
         holder.caseTitle.setText(caseItem.getUniqueId().substring(0, 7));
         holder.caseChildGender.setText(caseInfo.get("Sex"));
         holder.caseChildAge.setText(caseInfo.get("Age"));
@@ -61,15 +63,28 @@ public class CaseListAdapter extends RecyclerView.Adapter<CaseListAdapter.CaseLi
             @Override
             public void onClick(View v) {
                 CaseService.CaseValues.setValues(caseInfo);
-                ((BaseActivity) context).getSupportFragmentManager().beginTransaction()
+
+                CaseActivity caseActivity = (CaseActivity) context;
+                setViewMode(caseActivity);
+
+                caseActivity.getSupportFragmentManager().beginTransaction()
                         .replace(R.id.fragment_content, new CaseRegisterWrapperFragment())
                         .addToBackStack(null)
                         .commit();
+            }
+
+            private void setViewMode(CaseActivity caseActivity) {
+                Intent intent = new Intent();
+                intent.putExtra(CaseActivity.INTENT_KEY_IS_IN_VIEW_MODE, true);
+                caseActivity.setIntent(intent);
+                caseActivity.setEditCaseVisible(true);
+                caseActivity.setAddCaseVisible(false);
             }
         });
 
         hideDetailIfNeeded(holder);
     }
+
 
     @Override
     public int getItemCount() {

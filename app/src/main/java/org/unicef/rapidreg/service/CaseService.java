@@ -20,9 +20,11 @@ import java.util.UUID;
 
 public class CaseService {
     public static final String TAG = CaseService.class.getSimpleName();
+    public static final String UNIQUE_ID = "unique_id";
 
     private static final CaseService CASE_SERVICE = new CaseService(new CaseDaoImpl());
-    private static final String UNIQUE_ID = "unique_id";
+
+
     private CaseDao caseDao;
 
     public static CaseService getInstance() {
@@ -63,6 +65,7 @@ public class CaseService {
         Blob caseBlob = new Blob(caseJson.getBytes());
 
         String uniqueId = values.get(UNIQUE_ID);
+
         if (uniqueId == null) {
             Log.d(TAG, "save a new case");
             Case child = new Case();

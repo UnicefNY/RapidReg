@@ -12,6 +12,11 @@
         android:title="Save"
         android:visible="false"
         app:showAsAction="always" />
+    <item
+        android:id="@+id/edit_case"
+        android:title="Edit"
+        android:visible="false"
+        app:showAsAction="always" />
 
     <item
         android:id="@+id/search"
