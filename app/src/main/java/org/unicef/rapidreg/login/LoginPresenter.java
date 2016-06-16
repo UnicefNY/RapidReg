@@ -33,8 +33,10 @@ import org.unicef.rapidreg.service.CaseFormService;
 import org.unicef.rapidreg.service.UserService;
 import org.unicef.rapidreg.utils.EncryptHelper;
 
+import java.util.List;
 import java.util.Locale;
 
+import okhttp3.Headers;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -178,14 +180,13 @@ public class LoginPresenter extends MvpBasePresenter<LoginView> {
                 if (isViewAttached()) {
                     showLoadingIndicator(false);
                     if (response.isSuccessful()) {
-                        String cookie = response.headers().get("Set-Cookie");
                         User user = new User(username, EncryptHelper.encrypt(password), true, url);
                         user.setDbKey(response.body().getDb_key());
                         user.setOrganisation(response.body().getOrganization());
                         user.setLanguage(response.body().getLanguage());
                         user.setVerified(response.body().getVerified());
                         notifyEvent(new NeedCacheForOfflineEvent(user));
-                        notifyEvent(new NeedLoadFormSectionsEvent(cookie));
+                        notifyEvent(new NeedLoadFormSectionsEvent(getSessionId(response.headers())));
                         notifyEvent(new NeedGoToLoginSuccessScreenEvent(username));
                         showLoginResultMessage(HttpStatusCodeHandler.LOGIN_SUCCESS_MESSAGE);
                         Log.d(TAG, "login successfully");
@@ -240,5 +241,17 @@ public class LoginPresenter extends MvpBasePresenter<LoginView> {
 
     private void notifyEvent(Object event) {
         EventBus.getDefault().post(event);
+    }
+
+    private String getSessionId(Headers headers) {
+        List<String> cookies = headers.values("Set-Cookie");
+        for (String cookie : cookies) {
+            if (cookie.contains("session_id")) {
+                return cookie;
+            }
+        }
+
+        Log.e(TAG, "Can not get session id");
+        return null;
     }
 }
