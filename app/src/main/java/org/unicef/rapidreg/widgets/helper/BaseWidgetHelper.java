@@ -35,6 +35,10 @@ public abstract class BaseWidgetHelper implements WidgetHelper {
        return field.isEditable();
     }
 
+    protected boolean isRequired() {
+        return field.isRequired();
+    }
+
     private void initRes() {
         inflater = LayoutInflater.from(context);
         resources = context.getResources();
