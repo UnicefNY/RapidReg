@@ -29,10 +29,8 @@ public class GenericHelper extends BaseWidgetHelper implements WidgetHelper {
             convertView = inflater.inflate(resId, null);
         }
 
-        if (this.unEditable()) {
-            convertView.setEnabled(false);
-            convertView.setBackgroundResource(R.color.gainsboro);
-        }
+
+
 
         return convertView;
     }
@@ -43,6 +41,8 @@ public class GenericHelper extends BaseWidgetHelper implements WidgetHelper {
         labelView.setText(getLabel());
 
         TextView valueView = getValueView();
+
+        disableUnediatbleField(convertView);
         valueView.setText(CaseService.CaseValues.get(getLabel()));
     }
 
@@ -85,5 +85,12 @@ public class GenericHelper extends BaseWidgetHelper implements WidgetHelper {
 
     private TextView getValueView() {
         return (TextView) getConvertView().findViewById(R.id.value);
+    }
+
+    private void disableUnediatbleField(View view) {
+        if (!isEditable()) {
+            convertView.setBackgroundResource(R.color.gainsboro);
+            view.setEnabled(false);
+        }
     }
 }

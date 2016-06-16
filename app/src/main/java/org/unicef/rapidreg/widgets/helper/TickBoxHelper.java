@@ -24,10 +24,6 @@ public class TickBoxHelper extends BaseWidgetHelper implements WidgetHelper {
             convertView = inflater.inflate(resId, null);
         }
 
-        if (this.unEditable()) {
-            convertView.setBackgroundResource(R.color.gainsboro);
-        }
-
         return convertView;
     }
 
@@ -37,9 +33,8 @@ public class TickBoxHelper extends BaseWidgetHelper implements WidgetHelper {
         labelView.setText(getLabel());
 
         CheckBox valueView = getValueView();
-        if (this.unEditable()) {
-            valueView.setEnabled(false);
-        }
+
+        disableUnediatbleField(valueView);
         valueView.setChecked(Boolean.valueOf(CaseService.CaseValues.get(getLabel())));
     }
 
@@ -57,5 +52,12 @@ public class TickBoxHelper extends BaseWidgetHelper implements WidgetHelper {
 
     private CheckBox getValueView() {
         return (CheckBox) getConvertView().findViewById(R.id.value);
+    }
+
+    private void disableUnediatbleField(View view) {
+        if (!isEditable()) {
+            convertView.setBackgroundResource(R.color.gainsboro);
+            view.setEnabled(false);
+        }
     }
 }
