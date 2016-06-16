@@ -19,7 +19,7 @@ import org.unicef.rapidreg.R;
 import org.unicef.rapidreg.event.NeedCacheForOfflineEvent;
 import org.unicef.rapidreg.event.NeedDoLoginOffLineEvent;
 import org.unicef.rapidreg.event.NeedGoToLoginSuccessScreenEvent;
-import org.unicef.rapidreg.event.NeedLoadFormSectionsEvent;
+import org.unicef.rapidreg.event.NeedLoadFormsEvent;
 import org.unicef.rapidreg.forms.childcase.CaseFormRoot;
 import org.unicef.rapidreg.model.CaseForm;
 import org.unicef.rapidreg.model.LoginRequestBody;
@@ -41,15 +41,17 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static org.unicef.rapidreg.service.CaseFormService.FormLoadStateMachine;
+
 public class LoginPresenter extends MvpBasePresenter<LoginView> {
     public static final String TAG = LoginPresenter.class.getSimpleName();
+    private static final int MAX_LOAD_FORMS_NUM = 3;
 
     private PrimeroClient client;
     private ConnectivityManager cm;
     private Gson gson;
     private Context context;
     private IntentSender intentSender;
-
 
     public String fetchURL() {
         try {
@@ -101,7 +103,6 @@ public class LoginPresenter extends MvpBasePresenter<LoginView> {
     @Override
     public void detachView(boolean retainInstance) {
         super.detachView(retainInstance);
-        EventBus.getDefault().unregister(this);
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -122,7 +123,11 @@ public class LoginPresenter extends MvpBasePresenter<LoginView> {
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onNeedLoadFormSectionsEvent(NeedLoadFormSectionsEvent event) {
+    public void onNeedLoadFormsEvent(final NeedLoadFormsEvent event) {
+        final FormLoadStateMachine stateMachine = event.getStateMachine();
+        stateMachine.addOnce();
+        Log.d(TAG, String.format("this is %s time(s) to load forms", stateMachine.getCurrentNum()));
+
         Call<CaseFormRoot> call = client.getForm(event.getCookie(),
                 Locale.getDefault().getLanguage(), true, "case");
 
@@ -133,9 +138,12 @@ public class LoginPresenter extends MvpBasePresenter<LoginView> {
                     CaseFormRoot form = response.body();
                     CaseForm caseForm = new CaseForm(new Blob(gson.toJson(form).getBytes()));
                     CaseFormService.getInstance().saveOrUpdateCaseForm(caseForm);
+
+                    EventBus.getDefault().unregister(this);
                     Log.i(TAG, "load form successfully");
                 } else {
-                    Log.w(TAG, String.format("load form failed: %s", response.code()));
+                    Log.d(TAG, String.format("error code: %s", response.code()));
+                    reloadFormsIfNeeded(event.getCookie(), stateMachine);
                 }
             }
 
@@ -145,8 +153,19 @@ public class LoginPresenter extends MvpBasePresenter<LoginView> {
                     showNetworkErrorMessage(t, false);
                     showLoadingIndicator(false);
                 }
+
+                reloadFormsIfNeeded(event.getCookie(), stateMachine);
             }
         });
+    }
+
+    private void reloadFormsIfNeeded(String cookie, FormLoadStateMachine stateMachine) {
+        if (stateMachine.hasReachMaxRetryNum()) {
+            EventBus.getDefault().unregister(this);
+            Log.d(TAG, "reach the max retry number, stop trying");
+        } else {
+            notifyEvent(new NeedLoadFormsEvent(cookie, stateMachine));
+        }
     }
 
     private void initContext(Context context, String url) {
@@ -186,7 +205,8 @@ public class LoginPresenter extends MvpBasePresenter<LoginView> {
                         user.setLanguage(response.body().getLanguage());
                         user.setVerified(response.body().getVerified());
                         notifyEvent(new NeedCacheForOfflineEvent(user));
-                        notifyEvent(new NeedLoadFormSectionsEvent(getSessionId(response.headers())));
+                        notifyEvent(new NeedLoadFormsEvent(getSessionId(response.headers()),
+                                FormLoadStateMachine.getInstance(MAX_LOAD_FORMS_NUM)));
                         notifyEvent(new NeedGoToLoginSuccessScreenEvent(username));
                         showLoginResultMessage(HttpStatusCodeHandler.LOGIN_SUCCESS_MESSAGE);
                         Log.d(TAG, "login successfully");
