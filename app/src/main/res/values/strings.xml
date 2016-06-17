@@ -22,6 +22,8 @@
     <string name="login_user_label_key">login_user</string>
     <string name="syncing_forms_text">Syncing forms, please try it later</string>
     <string name="order_by">Order by:</string>
+    <string name="cancel">Cancel</string>
+    <string name="ok">OK</string>
 
     <string-array name="order_array">
         <item>Create Time</item>
