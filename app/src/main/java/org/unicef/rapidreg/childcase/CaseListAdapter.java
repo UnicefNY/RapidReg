@@ -3,6 +3,7 @@ package org.unicef.rapidreg.childcase;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,9 +25,7 @@ import java.util.Map;
 
 public class CaseListAdapter extends RecyclerView.Adapter<CaseListAdapter.CaseListHolder> {
 
-    public enum Test {
-        A
-    }
+    public static final String TAG = CaseListAdapter.class.getSimpleName();
 
     private List<Case> caseList;
     private CaseService caseService;
@@ -52,12 +51,16 @@ public class CaseListAdapter extends RecyclerView.Adapter<CaseListAdapter.CaseLi
 
     @Override
     public void onBindViewHolder(CaseListHolder holder, int position) {
+        CaseService.CaseValues.clear();
+
         Case caseItem = caseList.get(position);
-        String caseJson = new String(caseItem.getContent().getBlob());
+        final String caseJson = new String(caseItem.getContent().getBlob());
         final Type type = new TypeToken<Map<String, String>>() {
         }.getType();
 
         final Map<String, String> caseInfo = new Gson().fromJson(caseJson, type);
+
+        caseInfo.put(CaseService.UNIQUE_ID,caseItem.getUniqueId());
 
         holder.caseTitle.setText(caseItem.getUniqueId().substring(0, 7));
         holder.caseChildGender.setText(caseInfo.get("Sex"));
@@ -67,6 +70,7 @@ public class CaseListAdapter extends RecyclerView.Adapter<CaseListAdapter.CaseLi
             @Override
             public void onClick(View v) {
                 CaseService.CaseValues.setValues(caseInfo);
+                Log.i("sjyuan", caseInfo.toString());
 
                 CaseActivity caseActivity = (CaseActivity) context;
                 setViewMode(caseActivity);
