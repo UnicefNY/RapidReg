@@ -34,6 +34,7 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
     NavigationView navigationView;
 
     TextView textViewLoginUserLabel;
+    TextView textViewLogoutLabel;
 
     IntentSender intentSender = new IntentSender();
 
@@ -46,6 +47,15 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
         View headerView = navigationView.getHeaderView(0);
         textViewLoginUserLabel = (TextView) headerView.findViewById(R.id.login_user_label);
         textViewLoginUserLabel.setText(getIntent().getStringExtra(IntentSender.KEY_LOGIN_USER));
+        textViewLogoutLabel = (TextView) headerView.findViewById(R.id.logout_label);
+
+        final BaseActivity baseActivity = this;
+        textViewLogoutLabel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                attemptLogout(baseActivity);
+            }
+        });
 
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -73,13 +83,7 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
             navCaseAction();
         } else if (id == R.id.nav_tracing) {
 
-        } else if (id == R.id.nav_sync) {
-
-        } else if (id == R.id.nav_logout) {
-
-            attemptLogout(this);
         }
-
         navigationView.getMenu().findItem(id).setChecked(true);
         return true;
     }
@@ -155,7 +159,7 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
 
     //TODO: Put logout into basePresenter in future
     private void attemptLogout(BaseActivity currentActivity) {
-        if (currentActivity.getContext().getSyncTask() != null) {
+        if (getContext().getSyncTask() != null) {
             createAlertDialog(currentActivity);
         } else {
             logOut(currentActivity);
