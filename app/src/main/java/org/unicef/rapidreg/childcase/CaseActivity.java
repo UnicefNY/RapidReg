@@ -30,42 +30,6 @@ public class CaseActivity extends BaseActivity {
         EDIT, ADD, LIST, DETAIL
     }
 
-    public void setTopMenuItemsInCaseDetailPage() {
-        setEditCaseVisible(true);
-        setAddCaseVisible(false);
-        setSaveCaseVisible(false);
-    }
-
-    public void setTopMenuItemsInCaseListPage() {
-        setEditCaseVisible(false);
-        setAddCaseVisible(true);
-        setSaveCaseVisible(false);
-    }
-
-    public void setTopMenuItemsInCaseAdditionPage() {
-        setEditCaseVisible(false);
-        setAddCaseVisible(false);
-        setSaveCaseVisible(true);
-    }
-
-    public void setTopMenuItemsInCaseEditPage() {
-        setEditCaseVisible(false);
-        setAddCaseVisible(false);
-        setSaveCaseVisible(true);
-    }
-
-    public void setAddCaseVisible(boolean visible) {
-        toolbar.getMenu().findItem(R.id.add_case).setVisible(visible);
-    }
-
-    public void setSaveCaseVisible(boolean visible) {
-        toolbar.getMenu().findItem(R.id.save_case).setVisible(visible);
-    }
-
-    public void setEditCaseVisible(boolean visible) {
-        toolbar.getMenu().findItem(R.id.edit_case).setVisible(visible);
-    }
-
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -75,8 +39,7 @@ public class CaseActivity extends BaseActivity {
 
         if (savedInstanceState == null) {
             redirectFragment(new CaseListFragment());
-            setAddCaseVisible(true);
-            setSaveCaseVisible(false);
+            setTopMenuItemsInCaseListPage();
         }
     }
 
@@ -138,8 +101,7 @@ public class CaseActivity extends BaseActivity {
 
     private void resetBarButtonsIfNeeded() {
         if (isListFragmentVisible()) {
-            setAddCaseVisible(true);
-            setSaveCaseVisible(false);
+            setTopMenuItemsInCaseAdditionPage();
         }
     }
 

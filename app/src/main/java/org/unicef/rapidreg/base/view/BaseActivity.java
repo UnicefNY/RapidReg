@@ -1,5 +1,7 @@
 package org.unicef.rapidreg.base.view;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
@@ -66,23 +68,89 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         int id = item.getItemId();
+        drawer.closeDrawer(GravityCompat.START);
         if (id == R.id.nav_cases) {
-
-            navigationView.getMenu().getItem(0).setChecked(true);
-            getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.fragment_content, new CaseListFragment())
-                    .commit();
-
+            navCaseAction();
         } else if (id == R.id.nav_tracing) {
-            navigationView.getMenu().getItem(1).setChecked(true);
+
         } else if (id == R.id.nav_sync) {
-            navigationView.getMenu().getItem(2).setChecked(true);
+
         } else if (id == R.id.nav_logout) {
-            navigationView.getMenu().getItem(3).setChecked(true);
+
             attemptLogout(this);
         }
-        drawer.closeDrawer(GravityCompat.START);
+
+        navigationView.getMenu().findItem(id).setChecked(true);
         return true;
+    }
+
+    private void navCaseAction() {
+        if (isCaseInEdit()) {
+            new AlertDialog.Builder(this)
+                    .setTitle("Quit")
+                    .setMessage("Are you sure to quit without saving?")
+                    .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            redirectToCaseListPage();
+                        }
+                    })
+                    .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                        }
+                    }).show();
+        } else {
+            redirectToCaseListPage();
+        }
+    }
+
+    private void redirectToCaseListPage() {
+        setTopMenuItemsInCaseListPage();
+        navigationView.getMenu().findItem(R.id.nav_cases).setChecked(true);
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.fragment_content, new CaseListFragment())
+                .commit();
+    }
+
+    public void setTopMenuItemsInCaseDetailPage() {
+        setEditCaseVisible(true);
+        setAddCaseVisible(false);
+        setSaveCaseVisible(false);
+    }
+
+    public void setTopMenuItemsInCaseListPage() {
+        setEditCaseVisible(false);
+        setAddCaseVisible(true);
+        setSaveCaseVisible(false);
+    }
+
+    public void setTopMenuItemsInCaseAdditionPage() {
+        setEditCaseVisible(false);
+        setAddCaseVisible(false);
+        setSaveCaseVisible(true);
+    }
+
+    public void setTopMenuItemsInCaseEditPage() {
+        setEditCaseVisible(false);
+        setAddCaseVisible(false);
+        setSaveCaseVisible(true);
+    }
+
+    public boolean isCaseInEdit() {
+        return toolbar.getMenu().findItem(R.id.save_case).isVisible();
+    }
+
+    private void setAddCaseVisible(boolean visible) {
+        toolbar.getMenu().findItem(R.id.add_case).setVisible(visible);
+    }
+
+    private void setSaveCaseVisible(boolean visible) {
+        toolbar.getMenu().findItem(R.id.save_case).setVisible(visible);
+    }
+
+    private void setEditCaseVisible(boolean visible) {
+        toolbar.getMenu().findItem(R.id.edit_case).setVisible(visible);
     }
 
     //TODO: Put logout into basePresenter in future
