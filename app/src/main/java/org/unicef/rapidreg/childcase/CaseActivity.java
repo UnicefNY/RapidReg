@@ -16,9 +16,35 @@ import org.unicef.rapidreg.service.CaseService;
 import static org.unicef.rapidreg.service.CaseService.CaseValues;
 
 public class CaseActivity extends BaseActivity {
-    public final static String INTENT_KEY_IS_IN_VIEW_MODE = "_is_in_view_mode";
-    public final static String INTENT_KEY_CASE_INFO = "_case_info";
+    public final static String INTENT_KEY_CASE_MODE = "_case_mode";
 
+    public enum CaseMode {
+        EDIT, ADD, LIST, DETAIL
+    }
+
+    public void setTopMenuItemsInCaseDetailPage() {
+        setEditCaseVisible(true);
+        setAddCaseVisible(false);
+        setSaveCaseVisible(false);
+    }
+
+    public void setTopMenuItemsInCaseListPage() {
+        setEditCaseVisible(false);
+        setAddCaseVisible(true);
+        setSaveCaseVisible(false);
+    }
+
+    public void setTopMenuItemsInCaseAdditionPage() {
+        setEditCaseVisible(false);
+        setAddCaseVisible(false);
+        setSaveCaseVisible(true);
+    }
+
+    public void setTopMenuItemsInCaseEditPage() {
+        setEditCaseVisible(false);
+        setAddCaseVisible(false);
+        setSaveCaseVisible(true);
+    }
 
     public void setAddCaseVisible(boolean visible) {
         toolbar.getMenu().findItem(R.id.add_case).setVisible(visible);
@@ -40,7 +66,7 @@ public class CaseActivity extends BaseActivity {
         toolbar.setTitle("Cases");
 
         if (savedInstanceState == null) {
-            redirectFragment(new CaseListFragment(), false);
+            redirectFragment(new CaseListFragment());
             setAddCaseVisible(true);
             setSaveCaseVisible(false);
         }
@@ -51,7 +77,7 @@ public class CaseActivity extends BaseActivity {
         public boolean onMenuItemClick(MenuItem menuItem) {
             switch (menuItem.getItemId()) {
                 case R.id.search:
-                    redirectFragment(new CaseSearchFragment(), true);
+                    redirectFragment(new CaseSearchFragment());
                     return true;
                 case R.id.add_case:
                     return addCaseButtonAction();
@@ -67,10 +93,8 @@ public class CaseActivity extends BaseActivity {
 
     private boolean saveCaseButtonAction() {
         CaseService.getInstance().saveOrUpdateCase(CaseValues.getValues());
-        redirectFragment(new CaseListFragment(), false);
-
-        setAddCaseVisible(true);
-        setSaveCaseVisible(false);
+        redirectFragment(new CaseListFragment());
+        setTopMenuItemsInCaseListPage();
         return true;
     }
 
@@ -81,40 +105,32 @@ public class CaseActivity extends BaseActivity {
                     R.string.syncing_forms_text, Toast.LENGTH_LONG).show();
             return true;
         }
-        redirectFragment(new CaseRegisterWrapperFragment(), true);
-        getIntent().removeExtra(INTENT_KEY_IS_IN_VIEW_MODE);
-        setAddCaseVisible(false);
-        setSaveCaseVisible(true);
+        redirectFragment(new CaseRegisterWrapperFragment());
+        getIntent().removeExtra(INTENT_KEY_CASE_MODE);
+        setTopMenuItemsInCaseAdditionPage();
         return true;
     }
 
     private boolean editCaseButtonAction() {
-        redirectFragment(new CaseRegisterWrapperFragment(), false);
-        getIntent().removeExtra(INTENT_KEY_IS_IN_VIEW_MODE);
-        setSaveCaseVisible(true);
-        setEditCaseVisible(false);
+        redirectFragment(new CaseRegisterWrapperFragment());
+        getIntent().removeExtra(INTENT_KEY_CASE_MODE);
+        setTopMenuItemsInCaseEditPage();
         return true;
     }
 
-    private void redirectFragment(Fragment target, boolean needToBack) {
+    private void redirectFragment(Fragment target) {
         String name = target.getClass().getSimpleName();
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        if (needToBack) {
-            transaction.replace(R.id.fragment_content, target, name)
-                    .addToBackStack(null)
-                    .commit();
-        } else {
-            transaction.replace(R.id.fragment_content, target, name)
-                    .commit();
-        }
+        transaction.replace(R.id.fragment_content, target, name)
+                .commit();
         resetBarButtonsIfNeeded();
     }
 
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        resetBarButtonsIfNeeded();
-    }
+//    @Override
+//    public void onBackPressed() {
+//        super.onBackPressed();
+//        resetBarButtonsIfNeeded();
+//    }
 
     private void resetBarButtonsIfNeeded() {
         if (isListFragmentVisible()) {

@@ -10,6 +10,7 @@ import org.unicef.rapidreg.forms.childcase.CaseField;
 import org.unicef.rapidreg.widgets.helper.WidgetHelper;
 import org.unicef.rapidreg.widgets.helper.WidgetHelperFactory;
 
+import java.io.Serializable;
 import java.util.List;
 
 public class CaseRegisterAdapter extends ArrayAdapter<CaseField> {
@@ -23,11 +24,9 @@ public class CaseRegisterAdapter extends ArrayAdapter<CaseField> {
         final CaseField field = getItem(position);
         WidgetHelper widgetHelper = WidgetHelperFactory.getWidgetHelper(getContext(), field);
         widgetHelper.setValue();
+        Serializable caseMode = ((Activity) getContext()).getIntent().getSerializableExtra(CaseActivity.INTENT_KEY_CASE_MODE);
 
-        boolean isViewMode = ((Activity) getContext()).getIntent().
-                getBooleanExtra(CaseActivity.INTENT_KEY_IS_IN_VIEW_MODE, false);
-
-        if (!isViewMode) {
+        if (CaseActivity.CaseMode.DETAIL != caseMode) {
             widgetHelper.setOnClickListener();
         }
         return widgetHelper.getConvertView();

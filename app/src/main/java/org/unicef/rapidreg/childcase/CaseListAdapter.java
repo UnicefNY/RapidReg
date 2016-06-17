@@ -24,6 +24,10 @@ import java.util.Map;
 
 public class CaseListAdapter extends RecyclerView.Adapter<CaseListAdapter.CaseListHolder> {
 
+    public enum Test {
+        A
+    }
+
     private List<Case> caseList;
     private CaseService caseService;
     private Context context;
@@ -75,10 +79,9 @@ public class CaseListAdapter extends RecyclerView.Adapter<CaseListAdapter.CaseLi
 
             private void setViewMode(CaseActivity caseActivity) {
                 Intent intent = new Intent();
-                intent.putExtra(CaseActivity.INTENT_KEY_IS_IN_VIEW_MODE, true);
+                intent.putExtra(CaseActivity.INTENT_KEY_CASE_MODE, CaseActivity.CaseMode.DETAIL);
                 caseActivity.setIntent(intent);
-                caseActivity.setEditCaseVisible(true);
-                caseActivity.setAddCaseVisible(false);
+                caseActivity.setTopMenuItemsInCaseDetailPage();
             }
         });
 
