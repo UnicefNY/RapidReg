@@ -5,16 +5,12 @@
         <item
             android:id="@+id/nav_cases"
             android:checked="true"
+            android:icon="@drawable/ic_face_black_24dp"
             android:title="Cases"/>
         <item
             android:id="@+id/nav_tracing"
+            android:icon="@drawable/ic_supervisor_account_black_24dp"
             android:title="Tracing request"/>
-        <item
-            android:id="@+id/nav_sync"
-            android:title="Synchronization"/>
-        <item
-            android:id="@+id/nav_logout"
-            android:title="Logout"/>
     </group>
 
 </menu>
