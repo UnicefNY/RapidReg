@@ -51,7 +51,6 @@ public class CaseRegisterWrapperFragment extends Fragment {
             String[] values = section.getName().values().toArray(new String[0]);
             pages.add(FragmentPagerItem.of(values[0], CaseRegisterFragment.class));
         }
-
         return pages;
     }
 }

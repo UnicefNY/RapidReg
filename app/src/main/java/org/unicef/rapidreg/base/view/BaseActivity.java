@@ -67,10 +67,12 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
     public boolean onNavigationItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.nav_cases) {
+
             navigationView.getMenu().getItem(0).setChecked(true);
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.fragment_content, new CaseListFragment())
                     .commit();
+
         } else if (id == R.id.nav_tracing) {
             navigationView.getMenu().getItem(1).setChecked(true);
         } else if (id == R.id.nav_sync) {
