@@ -97,8 +97,6 @@ public class CaseActivity extends BaseActivity {
                     return false;
             }
         }
-
-
     }
 
     private boolean saveCaseButtonAction() {
@@ -156,24 +154,19 @@ public class CaseActivity extends BaseActivity {
         CaseFormRoot caseForm = CaseFormService.getInstance().getCurrentForm();
         List<CaseSection> sections = caseForm.getSections();
         List<CaseField> fields;
-        List<CaseField> requiredFields = new ArrayList<CaseField>();
+        String fieldValue;
 
         for (CaseSection section : sections) {
             fields = section.getFields();
             for (CaseField field : fields) {
                 if (field.isRequired()) {
-                    requiredFields.add(field);
+                    fieldValue = CaseValues.getValues().get(field.getDisplayName().get("en"));
+                    if (TextUtils.isEmpty(fieldValue)) {
+                        Toast.makeText(CaseActivity.this, "Required field: \"" + field.getDisplayName().get("en") + "\" is not filled, please fill them", Toast.LENGTH_LONG).show();
+                        return false;
+                    }
                 }
             }
-        }
-
-        for (CaseField field : requiredFields) {
-            String fieldValue = CaseValues.getValues().get(field.getDisplayName().get("en"));
-            if (TextUtils.isEmpty(fieldValue)) {
-                Toast.makeText(CaseActivity.this, "Some required field is not filled, please fill them", Toast.LENGTH_LONG).show();
-                return false;
-            }
-
         }
         return true;
     }
