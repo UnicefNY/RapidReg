@@ -17,7 +17,7 @@ public class CaseRegisterPresenter extends MvpBasePresenter<CaseRegisterView> {
             CaseFormRoot form = CaseFormService.getInstance().getCurrentForm();
             if (form != null) {
                 List<CaseField> fields = form.getSections().get(position).getFields();
-                getView().initView(new CaseRegisterAdapter(context, -1, fields));
+                getView().initView(new CaseRegisterAdapter(context, fields));
             }
         }
     }

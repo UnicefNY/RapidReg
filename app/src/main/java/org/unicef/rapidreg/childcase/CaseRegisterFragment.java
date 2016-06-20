@@ -3,6 +3,8 @@ package org.unicef.rapidreg.childcase;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,7 +21,7 @@ import butterknife.ButterKnife;
 public class CaseRegisterFragment extends MvpFragment<CaseRegisterView, CaseRegisterPresenter>
         implements CaseRegisterView {
     @BindView(R.id.register_forms_content)
-    ListView fieldList;
+    RecyclerView fieldList;
 
     private CaseRegisterAdapter adapter;
 
@@ -51,6 +53,9 @@ public class CaseRegisterFragment extends MvpFragment<CaseRegisterView, CaseRegi
     @Override
     public void initView(CaseRegisterAdapter adapter) {
         this.adapter = adapter;
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
+        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        fieldList.setLayoutManager(layoutManager);
         fieldList.setAdapter(adapter);
     }
 
