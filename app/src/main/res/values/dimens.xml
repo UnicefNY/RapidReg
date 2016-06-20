@@ -5,17 +5,17 @@
     <dimen name="activity_top_margin">40dp</dimen>
     <!--Text size-->
 
-    <dimen name="size_2">2sp</dimen>
-    <dimen name="size_5">5sp</dimen>
-    <dimen name="size_15">15sp</dimen>
+    <dimen name="size_2">2dp</dimen>
+    <dimen name="size_5">5dp</dimen>
+    <dimen name="size_15">15dp</dimen>
     <dimen name="text_size_16">16sp</dimen>
     <dimen name="text_size_20">20sp</dimen>
     <dimen name="text_size_24">24sp</dimen>
     <dimen name="text_size_48">48sp</dimen>
     <dimen name="text_size_200">200sp</dimen>
-    <dimen name="logo_margin">60sp</dimen>
+    <dimen name="logo_margin">60dp</dimen>
 
-    <dimen name="field_padding_top_bottom">5sp</dimen>
-    <dimen name="field_padding_left">15sp</dimen>
+    <dimen name="field_padding_top_bottom">5dp</dimen>
+    <dimen name="field_padding_left">15dp</dimen>
 
 </resources>
