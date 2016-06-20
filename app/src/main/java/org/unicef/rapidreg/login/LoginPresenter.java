@@ -153,7 +153,6 @@ public class LoginPresenter extends MvpBasePresenter<LoginView> {
                     showNetworkErrorMessage(t, false);
                     showLoadingIndicator(false);
                 }
-
                 reloadFormsIfNeeded(event.getCookie(), stateMachine);
             }
         });
@@ -270,7 +269,6 @@ public class LoginPresenter extends MvpBasePresenter<LoginView> {
                 return cookie;
             }
         }
-
         Log.e(TAG, "Can not get session id");
         return null;
     }

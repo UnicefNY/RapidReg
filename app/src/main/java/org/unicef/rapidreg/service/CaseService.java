@@ -8,10 +8,12 @@ import com.raizlabs.android.dbflow.data.Blob;
 
 import org.unicef.rapidreg.db.CaseDao;
 import org.unicef.rapidreg.db.impl.CaseDaoImpl;
+import org.unicef.rapidreg.forms.childcase.CaseField;
 import org.unicef.rapidreg.model.Case;
 
 import java.lang.reflect.Type;
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
@@ -38,6 +40,7 @@ public class CaseService {
     public List<Case> getCaseList() {
         return caseDao.getAllCases();
     }
+
     public List<Case> getCaseListOrderByAge() {
         return caseDao.getAllCasesOrderByAge();
     }
@@ -87,6 +90,16 @@ public class CaseService {
 
     public String createUniqueId() {
         return UUID.randomUUID().toString();
+    }
+
+    public List<String> fetchRequiredFiledNames(List<CaseField> caseFields) {
+        List<String> result = new ArrayList<>();
+        for (CaseField field : caseFields) {
+            if (field.isRequired()) {
+                result.add(field.getDisplayName().get("en"));
+            }
+        }
+        return result;
     }
 
     public static class CaseValues {

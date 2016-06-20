@@ -9,7 +9,7 @@ import org.unicef.rapidreg.R;
 import org.unicef.rapidreg.forms.childcase.CaseField;
 import org.unicef.rapidreg.service.CaseService;
 
-public class TickBoxHelper extends BaseWidgetHelper implements WidgetHelper {
+public class TickBoxHelper extends BaseWidgetHelper{
 
     private View convertView;
 
@@ -23,7 +23,6 @@ public class TickBoxHelper extends BaseWidgetHelper implements WidgetHelper {
             int resId = resources.getIdentifier(CaseField.TYPE_TICK_BOX, "layout", packageName);
             convertView = inflater.inflate(resId, null);
         }
-
         return convertView;
     }
 
@@ -34,7 +33,7 @@ public class TickBoxHelper extends BaseWidgetHelper implements WidgetHelper {
 
         CheckBox valueView = getValueView();
 
-        disableUnediatbleField(valueView);
+        disableUneditableField(valueView);
         valueView.setChecked(Boolean.valueOf(CaseService.CaseValues.get(getLabel())));
     }
 
@@ -54,7 +53,7 @@ public class TickBoxHelper extends BaseWidgetHelper implements WidgetHelper {
         return (CheckBox) getConvertView().findViewById(R.id.value);
     }
 
-    private void disableUnediatbleField(View view) {
+    private void disableUneditableField(View view) {
         if (!isEditable()) {
             convertView.setBackgroundResource(R.color.gainsboro);
             view.setEnabled(false);

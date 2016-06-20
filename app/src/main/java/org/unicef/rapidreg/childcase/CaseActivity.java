@@ -1,5 +1,7 @@
 package org.unicef.rapidreg.childcase;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -11,14 +13,14 @@ import android.widget.Toast;
 
 import org.unicef.rapidreg.R;
 import org.unicef.rapidreg.base.view.BaseActivity;
-import org.unicef.rapidreg.forms.childcase.CaseField;
 import org.unicef.rapidreg.forms.childcase.CaseFormRoot;
 import org.unicef.rapidreg.forms.childcase.CaseSection;
-import org.unicef.rapidreg.model.Case;
 import org.unicef.rapidreg.service.CaseFormService;
 import org.unicef.rapidreg.service.CaseService;
 
+import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import static org.unicef.rapidreg.service.CaseService.CaseValues;
@@ -40,6 +42,37 @@ public class CaseActivity extends BaseActivity {
         if (savedInstanceState == null) {
             redirectFragment(new CaseListFragment());
             setTopMenuItemsInCaseListPage();
+            getIntent().removeExtra(INTENT_KEY_CASE_MODE);
+        }
+    }
+
+
+    @Override
+    public void onBackPressed() {
+        Serializable caseMode = getIntent().getSerializableExtra(INTENT_KEY_CASE_MODE);
+        if (CaseActivity.CaseMode.LIST == caseMode) {
+            moveTaskToBack(true);
+        } else if (CaseMode.DETAIL == caseMode) {
+            setTopMenuItemsInCaseListPage();
+            super.onBackPressed();
+        } else if (CaseMode.ADD == caseMode || CaseMode.EDIT == caseMode) {
+            new AlertDialog.Builder(this)
+                    .setTitle("Quit")
+                    .setMessage("Are you sure to quit without saving?")
+                    .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            redirectFragment(new CaseListFragment());
+                            setTopMenuItemsInCaseListPage();
+                        }
+                    })
+                    .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                        }
+                    }).show();
+        } else {
+            super.onBackPressed();
         }
     }
 
@@ -114,20 +147,17 @@ public class CaseActivity extends BaseActivity {
 
     private boolean validateRequiredField() {
         CaseFormRoot caseForm = CaseFormService.getInstance().getCurrentForm();
-        List<CaseSection> sections = caseForm.getSections();
-        List<CaseField> fields;
-        String fieldValue;
+        List<String> requiredFieldNames = new ArrayList<>();
 
-        for (CaseSection section : sections) {
-            fields = section.getFields();
-            for (CaseField field : fields) {
-                if (field.isRequired()) {
-                    fieldValue = CaseValues.getValues().get(field.getDisplayName().get("en"));
-                    if (TextUtils.isEmpty(fieldValue)) {
-                        Toast.makeText(CaseActivity.this, "Required field: \"" + field.getDisplayName().get("en") + "\" is not filled, please fill them", Toast.LENGTH_LONG).show();
-                        return false;
-                    }
-                }
+        for (CaseSection section : caseForm.getSections()) {
+            Collections.addAll(requiredFieldNames, CaseService.getInstance()
+                    .fetchRequiredFiledNames(section.getFields()).toArray(new String[0]));
+        }
+
+        for (String field : requiredFieldNames) {
+            if (TextUtils.isEmpty(CaseValues.getValues().get(field))) {
+                Toast.makeText(CaseActivity.this, "Some required field is not filled, please fill them", Toast.LENGTH_LONG).show();
+                return false;
             }
         }
         return true;

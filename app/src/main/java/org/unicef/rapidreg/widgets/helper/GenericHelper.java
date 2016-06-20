@@ -13,7 +13,7 @@ import org.unicef.rapidreg.exception.DialogException;
 import org.unicef.rapidreg.forms.childcase.CaseField;
 import org.unicef.rapidreg.service.CaseService;
 
-public class GenericHelper extends BaseWidgetHelper implements WidgetHelper {
+public class GenericHelper extends BaseWidgetHelper{
     public static final String TAG = GenericHelper.class.getSimpleName();
 
     private View convertView;
@@ -28,8 +28,6 @@ public class GenericHelper extends BaseWidgetHelper implements WidgetHelper {
             int resId = resources.getIdentifier(CaseField.TYPE_TEXT_FIELD, "layout", packageName);
             convertView = inflater.inflate(resId, null);
         }
-
-
         return convertView;
     }
 
@@ -46,7 +44,7 @@ public class GenericHelper extends BaseWidgetHelper implements WidgetHelper {
 
         TextView valueView = getValueView();
 
-        disableUnediatbleField(convertView);
+        disableUneditableField(convertView);
         valueView.setText(CaseService.CaseValues.get(getLabel()));
     }
 
@@ -91,7 +89,7 @@ public class GenericHelper extends BaseWidgetHelper implements WidgetHelper {
         return (TextView) getConvertView().findViewById(R.id.value);
     }
 
-    private void disableUnediatbleField(View view) {
+    private void disableUneditableField(View view) {
         if (!isEditable()) {
             convertView.setBackgroundResource(R.color.gainsboro);
             view.setEnabled(false);

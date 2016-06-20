@@ -18,8 +18,11 @@ import android.widget.Toast;
 import org.unicef.rapidreg.IntentSender;
 import org.unicef.rapidreg.PrimeroApplication;
 import org.unicef.rapidreg.R;
+import org.unicef.rapidreg.childcase.CaseActivity;
 import org.unicef.rapidreg.childcase.CaseListFragment;
 import org.unicef.rapidreg.service.UserService;
+
+import java.io.Serializable;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -65,10 +68,12 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
         drawer.openDrawer(GravityCompat.START);
     }
 
+
     @Override
     public void onBackPressed() {
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
+            getIntent().putExtra(CaseActivity.INTENT_KEY_CASE_MODE, CaseActivity.CaseMode.LIST);
         } else {
             super.onBackPressed();
         }
@@ -88,7 +93,7 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
         return true;
     }
 
-    private void navCaseAction() {
+    public void navCaseAction() {
         if (isCaseInEdit()) {
             new AlertDialog.Builder(this)
                     .setTitle("Quit")
@@ -118,24 +123,28 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
     }
 
     public void setTopMenuItemsInCaseDetailPage() {
+        getIntent().putExtra(CaseActivity.INTENT_KEY_CASE_MODE, CaseActivity.CaseMode.DETAIL);
         setEditCaseVisible(true);
         setAddCaseVisible(false);
         setSaveCaseVisible(false);
     }
 
     public void setTopMenuItemsInCaseListPage() {
+        getIntent().putExtra(CaseActivity.INTENT_KEY_CASE_MODE, CaseActivity.CaseMode.LIST);
         setEditCaseVisible(false);
         setAddCaseVisible(true);
         setSaveCaseVisible(false);
     }
 
     public void setTopMenuItemsInCaseAdditionPage() {
+        getIntent().putExtra(CaseActivity.INTENT_KEY_CASE_MODE, CaseActivity.CaseMode.ADD);
         setEditCaseVisible(false);
         setAddCaseVisible(false);
         setSaveCaseVisible(true);
     }
 
     public void setTopMenuItemsInCaseEditPage() {
+        getIntent().putExtra(CaseActivity.INTENT_KEY_CASE_MODE, CaseActivity.CaseMode.EDIT);
         setEditCaseVisible(false);
         setAddCaseVisible(false);
         setSaveCaseVisible(true);

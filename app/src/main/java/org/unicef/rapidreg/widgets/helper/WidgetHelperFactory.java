@@ -15,6 +15,10 @@ public class WidgetHelperFactory {
             return new TickBoxHelper(context, field);
         }
 
+        if(field.isPhotoUploadBox()){
+            return new PhotoUploadHelper(context,field);
+        }
+
         return new GenericHelper(context, field);
     }
 }
