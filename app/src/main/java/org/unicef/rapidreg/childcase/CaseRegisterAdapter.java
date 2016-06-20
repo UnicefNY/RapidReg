@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import org.unicef.rapidreg.R;
 import org.unicef.rapidreg.forms.childcase.CaseField;
 import org.unicef.rapidreg.widgets.viewholder.BaseViewHolder;
 import org.unicef.rapidreg.widgets.viewholder.GenericViewHolder;
@@ -42,10 +43,12 @@ public class CaseRegisterAdapter extends RecyclerView.Adapter<BaseViewHolder> {
         switch (viewType) {
             case GENERIC_VIEW_HOLDER:
                 return new GenericViewHolder(context, inflater.inflate(resources
-                        .getIdentifier(CaseField.TYPE_TEXT_FIELD, "layout", packageName), null));
+                        .getIdentifier(CaseField.TYPE_TEXT_FIELD, "layout", packageName),
+                        parent, false));
             case TICK_BOX_VIEW_HOLDER:
                 return new TickBoxViewHolder(context, inflater.inflate(resources
-                        .getIdentifier(CaseField.TYPE_TICK_BOX, "layout", packageName), null));
+                        .getIdentifier(CaseField.TYPE_TICK_BOX, "layout", packageName),
+                        parent, false));
             default:
                 return new SeparatorViewHolder(context, new View(context));
         }
