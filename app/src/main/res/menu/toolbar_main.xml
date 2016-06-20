@@ -4,7 +4,7 @@
 
     <item
         android:id="@+id/add_case"
-        android:icon="@mipmap/ic_person_add_white_24dp"
+        android:icon="@drawable/add"
         android:title="Add Case"
         app:showAsAction="always" />
     <item
@@ -16,11 +16,12 @@
         android:id="@+id/edit_case"
         android:title="Edit"
         android:visible="false"
+        android:icon="@drawable/edit_white"
         app:showAsAction="always" />
 
     <item
         android:id="@+id/search"
-        android:icon="@mipmap/ic_search_white_24dp"
+        android:icon="@drawable/search"
         android:title="Search"
         app:showAsAction="always" />
 </menu>

@@ -44,4 +44,14 @@ public abstract class BaseWidgetHelper implements WidgetHelper {
         resources = context.getResources();
         packageName = context.getPackageName();
     }
+
+    @Override
+    public void setValue() {
+
+    }
+
+    @Override
+    public void setOnClickListener() {
+
+    }
 }

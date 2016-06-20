@@ -63,7 +63,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="BOY"
-                    android:textColor="@color/colorPrimaryDark"/>
+                    android:textColor="@color/color_primary_dark"/>
 
                 <TextView
                     android:id="@+id/case_child_age"

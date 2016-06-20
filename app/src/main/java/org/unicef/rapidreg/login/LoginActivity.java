@@ -24,7 +24,6 @@ import retrofit2.Call;
 
 public class LoginActivity extends MvpActivity<LoginView, LoginPresenter> implements LoginView {
     public static final String TAG = LoginActivity.class.getSimpleName();
-
     @BindView(R.id.button_login)
     Button loginButton;
     @BindView(R.id.editview_username)
@@ -47,7 +46,6 @@ public class LoginActivity extends MvpActivity<LoginView, LoginPresenter> implem
         hideUrlInputIfUserEverLoginSuccessfully();
         loginProgressDialog = new ProgressDialog(this);
         usernameEditView.requestFocus();
-
     }
 
     @OnClick(R.id.button_login)

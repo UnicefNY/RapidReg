@@ -20,6 +20,7 @@ public class CaseField {
     public static final String TYPE_MULTI_SELECT_BOX = "multi_select_box";
     public static final String TYPE_TICK_BOX = "form_tick_box";
     public static final String TYPE_TEXT_FIELD = "form_text_field";
+    public static final String TYPE_PHOTO_UPLOAD_LAYOUT = "form_photo_upload_layout";
 
     @SerializedName("name")
     @Expose
@@ -140,6 +141,10 @@ public class CaseField {
         isShowOnMiniForm = showOnMiniForm;
     }
 
+    public boolean isPhotoUploadBox() {
+        return FieldType.PHOTO_UPLOAD_BOX.name().equalsIgnoreCase(type);
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder("<Field>").append("\n");
@@ -157,6 +162,7 @@ public class CaseField {
         return sb.toString();
     }
 
+
     public enum FieldType {
         SEPARATOR(null),
         TICK_BOX(null),
@@ -166,7 +172,7 @@ public class CaseField {
         TEXT_FIELD(SingleTextDialog.class),
         RADIO_BUTTON(SingleSelectDialog.class),
         SINGLE_SELECT_BOX(SingleSelectDialog.class),
-        MULTI_SELECT_BOX(MultipleSelectDialog.class);
+        MULTI_SELECT_BOX(MultipleSelectDialog.class), PHOTO_UPLOAD_BOX(null);
 
         private Class<? extends BaseDialog> clz;
 

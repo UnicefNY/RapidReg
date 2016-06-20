@@ -18,9 +18,9 @@ import butterknife.ButterKnife;
 
 public class CaseRegisterFragment extends MvpFragment<CaseRegisterView, CaseRegisterPresenter>
         implements CaseRegisterView {
-
     @BindView(R.id.register_forms_content)
     ListView fieldList;
+
     private CaseRegisterAdapter adapter;
 
     @Nullable

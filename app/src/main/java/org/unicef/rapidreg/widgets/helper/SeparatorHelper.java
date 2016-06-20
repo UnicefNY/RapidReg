@@ -5,7 +5,7 @@ import android.view.View;
 
 import org.unicef.rapidreg.forms.childcase.CaseField;
 
-public class SeparatorHelper extends BaseWidgetHelper implements WidgetHelper {
+public class SeparatorHelper extends BaseWidgetHelper{
 
     public SeparatorHelper(Context context, CaseField field) {
         super(context, field);
@@ -15,17 +15,6 @@ public class SeparatorHelper extends BaseWidgetHelper implements WidgetHelper {
     public View getConvertView() {
         View view = new View(context);
         view.setVisibility(View.GONE);
-
         return view;
-    }
-
-    @Override
-    public void setValue() {
-
-    }
-
-    @Override
-    public void setOnClickListener() {
-
     }
 }
