@@ -9,9 +9,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.RelativeLayout;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 
+import com.getbase.floatingactionbutton.FloatingActionsMenu;
 import com.hannesdorfmann.mosby.mvp.MvpFragment;
 
 import org.unicef.rapidreg.R;
@@ -19,6 +20,7 @@ import org.unicef.rapidreg.service.CaseService;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 
 public class CaseListFragment extends MvpFragment<CaseListView, CaseListPresenter>
@@ -27,34 +29,34 @@ public class CaseListFragment extends MvpFragment<CaseListView, CaseListPresente
     @BindView(R.id.list_container)
     RecyclerView caseListContainer;
 
-
     @BindView(R.id.order_spinner)
     Spinner orderSpinner;
 
-    @BindView(R.id.header_bar)
-    RelativeLayout layout;
+    @BindView(R.id.container)
+    LinearLayout container;
 
     private CaseListAdapter adapter;
 
-
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
+    public View onCreateView(LayoutInflater inflater, @Nullable final ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        View caseListView = inflater.inflate(R.layout.fragment_cases_list, container, false);
+        View view = inflater.inflate(R.layout.fragment_cases_list, container, false);
+        FloatingActionsMenu floatingMenu
+                = (FloatingActionsMenu) view.findViewById(R.id.floating_menu);
+        floatingMenu.setOnFloatingActionsMenuUpdateListener(
+                new FloatingActionsMenu.OnFloatingActionsMenuUpdateListener() {
+                    @Override
+                    public void onMenuExpanded() {
+                        setListAlpha(0.5f);
+                    }
 
-        View addTRBtn = caseListView.findViewById(R.id.add_tracing_request);
-        View addCaseBtn = caseListView.findViewById(R.id.add_case);
-
-        addCaseBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                getActivity().getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.fragment_content, new CaseRegisterWrapperFragment(), null)
-                        .commit();
-            }
-        });
-        return caseListView;
+                    @Override
+                    public void onMenuCollapsed() {
+                        setListAlpha(1.0f);
+                    }
+                });
+        return view;
     }
 
     @Override
@@ -77,10 +79,10 @@ public class CaseListFragment extends MvpFragment<CaseListView, CaseListPresente
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         caseListContainer.setLayoutManager(layoutManager);
         caseListContainer.setAdapter(adapter);
-        ArrayAdapter<CharSequence> adapterSnpinner = ArrayAdapter.createFromResource(getActivity(),
+        ArrayAdapter<CharSequence> adapterSpinner = ArrayAdapter.createFromResource(getActivity(),
                 R.array.order_array, android.R.layout.simple_spinner_item);
-        adapterSnpinner.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        orderSpinner.setAdapter(adapterSnpinner);
+        adapterSpinner.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        orderSpinner.setAdapter(adapterSpinner);
         orderSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 
             @Override
@@ -91,7 +93,6 @@ public class CaseListFragment extends MvpFragment<CaseListView, CaseListPresente
                 } else {
                     adapter.setCaseList(caseService.getCaseListOrderByAge());
                 }
-                ;
                 adapter.notifyDataSetChanged();
             }
 
@@ -100,20 +101,21 @@ public class CaseListFragment extends MvpFragment<CaseListView, CaseListPresente
 
             }
         });
+    }
 
-        hideHeaderIfNeeded();
+    @OnClick(R.id.add_case)
+    public void onCaseAddClicked() {
+        getActivity().getSupportFragmentManager().beginTransaction()
+                .replace(R.id.fragment_content, new CaseRegisterWrapperFragment(),
+                        CaseRegisterWrapperFragment.class.getSimpleName())
+                .commit();
     }
 
     public void toggleMode(boolean isShow) {
         adapter.toggleViews(isShow);
     }
 
-    private boolean hideHeaderIfNeeded() {
-        if (adapter == null || adapter.isListEmpty()) {
-            layout.setVisibility(View.GONE);
-            return true;
-        }
-
-        return false;
+    private void setListAlpha(float value) {
+        container.setAlpha(value);
     }
 }
