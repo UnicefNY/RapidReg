@@ -49,5 +49,4 @@ public class TickBoxViewHolder extends BaseViewHolder<CaseField> {
             view.setEnabled(false);
         }
     }
-
 }

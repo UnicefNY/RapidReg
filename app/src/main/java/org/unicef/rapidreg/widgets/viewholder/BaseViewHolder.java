@@ -17,9 +17,9 @@ public abstract class BaseViewHolder<T> extends RecyclerView.ViewHolder {
         this.context = context;
     }
 
-    abstract public void setValue(T field);
+    public void setValue(T field){}
 
-    abstract public void setOnClickListener(T field);
+    public void setOnClickListener(T field){}
 
     //TODO: need to get display name according to the current system language
     protected String getLabel(CaseField field) {
