@@ -40,7 +40,6 @@
             android:layout_height="match_parent" />
     </LinearLayout>
 
-
     <com.getbase.floatingactionbutton.FloatingActionsMenu
         android:id="@+id/right_labels"
         android:layout_width="wrap_content"
@@ -55,6 +54,8 @@
             android:id="@+id/add_tracing_request"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:scrollY="3dp"
+            android:src="@drawable/tracing_white"
             fab:fab_colorNormal="@color/ftn_red"
             fab:fab_colorPressed="@color/ftn_red"
             fab:fab_title="Add Tracing Request" />
@@ -63,6 +64,8 @@
             android:id="@+id/add_case"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:scrollY="3dp"
+            android:src="@drawable/cases_white"
             fab:fab_colorNormal="@color/ftn_blue"
             fab:fab_colorPressed="@color/ftn_blue"
             fab:fab_title="Add Cases" />
