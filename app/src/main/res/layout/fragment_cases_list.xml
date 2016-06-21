@@ -12,28 +12,12 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <RelativeLayout
-            android:id="@+id/header_bar"
+
+        <Spinner
+            android:id="@+id/order_spinner"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingLeft="@dimen/size_5"
-            android:paddingRight="@dimen/size_5">
-
-            <TextView
-                android:id="@+id/order_label"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="5dp"
-                android:layout_marginStart="5dp"
-                android:text="@string/order_by" />
-
-            <Spinner
-                android:id="@+id/order_spinner"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_toEndOf="@id/order_label"
-                android:layout_toRightOf="@id/order_label" />
-        </RelativeLayout>
+            android:drawSelectorOnTop="true" />
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/list_container"
@@ -69,7 +53,7 @@
             android:src="@drawable/cases_white"
             fab:fab_colorNormal="@color/ftn_blue"
             fab:fab_colorPressed="@color/ftn_blue"
-            fab:fab_title="Add Cases" />
+            fab:fab_title="Add Case" />
     </com.getbase.floatingactionbutton.FloatingActionsMenu>
 
 </android.support.design.widget.CoordinatorLayout>
