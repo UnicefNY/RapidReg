@@ -18,4 +18,21 @@
     <dimen name="field_padding_top_bottom">5dp</dimen>
     <dimen name="field_padding_left">15dp</dimen>
 
+
+    <!--row in list start-->
+    <dimen name="row_height">90dp</dimen>
+    <dimen name="img_left_margin">18.7dp</dimen>
+    <dimen name="img_vertical_margin">10.7dp</dimen>
+    <dimen name="text_area_left_margin">105dp</dimen>
+    <dimen name="text_area_bottom_margin">24dp</dimen>
+    <dimen name="text_area_right_margin">18.3dp</dimen>
+    <dimen name="text_area_top_margin">20dp</dimen>
+    <dimen name="gender_left_margin">6.4dp</dimen>
+    <dimen name="age_badge_left_margin">19.3dp</dimen>
+    <dimen name="age_left_margin">7dp</dimen>
+    <dimen name="gender_name_length">35dp</dimen>
+    <dimen name="matching_badge_left_margin">10.8dp</dimen>
+    <dimen name="text_size_hidden_state">15sp</dimen>
+    <!--row in list end-->
+
 </resources>
