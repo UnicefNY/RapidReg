@@ -139,14 +139,7 @@ public class CaseActivity extends BaseActivity {
         public boolean onMenuItemClick(MenuItem menuItem) {
             switch (menuItem.getItemId()) {
                 case R.id.toggle:
-                    DetailState nextState = textAreaState.getNextState();
-                    MenuItem item = toolbar.getMenu().findItem(R.id.toggle);
-                    item.setIcon(nextState.getResId());
-                    textAreaState = nextState;
-                    CaseListFragment caseListFragment
-                            = (CaseListFragment) getSupportFragmentManager()
-                            .findFragmentByTag(CaseListFragment.class.getSimpleName());
-                    caseListFragment.toggleMode(nextState.isDetailShow());
+                    showOrHideCaseDetail();
                     return true;
                 case R.id.search:
                     redirectFragment(new CaseSearchFragment());
@@ -159,6 +152,17 @@ public class CaseActivity extends BaseActivity {
                     return false;
             }
         }
+    }
+
+    private void showOrHideCaseDetail() {
+        textAreaState = textAreaState.getNextState();
+
+        MenuItem item = toolbar.getMenu().findItem(R.id.toggle);
+        item.setIcon(textAreaState.getResId());
+
+        CaseListFragment caseListFragment = (CaseListFragment) getSupportFragmentManager()
+                .findFragmentByTag(CaseListFragment.class.getSimpleName());
+        caseListFragment.toggleMode(textAreaState.isDetailShow());
     }
 
     private boolean saveCaseButtonAction() {
