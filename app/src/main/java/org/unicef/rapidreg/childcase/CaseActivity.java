@@ -1,14 +1,23 @@
 package org.unicef.rapidreg.childcase;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.MenuItem;
+import android.widget.GridView;
 import android.widget.Toast;
 
 import org.unicef.rapidreg.R;
@@ -28,6 +37,11 @@ import static org.unicef.rapidreg.service.CaseService.CaseValues;
 public class CaseActivity extends BaseActivity {
     public final static String INTENT_KEY_CASE_MODE = "_case_mode";
 
+    private String imagePath;
+    private final int IMAGE_OPEN = 1;
+    private List<Bitmap> casePhotos;
+    private GridView photoGrid;
+
     public enum CaseMode {
         EDIT, ADD, LIST, DETAIL
     }
@@ -38,12 +52,59 @@ public class CaseActivity extends BaseActivity {
         toolbar.inflateMenu(R.menu.toolbar_main);
         toolbar.setOnMenuItemClickListener(new CaseMenuItemListener());
         toolbar.setTitle("Cases");
-
         if (savedInstanceState == null) {
             redirectFragment(new CaseListFragment());
             setTopMenuItemsInCaseListPage();
             getIntent().removeExtra(INTENT_KEY_CASE_MODE);
         }
+    }
+
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Log.i("sjyuan", "CaseActivity-->onActivityResult+imagePath=" + imagePath);
+
+        if (TextUtils.isEmpty(imagePath)) {
+            return;
+        }
+
+        BitmapFactory.Options opts = new BitmapFactory.Options();
+        opts.inJustDecodeBounds = false;
+        opts.inPreferredConfig = Bitmap.Config.RGB_565;
+        opts.inDither = true;
+        Bitmap newPhoto = BitmapFactory.decodeFile(imagePath, opts);
+
+        photoGrid = (GridView) findViewById(R.id.photo_grid);
+
+        CasePhotoAdapter casePhotoAdapter = (CasePhotoAdapter) photoGrid.getAdapter();
+        if (casePhotoAdapter.getCount() > 1) {
+            casePhotos = casePhotoAdapter.getAllItems();
+            casePhotos.add(casePhotos.size() - 1, newPhoto);
+        } else {
+            casePhotos = new ArrayList<>();
+            casePhotos.add(newPhoto);
+            casePhotos.add(BitmapFactory.decodeResource(getResources(), R.drawable.photo_add));
+        }
+        photoGrid.setAdapter(new CasePhotoAdapter(this, casePhotos));
+        imagePath = null;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        Log.i("sjyuan", "CaseActivity-->onActivityResult" + requestCode + resultCode + data);
+        if (Activity.RESULT_OK == resultCode && IMAGE_OPEN == requestCode) {
+            Uri uri = data.getData();
+            if (!TextUtils.isEmpty(uri.getAuthority())) {
+                Cursor cursor = getContentResolver().query(uri,
+                        new String[]{MediaStore.Images.Media.DATA}, null, null, null);
+                cursor.moveToFirst();
+                imagePath = cursor.getString(cursor
+                        .getColumnIndex(MediaStore.Images.Media.DATA));
+                cursor.close();
+            }
+        }
+        super.onActivityResult(requestCode, resultCode, data);
     }
 
 
@@ -112,8 +173,7 @@ public class CaseActivity extends BaseActivity {
     private void redirectFragment(Fragment target) {
         String name = target.getClass().getSimpleName();
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.fragment_content, target, name)
-                .commit();
+        transaction.replace(R.id.fragment_content, target, name).commit();
         resetBarButtonsIfNeeded();
     }
 

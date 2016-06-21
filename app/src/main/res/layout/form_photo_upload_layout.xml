@@ -17,7 +17,7 @@
             android:background="@color/lighter_gray" />
 
         <GridView
-            android:id="@+id/gridView1"
+            android:id="@+id/photo_grid"
             android:layout_width="fill_parent"
             android:layout_height="90dp"
             android:columnWidth="90dp"

@@ -8,10 +8,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import org.unicef.rapidreg.R;
 import org.unicef.rapidreg.forms.childcase.CaseField;
 import org.unicef.rapidreg.widgets.viewholder.BaseViewHolder;
 import org.unicef.rapidreg.widgets.viewholder.GenericViewHolder;
+import org.unicef.rapidreg.widgets.viewholder.PhotoUploadHolder;
 import org.unicef.rapidreg.widgets.viewholder.SeparatorViewHolder;
 import org.unicef.rapidreg.widgets.viewholder.TickBoxViewHolder;
 
@@ -20,9 +20,10 @@ import java.util.List;
 
 public class CaseRegisterAdapter extends RecyclerView.Adapter<BaseViewHolder> {
 
-    private final static int GENERIC_VIEW_HOLDER = 0;
-    private final static int SEPARATOR_VIEW_HOLDER = 1;
-    private final static int TICK_BOX_VIEW_HOLDER = 2;
+    private final static int VIEW_HOLDER_GENERIC = 0;
+    private final static int VIEW_HOLDER_SEPARATOR = 1;
+    private final static int VIEW_HOLDER_TICK_BOX = 2;
+    private final static int VIEW_HOLDER_PHOTO_UPLOAD_BOX = 3;
 
     private List<CaseField> fields;
     private Context context;
@@ -41,13 +42,17 @@ public class CaseRegisterAdapter extends RecyclerView.Adapter<BaseViewHolder> {
     @Override
     public BaseViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         switch (viewType) {
-            case GENERIC_VIEW_HOLDER:
+            case VIEW_HOLDER_GENERIC:
                 return new GenericViewHolder(context, inflater.inflate(resources
-                        .getIdentifier(CaseField.TYPE_TEXT_FIELD, "layout", packageName),
+                                .getIdentifier(CaseField.TYPE_TEXT_FIELD, "layout", packageName),
                         parent, false));
-            case TICK_BOX_VIEW_HOLDER:
+            case VIEW_HOLDER_TICK_BOX:
                 return new TickBoxViewHolder(context, inflater.inflate(resources
-                        .getIdentifier(CaseField.TYPE_TICK_BOX, "layout", packageName),
+                                .getIdentifier(CaseField.TYPE_TICK_BOX, "layout", packageName),
+                        parent, false));
+            case VIEW_HOLDER_PHOTO_UPLOAD_BOX:
+                return new PhotoUploadHolder(context, inflater.inflate(resources
+                                .getIdentifier(CaseField.TYPE_PHOTO_UPLOAD_LAYOUT, "layout", packageName),
                         parent, false));
             default:
                 return new SeparatorViewHolder(context, new View(context));
@@ -58,6 +63,7 @@ public class CaseRegisterAdapter extends RecyclerView.Adapter<BaseViewHolder> {
     public void onBindViewHolder(BaseViewHolder holder, int position) {
         CaseField field = fields.get(position);
         holder.setValue(field);
+
         Serializable caseMode = ((Activity) context).getIntent()
                 .getSerializableExtra(CaseActivity.INTENT_KEY_CASE_MODE);
         if (CaseActivity.CaseMode.DETAIL != caseMode) {
@@ -69,17 +75,19 @@ public class CaseRegisterAdapter extends RecyclerView.Adapter<BaseViewHolder> {
     public int getItemViewType(int position) {
         CaseField field = fields.get(position);
         if (field.isSeparator()) {
-            return SEPARATOR_VIEW_HOLDER;
+            return VIEW_HOLDER_SEPARATOR;
         }
         if (field.isTickBox()) {
-            return TICK_BOX_VIEW_HOLDER;
+            return VIEW_HOLDER_TICK_BOX;
         }
-        return GENERIC_VIEW_HOLDER;
+        if (field.isPhotoUploadBox()) {
+            return VIEW_HOLDER_PHOTO_UPLOAD_BOX;
+        }
+        return VIEW_HOLDER_GENERIC;
     }
 
     @Override
     public int getItemCount() {
         return fields.size();
     }
-
 }
