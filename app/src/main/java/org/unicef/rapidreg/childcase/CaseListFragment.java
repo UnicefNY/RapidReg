@@ -9,7 +9,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 
@@ -20,7 +19,6 @@ import org.unicef.rapidreg.service.CaseService;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 
 
 public class CaseListFragment extends MvpFragment<CaseListView, CaseListPresenter>
@@ -32,9 +30,6 @@ public class CaseListFragment extends MvpFragment<CaseListView, CaseListPresente
 
     @BindView(R.id.order_spinner)
     Spinner orderSpinner;
-
-    @BindView(R.id.toggle)
-    ImageButton toggle;
 
     @BindView(R.id.header_bar)
     RelativeLayout layout;
@@ -109,15 +104,8 @@ public class CaseListFragment extends MvpFragment<CaseListView, CaseListPresente
         hideHeaderIfNeeded();
     }
 
-    @OnClick(R.id.toggle)
-    public void onToggleClicked() {
-        if (hideHeaderIfNeeded()) {
-            return;
-        }
-
-        DetailState nextState = getNextToggleState();
-        setToggle(nextState);
-        adapter.toggleViews(nextState.isDetailShow());
+    public void toggleMode(boolean isShow) {
+        adapter.toggleViews(isShow);
     }
 
     private boolean hideHeaderIfNeeded() {
@@ -127,40 +115,5 @@ public class CaseListFragment extends MvpFragment<CaseListView, CaseListPresente
         }
 
         return false;
-    }
-
-    private DetailState getNextToggleState() {
-        DetailState currentState = DetailState.valueOf((String) toggle.getTag());
-        return currentState.getNextState();
-    }
-
-    private void setToggle(DetailState state) {
-        toggle.setBackgroundResource(state.getResId());
-        toggle.setTag(state.name());
-    }
-
-    public enum DetailState {
-        VISIBILITY(R.drawable.ic_visibility, true),
-        INVISIBILITY(R.drawable.ic_invisibility, false);
-
-        private final int resId;
-        private final boolean isDetailShow;
-
-        DetailState(int resId, boolean isDetailShow) {
-            this.resId = resId;
-            this.isDetailShow = isDetailShow;
-        }
-
-        public DetailState getNextState() {
-            return this == VISIBILITY ? INVISIBILITY : VISIBILITY;
-        }
-
-        public int getResId() {
-            return resId;
-        }
-
-        public boolean isDetailShow() {
-            return isDetailShow;
-        }
     }
 }

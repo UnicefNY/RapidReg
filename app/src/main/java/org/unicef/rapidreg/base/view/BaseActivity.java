@@ -132,12 +132,6 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
         setSaveCaseVisible(false);
     }
 
-    public void setTopMenuItemsInCaseAdditionPage() {
-        getIntent().putExtra(CaseActivity.INTENT_KEY_CASE_MODE, CaseActivity.CaseMode.ADD);
-        setEditCaseVisible(false);
-        setSaveCaseVisible(true);
-    }
-
     public void setTopMenuItemsInCaseEditPage() {
         getIntent().putExtra(CaseActivity.INTENT_KEY_CASE_MODE, CaseActivity.CaseMode.EDIT);
         setEditCaseVisible(false);

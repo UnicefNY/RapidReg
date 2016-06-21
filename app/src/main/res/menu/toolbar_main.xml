@@ -3,15 +3,21 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
+        android:id="@+id/toggle"
+        android:title="Show/Hide"
+        android:visible="true"
+        app:showAsAction="always"
+        android:icon="@drawable/visible" />
+    <item
         android:id="@+id/save_case"
         android:title="Save"
         android:visible="false"
         app:showAsAction="always" />
     <item
         android:id="@+id/edit_case"
+        android:icon="@drawable/edit_white"
         android:title="Edit"
         android:visible="false"
-        android:icon="@drawable/edit_white"
         app:showAsAction="always" />
 
     <item

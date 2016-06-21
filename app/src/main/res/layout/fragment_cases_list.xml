@@ -32,16 +32,6 @@
                 android:layout_height="wrap_content"
                 android:layout_toEndOf="@id/order_label"
                 android:layout_toRightOf="@id/order_label" />
-
-
-            <ImageButton
-                android:id="@+id/toggle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentRight="true"
-                android:background="@drawable/ic_visibility"
-                android:tag="VISIBILITY" />
         </RelativeLayout>
 
         <android.support.v7.widget.RecyclerView
