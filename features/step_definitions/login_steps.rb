@@ -23,6 +23,6 @@ When /^I logout$/ do
 end
 
 And /^I should see current user is "(.*?)"$/ do |username|
-  sleep 10
+  sleep 5   # must
   login_page.getCurrentUser.equal?("#{username}")
 end

@@ -15,14 +15,5 @@ When /^I press menu button$/ do
 end
 
 Then /^I should see page title is "(.*?)"$/ do |title|
-
+  main_menu.getPageTitle.equal?("#{title}")
 end
-
-# type: # android.widget.ImageButton
-# text:
-
-# type: # android.widget.CheckedTextView
-# text: Cases
-
-# type: # android.widget.TextView
-# text: Cases

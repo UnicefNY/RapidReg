@@ -10,8 +10,8 @@ desired_cps = {
         appPackage: "org.unicef.rapidreg.debug",
         appActivity: "org.unicef.rapidreg.login.LoginActivity",
         app: APP_PATH,
-        noReset: true,
-        fullReset: false
+        noReset: false,
+        fullReset: true
     },
     appium_lib: {
         sauce_username: nil,
