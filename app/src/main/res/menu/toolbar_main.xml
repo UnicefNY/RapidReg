@@ -3,11 +3,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/add_case"
-        android:icon="@drawable/add"
-        android:title="Add Case"
-        app:showAsAction="always" />
-    <item
         android:id="@+id/save_case"
         android:title="Save"
         android:visible="false"

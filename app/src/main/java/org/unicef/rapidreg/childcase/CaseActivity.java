@@ -83,8 +83,6 @@ public class CaseActivity extends BaseActivity {
                 case R.id.search:
                     redirectFragment(new CaseSearchFragment());
                     return true;
-                case R.id.add_case:
-                    return addCaseButtonAction();
                 case R.id.save_case:
                     return saveCaseButtonAction();
                 case R.id.edit_case:
@@ -101,19 +99,6 @@ public class CaseActivity extends BaseActivity {
             redirectFragment(new CaseListFragment());
             setTopMenuItemsInCaseListPage();
         }
-        return true;
-    }
-
-    private boolean addCaseButtonAction() {
-        CaseValues.clear();
-        if (!CaseFormService.getInstance().isFormReady()) {
-            Toast.makeText(CaseActivity.this,
-                    R.string.syncing_forms_text, Toast.LENGTH_LONG).show();
-            return true;
-        }
-        redirectFragment(new CaseRegisterWrapperFragment());
-        getIntent().removeExtra(INTENT_KEY_CASE_MODE);
-        setTopMenuItemsInCaseAdditionPage();
         return true;
     }
 

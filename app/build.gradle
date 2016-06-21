@@ -98,6 +98,8 @@ dependencies {
     compile 'com.ogaclejapan.smarttablayout:library:1.6.1@aar'
     compile 'com.ogaclejapan.smarttablayout:utils-v4:1.6.1@aar'
 
+    compile 'com.getbase:floatingactionbutton:1.10.1'
+
     testCompile 'junit:junit:4.12',
             'org.robolectric:robolectric:3.1',
             "org.powermock:powermock-module-junit4:${powerMockVersion}",
