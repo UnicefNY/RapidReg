@@ -17,7 +17,18 @@ module AndroidPageDomain
   def main_menu
     @mainMenu = Screen::Android::MainMenu.new
   end
+
+  def case_page
+    @casePage = Screen::Android::CasePage.new
+  end
 end
 
 World(AndroidPageDomain)
 
+module WithinHelpers
+  def with_scope(locator)
+    locator ? within(locator) { yield } : yield
+  end
+end
+
+World(WithinHelpers)
