@@ -1,5 +1,6 @@
 package org.unicef.rapidreg.childcase;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
@@ -9,14 +10,19 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import com.getbase.floatingactionbutton.FloatingActionsMenu;
 import com.hannesdorfmann.mosby.mvp.MvpFragment;
 
 import org.unicef.rapidreg.R;
 import org.unicef.rapidreg.service.CaseService;
+
+import java.util.Arrays;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -26,11 +32,20 @@ import butterknife.OnClick;
 public class CaseListFragment extends MvpFragment<CaseListView, CaseListPresenter>
         implements CaseListView {
 
+    private static final SpinnerState[] SPINNER_STATES = {
+            SpinnerState.AGE_ASC,
+            SpinnerState.AGE_DES,
+            SpinnerState.DATE_ASC,
+            SpinnerState.DATE_DES};
+
     @BindView(R.id.list_container)
     RecyclerView caseListContainer;
 
     @BindView(R.id.order_spinner)
     Spinner orderSpinner;
+
+    @BindView(R.id.floating_menu)
+    FloatingActionsMenu floatingMenu;
 
     @BindView(R.id.container)
     LinearLayout container;
@@ -41,22 +56,7 @@ public class CaseListFragment extends MvpFragment<CaseListView, CaseListPresente
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable final ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_cases_list, container, false);
-        FloatingActionsMenu floatingMenu
-                = (FloatingActionsMenu) view.findViewById(R.id.floating_menu);
-        floatingMenu.setOnFloatingActionsMenuUpdateListener(
-                new FloatingActionsMenu.OnFloatingActionsMenuUpdateListener() {
-                    @Override
-                    public void onMenuExpanded() {
-                        setListAlpha(0.5f);
-                    }
-
-                    @Override
-                    public void onMenuCollapsed() {
-                        setListAlpha(1.0f);
-                    }
-                });
-        return view;
+        return inflater.inflate(R.layout.fragment_cases_list, container, false);
     }
 
     @Override
@@ -79,10 +79,8 @@ public class CaseListFragment extends MvpFragment<CaseListView, CaseListPresente
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         caseListContainer.setLayoutManager(layoutManager);
         caseListContainer.setAdapter(adapter);
-        ArrayAdapter<CharSequence> adapterSpinner = ArrayAdapter.createFromResource(getActivity(),
-                R.array.order_array, android.R.layout.simple_spinner_item);
-        adapterSpinner.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        orderSpinner.setAdapter(adapterSpinner);
+        orderSpinner.setAdapter(new SpinnerAdapter(getActivity(),
+                R.layout.case_list_spinner, Arrays.asList(SPINNER_STATES)));
         orderSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 
             @Override
@@ -101,6 +99,19 @@ public class CaseListFragment extends MvpFragment<CaseListView, CaseListPresente
 
             }
         });
+
+        floatingMenu.setOnFloatingActionsMenuUpdateListener(
+                new FloatingActionsMenu.OnFloatingActionsMenuUpdateListener() {
+                    @Override
+                    public void onMenuExpanded() {
+                        setListAlpha(0.5f);
+                    }
+
+                    @Override
+                    public void onMenuCollapsed() {
+                        setListAlpha(1.0f);
+                    }
+                });
     }
 
     @OnClick(R.id.add_case)
@@ -117,5 +128,69 @@ public class CaseListFragment extends MvpFragment<CaseListView, CaseListPresente
 
     private void setListAlpha(float value) {
         container.setAlpha(value);
+    }
+
+    private enum SpinnerState {
+        AGE_ASC(R.drawable.age_up, "Age ascending order", "Age"),
+        AGE_DES(R.drawable.age_down, "Age descending order", "Age"),
+        DATE_ASC(R.drawable.date_up, "Registration date ascending order", "Registration date"),
+        DATE_DES(R.drawable.date_down, "Registration date descending order", "Registration date");
+
+        private int resId;
+        private String longName;
+        private String shortName;
+
+        SpinnerState(int resId, String longName, String shortName) {
+            this.resId = resId;
+            this.longName = longName;
+            this.shortName = shortName;
+        }
+
+        public int getResId() {
+            return resId;
+        }
+
+        public String getLongName() {
+            return longName;
+        }
+
+        public String getShortName() {
+            return shortName;
+        }
+    }
+
+    private class SpinnerAdapter extends ArrayAdapter<SpinnerState> {
+
+        private final List<SpinnerState> states;
+
+        public SpinnerAdapter(Context context, int resource, List<SpinnerState> states) {
+            super(context, resource, states);
+            this.states = states;
+        }
+
+        @Override
+        public View getDropDownView(int position, View convertView, ViewGroup parent) {
+            return getCustomView(position, convertView, parent);
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            return getCustomView(position, convertView, parent);
+        }
+
+        public View getCustomView(int position, View convertView, ViewGroup parent) {
+            SpinnerState state = states.get(position);
+
+            LayoutInflater inflater = LayoutInflater.from(getActivity());
+            View view = inflater.inflate(R.layout.case_list_spinner, parent, false);
+
+            ImageView indicator = (ImageView) view.findViewById(R.id.indicator);
+            TextView orderName = (TextView) view.findViewById(R.id.order_name);
+
+            indicator.setImageResource(state.getResId());
+            orderName.setText(state.getLongName());
+
+            return view;
+        }
     }
 }
