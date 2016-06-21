@@ -151,5 +151,8 @@
     <!--case row start-->
     <color name="boy_blue">#4e6af9</color>
     <color name="girl_red">#fb5116</color>
+    <color name="ftn_gray">#bbbbbb</color>
+    <color name="ftn_blue">#4e6af9</color>
+    <color name="ftn_red">#fb5116</color>
     <!--case row end-->
 </resources>

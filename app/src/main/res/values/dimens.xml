@@ -33,6 +33,7 @@
     <dimen name="gender_name_length">35dp</dimen>
     <dimen name="matching_badge_left_margin">10.8dp</dimen>
     <dimen name="text_size_hidden_state">15sp</dimen>
+    <dimen name="fab_margin">16dp</dimen>
     <!--row in list end-->
 
 </resources>

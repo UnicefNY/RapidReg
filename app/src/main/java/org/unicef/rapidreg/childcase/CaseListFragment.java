@@ -46,7 +46,20 @@ public class CaseListFragment extends MvpFragment<CaseListView, CaseListPresente
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_cases_list, container, false);
+        View caseListView = inflater.inflate(R.layout.fragment_cases_list, container, false);
+
+        View addTRBtn = caseListView.findViewById(R.id.add_tracing_request);
+        View addCaseBtn = caseListView.findViewById(R.id.add_case);
+
+        addCaseBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getActivity().getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.fragment_content, new CaseRegisterWrapperFragment(), null)
+                        .commit();
+            }
+        });
+        return caseListView;
     }
 
     @Override

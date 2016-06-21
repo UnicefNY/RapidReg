@@ -25,6 +25,11 @@
         <item name="android:layout_marginTop">@dimen/text_area_top_margin</item>
         <item name="android:layout_marginBottom">@dimen/text_area_bottom_margin</item>
     </style>
+
+    <style name="menu_labels_style">
+        <item name="android:background">@drawable/fab_label_background</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
     <!--row in case list end-->
 
 </resources>

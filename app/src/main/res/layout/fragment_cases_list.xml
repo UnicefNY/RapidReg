@@ -1,47 +1,81 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:fab="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     tools:context=".childcase.CaseActivity">
 
-    <RelativeLayout
-        android:id="@+id/header_bar"
+    <LinearLayout
         android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:id="@+id/header_bar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="@dimen/size_5"
+            android:paddingRight="@dimen/size_5">
+
+            <TextView
+                android:id="@+id/order_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:layout_marginStart="5dp"
+                android:text="@string/order_by" />
+
+            <Spinner
+                android:id="@+id/order_spinner"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toEndOf="@id/order_label"
+                android:layout_toRightOf="@id/order_label" />
+
+
+            <ImageButton
+                android:id="@+id/toggle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:background="@drawable/ic_visibility"
+                android:tag="VISIBILITY" />
+        </RelativeLayout>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/list_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </LinearLayout>
+
+
+    <com.getbase.floatingactionbutton.FloatingActionsMenu
+        android:id="@+id/right_labels"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:paddingLeft="@dimen/size_5"
-        android:paddingRight="@dimen/size_5">
+        android:layout_gravity="bottom|end"
+        fab:fab_addButtonColorNormal="@color/ftn_gray"
+        fab:fab_addButtonColorPressed="@color/ftn_gray"
+        fab:fab_labelStyle="@style/menu_labels_style"
+        fab:fab_labelsPosition="left">
 
-        <TextView
-            android:id="@+id/order_label"
+        <com.getbase.floatingactionbutton.FloatingActionButton
+            android:id="@+id/add_tracing_request"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="5dp"
-            android:layout_marginStart="5dp"
-            android:text="@string/order_by" />
+            fab:fab_colorNormal="@color/ftn_red"
+            fab:fab_colorPressed="@color/ftn_red"
+            fab:fab_title="Add Tracing Request" />
 
-        <Spinner
-            android:id="@+id/order_spinner"
+        <com.getbase.floatingactionbutton.FloatingActionButton
+            android:id="@+id/add_case"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_toRightOf="@id/order_label"
-            android:layout_toEndOf="@id/order_label" />
+            fab:fab_colorNormal="@color/ftn_blue"
+            fab:fab_colorPressed="@color/ftn_blue"
+            fab:fab_title="Add Cases" />
+    </com.getbase.floatingactionbutton.FloatingActionsMenu>
 
-
-        <ImageButton
-            android:id="@+id/toggle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
-            android:background="@drawable/ic_visibility"
-            android:tag="VISIBILITY" />
-    </RelativeLayout>
-
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/list_container"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
-
-</LinearLayout>
+</android.support.design.widget.CoordinatorLayout>
