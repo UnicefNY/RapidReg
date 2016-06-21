@@ -24,6 +24,8 @@
     <string name="order_by">Order by:</string>
     <string name="cancel">Cancel</string>
     <string name="ok">OK</string>
+    <string name="case_id">ID:&#160;</string>
+    <string name="child_gender">child gender</string>
 
     <string-array name="order_array">
         <item>Create Time</item>
