@@ -11,12 +11,14 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/case_id" />
+            android:text="@string/case_id"
+            android:textColor="@color/font_dark" />
 
         <TextView
             android:id="@+id/id_normal_state"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:textColor="@color/font_dark" />
 
         <ImageView
             android:id="@+id/connected"
@@ -60,7 +62,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/age_left_margin"
-            android:layout_marginStart="@dimen/age_left_margin" />
+            android:layout_marginStart="@dimen/age_left_margin"
+            android:textColor="@color/font_medium" />
 
         <View
             android:layout_width="0dp"
@@ -70,7 +73,8 @@
         <TextView
             android:id="@+id/created_time"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:textColor="@color/font_light" />
 
     </LinearLayout>
 </RelativeLayout>
