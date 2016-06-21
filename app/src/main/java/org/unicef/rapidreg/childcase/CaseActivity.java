@@ -15,7 +15,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.MenuItem;
 import android.widget.GridView;
 import android.widget.Toast;
@@ -41,9 +40,10 @@ public class CaseActivity extends BaseActivity {
     private final int IMAGE_OPEN = 1;
     private List<Bitmap> casePhotos;
     private GridView photoGrid;
+    private DetailState textAreaState = DetailState.VISIBILITY;
 
     public enum CaseMode {
-        EDIT, ADD, LIST, DETAIL
+        EDIT, LIST, DETAIL
     }
 
     @Override
@@ -59,11 +59,9 @@ public class CaseActivity extends BaseActivity {
         }
     }
 
-
     @Override
     protected void onResume() {
         super.onResume();
-        Log.i("sjyuan", "CaseActivity-->onActivityResult+imagePath=" + imagePath);
 
         if (TextUtils.isEmpty(imagePath)) {
             return;
@@ -92,7 +90,6 @@ public class CaseActivity extends BaseActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        Log.i("sjyuan", "CaseActivity-->onActivityResult" + requestCode + resultCode + data);
         if (Activity.RESULT_OK == resultCode && IMAGE_OPEN == requestCode) {
             Uri uri = data.getData();
             if (!TextUtils.isEmpty(uri.getAuthority())) {
@@ -116,7 +113,7 @@ public class CaseActivity extends BaseActivity {
         } else if (CaseMode.DETAIL == caseMode) {
             setTopMenuItemsInCaseListPage();
             super.onBackPressed();
-        } else if (CaseMode.ADD == caseMode || CaseMode.EDIT == caseMode) {
+        } else if (CaseMode.EDIT == caseMode) {
             new AlertDialog.Builder(this)
                     .setTitle("Quit")
                     .setMessage("Are you sure to quit without saving?")
@@ -141,6 +138,16 @@ public class CaseActivity extends BaseActivity {
         @Override
         public boolean onMenuItemClick(MenuItem menuItem) {
             switch (menuItem.getItemId()) {
+                case R.id.toggle:
+                    DetailState nextState = textAreaState.getNextState();
+                    MenuItem item = toolbar.getMenu().findItem(R.id.toggle);
+                    item.setIcon(nextState.getResId());
+                    textAreaState = nextState;
+                    CaseListFragment caseListFragment
+                            = (CaseListFragment) getSupportFragmentManager()
+                            .findFragmentByTag(CaseListFragment.class.getSimpleName());
+                    caseListFragment.toggleMode(nextState.isDetailShow());
+                    return true;
                 case R.id.search:
                     redirectFragment(new CaseSearchFragment());
                     return true;
@@ -178,9 +185,6 @@ public class CaseActivity extends BaseActivity {
     }
 
     private void resetBarButtonsIfNeeded() {
-        if (isListFragmentVisible()) {
-            setTopMenuItemsInCaseAdditionPage();
-        }
     }
 
     private boolean isListFragmentVisible() {
@@ -206,5 +210,30 @@ public class CaseActivity extends BaseActivity {
             }
         }
         return true;
+    }
+
+    public enum DetailState {
+        VISIBILITY(R.drawable.visible, true),
+        INVISIBILITY(R.drawable.invisible, false);
+
+        private final int resId;
+        private final boolean isDetailShow;
+
+        DetailState(int resId, boolean isDetailShow) {
+            this.resId = resId;
+            this.isDetailShow = isDetailShow;
+        }
+
+        public DetailState getNextState() {
+            return this == VISIBILITY ? INVISIBILITY : VISIBILITY;
+        }
+
+        public int getResId() {
+            return resId;
+        }
+
+        public boolean isDetailShow() {
+            return isDetailShow;
+        }
     }
 }
