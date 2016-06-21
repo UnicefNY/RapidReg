@@ -2,7 +2,7 @@ Feature: Basic Identify Form
   As a logged in user, I want to be able to create new cases. So that I should fill in Basic Identify Form.
 
   Background:
-    Given I press "button_login"
+    Given I login RapidReg with "primero" account
     And I press menu tab "Cases"
     When I press "New Case" button
     And I scroll to "Basic Identity" form
