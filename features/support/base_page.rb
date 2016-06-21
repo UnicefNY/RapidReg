@@ -32,6 +32,14 @@ module LocatorModule
     raise("Not find text: #{text}") if texts(text).empty?
   end
 
+  def ifTextExist(text)
+    if texts(text).empty?
+      return false
+    else
+      return true
+    end
+  end
+
   def verigyPromptNotExist(message)
     raise("Should not find text: #{message}") unless waitElement { texts(message).empty? }
   end
@@ -67,14 +75,28 @@ end
 module GestureModule
 
   def scrollFullScreen(direction)
-    # screen_width = self.tag("android.widget.LinearLayout").size.width      #1080
-    # screen_height = self.tag("android.widget.LinearLayout").size.height     #1920
-
     case direction.downcase
       when "right"
         self.swipe(:start_x => 1, :start_y => 1000, :end_x => 1000, :end_y => 1000, :duration => 2000)
       when "left"
         self.swipe(:start_x => 1000, :start_y => 1000, :end_x => 50, :end_y => 1000, :duration => 2000)
+      else
+        puts "Unknown scroll direction."
+    end
+  end
+
+  def scrollPartScreen(direction)
+    screen_width = self.tag("android.widget.LinearLayout").size.width      #1080
+    screen_height = self.tag("android.widget.LinearLayout").size.height     #1920
+    case direction.downcase
+      when "right"
+        self.swipe(:start_x => 0.1*screen_width, :start_y => 0.5*screen_height, :end_x => 0.9*screen_width, :end_y => 0.5*screen_height, :duration => 2000)
+      when "left"
+        self.swipe(:start_x => 0.9*screen_width, :start_y => 0.5*screen_height, :end_x => 0.1*screen_width, :end_y => 0.5*screen_height, :duration => 2000)
+      when "down"
+        self.swipe(:start_x => 0.5*screen_width, :start_y => 0.6*screen_height, :end_x => 0.5*screen_width, :end_y => 0.1*screen_height, :duration => 2000)
+      when "up"
+        self.swipe(:start_x => 0.5*screen_width, :start_y => 0.1*screen_height, :end_x => 0.5*screen_width, :end_y => 0.6*screen_height, :duration => 2000)
       else
         puts "Unknown scroll direction."
     end
