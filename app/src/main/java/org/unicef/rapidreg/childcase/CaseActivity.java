@@ -154,7 +154,10 @@ public class CaseActivity extends BaseActivity {
 
         CaseListFragment caseListFragment = (CaseListFragment) getSupportFragmentManager()
                 .findFragmentByTag(CaseListFragment.class.getSimpleName());
-        caseListFragment.toggleMode(textAreaState.isDetailShow());
+
+        if (caseListFragment != null) {
+            caseListFragment.toggleMode(textAreaState.isDetailShow());
+        }
     }
 
     private boolean saveCaseButtonAction() {
