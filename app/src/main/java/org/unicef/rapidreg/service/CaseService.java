@@ -40,11 +40,23 @@ public class CaseService {
     }
 
     public List<Case> getCaseList() {
-        return caseDao.getAllCases();
+        return caseDao.getAllCasesOrderByDate(false);
     }
 
-    public List<Case> getCaseListOrderByAge() {
-        return caseDao.getAllCasesOrderByAge();
+    public List<Case> getCaseListOrderByDateASC() {
+        return caseDao.getAllCasesOrderByDate(true);
+    }
+
+    public List<Case> getCaseListOrderByDateDES() {
+        return caseDao.getAllCasesOrderByDate(false);
+    }
+
+    public List<Case> getCaseListOrderByAgeASC() {
+        return caseDao.getAllCasesOrderByAge(true);
+    }
+
+    public List<Case> getCaseListOrderByAgeDES() {
+        return caseDao.getAllCasesOrderByAge(false);
     }
 
     public Map<String, String> getCaseMapByUniqueId(String uniqueId) {

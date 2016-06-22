@@ -7,7 +7,7 @@ import java.util.List;
 public interface CaseDao {
     Case getCaseByUniqueId(String id);
 
-    List<Case> getAllCases();
+    List<Case> getAllCasesOrderByDate(boolean isASC);
 
-    List<Case> getAllCasesOrderByAge();
+    List<Case> getAllCasesOrderByAge(boolean isASC);
 }
