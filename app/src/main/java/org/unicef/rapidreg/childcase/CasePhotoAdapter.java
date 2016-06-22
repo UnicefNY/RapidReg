@@ -12,6 +12,7 @@ import org.unicef.rapidreg.R;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 
 public class CasePhotoAdapter extends BaseAdapter {
     private Context context;

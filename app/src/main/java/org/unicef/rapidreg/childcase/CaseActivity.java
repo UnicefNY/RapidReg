@@ -25,20 +25,19 @@ import org.unicef.rapidreg.forms.childcase.CaseFormRoot;
 import org.unicef.rapidreg.forms.childcase.CaseSection;
 import org.unicef.rapidreg.service.CaseFormService;
 import org.unicef.rapidreg.service.CaseService;
+import org.unicef.rapidreg.utils.ImageCompressUtil;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import static org.unicef.rapidreg.service.CaseService.CaseValues;
-
 public class CaseActivity extends BaseActivity {
     public final static String INTENT_KEY_CASE_MODE = "_case_mode";
 
-    private String imagePath;
     private final int IMAGE_OPEN = 1;
-    private List<Bitmap> casePhotos;
+    private String imagePath;
+
     private GridView photoGrid;
     private DetailState textAreaState = DetailState.VISIBILITY;
 
@@ -66,25 +65,19 @@ public class CaseActivity extends BaseActivity {
         if (TextUtils.isEmpty(imagePath)) {
             return;
         }
-
-        BitmapFactory.Options opts = new BitmapFactory.Options();
-        opts.inJustDecodeBounds = false;
-        opts.inPreferredConfig = Bitmap.Config.RGB_565;
-        opts.inDither = true;
-        Bitmap newPhoto = BitmapFactory.decodeFile(imagePath, opts);
-
         photoGrid = (GridView) findViewById(R.id.photo_grid);
 
-        CasePhotoAdapter casePhotoAdapter = (CasePhotoAdapter) photoGrid.getAdapter();
-        if (casePhotoAdapter.getCount() > 1) {
-            casePhotos = casePhotoAdapter.getAllItems();
-            casePhotos.add(casePhotos.size() - 1, newPhoto);
-        } else {
-            casePhotos = new ArrayList<>();
-            casePhotos.add(newPhoto);
-            casePhotos.add(BitmapFactory.decodeResource(getResources(), R.drawable.photo_add));
-        }
-        photoGrid.setAdapter(new CasePhotoAdapter(this, casePhotos));
+        List<Bitmap> previousPhotos = CaseService.CaseValues.getPhotosBits();
+
+        Bitmap newPhoto = ImageCompressUtil.getThumbnail(getContentResolver(), imagePath);
+        previousPhotos.add(newPhoto);
+
+        Bitmap addPhotoIcon = BitmapFactory.decodeResource(getResources(), R.drawable.photo_add);
+        previousPhotos.add(addPhotoIcon);
+
+        CaseService.CaseValues.addPhoto(newPhoto, imagePath);
+
+        photoGrid.setAdapter(new CasePhotoAdapter(this, previousPhotos));
         imagePath = null;
     }
 
@@ -103,7 +96,6 @@ public class CaseActivity extends BaseActivity {
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
-
 
     @Override
     public void onBackPressed() {
@@ -167,7 +159,7 @@ public class CaseActivity extends BaseActivity {
 
     private boolean saveCaseButtonAction() {
         if (validateRequiredField()) {
-            CaseService.getInstance().saveOrUpdateCase(CaseValues.getValues());
+            CaseService.getInstance().saveOrUpdateCase(CaseService.CaseValues.getValues());
             redirectFragment(new CaseListFragment());
             setTopMenuItemsInCaseListPage();
         }
@@ -208,7 +200,7 @@ public class CaseActivity extends BaseActivity {
         }
 
         for (String field : requiredFieldNames) {
-            if (TextUtils.isEmpty(CaseValues.getValues().get(field))) {
+            if (TextUtils.isEmpty(CaseService.CaseValues.getValues().get(field))) {
                 Toast.makeText(CaseActivity.this, "Some required field is not filled, please fill them", Toast.LENGTH_LONG).show();
                 return false;
             }
