@@ -14,11 +14,13 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.getbase.floatingactionbutton.FloatingActionsMenu;
 import com.hannesdorfmann.mosby.mvp.MvpFragment;
 
 import org.unicef.rapidreg.R;
+import org.unicef.rapidreg.service.CaseFormService;
 import org.unicef.rapidreg.service.CaseService;
 
 import java.util.Arrays;
@@ -116,10 +118,20 @@ public class CaseListFragment extends MvpFragment<CaseListView, CaseListPresente
 
     @OnClick(R.id.add_case)
     public void onCaseAddClicked() {
+        CaseService.CaseValues.clear();
+        if (!CaseFormService.getInstance().isFormReady()) {
+            Toast.makeText(getActivity(),
+                    R.string.syncing_forms_text, Toast.LENGTH_LONG).show();
+            return;
+        }
         getActivity().getSupportFragmentManager().beginTransaction()
                 .replace(R.id.fragment_content, new CaseRegisterWrapperFragment(),
                         CaseRegisterWrapperFragment.class.getSimpleName())
                 .commit();
+
+        getActivity().getIntent().removeExtra(CaseActivity.INTENT_KEY_CASE_MODE);
+        CaseActivity activity = (CaseActivity) getActivity();
+        activity.setTopMenuItemsInCaseAdditionPage();
     }
 
     public void toggleMode(boolean isShow) {

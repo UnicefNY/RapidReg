@@ -135,17 +135,31 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
         getIntent().putExtra(CaseActivity.INTENT_KEY_CASE_MODE, CaseActivity.CaseMode.DETAIL);
         setEditCaseVisible(true);
         setSaveCaseVisible(false);
+        setToggleCaseVisible(false);
+        setSearchCaseVisible(false);
     }
 
     public void setTopMenuItemsInCaseListPage() {
         getIntent().putExtra(CaseActivity.INTENT_KEY_CASE_MODE, CaseActivity.CaseMode.LIST);
         setEditCaseVisible(false);
         setSaveCaseVisible(false);
+        setToggleCaseVisible(true);
+        setSearchCaseVisible(true);
     }
 
     public void setTopMenuItemsInCaseEditPage() {
         getIntent().putExtra(CaseActivity.INTENT_KEY_CASE_MODE, CaseActivity.CaseMode.EDIT);
         setEditCaseVisible(false);
+        setSaveCaseVisible(true);
+        setToggleCaseVisible(false);
+        setSearchCaseVisible(false);
+    }
+
+    public void setTopMenuItemsInCaseAdditionPage() {
+        getIntent().putExtra(CaseActivity.INTENT_KEY_CASE_MODE, CaseActivity.CaseMode.ADD);
+        setEditCaseVisible(false);
+        setToggleCaseVisible(false);
+        setSearchCaseVisible(false);
         setSaveCaseVisible(true);
     }
 
@@ -159,6 +173,14 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
 
     private void setEditCaseVisible(boolean visible) {
         toolbar.getMenu().findItem(R.id.edit_case).setVisible(visible);
+    }
+
+    private void setSearchCaseVisible(boolean visible) {
+        toolbar.getMenu().findItem(R.id.search).setVisible(visible);
+    }
+
+    private void setToggleCaseVisible(boolean visible) {
+        toolbar.getMenu().findItem(R.id.toggle).setVisible(visible);
     }
 
     //TODO: Put logout into basePresenter in future
