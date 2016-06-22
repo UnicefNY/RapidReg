@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:fab="http://schemas.android.com/apk/res-auto"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -30,10 +30,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
-        fab:fab_addButtonColorNormal="@color/ftn_gray"
-        fab:fab_addButtonColorPressed="@color/ftn_gray"
-        fab:fab_labelStyle="@style/menu_labels_style"
-        fab:fab_labelsPosition="left">
+        app:fab_addButtonColorNormal="@color/ftn_blue"
+        app:fab_addButtonColorPressed="@color/ftn_blue"
+        app:fab_labelStyle="@style/menu_labels_style"
+        app:fab_labelsPosition="left">
 
         <com.getbase.floatingactionbutton.FloatingActionButton
             android:id="@+id/add_tracing_request"
@@ -41,9 +41,9 @@
             android:layout_height="wrap_content"
             android:scrollY="3dp"
             android:src="@drawable/tracing_white"
-            fab:fab_colorNormal="@color/ftn_red"
-            fab:fab_colorPressed="@color/ftn_red"
-            fab:fab_title="Add Tracing Request" />
+            app:fab_colorNormal="@color/ftn_red"
+            app:fab_colorPressed="@color/ftn_red"
+            app:fab_title="Add Tracing Request" />
 
         <com.getbase.floatingactionbutton.FloatingActionButton
             android:id="@+id/add_case"
@@ -51,9 +51,9 @@
             android:layout_height="wrap_content"
             android:scrollY="3dp"
             android:src="@drawable/cases_white"
-            fab:fab_colorNormal="@color/ftn_blue"
-            fab:fab_colorPressed="@color/ftn_blue"
-            fab:fab_title="Add Case" />
+            app:fab_colorNormal="@color/ftn_green"
+            app:fab_colorPressed="@color/ftn_green"
+            app:fab_title="Add Case" />
     </com.getbase.floatingactionbutton.FloatingActionsMenu>
 
 </android.support.design.widget.CoordinatorLayout>
