@@ -2,9 +2,11 @@ package org.unicef.rapidreg.base.view;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -26,18 +28,21 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class BaseActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
-    protected
+    private static final int[][] COLOR_STATES = new int[][]{
+            new int[]{android.R.attr.state_checked},
+            new int[]{-android.R.attr.state_checked},};
+
     @BindView(R.id.toolbar)
-    Toolbar toolbar;
+    protected Toolbar toolbar;
     @BindView(R.id.drawer_layout)
     DrawerLayout drawer;
     @BindView(R.id.nav_view)
     NavigationView navigationView;
 
-    TextView textViewLoginUserLabel;
-    TextView textViewLogoutLabel;
-
     IntentSender intentSender = new IntentSender();
+
+    private ColorStateList caseColor;
+    private ColorStateList trColor;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -45,10 +50,15 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
+        navigationView.setItemIconTintList(null);
+        caseColor = generateColors(R.color.ftn_green);
+        trColor = generateColors(R.color.ftn_red);
+        navigationView.setItemTextColor(caseColor);
+
         View headerView = navigationView.getHeaderView(0);
-        textViewLoginUserLabel = (TextView) headerView.findViewById(R.id.login_user_label);
+        TextView textViewLoginUserLabel = (TextView) headerView.findViewById(R.id.login_user_label);
         textViewLoginUserLabel.setText(getIntent().getStringExtra(IntentSender.KEY_LOGIN_USER));
-        textViewLogoutLabel = (TextView) headerView.findViewById(R.id.logout_label);
+        TextView textViewLogoutLabel = (TextView) headerView.findViewById(R.id.logout_label);
 
         final BaseActivity baseActivity = this;
         textViewLogoutLabel.setOnClickListener(new View.OnClickListener() {
@@ -84,8 +94,9 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
         drawer.closeDrawer(GravityCompat.START);
         if (id == R.id.nav_cases) {
             navCaseAction();
+            navigationView.setItemTextColor(caseColor);
         } else if (id == R.id.nav_tracing) {
-
+            navigationView.setItemTextColor(trColor);
         }
         navigationView.getMenu().findItem(id).setChecked(true);
         return true;
@@ -173,5 +184,14 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
 
     public PrimeroApplication getContext() {
         return (PrimeroApplication) getApplication();
+    }
+
+    private ColorStateList generateColors(int resId) {
+        int[] color = new int[]{
+                ContextCompat.getColor(this, resId),
+                ContextCompat.getColor(this, R.color.font_medium),
+        };
+
+        return new ColorStateList(COLOR_STATES, color);
     }
 }
