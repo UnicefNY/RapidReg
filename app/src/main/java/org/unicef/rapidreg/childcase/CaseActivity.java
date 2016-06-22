@@ -42,7 +42,7 @@ public class CaseActivity extends BaseActivity {
     private DetailState textAreaState = DetailState.VISIBILITY;
 
     public enum CaseMode {
-        EDIT, LIST, DETAIL
+        EDIT, ADD, LIST, DETAIL
     }
 
     @Override
