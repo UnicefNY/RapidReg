@@ -154,6 +154,7 @@
     <color name="ftn_gray">#bbbbbb</color>
     <color name="ftn_blue">#4e6af9</color>
     <color name="ftn_red">#fb5116</color>
+    <color name="ftn_green">#0db14b</color>
     <!--case row end-->
 
     <color name="font_dark">#555555</color>
