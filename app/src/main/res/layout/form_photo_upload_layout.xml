@@ -19,13 +19,12 @@
         <GridView
             android:id="@+id/photo_grid"
             android:layout_width="fill_parent"
-            android:layout_height="90dp"
+            android:layout_height="wrap_content"
             android:columnWidth="90dp"
             android:gravity="center"
             android:horizontalSpacing="5dp"
             android:numColumns="4"
-            android:stretchMode="columnWidth"
-            android:verticalSpacing="5dp"/>
+            android:stretchMode="columnWidth" />
 
         <View
             android:layout_width="match_parent"

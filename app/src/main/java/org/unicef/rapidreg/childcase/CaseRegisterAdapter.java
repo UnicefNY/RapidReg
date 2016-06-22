@@ -11,7 +11,7 @@ import android.view.ViewGroup;
 import org.unicef.rapidreg.forms.childcase.CaseField;
 import org.unicef.rapidreg.widgets.viewholder.BaseViewHolder;
 import org.unicef.rapidreg.widgets.viewholder.GenericViewHolder;
-import org.unicef.rapidreg.widgets.viewholder.PhotoUploadHolder;
+import org.unicef.rapidreg.widgets.viewholder.PhotoUploadViewHolder;
 import org.unicef.rapidreg.widgets.viewholder.SeparatorViewHolder;
 import org.unicef.rapidreg.widgets.viewholder.TickBoxViewHolder;
 
@@ -51,7 +51,7 @@ public class CaseRegisterAdapter extends RecyclerView.Adapter<BaseViewHolder> {
                                 .getIdentifier(CaseField.TYPE_TICK_BOX, "layout", packageName),
                         parent, false));
             case VIEW_HOLDER_PHOTO_UPLOAD_BOX:
-                return new PhotoUploadHolder(context, inflater.inflate(resources
+                return new PhotoUploadViewHolder(context, inflater.inflate(resources
                                 .getIdentifier(CaseField.TYPE_PHOTO_UPLOAD_LAYOUT, "layout", packageName),
                         parent, false));
             default:

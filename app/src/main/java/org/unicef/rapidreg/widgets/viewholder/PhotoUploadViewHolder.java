@@ -14,27 +14,22 @@ import org.unicef.rapidreg.R;
 import org.unicef.rapidreg.childcase.CaseActivity;
 import org.unicef.rapidreg.childcase.CasePhotoAdapter;
 import org.unicef.rapidreg.forms.childcase.CaseField;
+import org.unicef.rapidreg.service.CaseService;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class PhotoUploadHolder extends BaseViewHolder<CaseField> {
-    public static final String TAG = PhotoUploadHolder.class.getSimpleName();
+public class PhotoUploadViewHolder extends BaseViewHolder<CaseField> {
+    public static final String TAG = PhotoUploadViewHolder.class.getSimpleName();
+    public final int IMAGE_OPEN = 1;
 
     @BindView(R.id.photo_grid)
     GridView photoGrid;
-
-    private final int IMAGE_OPEN = 1;
-    private Bitmap bmp;
-    private ArrayList<HashMap<String, Object>> imageItem;
-    private CasePhotoAdapter casePhotoAdapter;
     private CaseActivity caseActivity;
 
-    public PhotoUploadHolder(Context context, View itemView) {
+    public PhotoUploadViewHolder(Context context, View itemView) {
         super(context, itemView);
         ButterKnife.bind(this, itemView);
         caseActivity = (CaseActivity) context;
@@ -43,9 +38,16 @@ public class PhotoUploadHolder extends BaseViewHolder<CaseField> {
 
     @Override
     public void setValue(CaseField field) {
-        bmp = BitmapFactory.decodeResource(context.getResources(), R.drawable.photo_camera);
-        casePhotoAdapter = new CasePhotoAdapter(context, Arrays.asList(bmp));
-        photoGrid.setAdapter(casePhotoAdapter);
+        List<Bitmap> previousPhotos = CaseService.CaseValues.getPhotosBits();
+
+        Bitmap addPhotoIcon;
+        if (previousPhotos.size() > 0) {
+            addPhotoIcon = BitmapFactory.decodeResource(context.getResources(), R.drawable.photo_add);
+        } else {
+            addPhotoIcon = BitmapFactory.decodeResource(context.getResources(), R.drawable.photo_camera);
+        }
+        previousPhotos.add(addPhotoIcon);
+        photoGrid.setAdapter(new CasePhotoAdapter(context, previousPhotos));
     }
 
     @Override
@@ -60,21 +62,36 @@ public class PhotoUploadHolder extends BaseViewHolder<CaseField> {
                 }
             }
         });
+        photoGrid.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
+                if (i < photoGrid.getAdapter().getCount() - 1) {
+                    dialog(i);
+                }
+                return true;
+            }
+        });
     }
 
     protected void dialog(final int position) {
         AlertDialog.Builder builder = new AlertDialog.Builder(caseActivity);
-        builder.setMessage("确认移除已添加图片吗？");
-        builder.setTitle("提示");
-        builder.setPositiveButton("确认", new DialogInterface.OnClickListener() {
+        builder.setMessage("Are you sure to remove this photo?");
+        builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();
-                imageItem.remove(position);
+                CasePhotoAdapter casePhotoAdapter = (CasePhotoAdapter) photoGrid.getAdapter();
+                CaseService.CaseValues.removePhoto(casePhotoAdapter.getAllItems().get(position));
+                if (CaseService.CaseValues.getPhotoBitPaths().size() == 0) {
+                    casePhotoAdapter.getAllItems().clear();
+                    casePhotoAdapter.addItem(BitmapFactory.decodeResource(context.getResources(), R.drawable.photo_camera));
+                } else {
+                    casePhotoAdapter.getAllItems().remove(position);
+                }
                 casePhotoAdapter.notifyDataSetChanged();
             }
         });
-        builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+        builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();
