@@ -35,8 +35,11 @@
     <dimen name="text_size_hidden_state">15sp</dimen>
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="case_spinner_indicator_left_margin">20.3dp</dimen>
-    <dimen name="case_spinner_order_name_left_margin">59.7dp</dimen>
-    <dimen name="case_spinner_height">54dp</dimen>
+    <dimen name="case_spinner_order_left_margin">59.7dp</dimen>
+    <dimen name="case_spinner_order_name_left_margin">123.7dp</dimen>
+    <dimen name="case_spinner_height_opened">54dp</dimen>
+    <dimen name="case_spinner_height_closed">40.7dp</dimen>
+    <dimen name="case_spinner_arrow_right_margin">12dp</dimen>
     <!--row in list end-->
 
 </resources>
