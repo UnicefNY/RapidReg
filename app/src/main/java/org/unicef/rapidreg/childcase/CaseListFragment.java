@@ -40,6 +40,9 @@ public class CaseListFragment extends MvpFragment<CaseListView, CaseListPresente
             SpinnerState.DATE_ASC,
             SpinnerState.DATE_DES};
 
+    private static final int DEFAULT_SPINNER_STATE_POSITION =
+            Arrays.asList(SPINNER_STATES).indexOf(SpinnerState.DATE_DES);
+
     @BindView(R.id.list_container)
     RecyclerView caseListContainer;
 
@@ -77,34 +80,26 @@ public class CaseListFragment extends MvpFragment<CaseListView, CaseListPresente
     public void initView(final CaseListAdapter adapter) {
         this.adapter = adapter;
 
+        initCaseListContainer(adapter);
+        initOrderSpinner(adapter);
+        initFloatingMenu();
+    }
+
+    private void initCaseListContainer(CaseListAdapter adapter) {
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         caseListContainer.setLayoutManager(layoutManager);
         caseListContainer.setAdapter(adapter);
+    }
 
+    private void initOrderSpinner(final CaseListAdapter adapter) {
         orderSpinner.setAdapter(new SpinnerAdapter(getActivity(),
                 R.layout.case_list_spinner_opened, Arrays.asList(SPINNER_STATES)));
-        orderSpinner.setSelection(3);
+        orderSpinner.setSelection(DEFAULT_SPINNER_STATE_POSITION);
         orderSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                CaseService caseService = CaseService.getInstance();
-                switch (position) {
-                    case 0:
-                        adapter.setCaseList(caseService.getCaseListOrderByAgeASC());
-                        break;
-                    case 1:
-                        adapter.setCaseList(caseService.getCaseListOrderByAgeDES());
-                        break;
-                    case 2:
-                        adapter.setCaseList(caseService.getCaseListOrderByDateASC());
-                        break;
-                    case 3:
-                        adapter.setCaseList(caseService.getCaseListOrderByDateDES());
-                        break;
-                    default:
-                        break;
-                }
+                handleItemSelection(position);
                 adapter.notifyDataSetChanged();
             }
 
@@ -112,8 +107,30 @@ public class CaseListFragment extends MvpFragment<CaseListView, CaseListPresente
             public void onNothingSelected(AdapterView<?> parent) {
 
             }
-        });
 
+            private void handleItemSelection(int position) {
+                CaseService caseService = CaseService.getInstance();
+                switch (SPINNER_STATES[position]) {
+                    case AGE_ASC:
+                        adapter.setCaseList(caseService.getCaseListOrderByAgeASC());
+                        break;
+                    case AGE_DES:
+                        adapter.setCaseList(caseService.getCaseListOrderByAgeDES());
+                        break;
+                    case DATE_ASC:
+                        adapter.setCaseList(caseService.getCaseListOrderByDateASC());
+                        break;
+                    case DATE_DES:
+                        adapter.setCaseList(caseService.getCaseListOrderByDateDES());
+                        break;
+                    default:
+                        break;
+                }
+            }
+        });
+    }
+
+    private void initFloatingMenu() {
         floatingMenu.setOnFloatingActionsMenuUpdateListener(
                 new FloatingActionsMenu.OnFloatingActionsMenuUpdateListener() {
                     @Override
