@@ -14,6 +14,8 @@ import org.unicef.rapidreg.model.Case;
 
 import java.lang.reflect.Type;
 import java.sql.Date;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -76,7 +78,7 @@ public class CaseService {
     }
 
     public void saveOrUpdateCase(Map<String, String> values) {
-        Date date = new Date(Calendar.getInstance().getTimeInMillis());
+        Date date = getRegisterDate(values);
 
         String caseJson = new Gson().toJson(values);
         Blob caseBlob = new Blob(caseJson.getBytes());
@@ -88,14 +90,14 @@ public class CaseService {
             Case child = new Case();
             child.setUniqueId(createUniqueId());
             child.setCreateAt(date);
-            child.setLastUpdatedAt(date);
+            child.setLastUpdatedAt(getCurrentDate());
             child.setContent(caseBlob);
             child.setAge(Integer.parseInt(values.get("Age")));
             child.save();
         } else {
             Log.d(TAG, "update the existing case");
             Case child = caseDao.getCaseByUniqueId(uniqueId);
-            child.setLastUpdatedAt(date);
+            child.setLastUpdatedAt(getCurrentDate());
             child.setContent(caseBlob);
             child.setAge(Integer.parseInt(values.get("Age")));
             child.update();
@@ -114,6 +116,25 @@ public class CaseService {
             }
         }
         return result;
+    }
+
+    private Date getCurrentDate() {
+        return new Date(Calendar.getInstance().getTimeInMillis());
+    }
+
+    private Date getRegisterDate(Map<String, String> values) {
+        String key = "Date of Registration or Interview";
+        if (values.containsKey(key)) {
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM/dd/yyyy");
+            try {
+                java.util.Date date = simpleDateFormat.parse(values.get(key));
+                return new Date(date.getTime());
+            } catch (ParseException e) {
+                Log.e(TAG, "date format error");
+            }
+        }
+
+        return getCurrentDate();
     }
 
     public static class CaseValues {
