@@ -82,7 +82,7 @@ public class CaseListFragment extends MvpFragment<CaseListView, CaseListPresente
         caseListContainer.setLayoutManager(layoutManager);
         caseListContainer.setAdapter(adapter);
         orderSpinner.setAdapter(new SpinnerAdapter(getActivity(),
-                R.layout.case_list_spinner, Arrays.asList(SPINNER_STATES)));
+                R.layout.case_list_spinner_opened, Arrays.asList(SPINNER_STATES)));
         orderSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 
             @Override
@@ -182,25 +182,27 @@ public class CaseListFragment extends MvpFragment<CaseListView, CaseListPresente
 
         @Override
         public View getDropDownView(int position, View convertView, ViewGroup parent) {
-            return getCustomView(position, convertView, parent);
+            return getCustomView(position, parent, true);
         }
 
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
-            return getCustomView(position, convertView, parent);
+            return getCustomView(position, parent, false);
         }
 
-        public View getCustomView(int position, View convertView, ViewGroup parent) {
+        public View getCustomView(int position, ViewGroup parent, boolean isDropDownView) {
             SpinnerState state = states.get(position);
 
             LayoutInflater inflater = LayoutInflater.from(getActivity());
-            View view = inflater.inflate(R.layout.case_list_spinner, parent, false);
+            int layoutId = isDropDownView ?
+                    R.layout.case_list_spinner_opened : R.layout.case_list_spinner_closed;
+            View view = inflater.inflate(layoutId, parent, false);
 
             ImageView indicator = (ImageView) view.findViewById(R.id.indicator);
             TextView orderName = (TextView) view.findViewById(R.id.order_name);
 
             indicator.setImageResource(state.getResId());
-            orderName.setText(state.getLongName());
+            orderName.setText(isDropDownView ? state.getLongName() : state.getShortName());
 
             return view;
         }
