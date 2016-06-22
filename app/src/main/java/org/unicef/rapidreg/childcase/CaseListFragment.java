@@ -81,17 +81,29 @@ public class CaseListFragment extends MvpFragment<CaseListView, CaseListPresente
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         caseListContainer.setLayoutManager(layoutManager);
         caseListContainer.setAdapter(adapter);
+
         orderSpinner.setAdapter(new SpinnerAdapter(getActivity(),
                 R.layout.case_list_spinner_opened, Arrays.asList(SPINNER_STATES)));
+        orderSpinner.setSelection(3);
         orderSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 CaseService caseService = CaseService.getInstance();
-                if (position == 0) {
-                    adapter.setCaseList(caseService.getCaseList());
-                } else {
-                    adapter.setCaseList(caseService.getCaseListOrderByAge());
+                switch (position) {
+                    case 0:
+                        adapter.setCaseList(caseService.getCaseListOrderByAgeASC());
+                        break;
+                    case 1:
+                        adapter.setCaseList(caseService.getCaseListOrderByAgeDES());
+                        break;
+                    case 2:
+                        adapter.setCaseList(caseService.getCaseListOrderByDateASC());
+                        break;
+                    case 3:
+                        adapter.setCaseList(caseService.getCaseListOrderByDateDES());
+                        break;
+                    default:
+                        break;
                 }
                 adapter.notifyDataSetChanged();
             }

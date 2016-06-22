@@ -17,13 +17,29 @@ public class CaseDaoImpl implements CaseDao {
     }
 
     @Override
-    public List<Case> getAllCases() {
-        return SQLite.select().from(Case.class).orderBy(Case_Table.created_at, false).queryList();
+    public List<Case> getAllCasesOrderByDate(boolean isASC) {
+        return isASC ? getCasesByDateASC() : getCasesByDateDES();
     }
 
     @Override
-    public List<Case> getAllCasesOrderByAge() {
+    public List<Case> getAllCasesOrderByAge(boolean isASC) {
+        return isASC ? getCasesByAgeASC() : getCasesByAgeDES();
+
+    }
+
+    private List<Case> getCasesByAgeASC() {
         return SQLite.select().from(Case.class).orderBy(Case_Table.age, true).queryList();
     }
 
+    private List<Case> getCasesByAgeDES() {
+        return SQLite.select().from(Case.class).orderBy(Case_Table.age, false).queryList();
+    }
+
+    private List<Case> getCasesByDateASC() {
+        return SQLite.select().from(Case.class).orderBy(Case_Table.created_at, true).queryList();
+    }
+
+    private List<Case> getCasesByDateDES() {
+        return SQLite.select().from(Case.class).orderBy(Case_Table.created_at, false).queryList();
+    }
 }
