@@ -163,6 +163,14 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
         setSaveCaseVisible(true);
     }
 
+    public void setTopMenuItemsInCaseSearchPage() {
+        getIntent().putExtra(CaseActivity.INTENT_KEY_CASE_MODE, CaseActivity.CaseMode.SEARCH);
+        setEditCaseVisible(false);
+        setToggleCaseVisible(false);
+        setSaveCaseVisible(false);
+        setSearchCaseVisible(true);
+    }
+
     public boolean isCaseInEdit() {
         return toolbar.getMenu().findItem(R.id.save_case).isVisible();
     }

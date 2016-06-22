@@ -42,7 +42,7 @@ public class CaseActivity extends BaseActivity {
     private DetailState textAreaState = DetailState.VISIBILITY;
 
     public enum CaseMode {
-        EDIT, ADD, LIST, DETAIL
+        EDIT, ADD, LIST, DETAIL, SEARCH
     }
 
     @Override
@@ -135,6 +135,7 @@ public class CaseActivity extends BaseActivity {
                     return true;
                 case R.id.search:
                     redirectFragment(new CaseSearchFragment());
+                    setTopMenuItemsInCaseSearchPage();
                     return true;
                 case R.id.save_case:
                     return saveCaseButtonAction();
@@ -155,7 +156,7 @@ public class CaseActivity extends BaseActivity {
         CaseListFragment caseListFragment = (CaseListFragment) getSupportFragmentManager()
                 .findFragmentByTag(CaseListFragment.class.getSimpleName());
 
-        if (caseListFragment != null) {
+        if (isListFragmentVisible()) {
             caseListFragment.toggleMode(textAreaState.isDetailShow());
         }
     }
