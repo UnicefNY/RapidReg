@@ -1,5 +1,6 @@
 package org.unicef.rapidreg.db.impl;
 
+import com.raizlabs.android.dbflow.sql.language.ConditionGroup;
 import com.raizlabs.android.dbflow.sql.language.SQLite;
 
 import org.unicef.rapidreg.db.CaseDao;
@@ -25,6 +26,14 @@ public class CaseDaoImpl implements CaseDao {
     public List<Case> getAllCasesOrderByAge(boolean isASC) {
         return isASC ? getCasesByAgeASC() : getCasesByAgeDES();
 
+    }
+
+    @Override
+    public List<Case> getCaseListByConditionGroup(ConditionGroup conditionGroup) {
+        return SQLite.select().from(Case.class)
+                .where(conditionGroup)
+                .orderBy(Case_Table.created_at, false)
+                .queryList();
     }
 
     private List<Case> getCasesByAgeASC() {

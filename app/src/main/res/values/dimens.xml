@@ -42,4 +42,13 @@
     <dimen name="case_spinner_arrow_right_margin">12dp</dimen>
     <!--row in list end-->
 
+    <!--search start-->
+    <dimen name="search_bar_left_margin">20dp</dimen>
+    <dimen name="search_bar_right_margin">20dp</dimen>
+    <dimen name="search_bar_left_padding">20dp</dimen>
+    <dimen name="search_bar_right_padding">20dp</dimen>
+    <dimen name="search_bar_item_height">44.3dp</dimen>
+    <dimen name="search_button_height">48dp</dimen>
+    <!--search end-->
+
 </resources>

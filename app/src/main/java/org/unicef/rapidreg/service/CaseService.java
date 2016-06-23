@@ -6,6 +6,9 @@ import android.util.Log;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.raizlabs.android.dbflow.data.Blob;
+import com.raizlabs.android.dbflow.sql.language.Condition;
+import com.raizlabs.android.dbflow.sql.language.ConditionGroup;
+import com.raizlabs.android.dbflow.sql.language.NameAlias;
 
 import org.unicef.rapidreg.db.CaseDao;
 import org.unicef.rapidreg.db.impl.CaseDaoImpl;
@@ -77,6 +80,20 @@ public class CaseService {
         return values;
     }
 
+    public List<Case> getSearchResult(String uniqueId, String name, int ageFrom, int ageTo,
+                                      String caregiver, String date) {
+
+        ConditionGroup conditionGroup = ConditionGroup.clause();
+        conditionGroup.and(Condition.column(NameAlias.builder("unique_id").build())
+                .like(getWrappedCondition(uniqueId)));
+        conditionGroup.and(Condition.column(NameAlias.builder("name").build())
+                .like(getWrappedCondition(name)));
+        conditionGroup.and(Condition.column(NameAlias.builder("age").build())
+                .between(ageFrom).and(ageTo));
+
+        return caseDao.getCaseListByConditionGroup(conditionGroup);
+    }
+
     public void saveOrUpdateCase(Map<String, String> values) {
         Date date = getRegisterDate(values);
 
@@ -135,6 +152,10 @@ public class CaseService {
         }
 
         return getCurrentDate();
+    }
+
+    private String getWrappedCondition(String queryStr) {
+        return "%" + queryStr + "%";
     }
 
     public static class CaseValues {

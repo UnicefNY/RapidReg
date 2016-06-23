@@ -27,6 +27,24 @@
     <string name="case_id">ID:&#160;</string>
     <string name="child_gender">child gender</string>
 
+
+    <string name="id">ID</string>
+    <string name="name">Name</string>
+    <string name="age_from">Age From</string>
+    <string name="age_to">To</string>
+    <string name="caregiver">Current Caregiver</string>
+    <string name="registration_date">Registration date</string>
+
+    <!-- Title -->
+    <string name="search">Search</string>
+    <string name="cases">Cases</string>
+    <string name="edit">Edit</string>
+    <string name="case_details">Case details</string>
+    <!-- Title -->
+
+    <string name="click_to_search">Click to search</string>
+    <string name="done">Done</string>
+
     <string-array name="order_array">
         <item>Create Time</item>
         <item>Age</item>

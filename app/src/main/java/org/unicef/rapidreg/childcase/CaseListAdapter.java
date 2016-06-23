@@ -35,15 +35,13 @@ import java.util.Map;
 public class CaseListAdapter extends RecyclerView.Adapter<CaseListAdapter.CaseListHolder> {
     public static final String TAG = CaseListAdapter.class.getSimpleName();
 
-    private List<Case> caseList;
+    private List<Case> caseList = new ArrayList<>();
     private Context context;
     private DateFormat dateFormat = SimpleDateFormat.getDateInstance(DateFormat.MEDIUM, Locale.US);
     private boolean isDetailShow = true;
 
     public CaseListAdapter(Context context) {
         this.context = context;
-        caseList = new ArrayList<>();
-        caseList = getAllCaseData();
     }
 
     public void setCaseList(List<Case> caseList) {

@@ -137,6 +137,7 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
         setSaveCaseVisible(false);
         setToggleCaseVisible(false);
         setSearchCaseVisible(false);
+        setTittle(R.string.case_details);
     }
 
     public void setTopMenuItemsInCaseListPage() {
@@ -145,6 +146,7 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
         setSaveCaseVisible(false);
         setToggleCaseVisible(true);
         setSearchCaseVisible(true);
+        setTittle(R.string.cases);
     }
 
     public void setTopMenuItemsInCaseEditPage() {
@@ -153,6 +155,7 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
         setSaveCaseVisible(true);
         setToggleCaseVisible(false);
         setSearchCaseVisible(false);
+        setTittle(R.string.edit);
     }
 
     public void setTopMenuItemsInCaseAdditionPage() {
@@ -161,6 +164,7 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
         setToggleCaseVisible(false);
         setSearchCaseVisible(false);
         setSaveCaseVisible(true);
+        setTittle(R.string.cases);
     }
 
     public void setTopMenuItemsInCaseSearchPage() {
@@ -169,10 +173,15 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
         setToggleCaseVisible(false);
         setSaveCaseVisible(false);
         setSearchCaseVisible(true);
+        setTittle(R.string.search);
     }
 
     public boolean isCaseInEdit() {
         return toolbar.getMenu().findItem(R.id.save_case).isVisible();
+    }
+
+    private void setTittle(int resId) {
+        toolbar.setTitle(resId);
     }
 
     private void setSaveCaseVisible(boolean visible) {
