@@ -8,11 +8,11 @@
     android:outAnimation="@anim/slide_out_up">
 
     <include
-        android:id="@+id/case_search_bar_closed"
-        layout="@layout/case_search_bar_closed" />
-
-    <include
         android:id="@+id/case_search_bar_opened"
         layout="@layout/case_search_bar_opened" />
+
+    <include
+        android:id="@+id/case_search_bar_closed"
+        layout="@layout/case_search_bar_closed" />
 
 </ViewSwitcher>
