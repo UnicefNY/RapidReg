@@ -1,4 +1,4 @@
-Feature: Navigation
+Feature: Main menu
   As a user, I want to show/hide main menu, so that I can switch among tabs and proceed with necessary operations.
 
   Scenario: Show/Hide main menu
