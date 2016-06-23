@@ -7,6 +7,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ViewSwitcher;
 
 import com.hannesdorfmann.mosby.mvp.MvpFragment;
 
@@ -15,6 +16,7 @@ import org.unicef.rapidreg.service.CaseService;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class CaseSearchFragment extends MvpFragment<CaseListView, CaseListPresenter>
         implements CaseListView {
@@ -23,10 +25,13 @@ public class CaseSearchFragment extends MvpFragment<CaseListView, CaseListPresen
     View searchBarClosed;
 
     @BindView(R.id.case_search_bar_opened)
-    View searchBarOpend;
+    View searchBarOpened;
 
     @BindView(R.id.list_container)
     RecyclerView caseListContainer;
+
+    @BindView(R.id.view_switcher)
+    ViewSwitcher viewSwitcher;
 
     private CaseListAdapter adapter;
 
@@ -53,9 +58,7 @@ public class CaseSearchFragment extends MvpFragment<CaseListView, CaseListPresen
     public void initView(final CaseListAdapter adapter) {
         this.adapter = adapter;
 
-        searchBarClosed.setVisibility(View.INVISIBLE);
-        searchBarOpend.setVisibility(View.VISIBLE);
-
+        collapseSearchBar();
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         caseListContainer.setLayoutManager(layoutManager);
@@ -63,5 +66,20 @@ public class CaseSearchFragment extends MvpFragment<CaseListView, CaseListPresen
 
         adapter.setCaseList(CaseService.getInstance().getCaseList());
         adapter.notifyDataSetChanged();
+    }
+
+    @OnClick(R.id.search_bar)
+    public void onSearchBarClicked() {
+        viewSwitcher.showNext();
+    }
+
+    @OnClick(R.id.done)
+    public void onDoneClicked() {
+        viewSwitcher.showPrevious();
+    }
+
+    private void collapseSearchBar() {
+        searchBarClosed.setVisibility(View.VISIBLE);
+        searchBarOpened.setVisibility(View.INVISIBLE);
     }
 }

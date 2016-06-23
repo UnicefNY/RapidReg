@@ -98,7 +98,7 @@
         android:layout_weight="1" />
 
     <Button
-        android:id="@+id/Done"
+        android:id="@+id/done"
         android:layout_width="match_parent"
         android:layout_height="@dimen/search_button_height"
         android:background="@color/ftn_blue"
