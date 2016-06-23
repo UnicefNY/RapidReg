@@ -21,12 +21,6 @@ import butterknife.OnClick;
 public class CaseSearchFragment extends MvpFragment<CaseListView, CaseListPresenter>
         implements CaseListView {
 
-    @BindView(R.id.case_search_bar_closed)
-    View searchBarClosed;
-
-    @BindView(R.id.case_search_bar_opened)
-    View searchBarOpened;
-
     @BindView(R.id.list_container)
     RecyclerView caseListContainer;
 
@@ -58,7 +52,6 @@ public class CaseSearchFragment extends MvpFragment<CaseListView, CaseListPresen
     public void initView(final CaseListAdapter adapter) {
         this.adapter = adapter;
 
-        collapseSearchBar();
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         caseListContainer.setLayoutManager(layoutManager);
@@ -76,10 +69,5 @@ public class CaseSearchFragment extends MvpFragment<CaseListView, CaseListPresen
     @OnClick(R.id.done)
     public void onDoneClicked() {
         viewSwitcher.showPrevious();
-    }
-
-    private void collapseSearchBar() {
-        searchBarClosed.setVisibility(View.VISIBLE);
-        searchBarOpened.setVisibility(View.INVISIBLE);
     }
 }
