@@ -50,7 +50,7 @@ public class CaseActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         toolbar.inflateMenu(R.menu.toolbar_main);
         toolbar.setOnMenuItemClickListener(new CaseMenuItemListener());
-        toolbar.setTitle("Cases");
+        toolbar.setTitle(R.string.cases);
         if (savedInstanceState == null) {
             redirectFragment(new CaseListFragment());
             setTopMenuItemsInCaseListPage();
