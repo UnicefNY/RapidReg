@@ -20,7 +20,7 @@ Feature: Basic Identify Form
       | Date of Registration or Interview        | <Date> Today's date                           |
       | Sex (Required)                           | <Select> Male                                 |
       | Age (Required)                           | 10                                            |
-      | Date of Birth                            | <Date> 17-Jan-2006                            |
+      | Date of Birth                            | <Date> 6/21/2006                              |
       | Is the age estimated?                    | <Checkbox> Yes                                |
       | Distinguishing Physical Characteristics  | Really tall, dark hair, brown eyes            |
       | Ration Card Number                       | 121121                                        |
