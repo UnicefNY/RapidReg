@@ -131,7 +131,7 @@ public class CaseActivity extends BaseActivity {
         public boolean onMenuItemClick(MenuItem menuItem) {
             switch (menuItem.getItemId()) {
                 case R.id.toggle:
-                    showOrHideCaseDetail();
+                    showHideCaseDetail();
                     return true;
                 case R.id.search:
                     redirectFragment(new CaseSearchFragment());
@@ -147,7 +147,7 @@ public class CaseActivity extends BaseActivity {
         }
     }
 
-    private void showOrHideCaseDetail() {
+    private void showHideCaseDetail() {
         textAreaState = textAreaState.getNextState();
 
         MenuItem item = toolbar.getMenu().findItem(R.id.toggle);
