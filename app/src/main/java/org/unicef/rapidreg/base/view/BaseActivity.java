@@ -173,7 +173,7 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
         setEditCaseVisible(false);
         setToggleCaseVisible(false);
         setSaveCaseVisible(false);
-        setSearchCaseVisible(true);
+        setSearchCaseVisible(false);
         setTittle(R.string.search);
     }
 
