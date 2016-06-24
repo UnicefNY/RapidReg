@@ -127,7 +127,8 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
         setTopMenuItemsInCaseListPage();
         navigationView.getMenu().findItem(R.id.nav_cases).setChecked(true);
         getSupportFragmentManager().beginTransaction()
-                .replace(R.id.fragment_content, new CaseListFragment())
+                .replace(R.id.fragment_content, new CaseListFragment(),
+                        CaseListFragment.class.getSimpleName())
                 .commit();
     }
 

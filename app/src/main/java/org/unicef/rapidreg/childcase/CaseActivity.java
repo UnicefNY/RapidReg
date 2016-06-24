@@ -155,11 +155,6 @@ public class CaseActivity extends BaseActivity {
 
         CaseListFragment caseListFragment = (CaseListFragment) getSupportFragmentManager()
                 .findFragmentByTag(CaseListFragment.class.getSimpleName());
-
-        if (!isListFragmentVisible()) {
-            redirectFragment(new CaseListFragment());
-        }
-
         caseListFragment.toggleMode(textAreaState.isDetailShow());
     }
 
