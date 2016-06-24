@@ -73,7 +73,7 @@ public class CaseListAdapter extends RecyclerView.Adapter<CaseListAdapter.CaseLi
         }.getType();
 
         final Map<String, String> caseInfo = new Gson().fromJson(caseJson, type);
-        caseInfo.put(CaseService.UNIQUE_ID, caseItem.getUniqueId());
+        caseInfo.put(CaseService.CASE_ID, caseItem.getUniqueId());
 
         Gender gender = Gender.valueOf(caseInfo.get("Sex").toUpperCase());
         holder.caseImage.setImageDrawable(getDefaultAvatar(gender.getAvatarId()));

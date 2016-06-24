@@ -34,10 +34,18 @@ import java.util.UUID;
 
 public class CaseService {
     public static final String TAG = CaseService.class.getSimpleName();
-    public static final String UNIQUE_ID = "unique_id";
+    public static final String CASE_ID = "Case ID";
+    public static final String AGE = "Age";
+    public static final String FULL_NAME = "Full Name";
+    public static final String FIRST_NAME = "First Name";
+    public static final String MIDDLE_NAME = "Middle Name";
+    public static final String SURNAME = "Surname";
+    public static final String NICKNAME = "Nickname";
+    public static final String OTHER_NAME = "Other Name";
+    public static final String CAREGIVER_NAME = "Name of Current Caregiver";
+    public static final String REGISTRATION_DATE = "Date of Registration or Interview";
 
     private static final CaseService CASE_SERVICE = new CaseService();
-
     private CaseDao caseDao = new CaseDaoImpl();
     private CasePhotoDao casePhotoDao = new CasePhotoDaoImpl();
 
@@ -82,7 +90,7 @@ public class CaseService {
         }.getType();
         Map<String, String> values = new Gson().fromJson(caseJson, type);
 
-        values.put(UNIQUE_ID, uniqueId);
+        values.put(CASE_ID, uniqueId);
 
         return values;
     }
@@ -91,13 +99,13 @@ public class CaseService {
                                       String caregiver, String date) {
 
         ConditionGroup conditionGroup = ConditionGroup.clause();
-        conditionGroup.and(Condition.column(NameAlias.builder("unique_id").build())
+        conditionGroup.and(Condition.column(NameAlias.builder(Case.COLUMN_UNIQUE_ID).build())
                 .like(getWrappedCondition(uniqueId)));
-        conditionGroup.and(Condition.column(NameAlias.builder("name").build())
+        conditionGroup.and(Condition.column(NameAlias.builder(Case.COLUMN_NAME).build())
                 .like(getWrappedCondition(name)));
-        conditionGroup.and(Condition.column(NameAlias.builder("age").build())
+        conditionGroup.and(Condition.column(NameAlias.builder(Case.COLUMN_AGE).build())
                 .between(ageFrom).and(ageTo));
-        conditionGroup.and(Condition.column(NameAlias.builder("caregiver").build())
+        conditionGroup.and(Condition.column(NameAlias.builder(Case.COLUMN_CAREGIVER).build())
                 .like(getWrappedCondition(caregiver)));
 
         return caseDao.getCaseListByConditionGroup(conditionGroup);
@@ -114,7 +122,7 @@ public class CaseService {
     }
 
     public void saveOrUpdateCase(Map<String, String> values, Map<Bitmap, String> photoBitPaths) {
-        if (values.get(UNIQUE_ID) == null) {
+        if (values.get(CASE_ID) == null) {
             saveCase(values, photoBitPaths);
         } else {
             Log.d(TAG, "update the existing case");
@@ -132,7 +140,7 @@ public class CaseService {
         child.setLastUpdatedDate(date);
         child.setContent(caseBlob);
         child.setName(getChildName(values));
-        child.setAge(Integer.parseInt(values.get("Age")));
+        child.setAge(Integer.parseInt(values.get(AGE)));
         child.setCaregiver(getCaregiverName(values));
         child.setRegistrationDate(getRegisterDate(values));
         child.save();
@@ -143,11 +151,11 @@ public class CaseService {
     private void updateCase(Map<String, String> values, Map<Bitmap, String> photoBitPaths) {
         Blob caseBlob = new Blob(new Gson().toJson(values).getBytes());
 
-        Case child = caseDao.getCaseByUniqueId(values.get(UNIQUE_ID));
+        Case child = caseDao.getCaseByUniqueId(values.get(CASE_ID));
         child.setLastUpdatedDate(new Date(Calendar.getInstance().getTimeInMillis()));
         child.setContent(caseBlob);
         child.setName(getChildName(values));
-        child.setAge(Integer.parseInt(values.get("Age")));
+        child.setAge(Integer.parseInt(values.get(AGE)));
         child.setCaregiver(getCaregiverName(values));
         child.setRegistrationDate(getRegisterDate(values));
         child.update();
@@ -174,11 +182,10 @@ public class CaseService {
     }
 
     private Date getRegisterDate(Map<String, String> values) {
-        String key = "Date of Registration or Interview";
-        if (values.containsKey(key)) {
+        if (values.containsKey(REGISTRATION_DATE)) {
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM/dd/yyyy");
             try {
-                java.util.Date date = simpleDateFormat.parse(values.get(key));
+                java.util.Date date = simpleDateFormat.parse(values.get(REGISTRATION_DATE));
                 return new Date(date.getTime());
             } catch (ParseException e) {
                 Log.e(TAG, "date format error");
@@ -189,17 +196,17 @@ public class CaseService {
     }
 
     private String getChildName(Map<String, String> values) {
-        return values.get("Full Name") + " "
-                + values.get("First Name") + " "
-                + values.get("Middle Name") + " "
-                + values.get("Surname") + " "
-                + values.get("Nickname") + " "
-                + values.get("Other Name");
+        return values.get(FULL_NAME) + " "
+                + values.get(FIRST_NAME) + " "
+                + values.get(MIDDLE_NAME) + " "
+                + values.get(SURNAME) + " "
+                + values.get(NICKNAME) + " "
+                + values.get(OTHER_NAME);
     }
 
 
     private String getCaregiverName(Map<String, String> values) {
-        return "" + values.get("Name of Current Caregiver");
+        return "" + values.get(CAREGIVER_NAME);
     }
 
     private String getWrappedCondition(String queryStr) {
