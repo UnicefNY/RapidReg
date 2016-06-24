@@ -55,10 +55,7 @@
     <!--login start-->
     <dimen name="login_logo_size">120dp</dimen>
     <dimen name="login_logo_top_margin">113dp</dimen>
-    <dimen name="login_username_top_margin">350dp</dimen>
-    <dimen name="login_password_top_margin">420dp</dimen>
     <dimen name="login_input_margin">25dp</dimen>
-    <dimen name="login_url_top_margin">465dp</dimen>
     <!--login end-->
 
 </resources>

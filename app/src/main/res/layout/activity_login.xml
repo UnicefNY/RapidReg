@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
     <ImageView
         android:id="@+id/logo"
         android:layout_width="@dimen/login_logo_size"
         android:layout_height="@dimen/login_logo_size"
-        android:layout_centerHorizontal="true"
+        android:layout_gravity="center_horizontal"
         android:layout_marginTop="@dimen/login_logo_top_margin" />
 
     <EditText
@@ -27,7 +28,6 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/login_input_margin"
         android:layout_marginRight="@dimen/login_input_margin"
-        android:layout_marginTop="@dimen/login_password_top_margin"
         android:hint="@string/password_hint_text"
         android:inputType="textPassword"
         android:text="qu01n23!"
@@ -37,8 +37,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/login_input_margin"
-        android:layout_marginRight="@dimen/login_input_margin"
-        android:layout_marginTop="@dimen/login_url_top_margin">
+        android:layout_marginRight="@dimen/login_input_margin">
 
         <EditText
             android:id="@+id/url"
@@ -60,16 +59,19 @@
 
     </RelativeLayout>
 
+    <View
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+
     <Button
         android:id="@+id/login"
         android:layout_width="match_parent"
         android:layout_height="@dimen/search_button_height"
-        android:layout_alignParentBottom="true"
         android:background="@color/ftn_blue"
         android:gravity="center"
         android:text="@string/button_login_text"
         android:textColor="@color/white"
         android:textSize="@dimen/text_size_20" />
 
-
-</RelativeLayout>
+</LinearLayout>
