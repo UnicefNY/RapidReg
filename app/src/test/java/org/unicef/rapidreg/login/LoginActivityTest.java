@@ -39,8 +39,8 @@ public class LoginActivityTest {
     @Before
     public void setup() {
         Activity activity = Robolectric.setupActivity(LoginActivity.class);
-        usernameEditView = (EditText) activity.findViewById(R.id.editview_username);
-        passwordEditView = (EditText) activity.findViewById(R.id.editview_password);
+        usernameEditView = (EditText) activity.findViewById(R.id.username);
+        passwordEditView = (EditText) activity.findViewById(R.id.password);
         loginButton = (Button) activity.findViewById(R.id.button_login);
         urlEditView = (EditText) activity.findViewById(R.id.editview_url);
     }

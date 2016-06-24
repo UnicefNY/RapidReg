@@ -14,7 +14,6 @@
     <dimen name="text_size_24">24sp</dimen>
     <dimen name="text_size_48">48sp</dimen>
     <dimen name="text_size_200">200sp</dimen>
-    <dimen name="logo_margin">60dp</dimen>
 
     <dimen name="field_padding_top_bottom">5dp</dimen>
     <dimen name="field_padding_left">15dp</dimen>
@@ -52,5 +51,14 @@
     <dimen name="no_result_vertical_padding">16dp</dimen>
     <dimen name="no_result_horizontal_padding">8dp</dimen>
     <!--search end-->
+
+    <!--login start-->
+    <dimen name="login_logo_size">120dp</dimen>
+    <dimen name="login_logo_top_margin">113dp</dimen>
+    <dimen name="login_username_top_margin">350dp</dimen>
+    <dimen name="login_password_top_margin">420dp</dimen>
+    <dimen name="login_input_margin">25dp</dimen>
+    <dimen name="login_url_top_margin">465dp</dimen>
+    <!--login end-->
 
 </resources>
