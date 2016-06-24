@@ -25,7 +25,7 @@ And /^I press "SAVE" button$/ do
   case_page.saveCase
 end
 
-Then /^I should see a new case with sex "(.*?)" and age "(.*?)"$/ do |sex,age|
+Then /^I should see a case with sex "(.*?)" and age "(.*?)"$/ do |sex,age|
   base_page.verifyTextExist(sex)
   base_page.verifyTextExist(age)
 end
