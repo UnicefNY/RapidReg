@@ -39,14 +39,16 @@ public class Case extends BaseModel {
     private String internalRev;
     @Column(name = "unique_id")
     private String uniqueId;
+    @Column(name = "registration_date")
+    private Date registrationDate;
     @Column(name = "created_by")
     private String createdBy;
-    @Column(name = "created_at")
-    private Date createAt;
-    @Column(name = "last_updated_at")
-    private Date lastUpdatedAt;
-    @Column(name = "last_synced_at")
-    private Date lastSyncedAt;
+    @Column(name = "created_date")
+    private Date createDate;
+    @Column(name = "last_updated_date")
+    private Date lastUpdatedDate;
+    @Column(name = "last_synced_date")
+    private Date lastSyncedDate;
 
     public long getId() {
         return id;
@@ -144,6 +146,14 @@ public class Case extends BaseModel {
         this.uniqueId = uniqueId;
     }
 
+    public Date getRegistrationDate() {
+        return registrationDate;
+    }
+
+    public void setRegistrationDate(Date registrationDate) {
+        this.registrationDate = registrationDate;
+    }
+
     public String getCreatedBy() {
         return createdBy;
     }
@@ -152,28 +162,28 @@ public class Case extends BaseModel {
         this.createdBy = createdBy;
     }
 
-    public Date getCreateAt() {
-        return createAt;
+    public Date getCreateDate() {
+        return createDate;
     }
 
-    public void setCreateAt(Date createAt) {
-        this.createAt = createAt;
+    public void setCreateDate(Date createDate) {
+        this.createDate = createDate;
     }
 
-    public Date getLastUpdatedAt() {
-        return lastUpdatedAt;
+    public Date getLastUpdatedDate() {
+        return lastUpdatedDate;
     }
 
-    public void setLastUpdatedAt(Date lastUpdatedAt) {
-        this.lastUpdatedAt = lastUpdatedAt;
+    public void setLastUpdatedDate(Date lastUpdatedDate) {
+        this.lastUpdatedDate = lastUpdatedDate;
     }
 
-    public Date getLastSyncedAt() {
-        return lastSyncedAt;
+    public Date getLastSyncedDate() {
+        return lastSyncedDate;
     }
 
-    public void setLastSyncedAt(Date lastSyncedAt) {
-        this.lastSyncedAt = lastSyncedAt;
+    public void setLastSyncedDate(Date lastSyncedDate) {
+        this.lastSyncedDate = lastSyncedDate;
     }
 
     @Override
@@ -189,10 +199,11 @@ public class Case extends BaseModel {
         sb.append("internalId").append(internalId).append("\n");
         sb.append("internalRev").append(internalRev).append("\n");
         sb.append("uniqueId").append(uniqueId).append("\n");
+        sb.append("registrationDate").append(registrationDate).append("\n");
         sb.append("createdBy").append(createdBy).append("\n");
-        sb.append("createAt").append(createAt).append("\n");
-        sb.append("lastUpdatedAt").append(lastUpdatedAt).append("\n");
-        sb.append("lastSyncedAt").append(lastSyncedAt).append("\n");
+        sb.append("createDate").append(createDate).append("\n");
+        sb.append("lastUpdatedDate").append(lastUpdatedDate).append("\n");
+        sb.append("lastSyncedDate").append(lastSyncedDate).append("\n");
 
         return sb.toString();
     }

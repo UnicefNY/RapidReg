@@ -32,7 +32,7 @@ public class CaseDaoImpl implements CaseDao {
     public List<Case> getCaseListByConditionGroup(ConditionGroup conditionGroup) {
         return SQLite.select().from(Case.class)
                 .where(conditionGroup)
-                .orderBy(Case_Table.created_at, false)
+                .orderBy(Case_Table.registration_date, false)
                 .queryList();
     }
 
@@ -45,10 +45,12 @@ public class CaseDaoImpl implements CaseDao {
     }
 
     private List<Case> getCasesByDateASC() {
-        return SQLite.select().from(Case.class).orderBy(Case_Table.created_at, true).queryList();
+        return SQLite.select().from(Case.class)
+                .orderBy(Case_Table.registration_date, true).queryList();
     }
 
     private List<Case> getCasesByDateDES() {
-        return SQLite.select().from(Case.class).orderBy(Case_Table.created_at, false).queryList();
+        return SQLite.select().from(Case.class)
+                .orderBy(Case_Table.registration_date, false).queryList();
     }
 }

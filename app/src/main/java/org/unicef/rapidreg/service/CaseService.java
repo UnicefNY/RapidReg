@@ -128,12 +128,13 @@ public class CaseService {
 
         Case child = new Case();
         child.setUniqueId(createUniqueId());
-        child.setCreateAt(date);
-        child.setLastUpdatedAt(date);
+        child.setCreateDate(date);
+        child.setLastUpdatedDate(date);
         child.setContent(caseBlob);
         child.setName(getChildName(values));
         child.setAge(Integer.parseInt(values.get("Age")));
         child.setCaregiver(getCaregiverName(values));
+        child.setRegistrationDate(getRegisterDate(values));
         child.save();
 
         saveCasePhoto(child, photoBitPaths);
@@ -143,11 +144,12 @@ public class CaseService {
         Blob caseBlob = new Blob(new Gson().toJson(values).getBytes());
 
         Case child = caseDao.getCaseByUniqueId(values.get(UNIQUE_ID));
-        child.setLastUpdatedAt(new Date(Calendar.getInstance().getTimeInMillis()));
+        child.setLastUpdatedDate(new Date(Calendar.getInstance().getTimeInMillis()));
         child.setContent(caseBlob);
         child.setName(getChildName(values));
         child.setAge(Integer.parseInt(values.get("Age")));
         child.setCaregiver(getCaregiverName(values));
+        child.setRegistrationDate(getRegisterDate(values));
         child.update();
 
         casePhotoDao.deleteCasePhotosByCaseId(child.getId());
@@ -186,15 +188,6 @@ public class CaseService {
         return getCurrentDate();
     }
 
-    private String getWrappedCondition(String queryStr) {
-        return "%" + queryStr + "%";
-    }
-
-
-    public String createUniqueId() {
-        return UUID.randomUUID().toString();
-    }
-
     private String getChildName(Map<String, String> values) {
         return values.get("Full Name") + " "
                 + values.get("First Name") + " "
@@ -204,8 +197,17 @@ public class CaseService {
                 + values.get("Other Name");
     }
 
+
     private String getCaregiverName(Map<String, String> values) {
         return "" + values.get("Name of Current Caregiver");
+    }
+
+    private String getWrappedCondition(String queryStr) {
+        return "%" + queryStr + "%";
+    }
+
+    public String createUniqueId() {
+        return UUID.randomUUID().toString();
     }
 
     public static class CaseValues {
