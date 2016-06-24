@@ -1,65 +1,74 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
-
-    <EditText
-        android:id="@+id/editview_password"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:hint="@string/editview_password_hint_text"
-        android:inputType="textPassword"
-        android:text="qu01n23!" />
-
-
-    <EditText
-        android:id="@+id/editview_username"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_above="@id/editview_password"
-        android:hint="@string/editview_username_hint_text"
-        android:text="primero" />
-
+    android:layout_height="match_parent">
 
     <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_above="@id/editview_username"
+        android:id="@+id/logo"
+        android:layout_width="@dimen/login_logo_size"
+        android:layout_height="@dimen/login_logo_size"
         android:layout_centerHorizontal="true"
-        android:layout_marginLeft="@dimen/logo_margin"
-        android:layout_marginRight="@dimen/logo_margin"
-        android:src="@drawable/logo_huge" />
+        android:layout_marginTop="@dimen/login_logo_top_margin" />
 
-
-    <!--android:text="https://52.24.42.32:8443"-->
     <EditText
-        android:id="@+id/editview_url"
+        android:id="@+id/username"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/editview_password"
-        android:hint="@string/editview_URL_hint_text"
-        android:text="https://52.24.42.32:8443" />
+        android:layout_marginLeft="@dimen/login_input_margin"
+        android:layout_marginRight="@dimen/login_input_margin"
+        android:layout_marginTop="@dimen/login_username_top_margin"
+        android:hint="@string/editview_username_hint_text"
+        android:text="primero"
+        android:textColor="@color/font_dark" />
 
+    <EditText
+        android:id="@+id/password"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/login_input_margin"
+        android:layout_marginRight="@dimen/login_input_margin"
+        android:layout_marginTop="@dimen/login_password_top_margin"
+        android:hint="@string/editview_password_hint_text"
+        android:inputType="textPassword"
+        android:text="qu01n23!"
+        android:textColor="@color/font_dark" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/login_input_margin"
+        android:layout_marginRight="@dimen/login_input_margin"
+        android:layout_marginTop="@dimen/login_url_top_margin">
+
+        <EditText
+            android:id="@+id/editview_url"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/editview_URL_hint_text"
+            android:inputType="textUri" />
+
+        <TextView
+            android:id="@+id/text_view_change_url"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:text="@string/text_view_change_url"
+            android:textColor="@color/ftn_blue"
+            android:textSize="@dimen/text_size_14" />
+
+    </RelativeLayout>
 
     <Button
         android:id="@+id/button_login"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/editview_url"
-        android:text="@string/button_login_text"
-        android:textSize="@dimen/text_size_16" />
-
-    <TextView
-        android:id="@+id/text_view_change_url"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/button_login"
+        android:layout_height="@dimen/search_button_height"
+        android:layout_alignParentBottom="true"
+        android:background="@color/ftn_blue"
         android:gravity="center"
-        android:paddingTop="@dimen/text_size_24"
-        android:text="@string/text_view_change_url"
-        android:textColor="@color/blue"
-        android:textSize="@dimen/text_size_16" />
+        android:text="@string/button_login_text"
+        android:textColor="@color/white"
+        android:textSize="@dimen/text_size_20" />
+
 
 </RelativeLayout>
