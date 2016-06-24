@@ -1,6 +1,5 @@
 package org.unicef.rapidreg.service;
 
-import android.content.ContentResolver;
 import android.graphics.Bitmap;
 import android.util.Log;
 
@@ -18,6 +17,8 @@ import org.unicef.rapidreg.db.impl.CasePhotoDaoImpl;
 import org.unicef.rapidreg.forms.childcase.CaseField;
 import org.unicef.rapidreg.model.Case;
 import org.unicef.rapidreg.model.CasePhoto;
+import org.unicef.rapidreg.service.cache.CaseFieldValueCache;
+import org.unicef.rapidreg.service.cache.CasePhotoCache;
 import org.unicef.rapidreg.utils.ImageCompressUtil;
 
 import java.lang.reflect.Type;
@@ -27,7 +28,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -135,6 +135,11 @@ public class CaseService {
         }
     }
 
+    public void clearCaseCache(){
+        CaseFieldValueCache.clear();
+        CasePhotoCache.clear();
+    }
+
     private void saveCase(Map<String, String> values, Map<Bitmap, String> photoBitPaths) {
         Date date = new Date(Calendar.getInstance().getTimeInMillis());
         Blob caseBlob = new Blob(new Gson().toJson(values).getBytes());
@@ -222,70 +227,4 @@ public class CaseService {
         return UUID.randomUUID().toString();
     }
 
-    public static class CaseValues {
-        private static Map<String, String> values = new HashMap<>();
-        private static Map<Bitmap, String> photoBitPaths = new LinkedHashMap<>();
-
-        public static Map<String, String> getValues() {
-            return values;
-        }
-
-        public static void setValues(Map<String, String> valuesMap) {
-            values.putAll(valuesMap);
-        }
-
-        public static void setValues(Map<String, String> valuesMap, Map<Bitmap, String> photoPaths) {
-            setValues(valuesMap);
-            if (null != photoPaths) {
-                for (Map.Entry<Bitmap, String> photo : photoPaths.entrySet()) {
-                    photoBitPaths.put(photo.getKey(), photo.getValue());
-                }
-            }
-        }
-
-        public static void put(String key, String value) {
-            values.put(key, value);
-        }
-
-        public static String get(String key) {
-            return values.get(key);
-        }
-
-        public static void clear() {
-            values.clear();
-            photoBitPaths.clear();
-        }
-
-        public static void addPhoto(Bitmap bitmap, String photoPath) {
-            photoBitPaths.put(bitmap, photoPath);
-        }
-
-        public static void addPhoto(ContentResolver contentResolver, String photoPath) {
-            addPhoto(ImageCompressUtil.getThumbnail(contentResolver, photoPath), photoPath);
-        }
-
-        public static void removePhoto(Bitmap bitmap) {
-            photoBitPaths.remove(bitmap);
-        }
-
-        public static Map<Bitmap, String> getPhotoBitPaths() {
-            return photoBitPaths;
-        }
-
-        public static List<Bitmap> getPhotosBits() {
-            List<Bitmap> result = new ArrayList<>();
-            for (Bitmap photoBit : photoBitPaths.keySet()) {
-                result.add(photoBit);
-            }
-            return result;
-        }
-
-        public static List<String> getPhotosPaths() {
-            List<String> result = new ArrayList<>();
-            for (String photoPath : photoBitPaths.values()) {
-                result.add(photoPath);
-            }
-            return result;
-        }
-    }
 }

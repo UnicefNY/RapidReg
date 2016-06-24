@@ -6,9 +6,12 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.media.ExifInterface;
+import android.media.ThumbnailUtils;
 import android.provider.MediaStore;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -20,12 +23,17 @@ public class ImageCompressUtil {
 
     public static byte[] convertImageToBytes(Bitmap imageSource) {
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
-        imageSource.compress(Bitmap.CompressFormat.PNG, 100, stream);
+        imageSource.compress(Bitmap.CompressFormat.JPEG, 70, stream);
         return stream.toByteArray();
     }
 
     public static Bitmap convertByteArrayToImage(byte[] byteSource) {
         return BitmapFactory.decodeByteArray(byteSource, 0, byteSource.length);
+    }
+
+    public static Bitmap getThumbnail(String imagePath, int size) {
+        return ThumbnailUtils.extractThumbnail(
+                BitmapFactory.decodeFile(imagePath), size, size);
     }
 
     public static Bitmap getThumbnail(ContentResolver contentResolver, String path) {
@@ -51,11 +59,7 @@ public class ImageCompressUtil {
         int heightRatio = (int) Math.ceil(imgHeight / (float) targetHeight);
 
         if (widthRatio > 1 || heightRatio > 1) {
-            if (widthRatio > heightRatio) {
-                opts.inSampleSize = widthRatio;
-            } else {
-                opts.inSampleSize = heightRatio;
-            }
+            opts.inSampleSize = widthRatio > heightRatio ? widthRatio : heightRatio;
         }
         opts.inJustDecodeBounds = false;
         return BitmapFactory.decodeFile(pathName, opts);
@@ -94,10 +98,9 @@ public class ImageCompressUtil {
         opts.inJustDecodeBounds = true;
         bitmap = BitmapFactory.decodeByteArray(baos.toByteArray(), 0,
                 baos.toByteArray().length, opts);
-        // 得到图片的宽度、高度；  
         int imgWidth = opts.outWidth;
         int imgHeight = opts.outHeight;
-        // 分别计算图片宽度、高度与目标宽度、高度的比例；取大于该比例的最小整数；  
+
         int widthRatio = (int) Math.ceil(imgWidth / (float) targetWidth);
         int heightRatio = (int) Math.ceil(imgHeight / (float) targetHeight);
         if (widthRatio > 1 || heightRatio > 1) {
@@ -107,7 +110,6 @@ public class ImageCompressUtil {
                 opts.inSampleSize = heightRatio;
             }
         }
-        // 设置好缩放比例后，加载图片进内存；  
         opts.inJustDecodeBounds = false;
         Bitmap compressedBitmap = BitmapFactory.decodeByteArray(
                 baos.toByteArray(), 0, baos.toByteArray().length, opts);
@@ -186,7 +188,13 @@ public class ImageCompressUtil {
         if (bitmap != null && !bitmap.isRecycled()) {
             bitmap.recycle();
             System.gc();
-            bitmap = null;
         }
+    }
+
+    public static String storeImage(Bitmap image, File saveFile) throws IOException {
+        FileOutputStream fos = new FileOutputStream(saveFile);
+        image.compress(Bitmap.CompressFormat.PNG, 70, fos);
+        fos.close();
+        return saveFile.getPath();
     }
 }

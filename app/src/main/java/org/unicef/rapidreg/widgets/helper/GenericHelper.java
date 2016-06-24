@@ -7,11 +7,11 @@ import android.view.View;
 import android.widget.TextView;
 
 import org.unicef.rapidreg.R;
+import org.unicef.rapidreg.service.cache.CaseFieldValueCache;
 import org.unicef.rapidreg.widgets.dialog.BaseDialog;
 import org.unicef.rapidreg.widgets.dialog.FiledDialogFactory;
 import org.unicef.rapidreg.exception.DialogException;
 import org.unicef.rapidreg.forms.childcase.CaseField;
-import org.unicef.rapidreg.service.CaseService;
 
 public class GenericHelper extends BaseWidgetHelper{
     public static final String TAG = GenericHelper.class.getSimpleName();
@@ -45,7 +45,7 @@ public class GenericHelper extends BaseWidgetHelper{
         TextView valueView = getValueView();
 
         disableUneditableField(convertView);
-        valueView.setText(CaseService.CaseValues.get(getLabel()));
+        valueView.setText(CaseFieldValueCache.get(getLabel()));
     }
 
     @Override

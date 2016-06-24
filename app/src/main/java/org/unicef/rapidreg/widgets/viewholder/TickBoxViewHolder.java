@@ -7,7 +7,7 @@ import android.widget.TextView;
 
 import org.unicef.rapidreg.R;
 import org.unicef.rapidreg.forms.childcase.CaseField;
-import org.unicef.rapidreg.service.CaseService;
+import org.unicef.rapidreg.service.cache.CaseFieldValueCache;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -29,7 +29,7 @@ public class TickBoxViewHolder extends BaseViewHolder<CaseField> {
     public void setValue(CaseField field) {
         labelView.setText(getLabel(field));
         disableUnediatbleField(valueView, field);
-        valueView.setChecked(Boolean.valueOf(CaseService.CaseValues.get(getLabel(field))));
+        valueView.setChecked(Boolean.valueOf(CaseFieldValueCache.get(getLabel(field))));
     }
 
     @Override
@@ -37,7 +37,7 @@ public class TickBoxViewHolder extends BaseViewHolder<CaseField> {
         valueView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                CaseService.CaseValues.put(getLabel(field),
+                CaseFieldValueCache.put(getLabel(field),
                         String.valueOf(((CheckBox) v).isChecked()));
             }
         });

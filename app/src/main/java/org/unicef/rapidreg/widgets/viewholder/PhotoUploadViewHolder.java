@@ -7,9 +7,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
-import android.os.Environment;
 import android.provider.MediaStore;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
@@ -18,7 +16,7 @@ import org.unicef.rapidreg.R;
 import org.unicef.rapidreg.childcase.CaseActivity;
 import org.unicef.rapidreg.childcase.CasePhotoAdapter;
 import org.unicef.rapidreg.forms.childcase.CaseField;
-import org.unicef.rapidreg.service.CaseService;
+import org.unicef.rapidreg.service.cache.CasePhotoCache;
 
 import java.io.File;
 import java.util.List;
@@ -44,7 +42,7 @@ public class PhotoUploadViewHolder extends BaseViewHolder<CaseField> {
 
     @Override
     public void setValue(CaseField field) {
-        List<Bitmap> previousPhotos = CaseService.CaseValues.getPhotosBits();
+        List<Bitmap> previousPhotos = CasePhotoCache.getPhotosBits();
 
         Bitmap addPhotoIcon;
         if (previousPhotos.size() >= 4) {
@@ -67,10 +65,8 @@ public class PhotoUploadViewHolder extends BaseViewHolder<CaseField> {
         photoGrid.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
-                boolean isMax = CaseService.CaseValues.getPhotoBitPaths().size() == 4;
                 boolean isAddPhotoGridClicked = (position == photoGrid.getAdapter().getCount() - 1);
-
-                if (isMax || !isAddPhotoGridClicked) {
+                if (CasePhotoCache.isFull() || !isAddPhotoGridClicked) {
                     showViewPhotoDialog(position);
                 } else {
                     showAddPhotoOptionDialog(parent);
@@ -81,8 +77,8 @@ public class PhotoUploadViewHolder extends BaseViewHolder<CaseField> {
         photoGrid.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
-                boolean isMax = CaseService.CaseValues.getPhotoBitPaths().size() == 4;
-                boolean isPhotoGridClicked = (i < photoGrid.getAdapter().getCount() - (isMax ? 0 : 1));
+                boolean isPhotoGridClicked = (i < photoGrid.getAdapter().getCount() -
+                        (CasePhotoCache.isFull() ? 0 : 1));
 
                 if (isPhotoGridClicked) {
                     showDeletionConfirmDialog(i);
@@ -93,14 +89,13 @@ public class PhotoUploadViewHolder extends BaseViewHolder<CaseField> {
     }
 
     protected void showAddPhotoOptionDialog(AdapterView<?> parent) {
-        final CharSequence[] items = {"From Camera", "From Gallery",
-                "Cancel"};
+        final String[] items = {"From Camera", "From Gallery", "Cancel"};
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setItems(items, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int item) {
                 if (items[item].equals("From Camera")) {
-                    Uri saveUri = Uri.fromFile(new File(Environment.getExternalStorageDirectory(), "image.jpg"));
+                    Uri saveUri = Uri.fromFile(new File(CasePhotoCache.MEDIA_PATH_FOR_CAMERA));
                     Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                     intent.putExtra(MediaStore.EXTRA_OUTPUT, saveUri);
                     caseActivity.startActivityForResult(intent, REQUEST_CODE_CAMERA);
@@ -112,15 +107,14 @@ public class PhotoUploadViewHolder extends BaseViewHolder<CaseField> {
                     dialog.dismiss();
                 }
             }
-        });
-        builder.show();
+        }).show();
     }
 
     protected void showViewPhotoDialog(final int position) {
         Intent intent = new Intent();
         intent.setAction(Intent.ACTION_VIEW);
         intent.setDataAndType(Uri.parse(
-                "file://" + CaseService.CaseValues.getPhotosPaths().get(position)), "image/*");
+                "file://" + CasePhotoCache.getPhotosPaths().get(position)), "image/*");
         context.startActivity(intent);
     }
 
@@ -132,13 +126,14 @@ public class PhotoUploadViewHolder extends BaseViewHolder<CaseField> {
             public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();
                 CasePhotoAdapter casePhotoAdapter = (CasePhotoAdapter) photoGrid.getAdapter();
-                CaseService.CaseValues.removePhoto(casePhotoAdapter.getAllItems().get(position));
 
-                if (CaseService.CaseValues.getPhotoBitPaths().size() == 0) {
+                CasePhotoCache.removePhoto(casePhotoAdapter.getAllItems().get(position));
+
+                if (CasePhotoCache.isEmpty()) {
                     casePhotoAdapter.clearItems();
                     Bitmap addPhotoIcon = BitmapFactory.decodeResource(context.getResources(), R.drawable.photo_camera);
                     casePhotoAdapter.addItem(addPhotoIcon);
-                } else if (CaseService.CaseValues.getPhotoBitPaths().size() == 3) {
+                } else if (CasePhotoCache.getPhotoBitPaths().size() == 3) {
                     casePhotoAdapter.removeItem(position);
                     Bitmap addPhotoIcon = BitmapFactory.decodeResource(context.getResources(), R.drawable.photo_add);
                     casePhotoAdapter.addItem(addPhotoIcon);

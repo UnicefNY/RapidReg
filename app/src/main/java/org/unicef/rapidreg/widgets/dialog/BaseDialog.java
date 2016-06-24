@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import static org.unicef.rapidreg.service.CaseService.CaseValues;
+import org.unicef.rapidreg.service.cache.CaseFieldValueCache;
 
 public abstract class BaseDialog {
     protected CaseField caseField;
@@ -33,7 +33,7 @@ public abstract class BaseDialog {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 BaseDialog.this.resultView.setText(getResult());
-                CaseValues.put(caseField.getDisplayName().get("en"), getResult());
+                CaseFieldValueCache.put(caseField.getDisplayName().get("en"), getResult());
                 dialog.dismiss();
             }
         });
