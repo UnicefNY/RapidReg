@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.ViewSwitcher;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -34,6 +35,8 @@ import java.util.Map;
 
 public class CaseListAdapter extends RecyclerView.Adapter<CaseListAdapter.CaseListHolder> {
     public static final String TAG = CaseListAdapter.class.getSimpleName();
+    private static final int TEXT_AREA_SHOWED_STATE = 0;
+    private static final int TEXT_AREA_HIDDEN_STATE = 1;
 
     private List<Case> caseList = new ArrayList<>();
     private Context context;
@@ -109,23 +112,17 @@ public class CaseListAdapter extends RecyclerView.Adapter<CaseListAdapter.CaseLi
     }
 
 
-    public boolean isListEmpty() {
-        return getItemCount() == 0;
-    }
-
     public void toggleViews(boolean isDetailShow) {
         this.isDetailShow = isDetailShow;
         this.notifyDataSetChanged();
     }
 
     private void toggleTextArea(CaseListHolder holder) {
-        holder.textAreaNormalState.setVisibility(isDetailShow ? View.VISIBLE : View.GONE);
-        holder.textAreaHiddenState.setVisibility(isDetailShow ? View.GONE : View.VISIBLE);
-    }
-
-    private List<Case> getAllCaseData() {
-        CaseService caseService = CaseService.getInstance();
-        return caseService.getCaseList();
+        if (isDetailShow) {
+            holder.viewSwitcher.setDisplayedChild(TEXT_AREA_SHOWED_STATE);
+        } else {
+            holder.viewSwitcher.setDisplayedChild(TEXT_AREA_HIDDEN_STATE);
+        }
     }
 
     private Drawable getDefaultGenderBadge(int genderId) {
@@ -159,8 +156,7 @@ public class CaseListAdapter extends RecyclerView.Adapter<CaseListAdapter.CaseLi
         protected TextView createdTime;
         protected ImageView caseImage;
         protected View view;
-        protected View textAreaNormalState;
-        protected View textAreaHiddenState;
+        protected ViewSwitcher viewSwitcher;
 
         public CaseListHolder(View itemView) {
             super(itemView);
@@ -174,8 +170,7 @@ public class CaseListAdapter extends RecyclerView.Adapter<CaseListAdapter.CaseLi
             createdTime = (TextView) itemView.findViewById(R.id.created_time);
             caseImage = (ImageView) itemView.findViewById(R.id.case_image);
 
-            textAreaNormalState = itemView.findViewById(R.id.text_area_normal_state);
-            textAreaHiddenState = itemView.findViewById(R.id.text_area_hidden_state);
+            viewSwitcher = (ViewSwitcher) itemView.findViewById(R.id.view_switcher);
         }
     }
 
