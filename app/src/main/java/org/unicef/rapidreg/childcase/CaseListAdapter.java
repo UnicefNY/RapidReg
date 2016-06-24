@@ -90,7 +90,8 @@ public class CaseListAdapter extends RecyclerView.Adapter<CaseListAdapter.CaseLi
                 setViewMode(caseActivity);
 
                 caseActivity.getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.fragment_content, new CaseRegisterWrapperFragment())
+                        .replace(R.id.fragment_content, new CaseRegisterWrapperFragment(),
+                                CaseRegisterWrapperFragment.class.getSimpleName())
                         .addToBackStack(null)
                         .commit();
             }

@@ -33,7 +33,8 @@ public class CaseMiniRegisterPresenter extends MvpBasePresenter<CaseMiniRegister
                     getView().initView(new CaseMiniRegisterAdapter(context, -1, fields));
                 } else {
                     ((BaseActivity) context).getSupportFragmentManager().beginTransaction()
-                            .replace(R.id.fragment_content, new CaseRegisterWrapperFragment())
+                            .replace(R.id.fragment_content, new CaseRegisterWrapperFragment(),
+                                    CaseRegisterWrapperFragment.class.getSimpleName())
                             .addToBackStack(null)
                             .commit();
                     Toast.makeText(context, "There is no mini form!", Toast.LENGTH_SHORT).show();
