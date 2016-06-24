@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.media.ThumbnailUtils;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -17,7 +16,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.MenuItem;
 import android.widget.GridView;
 import android.widget.Toast;
@@ -28,11 +26,12 @@ import org.unicef.rapidreg.forms.childcase.CaseFormRoot;
 import org.unicef.rapidreg.forms.childcase.CaseSection;
 import org.unicef.rapidreg.service.CaseFormService;
 import org.unicef.rapidreg.service.CaseService;
+import org.unicef.rapidreg.service.cache.CaseFieldValueCache;
+import org.unicef.rapidreg.service.cache.CasePhotoCache;
+import org.unicef.rapidreg.utils.ImageCompressUtil;
 import org.unicef.rapidreg.widgets.viewholder.PhotoUploadViewHolder;
 
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -74,16 +73,12 @@ public class CaseActivity extends BaseActivity {
         }
         photoGrid = (GridView) findViewById(R.id.photo_grid);
 
-        List<Bitmap> previousPhotos = CaseService.CaseValues.getPhotosBits();
-
-        int THUMB_SIZE = 80;
-        Bitmap newPhoto = ThumbnailUtils.extractThumbnail(
-                BitmapFactory.decodeFile(imagePath), THUMB_SIZE, THUMB_SIZE);
-
+        List<Bitmap> previousPhotos = CasePhotoCache.getPhotosBits();
+        Bitmap newPhoto = ImageCompressUtil.getThumbnail(imagePath, 80);
         previousPhotos.add(newPhoto);
-        CaseService.CaseValues.addPhoto(newPhoto, imagePath);
+        CasePhotoCache.addPhoto(newPhoto, imagePath);
 
-        if (CaseService.CaseValues.getPhotoBitPaths().size() < 4) {
+        if (CasePhotoCache.isUnderLimit()) {
             Bitmap addPhotoIcon = BitmapFactory.decodeResource(getResources(), R.drawable.photo_add);
             previousPhotos.add(addPhotoIcon);
         }
@@ -116,22 +111,13 @@ public class CaseActivity extends BaseActivity {
         }
     }
 
-
     private void onCaptureImageResult(Intent data) {
-        Bitmap bitmap = BitmapFactory.decodeFile(Environment.getExternalStorageDirectory() + "/image.jpg");
-        storeImage(bitmap);
-        bitmap.recycle();
-    }
-
-    private void storeImage(Bitmap image) {
-        File pictureFile = getOutputMediaFile();
         try {
-            FileOutputStream fos = new FileOutputStream(pictureFile);
-            image.compress(Bitmap.CompressFormat.PNG, 100, fos);
-            fos.close();
-            imagePath = pictureFile.getPath();
+            Bitmap bitmap = BitmapFactory.decodeFile(CasePhotoCache.MEDIA_PATH_FOR_CAMERA);
+            imagePath = ImageCompressUtil.storeImage(bitmap, getOutputMediaFile());
+            bitmap.recycle();
         } catch (IOException e) {
-            Log.d("sjyuan", "Error accessing file: " + e.getMessage());
+            e.printStackTrace();
         }
     }
 
@@ -141,9 +127,8 @@ public class CaseActivity extends BaseActivity {
         if (!mediaStorageDir.exists()) {
             mediaStorageDir.mkdirs();
         }
-        return new File(mediaStorageDir.getPath() + File.separator + System.currentTimeMillis() + ".jpg");
+        return new File(mediaStorageDir.getPath(), System.currentTimeMillis() + ".jpg");
     }
-
 
     @Override
     public void onBackPressed() {
@@ -200,7 +185,6 @@ public class CaseActivity extends BaseActivity {
 
         MenuItem item = toolbar.getMenu().findItem(R.id.toggle);
         item.setIcon(textAreaState.getResId());
-
         CaseListFragment caseListFragment = (CaseListFragment) getSupportFragmentManager()
                 .findFragmentByTag(CaseListFragment.class.getSimpleName());
         caseListFragment.toggleMode(textAreaState.isDetailShow());
@@ -208,8 +192,8 @@ public class CaseActivity extends BaseActivity {
 
     private boolean saveCaseButtonAction() {
         if (validateRequiredField()) {
-            Map<Bitmap, String> photoBitPaths = CaseService.CaseValues.getPhotoBitPaths();
-            CaseService.getInstance().saveOrUpdateCase(CaseService.CaseValues.getValues(), photoBitPaths);
+            Map<Bitmap, String> photoBitPaths = CasePhotoCache.getPhotoBitPaths();
+            CaseService.getInstance().saveOrUpdateCase(CaseFieldValueCache.getValues(), photoBitPaths);
             redirectFragment(new CaseListFragment());
             setTopMenuItemsInCaseListPage();
         }
@@ -227,17 +211,6 @@ public class CaseActivity extends BaseActivity {
         String name = target.getClass().getSimpleName();
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.fragment_content, target, name).commit();
-        resetBarButtonsIfNeeded();
-    }
-
-    private void resetBarButtonsIfNeeded() {
-    }
-
-    private boolean isListFragmentVisible() {
-        Fragment listFragment = getSupportFragmentManager()
-                .findFragmentByTag(CaseListFragment.class.getSimpleName());
-
-        return listFragment != null && listFragment.isVisible();
     }
 
     private boolean validateRequiredField() {
@@ -250,7 +223,7 @@ public class CaseActivity extends BaseActivity {
         }
 
         for (String field : requiredFieldNames) {
-            if (TextUtils.isEmpty(CaseService.CaseValues.getValues().get(field))) {
+            if (TextUtils.isEmpty(CaseFieldValueCache.getValues().get(field))) {
                 Toast.makeText(CaseActivity.this, "Some required field is not filled, please fill them", Toast.LENGTH_LONG).show();
                 return false;
             }

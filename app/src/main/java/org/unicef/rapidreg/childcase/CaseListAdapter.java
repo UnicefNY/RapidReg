@@ -11,6 +11,7 @@ import android.support.v4.content.res.ResourcesCompat;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,6 +27,8 @@ import org.unicef.rapidreg.model.Case;
 import org.unicef.rapidreg.model.CasePhoto;
 import org.unicef.rapidreg.service.CasePhotoService;
 import org.unicef.rapidreg.service.CaseService;
+import org.unicef.rapidreg.service.cache.CaseFieldValueCache;
+import org.unicef.rapidreg.service.cache.CasePhotoCache;
 import org.unicef.rapidreg.utils.ImageCompressUtil;
 
 import java.lang.reflect.Type;
@@ -64,7 +67,7 @@ public class CaseListAdapter extends RecyclerView.Adapter<CaseListAdapter.CaseLi
 
     @Override
     public void onBindViewHolder(CaseListHolder holder, int position) {
-        CaseService.CaseValues.clear();
+        CaseService.getInstance().clearCaseCache();
 
         final Case caseItem = caseList.get(position);
 
@@ -90,16 +93,18 @@ public class CaseListAdapter extends RecyclerView.Adapter<CaseListAdapter.CaseLi
         holder.view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                CaseFieldValueCache.setValues(caseInfo);
                 List<CasePhoto> casePhotos = CasePhotoService.getInstance().getAllCasePhotos(caseItem.getId());
+
+                Log.i("sjyuan", casePhotos.toString());
                 for (CasePhoto casePhoto : casePhotos) {
+                    Log.i("sjyuan", casePhoto.toString());
                     Bitmap thumbnail = ImageCompressUtil.convertByteArrayToImage(casePhoto.getThumbnail().getBlob());
-                    CaseService.CaseValues.addPhoto(thumbnail, casePhoto.getPath());
+                    CasePhotoCache.addPhoto(thumbnail, casePhoto.getPath());
                 }
-                CaseService.CaseValues.setValues(caseInfo);
+
                 CaseActivity caseActivity = (CaseActivity) context;
                 setViewMode(caseActivity);
-
                 caseActivity.getSupportFragmentManager().beginTransaction()
                         .replace(R.id.fragment_content, new CaseRegisterWrapperFragment(),
                                 CaseRegisterWrapperFragment.class.getSimpleName())
@@ -122,7 +127,6 @@ public class CaseListAdapter extends RecyclerView.Adapter<CaseListAdapter.CaseLi
     public int getItemCount() {
         return caseList.size();
     }
-
 
     public void toggleViews(boolean isDetailShow) {
         this.isDetailShow = isDetailShow;

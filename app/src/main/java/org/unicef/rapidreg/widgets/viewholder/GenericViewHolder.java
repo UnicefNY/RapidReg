@@ -9,7 +9,7 @@ import android.widget.TextView;
 import org.unicef.rapidreg.R;
 import org.unicef.rapidreg.exception.DialogException;
 import org.unicef.rapidreg.forms.childcase.CaseField;
-import org.unicef.rapidreg.service.CaseService;
+import org.unicef.rapidreg.service.cache.CaseFieldValueCache;
 import org.unicef.rapidreg.widgets.dialog.BaseDialog;
 import org.unicef.rapidreg.widgets.dialog.FiledDialogFactory;
 
@@ -41,7 +41,7 @@ public class GenericViewHolder extends BaseViewHolder<CaseField> {
 
         labelView.setText(labelText);
         disableUneditableField(itemView, field);
-        valueView.setText(CaseService.CaseValues.get(getLabel(field)));
+        valueView.setText(CaseFieldValueCache.get(getLabel(field)));
     }
 
     @Override
