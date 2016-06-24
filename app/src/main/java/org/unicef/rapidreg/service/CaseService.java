@@ -157,7 +157,6 @@ public class CaseService {
                 casePhoto.setThumbnail(new Blob(ImageCompressUtil.convertImageToBytes(photoBitPathEntry.getKey())));
                 casePhoto.setCase(child);
                 casePhoto.save();
-                Log.i("sjyuan", "saved casePhoto = " + casePhoto.toString());
             }
         }
     }
