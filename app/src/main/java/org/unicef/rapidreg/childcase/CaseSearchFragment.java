@@ -38,6 +38,9 @@ public class CaseSearchFragment extends MvpFragment<CaseListView, CaseListPresen
         implements CaseListView {
     public static final String TAG = CaseSearchFragment.class.getSimpleName();
 
+    private static final int HAVE_RESULT_LIST = 0;
+    private static final int HAVE_NO_RESULT = 1;
+
     private static final String ID = "id";
     private static final String NAME = "name";
     private static final String AGE_FROM = "age_from";
@@ -74,6 +77,9 @@ public class CaseSearchFragment extends MvpFragment<CaseListView, CaseListPresen
 
     @BindView(R.id.registration_date_clear)
     ImageButton registrationDateClear;
+
+    @BindView(R.id.search_result)
+    ViewSwitcher searchResultSwitcher;
 
     private CaseListAdapter adapter;
 
@@ -152,7 +158,12 @@ public class CaseSearchFragment extends MvpFragment<CaseListView, CaseListPresen
         Map<String, String> values = getFilterValues();
         searchBarTitle.setText(getFirstValidValue(values));
 
-        adapter.setCaseList(getSearchResult(values));
+        List<Case> searchResult = getSearchResult(values);
+
+        int resultIndex = searchResult.isEmpty() ? HAVE_NO_RESULT : HAVE_RESULT_LIST;
+        searchResultSwitcher.setDisplayedChild(resultIndex);
+
+        adapter.setCaseList(searchResult);
         adapter.notifyDataSetChanged();
     }
 

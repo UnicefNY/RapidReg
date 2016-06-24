@@ -42,9 +42,22 @@
         android:layout_height="1dp"
         android:background="@color/lighter_gray" />
 
-
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/list_container"
+    <ViewSwitcher
+        android:id="@+id/search_result"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/list_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="@string/no_search_result"
+            android:textColor="@color/font_dark"
+            android:textSize="@dimen/text_size_14" />
+    </ViewSwitcher>
 </LinearLayout>

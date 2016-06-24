@@ -8,6 +8,7 @@
     <dimen name="size_2">2dp</dimen>
     <dimen name="size_5">5dp</dimen>
     <dimen name="size_15">15dp</dimen>
+    <dimen name="text_size_14">14sp</dimen>
     <dimen name="text_size_16">16sp</dimen>
     <dimen name="text_size_20">20sp</dimen>
     <dimen name="text_size_24">24sp</dimen>
@@ -17,7 +18,6 @@
 
     <dimen name="field_padding_top_bottom">5dp</dimen>
     <dimen name="field_padding_left">15dp</dimen>
-
 
     <!--row in list start-->
     <dimen name="row_height">90dp</dimen>
@@ -49,6 +49,8 @@
     <dimen name="search_bar_right_padding">20dp</dimen>
     <dimen name="search_bar_item_height">44.3dp</dimen>
     <dimen name="search_button_height">48dp</dimen>
+    <dimen name="no_result_vertical_padding">16dp</dimen>
+    <dimen name="no_result_horizontal_padding">8dp</dimen>
     <!--search end-->
 
 </resources>
