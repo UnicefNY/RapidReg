@@ -35,6 +35,8 @@ public class AudioUploadViewHolder extends BaseViewHolder {
     ImageView audioDeleteButton;
     @BindView(R.id.audio_timer)
     TextView timerTextView;
+    @BindView(R.id.audio_timer_total)
+    TextView timerTotalTextView;
     private CaseActivity caseActivity;
     private MediaRecorder mRecorder = null;
     private MediaPlayer mPlayer = null;
@@ -43,6 +45,7 @@ public class AudioUploadViewHolder extends BaseViewHolder {
     private boolean mStartPlaying = true;
 
     private long startTime = 0;
+    private int audioDuration = 0;
 
 
     final Handler timerHandler = new Handler();
@@ -50,15 +53,20 @@ public class AudioUploadViewHolder extends BaseViewHolder {
         @Override
         public void run() {
             long millis = System.currentTimeMillis() - startTime;
-            int seconds = (int) (millis / 1000);
-            int minutes = seconds / 60;
-            seconds = seconds % 60;
 
-            timerTextView.setText(String.format("%d:%02d", minutes, seconds));
+            timerTextView.setText(getTime(millis));
 
             timerHandler.postDelayed(this, 500);
         }
     };
+
+    private String getTime(long millis) {
+        int seconds = (int) (millis / 1000);
+        int minutes = seconds / 60;
+        seconds = seconds % 60;
+
+        return String.format("%d:%02d", minutes, seconds);
+    }
 
 
     public AudioUploadViewHolder(Context context, View itemView) {
@@ -74,7 +82,7 @@ public class AudioUploadViewHolder extends BaseViewHolder {
     public void onRecordButtonClicked() {
         onRecord(mStartRecording);
         if (mStartRecording) {
-            recordButton.setImageResource(R.drawable.pause_210);
+            recordButton.setImageResource(R.drawable.pause_210_with_color_boarder);
         } else {
             recordButton.setVisibility(View.GONE);
             playButton.setVisibility(View.VISIBLE);
@@ -87,19 +95,27 @@ public class AudioUploadViewHolder extends BaseViewHolder {
     public void onPlayButtonClicked() {
         onPlay(mStartPlaying);
         if (mStartPlaying) {
-            playButton.setImageResource(R.drawable.pause_210);
+            playButton.setImageResource(R.drawable.pause_210_with_color_boarder);
+            audioDeleteButton.setVisibility(View.GONE);
         } else {
             playButton.setImageResource(R.drawable.play_210);
+            audioDeleteButton.setVisibility(View.VISIBLE);
         }
         mStartPlaying = !mStartPlaying;
     }
 
     @OnClick(R.id.delete_button)
     public void onDeleteButtonClicked() {
+        initAudioRecordUI();
+    }
+
+    private void initAudioRecordUI() {
         recordButton.setVisibility(View.VISIBLE);
         recordButton.setImageResource(R.drawable.mic_rec_210);
         playButton.setVisibility(View.GONE);
         audioDeleteButton.setVisibility(View.GONE);
+        timerTextView.setText("0:00");
+        timerTotalTextView.setText("/1:00");
     }
 
     private void onRecord(boolean start) {
@@ -135,6 +151,8 @@ public class AudioUploadViewHolder extends BaseViewHolder {
                 }
             });
             mPlayer.prepare();
+            audioDuration = mPlayer.getDuration();
+            timerTotalTextView.setText("/"+ getTime(audioDuration));
             mPlayer.start();
 
         } catch (IOException e) {
