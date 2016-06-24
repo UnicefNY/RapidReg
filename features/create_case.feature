@@ -17,7 +17,7 @@ Feature: Create new case through full form.
       | Sex (Required)                           | <Select> Male                                 |
       | Age (Required)                           | 10                                            |
     And I press "SAVE" button
-    Then I should see a new case with sex "Male" and age "10"
+    Then I should see a case with sex "Male" and age "10"
 
 
 
