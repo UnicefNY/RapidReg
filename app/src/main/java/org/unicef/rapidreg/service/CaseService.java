@@ -97,6 +97,8 @@ public class CaseService {
                 .like(getWrappedCondition(name)));
         conditionGroup.and(Condition.column(NameAlias.builder("age").build())
                 .between(ageFrom).and(ageTo));
+        conditionGroup.and(Condition.column(NameAlias.builder("caregiver").build())
+                .like(getWrappedCondition(caregiver)));
 
         return caseDao.getCaseListByConditionGroup(conditionGroup);
     }
@@ -130,6 +132,7 @@ public class CaseService {
         child.setLastUpdatedAt(date);
         child.setContent(caseBlob);
         child.setAge(Integer.parseInt(values.get("Age")));
+        child.setCaregiver(getCaregiverName(values));
         child.save();
 
         saveCasePhoto(child, photoBitPaths);
@@ -142,6 +145,7 @@ public class CaseService {
         child.setLastUpdatedAt(new Date(Calendar.getInstance().getTimeInMillis()));
         child.setContent(caseBlob);
         child.setAge(Integer.parseInt(values.get("Age")));
+        child.setCaregiver(getCaregiverName(values));
         child.update();
 
         casePhotoDao.deleteCasePhotosByCaseId(child.getId());
@@ -184,8 +188,22 @@ public class CaseService {
         return "%" + queryStr + "%";
     }
 
+
     public String createUniqueId() {
         return UUID.randomUUID().toString();
+    }
+
+    private String getChildName(Map<String, String> values) {
+        return values.get("Full Name") + " "
+                + values.get("First Name") + " "
+                + values.get("Middle Name") + " "
+                + values.get("Surname") + " "
+                + values.get("Nickname") + " "
+                + values.get("Other Name");
+    }
+
+    private String getCaregiverName(Map<String, String> values) {
+        return "" + values.get("Name of Current Caregiver");
     }
 
     public static class CaseValues {
