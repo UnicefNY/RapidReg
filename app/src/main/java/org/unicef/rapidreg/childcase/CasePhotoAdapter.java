@@ -24,9 +24,7 @@ public class CasePhotoAdapter extends BaseAdapter {
     }
 
     public void addItem(Bitmap item) {
-        int lastIndex = photos.size() - 1;
-        int addIndex = lastIndex > 0 ? lastIndex : 0;
-        photos.add(addIndex, item);
+        photos.add(item);
     }
 
     public void addItems(List<Bitmap> items) {
@@ -37,6 +35,10 @@ public class CasePhotoAdapter extends BaseAdapter {
 
     public List<Bitmap> getAllItems(){
         return photos;
+    }
+
+    public void removeItem(int index){
+        photos.remove(index);
     }
 
     public void clearItems(){
