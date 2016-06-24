@@ -96,9 +96,7 @@ public class CaseListAdapter extends RecyclerView.Adapter<CaseListAdapter.CaseLi
                 CaseFieldValueCache.setValues(caseInfo);
                 List<CasePhoto> casePhotos = CasePhotoService.getInstance().getAllCasePhotos(caseItem.getId());
 
-                Log.i("sjyuan", casePhotos.toString());
                 for (CasePhoto casePhoto : casePhotos) {
-                    Log.i("sjyuan", casePhoto.toString());
                     Bitmap thumbnail = ImageCompressUtil.convertByteArrayToImage(casePhoto.getThumbnail().getBlob());
                     CasePhotoCache.addPhoto(thumbnail, casePhoto.getPath());
                 }
