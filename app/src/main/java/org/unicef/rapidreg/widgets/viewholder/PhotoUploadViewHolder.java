@@ -47,6 +47,11 @@ public class PhotoUploadViewHolder extends BaseViewHolder<CaseField> {
         List<Bitmap> previousPhotos = CaseService.CaseValues.getPhotosBits();
 
         Bitmap addPhotoIcon;
+        if (previousPhotos.size() >= 4) {
+            photoGrid.setAdapter(new CasePhotoAdapter(context, previousPhotos));
+            return;
+        }
+
         if (previousPhotos.size() > 0) {
             addPhotoIcon = BitmapFactory.decodeResource(context.getResources(), R.drawable.photo_add);
         } else {
@@ -54,6 +59,7 @@ public class PhotoUploadViewHolder extends BaseViewHolder<CaseField> {
         }
         previousPhotos.add(addPhotoIcon);
         photoGrid.setAdapter(new CasePhotoAdapter(context, previousPhotos));
+
     }
 
     @Override
@@ -63,6 +69,7 @@ public class PhotoUploadViewHolder extends BaseViewHolder<CaseField> {
             public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
                 boolean isMax = CaseService.CaseValues.getPhotoBitPaths().size() == 4;
                 boolean isAddPhotoGridClicked = (position == photoGrid.getAdapter().getCount() - 1);
+
                 if (isMax || !isAddPhotoGridClicked) {
                     showViewPhotoDialog(position);
                 } else {
@@ -93,7 +100,7 @@ public class PhotoUploadViewHolder extends BaseViewHolder<CaseField> {
             @Override
             public void onClick(DialogInterface dialog, int item) {
                 if (items[item].equals("From Camera")) {
-                    Uri saveUri = Uri.fromFile(new File(Environment.getExternalStorageDirectory(),"image.jpg"));
+                    Uri saveUri = Uri.fromFile(new File(Environment.getExternalStorageDirectory(), "image.jpg"));
                     Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                     intent.putExtra(MediaStore.EXTRA_OUTPUT, saveUri);
                     caseActivity.startActivityForResult(intent, REQUEST_CODE_CAMERA);
@@ -114,7 +121,6 @@ public class PhotoUploadViewHolder extends BaseViewHolder<CaseField> {
         intent.setAction(Intent.ACTION_VIEW);
         intent.setDataAndType(Uri.parse(
                 "file://" + CaseService.CaseValues.getPhotosPaths().get(position)), "image/*");
-        Log.i("sjyuan", "show path = " + CaseService.CaseValues.getPhotosPaths().get(position));
         context.startActivity(intent);
     }
 

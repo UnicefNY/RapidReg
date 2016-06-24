@@ -83,9 +83,6 @@ public class CaseActivity extends BaseActivity {
         previousPhotos.add(newPhoto);
         CaseService.CaseValues.addPhoto(newPhoto, imagePath);
 
-        Log.i("sjyuan", "newPhoto = " + newPhoto);
-        Log.i("sjyuan", "imagePath = " + imagePath);
-
         if (CaseService.CaseValues.getPhotoBitPaths().size() < 4) {
             Bitmap addPhotoIcon = BitmapFactory.decodeResource(getResources(), R.drawable.photo_add);
             previousPhotos.add(addPhotoIcon);
