@@ -79,13 +79,35 @@
         android:layout_height="1dp"
         android:background="@color/lighter_gray" />
 
-    <org.unicef.rapidreg.widgets.ClearableEditText
-        android:id="@+id/registration_date"
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/registration_date_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="@string/registration_date"
-        android:maxLength="30"
-        android:singleLine="true" />
+        android:paddingLeft="@dimen/search_bar_left_padding"
+        android:paddingRight="@dimen/search_bar_right_padding">
+
+        <TextView
+            android:id="@+id/registration_date"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/search_bar_item_height"
+            android:background="@drawable/edit_view_shape"
+            android:gravity="center_vertical"
+            android:hint="@string/registration_date"
+            android:textColor="@color/font_dark"
+            android:textCursorDrawable="@null"
+            android:textSize="@dimen/text_size_16" />
+
+        <ImageButton
+            android:id="@+id/registration_date_clear"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:background="@null"
+            android:src="@drawable/clear_black"
+            android:visibility="invisible" />
+    </RelativeLayout>
 
     <View
         android:layout_width="match_parent"

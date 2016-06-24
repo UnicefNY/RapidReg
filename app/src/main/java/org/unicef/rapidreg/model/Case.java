@@ -18,6 +18,7 @@ public class Case extends BaseModel {
     public static final String COLUMN_NAME = "name";
     public static final String COLUMN_AGE = "age";
     public static final String COLUMN_CAREGIVER = "caregiver";
+    public static final String COLUMN_REGISTRATION_DATE = "registration_date";
 
     @PrimaryKey(autoincrement = true)
     public long id;
@@ -212,4 +213,3 @@ public class Case extends BaseModel {
         return sb.toString();
     }
 }
-
