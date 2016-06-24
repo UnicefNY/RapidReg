@@ -131,6 +131,7 @@ public class CaseService {
         child.setCreateAt(date);
         child.setLastUpdatedAt(date);
         child.setContent(caseBlob);
+        child.setName(getChildName(values));
         child.setAge(Integer.parseInt(values.get("Age")));
         child.setCaregiver(getCaregiverName(values));
         child.save();
@@ -144,6 +145,7 @@ public class CaseService {
         Case child = caseDao.getCaseByUniqueId(values.get(UNIQUE_ID));
         child.setLastUpdatedAt(new Date(Calendar.getInstance().getTimeInMillis()));
         child.setContent(caseBlob);
+        child.setName(getChildName(values));
         child.setAge(Integer.parseInt(values.get("Age")));
         child.setCaregiver(getCaregiverName(values));
         child.update();
