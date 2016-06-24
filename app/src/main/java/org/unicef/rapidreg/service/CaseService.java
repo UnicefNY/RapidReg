@@ -96,7 +96,7 @@ public class CaseService {
     }
 
     public List<Case> getSearchResult(String uniqueId, String name, int ageFrom, int ageTo,
-                                      String caregiver, String date) {
+                                      String caregiver, Date date) {
 
         ConditionGroup conditionGroup = ConditionGroup.clause();
         conditionGroup.and(Condition.column(NameAlias.builder(Case.COLUMN_UNIQUE_ID).build())
@@ -107,6 +107,11 @@ public class CaseService {
                 .between(ageFrom).and(ageTo));
         conditionGroup.and(Condition.column(NameAlias.builder(Case.COLUMN_CAREGIVER).build())
                 .like(getWrappedCondition(caregiver)));
+
+        if (date != null) {
+            conditionGroup.and(Condition.column(NameAlias.builder(Case.COLUMN_REGISTRATION_DATE)
+                    .build()).eq(date));
+        }
 
         return caseDao.getCaseListByConditionGroup(conditionGroup);
     }
