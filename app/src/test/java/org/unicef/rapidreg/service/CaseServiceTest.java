@@ -39,7 +39,7 @@ public class CaseServiceTest {
         Map<String, String> cases = caseService.getCaseMapByUniqueId("uuid");
 
         assertThat(cases.size(), is(2));
-        assertThat(cases.get("unique_id"), is("uuid"));
+        assertThat(cases.get(CaseService.CASE_ID), is("uuid"));
         assertThat(cases.get("name"), is("jack"));
 
         when(caseDao.getCaseByUniqueId("uuid")).thenReturn(null);
