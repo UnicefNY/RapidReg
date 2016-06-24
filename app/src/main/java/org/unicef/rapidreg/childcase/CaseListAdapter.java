@@ -85,7 +85,7 @@ public class CaseListAdapter extends RecyclerView.Adapter<CaseListAdapter.CaseLi
         holder.genderName.setText(gender.getName());
         holder.genderName.setTextColor(ContextCompat.getColor(context, gender.getColorId()));
         holder.age.setText(caseInfo.get("Age"));
-        holder.createdTime.setText(dateFormat.format(caseItem.getCreateAt()));
+        holder.registrationDate.setText(dateFormat.format(caseItem.getRegistrationDate()));
 
         holder.view.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -94,7 +94,7 @@ public class CaseListAdapter extends RecyclerView.Adapter<CaseListAdapter.CaseLi
                 List<CasePhoto> casePhotos = CasePhotoService.getInstance().getAllCasePhotos(caseItem.getId());
                 for (CasePhoto casePhoto : casePhotos) {
                     Bitmap thumbnail = ImageCompressUtil.convertByteArrayToImage(casePhoto.getThumbnail().getBlob());
-                    CaseService.CaseValues.addPhoto(thumbnail,casePhoto.getPath());
+                    CaseService.CaseValues.addPhoto(thumbnail, casePhoto.getPath());
                 }
                 CaseService.CaseValues.setValues(caseInfo);
                 CaseActivity caseActivity = (CaseActivity) context;
@@ -165,7 +165,7 @@ public class CaseListAdapter extends RecyclerView.Adapter<CaseListAdapter.CaseLi
         protected ImageView genderBadge;
         protected TextView genderName;
         protected TextView age;
-        protected TextView createdTime;
+        protected TextView registrationDate;
         protected ImageView caseImage;
         protected View view;
         protected ViewSwitcher viewSwitcher;
@@ -179,7 +179,7 @@ public class CaseListAdapter extends RecyclerView.Adapter<CaseListAdapter.CaseLi
             genderBadge = (ImageView) itemView.findViewById(R.id.gender_badge);
             genderName = (TextView) itemView.findViewById(R.id.gender_name);
             age = (TextView) itemView.findViewById(R.id.age);
-            createdTime = (TextView) itemView.findViewById(R.id.created_time);
+            registrationDate = (TextView) itemView.findViewById(R.id.registration_date);
             caseImage = (ImageView) itemView.findViewById(R.id.case_image);
 
             viewSwitcher = (ViewSwitcher) itemView.findViewById(R.id.view_switcher);
