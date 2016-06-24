@@ -9,6 +9,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import org.unicef.rapidreg.forms.childcase.CaseField;
+import org.unicef.rapidreg.model.Case;
+import org.unicef.rapidreg.widgets.viewholder.AudioUploadViewHolder;
 import org.unicef.rapidreg.widgets.viewholder.BaseViewHolder;
 import org.unicef.rapidreg.widgets.viewholder.GenericViewHolder;
 import org.unicef.rapidreg.widgets.viewholder.PhotoUploadViewHolder;
@@ -24,6 +26,7 @@ public class CaseRegisterAdapter extends RecyclerView.Adapter<BaseViewHolder> {
     private final static int VIEW_HOLDER_SEPARATOR = 1;
     private final static int VIEW_HOLDER_TICK_BOX = 2;
     private final static int VIEW_HOLDER_PHOTO_UPLOAD_BOX = 3;
+    private static final int VIEW_HOLDER_AUDIO_UPLOAD_BOX = 4;
 
     private List<CaseField> fields;
     private Context context;
@@ -54,6 +57,10 @@ public class CaseRegisterAdapter extends RecyclerView.Adapter<BaseViewHolder> {
                 return new PhotoUploadViewHolder(context, inflater.inflate(resources
                                 .getIdentifier(CaseField.TYPE_PHOTO_UPLOAD_LAYOUT, "layout", packageName),
                         parent, false));
+            case VIEW_HOLDER_AUDIO_UPLOAD_BOX:
+                return new AudioUploadViewHolder(context, inflater.inflate(resources
+                                .getIdentifier(CaseField.TYPE_AUDIO_UPLOAD_LAYOUT, "layout", packageName ),
+                        parent, false));
             default:
                 return new SeparatorViewHolder(context, new View(context));
         }
@@ -83,6 +90,10 @@ public class CaseRegisterAdapter extends RecyclerView.Adapter<BaseViewHolder> {
         if (field.isPhotoUploadBox()) {
             return VIEW_HOLDER_PHOTO_UPLOAD_BOX;
         }
+        if (field.isAudioUploadBox()) {
+            return VIEW_HOLDER_AUDIO_UPLOAD_BOX;
+        }
+
         return VIEW_HOLDER_GENERIC;
     }
 

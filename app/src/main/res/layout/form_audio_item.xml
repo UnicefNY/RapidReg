@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:descendantFocusability="blocksDescendants"
+    android:gravity="center"
+    android:orientation="vertical"
+    tools:ignore="MergeRootFrame">
+
+    <LinearLayout
+        android:id="@+id/audio_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/record_button"
+            android:layout_width="90dp"
+            android:layout_height="90dp"
+            android:padding="10dp"
+            android:scaleType="fitXY"
+            android:src="@drawable/mic_rec_210" />
+
+        <ImageView
+            android:id="@+id/play_button"
+            android:layout_width="90dp"
+            android:layout_height="90dp"
+            android:padding="10dp"
+            android:scaleType="fitXY"
+            android:src="@drawable/play_210" 
+            android:visibility="gone"/>
+
+        <TextView
+            android:id="@+id/audio_timer"
+            android:layout_width="45dp"
+            android:layout_height="20dp"
+            android:layout_gravity="center_vertical"
+            android:gravity="right"
+            android:text="0:00" />
+
+        <TextView
+            android:id="@+id/audio_timer_total"
+            android:layout_width="45dp"
+            android:layout_height="20dp"
+            android:layout_gravity="center_vertical"
+            android:layout_margin="5dp"
+            android:text="/1:00"
+            android:layout_weight="1" />
+
+        <ImageView
+            android:id="@+id/delete_button"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/recycle_bin"
+            android:layout_gravity="center_vertical"
+            android:layout_marginRight="15dp"
+            android:visibility="gone"/>
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="10dp"
+        android:background="@color/lighter_gray" />
+
+</LinearLayout>

@@ -109,4 +109,6 @@ dependencies {
             'org.robolectric:robolectric:3.1',
             "org.powermock:powermock-module-junit4:${powerMockVersion}",
             "org.powermock:powermock-api-mockito:${powerMockVersion}"
+
+    compile 'com.google.android.gms:play-services-appindexing:8.4.0'
 }
