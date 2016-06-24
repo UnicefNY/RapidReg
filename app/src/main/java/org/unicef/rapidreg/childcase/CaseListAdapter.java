@@ -23,7 +23,10 @@ import com.google.gson.reflect.TypeToken;
 
 import org.unicef.rapidreg.R;
 import org.unicef.rapidreg.model.Case;
+import org.unicef.rapidreg.model.CasePhoto;
+import org.unicef.rapidreg.service.CasePhotoService;
 import org.unicef.rapidreg.service.CaseService;
+import org.unicef.rapidreg.utils.ImageCompressUtil;
 
 import java.lang.reflect.Type;
 import java.text.DateFormat;
@@ -63,17 +66,18 @@ public class CaseListAdapter extends RecyclerView.Adapter<CaseListAdapter.CaseLi
     public void onBindViewHolder(CaseListHolder holder, int position) {
         CaseService.CaseValues.clear();
 
-        Case caseItem = caseList.get(position);
+        final Case caseItem = caseList.get(position);
+
         final String caseJson = new String(caseItem.getContent().getBlob());
         final Type type = new TypeToken<Map<String, String>>() {
         }.getType();
 
         final Map<String, String> caseInfo = new Gson().fromJson(caseJson, type);
-
         caseInfo.put(CaseService.UNIQUE_ID, caseItem.getUniqueId());
-        Gender gender = Gender.valueOf(caseInfo.get("Sex").toUpperCase());
 
+        Gender gender = Gender.valueOf(caseInfo.get("Sex").toUpperCase());
         holder.caseImage.setImageDrawable(getDefaultAvatar(gender.getAvatarId()));
+
         String shortUUID = getShortUUID(caseItem.getUniqueId());
         holder.id_normal_state.setText(shortUUID);
         holder.id_hidden_state.setText(shortUUID);
@@ -82,9 +86,16 @@ public class CaseListAdapter extends RecyclerView.Adapter<CaseListAdapter.CaseLi
         holder.genderName.setTextColor(ContextCompat.getColor(context, gender.getColorId()));
         holder.age.setText(caseInfo.get("Age"));
         holder.createdTime.setText(dateFormat.format(caseItem.getCreateAt()));
+
         holder.view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                List<CasePhoto> casePhotos = CasePhotoService.getInstance().getAllCasePhotos(caseItem.getId());
+                for (CasePhoto casePhoto : casePhotos) {
+                    Bitmap thumbnail = ImageCompressUtil.convertByteArrayToImage(casePhoto.getThumbnail().getBlob());
+                    CaseService.CaseValues.addPhoto(thumbnail,casePhoto.getPath());
+                }
                 CaseService.CaseValues.setValues(caseInfo);
                 CaseActivity caseActivity = (CaseActivity) context;
                 setViewMode(caseActivity);

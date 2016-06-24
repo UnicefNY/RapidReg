@@ -1,5 +1,6 @@
 package org.unicef.rapidreg.service;
 
+import android.content.ContentResolver;
 import android.graphics.Bitmap;
 import android.util.Log;
 
@@ -11,9 +12,13 @@ import com.raizlabs.android.dbflow.sql.language.ConditionGroup;
 import com.raizlabs.android.dbflow.sql.language.NameAlias;
 
 import org.unicef.rapidreg.db.CaseDao;
+import org.unicef.rapidreg.db.CasePhotoDao;
 import org.unicef.rapidreg.db.impl.CaseDaoImpl;
+import org.unicef.rapidreg.db.impl.CasePhotoDaoImpl;
 import org.unicef.rapidreg.forms.childcase.CaseField;
 import org.unicef.rapidreg.model.Case;
+import org.unicef.rapidreg.model.CasePhoto;
+import org.unicef.rapidreg.utils.ImageCompressUtil;
 
 import java.lang.reflect.Type;
 import java.sql.Date;
@@ -31,13 +36,16 @@ public class CaseService {
     public static final String TAG = CaseService.class.getSimpleName();
     public static final String UNIQUE_ID = "unique_id";
 
-    private static final CaseService CASE_SERVICE = new CaseService(new CaseDaoImpl());
+    private static final CaseService CASE_SERVICE = new CaseService();
 
-
-    private CaseDao caseDao;
+    private CaseDao caseDao = new CaseDaoImpl();
+    private CasePhotoDao casePhotoDao = new CasePhotoDaoImpl();
 
     public static CaseService getInstance() {
         return CASE_SERVICE;
+    }
+
+    private CaseService() {
     }
 
     public CaseService(CaseDao caseDao) {
@@ -69,7 +77,6 @@ public class CaseService {
         if (child == null) {
             return new HashMap<>();
         }
-
         String caseJson = new String(child.getContent().getBlob());
         Type type = new TypeToken<Map<String, String>>() {
         }.getType();
@@ -94,37 +101,6 @@ public class CaseService {
         return caseDao.getCaseListByConditionGroup(conditionGroup);
     }
 
-    public void saveOrUpdateCase(Map<String, String> values) {
-        Date date = getRegisterDate(values);
-
-        String caseJson = new Gson().toJson(values);
-        Blob caseBlob = new Blob(caseJson.getBytes());
-
-        String uniqueId = values.get(UNIQUE_ID);
-
-        if (uniqueId == null) {
-            Log.d(TAG, "save a new case");
-            Case child = new Case();
-            child.setUniqueId(createUniqueId());
-            child.setCreateAt(date);
-            child.setLastUpdatedAt(getCurrentDate());
-            child.setContent(caseBlob);
-            child.setAge(Integer.parseInt(values.get("Age")));
-            child.save();
-        } else {
-            Log.d(TAG, "update the existing case");
-            Case child = caseDao.getCaseByUniqueId(uniqueId);
-            child.setLastUpdatedAt(getCurrentDate());
-            child.setContent(caseBlob);
-            child.setAge(Integer.parseInt(values.get("Age")));
-            child.update();
-        }
-    }
-
-    public String createUniqueId() {
-        return UUID.randomUUID().toString();
-    }
-
     public List<String> fetchRequiredFiledNames(List<CaseField> caseFields) {
         List<String> result = new ArrayList<>();
         for (CaseField field : caseFields) {
@@ -133,6 +109,57 @@ public class CaseService {
             }
         }
         return result;
+    }
+
+    public void saveOrUpdateCase(Map<String, String> values, Map<Bitmap, String> photoBitPaths) {
+        if (values.get(UNIQUE_ID) == null) {
+            saveCase(values, photoBitPaths);
+        } else {
+            Log.d(TAG, "update the existing case");
+            updateCase(values, photoBitPaths);
+        }
+    }
+
+    private void saveCase(Map<String, String> values, Map<Bitmap, String> photoBitPaths) {
+        Date date = new Date(Calendar.getInstance().getTimeInMillis());
+        Blob caseBlob = new Blob(new Gson().toJson(values).getBytes());
+
+        Case child = new Case();
+        child.setUniqueId(createUniqueId());
+        child.setCreateAt(date);
+        child.setLastUpdatedAt(date);
+        child.setContent(caseBlob);
+        child.setAge(Integer.parseInt(values.get("Age")));
+        child.save();
+
+        saveCasePhoto(child, photoBitPaths);
+    }
+
+    private void updateCase(Map<String, String> values, Map<Bitmap, String> photoBitPaths) {
+        Blob caseBlob = new Blob(new Gson().toJson(values).getBytes());
+
+        Case child = caseDao.getCaseByUniqueId(values.get(UNIQUE_ID));
+        child.setLastUpdatedAt(new Date(Calendar.getInstance().getTimeInMillis()));
+        child.setContent(caseBlob);
+        child.setAge(Integer.parseInt(values.get("Age")));
+        child.update();
+
+        casePhotoDao.deleteCasePhotosByCaseId(child.getId());
+        saveCasePhoto(child, photoBitPaths);
+    }
+
+    private void saveCasePhoto(Case child, Map<Bitmap, String> photoBitPaths) {
+        if (photoBitPaths != null) {
+            for (Map.Entry<Bitmap, String> photoBitPathEntry : photoBitPaths.entrySet()) {
+                CasePhoto casePhoto = new CasePhoto();
+                casePhoto.setPath(photoBitPathEntry.getValue());
+                casePhoto.setPhoto(new Blob(ImageCompressUtil.convertImageToBytes(photoBitPathEntry.getValue())));
+                casePhoto.setThumbnail(new Blob(ImageCompressUtil.convertImageToBytes(photoBitPathEntry.getKey())));
+                casePhoto.setCase(child);
+                casePhoto.save();
+                Log.i("sjyuan", "saved casePhoto = " + casePhoto.toString());
+            }
+        }
     }
 
     private Date getCurrentDate() {
@@ -158,6 +185,10 @@ public class CaseService {
         return "%" + queryStr + "%";
     }
 
+    public String createUniqueId() {
+        return UUID.randomUUID().toString();
+    }
+
     public static class CaseValues {
         private static Map<String, String> values = new HashMap<>();
         private static Map<Bitmap, String> photoBitPaths = new LinkedHashMap<>();
@@ -176,7 +207,6 @@ public class CaseService {
                 for (Map.Entry<Bitmap, String> photo : photoPaths.entrySet()) {
                     photoBitPaths.put(photo.getKey(), photo.getValue());
                 }
-
             }
         }
 
@@ -193,9 +223,12 @@ public class CaseService {
             photoBitPaths.clear();
         }
 
-
         public static void addPhoto(Bitmap bitmap, String photoPath) {
             photoBitPaths.put(bitmap, photoPath);
+        }
+
+        public static void addPhoto(ContentResolver contentResolver, String photoPath) {
+            addPhoto(ImageCompressUtil.getThumbnail(contentResolver, photoPath), photoPath);
         }
 
         public static void removePhoto(Bitmap bitmap) {

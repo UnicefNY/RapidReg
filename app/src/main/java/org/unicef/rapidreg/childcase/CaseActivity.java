@@ -7,14 +7,17 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.media.ThumbnailUtils;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.MenuItem;
 import android.widget.GridView;
 import android.widget.Toast;
@@ -25,17 +28,21 @@ import org.unicef.rapidreg.forms.childcase.CaseFormRoot;
 import org.unicef.rapidreg.forms.childcase.CaseSection;
 import org.unicef.rapidreg.service.CaseFormService;
 import org.unicef.rapidreg.service.CaseService;
-import org.unicef.rapidreg.utils.ImageCompressUtil;
+import org.unicef.rapidreg.widgets.viewholder.PhotoUploadViewHolder;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 public class CaseActivity extends BaseActivity {
     public final static String INTENT_KEY_CASE_MODE = "_case_mode";
 
-    private final int IMAGE_OPEN = 1;
     private String imagePath;
 
     private GridView photoGrid;
@@ -69,13 +76,20 @@ public class CaseActivity extends BaseActivity {
 
         List<Bitmap> previousPhotos = CaseService.CaseValues.getPhotosBits();
 
-        Bitmap newPhoto = ImageCompressUtil.getThumbnail(getContentResolver(), imagePath);
+        int THUMB_SIZE = 80;
+        Bitmap newPhoto = ThumbnailUtils.extractThumbnail(
+                BitmapFactory.decodeFile(imagePath), THUMB_SIZE, THUMB_SIZE);
+
         previousPhotos.add(newPhoto);
-
-        Bitmap addPhotoIcon = BitmapFactory.decodeResource(getResources(), R.drawable.photo_add);
-        previousPhotos.add(addPhotoIcon);
-
         CaseService.CaseValues.addPhoto(newPhoto, imagePath);
+
+        Log.i("sjyuan", "newPhoto = " + newPhoto);
+        Log.i("sjyuan", "imagePath = " + imagePath);
+
+        if (CaseService.CaseValues.getPhotoBitPaths().size() < 4) {
+            Bitmap addPhotoIcon = BitmapFactory.decodeResource(getResources(), R.drawable.photo_add);
+            previousPhotos.add(addPhotoIcon);
+        }
 
         photoGrid.setAdapter(new CasePhotoAdapter(this, previousPhotos));
         imagePath = null;
@@ -83,19 +97,56 @@ public class CaseActivity extends BaseActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (Activity.RESULT_OK == resultCode && IMAGE_OPEN == requestCode) {
-            Uri uri = data.getData();
-            if (!TextUtils.isEmpty(uri.getAuthority())) {
-                Cursor cursor = getContentResolver().query(uri,
-                        new String[]{MediaStore.Images.Media.DATA}, null, null, null);
-                cursor.moveToFirst();
-                imagePath = cursor.getString(cursor
-                        .getColumnIndex(MediaStore.Images.Media.DATA));
-                cursor.close();
+        if (Activity.RESULT_OK == resultCode) {
+            if (PhotoUploadViewHolder.REQUEST_CODE_GALLERY == requestCode) {
+                onSelectFromGalleryResult(data);
+            } else if (PhotoUploadViewHolder.REQUEST_CODE_CAMERA == requestCode) {
+                onCaptureImageResult(data);
             }
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
+
+    private void onSelectFromGalleryResult(Intent data) {
+        Uri uri = data.getData();
+        if (!TextUtils.isEmpty(uri.getAuthority())) {
+            Cursor cursor = getContentResolver().query(uri,
+                    new String[]{MediaStore.Images.Media.DATA}, null, null, null);
+            cursor.moveToFirst();
+            imagePath = cursor.getString(cursor
+                    .getColumnIndex(MediaStore.Images.Media.DATA));
+            cursor.close();
+        }
+    }
+
+
+    private void onCaptureImageResult(Intent data) {
+        Bitmap bitmap = BitmapFactory.decodeFile(Environment.getExternalStorageDirectory() + "/image.jpg");
+        storeImage(bitmap);
+        bitmap.recycle();
+    }
+
+    private void storeImage(Bitmap image) {
+        File pictureFile = getOutputMediaFile();
+        try {
+            FileOutputStream fos = new FileOutputStream(pictureFile);
+            image.compress(Bitmap.CompressFormat.PNG, 100, fos);
+            fos.close();
+            imagePath = pictureFile.getPath();
+        } catch (IOException e) {
+            Log.d("sjyuan", "Error accessing file: " + e.getMessage());
+        }
+    }
+
+    private File getOutputMediaFile() {
+        File mediaStorageDir = new File(Environment.getExternalStorageDirectory()
+                + "/" + getApplicationContext().getPackageName());
+        if (!mediaStorageDir.exists()) {
+            mediaStorageDir.mkdirs();
+        }
+        return new File(mediaStorageDir.getPath() + File.separator + System.currentTimeMillis() + ".jpg");
+    }
+
 
     @Override
     public void onBackPressed() {
@@ -160,7 +211,8 @@ public class CaseActivity extends BaseActivity {
 
     private boolean saveCaseButtonAction() {
         if (validateRequiredField()) {
-            CaseService.getInstance().saveOrUpdateCase(CaseService.CaseValues.getValues());
+            Map<Bitmap, String> photoBitPaths = CaseService.CaseValues.getPhotoBitPaths();
+            CaseService.getInstance().saveOrUpdateCase(CaseService.CaseValues.getValues(), photoBitPaths);
             redirectFragment(new CaseListFragment());
             setTopMenuItemsInCaseListPage();
         }

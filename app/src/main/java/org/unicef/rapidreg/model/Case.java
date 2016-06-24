@@ -1,19 +1,26 @@
 package org.unicef.rapidreg.model;
 
 import com.raizlabs.android.dbflow.annotation.Column;
+import com.raizlabs.android.dbflow.annotation.ModelContainer;
+import com.raizlabs.android.dbflow.annotation.OneToMany;
 import com.raizlabs.android.dbflow.annotation.PrimaryKey;
 import com.raizlabs.android.dbflow.annotation.Table;
 import com.raizlabs.android.dbflow.data.Blob;
+import com.raizlabs.android.dbflow.sql.language.Condition;
+import com.raizlabs.android.dbflow.sql.language.NameAlias;
+import com.raizlabs.android.dbflow.sql.language.SQLite;
 import com.raizlabs.android.dbflow.structure.BaseModel;
 
 import org.unicef.rapidreg.db.PrimeroDB;
 
 import java.sql.Date;
+import java.util.List;
 
 @Table(database = PrimeroDB.class)
 public class Case extends BaseModel {
+    @Column
     @PrimaryKey(autoincrement = true)
-    private long id;
+    long id;
     @Column(name = "name")
     private String name;
     @Column(name = "case_json")
@@ -161,6 +168,27 @@ public class Case extends BaseModel {
 
     public void setAge(int age) {
         this.age = age;
+    }
+
+    @Override
+    public String toString() {
+        return "Case{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", content=" + content +
+                ", photo=" + photo +
+                ", audio=" + audio +
+                ", isSynced=" + isSynced +
+                ", syncLog='" + syncLog + '\'' +
+                ", internalId='" + internalId + '\'' +
+                ", internalRev='" + internalRev + '\'' +
+                ", uniqueId='" + uniqueId + '\'' +
+                ", createdBy='" + createdBy + '\'' +
+                ", createAt=" + createAt +
+                ", lastUpdatedAt=" + lastUpdatedAt +
+                ", lastSyncedAt=" + lastSyncedAt +
+                ", age=" + age +
+                '}';
     }
 }
 
