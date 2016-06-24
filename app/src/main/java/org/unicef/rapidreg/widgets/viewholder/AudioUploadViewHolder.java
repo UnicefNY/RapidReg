@@ -154,6 +154,7 @@ public class AudioUploadViewHolder extends BaseViewHolder {
     @OnClick(R.id.delete_button)
     public void onDeleteButtonClicked() {
         initAudioRecordUI();
+        CaseFieldValueCache.clearAudioFile();
     }
 
     private void initAudioRecordUI() {
