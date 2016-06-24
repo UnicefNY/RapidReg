@@ -2,9 +2,9 @@
     <string name="app_name">RapidReg</string>
     <!--Loging activity layout string-->
     <string name="app_banner_text">Primero</string>
-    <string name="editview_username_hint_text">Username</string>
-    <string name="editview_password_hint_text">Password</string>
-    <string name="editview_URL_hint_text">URL</string>
+    <string name="username_hint_text">Username</string>
+    <string name="password_hint_text">Password</string>
+    <string name="url_hint_text">URL</string>
     <string name="text_view_change_url">Change URL</string>
     <string name="button_login_text">Login</string>
     <string name="login_loading_text">Logining, please wait...</string>
