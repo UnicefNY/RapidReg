@@ -15,13 +15,9 @@
         android:inAnimation="@android:anim/fade_in"
         android:outAnimation="@android:anim/fade_out">
 
-        <include
-            android:id="@+id/text_area_normal_state"
-            layout="@layout/case_list_text_area_normal_state" />
+        <include layout="@layout/case_list_text_area_normal_state" />
 
-        <include
-            android:id="@+id/text_area_hidden_state"
-            layout="@layout/case_list_text_area_hidden_state" />
+        <include layout="@layout/case_list_text_area_hidden_state" />
     </ViewSwitcher>
 
     <View
