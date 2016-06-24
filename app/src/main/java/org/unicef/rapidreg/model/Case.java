@@ -18,11 +18,16 @@ import java.util.List;
 
 @Table(database = PrimeroDB.class)
 public class Case extends BaseModel {
-    @Column
+    public static final int MIN_AGE = 0;
+    public static final int MAX_AGE = 100;
     @PrimaryKey(autoincrement = true)
-    long id;
-    @Column(name = "name")
-    private String name;
+    private long id;
+    @Column(name = "name", defaultValue = "")
+    private String name = "";
+    @Column(name = "age")
+    private int age;
+    @Column(name = "caregiver", defaultValue = "")
+    private String caregiver = "";
     @Column(name = "case_json")
     private Blob content;
     @Column(name = "photo")
@@ -47,8 +52,6 @@ public class Case extends BaseModel {
     private Date lastUpdatedAt;
     @Column(name = "last_synced_at")
     private Date lastSyncedAt;
-    @Column(name = "age")
-    private int age;
 
     public long getId() {
         return id;
@@ -64,6 +67,22 @@ public class Case extends BaseModel {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public int getAge() {
+        return age;
+    }
+
+    public void setAge(int age) {
+        this.age = age;
+    }
+
+    public String getCaregiver() {
+        return caregiver;
+    }
+
+    public void setCaregiver(String caregiver) {
+        this.caregiver = caregiver;
     }
 
     public Blob getContent() {
@@ -162,33 +181,25 @@ public class Case extends BaseModel {
         this.lastSyncedAt = lastSyncedAt;
     }
 
-    public int getAge() {
-        return age;
-    }
-
-    public void setAge(int age) {
-        this.age = age;
-    }
-
     @Override
     public String toString() {
-        return "Case{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", content=" + content +
-                ", photo=" + photo +
-                ", audio=" + audio +
-                ", isSynced=" + isSynced +
-                ", syncLog='" + syncLog + '\'' +
-                ", internalId='" + internalId + '\'' +
-                ", internalRev='" + internalRev + '\'' +
-                ", uniqueId='" + uniqueId + '\'' +
-                ", createdBy='" + createdBy + '\'' +
-                ", createAt=" + createAt +
-                ", lastUpdatedAt=" + lastUpdatedAt +
-                ", lastSyncedAt=" + lastSyncedAt +
-                ", age=" + age +
-                '}';
+        StringBuilder sb = new StringBuilder("Case:");
+        sb.append("id").append(id).append("\n");
+        sb.append("name").append(name).append("\n");
+        sb.append("age").append(age).append("\n");
+        sb.append("caregiver").append(caregiver).append("\n");
+        sb.append("content").append(content).append("\n");
+        sb.append("isSynced").append(isSynced).append("\n");
+        sb.append("syncLog").append(syncLog).append("\n");
+        sb.append("internalId").append(internalId).append("\n");
+        sb.append("internalRev").append(internalRev).append("\n");
+        sb.append("uniqueId").append(uniqueId).append("\n");
+        sb.append("createdBy").append(createdBy).append("\n");
+        sb.append("createAt").append(createAt).append("\n");
+        sb.append("lastUpdatedAt").append(lastUpdatedAt).append("\n");
+        sb.append("lastSyncedAt").append(lastSyncedAt).append("\n");
+
+        return sb.toString();
     }
 }
 
