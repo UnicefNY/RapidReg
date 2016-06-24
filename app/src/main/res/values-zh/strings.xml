@@ -2,9 +2,9 @@
     <!--<string name="app_name">RapidReg</string>-->
     <!--Loging activity layout string-->
     <!--<string name="app_banner_text">Primero</string>-->
-    <string name="editview_username_hint_text">用户名</string>
-    <string name="editview_password_hint_text">密码</string>
-    <string name="editview_URL_hint_text">网址</string>
+    <string name="username_hint_text">用户名</string>
+    <string name="password_hint_text">密码</string>
+    <string name="url_hint_text">网址</string>
     <string name="text_view_change_url">切换网址</string>
     <string name="button_login_text">登陆</string>
     <string name="login_loading_text">正在登陆,请稍后...</string>

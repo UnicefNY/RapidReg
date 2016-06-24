@@ -31,15 +31,15 @@ import retrofit2.Call;
 
 public class LoginActivity extends MvpActivity<LoginView, LoginPresenter> implements LoginView {
     public static final String TAG = LoginActivity.class.getSimpleName();
-    @BindView(R.id.button_login)
+    @BindView(R.id.login)
     Button loginButton;
     @BindView(R.id.username)
     EditText usernameEditView;
     @BindView(R.id.password)
     EditText passwordEditView;
-    @BindView(R.id.editview_url)
+    @BindView(R.id.url)
     EditText urlEditView;
-    @BindView(R.id.text_view_change_url)
+    @BindView(R.id.change_url)
     TextView changeUrlTextView;
     @BindView(R.id.logo)
     ImageView logoView;
@@ -59,7 +59,7 @@ public class LoginActivity extends MvpActivity<LoginView, LoginPresenter> implem
         usernameEditView.requestFocus();
     }
 
-    @OnClick(R.id.button_login)
+    @OnClick(R.id.login)
     public void onLoginButtonClicked() {
         presenter.doLogin(this,
                 usernameEditView.getText().toString().trim(),
@@ -67,7 +67,7 @@ public class LoginActivity extends MvpActivity<LoginView, LoginPresenter> implem
                 urlEditView.getText().toString().trim());
     }
 
-    @OnClick(R.id.text_view_change_url)
+    @OnClick(R.id.change_url)
     public void onChangeUrlTextClicked() {
         ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         if (!NetworkStatusManager.isOnline(cm)) {
