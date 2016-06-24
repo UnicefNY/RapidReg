@@ -14,6 +14,10 @@ import java.sql.Date;
 public class Case extends BaseModel {
     public static final int MIN_AGE = 0;
     public static final int MAX_AGE = 100;
+    public static final String COLUMN_UNIQUE_ID = "unique_id";
+    public static final String COLUMN_NAME = "name";
+    public static final String COLUMN_AGE = "age";
+    public static final String COLUMN_CAREGIVER = "caregiver";
 
     @PrimaryKey(autoincrement = true)
     public long id;
