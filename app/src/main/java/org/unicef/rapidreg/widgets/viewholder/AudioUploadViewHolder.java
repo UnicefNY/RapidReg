@@ -3,7 +3,6 @@ package org.unicef.rapidreg.widgets.viewholder;
 import android.content.Context;
 import android.media.MediaPlayer;
 import android.media.MediaRecorder;
-import android.os.Environment;
 import android.os.Handler;
 import android.util.Log;
 import android.view.View;
@@ -12,7 +11,9 @@ import android.widget.TextView;
 
 import org.unicef.rapidreg.R;
 import org.unicef.rapidreg.childcase.CaseActivity;
+import org.unicef.rapidreg.service.cache.CaseFieldValueCache;
 
+import java.io.File;
 import java.io.IOException;
 
 import butterknife.BindView;
@@ -74,9 +75,29 @@ public class AudioUploadViewHolder extends BaseViewHolder {
         ButterKnife.bind(this, itemView);
         caseActivity = (CaseActivity) context;
 
-        mFileName = Environment.getExternalStorageDirectory().getAbsolutePath();
-        mFileName += "/audiorecordtest.3gp";
+        mFileName = CaseFieldValueCache.AUDIO_FILE_PATH;
+
+        if (!(isCaseMode(CaseActivity.CaseMode.EDIT) || isCaseMode(CaseActivity.CaseMode.ADD))) {
+            initPlayAudioUI();
+
+        }
+        if (isCaseMode(CaseActivity.CaseMode.ADD)) {
+            CaseFieldValueCache.clearAudioFile();
+        }
+        if (isFileExists(mFileName)) {
+            initPlayAudioUI();
+            showDeleteIconWhenIsEditMode();
+        }
     }
+
+    public boolean isCaseMode(CaseActivity.CaseMode mode) {
+        CaseActivity.CaseMode caseMode = (CaseActivity.CaseMode) caseActivity.getIntent().getExtras().get(CaseActivity.INTENT_KEY_CASE_MODE);
+        if (caseMode ==  mode) {
+            return true;
+        }
+        return false;
+    }
+
 
     @OnClick(R.id.record_button)
     public void onRecordButtonClicked() {
@@ -84,11 +105,28 @@ public class AudioUploadViewHolder extends BaseViewHolder {
         if (mStartRecording) {
             recordButton.setImageResource(R.drawable.pause_210_with_color_boarder);
         } else {
-            recordButton.setVisibility(View.GONE);
-            playButton.setVisibility(View.VISIBLE);
-            audioDeleteButton.setVisibility(View.VISIBLE);
+            initPlayAudioUI();
+            showDeleteIconWhenIsEditMode();
         }
         mStartRecording = !mStartRecording;
+    }
+
+    private void showDeleteIconWhenIsEditMode() {
+        if (isCaseMode(CaseActivity.CaseMode.EDIT) || isCaseMode(CaseActivity.CaseMode.ADD)) {
+            audioDeleteButton.setVisibility(View.VISIBLE);
+        }
+    }
+
+    private void initPlayAudioUI() {
+        if (isFileExists(mFileName)) {
+            recordButton.setVisibility(View.GONE);
+            playButton.setVisibility(View.VISIBLE);
+        } else {
+            recordButton.setVisibility(View.GONE);
+            playButton.setVisibility(View.GONE);
+            timerTextView.setVisibility(View.GONE);
+            timerTotalTextView.setText("No audio file exist.");
+        }
     }
 
     @OnClick(R.id.play_button)
@@ -99,9 +137,18 @@ public class AudioUploadViewHolder extends BaseViewHolder {
             audioDeleteButton.setVisibility(View.GONE);
         } else {
             playButton.setImageResource(R.drawable.play_210);
-            audioDeleteButton.setVisibility(View.VISIBLE);
+            showDeleteIconWhenIsEditMode();
         }
         mStartPlaying = !mStartPlaying;
+    }
+
+    private boolean isFileExists(String filePath) {
+
+        File f = new File(filePath);
+        if (f.exists() && !f.isDirectory()) {
+            return true;
+        }
+        return false;
     }
 
     @OnClick(R.id.delete_button)
@@ -123,8 +170,8 @@ public class AudioUploadViewHolder extends BaseViewHolder {
             startRecording();
             startTiming();
         } else {
-            stopRecording();
             stopTiming();
+            stopRecording();
         }
     }
 
@@ -133,8 +180,8 @@ public class AudioUploadViewHolder extends BaseViewHolder {
             startPlaying();
             startTiming();
         } else {
-            stopPlaying();
             stopTiming();
+            stopPlaying();
         }
     }
 
@@ -145,14 +192,14 @@ public class AudioUploadViewHolder extends BaseViewHolder {
             mPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
                 @Override
                 public void onCompletion(MediaPlayer mp) {
-                    if(mPlayer !=null ) {
+                    if (mPlayer != null) {
                         onPlayButtonClicked();
                     }
                 }
             });
             mPlayer.prepare();
             audioDuration = mPlayer.getDuration();
-            timerTotalTextView.setText("/"+ getTime(audioDuration));
+            timerTotalTextView.setText("/" + getTime(audioDuration));
             mPlayer.start();
 
         } catch (IOException e) {

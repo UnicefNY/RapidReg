@@ -11,7 +11,6 @@ import android.support.v4.content.res.ResourcesCompat;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,6 +30,7 @@ import org.unicef.rapidreg.service.cache.CaseFieldValueCache;
 import org.unicef.rapidreg.service.cache.CasePhotoCache;
 import org.unicef.rapidreg.utils.ImageCompressUtil;
 
+import java.io.IOException;
 import java.lang.reflect.Type;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -108,6 +108,14 @@ public class CaseListAdapter extends RecyclerView.Adapter<CaseListAdapter.CaseLi
                                 CaseRegisterWrapperFragment.class.getSimpleName())
                         .addToBackStack(null)
                         .commit();
+                try {
+                    CaseFieldValueCache.clearAudioFile();
+                    if(caseItem.getAudio() != null) {
+                        ImageCompressUtil.writeFile(caseItem.getAudio().getBlob(), CaseFieldValueCache.AUDIO_FILE_PATH);
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
 
             private void setViewMode(CaseActivity caseActivity) {

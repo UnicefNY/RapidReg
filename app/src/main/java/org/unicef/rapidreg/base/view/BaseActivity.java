@@ -23,6 +23,7 @@ import org.unicef.rapidreg.R;
 import org.unicef.rapidreg.childcase.CaseActivity;
 import org.unicef.rapidreg.childcase.CaseListFragment;
 import org.unicef.rapidreg.service.UserService;
+import org.unicef.rapidreg.service.cache.CaseFieldValueCache;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;

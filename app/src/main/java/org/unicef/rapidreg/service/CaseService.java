@@ -21,6 +21,8 @@ import org.unicef.rapidreg.service.cache.CaseFieldValueCache;
 import org.unicef.rapidreg.service.cache.CasePhotoCache;
 import org.unicef.rapidreg.utils.ImageCompressUtil;
 
+import java.io.File;
+import java.io.IOException;
 import java.lang.reflect.Type;
 import java.sql.Date;
 import java.text.ParseException;
@@ -143,6 +145,12 @@ public class CaseService {
     private void saveCase(Map<String, String> values, Map<Bitmap, String> photoBitPaths) {
         Date date = new Date(Calendar.getInstance().getTimeInMillis());
         Blob caseBlob = new Blob(new Gson().toJson(values).getBytes());
+        Blob audioFileDefault = null;
+        try {
+            audioFileDefault = new Blob(ImageCompressUtil.readFile(CaseFieldValueCache.AUDIO_FILE_PATH));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         Case child = new Case();
         child.setUniqueId(createUniqueId());
@@ -153,13 +161,21 @@ public class CaseService {
         child.setAge(Integer.parseInt(values.get(AGE)));
         child.setCaregiver(getCaregiverName(values));
         child.setRegistrationDate(getRegisterDate(values));
+        child.setAudio(audioFileDefault);
         child.save();
 
         saveCasePhoto(child, photoBitPaths);
+        CaseFieldValueCache.clearAudioFile();
     }
 
     private void updateCase(Map<String, String> values, Map<Bitmap, String> photoBitPaths) {
         Blob caseBlob = new Blob(new Gson().toJson(values).getBytes());
+        Blob audioFileDefault = null;
+        try {
+            audioFileDefault = new Blob(ImageCompressUtil.readFile(CaseFieldValueCache.AUDIO_FILE_PATH));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         Case child = caseDao.getCaseByUniqueId(values.get(CASE_ID));
         child.setLastUpdatedDate(new Date(Calendar.getInstance().getTimeInMillis()));
@@ -168,9 +184,11 @@ public class CaseService {
         child.setAge(Integer.parseInt(values.get(AGE)));
         child.setCaregiver(getCaregiverName(values));
         child.setRegistrationDate(getRegisterDate(values));
+        child.setAudio(audioFileDefault);
         child.update();
 
         casePhotoDao.deleteCasePhotosByCaseId(child.getId());
+        CaseFieldValueCache.clearAudioFile();
         saveCasePhoto(child, photoBitPaths);
     }
 
