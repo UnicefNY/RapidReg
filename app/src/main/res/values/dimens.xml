@@ -58,4 +58,8 @@
     <dimen name="login_input_margin">25dp</dimen>
     <!--login end-->
 
+    <!--case register start-->
+    <dimen name="pull_back_text_padding">15dp</dimen>
+    <!--case register end-->
+
 </resources>
