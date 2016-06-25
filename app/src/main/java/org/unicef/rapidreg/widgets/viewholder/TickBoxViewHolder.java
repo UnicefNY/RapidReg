@@ -28,7 +28,7 @@ public class TickBoxViewHolder extends BaseViewHolder<CaseField> {
     @Override
     public void setValue(CaseField field) {
         labelView.setText(getLabel(field));
-        disableUnediatbleField(valueView, field);
+        disableUnediatbleField(field);
         valueView.setChecked(Boolean.valueOf(CaseFieldValueCache.get(getLabel(field))));
     }
 
@@ -41,12 +41,5 @@ public class TickBoxViewHolder extends BaseViewHolder<CaseField> {
                         String.valueOf(((CheckBox) v).isChecked()));
             }
         });
-    }
-
-    private void disableUnediatbleField(View view, CaseField field) {
-        if (!isEditable(field)) {
-            itemView.setBackgroundResource(R.color.gainsboro);
-            view.setEnabled(false);
-        }
     }
 }

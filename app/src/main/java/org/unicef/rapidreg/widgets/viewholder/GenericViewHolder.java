@@ -40,7 +40,7 @@ public class GenericViewHolder extends BaseViewHolder<CaseField> {
         }
 
         labelView.setText(labelText);
-        disableUneditableField(itemView, field);
+        disableUnediatbleField(field);
         valueView.setText(CaseFieldValueCache.get(getLabel(field)));
     }
 
@@ -56,13 +56,6 @@ public class GenericViewHolder extends BaseViewHolder<CaseField> {
                 }
             }
         });
-    }
-
-    private void disableUneditableField(View view, CaseField field) {
-        if (!isEditable(field)) {
-            itemView.setBackgroundResource(R.color.gainsboro);
-            view.setEnabled(false);
-        }
     }
 
     private void showFieldDialog(CaseField field, TextView valueView) {
