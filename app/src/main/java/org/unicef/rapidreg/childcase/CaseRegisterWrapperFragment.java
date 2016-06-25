@@ -53,6 +53,8 @@ public class CaseRegisterWrapperFragment extends Fragment {
     @BindView(R.id.mini_form_container)
     RecyclerView miniFormContainer;
 
+    private CaseFormRoot caseForm;
+    private List<CaseSection> sections;
     private List<CaseField> miniFields;
 
     @Nullable
@@ -61,70 +63,98 @@ public class CaseRegisterWrapperFragment extends Fragment {
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
-
         View view = inflater.inflate(R.layout.fragment_cases_register_wrapper, container, false);
         ButterKnife.bind(this, view);
+        initCaseFormData();
+        initMiniFormContainer();
+        initFullFormContainer();
+        return view;
+    }
 
-        FragmentStatePagerItemAdapter adapter = new FragmentStatePagerItemAdapter(
-                getActivity().getSupportFragmentManager(), getPages());
-        viewPager.setAdapter(adapter);
-        viewPagerTab.setViewPager(viewPager);
-
-        CaseFormRoot form = CaseFormService.getInstance().getCurrentForm();
-
-        if (form != null) {
-            miniFields = new ArrayList<>();
-            for (CaseSection section : form.getSections()) {
-                for (CaseField caseField : section.getFields()) {
-                    if (caseField.isShowOnMiniForm()) {
-                        miniFields.add(caseField);
-                    }
-                }
-            }
-//                getView().initView(new CaseMiniRegisterAdapter(context, -1, fields));
-//            } else {
-//                ((BaseActivity) context).getSupportFragmentManager().beginTransaction()
-//                        .replace(R.id.fragment_content, new CaseRegisterWrapperFragment())
-//                        .addToBackStack(null)
-//                        .commit();
-//                Toast.makeText(context, "There is no mini form!", Toast.LENGTH_SHORT).show();
-//            }
-        }
-        CaseRegisterAdapter caseRegisterAdapter = new CaseRegisterAdapter(getActivity(), miniFields);
+    private void initMiniFormContainer() {
+        CaseRegisterAdapter caseRegisterAdapter =
+                new CaseRegisterAdapter(getActivity(), miniFields);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         if (miniFields.size() != 0) {
             miniFormContainer.setLayoutManager(layoutManager);
             miniFormContainer.setAdapter(caseRegisterAdapter);
+            miniFormSwipeLayout.setDragEdge(SwipeChangeLayout.DragEdge.BOTTOM);
+            miniFormSwipeLayout.setShouldGoneContainer(miniFormLayout);
+            miniFormSwipeLayout.setShouldShowContainer(fullFormLayout);
+            miniFormSwipeLayout.setScrollChild(miniFormContainer);
+            miniFormSwipeLayout.setOnSwipeBackListener(new SwipeChangeLayout.SwipeBackListener() {
+                @Override
+                public void onViewPositionChanged(float fractionAnchor, float fractionScreen) {
+
+                }
+            });
+        } else {
+            miniFormSwipeLayout.setEnableFlingBack(false);
+            miniFormLayout.setVisibility(View.GONE);
+            fullFormLayout.setVisibility(View.VISIBLE);
         }
+    }
 
-        fullFormSwipeLayout.setDragEdge(SwipeChangeLayout.DragEdge.TOP);
-        fullFormSwipeLayout.setShouldGoneContainer(fullFormLayout);
-        fullFormSwipeLayout.setShouldShowContainer(miniFormLayout);
-        fullFormSwipeLayout.setOnSwipeBackListener(new SwipeChangeLayout.SwipeBackListener() {
+    private void initFullFormContainer() {
+        final FragmentStatePagerItemAdapter adapter = new FragmentStatePagerItemAdapter(
+                getActivity().getSupportFragmentManager(), getPages());
+        viewPager.setAdapter(adapter);
+        viewPagerTab.setViewPager(viewPager);
+        viewPagerTab.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
-            public void onViewPositionChanged(float fractionAnchor, float fractionScreen) {
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                fullFormSwipeLayout.setScrollChild(
+                        adapter.getPage(position).getView()
+                                .findViewById(R.id.register_forms_content));
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
 
             }
         });
-        miniFormSwipeLayout.setDragEdge(SwipeChangeLayout.DragEdge.BOTTOM);
-        miniFormSwipeLayout.setShouldGoneContainer(miniFormLayout);
-        miniFormSwipeLayout.setShouldShowContainer(fullFormLayout);
-        miniFormSwipeLayout.setOnSwipeBackListener(new SwipeChangeLayout.SwipeBackListener() {
-            @Override
-            public void onViewPositionChanged(float fractionAnchor, float fractionScreen) {
+        if (miniFields.size() != 0) {
+            fullFormSwipeLayout.setDragEdge(SwipeChangeLayout.DragEdge.TOP);
+            fullFormSwipeLayout.setShouldGoneContainer(fullFormLayout);
+            fullFormSwipeLayout.setShouldShowContainer(miniFormLayout);
+            fullFormSwipeLayout.setOnSwipeBackListener(new SwipeChangeLayout.SwipeBackListener() {
+                @Override
+                public void onViewPositionChanged(float fractionAnchor, float fractionScreen) {
 
+                }
+            });
+        } else {
+            fullFormSwipeLayout.setEnableFlingBack(false);
+        }
+    }
+
+    private void initCaseFormData() {
+        caseForm = CaseFormService.getInstance().getCurrentForm();
+        sections = caseForm.getSections();
+        miniFields = new ArrayList<>();
+        if (caseForm != null) {
+            getMiniFields();
+        }
+    }
+
+    private void getMiniFields() {
+        for (CaseSection section : sections) {
+            for (CaseField caseField : section.getFields()) {
+                if (caseField.isShowOnMiniForm()) {
+                    miniFields.add(caseField);
+                }
             }
-        });
-
-        return view;
+        }
     }
 
     @NonNull
     private FragmentPagerItems getPages() {
-        CaseFormRoot caseForm = CaseFormService.getInstance().getCurrentForm();
-        List<CaseSection> sections = caseForm.getSections();
-
         FragmentPagerItems pages = new FragmentPagerItems(getActivity());
         for (CaseSection section : sections) {
             String[] values = section.getName().values().toArray(new String[0]);
@@ -132,4 +162,6 @@ public class CaseRegisterWrapperFragment extends Fragment {
         }
         return pages;
     }
+
+
 }
