@@ -4,6 +4,7 @@ import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
+import org.unicef.rapidreg.R;
 import org.unicef.rapidreg.forms.childcase.CaseField;
 
 public abstract class BaseViewHolder<T> extends RecyclerView.ViewHolder {
@@ -32,5 +33,15 @@ public abstract class BaseViewHolder<T> extends RecyclerView.ViewHolder {
 
     protected boolean isRequired(CaseField field) {
         return field.isRequired();
+    }
+
+    protected void disableUnediatbleField(CaseField field) {
+        if (!isEditable(field)) {
+            itemView.setBackgroundResource(R.color.gainsboro);
+            itemView.setEnabled(false);
+        } else {
+            itemView.setBackgroundResource(R.color.white);
+            itemView.setEnabled(true);
+        }
     }
 }
