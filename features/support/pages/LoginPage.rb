@@ -47,7 +47,7 @@ module Screen
       end
 
       def sign_in
-        clickById("button_login")
+        clickById("login")
       end
 
     end
