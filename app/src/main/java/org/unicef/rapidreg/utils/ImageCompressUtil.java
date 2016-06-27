@@ -42,7 +42,7 @@ public class ImageCompressUtil {
 
     public static byte[] convertImageToBytes(Bitmap imageSource) {
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
-        imageSource.compress(Bitmap.CompressFormat.JPEG, 70, stream);
+        imageSource.compress(Bitmap.CompressFormat.JPEG, 30, stream);
         return stream.toByteArray();
     }
 
@@ -51,8 +51,7 @@ public class ImageCompressUtil {
     }
 
     public static Bitmap getThumbnail(String imagePath, int size) {
-        return ThumbnailUtils.extractThumbnail(
-                BitmapFactory.decodeFile(imagePath), size, size);
+        return getThumbnail(BitmapFactory.decodeFile(imagePath), size);
     }
 
     public static Bitmap getThumbnail(Bitmap bitmap, int size) {

@@ -28,6 +28,7 @@ import org.unicef.rapidreg.service.CasePhotoService;
 import org.unicef.rapidreg.service.CaseService;
 import org.unicef.rapidreg.service.cache.CaseFieldValueCache;
 import org.unicef.rapidreg.service.cache.CasePhotoCache;
+import org.unicef.rapidreg.utils.ImageCompressUtil;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
@@ -96,8 +97,6 @@ public class CaseListAdapter extends RecyclerView.Adapter<CaseListAdapter.CaseLi
                 List<CasePhoto> casePhotos = CasePhotoService.getInstance().getAllCasePhotos(caseItem.getId());
 
                 CasePhotoCache.cachePhotosFromDbToLocalFiles(casePhotos);
-
-                Log.i("sjyuan",CasePhotoCache.getPhotoBitPaths().toString());
 
                 CaseActivity caseActivity = (CaseActivity) context;
                 setViewMode(caseActivity);
