@@ -22,6 +22,7 @@ public class CaseField {
     public static final String TYPE_TEXT_FIELD = "form_text_field";
     public static final String TYPE_PHOTO_UPLOAD_LAYOUT = "form_photo_upload_layout";
     public static final String TYPE_AUDIO_UPLOAD_LAYOUT = "form_audio_item";
+    public static final String TYPE_SUBFORM_LAYOUT = "form_subform_layout";
 
     @SerializedName("name")
     @Expose
@@ -150,6 +151,10 @@ public class CaseField {
         return FieldType.AUDIO_UPLOAD_BOX.name().equalsIgnoreCase(type);
     }
 
+    public boolean isSubform() {
+        return FieldType.SUBFORM.name().equalsIgnoreCase(type);
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder("<Field>").append("\n");
@@ -167,8 +172,6 @@ public class CaseField {
         return sb.toString();
     }
 
-
-
     public enum FieldType {
         SEPARATOR(null),
         TICK_BOX(null),
@@ -180,7 +183,8 @@ public class CaseField {
         SINGLE_SELECT_BOX(SingleSelectDialog.class),
         MULTI_SELECT_BOX(MultipleSelectDialog.class),
         PHOTO_UPLOAD_BOX(null),
-        AUDIO_UPLOAD_BOX(null);
+        AUDIO_UPLOAD_BOX(null),
+        SUBFORM(null);
 
         private Class<? extends BaseDialog> clz;
 

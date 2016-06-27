@@ -9,12 +9,12 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import org.unicef.rapidreg.forms.childcase.CaseField;
-import org.unicef.rapidreg.model.Case;
 import org.unicef.rapidreg.widgets.viewholder.AudioUploadViewHolder;
 import org.unicef.rapidreg.widgets.viewholder.BaseViewHolder;
 import org.unicef.rapidreg.widgets.viewholder.GenericViewHolder;
 import org.unicef.rapidreg.widgets.viewholder.PhotoUploadViewHolder;
 import org.unicef.rapidreg.widgets.viewholder.SeparatorViewHolder;
+import org.unicef.rapidreg.widgets.viewholder.SubformViewHolder;
 import org.unicef.rapidreg.widgets.viewholder.TickBoxViewHolder;
 
 import java.io.Serializable;
@@ -22,11 +22,13 @@ import java.util.List;
 
 public class CaseRegisterAdapter extends RecyclerView.Adapter<BaseViewHolder> {
 
-    private final static int VIEW_HOLDER_GENERIC = 0;
-    private final static int VIEW_HOLDER_SEPARATOR = 1;
-    private final static int VIEW_HOLDER_TICK_BOX = 2;
-    private final static int VIEW_HOLDER_PHOTO_UPLOAD_BOX = 3;
+    private static final String LAYOUT = "layout";
+    private static final int VIEW_HOLDER_GENERIC = 0;
+    private static final int VIEW_HOLDER_SEPARATOR = 1;
+    private static final int VIEW_HOLDER_TICK_BOX = 2;
+    private static final int VIEW_HOLDER_PHOTO_UPLOAD_BOX = 3;
     private static final int VIEW_HOLDER_AUDIO_UPLOAD_BOX = 4;
+    private static final int VIEW_HOLDER_SUBFORM = 5;
 
     private List<CaseField> fields;
     private Context context;
@@ -36,6 +38,7 @@ public class CaseRegisterAdapter extends RecyclerView.Adapter<BaseViewHolder> {
 
     public CaseRegisterAdapter(Context context, List<CaseField> fields) {
         this.fields = fields;
+
         this.context = context;
         inflater = LayoutInflater.from(context);
         resources = context.getResources();
@@ -47,20 +50,25 @@ public class CaseRegisterAdapter extends RecyclerView.Adapter<BaseViewHolder> {
         switch (viewType) {
             case VIEW_HOLDER_GENERIC:
                 return new GenericViewHolder(context, inflater.inflate(resources
-                                .getIdentifier(CaseField.TYPE_TEXT_FIELD, "layout", packageName),
+                                .getIdentifier(CaseField.TYPE_TEXT_FIELD, LAYOUT, packageName),
                         parent, false));
             case VIEW_HOLDER_TICK_BOX:
                 return new TickBoxViewHolder(context, inflater.inflate(resources
-                                .getIdentifier(CaseField.TYPE_TICK_BOX, "layout", packageName),
+                                .getIdentifier(CaseField.TYPE_TICK_BOX, LAYOUT, packageName),
                         parent, false));
             case VIEW_HOLDER_PHOTO_UPLOAD_BOX:
                 return new PhotoUploadViewHolder(context, inflater.inflate(resources
-                                .getIdentifier(CaseField.TYPE_PHOTO_UPLOAD_LAYOUT, "layout", packageName),
+                                .getIdentifier(CaseField.TYPE_PHOTO_UPLOAD_LAYOUT, LAYOUT, packageName),
                         parent, false));
             case VIEW_HOLDER_AUDIO_UPLOAD_BOX:
                 return new AudioUploadViewHolder(context, inflater.inflate(resources
-                                .getIdentifier(CaseField.TYPE_AUDIO_UPLOAD_LAYOUT, "layout", packageName ),
+                                .getIdentifier(CaseField.TYPE_AUDIO_UPLOAD_LAYOUT, LAYOUT, packageName),
                         parent, false));
+            case VIEW_HOLDER_SUBFORM:
+                return new SubformViewHolder(context, inflater.inflate(resources
+                                .getIdentifier(CaseField.TYPE_SUBFORM_LAYOUT, LAYOUT, packageName),
+                        parent, false));
+
             default:
                 return new SeparatorViewHolder(context, new View(context));
         }
@@ -92,6 +100,9 @@ public class CaseRegisterAdapter extends RecyclerView.Adapter<BaseViewHolder> {
         }
         if (field.isAudioUploadBox()) {
             return VIEW_HOLDER_AUDIO_UPLOAD_BOX;
+        }
+        if (field.isSubform()) {
+            return VIEW_HOLDER_SUBFORM;
         }
 
         return VIEW_HOLDER_GENERIC;

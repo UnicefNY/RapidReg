@@ -1,33 +1,18 @@
 package org.unicef.rapidreg.childcase;
 
-import android.app.Activity;
-import android.content.Intent;
-import android.database.Cursor;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.GridView;
-import android.widget.ImageView;
-import android.widget.SimpleAdapter;
-
 
 import com.hannesdorfmann.mosby.mvp.MvpFragment;
 import com.ogaclejapan.smarttablayout.utils.v4.FragmentPagerItem;
 
 import org.unicef.rapidreg.R;
-
-import java.util.ArrayList;
-import java.util.HashMap;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -38,7 +23,6 @@ public class CaseRegisterFragment extends MvpFragment<CaseRegisterView, CaseRegi
     @BindView(R.id.register_forms_content)
     RecyclerView fieldList;
     private CaseRegisterAdapter adapter;
-
 
     @Nullable
     @Override
@@ -59,7 +43,6 @@ public class CaseRegisterFragment extends MvpFragment<CaseRegisterView, CaseRegi
         presenter.initContext(getActivity(), position);
     }
 
-
     @NonNull
     @Override
     public CaseRegisterPresenter createPresenter() {
@@ -69,9 +52,9 @@ public class CaseRegisterFragment extends MvpFragment<CaseRegisterView, CaseRegi
     @Override
     public void initView(CaseRegisterAdapter adapter) {
         this.adapter = adapter;
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
-        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        fieldList.setLayoutManager(layoutManager);
+        RecyclerView.LayoutManager layout = new LinearLayoutManager(getContext());
+        layout.setAutoMeasureEnabled(true);
+        fieldList.setLayoutManager(layout);
         fieldList.setAdapter(adapter);
     }
 

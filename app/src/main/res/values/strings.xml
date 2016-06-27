@@ -51,8 +51,9 @@
         <item>Age</item>
     </string-array>
 
-    <!--Case register-->
     <string name="pull_down_load_mini_form">... Pull Down To Load Mini Form ...</string>
     <string name="pull_up_load_full_form">... Pull Up To Load Full Form ...</string>
     <string name="no_photo_promote_info">No photo file exists.</string>
+    <string name="Delete">Delete</string>
+    <string name="Add">Add</string>
 </resources>
