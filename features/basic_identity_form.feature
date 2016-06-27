@@ -4,7 +4,8 @@ Feature: Basic Identify Form
   Background:
     Given I login RapidReg with "primero" account
     And I press menu tab "Cases"
-    When I press "New Case" button
+    When I press "fab_expand_menu_button" button
+    And I press "add_case" button
     And I scroll to "Basic Identity" form
 
   Scenario: As a logged in user, I create a case by entering something in every field in the basic identity form
@@ -37,5 +38,5 @@ Feature: Basic Identify Form
       | Landmark                                 | Old Oak Tree                                  |
       | Is this address permanent?               | <Checkbox> No                                 |
       | Current Telephone                        | 336-555-1313                                  |
-    And I press "SAVE" button
+    And I press "save_case" button
     Then I should see a new case with sex "Male" and age "10"

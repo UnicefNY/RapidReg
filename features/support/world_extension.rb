@@ -6,6 +6,11 @@ module AndroidPageDomain
     @account =  JSON.parse(json)
   end
 
+  def test_case
+    json = File.read(File.join(File.dirname(__FILE__),'..','test_data','test_case.json'))
+    @account = JSON.parse(json)
+  end
+
   def base_page
     @basePage = RapidRegAppPage.new
   end

@@ -4,9 +4,10 @@ Feature: Case list and sorting
   Scenario: As a logged in user, I add new cases and view them through case list.
     Given I login RapidReg with "primero" account
     And I press menu tab "Cases"
-    When I press "New Case" button
+    When I press "fab_expand_menu_button" button
+    And I press "add_case" button
     And I scroll to "Basic Identity" form
     And I fill in the following:
       | Sex (Required)                           | <Select> Male                                 |
       | Age (Required)                           | 10                                            |
-    And I press "SAVE" button
+    And I press "save_case" button

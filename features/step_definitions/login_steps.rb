@@ -10,7 +10,7 @@ When /^I re-login RapidReg with "(.*?)" and "(.*?)"$/ do |username,password|
   login_page.reLoginAs(username,password)
 end
 
-When /^I press "(.*?)"$/ do |button|
+When /^I press "(.*?)" button$/ do |button|
   base_page.clickById(button)
 end
 
