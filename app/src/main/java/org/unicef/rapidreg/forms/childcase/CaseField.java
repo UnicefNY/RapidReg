@@ -22,7 +22,7 @@ public class CaseField {
     public static final String TYPE_TEXT_FIELD = "form_text_field";
     public static final String TYPE_PHOTO_UPLOAD_LAYOUT = "form_photo_upload_layout";
     public static final String TYPE_AUDIO_UPLOAD_LAYOUT = "form_audio_item";
-    public static final String TYPE_SUBFORM_LAYOUT = "form_subform_layout";
+    public static final String TYPE_SUBFORM_FIELD = "form_subform_btn_layout";
 
     @SerializedName("name")
     @Expose
