@@ -11,15 +11,11 @@ import android.provider.MediaStore;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
-import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.sql.Blob;
 
 
 public class ImageCompressUtil {
@@ -59,6 +55,10 @@ public class ImageCompressUtil {
                 BitmapFactory.decodeFile(imagePath), size, size);
     }
 
+    public static Bitmap getThumbnail(Bitmap bitmap, int size) {
+        return ThumbnailUtils.extractThumbnail(bitmap, size, size);
+    }
+
     public static Bitmap getThumbnail(ContentResolver contentResolver, String path) {
         Cursor cursor = contentResolver.query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
                 new String[]{MediaStore.MediaColumns._ID}, MediaStore.MediaColumns.DATA + "=?", new String[]{path}, null);
@@ -92,17 +92,13 @@ public class ImageCompressUtil {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         int quality = 100;
         bitmap.compress(Bitmap.CompressFormat.JPEG, quality, baos);
-        System.out.println("图片压缩前大小：" + baos.toByteArray().length + "byte");
         boolean isCompressed = false;
         while (baos.toByteArray().length / 1024 > maxSize) {
             quality -= 10;
             baos.reset();
             bitmap.compress(Bitmap.CompressFormat.JPEG, quality, baos);
-            System.out.println("质量压缩到原来的" + quality + "%时大小为："
-                    + baos.toByteArray().length + "byte");
             isCompressed = true;
         }
-        System.out.println("图片压缩后大小：" + baos.toByteArray().length + "byte");
         if (isCompressed) {
             Bitmap compressedBitmap = BitmapFactory.decodeByteArray(
                     baos.toByteArray(), 0, baos.toByteArray().length);
@@ -144,7 +140,7 @@ public class ImageCompressUtil {
                                         int targetHeight) throws IOException {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         byte[] buff = new byte[1024];
-        int len = 0;
+        int len;
         while ((len = is.read(buff)) != -1) {
             baos.write(buff, 0, len);
         }
@@ -153,10 +149,8 @@ public class ImageCompressUtil {
         BitmapFactory.Options opts = new BitmapFactory.Options();
         opts.inJustDecodeBounds = true;
         Bitmap bitmap;
-        // 得到图片的宽度、高度；  
         int imgWidth = opts.outWidth;
         int imgHeight = opts.outHeight;
-        // 分别计算图片宽度、高度与目标宽度、高度的比例；取大于该比例的最小整数；  
         int widthRatio = (int) Math.ceil(imgWidth / (float) targetWidth);
         int heightRatio = (int) Math.ceil(imgHeight / (float) targetHeight);
         if (widthRatio > 1 || heightRatio > 1) {
@@ -166,7 +160,6 @@ public class ImageCompressUtil {
                 opts.inSampleSize = heightRatio;
             }
         }
-        // 设置好缩放比例后，加载图片进内存；  
         opts.inJustDecodeBounds = false;
         bitmap = BitmapFactory.decodeByteArray(data, 0, data.length, opts);
         return bitmap;
@@ -177,7 +170,7 @@ public class ImageCompressUtil {
         Bitmap newBitmap = null;
         try {
             exif = new ExifInterface(srcPath);
-            if (exif != null) { // 读取图片中相机方向信息
+            if (exif != null) {
                 int ori = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION,
                         ExifInterface.ORIENTATION_NORMAL);
                 int digree = 0;
@@ -214,10 +207,9 @@ public class ImageCompressUtil {
         }
     }
 
-    public static String storeImage(Bitmap image, File saveFile) throws IOException {
-        FileOutputStream fos = new FileOutputStream(saveFile);
+    public static void storeImage(Bitmap image, String saveFilePath) throws IOException {
+        FileOutputStream fos = new FileOutputStream(saveFilePath);
         image.compress(Bitmap.CompressFormat.PNG, 70, fos);
         fos.close();
-        return saveFile.getPath();
     }
 }
