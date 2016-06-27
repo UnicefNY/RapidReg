@@ -19,6 +19,15 @@
             android:numColumns="4"
             android:stretchMode="columnWidth" />
 
+        <TextView
+            android:id="@+id/no_photo_promote_view"
+            android:layout_width="match_parent"
+            android:layout_height="20dp"
+            android:layout_gravity="center_vertical"
+            android:layout_margin="5dp"
+            android:visibility="gone"
+            android:text="@string/no_photo_promote_info"/>
+
         <View
             android:layout_width="match_parent"
             android:layout_height="10dp"

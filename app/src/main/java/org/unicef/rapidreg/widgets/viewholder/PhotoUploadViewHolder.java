@@ -12,6 +12,7 @@ import android.provider.MediaStore;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
+import android.widget.TextView;
 
 import org.unicef.rapidreg.R;
 import org.unicef.rapidreg.childcase.CaseActivity;
@@ -33,6 +34,10 @@ public class PhotoUploadViewHolder extends BaseViewHolder<CaseField> {
 
     @BindView(R.id.photo_grid)
     GridView photoGrid;
+
+    @BindView(R.id.no_photo_promote_view)
+    TextView noPhotoPromoteView;
+
     private CaseActivity caseActivity;
 
     public PhotoUploadViewHolder(Context context, View itemView) {
@@ -50,8 +55,8 @@ public class PhotoUploadViewHolder extends BaseViewHolder<CaseField> {
             photoGrid.setAdapter(new CasePhotoAdapter(context, previousPhotos));
             return;
         }
-
         appendAddPhotoIconExceptViewPage(previousPhotos);
+
         photoGrid.setAdapter(new CasePhotoAdapter(context, previousPhotos));
     }
 
@@ -62,6 +67,8 @@ public class PhotoUploadViewHolder extends BaseViewHolder<CaseField> {
             int addIconId = CasePhotoCache.isEmpty() ? R.drawable.photo_camera : R.drawable.photo_add;
             Bitmap addPhotoIcon = BitmapFactory.decodeResource(context.getResources(), addIconId);
             previousPhotos.add(addPhotoIcon);
+        } else if (previousPhotos.isEmpty()) {
+            noPhotoPromoteView.setVisibility(View.VISIBLE);
         }
     }
 
