@@ -3,39 +3,34 @@
   {
     "Full Name": "Tom Justin Clinton",
     "Sex (Required)": "<Select> Male",
-    "Age (Required)": "10",
-    "Date of Registration or Interview": "6/21/2016"
+    "Age (Required)": "10"
   },
 
   "Jim":
   {
     "Full Name": "Jim Washington",
     "Sex (Required)": "<Select> Male",
-    "Age (Required)": "8",
-    "Date of Registration or Interview": "6/23/2016"
+    "Age (Required)": "8"
   },
 
   "Jack":
   {
     "Full Name": "Jack Franklin",
     "Sex (Required)": "<Select> Male",
-    "Age (Required)": "6",
-    "Date of Registration or Interview": "6/25/2016"
+    "Age (Required)": "6"
   },
 
   "Angela":
   {
     "Full Name": "Angela Adams",
     "Sex (Required)": "<Select> Female",
-    "Age (Required)": "4",
-    "Date of Registration or Interview": "6/27/2016"
+    "Age (Required)": "4"
   },
 
   "Lily":
   {
     "Full Name": "Lily Jefferson",
     "Sex (Required)": "<Select> Female",
-    "Age (Required)": "2",
-    "Date of Registration or Interview": "6/29/2016"
+    "Age (Required)": "2"
   }
 }

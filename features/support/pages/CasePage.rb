@@ -46,6 +46,17 @@ android.widget.TextView[@selected='true']").text
         end
       end
 
+      def createCaseThroughMiniForm(case_instance)
+        p case_instance
+        raise("Case dose not exist...") if case_instance.empty?
+        fullname = case_instance["Full Name"]
+        sex = case_instance["Sex (Required)"]
+        age = case_instance["Age (Required)"]
+        fillInForm("Full Name", fullname)
+        fillInForm("Sex (Required)", sex)
+        fillInForm("Age (Required)", age)
+      end
+
     end
   end
 end

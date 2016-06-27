@@ -4,7 +4,7 @@ Feature: Search cases
 
   Background:
 #    Given I login RapidReg with "primero" account
-    Given I press "button_login" button
+    Given I press "login" button
     And I press menu tab "Cases"
 
 
@@ -42,7 +42,7 @@ Feature: Search cases
     And I search for:
       | Name | Tom |
     And I press "done" button
-    Then I should see a case with sex "Male" and age "10"
+    Then I should see a case with sex "BOY" and age "10"
 
     And I press "search_bar" button
     And I clear up existing search info
@@ -50,20 +50,14 @@ Feature: Search cases
       | Age From | 7 |
       | To       | 9 |
     And I press "done" button
-    Then I should see a case with sex "Male" and age "8"
+    Then I should see a case with sex "BOY" and age "8"
 
     And I press "search_bar" button
     And I clear up existing search info
-    And I search for:
-      | Registration date | <Date> 6/25/2016 |
-    And I press "done" button
-    Then I should see a case with sex "Male" and age "6"
-
-    And I press "search_bar" button
     And I clear up existing search info
     And I press "done" button
-    Then I should see a case with sex "Male" and age "10"
-    And I should see a case with sex "Male" and age "8"
-    And I should see a case with sex "Male" and age "6"
+    Then I should see a case with sex "BOY" and age "10"
+    And I should see a case with sex "BOY" and age "8"
+    And I should see a case with sex "BOY" and age "6"
 
 

@@ -1,7 +1,7 @@
 Feature: Login test
 
   Scenario: No login details
-    When I press "button_login" button
+    When I press "login" button
     Then I should see "Enter a valid username!"
 
   Scenario Outline: Login with incorrect credential and network connected

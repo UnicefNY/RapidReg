@@ -40,6 +40,14 @@ module LocatorModule
     end
   end
 
+  def verifyElementExistById(id)
+    if findById(id)
+      return true
+    else
+      return false
+    end
+  end
+
   def verigyPromptNotExist(message)
     raise("Should not find text: #{message}") unless waitElement { texts(message).empty? }
   end

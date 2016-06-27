@@ -11,8 +11,15 @@ Then /^I should see following information:$/ do |table|
   end
 end
 
-And /^I create case "(.*?)"$/ do |case_name|
+And /^I create case "(.*?)"$/ do |case_instance|
+  base_page.clickById("fab_expand_menu_button")
+  base_page.clickById("add_case")
+  case_page.createCaseThroughMiniForm(test_case[case_instance])
+  base_page.clickById("save_case")
+end
 
+And /^I clear up existing search info$/ do
+    base_page.clickById("clear_text")
 end
 
 
