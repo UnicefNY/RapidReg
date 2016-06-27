@@ -18,7 +18,7 @@
         android:id="@+id/delete"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/Delete"
+        android:text="@string/delete"
         android:textAllCaps="false"
         android:textColor="@color/ftn_red"
         android:background="@null" />
@@ -32,7 +32,7 @@
         android:id="@+id/add"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/Add"
+        android:text="@string/add"
         android:textAllCaps="false"
         android:textColor="@color/ftn_blue"
         android:background="@null" />
