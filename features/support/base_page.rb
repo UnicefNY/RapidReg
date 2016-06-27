@@ -40,14 +40,6 @@ module LocatorModule
     end
   end
 
-  def verifyElementExistById(id)
-    if findById(id)
-      return true
-    else
-      return false
-    end
-  end
-
   def verigyPromptNotExist(message)
     raise("Should not find text: #{message}") unless waitElement { texts(message).empty? }
   end
@@ -101,9 +93,9 @@ module GestureModule
         self.swipe(:start_x => 0.1*screen_width, :start_y => 0.5*screen_height, :end_x => 0.9*screen_width, :end_y => 0.5*screen_height, :duration => 2000)
       when "left"
         self.swipe(:start_x => 0.9*screen_width, :start_y => 0.5*screen_height, :end_x => 0.1*screen_width, :end_y => 0.5*screen_height, :duration => 2000)
-      when "down"
-        self.swipe(:start_x => 0.5*screen_width, :start_y => 0.6*screen_height, :end_x => 0.5*screen_width, :end_y => 0.1*screen_height, :duration => 2000)
       when "up"
+        self.swipe(:start_x => 0.5*screen_width, :start_y => 0.6*screen_height, :end_x => 0.5*screen_width, :end_y => 0.1*screen_height, :duration => 2000)
+      when "down"
         self.swipe(:start_x => 0.5*screen_width, :start_y => 0.1*screen_height, :end_x => 0.5*screen_width, :end_y => 0.6*screen_height, :duration => 2000)
       else
         puts "Unknown scroll direction."
@@ -116,3 +108,8 @@ class RapidRegAppPage
   include LocatorModule
   include GestureModule
 end
+
+
+=begin
+ Top-left is (0,0)
+=end

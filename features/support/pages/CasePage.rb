@@ -2,12 +2,16 @@ module Screen
   module Android
     class CasePage < RapidRegAppPage
 
+      def switchToFullForm
+        1.times { scrollPartScreen("up") }
+      end
+
       def scrollToNextForm
         1.times { scrollPartScreen("left") }
       end
 
       def scrollToNextFields
-        1.times { scrollPartScreen("down")}
+        1.times { scrollPartScreen("up")}
         sleep 3
       end
 
@@ -46,7 +50,7 @@ android.widget.TextView[@selected='true']").text
         end
       end
 
-      def createCaseThroughMiniForm(case_instance)
+      def fillInMiniForm(case_instance)
         p case_instance
         raise("Case dose not exist...") if case_instance.empty?
         fullname = case_instance["Full Name"]

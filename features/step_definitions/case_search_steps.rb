@@ -1,7 +1,6 @@
-
 And /^I search for:$/ do |table|
   table.rows_hash.each do |field, value|
-    case_page.fillInSearchField(field,value)
+    case_page.fillInSearchField(field, value)
   end
 end
 
@@ -14,12 +13,13 @@ end
 And /^I create case "(.*?)"$/ do |case_instance|
   base_page.clickById("fab_expand_menu_button")
   base_page.clickById("add_case")
-  case_page.createCaseThroughMiniForm(test_case[case_instance])
+  sleep 5
+  case_page.fillInMiniForm(test_case[case_instance])
   base_page.clickById("save_case")
 end
 
-And /^I clear up existing search info$/ do
-    base_page.clickById("clear_text")
+And /^I clear up above "(.*?)" search conditions$/ do |num|
+  num.to_i.times { base_page.clickById("clear_text") }
 end
 
 
