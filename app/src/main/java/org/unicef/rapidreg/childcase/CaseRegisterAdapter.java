@@ -66,7 +66,7 @@ public class CaseRegisterAdapter extends RecyclerView.Adapter<BaseViewHolder> {
                         parent, false));
             case VIEW_HOLDER_SUBFORM:
                 return new SubformViewHolder(context, inflater.inflate(resources
-                                .getIdentifier(CaseField.TYPE_TEXT_FIELD, LAYOUT, packageName),
+                                .getIdentifier(CaseField.TYPE_SUBFORM_FIELD, LAYOUT, packageName),
                         parent, false));
 
             default:

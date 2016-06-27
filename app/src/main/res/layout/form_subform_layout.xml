@@ -18,10 +18,11 @@
         android:id="@+id/delete"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@null"
         android:text="@string/delete"
         android:textAllCaps="false"
         android:textColor="@color/ftn_red"
-        android:background="@null" />
+        android:textSize="@dimen/text_size_16" />
 
     <View
         android:layout_width="match_parent"
@@ -32,9 +33,10 @@
         android:id="@+id/add"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@null"
         android:text="@string/add"
         android:textAllCaps="false"
         android:textColor="@color/ftn_blue"
-        android:background="@null" />
+        android:textSize="@dimen/text_size_16" />
 
 </LinearLayout>
