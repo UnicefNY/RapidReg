@@ -2,10 +2,6 @@ module Screen
   module Android
     class CasePage < RapidRegAppPage
 
-      def createNewCase
-        clickById("add_case")
-      end
-
       def scrollToNextForm
         1.times { scrollPartScreen("left") }
       end
@@ -15,16 +11,12 @@ module Screen
         sleep 3
       end
 
-      def saveCase
-        clickById("save_case")
-      end
-
       def getCurrentFormName
         return findByXpath("//android.widget.RelativeLayout/android.widget.HorizontalScrollView/android.widget.LinearLayout/
 android.widget.TextView[@selected='true']").text
       end
 
-      def fill_in(field, value)
+      def fillInForm(field, value)
         if value.include?("<Select>")
           clickByXpath("//android.widget.TextView[@text='#{field}']")
           option = value.split('>')[1].strip
@@ -40,8 +32,17 @@ android.widget.TextView[@selected='true']").text
           clickByXpath("//android.widget.Button[@text='OK']")
         else
           clickByXpath("//android.widget.TextView[@text='#{field}']")
-          findByXpath("//android.widget.EditText").send_keys("#{value}")
+          findByXpath("//android.widget.EditText").send_keys(value)
           clickByXpath("//android.widget.Button[@text='OK']")
+        end
+      end
+
+      def fillInSearchField(field, value)
+        if value.include?("<Date>")
+          date = value.split('>')[1].strip
+          findByXpath("//android.widget.EditText[@text='#{field}']").send_keys(date)
+        else
+          findByXpath("//android.widget.EditText[@text='#{field}']").send_keys(value)
         end
       end
 
