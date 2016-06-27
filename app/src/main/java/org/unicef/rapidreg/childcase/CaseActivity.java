@@ -79,24 +79,25 @@ public class CaseActivity extends BaseActivity {
         CasePhotoCache.addPhoto(newPhoto, imagePath);
 
         if (CasePhotoCache.isUnderLimit()) {
-            Bitmap addPhotoIcon = BitmapFactory.decodeResource(getResources(), R.drawable.photo_add);
-            previousPhotos.add(addPhotoIcon);
+            previousPhotos.add(BitmapFactory.decodeResource(getResources(), R.drawable.photo_add));
         }
-
         photoGrid.setAdapter(new CasePhotoAdapter(this, previousPhotos));
         imagePath = null;
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (Activity.RESULT_OK == resultCode) {
-            if (PhotoUploadViewHolder.REQUEST_CODE_GALLERY == requestCode) {
-                onSelectFromGalleryResult(data);
-            } else if (PhotoUploadViewHolder.REQUEST_CODE_CAMERA == requestCode) {
-                onCaptureImageResult(data);
-            }
-        }
         super.onActivityResult(requestCode, resultCode, data);
+
+        if (Activity.RESULT_OK != resultCode) {
+            return;
+        }
+
+        if (PhotoUploadViewHolder.REQUEST_CODE_GALLERY == requestCode) {
+            onSelectFromGalleryResult(data);
+        } else if (PhotoUploadViewHolder.REQUEST_CODE_CAMERA == requestCode) {
+            onCaptureImageResult();
+        }
     }
 
     private void onSelectFromGalleryResult(Intent data) {
@@ -111,23 +112,24 @@ public class CaseActivity extends BaseActivity {
         }
     }
 
-    private void onCaptureImageResult(Intent data) {
+    private void onCaptureImageResult() {
         try {
             Bitmap bitmap = BitmapFactory.decodeFile(CasePhotoCache.MEDIA_PATH_FOR_CAMERA);
-            imagePath = ImageCompressUtil.storeImage(bitmap, getOutputMediaFile());
+            imagePath = getOutputMediaFilePath();
+            ImageCompressUtil.storeImage(bitmap, imagePath);
             bitmap.recycle();
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    private File getOutputMediaFile() {
+    private String getOutputMediaFilePath() {
         File mediaStorageDir = new File(Environment.getExternalStorageDirectory()
-                + "/" + getApplicationContext().getPackageName());
+                + File.separator + getApplicationContext().getPackageName());
         if (!mediaStorageDir.exists()) {
             mediaStorageDir.mkdirs();
         }
-        return new File(mediaStorageDir.getPath(), System.currentTimeMillis() + ".jpg");
+        return mediaStorageDir.getPath() + File.separator + System.currentTimeMillis() + ".jpg";
     }
 
     @Override

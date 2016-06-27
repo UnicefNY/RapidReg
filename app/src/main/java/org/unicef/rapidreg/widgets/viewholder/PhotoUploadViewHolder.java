@@ -39,25 +39,19 @@ public class PhotoUploadViewHolder extends BaseViewHolder<CaseField> {
         caseActivity = (CaseActivity) context;
     }
 
-
     @Override
     public void setValue(CaseField field) {
         List<Bitmap> previousPhotos = CasePhotoCache.getPhotosBits();
-
-        Bitmap addPhotoIcon;
-        if (previousPhotos.size() >= 4) {
+        if (CasePhotoCache.isFull()) {
             photoGrid.setAdapter(new CasePhotoAdapter(context, previousPhotos));
             return;
         }
 
-        if (previousPhotos.size() > 0) {
-            addPhotoIcon = BitmapFactory.decodeResource(context.getResources(), R.drawable.photo_add);
-        } else {
-            addPhotoIcon = BitmapFactory.decodeResource(context.getResources(), R.drawable.photo_camera);
-        }
+        int addIconId = CasePhotoCache.isEmpty() ? R.drawable.photo_camera : R.drawable.photo_add;
+        Bitmap addPhotoIcon = BitmapFactory.decodeResource(context.getResources(), addIconId);
         previousPhotos.add(addPhotoIcon);
-        photoGrid.setAdapter(new CasePhotoAdapter(context, previousPhotos));
 
+        photoGrid.setAdapter(new CasePhotoAdapter(context, previousPhotos));
     }
 
     @Override
@@ -69,7 +63,7 @@ public class PhotoUploadViewHolder extends BaseViewHolder<CaseField> {
                 if (CasePhotoCache.isFull() || !isAddPhotoGridClicked) {
                     showViewPhotoDialog(position);
                 } else {
-                    showAddPhotoOptionDialog(parent);
+                    showAddPhotoOptionDialog();
                 }
             }
         });
@@ -88,29 +82,7 @@ public class PhotoUploadViewHolder extends BaseViewHolder<CaseField> {
         });
     }
 
-    protected void showAddPhotoOptionDialog(AdapterView<?> parent) {
-        final String[] items = {"From Camera", "From Gallery", "Cancel"};
-        AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setItems(items, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int item) {
-                if (items[item].equals("From Camera")) {
-                    Uri saveUri = Uri.fromFile(new File(CasePhotoCache.MEDIA_PATH_FOR_CAMERA));
-                    Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                    intent.putExtra(MediaStore.EXTRA_OUTPUT, saveUri);
-                    caseActivity.startActivityForResult(intent, REQUEST_CODE_CAMERA);
-                } else if (items[item].equals("From Gallery")) {
-                    Intent intent = new Intent(Intent.ACTION_PICK,
-                            android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                    caseActivity.startActivityForResult(intent, REQUEST_CODE_GALLERY);
-                } else if (items[item].equals("Cancel")) {
-                    dialog.dismiss();
-                }
-            }
-        }).show();
-    }
-
-    protected void showViewPhotoDialog(final int position) {
+    private void showViewPhotoDialog(final int position) {
         Intent intent = new Intent();
         intent.setAction(Intent.ACTION_VIEW);
         intent.setDataAndType(Uri.parse(
@@ -118,7 +90,33 @@ public class PhotoUploadViewHolder extends BaseViewHolder<CaseField> {
         context.startActivity(intent);
     }
 
-    protected void showDeletionConfirmDialog(final int position) {
+    private void showAddPhotoOptionDialog() {
+        final String fromCameraItem = "From Camera";
+        final String fromGalleryItem = "From Gallery";
+        final String cancelItem = "Cancel";
+        final String[] items = {fromCameraItem, fromGalleryItem, cancelItem};
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setItems(items, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int item) {
+                if (fromCameraItem.equals(items[item])) {
+                    Uri saveUri = Uri.fromFile(new File(CasePhotoCache.MEDIA_PATH_FOR_CAMERA));
+                    Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                    intent.putExtra(MediaStore.EXTRA_OUTPUT, saveUri);
+                    caseActivity.startActivityForResult(intent, REQUEST_CODE_CAMERA);
+                } else if (fromGalleryItem.equals(items[item])) {
+                    Intent intent = new Intent(Intent.ACTION_PICK,
+                            android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                    caseActivity.startActivityForResult(intent, REQUEST_CODE_GALLERY);
+                } else if (cancelItem.equals(items[item])) {
+                    dialog.dismiss();
+                }
+            }
+        }).show();
+    }
+
+    private void showDeletionConfirmDialog(final int position) {
         AlertDialog.Builder builder = new AlertDialog.Builder(caseActivity);
         builder.setMessage("Are you sure to remove this photo?");
         builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
@@ -128,23 +126,20 @@ public class PhotoUploadViewHolder extends BaseViewHolder<CaseField> {
                 CasePhotoAdapter casePhotoAdapter = (CasePhotoAdapter) photoGrid.getAdapter();
 
                 CasePhotoCache.removePhoto(casePhotoAdapter.getAllItems().get(position));
-
                 if (CasePhotoCache.isEmpty()) {
                     casePhotoAdapter.clearItems();
                     Bitmap addPhotoIcon = BitmapFactory.decodeResource(context.getResources(), R.drawable.photo_camera);
                     casePhotoAdapter.addItem(addPhotoIcon);
-                } else if (CasePhotoCache.getPhotoBitPaths().size() == 3) {
+                } else if (CasePhotoCache.isOneLessThanLimit()) {
                     casePhotoAdapter.removeItem(position);
                     Bitmap addPhotoIcon = BitmapFactory.decodeResource(context.getResources(), R.drawable.photo_add);
                     casePhotoAdapter.addItem(addPhotoIcon);
                 } else {
                     casePhotoAdapter.removeItem(position);
                 }
-
                 casePhotoAdapter.notifyDataSetChanged();
             }
-        });
-        builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+        }).setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();

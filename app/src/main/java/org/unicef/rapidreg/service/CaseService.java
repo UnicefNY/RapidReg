@@ -202,6 +202,7 @@ public class CaseService {
                 casePhoto.setCase(child);
                 casePhoto.save();
             }
+            CasePhotoCache.clearLocalCachedPhotoFiles();
         }
     }
 
@@ -231,7 +232,6 @@ public class CaseService {
                 + values.get(NICKNAME) + " "
                 + values.get(OTHER_NAME);
     }
-
 
     private String getCaregiverName(Map<String, String> values) {
         return "" + values.get(CAREGIVER_NAME);

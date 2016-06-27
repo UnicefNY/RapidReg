@@ -28,7 +28,6 @@ import org.unicef.rapidreg.service.CasePhotoService;
 import org.unicef.rapidreg.service.CaseService;
 import org.unicef.rapidreg.service.cache.CaseFieldValueCache;
 import org.unicef.rapidreg.service.cache.CasePhotoCache;
-import org.unicef.rapidreg.utils.ImageCompressUtil;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
@@ -96,10 +95,9 @@ public class CaseListAdapter extends RecyclerView.Adapter<CaseListAdapter.CaseLi
                 CaseFieldValueCache.setValues(caseInfo);
                 List<CasePhoto> casePhotos = CasePhotoService.getInstance().getAllCasePhotos(caseItem.getId());
 
-                for (CasePhoto casePhoto : casePhotos) {
-                    Bitmap thumbnail = ImageCompressUtil.convertByteArrayToImage(casePhoto.getThumbnail().getBlob());
-                    CasePhotoCache.addPhoto(thumbnail, casePhoto.getPath());
-                }
+                CasePhotoCache.cachePhotosFromDbToLocalFiles(casePhotos);
+
+                Log.i("sjyuan",CasePhotoCache.getPhotoBitPaths().toString());
 
                 CaseActivity caseActivity = (CaseActivity) context;
                 setViewMode(caseActivity);
@@ -125,7 +123,6 @@ public class CaseListAdapter extends RecyclerView.Adapter<CaseListAdapter.CaseLi
                 caseActivity.setTopMenuItemsInCaseDetailPage();
             }
         });
-
         toggleTextArea(holder);
     }
 
@@ -160,7 +157,6 @@ public class CaseListAdapter extends RecyclerView.Adapter<CaseListAdapter.CaseLi
         Bitmap img = BitmapFactory.decodeResource(resources, resId);
         RoundedBitmapDrawable dr = RoundedBitmapDrawableFactory.create(resources, img);
         dr.setCornerRadius(Math.max(img.getWidth(), img.getHeight()) / 2.0f);
-
         return dr;
     }
 
@@ -183,7 +179,6 @@ public class CaseListAdapter extends RecyclerView.Adapter<CaseListAdapter.CaseLi
         public CaseListHolder(View itemView) {
             super(itemView);
             view = itemView;
-
             id_normal_state = (TextView) itemView.findViewById(R.id.id_normal_state);
             id_hidden_state = (TextView) itemView.findViewById(R.id.id_on_hidden_state);
             genderBadge = (ImageView) itemView.findViewById(R.id.gender_badge);
