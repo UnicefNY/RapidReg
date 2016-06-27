@@ -7,7 +7,6 @@ Feature: Search cases
     Given I press "login" button
     And I press menu tab "Cases"
 
-
   Scenario: Search fields
     When I press "search" button
     And I search for:
@@ -16,7 +15,6 @@ Feature: Search cases
       | Age From          | 1       |
       | To                | 2       |
       | Current Caregiver | Jane    |
-#      | Registration date | <Date> 6/21/2015 |
     And I press "done" button
     And I press "search_bar" button
     Then I should see "1234567"
@@ -24,7 +22,6 @@ Feature: Search cases
     And I should see "1"
     And I should see "2"
     And I should see "Jane"
-#    And I should see "6/21/2016"
 
 
   Scenario: No search result
@@ -45,7 +42,7 @@ Feature: Search cases
     Then I should see a case with sex "BOY" and age "10"
 
     And I press "search_bar" button
-    And I clear up existing search info
+    And I clear up above "1" search conditions
     And I search for:
       | Age From | 7 |
       | To       | 9 |
@@ -53,11 +50,15 @@ Feature: Search cases
     Then I should see a case with sex "BOY" and age "8"
 
     And I press "search_bar" button
-    And I clear up existing search info
-    And I clear up existing search info
+    And I clear up above "2" search conditions
     And I press "done" button
     Then I should see a case with sex "BOY" and age "10"
     And I should see a case with sex "BOY" and age "8"
     And I should see a case with sex "BOY" and age "6"
+
+
+
+
+
 
 
