@@ -1,5 +1,6 @@
 package org.unicef.rapidreg.widgets.viewholder;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -19,6 +20,7 @@ import org.unicef.rapidreg.forms.childcase.CaseField;
 import org.unicef.rapidreg.service.cache.CasePhotoCache;
 
 import java.io.File;
+import java.io.Serializable;
 import java.util.List;
 
 import butterknife.BindView;
@@ -42,16 +44,38 @@ public class PhotoUploadViewHolder extends BaseViewHolder<CaseField> {
     @Override
     public void setValue(CaseField field) {
         List<Bitmap> previousPhotos = CasePhotoCache.getPhotosBits();
+        setOnItemClickListenerOnViewPage();
+
         if (CasePhotoCache.isFull()) {
             photoGrid.setAdapter(new CasePhotoAdapter(context, previousPhotos));
             return;
         }
 
-        int addIconId = CasePhotoCache.isEmpty() ? R.drawable.photo_camera : R.drawable.photo_add;
-        Bitmap addPhotoIcon = BitmapFactory.decodeResource(context.getResources(), addIconId);
-        previousPhotos.add(addPhotoIcon);
-
+        appendAddPhotoIconExceptViewPage(previousPhotos);
         photoGrid.setAdapter(new CasePhotoAdapter(context, previousPhotos));
+    }
+
+    private void appendAddPhotoIconExceptViewPage(List<Bitmap> previousPhotos) {
+        Serializable caseMode = ((Activity) context).getIntent()
+                .getSerializableExtra(CaseActivity.INTENT_KEY_CASE_MODE);
+        if (CaseActivity.CaseMode.DETAIL != caseMode) {
+            int addIconId = CasePhotoCache.isEmpty() ? R.drawable.photo_camera : R.drawable.photo_add;
+            Bitmap addPhotoIcon = BitmapFactory.decodeResource(context.getResources(), addIconId);
+            previousPhotos.add(addPhotoIcon);
+        }
+    }
+
+    private void setOnItemClickListenerOnViewPage() {
+        Serializable caseMode = ((Activity) context).getIntent()
+                .getSerializableExtra(CaseActivity.INTENT_KEY_CASE_MODE);
+        if (CaseActivity.CaseMode.DETAIL == caseMode) {
+            photoGrid.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
+                    showViewPhotoDialog(position);
+                }
+            });
+        }
     }
 
     @Override
