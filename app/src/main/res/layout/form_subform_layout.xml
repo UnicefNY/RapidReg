@@ -24,19 +24,4 @@
         android:textColor="@color/ftn_red"
         android:textSize="@dimen/text_size_16" />
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="10dp"
-        android:background="@color/lighter_gray" />
-
-    <Button
-        android:id="@+id/add"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@null"
-        android:text="@string/add"
-        android:textAllCaps="false"
-        android:textColor="@color/ftn_blue"
-        android:textSize="@dimen/text_size_16" />
-
 </LinearLayout>
