@@ -30,6 +30,8 @@ public class Case extends BaseModel {
     private String caregiver = "";
     @Column(name = "case_json")
     private Blob content;
+    @Column(name = "subform")
+    private Blob subform;
     @Column(name = "photo")
     private Blob photo;
     @Column(name = "audio")
@@ -93,6 +95,14 @@ public class Case extends BaseModel {
 
     public void setContent(Blob content) {
         this.content = content;
+    }
+
+    public Blob getSubform() {
+        return subform;
+    }
+
+    public void setSubform(Blob subform) {
+        this.subform = subform;
     }
 
     public Blob getPhoto() {

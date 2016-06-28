@@ -136,10 +136,10 @@ public class CaseService {
         attachSubforms(values, subformValues);
 
         if (values.get(CASE_ID) == null) {
-            saveCase(values, photoBitPaths);
+            saveCase(values, subformValues, photoBitPaths);
         } else {
             Log.d(TAG, "update the existing case");
-            updateCase(values, photoBitPaths);
+            updateCase(values, subformValues, photoBitPaths);
         }
     }
 
@@ -154,9 +154,12 @@ public class CaseService {
     }
 
     private void saveCase(Map<String, String> values,
+                          Map<String, List<Map<String, String>>> subformValues,
                           Map<Bitmap, String> photoBitPaths) {
+        Gson gson = new Gson();
         Date date = new Date(Calendar.getInstance().getTimeInMillis());
-        Blob caseBlob = new Blob(new Gson().toJson(values).getBytes());
+        Blob caseBlob = new Blob(gson.toJson(values).getBytes());
+        Blob subformBlob = new Blob(gson.toJson(subformValues).getBytes());
         Blob audioFileDefault = null;
         audioFileDefault = getAudioBlob(audioFileDefault);
 
@@ -170,14 +173,19 @@ public class CaseService {
         child.setCaregiver(getCaregiverName(values));
         child.setRegistrationDate(getRegisterDate(values));
         child.setAudio(audioFileDefault);
+        child.setSubform(subformBlob);
         child.save();
 
         saveCasePhoto(child, photoBitPaths);
         CaseFieldValueCache.clearAudioFile();
     }
 
-    private void updateCase(Map<String, String> values, Map<Bitmap, String> photoBitPaths) {
-        Blob caseBlob = new Blob(new Gson().toJson(values).getBytes());
+    private void updateCase(Map<String, String> values,
+                            Map<String, List<Map<String, String>>> subformValues,
+                            Map<Bitmap, String> photoBitPaths) {
+        Gson gson = new Gson();
+        Blob caseBlob = new Blob(gson.toJson(values).getBytes());
+        Blob subformBlob = new Blob(gson.toJson(subformValues).getBytes());
         Blob audioFileDefault = null;
         audioFileDefault = getAudioBlob(audioFileDefault);
 
@@ -189,6 +197,7 @@ public class CaseService {
         child.setCaregiver(getCaregiverName(values));
         child.setRegistrationDate(getRegisterDate(values));
         child.setAudio(audioFileDefault);
+        child.setSubform(subformBlob);
         child.update();
 
         casePhotoDao.deleteCasePhotosByCaseId(child.getId());

@@ -28,7 +28,7 @@ import org.unicef.rapidreg.service.CasePhotoService;
 import org.unicef.rapidreg.service.CaseService;
 import org.unicef.rapidreg.service.cache.CaseFieldValueCache;
 import org.unicef.rapidreg.service.cache.CasePhotoCache;
-import org.unicef.rapidreg.utils.ImageCompressUtil;
+import org.unicef.rapidreg.service.cache.SubformCache;
 import org.unicef.rapidreg.utils.StreamUtil;
 
 import java.io.IOException;
@@ -73,11 +73,18 @@ public class CaseListAdapter extends RecyclerView.Adapter<CaseListAdapter.CaseLi
         final Case caseItem = caseList.get(position);
 
         final String caseJson = new String(caseItem.getContent().getBlob());
-        final Type type = new TypeToken<Map<String, String>>() {
+        final String subformJson = new String(caseItem.getSubform().getBlob());
+        final Type caseType = new TypeToken<Map<String, String>>() {
         }.getType();
 
-        final Map<String, String> caseInfo = new Gson().fromJson(caseJson, type);
+        final Map<String, String> caseInfo = new Gson().fromJson(caseJson, caseType);
         caseInfo.put(CaseService.CASE_ID, caseItem.getUniqueId());
+
+        final Type subformType = new TypeToken<Map<String, List<Map<String, String>>>>() {
+        }.getType();
+
+        final Map<String, List<Map<String, String>>> subformInfo
+                = new Gson().fromJson(subformJson, subformType);
 
         Gender gender = Gender.valueOf(caseInfo.get("Sex").toUpperCase());
         holder.caseImage.setImageDrawable(getDefaultAvatar(gender.getAvatarId()));
@@ -95,6 +102,7 @@ public class CaseListAdapter extends RecyclerView.Adapter<CaseListAdapter.CaseLi
             @Override
             public void onClick(View v) {
                 CaseFieldValueCache.setValues(caseInfo);
+                SubformCache.setValues(subformInfo);
                 List<CasePhoto> casePhotos = CasePhotoService.getInstance().getAllCasePhotos(caseItem.getId());
 
                 CasePhotoCache.cachePhotosFromDbToLocalFiles(casePhotos);
@@ -108,7 +116,7 @@ public class CaseListAdapter extends RecyclerView.Adapter<CaseListAdapter.CaseLi
                         .commit();
                 try {
                     CaseFieldValueCache.clearAudioFile();
-                    if(caseItem.getAudio() != null) {
+                    if (caseItem.getAudio() != null) {
                         StreamUtil.writeFile(caseItem.getAudio().getBlob(), CaseFieldValueCache.AUDIO_FILE_PATH);
                     }
                 } catch (IOException e) {
