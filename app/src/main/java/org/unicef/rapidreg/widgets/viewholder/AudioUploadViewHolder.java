@@ -20,9 +20,6 @@ import butterknife.OnClick;
 
 public class AudioUploadViewHolder extends BaseViewHolder {
 
-
-    private static final String LOG_TAG = "AudioRecordTest";
-    public static final int RECORDER_MAX_DURATION_MS = 10000;
     private static String mFileName = null;
 
     @BindView(R.id.record_button)
@@ -89,7 +86,7 @@ public class AudioUploadViewHolder extends BaseViewHolder {
         } else {
             recordButton.setVisibility(View.GONE);
             playButton.setVisibility(View.GONE);
-            noFileTextView.setText("No audio file exist.");
+            noFileTextView.setText("No audio file exists.");
         }
     }
 
