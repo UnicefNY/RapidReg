@@ -56,4 +56,14 @@
     <string name="no_photo_promote_info">No photo file exists.</string>
     <string name="delete">Delete</string>
     <string name="add">Add</string>
+
+    <!--Transparent theme-->
+    <style name="Transparent" parent="AppTheme">
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:backgroundDimEnabled">false</item>
+    </style>
+    <!--Transparent theme-->
 </resources>
