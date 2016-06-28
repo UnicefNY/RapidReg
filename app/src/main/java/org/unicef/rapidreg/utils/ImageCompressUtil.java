@@ -19,23 +19,6 @@ import java.io.InputStream;
 
 
 public class ImageCompressUtil {
-
-    public static byte[] readFile(String filePath) throws IOException {
-        BufferedInputStream bis = new BufferedInputStream(new FileInputStream(filePath));
-        ByteArrayOutputStream bos = new ByteArrayOutputStream();
-        byte[] buffer = new byte[4096];
-        int length;
-        while ((length = bis.read(buffer)) != -1) {
-            bos.write(buffer, 0, length);
-        }
-        return bos.toByteArray();
-    }
-
-    public static void writeFile(byte[] byteFile, String filePath) throws IOException {
-        BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(filePath));
-        bos.write(byteFile);
-    }
-
     public static byte[] convertImageToBytes(String imagePath) {
         return convertImageToBytes(BitmapFactory.decodeFile(imagePath));
     }

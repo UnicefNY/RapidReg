@@ -3,6 +3,7 @@ package org.unicef.rapidreg.utils;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -22,6 +23,15 @@ public class StreamUtil {
     public static void writeFile(byte[] byteFile, String filePath) throws IOException {
         BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(filePath));
         bos.write(byteFile);
+    }
+
+    public static boolean isFileExists(String filePath) {
+
+        File f = new File(filePath);
+        if (f.exists() && !f.isDirectory()) {
+            return true;
+        }
+        return false;
     }
 }
 

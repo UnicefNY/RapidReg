@@ -29,6 +29,7 @@ import org.unicef.rapidreg.service.CaseService;
 import org.unicef.rapidreg.service.cache.CaseFieldValueCache;
 import org.unicef.rapidreg.service.cache.CasePhotoCache;
 import org.unicef.rapidreg.utils.ImageCompressUtil;
+import org.unicef.rapidreg.utils.StreamUtil;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
@@ -108,7 +109,7 @@ public class CaseListAdapter extends RecyclerView.Adapter<CaseListAdapter.CaseLi
                 try {
                     CaseFieldValueCache.clearAudioFile();
                     if(caseItem.getAudio() != null) {
-                        ImageCompressUtil.writeFile(caseItem.getAudio().getBlob(), CaseFieldValueCache.AUDIO_FILE_PATH);
+                        StreamUtil.writeFile(caseItem.getAudio().getBlob(), CaseFieldValueCache.AUDIO_FILE_PATH);
                     }
                 } catch (IOException e) {
                     e.printStackTrace();
