@@ -13,8 +13,11 @@ import org.unicef.rapidreg.R;
 import org.unicef.rapidreg.childcase.CaseActivity;
 import org.unicef.rapidreg.childcase.CaseRegisterAdapter;
 import org.unicef.rapidreg.forms.childcase.CaseField;
+import org.unicef.rapidreg.service.cache.SubformCache;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -28,6 +31,7 @@ public class SubformViewHolder extends BaseViewHolder<CaseField> {
     private CaseActivity activity;
     private ViewGroup parent;
     private List<CaseField> fields;
+    private String fieldParent;
 
     public SubformViewHolder(Context context, View itemView) {
         super(context, itemView);
@@ -39,8 +43,10 @@ public class SubformViewHolder extends BaseViewHolder<CaseField> {
     @Override
     public void setValue(CaseField field) {
         fields = field.getSubForm().getFields();
-        addSubform.setText(String.format("%s %s", addSubform.getText(),
-                field.getDisplayName().get("en")));
+        fieldParent = field.getDisplayName().get("en");
+
+        attachParentToFields(fields, fieldParent);
+        addSubform.setText(String.format("%s %s", addSubform.getText(), fieldParent));
     }
 
     @Override
@@ -68,7 +74,9 @@ public class SubformViewHolder extends BaseViewHolder<CaseField> {
         deleteBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                updateSubformCache(parent.indexOfChild((View) v.getParent()));
                 parent.removeView((View) v.getParent());
+                updateIndexForFields();
             }
         });
     }
@@ -78,7 +86,47 @@ public class SubformViewHolder extends BaseViewHolder<CaseField> {
         RecyclerView.LayoutManager layout = new LinearLayoutManager(activity);
         layout.setAutoMeasureEnabled(true);
         fieldList.setLayoutManager(layout);
+
+        List<CaseField> fields = cloneFields();
+        assignIndexForFields(fields, getInsertIndex());
         CaseRegisterAdapter adapter = new CaseRegisterAdapter(activity, fields);
         fieldList.setAdapter(adapter);
+    }
+
+    private void attachParentToFields(List<CaseField> fields, String parent) {
+        for (CaseField field : fields) {
+            field.setParent(parent);
+        }
+    }
+
+    private void assignIndexForFields(List<CaseField> fields, int index) {
+        for (CaseField field : fields) {
+            field.setIndex(index);
+        }
+    }
+
+    private void updateIndexForFields() {
+        for (int i = 0; i < getInsertIndex(); i++) {
+            View child = parent.getChildAt(i);
+            RecyclerView fieldList = (RecyclerView) child.findViewById(R.id.field_list);
+            CaseRegisterAdapter adapter = (CaseRegisterAdapter) fieldList.getAdapter();
+            List<CaseField> fields = adapter.getFields();
+            assignIndexForFields(fields, i);
+        }
+    }
+
+    private List<CaseField> cloneFields() {
+        List<CaseField> fieldList = new ArrayList<>();
+
+        for (CaseField field : fields) {
+            fieldList.add(field.copy());
+        }
+
+        return fieldList;
+    }
+
+    private void updateSubformCache(int index) {
+        List<Map<String, String>> values = SubformCache.get(fieldParent);
+        values.remove(index);
     }
 }

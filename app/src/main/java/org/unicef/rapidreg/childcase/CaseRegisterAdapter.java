@@ -112,4 +112,8 @@ public class CaseRegisterAdapter extends RecyclerView.Adapter<BaseViewHolder> {
     public int getItemCount() {
         return fields.size();
     }
+
+    public List<CaseField> getFields() {
+        return fields;
+    }
 }

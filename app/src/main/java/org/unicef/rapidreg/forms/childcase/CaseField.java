@@ -24,6 +24,8 @@ public class CaseField {
     public static final String TYPE_AUDIO_UPLOAD_LAYOUT = "form_audio_item";
     public static final String TYPE_SUBFORM_FIELD = "form_subform_container";
 
+    private static final int INVALID_INDEX = -1;
+
     @SerializedName("name")
     @Expose
     private String name;
@@ -54,6 +56,10 @@ public class CaseField {
     @SerializedName("show_on_minify_form")
     @Expose
     private boolean isShowOnMiniForm;
+
+    private String parent;
+
+    private int index = INVALID_INDEX;
 
     public String getName() {
         return name;
@@ -127,6 +133,22 @@ public class CaseField {
         this.subForm = subForm;
     }
 
+    public int getIndex() {
+        return index;
+    }
+
+    public void setIndex(int index) {
+        this.index = index;
+    }
+
+    public String getParent() {
+        return parent;
+    }
+
+    public void setParent(String parent) {
+        this.parent = parent;
+    }
+
     public boolean isSeparator() {
         return FieldType.SEPARATOR.name().equalsIgnoreCase(type);
     }
@@ -167,9 +189,27 @@ public class CaseField {
         sb.append("helpText: ").append(helpText).append("\n");
         sb.append("optionStringsText: ").append(optionStringsText).append("\n");
         sb.append("subForm: ").append(subForm).append("\n");
-        sb.append("show_on_minify_form").append(isShowOnMiniForm).append("\n");
+        sb.append("show_on_minify_form: ").append(isShowOnMiniForm).append("\n");
+        sb.append("parent: ").append(parent).append("\n");
 
         return sb.toString();
+    }
+
+    public CaseField copy() {
+        CaseField newField = new CaseField();
+        newField.setName(name);
+        newField.setEditable(editable);
+        newField.setRequired(required);
+        newField.setMultiSelect(multiSelect);
+        newField.setType(type);
+        newField.setDisplayName(displayName);
+        newField.setHelpText(helpText);
+        newField.setOptionStringsText(optionStringsText);
+        newField.setSubForm(subForm);
+        newField.setShowOnMiniForm(isShowOnMiniForm);
+        newField.setParent(parent);
+
+        return newField;
     }
 
     public enum FieldType {

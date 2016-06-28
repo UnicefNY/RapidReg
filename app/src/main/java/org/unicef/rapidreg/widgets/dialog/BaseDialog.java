@@ -7,12 +7,13 @@ import android.widget.TextView;
 
 import org.unicef.rapidreg.R;
 import org.unicef.rapidreg.forms.childcase.CaseField;
+import org.unicef.rapidreg.service.cache.CaseFieldValueCache;
+import org.unicef.rapidreg.service.cache.SubformCache;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import org.unicef.rapidreg.service.cache.CaseFieldValueCache;
 
 public abstract class BaseDialog {
     protected CaseField caseField;
@@ -33,7 +34,13 @@ public abstract class BaseDialog {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 BaseDialog.this.resultView.setText(getResult());
-                CaseFieldValueCache.put(caseField.getDisplayName().get("en"), getResult());
+
+                if (isSubformField()) {
+                    SubformCache.put(caseField.getParent(), getValues());
+                } else {
+                    CaseFieldValueCache.put(caseField.getDisplayName().get("en"), getResult());
+                }
+
                 dialog.dismiss();
             }
         });
@@ -75,4 +82,26 @@ public abstract class BaseDialog {
     public abstract void initView();
 
     public abstract String getResult();
+
+    private boolean isSubformField() {
+        return caseField.getParent() != null;
+    }
+
+    private List<Map<String, String>> getValues() {
+        List<Map<String, String>> values = SubformCache.get(caseField.getParent()) == null ?
+                new ArrayList<Map<String, String>>() : SubformCache.get(caseField.getParent());
+
+        Map<String, String> value;
+        try {
+            value = values.get(caseField.getIndex());
+            value.put(caseField.getDisplayName().get("en"), getResult());
+            values.set(caseField.getIndex(), value);
+        } catch (IndexOutOfBoundsException e) {
+            value = new HashMap<>();
+            value.put(caseField.getDisplayName().get("en"), getResult());
+            values.add(caseField.getIndex(), value);
+        }
+
+        return values;
+    }
 }
