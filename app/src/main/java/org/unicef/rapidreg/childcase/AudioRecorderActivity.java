@@ -81,9 +81,19 @@ public class AudioRecorderActivity extends AppCompatActivity {
 
     @OnClick(R.id.stop_button)
     public void onStopButtonClicked() {
+        exitAudioRecorder();
+    }
+
+    private void exitAudioRecorder() {
         stopRecording();
         stopPlaying();
         finish();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        exitAudioRecorder();
     }
 
     public void recordAudio() {
@@ -124,7 +134,7 @@ public class AudioRecorderActivity extends AppCompatActivity {
             mPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
                 @Override
                 public void onCompletion(MediaPlayer mp) {
-                    onStopButtonClicked();
+                    exitAudioRecorder();
                 }
             });
             mPlayer.prepare();
@@ -163,7 +173,7 @@ public class AudioRecorderActivity extends AppCompatActivity {
             @Override
             public void onInfo(MediaRecorder mr, int what, int extra) {
                 if (what == MediaRecorder.MEDIA_RECORDER_INFO_MAX_DURATION_REACHED) {
-                    onStopButtonClicked();
+                    exitAudioRecorder();
                 }
             }
         });
