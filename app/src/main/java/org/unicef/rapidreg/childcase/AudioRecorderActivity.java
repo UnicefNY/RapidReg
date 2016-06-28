@@ -40,6 +40,7 @@ public class AudioRecorderActivity extends AppCompatActivity {
 
     private long startTime = 0;
     private int audioDuration = 0;
+    private long passedTime = 0;
 
 
     final Handler timerHandler = new Handler();
@@ -49,7 +50,7 @@ public class AudioRecorderActivity extends AppCompatActivity {
             long millis = System.currentTimeMillis() - startTime;
 
             timerTextView.setText(getTime(millis));
-
+            passedTime = millis;
             timerHandler.postDelayed(this, 500);
         }
     };
@@ -71,9 +72,9 @@ public class AudioRecorderActivity extends AppCompatActivity {
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
             String value = extras.getString("currentState");
-            if (TextUtils.equals(value,  "StartRecording")) {
+            if (TextUtils.equals(value, "StartRecording")) {
                 recordAudio();
-            } else if (TextUtils.equals(value,  "StartPlaying")) {
+            } else if (TextUtils.equals(value, "StartPlaying")) {
                 playAudio();
             }
         }
@@ -85,9 +86,11 @@ public class AudioRecorderActivity extends AppCompatActivity {
     }
 
     private void exitAudioRecorder() {
-        stopRecording();
-        stopPlaying();
-        finish();
+        if (passedTime > 1000) {
+            stopRecording();
+            stopPlaying();
+            finish();
+        }
     }
 
     @Override
