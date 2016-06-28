@@ -10,6 +10,7 @@ import org.unicef.rapidreg.R;
 import org.unicef.rapidreg.childcase.AudioRecorderActivity;
 import org.unicef.rapidreg.childcase.CaseActivity;
 import org.unicef.rapidreg.service.cache.CaseFieldValueCache;
+import org.unicef.rapidreg.utils.StreamUtil;
 
 import java.io.File;
 
@@ -42,12 +43,11 @@ public class AudioUploadViewHolder extends BaseViewHolder {
 
         if (!(isCaseMode(CaseActivity.CaseMode.EDIT) || isCaseMode(CaseActivity.CaseMode.ADD))) {
             initPlayAudioUI();
-
         }
         if (isCaseMode(CaseActivity.CaseMode.ADD)) {
             CaseFieldValueCache.clearAudioFile();
         }
-        if (isFileExists(mFileName)) {
+        if (StreamUtil.isFileExists(mFileName)) {
             initPlayAudioUI();
             showDeleteIconWhenIsEditMode();
         }
@@ -80,7 +80,7 @@ public class AudioUploadViewHolder extends BaseViewHolder {
     }
 
     private void initPlayAudioUI() {
-        if (isFileExists(mFileName)) {
+        if (StreamUtil.isFileExists(mFileName)) {
             recordButton.setVisibility(View.GONE);
             playButton.setVisibility(View.VISIBLE);
         } else {
@@ -99,14 +99,6 @@ public class AudioUploadViewHolder extends BaseViewHolder {
         caseActivity.startActivityForResult(intent, requestCode);
     }
 
-    private boolean isFileExists(String filePath) {
-
-        File f = new File(filePath);
-        if (f.exists() && !f.isDirectory()) {
-            return true;
-        }
-        return false;
-    }
 
     @OnClick(R.id.delete_button)
     public void onDeleteButtonClicked() {

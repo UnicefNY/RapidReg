@@ -20,6 +20,7 @@ import org.unicef.rapidreg.model.CasePhoto;
 import org.unicef.rapidreg.service.cache.CaseFieldValueCache;
 import org.unicef.rapidreg.service.cache.CasePhotoCache;
 import org.unicef.rapidreg.utils.ImageCompressUtil;
+import org.unicef.rapidreg.utils.StreamUtil;
 
 import java.io.File;
 import java.io.IOException;
@@ -146,11 +147,7 @@ public class CaseService {
         Date date = new Date(Calendar.getInstance().getTimeInMillis());
         Blob caseBlob = new Blob(new Gson().toJson(values).getBytes());
         Blob audioFileDefault = null;
-        try {
-            audioFileDefault = new Blob(ImageCompressUtil.readFile(CaseFieldValueCache.AUDIO_FILE_PATH));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        audioFileDefault = getAudioBlob(audioFileDefault);
 
         Case child = new Case();
         child.setUniqueId(createUniqueId());
@@ -171,11 +168,7 @@ public class CaseService {
     private void updateCase(Map<String, String> values, Map<Bitmap, String> photoBitPaths) {
         Blob caseBlob = new Blob(new Gson().toJson(values).getBytes());
         Blob audioFileDefault = null;
-        try {
-            audioFileDefault = new Blob(ImageCompressUtil.readFile(CaseFieldValueCache.AUDIO_FILE_PATH));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        audioFileDefault = getAudioBlob(audioFileDefault);
 
         Case child = caseDao.getCaseByUniqueId(values.get(CASE_ID));
         child.setLastUpdatedDate(new Date(Calendar.getInstance().getTimeInMillis()));
@@ -190,6 +183,15 @@ public class CaseService {
         casePhotoDao.deleteCasePhotosByCaseId(child.getId());
         CaseFieldValueCache.clearAudioFile();
         saveCasePhoto(child, photoBitPaths);
+    }
+
+    private Blob getAudioBlob(Blob blob) {
+        try {
+            blob = new Blob(StreamUtil.readFile(CaseFieldValueCache.AUDIO_FILE_PATH));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return blob;
     }
 
     private void saveCasePhoto(Case child, Map<Bitmap, String> photoBitPaths) {
