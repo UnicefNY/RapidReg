@@ -23,6 +23,7 @@ import org.unicef.rapidreg.R;
 import org.unicef.rapidreg.service.CaseFormService;
 import org.unicef.rapidreg.service.CaseService;
 import org.unicef.rapidreg.service.cache.CaseFieldValueCache;
+import org.unicef.rapidreg.service.cache.SubformCache;
 
 import java.util.Arrays;
 import java.util.List;
@@ -149,6 +150,7 @@ public class CaseListFragment extends MvpFragment<CaseListView, CaseListPresente
     @OnClick(R.id.add_case)
     public void onCaseAddClicked() {
         CaseFieldValueCache.clear();
+        SubformCache.clear();
         if (!CaseFormService.getInstance().isFormReady()) {
             Toast.makeText(getActivity(),
                     R.string.syncing_forms_text, Toast.LENGTH_LONG).show();
