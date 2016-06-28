@@ -129,7 +129,12 @@ public class CaseService {
         return result;
     }
 
-    public void saveOrUpdateCase(Map<String, String> values, Map<Bitmap, String> photoBitPaths) {
+    public void saveOrUpdateCase(Map<String, String> values,
+                                 Map<String, List<Map<String, String>>> subformValues,
+                                 Map<Bitmap, String> photoBitPaths) {
+
+        attachSubforms(values, subformValues);
+
         if (values.get(CASE_ID) == null) {
             saveCase(values, photoBitPaths);
         } else {
@@ -144,7 +149,12 @@ public class CaseService {
         SubformCache.clear();
     }
 
-    private void saveCase(Map<String, String> values, Map<Bitmap, String> photoBitPaths) {
+    public String createUniqueId() {
+        return UUID.randomUUID().toString();
+    }
+
+    private void saveCase(Map<String, String> values,
+                          Map<Bitmap, String> photoBitPaths) {
         Date date = new Date(Calendar.getInstance().getTimeInMillis());
         Blob caseBlob = new Blob(new Gson().toJson(values).getBytes());
         Blob audioFileDefault = null;
@@ -244,8 +254,12 @@ public class CaseService {
         return "%" + queryStr + "%";
     }
 
-    public String createUniqueId() {
-        return UUID.randomUUID().toString();
+    private void attachSubforms(Map<String, String> values, Map<String, List<Map<String, String>>> subformValues) {
+        Gson gson = new Gson();
+
+        for (String key : subformValues.keySet()) {
+            values.put(key, gson.toJson(subformValues.get(key)));
+        }
     }
 
 }

@@ -28,6 +28,7 @@ import org.unicef.rapidreg.service.CaseFormService;
 import org.unicef.rapidreg.service.CaseService;
 import org.unicef.rapidreg.service.cache.CaseFieldValueCache;
 import org.unicef.rapidreg.service.cache.CasePhotoCache;
+import org.unicef.rapidreg.service.cache.SubformCache;
 import org.unicef.rapidreg.utils.ImageCompressUtil;
 import org.unicef.rapidreg.widgets.viewholder.PhotoUploadViewHolder;
 
@@ -196,7 +197,9 @@ public class CaseActivity extends BaseActivity {
     private boolean saveCaseButtonAction() {
         if (validateRequiredField()) {
             Map<Bitmap, String> photoBitPaths = CasePhotoCache.getPhotoBitPaths();
-            CaseService.getInstance().saveOrUpdateCase(CaseFieldValueCache.getValues(), photoBitPaths);
+            CaseService.getInstance().saveOrUpdateCase(CaseFieldValueCache.getValues(),
+                    SubformCache.getValues(),
+                    photoBitPaths);
             redirectFragment(new CaseListFragment());
             setTopMenuItemsInCaseListPage();
         }
