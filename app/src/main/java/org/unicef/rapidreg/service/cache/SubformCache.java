@@ -13,6 +13,10 @@ public class SubformCache {
         return values;
     }
 
+    public static void setValues(Map<String, List<Map<String, String>>> subforms) {
+        values.putAll(subforms);
+    }
+
     public static void put(String key, List<Map<String, String>> fields) {
         values.put(key, fields);
     }
