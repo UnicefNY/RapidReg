@@ -11,6 +11,7 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.unicef.rapidreg.R;
 import org.unicef.rapidreg.service.cache.CaseFieldValueCache;
@@ -42,6 +43,8 @@ public class AudioRecorderActivity extends AppCompatActivity {
     private int audioDuration = 0;
     private long passedTime = 0;
 
+    private String currentMode;
+
 
     final Handler timerHandler = new Handler();
     Runnable timerRunnable = new Runnable() {
@@ -71,10 +74,10 @@ public class AudioRecorderActivity extends AppCompatActivity {
 
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
-            String value = extras.getString("currentState");
-            if (TextUtils.equals(value, "StartRecording")) {
+            currentMode = extras.getString("currentState");
+            if (TextUtils.equals(currentMode, "StartRecording")) {
                 recordAudio();
-            } else if (TextUtils.equals(value, "StartPlaying")) {
+            } else if (TextUtils.equals(currentMode, "StartPlaying")) {
                 playAudio();
             }
         }
@@ -86,10 +89,24 @@ public class AudioRecorderActivity extends AppCompatActivity {
     }
 
     private void exitAudioRecorder() {
-        if (passedTime > 1000) {
+        if (TextUtils.equals(currentMode, "StartRecording")) {
+            exitRecording();
+        } else if (TextUtils.equals(currentMode, "StartPlaying")) {
+            exitPlaying();
+        }
+    }
+
+    private void exitPlaying() {
+        stopPlaying();
+        finish();
+    }
+
+    private void exitRecording() {
+        if (passedTime > 2000) {
             stopRecording();
-            stopPlaying();
             finish();
+        } else {
+            Toast.makeText(this, "Recording is too short", Toast.LENGTH_SHORT).show();
         }
     }
 
