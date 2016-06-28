@@ -11,7 +11,7 @@
         android:background="@color/lighter_gray" />
 
     <Button
-        android:id="@+id/show_subform"
+        android:id="@+id/add_subform"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@null"

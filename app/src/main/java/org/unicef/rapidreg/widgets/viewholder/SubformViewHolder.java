@@ -22,8 +22,8 @@ import butterknife.ButterKnife;
 public class SubformViewHolder extends BaseViewHolder<CaseField> {
     public static final int NUM_CHILD_VIEWS = 2;
 
-    @BindView(R.id.show_subform)
-    Button showSubform;
+    @BindView(R.id.add_subform)
+    Button addSubform;
 
     private CaseActivity activity;
     private ViewGroup parent;
@@ -39,18 +39,18 @@ public class SubformViewHolder extends BaseViewHolder<CaseField> {
     @Override
     public void setValue(CaseField field) {
         fields = field.getSubForm().getFields();
-        showSubform.setText(String.format("%s %s", showSubform.getText(),
+        addSubform.setText(String.format("%s %s", addSubform.getText(),
                 field.getDisplayName().get("en")));
     }
 
     @Override
     public void setOnClickListener(CaseField field) {
-        showSubform.setOnClickListener(new View.OnClickListener() {
+        addSubform.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 LayoutInflater inflater = LayoutInflater.from(activity);
                 ViewGroup container = (LinearLayout) inflater
-                        .inflate(R.layout.form_subform_layout, parent, false);
+                        .inflate(R.layout.form_subform, parent, false);
 
                 initDeleteBtn(container);
                 initFieldList(container);
@@ -64,7 +64,7 @@ public class SubformViewHolder extends BaseViewHolder<CaseField> {
     }
 
     private void initDeleteBtn(ViewGroup container) {
-        Button deleteBtn = (Button) container.findViewById(R.id.delete);
+        Button deleteBtn = (Button) container.findViewById(R.id.delete_subform);
         deleteBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
