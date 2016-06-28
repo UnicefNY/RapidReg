@@ -131,6 +131,7 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
                 .replace(R.id.fragment_content, new CaseListFragment(),
                         CaseListFragment.class.getSimpleName())
                 .commit();
+        CaseFieldValueCache.clearAudioFile();
     }
 
     public void setTopMenuItemsInCaseDetailPage() {
