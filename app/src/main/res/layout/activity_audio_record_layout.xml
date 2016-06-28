@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="#aa000000">
+    android:background="@color/semi_dark">
 
     <LinearLayout
         android:id="@+id/empty_container"

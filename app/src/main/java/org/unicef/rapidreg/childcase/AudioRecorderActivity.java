@@ -23,7 +23,7 @@ import butterknife.OnClick;
 
 public class AudioRecorderActivity extends AppCompatActivity {
     private static final String LOG_TAG = "AudioRecordTest";
-    public static final int RECORDER_MAX_DURATION_MS = 10000;
+    public static final int RECORDER_MAX_DURATION_MS = 60000;
     private static String mFileName = null;
 
     @BindView(R.id.stop_button)
