@@ -26,7 +26,7 @@ public class SubformViewHolder extends BaseViewHolder<CaseField> {
     public static final int NUM_CHILD_VIEWS = 2;
 
     @BindView(R.id.add_subform)
-    Button addSubform;
+    Button addSubformBtn;
 
     private CaseActivity activity;
     private ViewGroup parent;
@@ -46,21 +46,17 @@ public class SubformViewHolder extends BaseViewHolder<CaseField> {
         fieldParent = field.getDisplayName().get("en");
 
         attachParentToFields(fields, fieldParent);
-        addSubform.setText(String.format("%s %s", addSubform.getText(), fieldParent));
+        addSubformBtn.setText(String.format("%s %s", addSubformBtn.getText(), fieldParent));
+
+        restoreSubforms();
     }
 
     @Override
     public void setOnClickListener(CaseField field) {
-        addSubform.setOnClickListener(new View.OnClickListener() {
+        addSubformBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                LayoutInflater inflater = LayoutInflater.from(activity);
-                ViewGroup container = (LinearLayout) inflater
-                        .inflate(R.layout.form_subform, parent, false);
-
-                initDeleteBtn(container);
-                initFieldList(container);
-                parent.addView(container, getInsertIndex());
+                addSubform();
             }
         });
     }
@@ -128,5 +124,24 @@ public class SubformViewHolder extends BaseViewHolder<CaseField> {
     private void updateSubformCache(int index) {
         List<Map<String, String>> values = SubformCache.get(fieldParent);
         values.remove(index);
+    }
+
+    private void addSubform() {
+        LayoutInflater inflater = LayoutInflater.from(activity);
+        ViewGroup container = (LinearLayout) inflater
+                .inflate(R.layout.form_subform, parent, false);
+
+        initDeleteBtn(container);
+        initFieldList(container);
+        parent.addView(container, getInsertIndex());
+    }
+
+    private void restoreSubforms() {
+        List<Map<String, String>> values = SubformCache.get(fieldParent) == null ?
+                new ArrayList<Map<String, String>>() : SubformCache.get(fieldParent);
+
+        for (int i = 0; i < values.size(); i++) {
+            addSubform();
+        }
     }
 }

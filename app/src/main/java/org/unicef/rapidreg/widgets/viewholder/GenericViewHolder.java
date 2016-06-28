@@ -41,7 +41,12 @@ public class GenericViewHolder extends BaseViewHolder<CaseField> {
 
         labelView.setText(labelText);
         disableUnediatbleField(field);
-        valueView.setText(CaseFieldValueCache.get(getLabel(field)));
+        if (isSubformField(field)) {
+
+            valueView.setText(getValue(field));
+        } else {
+            valueView.setText(CaseFieldValueCache.get(getLabel(field)));
+        }
     }
 
     @Override
@@ -79,5 +84,4 @@ public class GenericViewHolder extends BaseViewHolder<CaseField> {
             Log.e(TAG, String.format("create dialog error. Field: %s", field), e);
         }
     }
-
 }
