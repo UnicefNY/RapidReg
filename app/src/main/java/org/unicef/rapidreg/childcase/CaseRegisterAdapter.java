@@ -65,23 +65,23 @@ public class CaseRegisterAdapter extends RecyclerView.Adapter<BaseViewHolder> {
             case VIEW_HOLDER_GENERIC:
 
                 return new GenericViewHolder(activity, inflater.inflate(resources
-                                .getIdentifier(CaseField.TYPE_TEXT_FIELD, LAYOUT, packageName),
+                                .getIdentifier(PREFIX + CaseField.TYPE_TEXT_FIELD, LAYOUT, packageName),
                         parent, false));
             case VIEW_HOLDER_TICK_BOX:
                 return new TickBoxViewHolder(activity, inflater.inflate(resources
-                                .getIdentifier(CaseField.TYPE_TICK_BOX, LAYOUT, packageName),
+                                .getIdentifier(PREFIX + CaseField.TYPE_TICK_BOX, LAYOUT, packageName),
                         parent, false));
             case VIEW_HOLDER_PHOTO_UPLOAD_BOX:
                 return new PhotoUploadViewHolder(activity, inflater.inflate(resources
-                                .getIdentifier(CaseField.TYPE_PHOTO_UPLOAD_LAYOUT, LAYOUT, packageName),
+                                .getIdentifier(PREFIX + CaseField.TYPE_PHOTO_UPLOAD_LAYOUT, LAYOUT, packageName),
                         parent, false));
             case VIEW_HOLDER_AUDIO_UPLOAD_BOX:
                 return new AudioUploadViewHolder(activity, inflater.inflate(resources
-                                .getIdentifier(CaseField.TYPE_AUDIO_UPLOAD_LAYOUT, LAYOUT, packageName),
+                                .getIdentifier(PREFIX + CaseField.TYPE_AUDIO_UPLOAD_LAYOUT, LAYOUT, packageName),
                         parent, false));
             case VIEW_HOLDER_SUBFORM:
                 return new SubformViewHolder(activity, inflater.inflate(resources
-                                .getIdentifier(CaseField.TYPE_SUBFORM_FIELD, LAYOUT, packageName),
+                                .getIdentifier(PREFIX + CaseField.TYPE_SUBFORM_FIELD, LAYOUT, packageName),
                         parent, false));
 
             default:
