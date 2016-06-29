@@ -175,6 +175,15 @@ public class CaseRegisterWrapperFragment extends Fragment {
                 }
             }
         }
+
+        CaseField caseField = new CaseField();
+        caseField.setType(CaseField.TYPE_MINI_FORM_PROFILE);
+        try {
+            miniFields.add(1, caseField);
+        } catch (Exception e) {
+            miniFields.add(caseField);
+        }
+
     }
 
     @NonNull

@@ -11,6 +11,7 @@ import org.unicef.rapidreg.forms.childcase.CaseField;
 import org.unicef.rapidreg.widgets.viewholder.AudioUploadViewHolder;
 import org.unicef.rapidreg.widgets.viewholder.BaseViewHolder;
 import org.unicef.rapidreg.widgets.viewholder.GenericViewHolder;
+import org.unicef.rapidreg.widgets.viewholder.MiniFormProfileViewHolder;
 import org.unicef.rapidreg.widgets.viewholder.PhotoUploadMiniFormViewHolder;
 import org.unicef.rapidreg.widgets.viewholder.PhotoUploadViewHolder;
 import org.unicef.rapidreg.widgets.viewholder.SeparatorViewHolder;
@@ -35,6 +36,7 @@ public class CaseRegisterAdapter extends RecyclerView.Adapter<BaseViewHolder> {
     private static final int VIEW_HOLDER_SELECT_SINGLE_LINE = 7;
     private static final int VIEW_HOLDER_RADIO_SINGLE_LINE = 8;
     private static final int VIEW_HOLDER_PHOTO_UPLOAD_BOX_MINI_FORM = 9;
+    private static final int VIEW_HOLDER_MINI_FORM_PROFILE = 10;
 
     private boolean isMiniForm;
 
@@ -92,6 +94,11 @@ public class CaseRegisterAdapter extends RecyclerView.Adapter<BaseViewHolder> {
                 return new SubformViewHolder(activity, inflater.inflate(resources
                                 .getIdentifier(PREFIX + CaseField.TYPE_SUBFORM_FIELD, LAYOUT, packageName),
                         parent, false));
+
+            case VIEW_HOLDER_MINI_FORM_PROFILE:
+                return new MiniFormProfileViewHolder(activity, inflater.inflate(resources
+                                .getIdentifier(PREFIX + CaseField.TYPE_MINI_FORM_PROFILE, LAYOUT, packageName),
+                        parent, false));
             default:
                 return new SeparatorViewHolder(activity, new View(activity));
         }
@@ -119,7 +126,7 @@ public class CaseRegisterAdapter extends RecyclerView.Adapter<BaseViewHolder> {
                         VIEW_HOLDER_SELECT_SINGLE_LINE : VIEW_HOLDER_RADIO_SINGLE_LINE;
             }
         }
-        if (field.isRaduiButton()) {
+        if (field.isRadioButton()) {
             return VIEW_HOLDER_RADIO_SINGLE_LINE;
         }
         if (field.isSeparator()) {
@@ -139,6 +146,9 @@ public class CaseRegisterAdapter extends RecyclerView.Adapter<BaseViewHolder> {
         }
         if (field.isSubform()) {
             return VIEW_HOLDER_SUBFORM;
+        }
+        if (field.isMiniFormProfile()) {
+            return VIEW_HOLDER_MINI_FORM_PROFILE;
         }
         return VIEW_HOLDER_GENERIC;
     }
