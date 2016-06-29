@@ -3,7 +3,9 @@ package org.unicef.rapidreg.widgets.dialog;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.text.TextUtils;
 import android.widget.TextView;
+import android.widget.ViewSwitcher;
 
 import org.unicef.rapidreg.R;
 import org.unicef.rapidreg.forms.childcase.CaseField;
@@ -15,16 +17,27 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.unicef.rapidreg.service.cache.CaseFieldValueCache;
+import org.unicef.rapidreg.widgets.viewholder.GenericViewHolder;
+
 public abstract class BaseDialog {
     protected CaseField caseField;
     protected TextView resultView;
+    protected ViewSwitcher viewSwitcher;
 
     private AlertDialog.Builder builder;
     private Context context;
 
-    public BaseDialog(final Context context, final CaseField caseField, final TextView resultView) {
+    public BaseDialog(final Context context, final CaseField caseField,
+                      final TextView resultView) {
+        this(context, caseField, resultView, null);
+    }
+
+    public BaseDialog(final Context context, final CaseField caseField,
+                      final TextView resultView, final ViewSwitcher viewSwitcher) {
         this.caseField = caseField;
         this.resultView = resultView;
+        this.viewSwitcher = viewSwitcher;
         this.context = context;
 
         builder = new AlertDialog.Builder(context);
@@ -33,6 +46,11 @@ public abstract class BaseDialog {
         builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
+                if (!TextUtils.isEmpty(getResult())) {
+                    BaseDialog.this.viewSwitcher.setDisplayedChild(GenericViewHolder.FORM_HAS_ANSWER_STATE);
+                } else {
+                    BaseDialog.this.viewSwitcher.setDisplayedChild(GenericViewHolder.FORM_NO_ANSWER_STATE);
+                }
                 BaseDialog.this.resultView.setText(getResult());
 
                 if (isSubformField()) {

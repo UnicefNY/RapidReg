@@ -3,6 +3,7 @@ package org.unicef.rapidreg.widgets.dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.widget.TextView;
+import android.widget.ViewSwitcher;
 
 import org.unicef.rapidreg.forms.childcase.CaseField;
 
@@ -15,8 +16,8 @@ public class MultipleSelectDialog extends BaseDialog {
     private List<String> result;
     private String[] optionItems;
 
-    public MultipleSelectDialog(Context context, CaseField caseField, TextView resultView) {
-        super(context, caseField, resultView);
+    public MultipleSelectDialog(Context context, CaseField caseField, TextView resultView, ViewSwitcher viewSwitcher) {
+        super(context, caseField, resultView, viewSwitcher);
         result = new ArrayList<>();
     }
 

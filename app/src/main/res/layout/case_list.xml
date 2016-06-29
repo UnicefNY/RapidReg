@@ -20,9 +20,6 @@
         <include layout="@layout/case_list_text_area_hidden_state" />
     </ViewSwitcher>
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_alignParentBottom="true"
-        android:background="@color/lighter_gray" />
+    <include layout="@layout/list_item_border" />
+
 </RelativeLayout>

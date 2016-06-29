@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:orientation="vertical"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:minHeight="@dimen/case_register_mini_heigh">
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:minHeight="@dimen/case_register_mini_heigh"
+    android:orientation="vertical">
 
     <ViewSwitcher
         android:id="@+id/view_switcher"
@@ -14,7 +15,7 @@
 
         <include layout="@layout/case_register_generic_form_no_answer_state" />
 
-        <include layout="@layout/case_register_text_form_has_answer_state" />
+        <include layout="@layout/case_register_generic_form_has_answer_state" />
     </ViewSwitcher>
 
     <include layout="@layout/list_item_border" />

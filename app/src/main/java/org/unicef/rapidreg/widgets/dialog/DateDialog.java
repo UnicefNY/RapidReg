@@ -3,6 +3,7 @@ package org.unicef.rapidreg.widgets.dialog;
 import android.content.Context;
 import android.widget.DatePicker;
 import android.widget.TextView;
+import android.widget.ViewSwitcher;
 
 import org.unicef.rapidreg.forms.childcase.CaseField;
 
@@ -10,8 +11,8 @@ public class DateDialog extends BaseDialog {
     private String result;
     private DatePicker datePicker;
 
-    public DateDialog(Context context, CaseField caseField, TextView resultView) {
-        super(context, caseField, resultView);
+    public DateDialog(Context context, CaseField caseField, TextView resultView, ViewSwitcher viewSwitcher) {
+        super(context, caseField, resultView, viewSwitcher);
         result = resultView.getText().toString().trim();
     }
 

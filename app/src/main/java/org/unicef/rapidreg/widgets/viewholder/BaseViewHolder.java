@@ -46,10 +46,8 @@ public abstract class BaseViewHolder<T> extends RecyclerView.ViewHolder {
     protected void disableUnediatbleField(CaseField field) {
         if (!isEditable(field)) {
             itemView.setBackgroundResource(R.color.gainsboro);
-            itemView.setEnabled(false);
         } else {
             itemView.setBackgroundResource(R.color.white);
-            itemView.setEnabled(true);
         }
     }
 

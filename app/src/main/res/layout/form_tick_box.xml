@@ -8,23 +8,38 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:minHeight="@dimen/case_register_mini_heigh"
         android:orientation="horizontal"
         android:layout_gravity="center_vertical"
         android:paddingBottom="@dimen/size_5"
         android:weightSum="10">
 
-        <include layout="@layout/form_label"
-                 android:layout_height="wrap_content"
-                 android:layout_width="0dp"
-                 android:layout_weight="9"
-                 android:layout_gravity="center_vertical"/>
+        <TextView
+            android:id="@+id/label"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="9"
+            android:layout_gravity="center_vertical"
+            android:paddingLeft="@dimen/case_register_label_padding_left_right"
+            android:paddingRight="@dimen/case_register_label_padding_left_right"
+            android:paddingTop="@dimen/case_register_field_padding_top_bottom"
+            android:paddingBottom="@dimen/case_register_field_padding_top_bottom"
+            android:textColor="@color/gray"
+            android:textSize="@dimen/text_size_16" />
 
         <CheckBox
             android:id="@+id/value"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="2"
+            android:layout_weight="1"
+            android:layout_marginRight="@dimen/case_register_field_padding_left_right"
+            android:layout_marginTop="@dimen/case_register_field_padding_top_bottom"
+            android:layout_marginBottom="@dimen/case_register_field_padding_top_bottom"
+
             android:layout_gravity="center_vertical">
         </CheckBox>
     </LinearLayout>
+
+    <include layout="@layout/list_item_border" />
+
 </org.unicef.rapidreg.widgets.TickBox>
