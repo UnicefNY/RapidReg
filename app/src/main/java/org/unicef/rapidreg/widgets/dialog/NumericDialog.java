@@ -5,6 +5,7 @@ import android.content.res.Configuration;
 import android.text.InputType;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.ViewSwitcher;
 
 import org.unicef.rapidreg.forms.childcase.CaseField;
 
@@ -12,8 +13,8 @@ public class NumericDialog extends BaseDialog {
 
     private EditText editText;
 
-    public NumericDialog(Context context, CaseField caseField, TextView resultView) {
-        super(context, caseField, resultView);
+    public NumericDialog(Context context, CaseField caseField, TextView resultView, ViewSwitcher viewSwitcher) {
+        super(context, caseField, resultView, viewSwitcher);
     }
 
     @Override

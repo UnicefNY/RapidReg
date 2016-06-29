@@ -3,6 +3,7 @@ package org.unicef.rapidreg.widgets.dialog;
 import android.content.Context;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.ViewSwitcher;
 
 import org.unicef.rapidreg.forms.childcase.CaseField;
 
@@ -10,8 +11,8 @@ public class TextDialog extends BaseDialog {
 
     private EditText editText;
 
-    public TextDialog(Context context, CaseField caseField, TextView resultView) {
-        super(context, caseField, resultView);
+    public TextDialog(Context context, CaseField caseField, TextView resultView, ViewSwitcher viewSwitcher) {
+        super(context, caseField, resultView, viewSwitcher);
     }
 
     @Override

@@ -2,9 +2,12 @@ package org.unicef.rapidreg.widgets.viewholder;
 
 import android.content.Context;
 import android.support.v7.app.AlertDialog;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.ViewSwitcher;
 
 import org.unicef.rapidreg.R;
 import org.unicef.rapidreg.exception.DialogException;
@@ -19,12 +22,20 @@ import butterknife.ButterKnife;
 public class GenericViewHolder extends BaseViewHolder<CaseField> {
 
     public static final String TAG = GenericViewHolder.class.getSimpleName();
+    public static final int FORM_NO_ANSWER_STATE = 0;
+    public static final int FORM_HAS_ANSWER_STATE = 1;
 
     @BindView(R.id.label)
     TextView labelView;
 
     @BindView(R.id.value)
     TextView valueView;
+
+    @BindView(R.id.view_switcher)
+    ViewSwitcher viewSwitcher;
+
+    @BindView(R.id.form_question)
+    TextView formQuestion;
 
     public GenericViewHolder(Context context, View itemView) {
         super(context, itemView);
@@ -39,7 +50,9 @@ public class GenericViewHolder extends BaseViewHolder<CaseField> {
             labelText += " (Required)";
         }
 
-        labelView.setText(labelText);
+//        labelView.setText(labelText);
+        labelView.setHint(labelText);
+        formQuestion.setHint(labelText);
         disableUnediatbleField(field);
         if (isSubformField(field)) {
 
@@ -63,6 +76,12 @@ public class GenericViewHolder extends BaseViewHolder<CaseField> {
         });
     }
 
+    @Override
+    protected void disableUnediatbleField(CaseField field) {
+        super.disableUnediatbleField(field);
+
+    }
+
     private void showFieldDialog(CaseField field, TextView valueView) {
         String fieldType = field.getType();
 
@@ -78,7 +97,8 @@ public class GenericViewHolder extends BaseViewHolder<CaseField> {
                     CaseField.FieldType.valueOf(fieldType.toUpperCase()),
                     context,
                     field,
-                    valueView);
+                    valueView,
+                    viewSwitcher);
             dialog.show();
         } catch (DialogException e) {
             Log.e(TAG, String.format("create dialog error. Field: %s", field), e);
