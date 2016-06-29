@@ -10,8 +10,12 @@ import android.widget.TextView;
 import org.unicef.rapidreg.R;
 import org.unicef.rapidreg.forms.childcase.CaseField;
 import org.unicef.rapidreg.service.cache.CaseFieldValueCache;
+import org.unicef.rapidreg.service.cache.SubformCache;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -51,16 +55,28 @@ public class SingleLineRadioViewHolder extends BaseViewHolder<CaseField> {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
                 if (checkedId == firstOption.getId()) {
-                    CaseFieldValueCache.put(field.getDisplayName().get("en"), options.get(0));
+                    if (isSubformField(field)) {
+                        SubformCache.put(field.getParent(), getValues(field, options.get(0)));
+                    } else {
+                        CaseFieldValueCache.put(field.getDisplayName().get("en"), options.get(0));
+                    }
                 } else {
-                    CaseFieldValueCache.put(field.getDisplayName().get("en"), options.get(1));
+                    if (isSubformField(field)) {
+                        SubformCache.put(field.getParent(), getValues(field, options.get(1)));
+                    } else {
+                        CaseFieldValueCache.put(field.getDisplayName().get("en"), options.get(1));
+                    }
                 }
             }
         });
         labelView.setHint(labelText);
         disableUnediatbleField(field, optionGroup);
         if (!TextUtils.isEmpty(CaseFieldValueCache.get(getLabel(field)))) {
-            setSelectedRadio(CaseFieldValueCache.get(getLabel(field)));
+            if (isSubformField(field)) {
+                setSelectedRadio(getValue(field));
+            } else {
+                setSelectedRadio(CaseFieldValueCache.get(getLabel(field)));
+            }
         }
     }
 
@@ -76,5 +92,23 @@ public class SingleLineRadioViewHolder extends BaseViewHolder<CaseField> {
             firstOption.setChecked(false);
             secondOption.setChecked(true);
         }
+    }
+
+    private List<Map<String, String>> getValues(CaseField field, String option) {
+        List<Map<String, String>> values = SubformCache.get(field.getParent()) == null ?
+                new ArrayList<Map<String, String>>() : SubformCache.get(field.getParent());
+
+        Map<String, String> value;
+        try {
+            value = values.get(field.getIndex());
+            value.put(field.getDisplayName().get("en"), option);
+            values.set(field.getIndex(), value);
+        } catch (IndexOutOfBoundsException e) {
+            value = new HashMap<>();
+            value.put(field.getDisplayName().get("en"), option);
+            values.add(field.getIndex(), value);
+        }
+
+        return values;
     }
 }
