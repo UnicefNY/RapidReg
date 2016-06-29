@@ -7,7 +7,7 @@ import org.unicef.rapidreg.R;
 public enum CaseFeature {
     LIST(R.string.cases, CaseListFragment.class),
     ADD(R.string.new_case, CaseRegisterWrapperFragment.class),
-    EDIT(R.string.edit, null),
+    EDIT(R.string.edit, CaseRegisterWrapperFragment.class),
     DETAILS(R.string.case_details, CaseRegisterWrapperFragment.class),
     SEARCH(R.string.search, CaseSearchFragment.class);
 
