@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.res.Configuration;
 import android.text.InputType;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
@@ -34,9 +33,12 @@ public class TextViewHolder extends BaseViewHolder<CaseField> {
     @BindView(R.id.form_question)
     TextView formQuestion;
 
+    private InputMethodManager inputMethodManager;
+
     public TextViewHolder(Context context, View itemView) {
         super(context, itemView);
         ButterKnife.bind(this, itemView);
+        inputMethodManager = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
     }
 
     @Override
@@ -49,11 +51,20 @@ public class TextViewHolder extends BaseViewHolder<CaseField> {
 
         labelView.setHint(labelText);
         formQuestion.setHint(labelText);
+        valueView.setText(CaseFieldValueCache.get(getLabel(field)));
+        if (TextUtils.isEmpty(valueView.getText())) {
+            viewSwitcher.setDisplayedChild(GenericViewHolder.FORM_NO_ANSWER_STATE);
+        } else {
+            viewSwitcher.setDisplayedChild(GenericViewHolder.FORM_HAS_ANSWER_STATE);
+        }
+
         disableUnediatbleField(field);
+
         if (field.isNumericField()) {
             valueView.setInputType(InputType.TYPE_CLASS_NUMBER);
             valueView.setRawInputType(Configuration.KEYBOARD_12KEY);
         }
+
     }
 
     @Override
@@ -65,8 +76,7 @@ public class TextViewHolder extends BaseViewHolder<CaseField> {
                 valueView.setFocusableInTouchMode(true);
                 valueView.setFocusable(true);
                 valueView.requestFocus();
-                InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
-                imm.showSoftInput(valueView, InputMethodManager.SHOW_IMPLICIT);
+                inputMethodManager.showSoftInput(valueView, InputMethodManager.SHOW_IMPLICIT);
             }
         });
         valueView.setOnFocusChangeListener(new View.OnFocusChangeListener() {
@@ -78,6 +88,7 @@ public class TextViewHolder extends BaseViewHolder<CaseField> {
                             viewSwitcher.setDisplayedChild(GenericViewHolder.FORM_NO_ANSWER_STATE);
                         } else {
                             viewSwitcher.setDisplayedChild(GenericViewHolder.FORM_HAS_ANSWER_STATE);
+                            CaseFieldValueCache.put(field.getDisplayName().get("en"), valueView.getText().toString());
                         }
                     }
                 }
