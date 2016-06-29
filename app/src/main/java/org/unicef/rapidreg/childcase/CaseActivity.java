@@ -141,7 +141,9 @@ public class CaseActivity extends BaseActivity {
                         CaseFieldValueCache.clearAudioFile();
                         turnToFeature(CaseFeature.LIST);
                     }
-                }).show();
+                })
+                .setNegativeButton(R.string.cancel, null)
+                .show();
     }
 
     private void initToolbar() {
