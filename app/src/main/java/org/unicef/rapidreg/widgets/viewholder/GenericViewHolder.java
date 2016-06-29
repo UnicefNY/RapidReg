@@ -5,7 +5,6 @@ import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.ViewSwitcher;
 
@@ -50,10 +49,9 @@ public class GenericViewHolder extends BaseViewHolder<CaseField> {
             labelText += " (Required)";
         }
 
-//        labelView.setText(labelText);
         labelView.setHint(labelText);
         formQuestion.setHint(labelText);
-        disableUnediatbleField(field);
+        disableUnediatbleField(field, null);
 
         if (isSubformField(field)) {
             valueView.setText(getValue(field));
@@ -95,12 +93,6 @@ public class GenericViewHolder extends BaseViewHolder<CaseField> {
                 }
             }
         });
-
-    }
-
-    @Override
-    protected void disableUnediatbleField(CaseField field) {
-        super.disableUnediatbleField(field);
 
     }
 

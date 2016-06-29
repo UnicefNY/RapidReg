@@ -34,7 +34,7 @@ public class TickBoxViewHolder extends BaseViewHolder<CaseField> {
     @Override
     public void setValue(CaseField field) {
         labelView.setText(getLabel(field));
-        disableUnediatbleField(field);
+        disableUnediatbleField(field, valueView);
 
         if (isSubformField(field)) {
             valueView.setChecked(Boolean.valueOf(getValue(field)));

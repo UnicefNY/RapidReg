@@ -50,7 +50,7 @@ public class SingleLineRadioViewHolder extends BaseViewHolder<CaseField> {
         optionGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
-                if(checkedId == firstOption.getId()) {
+                if (checkedId == firstOption.getId()) {
                     CaseFieldValueCache.put(field.getDisplayName().get("en"), options.get(0));
                 } else {
                     CaseFieldValueCache.put(field.getDisplayName().get("en"), options.get(1));
@@ -58,7 +58,7 @@ public class SingleLineRadioViewHolder extends BaseViewHolder<CaseField> {
             }
         });
         labelView.setHint(labelText);
-        disableUnediatbleField(field);
+        disableUnediatbleField(field, optionGroup);
         if (!TextUtils.isEmpty(CaseFieldValueCache.get(getLabel(field)))) {
             setSelectedRadio(CaseFieldValueCache.get(getLabel(field)));
         }
