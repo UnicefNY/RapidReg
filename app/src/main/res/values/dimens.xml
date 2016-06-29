@@ -8,8 +8,10 @@
     <dimen name="size_2">2dp</dimen>
     <dimen name="size_5">5dp</dimen>
     <dimen name="size_15">15dp</dimen>
+    <dimen name="text_size_12">12sp</dimen>
     <dimen name="text_size_14">14sp</dimen>
     <dimen name="text_size_16">16sp</dimen>
+    <dimen name="text_size_18">18sp</dimen>
     <dimen name="text_size_20">20sp</dimen>
     <dimen name="text_size_24">24sp</dimen>
     <dimen name="text_size_48">48sp</dimen>
@@ -59,7 +61,11 @@
     <!--login end-->
 
     <!--case register start-->
+    <dimen name="case_register_mini_heigh">72dp</dimen>
     <dimen name="pull_back_text_padding">15dp</dimen>
+    <dimen name="case_register_label_padding_left_right">20dp</dimen>
+    <dimen name="case_register_field_padding_left_right">15dp</dimen>
+    <dimen name="case_register_field_padding_top_bottom">16dp</dimen>
     <!--case register end-->
 
 </resources>
