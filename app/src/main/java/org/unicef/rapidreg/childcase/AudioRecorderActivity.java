@@ -25,7 +25,7 @@ import butterknife.OnClick;
 public class AudioRecorderActivity extends AppCompatActivity {
     private static final String LOG_TAG = "AudioRecordTest";
     public static final int RECORDER_MAX_DURATION_MS = 60000;
-    private static String mFileName = null;
+    private static String mFileName = CaseFieldValueCache.AUDIO_FILE_PATH;
 
     @BindView(R.id.stop_button)
     ImageView stopButton;
@@ -70,7 +70,6 @@ public class AudioRecorderActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_audio_record_layout);
         ButterKnife.bind(this);
-        mFileName = CaseFieldValueCache.AUDIO_FILE_PATH;
 
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
@@ -97,13 +96,13 @@ public class AudioRecorderActivity extends AppCompatActivity {
     }
 
     private void exitPlaying() {
-        stopPlaying();
+        onPlay(false);
         finish();
     }
 
     private void exitRecording() {
-        if (passedTime > 2000) {
-            stopRecording();
+        if (passedTime > 4000) {
+            onRecord(false);
             finish();
         } else {
             Toast.makeText(this, "Recording is too short", Toast.LENGTH_SHORT).show();
