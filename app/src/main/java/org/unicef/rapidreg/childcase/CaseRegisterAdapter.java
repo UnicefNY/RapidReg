@@ -8,7 +8,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import org.unicef.rapidreg.forms.childcase.CaseField;
-import org.unicef.rapidreg.service.cache.PageModeCached;
 import org.unicef.rapidreg.widgets.viewholder.AudioUploadViewHolder;
 import org.unicef.rapidreg.widgets.viewholder.BaseViewHolder;
 import org.unicef.rapidreg.widgets.viewholder.GenericViewHolder;
@@ -130,7 +129,7 @@ public class CaseRegisterAdapter extends RecyclerView.Adapter<BaseViewHolder> {
             return VIEW_HOLDER_TICK_BOX;
         }
         if (field.isPhotoUploadBox()) {
-            if (!PageModeCached.isDetailMode()) {
+            if (activity.getCurrentFeature() != CaseFeature.DETAILS) {
                 return VIEW_HOLDER_PHOTO_UPLOAD_BOX;
             }
             return isMiniForm ? VIEW_HOLDER_PHOTO_UPLOAD_BOX_MINI_FORM : VIEW_HOLDER_PHOTO_UPLOAD_BOX;
