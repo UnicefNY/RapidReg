@@ -59,7 +59,9 @@ public class SingleLineRadioViewHolder extends BaseViewHolder<CaseField> {
         });
         labelView.setHint(labelText);
         disableUnediatbleField(field);
-//        setSelectedRadio(CaseFieldValueCache.get(getLabel(field)));
+        if (!TextUtils.isEmpty(CaseFieldValueCache.get(getLabel(field)))) {
+            setSelectedRadio(CaseFieldValueCache.get(getLabel(field)));
+        }
     }
 
     @Override
@@ -67,14 +69,12 @@ public class SingleLineRadioViewHolder extends BaseViewHolder<CaseField> {
     }
 
     public void setSelectedRadio(String selectedRadio) {
-        if (!TextUtils.isEmpty(selectedRadio)) {
-            if (selectedRadio.equals(options.get(0))) {
-                firstOption.setChecked(true);
-                secondOption.setChecked(false);
-            } else {
-                firstOption.setChecked(false);
-                secondOption.setChecked(true);
-            }
+        if (selectedRadio.equals(options.get(0))) {
+            firstOption.setChecked(true);
+            secondOption.setChecked(false);
+        } else {
+            firstOption.setChecked(false);
+            secondOption.setChecked(true);
         }
     }
 }

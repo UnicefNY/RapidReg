@@ -54,11 +54,17 @@ public class GenericViewHolder extends BaseViewHolder<CaseField> {
         labelView.setHint(labelText);
         formQuestion.setHint(labelText);
         disableUnediatbleField(field);
-        if (isSubformField(field)) {
 
+        if (isSubformField(field)) {
             valueView.setText(getValue(field));
         } else {
             valueView.setText(CaseFieldValueCache.get(getLabel(field)));
+        }
+
+        if (TextUtils.isEmpty(valueView.getText())) {
+            viewSwitcher.setDisplayedChild(GenericViewHolder.FORM_NO_ANSWER_STATE);
+        } else {
+            viewSwitcher.setDisplayedChild(GenericViewHolder.FORM_HAS_ANSWER_STATE);
         }
     }
 
@@ -74,6 +80,22 @@ public class GenericViewHolder extends BaseViewHolder<CaseField> {
                 }
             }
         });
+        valueView.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (v.getId() == valueView.getId()) {
+                    if (!hasFocus) {
+                        if (TextUtils.isEmpty(valueView.getText())) {
+                            viewSwitcher.setDisplayedChild(GenericViewHolder.FORM_NO_ANSWER_STATE);
+                        } else {
+                            viewSwitcher.setDisplayedChild(GenericViewHolder.FORM_HAS_ANSWER_STATE);
+                            CaseFieldValueCache.put(field.getDisplayName().get("en"), valueView.getText().toString());
+                        }
+                    }
+                }
+            }
+        });
+
     }
 
     @Override
