@@ -13,6 +13,7 @@ import android.widget.ViewSwitcher;
 import org.unicef.rapidreg.R;
 import org.unicef.rapidreg.forms.childcase.CaseField;
 import org.unicef.rapidreg.service.cache.CaseFieldValueCache;
+import org.unicef.rapidreg.service.cache.SubformCache;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -51,7 +52,11 @@ public class TextViewHolder extends BaseViewHolder<CaseField> {
 
         labelView.setHint(labelText);
         formQuestion.setHint(labelText);
-        valueView.setText(CaseFieldValueCache.get(getLabel(field)));
+        if (isSubformField(field)) {
+            valueView.setText(getValue(field));
+        } else {
+            valueView.setText(CaseFieldValueCache.get(getLabel(field)));
+        }
         if (TextUtils.isEmpty(valueView.getText())) {
             viewSwitcher.setDisplayedChild(GenericViewHolder.FORM_NO_ANSWER_STATE);
         } else {
@@ -88,7 +93,11 @@ public class TextViewHolder extends BaseViewHolder<CaseField> {
                             viewSwitcher.setDisplayedChild(GenericViewHolder.FORM_NO_ANSWER_STATE);
                         } else {
                             viewSwitcher.setDisplayedChild(GenericViewHolder.FORM_HAS_ANSWER_STATE);
-                            CaseFieldValueCache.put(field.getDisplayName().get("en"), valueView.getText().toString());
+                            if (isSubformField(field)) {
+                                SubformCache.put(field.getParent(), getValues(field));
+                            } else {
+                                CaseFieldValueCache.put(field.getDisplayName().get("en"), valueView.getText().toString());
+                            }
                         }
                     }
                 }
@@ -96,4 +105,8 @@ public class TextViewHolder extends BaseViewHolder<CaseField> {
         });
     }
 
+    @Override
+    protected String getResult() {
+        return valueView.getText().toString();
+    }
 }

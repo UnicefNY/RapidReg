@@ -20,4 +20,9 @@ public class SeparatorViewHolder extends BaseViewHolder<CaseField> {
     public void setOnClickListener(CaseField field) {
 
     }
+
+    @Override
+    protected String getResult() {
+        return null;
+    }
 }

@@ -50,28 +50,31 @@ public class TickBoxViewHolder extends BaseViewHolder<CaseField> {
             public void onClick(View v) {
 
                 if (isSubformField(field)) {
-                    SubformCache.put(field.getParent(), getValues(field,
-                            ((CheckBox) v).isChecked()));
+                    SubformCache.put(field.getParent(), getValues(field, getResult()));
                 } else {
-                    CaseFieldValueCache.put(getLabel(field),
-                            String.valueOf(((CheckBox) v).isChecked()));
+                    CaseFieldValueCache.put(getLabel(field), getResult());
                 }
             }
         });
     }
 
-    private List<Map<String, String>> getValues(CaseField field, boolean isChecked) {
+    @Override
+    protected String getResult() {
+        return String.valueOf(valueView.isChecked());
+    }
+
+    private List<Map<String, String>> getValues(CaseField field, String isChecked) {
         List<Map<String, String>> values = SubformCache.get(field.getParent()) == null ?
                 new ArrayList<Map<String, String>>() : SubformCache.get(field.getParent());
 
         Map<String, String> value;
         try {
             value = values.get(field.getIndex());
-            value.put(field.getDisplayName().get("en"), String.valueOf(isChecked));
+            value.put(field.getDisplayName().get("en"), isChecked);
             values.set(field.getIndex(), value);
         } catch (IndexOutOfBoundsException e) {
             value = new HashMap<>();
-            value.put(field.getDisplayName().get("en"), String.valueOf(isChecked));
+            value.put(field.getDisplayName().get("en"), isChecked);
             values.add(field.getIndex(), value);
         }
 

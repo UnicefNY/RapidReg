@@ -12,6 +12,7 @@ import org.unicef.rapidreg.R;
 import org.unicef.rapidreg.exception.DialogException;
 import org.unicef.rapidreg.forms.childcase.CaseField;
 import org.unicef.rapidreg.service.cache.CaseFieldValueCache;
+import org.unicef.rapidreg.service.cache.SubformCache;
 import org.unicef.rapidreg.widgets.dialog.BaseDialog;
 import org.unicef.rapidreg.widgets.dialog.FiledDialogFactory;
 
@@ -87,13 +88,19 @@ public class GenericViewHolder extends BaseViewHolder<CaseField> {
                             viewSwitcher.setDisplayedChild(GenericViewHolder.FORM_NO_ANSWER_STATE);
                         } else {
                             viewSwitcher.setDisplayedChild(GenericViewHolder.FORM_HAS_ANSWER_STATE);
-                            CaseFieldValueCache.put(field.getDisplayName().get("en"), valueView.getText().toString());
+                            if (isSubformField(field)) {
+                                Log.d("fengbo", "field: " + field.getDisplayName().get("en"));
+                                SubformCache.put(field.getParent(), getValues(field));
+                                Log.d("fengbo", "cache: " + SubformCache.toJson());
+                            } else {
+                                Log.d("fengbo", "no, field: " + field.getDisplayName().get("en"));
+                                CaseFieldValueCache.put(field.getDisplayName().get("en"), getResult());
+                            }
                         }
                     }
                 }
             }
         });
-
     }
 
     private void showFieldDialog(CaseField field, TextView valueView) {
@@ -117,5 +124,10 @@ public class GenericViewHolder extends BaseViewHolder<CaseField> {
         } catch (DialogException e) {
             Log.e(TAG, String.format("create dialog error. Field: %s", field), e);
         }
+    }
+
+    @Override
+    protected String getResult() {
+        return valueView.getText().toString();
     }
 }
