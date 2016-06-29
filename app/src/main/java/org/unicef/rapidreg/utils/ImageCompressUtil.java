@@ -9,10 +9,7 @@ import android.media.ExifInterface;
 import android.media.ThumbnailUtils;
 import android.provider.MediaStore;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -33,12 +30,16 @@ public class ImageCompressUtil {
         return BitmapFactory.decodeByteArray(byteSource, 0, byteSource.length);
     }
 
-    public static Bitmap getThumbnail(String imagePath, int size) {
-        return getThumbnail(BitmapFactory.decodeFile(imagePath), size);
+    public static Bitmap getThumbnail(String imagePath, int width, int height) {
+        return getThumbnail(BitmapFactory.decodeFile(imagePath), width, height);
     }
 
-    public static Bitmap getThumbnail(Bitmap bitmap, int size) {
-        return ThumbnailUtils.extractThumbnail(bitmap, size, size);
+    public static Bitmap getThumbnail(String imagePath, int size) {
+        return getThumbnail(BitmapFactory.decodeFile(imagePath), size, size);
+    }
+
+    public static Bitmap getThumbnail(Bitmap bitmap, int width, int height) {
+        return ThumbnailUtils.extractThumbnail(bitmap, width, height);
     }
 
     public static Bitmap getThumbnail(ContentResolver contentResolver, String path) {

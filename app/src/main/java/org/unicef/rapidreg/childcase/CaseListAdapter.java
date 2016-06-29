@@ -117,7 +117,6 @@ public class CaseListAdapter extends RecyclerView.Adapter<CaseListAdapter.CaseLi
                     e.printStackTrace();
                 }
             }
-
         });
         toggleTextArea(holder);
     }

@@ -8,9 +8,11 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import org.unicef.rapidreg.forms.childcase.CaseField;
+import org.unicef.rapidreg.service.cache.PageModeCached;
 import org.unicef.rapidreg.widgets.viewholder.AudioUploadViewHolder;
 import org.unicef.rapidreg.widgets.viewholder.BaseViewHolder;
 import org.unicef.rapidreg.widgets.viewholder.GenericViewHolder;
+import org.unicef.rapidreg.widgets.viewholder.PhotoUploadMiniFormViewHolder;
 import org.unicef.rapidreg.widgets.viewholder.PhotoUploadViewHolder;
 import org.unicef.rapidreg.widgets.viewholder.SeparatorViewHolder;
 import org.unicef.rapidreg.widgets.viewholder.SingleLineRadioViewHolder;
@@ -23,6 +25,7 @@ import java.util.List;
 public class CaseRegisterAdapter extends RecyclerView.Adapter<BaseViewHolder> {
 
     private static final String LAYOUT = "layout";
+    private static final String PREFIX = "form_";
     private static final int VIEW_HOLDER_GENERIC = 0;
     private static final int VIEW_HOLDER_SEPARATOR = 1;
     private static final int VIEW_HOLDER_TICK_BOX = 2;
@@ -32,8 +35,9 @@ public class CaseRegisterAdapter extends RecyclerView.Adapter<BaseViewHolder> {
     private static final int VIEW_HOLDER_TEXT = 6;
     private static final int VIEW_HOLDER_SELECT_SINGLE_LINE = 7;
     private static final int VIEW_HOLDER_RADIO_SINGLE_LINE = 8;
+    private static final int VIEW_HOLDER_PHOTO_UPLOAD_BOX_MINI_FORM = 9;
 
-    private static final String PREFIX = "form_";
+    private boolean isMiniForm;
 
     private List<CaseField> fields;
     private CaseActivity activity;
@@ -41,13 +45,14 @@ public class CaseRegisterAdapter extends RecyclerView.Adapter<BaseViewHolder> {
     protected Resources resources;
     protected String packageName;
 
-    public CaseRegisterAdapter(Context activity, List<CaseField> fields) {
+    public CaseRegisterAdapter(Context context, List<CaseField> fields, boolean isMiniForm) {
         this.fields = fields;
+        this.activity = (CaseActivity) context;
+        this.isMiniForm = isMiniForm;
 
-        this.activity = (CaseActivity) activity;
-        inflater = LayoutInflater.from(activity);
-        resources = activity.getResources();
-        packageName = activity.getPackageName();
+        inflater = LayoutInflater.from(context);
+        resources = context.getResources();
+        packageName = context.getPackageName();
     }
 
     @Override
@@ -74,6 +79,12 @@ public class CaseRegisterAdapter extends RecyclerView.Adapter<BaseViewHolder> {
                 return new PhotoUploadViewHolder(activity, inflater.inflate(resources
                                 .getIdentifier(PREFIX + CaseField.TYPE_PHOTO_UPLOAD_LAYOUT, LAYOUT, packageName),
                         parent, false));
+
+            case VIEW_HOLDER_PHOTO_UPLOAD_BOX_MINI_FORM:
+                return new PhotoUploadMiniFormViewHolder(activity, inflater.inflate(resources
+                                .getIdentifier(CaseField.TYPE_PHOTO_VIEW_SLIDER, LAYOUT, packageName),
+                        parent, false));
+
             case VIEW_HOLDER_AUDIO_UPLOAD_BOX:
                 return new AudioUploadViewHolder(activity, inflater.inflate(resources
                                 .getIdentifier(PREFIX + CaseField.TYPE_AUDIO_UPLOAD_LAYOUT, LAYOUT, packageName),
@@ -82,7 +93,6 @@ public class CaseRegisterAdapter extends RecyclerView.Adapter<BaseViewHolder> {
                 return new SubformViewHolder(activity, inflater.inflate(resources
                                 .getIdentifier(PREFIX + CaseField.TYPE_SUBFORM_FIELD, LAYOUT, packageName),
                         parent, false));
-
             default:
                 return new SeparatorViewHolder(activity, new View(activity));
         }
@@ -120,7 +130,10 @@ public class CaseRegisterAdapter extends RecyclerView.Adapter<BaseViewHolder> {
             return VIEW_HOLDER_TICK_BOX;
         }
         if (field.isPhotoUploadBox()) {
-            return VIEW_HOLDER_PHOTO_UPLOAD_BOX;
+            if (!PageModeCached.isDetailMode()) {
+                return VIEW_HOLDER_PHOTO_UPLOAD_BOX;
+            }
+            return isMiniForm ? VIEW_HOLDER_PHOTO_UPLOAD_BOX_MINI_FORM : VIEW_HOLDER_PHOTO_UPLOAD_BOX;
         }
         if (field.isAudioUploadBox()) {
             return VIEW_HOLDER_AUDIO_UPLOAD_BOX;
@@ -128,7 +141,6 @@ public class CaseRegisterAdapter extends RecyclerView.Adapter<BaseViewHolder> {
         if (field.isSubform()) {
             return VIEW_HOLDER_SUBFORM;
         }
-
         return VIEW_HOLDER_GENERIC;
     }
 

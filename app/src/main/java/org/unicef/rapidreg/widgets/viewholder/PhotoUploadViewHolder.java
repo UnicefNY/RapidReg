@@ -15,7 +15,8 @@ import android.widget.TextView;
 
 import org.unicef.rapidreg.R;
 import org.unicef.rapidreg.childcase.CaseActivity;
-import org.unicef.rapidreg.childcase.CasePhotoAdapter;
+import org.unicef.rapidreg.childcase.media.CasePhotoAdapter;
+import org.unicef.rapidreg.childcase.media.CasePhotoViewActivity;
 import org.unicef.rapidreg.forms.childcase.CaseField;
 import org.unicef.rapidreg.service.cache.CasePhotoCache;
 
@@ -54,7 +55,6 @@ public class PhotoUploadViewHolder extends BaseViewHolder<CaseField> {
             return;
         }
         appendAddPhotoIconExceptViewPage(previousPhotos);
-
         photoGrid.setAdapter(new CasePhotoAdapter(context, previousPhotos));
     }
 
@@ -108,11 +108,9 @@ public class PhotoUploadViewHolder extends BaseViewHolder<CaseField> {
     }
 
     private void showViewPhotoDialog(final int position) {
-        Intent intent = new Intent();
-        intent.setAction(Intent.ACTION_VIEW);
-        intent.setDataAndType(Uri.parse(
-                "file://" + CasePhotoCache.getPhotosPaths().get(position)), "image/*");
-        context.startActivity(intent);
+        Intent intent = new Intent(activity, CasePhotoViewActivity.class);
+        intent.putExtra("position", position);
+        activity.startActivity(intent);
     }
 
     private void showAddPhotoOptionDialog() {

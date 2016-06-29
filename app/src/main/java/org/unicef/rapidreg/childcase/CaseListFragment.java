@@ -156,7 +156,6 @@ public class CaseListFragment extends MvpFragment<CaseListView, CaseListPresente
                     R.string.syncing_forms_text, Toast.LENGTH_LONG).show();
             return;
         }
-
         floatingMenu.collapseImmediately();
 
         CaseActivity activity = (CaseActivity) getActivity();

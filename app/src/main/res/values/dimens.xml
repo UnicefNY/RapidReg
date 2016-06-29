@@ -66,6 +66,7 @@
     <dimen name="case_register_label_padding_left_right">20dp</dimen>
     <dimen name="case_register_field_padding_left_right">15dp</dimen>
     <dimen name="case_register_field_padding_top_bottom">16dp</dimen>
+    <dimen name="case_photo_view_pager_height_mini_form">205dp</dimen>
     <!--case register end-->
 
 </resources>

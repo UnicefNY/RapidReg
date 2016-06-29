@@ -85,7 +85,7 @@ public class SubformViewHolder extends BaseViewHolder<CaseField> {
 
         List<CaseField> fields = cloneFields();
         assignIndexForFields(fields, getInsertIndex());
-        CaseRegisterAdapter adapter = new CaseRegisterAdapter(activity, fields);
+        CaseRegisterAdapter adapter = new CaseRegisterAdapter(activity, fields, false);
         fieldList.setAdapter(adapter);
     }
 

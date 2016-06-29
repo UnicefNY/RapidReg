@@ -49,10 +49,10 @@ public class CasePhotoCache {
             Bitmap thumbnail = ImageCompressUtil.convertByteArrayToImage(casePhoto.getThumbnail().getBlob());
             addPhoto(thumbnail, CASE_PHOTO_FILE_PATH_FROM_DB.get(index++));
         }
-        asyncCachedPhotos(casePhotos);
+        asyncCachingPhotos(casePhotos);
     }
 
-    private static void asyncCachedPhotos(final List<CasePhoto> casePhotos) {
+    private static void asyncCachingPhotos(final List<CasePhoto> casePhotos) {
         ExecutorService service = Executors.newCachedThreadPool();
         service.execute(new Runnable() {
             @Override
@@ -90,6 +90,10 @@ public class CasePhotoCache {
 
     public static void clear() {
         photoBitPaths.clear();
+    }
+
+    public static int size() {
+        return photoBitPaths.size();
     }
 
     public static void initApplicationPackageName(String applicationPackageName) {

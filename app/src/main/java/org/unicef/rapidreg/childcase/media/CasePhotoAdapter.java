@@ -1,4 +1,4 @@
-package org.unicef.rapidreg.childcase;
+package org.unicef.rapidreg.childcase.media;
 
 import android.content.Context;
 import android.graphics.Bitmap;

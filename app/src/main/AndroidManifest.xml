@@ -35,10 +35,10 @@
             android:windowSoftInputMode="adjustResize" />
 
         <activity
-            android:name=".childcase.AudioRecorderActivity"
-            android:configChanges="orientation|keyboardHidden"
-            android:screenOrientation="portrait"
-            android:theme="@style/Transparent" />
+            android:name=".childcase.media.CasePhotoViewActivity"
+            android:windowSoftInputMode="adjustResize"></activity>
+        <activity
+            android:name=".childcase.AudioRecorderActivity" android:theme="@style/Transparent"></activity>
 
     </application>
 
