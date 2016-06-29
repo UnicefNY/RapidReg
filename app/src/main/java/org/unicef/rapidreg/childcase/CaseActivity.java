@@ -141,7 +141,11 @@ public class CaseActivity extends BaseActivity {
         currentFeature = feature;
         changeToolbarTitle(feature.getTitleId());
         changeToolbarIcon(feature);
-        navToFragment(feature.getFragment());
+        try {
+            navToFragment(feature.getFragment());
+        } catch (Exception e) {
+            throw new RuntimeException("Fragment navigation error", e);
+        }
     }
 
     public CaseFeature getCurrentFeature() {
@@ -278,9 +282,7 @@ public class CaseActivity extends BaseActivity {
         if (target != null) {
             String tag = target.getClass().getSimpleName();
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-            transaction.replace(R.id.fragment_content, target, tag)
-                    .addToBackStack(tag)
-                    .commit();
+            transaction.replace(R.id.fragment_content, target, tag).commit();
         }
     }
 

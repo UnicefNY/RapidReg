@@ -5,26 +5,26 @@ import android.support.v4.app.Fragment;
 import org.unicef.rapidreg.R;
 
 public enum CaseFeature {
-    LIST(R.string.cases, new CaseListFragment()),
-    ADD(R.string.new_case, new CaseRegisterWrapperFragment()),
+    LIST(R.string.cases, CaseListFragment.class),
+    ADD(R.string.new_case, CaseRegisterWrapperFragment.class),
     EDIT(R.string.edit, null),
-    DETAILS(R.string.case_details, new CaseRegisterWrapperFragment()),
-    SEARCH(R.string.search, new CaseSearchFragment());
+    DETAILS(R.string.case_details, CaseRegisterWrapperFragment.class),
+    SEARCH(R.string.search, CaseSearchFragment.class);
 
     private int titleId;
-    private Fragment fragment;
+    private Class clz;
 
-    CaseFeature(int titleId, Fragment fragment) {
+
+    CaseFeature(int titleId, Class clz) {
         this.titleId = titleId;
-        this.fragment = fragment;
-
+        this.clz = clz;
     }
 
     public int getTitleId() {
         return titleId;
     }
 
-    public Fragment getFragment() {
-        return fragment;
+    public Fragment getFragment() throws IllegalAccessException, InstantiationException {
+        return (Fragment) clz.newInstance();
     }
 }
