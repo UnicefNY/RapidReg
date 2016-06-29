@@ -30,6 +30,8 @@ public class CaseField {
     public static final String TYPE_NUMERIC_FIELD = "numeric_field";
     public static final String TYPE_PHOTO_VIEW_SLIDER = "case_photo_view_slider";
 
+    public static final String TYPE_MINI_FORM_PROFILE = "mini_form_profile";
+
     private static final int INVALID_INDEX = -1;
 
 
@@ -192,12 +194,16 @@ public class CaseField {
         return type.equals(TYPE_SELECT_BOX);
     }
 
-    public boolean isRaduiButton() {
+    public boolean isRadioButton() {
         return type.equals(TYPE_RADIO_BUTTON);
     }
 
     public boolean isNumericField() {
         return type.equals(TYPE_NUMERIC_FIELD);
+    }
+
+    public boolean isMiniFormProfile() {
+        return TYPE_MINI_FORM_PROFILE.equals(type);
     }
 
     public boolean isManyOptions() {
@@ -253,6 +259,7 @@ public class CaseField {
         newField.setParent(parent);
 
         return newField;
+
     }
 
     public enum FieldType {

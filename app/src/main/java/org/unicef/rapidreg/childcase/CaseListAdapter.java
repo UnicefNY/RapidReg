@@ -89,13 +89,22 @@ public class CaseListAdapter extends RecyclerView.Adapter<CaseListAdapter.CaseLi
         holder.caseImage.setImageDrawable(getDefaultAvatar(gender.getAvatarId()));
 
         String shortUUID = getShortUUID(caseItem.getUniqueId());
-        holder.id_normal_state.setText(shortUUID);
-        holder.id_hidden_state.setText(shortUUID);
+        holder.idNormalState.setText(shortUUID);
+        holder.idHiddenState.setText(shortUUID);
         holder.genderBadge.setImageDrawable(getDefaultGenderBadge(gender.getGenderId()));
         holder.genderName.setText(gender.getName());
         holder.genderName.setTextColor(ContextCompat.getColor(activity, gender.getColorId()));
         holder.age.setText(caseInfo.get("Age"));
         holder.registrationDate.setText(dateFormat.format(caseItem.getRegistrationDate()));
+
+        CaseFieldValueCache.addProfileItem(CaseFieldValueCache.CaseProfile.ID_NORMAL_STATE, shortUUID);
+        CaseFieldValueCache.addProfileItem(CaseFieldValueCache.CaseProfile.SEX, caseInfo.get("Sex"));
+        CaseFieldValueCache.addProfileItem(CaseFieldValueCache.CaseProfile.REGISTRATION_DATE,
+                dateFormat.format(caseItem.getRegistrationDate()));
+        CaseFieldValueCache.addProfileItem(CaseFieldValueCache.CaseProfile.GENDER_NAME, shortUUID);
+        CaseFieldValueCache.addProfileItem(CaseFieldValueCache.CaseProfile.AGE, caseInfo.get("Age"));
+
+        setProfileForMiniForm(shortUUID);
 
         holder.view.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -119,6 +128,10 @@ public class CaseListAdapter extends RecyclerView.Adapter<CaseListAdapter.CaseLi
             }
         });
         toggleTextArea(holder);
+    }
+
+    private void setProfileForMiniForm(String shortUUID) {
+
     }
 
     @Override
@@ -161,8 +174,8 @@ public class CaseListAdapter extends RecyclerView.Adapter<CaseListAdapter.CaseLi
     }
 
     public static class CaseListHolder extends RecyclerView.ViewHolder {
-        protected TextView id_normal_state;
-        protected TextView id_hidden_state;
+        protected TextView idNormalState;
+        protected TextView idHiddenState;
         protected ImageView genderBadge;
         protected TextView genderName;
         protected TextView age;
@@ -174,8 +187,8 @@ public class CaseListAdapter extends RecyclerView.Adapter<CaseListAdapter.CaseLi
         public CaseListHolder(View itemView) {
             super(itemView);
             view = itemView;
-            id_normal_state = (TextView) itemView.findViewById(R.id.id_normal_state);
-            id_hidden_state = (TextView) itemView.findViewById(R.id.id_on_hidden_state);
+            idNormalState = (TextView) itemView.findViewById(R.id.id_normal_state);
+            idHiddenState = (TextView) itemView.findViewById(R.id.id_on_hidden_state);
             genderBadge = (ImageView) itemView.findViewById(R.id.gender_badge);
             genderName = (TextView) itemView.findViewById(R.id.gender_name);
             age = (TextView) itemView.findViewById(R.id.age);

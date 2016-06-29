@@ -8,6 +8,7 @@ import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewGroup.LayoutParams;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
@@ -17,7 +18,6 @@ import org.unicef.rapidreg.forms.childcase.CaseField;
 import org.unicef.rapidreg.service.cache.CasePhotoCache;
 import org.unicef.rapidreg.utils.ImageCompressUtil;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -29,9 +29,13 @@ public class PhotoUploadMiniFormViewHolder extends BaseViewHolder<CaseField> imp
     @BindView(R.id.case_photo_view_slider)
     ViewPager viewPager;
 
+    @BindView(R.id.dot_view)
+    ViewGroup dotViewGroup;
+
     private CaseActivity caseActivity;
     private ImageView[] tips;
-    private List<ImageView> mImageViews = new ArrayList<>();
+
+    private boolean isPhotosPrepared;
 
     public PhotoUploadMiniFormViewHolder(Context context, View itemView) {
         super(context, itemView);
@@ -43,18 +47,41 @@ public class PhotoUploadMiniFormViewHolder extends BaseViewHolder<CaseField> imp
     public void setValue(CaseField field) {
         viewPager.setAdapter(new CasePhotoViewPagerAdapter());
         viewPager.addOnPageChangeListener(this);
-        initDots(viewPager);
-        initImages();
+        if (!isPhotosPrepared) {
+            initDots();
+            initImages();
+        }
     }
 
+    private void initDots() {
+        tips = new ImageView[CasePhotoCache.size()];
+        for (int i = 0; i < tips.length; i++) {
+            tips[i] = new ImageView(context);
+            tips[i].setLayoutParams(new LayoutParams(10, 10));
+            if (i == 0) {
+                tips[i].setBackgroundResource(R.drawable.page_indicator_focused);
+            } else {
+                tips[i].setBackgroundResource(R.drawable.page_indicator_unfocused);
+            }
+
+            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
+                    new ViewGroup.LayoutParams(LayoutParams.WRAP_CONTENT,
+                            LayoutParams.WRAP_CONTENT));
+            layoutParams.leftMargin = 5;
+            layoutParams.rightMargin = 5;
+            dotViewGroup.addView(tips[i], layoutParams);
+        }
+    }
+
+    // TODO Wait for the photos caching getting finished
     private void initImages() {
         try {
-            Thread.sleep(2000);
+            Thread.sleep(1000);
+            isPhotosPrepared = true;
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
     }
-
 
     @Override
     public void setOnClickListener(CaseField field) {
@@ -70,6 +97,7 @@ public class PhotoUploadMiniFormViewHolder extends BaseViewHolder<CaseField> imp
     public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
 
     }
+
 
     @Override
     public void onPageSelected(int position) {
@@ -89,26 +117,6 @@ public class PhotoUploadMiniFormViewHolder extends BaseViewHolder<CaseField> imp
     @Override
     public void onPageScrollStateChanged(int state) {
 
-    }
-
-    public void initDots(ViewGroup group) {
-        tips = new ImageView[CasePhotoCache.size()];
-        for (int i = 0; i < tips.length; i++) {
-            ImageView imageView = new ImageView(context);
-            imageView.setLayoutParams(new ViewGroup.LayoutParams(10, 10));
-            tips[i] = imageView;
-            if (i == 0) {
-                tips[i].setBackgroundResource(R.drawable.page_indicator_focused);
-            } else {
-                tips[i].setBackgroundResource(R.drawable.page_indicator_unfocused);
-            }
-            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
-                    new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
-                            ViewGroup.LayoutParams.WRAP_CONTENT));
-            layoutParams.leftMargin = 5;
-            layoutParams.rightMargin = 5;
-            group.addView(imageView, layoutParams);
-        }
     }
 
     public class CasePhotoViewPagerAdapter extends PagerAdapter {
