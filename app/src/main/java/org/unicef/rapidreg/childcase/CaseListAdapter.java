@@ -103,6 +103,7 @@ public class CaseListAdapter extends RecyclerView.Adapter<CaseListAdapter.CaseLi
                 dateFormat.format(caseItem.getRegistrationDate()));
         CaseFieldValueCache.addProfileItem(CaseFieldValueCache.CaseProfile.GENDER_NAME, shortUUID);
         CaseFieldValueCache.addProfileItem(CaseFieldValueCache.CaseProfile.AGE, caseInfo.get("Age"));
+        CaseFieldValueCache.addProfileItem(CaseFieldValueCache.CaseProfile.ID, String.valueOf(caseItem.getId()));
 
         setProfileForMiniForm(shortUUID);
 
@@ -113,7 +114,7 @@ public class CaseListAdapter extends RecyclerView.Adapter<CaseListAdapter.CaseLi
                 SubformCache.setValues(subformInfo);
                 List<CasePhoto> casePhotos = CasePhotoService.getInstance().getAllCasePhotos(caseItem.getId());
 
-                CasePhotoCache.cachePhotosFromDbToLocalFiles(casePhotos);
+                CasePhotoCache.syncPhotosPaths(casePhotos);
 
                 activity.turnToFeature(CaseFeature.DETAILS);
 

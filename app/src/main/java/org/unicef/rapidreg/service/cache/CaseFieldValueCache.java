@@ -14,6 +14,7 @@ public class CaseFieldValueCache {
         public static final String GENDER_NAME = "_gender_name";
         public static final String AGE = "_age";
         public static final String REGISTRATION_DATE = "_registration_date";
+        public static final String ID = "_id";
     }
 
     public static final String AUDIO_FILE_PATH = Environment.getExternalStorageDirectory().getAbsolutePath() + "/audiorecordtest.3gp";

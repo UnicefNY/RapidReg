@@ -2,6 +2,7 @@ package org.unicef.rapidreg.service.cache;
 
 import android.graphics.Bitmap;
 import android.os.Environment;
+import android.util.Log;
 
 import org.unicef.rapidreg.model.CasePhoto;
 import org.unicef.rapidreg.utils.ImageCompressUtil;
@@ -13,8 +14,6 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 public class CasePhotoCache {
     public static final int PHOTO_LIMIT = 4;
@@ -42,34 +41,26 @@ public class CasePhotoCache {
         }
     }
 
-    public static void cachePhotosFromDbToLocalFiles(List<CasePhoto> casePhotos) {
+    public static void syncPhotosPaths(List<CasePhoto> casePhotos) {
         clearLocalCachedPhotoFiles();
         int index = 0;
         for (CasePhoto casePhoto : casePhotos) {
             Bitmap thumbnail = ImageCompressUtil.convertByteArrayToImage(casePhoto.getThumbnail().getBlob());
             addPhoto(thumbnail, CASE_PHOTO_FILE_PATH_FROM_DB.get(index++));
         }
-        asyncCachingPhotos(casePhotos);
     }
 
-    private static void asyncCachingPhotos(final List<CasePhoto> casePhotos) {
-        ExecutorService service = Executors.newCachedThreadPool();
-        service.execute(new Runnable() {
-            @Override
-            public void run() {
-                int index = 0;
-                for (CasePhoto casePhoto : casePhotos) {
-                    try {
-                        Bitmap bitmap = ImageCompressUtil.convertByteArrayToImage(casePhoto.getPhoto().getBlob());
-                        ImageCompressUtil.storeImage(bitmap, CASE_PHOTO_FILE_PATH_FROM_DB.get(index++));
-                        bitmap.recycle();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
+    public static void syncCachingPhotos(final List<CasePhoto> casePhotos) {
+        int index = 0;
+        for (CasePhoto casePhoto : casePhotos) {
+            try {
+                Bitmap bitmap = ImageCompressUtil.convertByteArrayToImage(casePhoto.getPhoto().getBlob());
+                ImageCompressUtil.storeImage(bitmap, CASE_PHOTO_FILE_PATH_FROM_DB.get(index++));
+                bitmap.recycle();
+            } catch (IOException e) {
+                e.printStackTrace();
             }
-        });
-        service.shutdown();
+        }
     }
 
     public static boolean isEmpty() {
