@@ -260,6 +260,7 @@ public class CaseActivity extends BaseActivity {
                 caseToggleMenu.setVisible(true);
                 caseSearchMenu.setVisible(true);
                 break;
+            case EDIT:
             case ADD:
                 caseSaveMenu.setVisible(true);
                 break;
