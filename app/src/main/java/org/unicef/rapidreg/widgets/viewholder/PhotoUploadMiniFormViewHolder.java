@@ -57,13 +57,6 @@ public class PhotoUploadMiniFormViewHolder extends BaseViewHolder<CaseField> imp
         }
     }
 
-    public synchronized void setPhotoPrepared() {
-        isPhotosPrepared = true;
-    }
-
-    public synchronized boolean isPhotosPrepared() {
-        return isPhotosPrepared;
-    }
 
     private void initDots() {
         tips = new ImageView[CasePhotoCache.size()];
@@ -141,9 +134,6 @@ public class PhotoUploadMiniFormViewHolder extends BaseViewHolder<CaseField> imp
         @Override
         public void finishUpdate(ViewGroup container) {
             super.finishUpdate(container);
-            if (!isPhotosPrepared()) {
-                new UpdateImageViewTask(imageViews).execute();
-            }
         }
 
         @Override
@@ -152,24 +142,30 @@ public class PhotoUploadMiniFormViewHolder extends BaseViewHolder<CaseField> imp
             ImageView imageView = (ImageView) itemView.findViewById(R.id.case_photo_item);
             container.addView(itemView);
             imageViews.put(position, imageView);
+            new UpdateImageViewTask(imageView, position).execute();
             return itemView;
         }
 
 
         private class UpdateImageViewTask extends AsyncTask<String, Integer, Integer> {
-            private Map<Integer, ImageView> imageViews;
+            private ImageView imageView;
+            private int position;
 
-            public UpdateImageViewTask(Map<Integer, ImageView> imageViews) {
-                this.imageViews = imageViews;
+
+            public UpdateImageViewTask(ImageView imageView, int position) {
+                this.imageView = imageView;
+                this.position = position;
             }
 
             @Override
             protected Integer doInBackground(String... params) {
-                if (!isPhotosPrepared()) {
+                if (!isPhotosPrepared) {
                     synchronized (CasePhotoViewPagerAdapter.this) {
-                        long caseId = Long.parseLong(CaseFieldValueCache.getProfileValue(CaseFieldValueCache.CaseProfile.ID));
-                        CasePhotoCache.syncCachingPhotos(CasePhotoService.getInstance().getAllCasePhotos(caseId));
-                        setPhotoPrepared();
+                        if (!isPhotosPrepared) {
+                            long caseId = Long.parseLong(CaseFieldValueCache.getProfileValue(CaseFieldValueCache.CaseProfile.ID));
+                            CasePhotoCache.syncCachingPhotos(CasePhotoService.getInstance().getAllCasePhotos(caseId));
+                            isPhotosPrepared = true;
+                        }
                     }
                 }
                 return null;
@@ -183,12 +179,8 @@ public class PhotoUploadMiniFormViewHolder extends BaseViewHolder<CaseField> imp
                 int height = (int) context.getResources()
                         .getDimension(R.dimen.case_photo_view_pager_height_mini_form);
                 List<String> previousPhotoPaths = CasePhotoCache.getPhotosPaths();
-
-                for (Map.Entry<Integer, ImageView> imageViewEntry : imageViews.entrySet()) {
-                    Bitmap image = ImageCompressUtil.getThumbnail(previousPhotoPaths.get(imageViewEntry.getKey()), width, height);
-                    imageViewEntry.getValue().setImageBitmap(image);
-                    CasePhotoViewPagerAdapter.this.notifyDataSetChanged();
-                }
+                Bitmap image = ImageCompressUtil.getThumbnail(previousPhotoPaths.get(position), width, height);
+                imageView.setImageBitmap(image);
             }
         }
     }
