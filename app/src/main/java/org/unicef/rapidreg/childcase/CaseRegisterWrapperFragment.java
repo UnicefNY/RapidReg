@@ -95,7 +95,7 @@ public class CaseRegisterWrapperFragment extends Fragment {
                 new CaseRegisterAdapter(getActivity(), miniFields, true);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        if (miniFields.size() != 0) {
+        if (!miniFields.isEmpty()) {
             miniFormContainer.setLayoutManager(layoutManager);
             miniFormContainer.setAdapter(caseRegisterAdapter);
             miniFormSwipeLayout.setDragEdge(SwipeChangeLayout.DragEdge.BOTTOM);
@@ -112,6 +112,7 @@ public class CaseRegisterWrapperFragment extends Fragment {
             miniFormSwipeLayout.setEnableFlingBack(false);
             miniFormLayout.setVisibility(View.GONE);
             fullFormLayout.setVisibility(View.VISIBLE);
+            fullFormSwipeLayout.setEnableFlingBack(false);
         }
     }
 
