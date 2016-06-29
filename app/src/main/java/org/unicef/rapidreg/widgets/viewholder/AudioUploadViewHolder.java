@@ -51,6 +51,11 @@ public class AudioUploadViewHolder extends BaseViewHolder {
         }
     }
 
+    @Override
+    protected String getResult() {
+        return null;
+    }
+
 
     @OnClick(R.id.record_button)
     public void onRecordButtonClicked() {
