@@ -95,13 +95,11 @@ public class CaseActivity extends BaseActivity {
     }
 
     @Override
-    public void onBackPressed() {
+    protected void processBackButton() {
         if (currentFeature == CaseFeature.LIST) {
-            moveTaskToBack(true);
-        } else if (currentFeature == CaseFeature.DETAILS) {
-            turnToFeature(CaseFeature.LIST);
-            super.onBackPressed();
-        } else if (currentFeature == CaseFeature.EDIT) {
+            logOut(this);
+        } else if (currentFeature == CaseFeature.EDIT
+                || currentFeature == CaseFeature.ADD) {
             new AlertDialog.Builder(this)
                     .setTitle(R.string.quit)
                     .setMessage(R.string.quit_without_saving)
@@ -110,15 +108,44 @@ public class CaseActivity extends BaseActivity {
                         public void onClick(DialogInterface dialogInterface, int i) {
                             turnToFeature(CaseFeature.LIST);
                         }
-                    })
-                    .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                    }).show();
+        } else {
+            turnToFeature(CaseFeature.LIST);
+        }
+    }
+
+    @Override
+    protected void navCaseAction() {
+        if (isCaseInEdit()) {
+            new AlertDialog.Builder(this)
+                    .setTitle(R.string.quit)
+                    .setMessage(R.string.quit_without_saving)
+                    .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
+                            CaseFieldValueCache.clearAudioFile();
+                            turnToFeature(CaseFeature.LIST);
                         }
                     }).show();
         } else {
-            super.onBackPressed();
+            CaseFieldValueCache.clearAudioFile();
+            turnToFeature(CaseFeature.LIST);
         }
+    }
+
+    public boolean isCaseInEdit() {
+        return currentFeature == CaseFeature.EDIT;
+    }
+
+    public void turnToFeature(CaseFeature feature) {
+        currentFeature = feature;
+        changeToolbarTitle(feature.getTitleId());
+        changeToolbarIcon(feature);
+        navToFragment(feature.getFragment());
+    }
+
+    public CaseFeature getCurrentFeature() {
+        return currentFeature;
     }
 
     private void initToolbar() {
@@ -173,11 +200,12 @@ public class CaseActivity extends BaseActivity {
                     turnToFeature(CaseFeature.SEARCH);
                     return true;
                 case R.id.save_case:
-                    return saveCaseButtonAction();
+                    return saveCase();
                 default:
                     return false;
             }
         }
+
     }
 
     private void showHideCaseDetail() {
@@ -189,7 +217,7 @@ public class CaseActivity extends BaseActivity {
         caseListFragment.toggleMode(textAreaState.isDetailShow());
     }
 
-    private boolean saveCaseButtonAction() {
+    private boolean saveCase() {
         if (validateRequiredField()) {
             Map<Bitmap, String> photoBitPaths = CasePhotoCache.getPhotoBitPaths();
             CaseService.getInstance().saveOrUpdateCase(CaseFieldValueCache.getValues(),
@@ -250,41 +278,10 @@ public class CaseActivity extends BaseActivity {
         if (target != null) {
             String tag = target.getClass().getSimpleName();
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-            transaction.replace(R.id.fragment_content, target, tag).commit();
+            transaction.replace(R.id.fragment_content, target, tag)
+                    .addToBackStack(tag)
+                    .commit();
         }
-    }
-
-    public boolean isCaseInEdit() {
-        return currentFeature == CaseFeature.EDIT;
-    }
-
-    public void turnToFeature(CaseFeature feature) {
-        currentFeature = feature;
-        changeToolbarTitle(feature.getTitleId());
-        changeToolbarIcon(feature);
-        navToFragment(feature.getFragment());
-    }
-
-    public void navCaseAction() {
-        if (isCaseInEdit()) {
-            new AlertDialog.Builder(this)
-                    .setTitle(R.string.quit)
-                    .setMessage(R.string.quit_without_saving)
-                    .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                            CaseFieldValueCache.clearAudioFile();
-                            turnToFeature(CaseFeature.LIST);
-                        }
-                    }).show();
-        } else {
-            CaseFieldValueCache.clearAudioFile();
-            turnToFeature(CaseFeature.LIST);
-        }
-    }
-
-    public CaseFeature getCurrentFeature() {
-        return currentFeature;
     }
 
     public enum DetailState {

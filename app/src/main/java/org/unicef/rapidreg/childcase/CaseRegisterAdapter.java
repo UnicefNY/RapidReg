@@ -13,8 +13,8 @@ import org.unicef.rapidreg.widgets.viewholder.BaseViewHolder;
 import org.unicef.rapidreg.widgets.viewholder.GenericViewHolder;
 import org.unicef.rapidreg.widgets.viewholder.PhotoUploadViewHolder;
 import org.unicef.rapidreg.widgets.viewholder.SeparatorViewHolder;
-import org.unicef.rapidreg.widgets.viewholder.SubformViewHolder;
 import org.unicef.rapidreg.widgets.viewholder.SingleLineRadioViewHolder;
+import org.unicef.rapidreg.widgets.viewholder.SubformViewHolder;
 import org.unicef.rapidreg.widgets.viewholder.TextViewHolder;
 import org.unicef.rapidreg.widgets.viewholder.TickBoxViewHolder;
 
@@ -55,18 +55,17 @@ public class CaseRegisterAdapter extends RecyclerView.Adapter<BaseViewHolder> {
         switch (viewType) {
             case VIEW_HOLDER_TEXT:
                 return new TextViewHolder(activity, inflater.inflate(resources
-                                .getIdentifier(PREFIX + CaseField.TYPE_TEXT_FIELD,
-                                        LAYOUT, packageName), parent, false));
+                        .getIdentifier(PREFIX + CaseField.TYPE_TEXT_FIELD,
+                                LAYOUT, packageName), parent, false));
             case VIEW_HOLDER_RADIO_SINGLE_LINE:
                 return new SingleLineRadioViewHolder(activity, inflater.inflate(resources
-                                .getIdentifier(PREFIX + CaseField.TYPE_SINGLE_LINE_RADIO,
-                                        LAYOUT, packageName), parent, false));
+                        .getIdentifier(PREFIX + CaseField.TYPE_SINGLE_LINE_RADIO,
+                                LAYOUT, packageName), parent, false));
             case VIEW_HOLDER_SELECT_SINGLE_LINE:
             case VIEW_HOLDER_GENERIC:
-
                 return new GenericViewHolder(activity, inflater.inflate(resources
-                                .getIdentifier(PREFIX + CaseField.TYPE_TEXT_FIELD, LAYOUT, packageName),
-                        parent, false));
+                                .getIdentifier(PREFIX + CaseField.TYPE_TEXT_FIELD,
+                                        LAYOUT, packageName), parent, false));
             case VIEW_HOLDER_TICK_BOX:
                 return new TickBoxViewHolder(activity, inflater.inflate(resources
                                 .getIdentifier(PREFIX + CaseField.TYPE_TICK_BOX, LAYOUT, packageName),

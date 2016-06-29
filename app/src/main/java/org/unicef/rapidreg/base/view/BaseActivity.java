@@ -79,7 +79,7 @@ public abstract class BaseActivity extends AppCompatActivity
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
-            super.onBackPressed();
+            processBackButton();
         }
     }
 
@@ -102,6 +102,14 @@ public abstract class BaseActivity extends AppCompatActivity
         return (PrimeroApplication) getApplication();
     }
 
+    protected void logOut(BaseActivity currentActivity) {
+        PrimeroApplication context = currentActivity.getContext();
+        String message = context.getResources().getString(R.string.login_out_successful_text);
+        UserService.getInstance().setCurrentUser(null);
+        Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
+        intentSender.showLoginActivity(currentActivity);
+    }
+
     //TODO: Put logout into basePresenter in future
     private void attemptLogout(BaseActivity currentActivity) {
         if (getContext().getSyncTask() != null) {
@@ -109,14 +117,6 @@ public abstract class BaseActivity extends AppCompatActivity
         } else {
             logOut(currentActivity);
         }
-    }
-
-    private void logOut(BaseActivity currentActivity) {
-        PrimeroApplication context = currentActivity.getContext();
-        String message = context.getResources().getString(R.string.login_out_successful_text);
-        UserService.getInstance().setCurrentUser(null);
-        Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
-        intentSender.showLoginActivity(currentActivity);
     }
 
     private void createAlertDialog(BaseActivity currentActivity) {
@@ -132,5 +132,7 @@ public abstract class BaseActivity extends AppCompatActivity
         return new ColorStateList(COLOR_STATES, color);
     }
 
-    public abstract void navCaseAction();
+    protected abstract void navCaseAction();
+
+    protected abstract void processBackButton();
 }
