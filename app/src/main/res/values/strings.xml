@@ -52,7 +52,8 @@
     </string-array>
 
     <string name="pull_down_load_mini_form">... Pull Down To Load Mini Form ...</string>
-    <string name="pull_up_load_full_form">... Pull Up To Load Full Form ...</string>
+    <string name="pull_up_load_full_form">... Swipe Up To Show More Details ...</string>
+    <string name="swipe_up_to_show_more_details">Swipe Up To Show More Details</string>
     <string name="no_photo_promote_info">No photo file exists.</string>
     <string name="delete">Delete</string>
     <string name="add">Add</string>
