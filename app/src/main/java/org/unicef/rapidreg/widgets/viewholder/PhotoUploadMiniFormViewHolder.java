@@ -36,14 +36,12 @@ public class PhotoUploadMiniFormViewHolder extends BaseViewHolder<CaseField> imp
 
     public PhotoUploadMiniFormViewHolder(Context context, View itemView) {
         super(context, itemView);
-        Log.i("sjyuan", "PhotoUploadMiniFormViewHolder constructor = " + itemView);
         ButterKnife.bind(this, itemView);
         caseActivity = (CaseActivity) context;
     }
 
     @Override
     public void setValue(CaseField field) {
-        Log.i("sjyuan", "PhotoUploadMiniFormViewHolder setValue = " + field);
         viewPager.setAdapter(new MyAdapter());
         viewPager.addOnPageChangeListener(this);
         initDots(viewPager);
@@ -123,7 +121,7 @@ public class PhotoUploadMiniFormViewHolder extends BaseViewHolder<CaseField> imp
 
         @Override
         public void destroyItem(ViewGroup container, int position, Object object) {
-            super.destroyItem(container, position, object);
+//            super.destroyItem(container, position, object);
 //            ((ViewPager) container).removeView(mImageViews[position % mImageViews.size()]);
         }
 

@@ -36,9 +36,11 @@
 
         <activity
             android:name=".childcase.media.CasePhotoViewActivity"
-            android:windowSoftInputMode="adjustResize"></activity>
+            android:theme="@style/Transparent"
+            />
         <activity
-            android:name=".childcase.AudioRecorderActivity" android:theme="@style/Transparent"></activity>
+            android:name=".childcase.AudioRecorderActivity"
+            android:theme="@style/Transparent" />
 
     </application>
 
