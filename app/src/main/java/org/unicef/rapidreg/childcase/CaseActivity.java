@@ -22,6 +22,7 @@ import android.widget.Toast;
 
 import org.unicef.rapidreg.R;
 import org.unicef.rapidreg.base.view.BaseActivity;
+import org.unicef.rapidreg.childcase.media.CasePhotoAdapter;
 import org.unicef.rapidreg.forms.childcase.CaseFormRoot;
 import org.unicef.rapidreg.forms.childcase.CaseSection;
 import org.unicef.rapidreg.service.CaseFormService;
@@ -67,8 +68,7 @@ public class CaseActivity extends BaseActivity {
         GridView photoGrid = (GridView) findViewById(R.id.photo_grid);
 
         List<Bitmap> previousPhotos = CasePhotoCache.getPhotosBits();
-        Bitmap newPhoto = ImageCompressUtil.getThumbnail(
-                ImageCompressUtil.compressBySize(imagePath, 512, 860), 80);
+        Bitmap newPhoto = ImageCompressUtil.getThumbnail(imagePath, 80);
         previousPhotos.add(newPhoto);
         CasePhotoCache.addPhoto(newPhoto, imagePath);
 
@@ -187,6 +187,7 @@ public class CaseActivity extends BaseActivity {
         return mediaStorageDir.getPath() + File.separator + System.currentTimeMillis() + ".jpg";
     }
 
+
     private class CaseMenuItemListener implements Toolbar.OnMenuItemClickListener {
         @Override
         public boolean onMenuItemClick(MenuItem menuItem) {
@@ -221,7 +222,6 @@ public class CaseActivity extends BaseActivity {
             CaseService.getInstance().saveOrUpdateCase(CaseFieldValueCache.getValues(),
                     SubformCache.getValues(),
                     photoBitPaths);
-
             turnToFeature(CaseFeature.LIST);
         }
         return true;

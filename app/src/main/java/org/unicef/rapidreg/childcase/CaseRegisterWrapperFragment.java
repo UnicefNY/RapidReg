@@ -73,7 +73,7 @@ public class CaseRegisterWrapperFragment extends Fragment {
 
     private void initMiniFormContainer() {
         CaseRegisterAdapter caseRegisterAdapter =
-                new CaseRegisterAdapter(getActivity(), miniFields);
+                new CaseRegisterAdapter(getActivity(), miniFields, true);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         if (miniFields.size() != 0) {
@@ -101,6 +101,7 @@ public class CaseRegisterWrapperFragment extends Fragment {
                 getActivity().getSupportFragmentManager(), getPages());
         viewPager.setAdapter(adapter);
         viewPagerTab.setViewPager(viewPager);
+
         viewPagerTab.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -147,7 +148,11 @@ public class CaseRegisterWrapperFragment extends Fragment {
         for (CaseSection section : sections) {
             for (CaseField caseField : section.getFields()) {
                 if (caseField.isShowOnMiniForm()) {
-                    miniFields.add(caseField);
+                    if (caseField.isPhotoUploadBox()) {
+                        miniFields.add(0, caseField);
+                    } else {
+                        miniFields.add(caseField);
+                    }
                 }
             }
         }
@@ -162,6 +167,4 @@ public class CaseRegisterWrapperFragment extends Fragment {
         }
         return pages;
     }
-
-
 }
