@@ -96,45 +96,24 @@ public class CaseActivity extends BaseActivity {
 
     @Override
     protected void processBackButton() {
-        if (currentFeature == CaseFeature.LIST) {
+        if (currentFeature.isInListMode()) {
             logOut(this);
-        } else if (currentFeature == CaseFeature.EDIT
-                || currentFeature == CaseFeature.ADD) {
-            new AlertDialog.Builder(this)
-                    .setTitle(R.string.quit)
-                    .setMessage(R.string.quit_without_saving)
-                    .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                            turnToFeature(CaseFeature.LIST);
-                        }
-                    }).show();
-        } else {
-            turnToFeature(CaseFeature.LIST);
-        }
-    }
-
-    @Override
-    protected void navCaseAction() {
-        if (isCaseInEdit()) {
-            new AlertDialog.Builder(this)
-                    .setTitle(R.string.quit)
-                    .setMessage(R.string.quit_without_saving)
-                    .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                            CaseFieldValueCache.clearAudioFile();
-                            turnToFeature(CaseFeature.LIST);
-                        }
-                    }).show();
+        } else if (currentFeature.isInEditMode()) {
+            showQuitDialog();
         } else {
             CaseFieldValueCache.clearAudioFile();
             turnToFeature(CaseFeature.LIST);
         }
     }
 
-    public boolean isCaseInEdit() {
-        return currentFeature == CaseFeature.EDIT;
+    @Override
+    protected void navCaseAction() {
+        if (currentFeature.isInEditMode()) {
+            showQuitDialog();
+        } else {
+            CaseFieldValueCache.clearAudioFile();
+            turnToFeature(CaseFeature.LIST);
+        }
     }
 
     public void turnToFeature(CaseFeature feature) {
@@ -150,6 +129,19 @@ public class CaseActivity extends BaseActivity {
 
     public CaseFeature getCurrentFeature() {
         return currentFeature;
+    }
+
+    private void showQuitDialog() {
+        new AlertDialog.Builder(this)
+                .setTitle(R.string.quit)
+                .setMessage(R.string.quit_without_saving)
+                .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        CaseFieldValueCache.clearAudioFile();
+                        turnToFeature(CaseFeature.LIST);
+                    }
+                }).show();
     }
 
     private void initToolbar() {

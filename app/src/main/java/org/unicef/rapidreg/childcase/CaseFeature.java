@@ -27,4 +27,20 @@ public enum CaseFeature {
     public Fragment getFragment() throws IllegalAccessException, InstantiationException {
         return (Fragment) clz.newInstance();
     }
+
+    public boolean isInEditMode() {
+        return this == ADD || this == EDIT;
+    }
+
+    public boolean isInListMode() {
+        return this == LIST;
+    }
+
+    public boolean isInDetailMode() {
+        return this == DETAILS;
+    }
+
+    public boolean isInAddMode() {
+        return this == ADD;
+    }
 }

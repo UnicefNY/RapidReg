@@ -15,7 +15,6 @@ import android.widget.TextView;
 
 import org.unicef.rapidreg.R;
 import org.unicef.rapidreg.childcase.CaseActivity;
-import org.unicef.rapidreg.childcase.CaseFeature;
 import org.unicef.rapidreg.childcase.CasePhotoAdapter;
 import org.unicef.rapidreg.forms.childcase.CaseField;
 import org.unicef.rapidreg.service.cache.CasePhotoCache;
@@ -60,7 +59,7 @@ public class PhotoUploadViewHolder extends BaseViewHolder<CaseField> {
     }
 
     private void appendAddPhotoIconExceptViewPage(List<Bitmap> previousPhotos) {
-        if (activity.getCurrentFeature() != CaseFeature.DETAILS) {
+        if (!activity.getCurrentFeature().isInDetailMode()) {
             int addIconId = CasePhotoCache.isEmpty() ? R.drawable.photo_camera : R.drawable.photo_add;
             Bitmap addPhotoIcon = BitmapFactory.decodeResource(context.getResources(), addIconId);
             previousPhotos.add(addPhotoIcon);
@@ -70,7 +69,7 @@ public class PhotoUploadViewHolder extends BaseViewHolder<CaseField> {
     }
 
     private void setOnItemClickListenerOnViewPage() {
-        if (activity.getCurrentFeature() == CaseFeature.DETAILS) {
+        if (activity.getCurrentFeature().isInDetailMode()) {
             photoGrid.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
