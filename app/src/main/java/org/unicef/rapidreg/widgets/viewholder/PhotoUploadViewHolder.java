@@ -1,6 +1,5 @@
 package org.unicef.rapidreg.widgets.viewholder;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -16,12 +15,12 @@ import android.widget.TextView;
 
 import org.unicef.rapidreg.R;
 import org.unicef.rapidreg.childcase.CaseActivity;
+import org.unicef.rapidreg.childcase.CaseFeature;
 import org.unicef.rapidreg.childcase.CasePhotoAdapter;
 import org.unicef.rapidreg.forms.childcase.CaseField;
 import org.unicef.rapidreg.service.cache.CasePhotoCache;
 
 import java.io.File;
-import java.io.Serializable;
 import java.util.List;
 
 import butterknife.BindView;
@@ -38,12 +37,12 @@ public class PhotoUploadViewHolder extends BaseViewHolder<CaseField> {
     @BindView(R.id.no_photo_promote_view)
     TextView noPhotoPromoteView;
 
-    private CaseActivity caseActivity;
+    private CaseActivity activity;
 
     public PhotoUploadViewHolder(Context context, View itemView) {
         super(context, itemView);
         ButterKnife.bind(this, itemView);
-        caseActivity = (CaseActivity) context;
+        activity = (CaseActivity) context;
     }
 
     @Override
@@ -61,9 +60,7 @@ public class PhotoUploadViewHolder extends BaseViewHolder<CaseField> {
     }
 
     private void appendAddPhotoIconExceptViewPage(List<Bitmap> previousPhotos) {
-        Serializable caseMode = ((Activity) context).getIntent()
-                .getSerializableExtra(CaseActivity.INTENT_KEY_CASE_MODE);
-        if (CaseActivity.CaseMode.DETAIL != caseMode) {
+        if (activity.getCurrentFeature() != CaseFeature.DETAILS) {
             int addIconId = CasePhotoCache.isEmpty() ? R.drawable.photo_camera : R.drawable.photo_add;
             Bitmap addPhotoIcon = BitmapFactory.decodeResource(context.getResources(), addIconId);
             previousPhotos.add(addPhotoIcon);
@@ -73,9 +70,7 @@ public class PhotoUploadViewHolder extends BaseViewHolder<CaseField> {
     }
 
     private void setOnItemClickListenerOnViewPage() {
-        Serializable caseMode = ((Activity) context).getIntent()
-                .getSerializableExtra(CaseActivity.INTENT_KEY_CASE_MODE);
-        if (CaseActivity.CaseMode.DETAIL == caseMode) {
+        if (activity.getCurrentFeature() == CaseFeature.DETAILS) {
             photoGrid.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
@@ -135,11 +130,11 @@ public class PhotoUploadViewHolder extends BaseViewHolder<CaseField> {
                     Uri saveUri = Uri.fromFile(new File(CasePhotoCache.MEDIA_PATH_FOR_CAMERA));
                     Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                     intent.putExtra(MediaStore.EXTRA_OUTPUT, saveUri);
-                    caseActivity.startActivityForResult(intent, REQUEST_CODE_CAMERA);
+                    activity.startActivityForResult(intent, REQUEST_CODE_CAMERA);
                 } else if (fromGalleryItem.equals(items[item])) {
                     Intent intent = new Intent(Intent.ACTION_PICK,
                             android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                    caseActivity.startActivityForResult(intent, REQUEST_CODE_GALLERY);
+                    activity.startActivityForResult(intent, REQUEST_CODE_GALLERY);
                 } else if (cancelItem.equals(items[item])) {
                     dialog.dismiss();
                 }
@@ -148,7 +143,7 @@ public class PhotoUploadViewHolder extends BaseViewHolder<CaseField> {
     }
 
     private void showDeletionConfirmDialog(final int position) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(caseActivity);
+        AlertDialog.Builder builder = new AlertDialog.Builder(activity);
         builder.setMessage("Are you sure to remove this photo?");
         builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
             @Override

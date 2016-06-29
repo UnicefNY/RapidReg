@@ -34,35 +34,27 @@ import org.unicef.rapidreg.widgets.viewholder.PhotoUploadViewHolder;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
 public class CaseActivity extends BaseActivity {
-    public final static String INTENT_KEY_CASE_MODE = "_case_mode";
-
-    private String imagePath;
-
-    private GridView photoGrid;
     private DetailState textAreaState = DetailState.VISIBILITY;
 
-    public enum CaseMode {
-        EDIT, ADD, LIST, DETAIL, SEARCH
-    }
+    private MenuItem caseSaveMenu;
+    private MenuItem caseSearchMenu;
+    private MenuItem caseToggleMenu;
+
+    private String imagePath;
+    private CaseFeature currentFeature;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        toolbar.inflateMenu(R.menu.toolbar_main);
-        toolbar.setOnMenuItemClickListener(new CaseMenuItemListener());
-        toolbar.setTitle(R.string.cases);
-        if (savedInstanceState == null) {
-            redirectFragment(new CaseListFragment());
-            setTopMenuItemsInCaseListPage();
-            getIntent().removeExtra(INTENT_KEY_CASE_MODE);
-        }
+        initToolbar();
+
+        turnToFeature(CaseFeature.LIST);
     }
 
     @Override
@@ -72,7 +64,7 @@ public class CaseActivity extends BaseActivity {
         if (TextUtils.isEmpty(imagePath)) {
             return;
         }
-        photoGrid = (GridView) findViewById(R.id.photo_grid);
+        GridView photoGrid = (GridView) findViewById(R.id.photo_grid);
 
         List<Bitmap> previousPhotos = CasePhotoCache.getPhotosBits();
         Bitmap newPhoto = ImageCompressUtil.getThumbnail(
@@ -100,6 +92,42 @@ public class CaseActivity extends BaseActivity {
         } else if (PhotoUploadViewHolder.REQUEST_CODE_CAMERA == requestCode) {
             onCaptureImageResult();
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (currentFeature == CaseFeature.LIST) {
+            moveTaskToBack(true);
+        } else if (currentFeature == CaseFeature.DETAILS) {
+            turnToFeature(CaseFeature.LIST);
+            super.onBackPressed();
+        } else if (currentFeature == CaseFeature.EDIT) {
+            new AlertDialog.Builder(this)
+                    .setTitle(R.string.quit)
+                    .setMessage(R.string.quit_without_saving)
+                    .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            turnToFeature(CaseFeature.LIST);
+                        }
+                    })
+                    .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                        }
+                    }).show();
+        } else {
+            super.onBackPressed();
+        }
+    }
+
+    private void initToolbar() {
+        toolbar.inflateMenu(R.menu.toolbar_main);
+        toolbar.setOnMenuItemClickListener(new CaseMenuItemListener());
+
+        caseSaveMenu = toolbar.getMenu().findItem(R.id.save_case);
+        caseSearchMenu = toolbar.getMenu().findItem(R.id.search);
+        caseToggleMenu = toolbar.getMenu().findItem(R.id.toggle);
     }
 
     private void onSelectFromGalleryResult(Intent data) {
@@ -134,35 +162,6 @@ public class CaseActivity extends BaseActivity {
         return mediaStorageDir.getPath() + File.separator + System.currentTimeMillis() + ".jpg";
     }
 
-    @Override
-    public void onBackPressed() {
-        Serializable caseMode = getIntent().getSerializableExtra(INTENT_KEY_CASE_MODE);
-        if (CaseActivity.CaseMode.LIST == caseMode) {
-            moveTaskToBack(true);
-        } else if (CaseMode.DETAIL == caseMode) {
-            setTopMenuItemsInCaseListPage();
-            super.onBackPressed();
-        } else if (CaseMode.EDIT == caseMode) {
-            new AlertDialog.Builder(this)
-                    .setTitle("Quit")
-                    .setMessage("Are you sure to quit without saving?")
-                    .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                            redirectFragment(new CaseListFragment());
-                            setTopMenuItemsInCaseListPage();
-                        }
-                    })
-                    .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                        }
-                    }).show();
-        } else {
-            super.onBackPressed();
-        }
-    }
-
     private class CaseMenuItemListener implements Toolbar.OnMenuItemClickListener {
         @Override
         public boolean onMenuItemClick(MenuItem menuItem) {
@@ -171,13 +170,10 @@ public class CaseActivity extends BaseActivity {
                     showHideCaseDetail();
                     return true;
                 case R.id.search:
-                    redirectFragment(new CaseSearchFragment());
-                    setTopMenuItemsInCaseSearchPage();
+                    turnToFeature(CaseFeature.SEARCH);
                     return true;
                 case R.id.save_case:
                     return saveCaseButtonAction();
-                case R.id.edit_case:
-                    return editCaseButtonAction();
                 default:
                     return false;
             }
@@ -187,8 +183,7 @@ public class CaseActivity extends BaseActivity {
     private void showHideCaseDetail() {
         textAreaState = textAreaState.getNextState();
 
-        MenuItem item = toolbar.getMenu().findItem(R.id.toggle);
-        item.setIcon(textAreaState.getResId());
+        caseToggleMenu.setIcon(textAreaState.getResId());
         CaseListFragment caseListFragment = (CaseListFragment) getSupportFragmentManager()
                 .findFragmentByTag(CaseListFragment.class.getSimpleName());
         caseListFragment.toggleMode(textAreaState.isDetailShow());
@@ -200,23 +195,10 @@ public class CaseActivity extends BaseActivity {
             CaseService.getInstance().saveOrUpdateCase(CaseFieldValueCache.getValues(),
                     SubformCache.getValues(),
                     photoBitPaths);
-            redirectFragment(new CaseListFragment());
-            setTopMenuItemsInCaseListPage();
+
+            turnToFeature(CaseFeature.LIST);
         }
         return true;
-    }
-
-    private boolean editCaseButtonAction() {
-        redirectFragment(new CaseRegisterWrapperFragment());
-        getIntent().removeExtra(INTENT_KEY_CASE_MODE);
-        setTopMenuItemsInCaseEditPage();
-        return true;
-    }
-
-    private void redirectFragment(Fragment target) {
-        String name = target.getClass().getSimpleName();
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.fragment_content, target, name).commit();
     }
 
     private boolean validateRequiredField() {
@@ -230,11 +212,79 @@ public class CaseActivity extends BaseActivity {
 
         for (String field : requiredFieldNames) {
             if (TextUtils.isEmpty(CaseFieldValueCache.getValues().get(field))) {
-                Toast.makeText(CaseActivity.this, "Some required field is not filled, please fill them", Toast.LENGTH_LONG).show();
+                Toast.makeText(CaseActivity.this, R.string.required_field_is_not_filled,
+                        Toast.LENGTH_LONG).show();
                 return false;
             }
         }
         return true;
+    }
+
+    private void hideAllToolbarIcons() {
+        caseToggleMenu.setVisible(false);
+        caseSearchMenu.setVisible(false);
+        caseSaveMenu.setVisible(false);
+    }
+
+    private void changeToolbarIcon(CaseFeature feature) {
+        hideAllToolbarIcons();
+
+        switch (feature) {
+            case LIST:
+                caseToggleMenu.setVisible(true);
+                caseSearchMenu.setVisible(true);
+                break;
+            case ADD:
+                caseSaveMenu.setVisible(true);
+                break;
+            default:
+                break;
+        }
+    }
+
+    private void changeToolbarTitle(int resId) {
+        toolbar.setTitle(resId);
+    }
+
+    private void navToFragment(Fragment target) {
+        if (target != null) {
+            String tag = target.getClass().getSimpleName();
+            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+            transaction.replace(R.id.fragment_content, target, tag).commit();
+        }
+    }
+
+    public boolean isCaseInEdit() {
+        return currentFeature == CaseFeature.EDIT;
+    }
+
+    public void turnToFeature(CaseFeature feature) {
+        currentFeature = feature;
+        changeToolbarTitle(feature.getTitleId());
+        changeToolbarIcon(feature);
+        navToFragment(feature.getFragment());
+    }
+
+    public void navCaseAction() {
+        if (isCaseInEdit()) {
+            new AlertDialog.Builder(this)
+                    .setTitle(R.string.quit)
+                    .setMessage(R.string.quit_without_saving)
+                    .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            CaseFieldValueCache.clearAudioFile();
+                            turnToFeature(CaseFeature.LIST);
+                        }
+                    }).show();
+        } else {
+            CaseFieldValueCache.clearAudioFile();
+            turnToFeature(CaseFeature.LIST);
+        }
+    }
+
+    public CaseFeature getCurrentFeature() {
+        return currentFeature;
     }
 
     public enum DetailState {

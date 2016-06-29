@@ -1,7 +1,6 @@
 package org.unicef.rapidreg.childcase;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -46,12 +45,12 @@ public class CaseListAdapter extends RecyclerView.Adapter<CaseListAdapter.CaseLi
     private static final int TEXT_AREA_HIDDEN_STATE = 1;
 
     private List<Case> caseList = new ArrayList<>();
-    private Context context;
+    private CaseActivity activity;
     private DateFormat dateFormat = SimpleDateFormat.getDateInstance(DateFormat.MEDIUM, Locale.US);
     private boolean isDetailShow = true;
 
-    public CaseListAdapter(Context context) {
-        this.context = context;
+    public CaseListAdapter(Context activity) {
+        this.activity = (CaseActivity) activity;
     }
 
     public void setCaseList(List<Case> caseList) {
@@ -94,7 +93,7 @@ public class CaseListAdapter extends RecyclerView.Adapter<CaseListAdapter.CaseLi
         holder.id_hidden_state.setText(shortUUID);
         holder.genderBadge.setImageDrawable(getDefaultGenderBadge(gender.getGenderId()));
         holder.genderName.setText(gender.getName());
-        holder.genderName.setTextColor(ContextCompat.getColor(context, gender.getColorId()));
+        holder.genderName.setTextColor(ContextCompat.getColor(activity, gender.getColorId()));
         holder.age.setText(caseInfo.get("Age"));
         holder.registrationDate.setText(dateFormat.format(caseItem.getRegistrationDate()));
 
@@ -107,13 +106,8 @@ public class CaseListAdapter extends RecyclerView.Adapter<CaseListAdapter.CaseLi
 
                 CasePhotoCache.cachePhotosFromDbToLocalFiles(casePhotos);
 
-                CaseActivity caseActivity = (CaseActivity) context;
-                setViewMode(caseActivity);
-                caseActivity.getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.fragment_content, new CaseRegisterWrapperFragment(),
-                                CaseRegisterWrapperFragment.class.getSimpleName())
-                        .addToBackStack(null)
-                        .commit();
+                activity.turnToFeature(CaseFeature.DETAILS);
+
                 try {
                     CaseFieldValueCache.clearAudioFile();
                     if (caseItem.getAudio() != null) {
@@ -124,12 +118,6 @@ public class CaseListAdapter extends RecyclerView.Adapter<CaseListAdapter.CaseLi
                 }
             }
 
-            private void setViewMode(CaseActivity caseActivity) {
-                Intent intent = new Intent();
-                intent.putExtra(CaseActivity.INTENT_KEY_CASE_MODE, CaseActivity.CaseMode.DETAIL);
-                caseActivity.setIntent(intent);
-                caseActivity.setTopMenuItemsInCaseDetailPage();
-            }
         });
         toggleTextArea(holder);
     }
@@ -153,7 +141,7 @@ public class CaseListAdapter extends RecyclerView.Adapter<CaseListAdapter.CaseLi
     }
 
     private Drawable getDefaultGenderBadge(int genderId) {
-        return ResourcesCompat.getDrawable(context.getResources(), genderId, null);
+        return ResourcesCompat.getDrawable(activity.getResources(), genderId, null);
     }
 
     private Drawable getDefaultAvatar(int resId) {
@@ -161,7 +149,7 @@ public class CaseListAdapter extends RecyclerView.Adapter<CaseListAdapter.CaseLi
     }
 
     private Drawable getRoundedDrawable(int resId) {
-        Resources resources = this.context.getResources();
+        Resources resources = activity.getResources();
         Bitmap img = BitmapFactory.decodeResource(resources, resId);
         RoundedBitmapDrawable dr = RoundedBitmapDrawableFactory.create(resources, img);
         dr.setCornerRadius(Math.max(img.getWidth(), img.getHeight()) / 2.0f);

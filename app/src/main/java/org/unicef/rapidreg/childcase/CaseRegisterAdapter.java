@@ -1,6 +1,5 @@
 package org.unicef.rapidreg.childcase;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.res.Resources;
 import android.support.v7.widget.RecyclerView;
@@ -19,7 +18,6 @@ import org.unicef.rapidreg.widgets.viewholder.SingleLineRadioViewHolder;
 import org.unicef.rapidreg.widgets.viewholder.TextViewHolder;
 import org.unicef.rapidreg.widgets.viewholder.TickBoxViewHolder;
 
-import java.io.Serializable;
 import java.util.List;
 
 public class CaseRegisterAdapter extends RecyclerView.Adapter<BaseViewHolder> {
@@ -38,55 +36,56 @@ public class CaseRegisterAdapter extends RecyclerView.Adapter<BaseViewHolder> {
     private static final String PREFIX = "form_";
 
     private List<CaseField> fields;
-    private Context context;
+    private CaseActivity activity;
     protected LayoutInflater inflater;
     protected Resources resources;
     protected String packageName;
 
-    public CaseRegisterAdapter(Context context, List<CaseField> fields) {
+    public CaseRegisterAdapter(Context activity, List<CaseField> fields) {
         this.fields = fields;
 
-        this.context = context;
-        inflater = LayoutInflater.from(context);
-        resources = context.getResources();
-        packageName = context.getPackageName();
+        this.activity = (CaseActivity) activity;
+        inflater = LayoutInflater.from(activity);
+        resources = activity.getResources();
+        packageName = activity.getPackageName();
     }
 
     @Override
     public BaseViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         switch (viewType) {
             case VIEW_HOLDER_TEXT:
-                return new TextViewHolder(context, inflater.inflate(resources
+                return new TextViewHolder(activity, inflater.inflate(resources
                                 .getIdentifier(PREFIX + CaseField.TYPE_TEXT_FIELD,
-                                        "layout", packageName), parent, false));
+                                        LAYOUT, packageName), parent, false));
             case VIEW_HOLDER_RADIO_SINGLE_LINE:
-                return new SingleLineRadioViewHolder(context, inflater.inflate(resources
+                return new SingleLineRadioViewHolder(activity, inflater.inflate(resources
                                 .getIdentifier(PREFIX + CaseField.TYPE_SINGLE_LINE_RADIO,
-                                        "layout", packageName), parent, false));
+                                        LAYOUT, packageName), parent, false));
             case VIEW_HOLDER_SELECT_SINGLE_LINE:
             case VIEW_HOLDER_GENERIC:
-                return new GenericViewHolder(context, inflater.inflate(resources
-                        .getIdentifier(PREFIX + CaseField.TYPE_GENERIC_LAYOUT,
-                                "layout", packageName), parent, false));
+
+                return new GenericViewHolder(activity, inflater.inflate(resources
+                                .getIdentifier(CaseField.TYPE_TEXT_FIELD, LAYOUT, packageName),
+                        parent, false));
             case VIEW_HOLDER_TICK_BOX:
-                return new TickBoxViewHolder(context, inflater.inflate(resources
-                                .getIdentifier(PREFIX + CaseField.TYPE_TICK_BOX,
-                                        "layout", packageName), parent, false));
-            case VIEW_HOLDER_SUBFORM:
-                return new SubformViewHolder(context, inflater.inflate(resources
-                        .getIdentifier(PREFIX + CaseField.TYPE_SUBFORM_FIELD, LAYOUT, packageName),
+                return new TickBoxViewHolder(activity, inflater.inflate(resources
+                                .getIdentifier(CaseField.TYPE_TICK_BOX, LAYOUT, packageName),
                         parent, false));
             case VIEW_HOLDER_PHOTO_UPLOAD_BOX:
-                return new PhotoUploadViewHolder(context, inflater.inflate(resources
-                                .getIdentifier(PREFIX + CaseField.TYPE_PHOTO_UPLOAD_LAYOUT,
-                                        "layout", packageName), parent, false));
+                return new PhotoUploadViewHolder(activity, inflater.inflate(resources
+                                .getIdentifier(CaseField.TYPE_PHOTO_UPLOAD_LAYOUT, LAYOUT, packageName),
+                        parent, false));
             case VIEW_HOLDER_AUDIO_UPLOAD_BOX:
-                return new AudioUploadViewHolder(context, inflater.inflate(resources
-                                .getIdentifier(PREFIX + CaseField.TYPE_AUDIO_UPLOAD_LAYOUT,
-                                        "layout", packageName ), parent, false));
+                return new AudioUploadViewHolder(activity, inflater.inflate(resources
+                                .getIdentifier(CaseField.TYPE_AUDIO_UPLOAD_LAYOUT, LAYOUT, packageName),
+                        parent, false));
+            case VIEW_HOLDER_SUBFORM:
+                return new SubformViewHolder(activity, inflater.inflate(resources
+                                .getIdentifier(CaseField.TYPE_SUBFORM_FIELD, LAYOUT, packageName),
+                        parent, false));
 
             default:
-                return new SeparatorViewHolder(context, new View(context));
+                return new SeparatorViewHolder(activity, new View(activity));
         }
     }
 
@@ -95,9 +94,7 @@ public class CaseRegisterAdapter extends RecyclerView.Adapter<BaseViewHolder> {
         CaseField field = fields.get(position);
         holder.setValue(field);
 
-        Serializable caseMode = ((Activity) context).getIntent()
-                .getSerializableExtra(CaseActivity.INTENT_KEY_CASE_MODE);
-        if (CaseActivity.CaseMode.DETAIL != caseMode) {
+        if (activity.getCurrentFeature() != CaseFeature.DETAILS) {
             holder.setOnClickListener(field);
         }
     }
