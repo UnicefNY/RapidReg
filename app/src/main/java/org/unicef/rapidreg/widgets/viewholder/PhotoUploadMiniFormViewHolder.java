@@ -181,6 +181,7 @@ public class PhotoUploadMiniFormViewHolder extends BaseViewHolder<CaseField> imp
                 List<String> previousPhotoPaths = CasePhotoCache.getPhotosPaths();
                 Bitmap image = ImageCompressUtil.getThumbnail(previousPhotoPaths.get(position), width, height);
                 imageView.setImageBitmap(image);
+                CasePhotoViewPagerAdapter.this.notifyDataSetChanged();
             }
         }
     }
