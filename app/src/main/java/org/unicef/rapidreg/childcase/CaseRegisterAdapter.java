@@ -110,10 +110,8 @@ public class CaseRegisterAdapter extends RecyclerView.Adapter<BaseViewHolder> {
         }
         if (field.isSelectField()) {
             if (!field.isManyOptions()) {
-                if (field.isMultiSelect()) {
-                    return VIEW_HOLDER_SELECT_SINGLE_LINE;
-                }
-                return VIEW_HOLDER_RADIO_SINGLE_LINE;
+                return field.isMultiSelect() ?
+                        VIEW_HOLDER_SELECT_SINGLE_LINE : VIEW_HOLDER_RADIO_SINGLE_LINE;
             }
         }
         if (field.isRaduiButton()) {
