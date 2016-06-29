@@ -64,8 +64,8 @@ public class CaseRegisterAdapter extends RecyclerView.Adapter<BaseViewHolder> {
             case VIEW_HOLDER_SELECT_SINGLE_LINE:
             case VIEW_HOLDER_GENERIC:
                 return new GenericViewHolder(activity, inflater.inflate(resources
-                                .getIdentifier(PREFIX + CaseField.TYPE_TEXT_FIELD,
-                                        LAYOUT, packageName), parent, false));
+                        .getIdentifier(PREFIX + CaseField.TYPE_TEXT_FIELD,
+                                LAYOUT, packageName), parent, false));
             case VIEW_HOLDER_TICK_BOX:
                 return new TickBoxViewHolder(activity, inflater.inflate(resources
                                 .getIdentifier(PREFIX + CaseField.TYPE_TICK_BOX, LAYOUT, packageName),
@@ -93,7 +93,7 @@ public class CaseRegisterAdapter extends RecyclerView.Adapter<BaseViewHolder> {
         CaseField field = fields.get(position);
         holder.setValue(field);
 
-        if (activity.getCurrentFeature() != CaseFeature.DETAILS) {
+        if (!activity.getCurrentFeature().isInDetailMode()) {
             holder.setOnClickListener(field);
         }
     }
