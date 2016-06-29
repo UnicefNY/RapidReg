@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 
+import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.ogaclejapan.smarttablayout.SmartTabLayout;
 import com.ogaclejapan.smarttablayout.utils.v4.FragmentPagerItem;
 import com.ogaclejapan.smarttablayout.utils.v4.FragmentPagerItems;
@@ -29,6 +30,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class CaseRegisterWrapperFragment extends Fragment {
 
@@ -53,6 +55,9 @@ public class CaseRegisterWrapperFragment extends Fragment {
     @BindView(R.id.mini_form_container)
     RecyclerView miniFormContainer;
 
+    @BindView(R.id.edit_case)
+    FloatingActionButton editCaseButton;
+
     private CaseFormRoot caseForm;
     private List<CaseSection> sections;
     private List<CaseField> miniFields;
@@ -66,9 +71,23 @@ public class CaseRegisterWrapperFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_cases_register_wrapper, container, false);
         ButterKnife.bind(this, view);
         initCaseFormData();
+        initFloatingActionButton();
         initMiniFormContainer();
         initFullFormContainer();
         return view;
+    }
+
+    @OnClick(R.id.edit_case)
+    public void onCaseEditClicked() {
+        ((CaseActivity) getActivity()).turnToFeature(CaseFeature.EDIT);
+    }
+
+    private void initFloatingActionButton() {
+        if (((CaseActivity) getActivity()).getCurrentFeature() == CaseFeature.DETAILS) {
+            editCaseButton.setVisibility(View.VISIBLE);
+        } else {
+            editCaseButton.setVisibility(View.GONE);
+        }
     }
 
     private void initMiniFormContainer() {

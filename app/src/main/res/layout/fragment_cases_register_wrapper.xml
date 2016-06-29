@@ -96,6 +96,17 @@
 
         </org.unicef.rapidreg.base.view.SwipeChangeLayout>
 
+        <com.getbase.floatingactionbutton.FloatingActionButton
+            android:id="@+id/edit_case"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:scrollY="3dp"
+            android:src="@drawable/edit_white"
+            app:fab_colorNormal="@color/ftn_blue"
+            app:fab_colorPressed="@color/ftn_blue"/>
+
     </RelativeLayout>
 
 </RelativeLayout>
