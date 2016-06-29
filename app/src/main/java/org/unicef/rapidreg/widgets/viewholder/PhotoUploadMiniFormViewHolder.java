@@ -112,10 +112,7 @@ public class PhotoUploadMiniFormViewHolder extends BaseViewHolder<CaseField> imp
 
     public class CasePhotoViewPagerAdapter extends PagerAdapter {
 
-        private Map<Integer, ImageView> imageViews = new HashMap<>();
-
         @Override
-
         public int getCount() {
             return CasePhotoCache.size();
         }
@@ -128,12 +125,6 @@ public class PhotoUploadMiniFormViewHolder extends BaseViewHolder<CaseField> imp
         @Override
         public void destroyItem(ViewGroup container, int position, Object object) {
             container.removeView((View) object);
-            imageViews.remove(imageViews.get(position));
-        }
-
-        @Override
-        public void finishUpdate(ViewGroup container) {
-            super.finishUpdate(container);
         }
 
         @Override
@@ -141,7 +132,6 @@ public class PhotoUploadMiniFormViewHolder extends BaseViewHolder<CaseField> imp
             View itemView = LayoutInflater.from(context).inflate(R.layout.case_photo_view_item, container, false);
             ImageView imageView = (ImageView) itemView.findViewById(R.id.case_photo_item);
             container.addView(itemView);
-            imageViews.put(position, imageView);
             new UpdateImageViewTask(imageView, position).execute();
             return itemView;
         }
