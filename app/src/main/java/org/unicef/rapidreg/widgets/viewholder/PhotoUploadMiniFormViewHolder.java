@@ -5,7 +5,6 @@ import android.graphics.Bitmap;
 import android.graphics.Point;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -42,7 +41,7 @@ public class PhotoUploadMiniFormViewHolder extends BaseViewHolder<CaseField> imp
 
     @Override
     public void setValue(CaseField field) {
-        viewPager.setAdapter(new MyAdapter());
+        viewPager.setAdapter(new CasePhotoViewPagerAdapter());
         viewPager.addOnPageChangeListener(this);
         initDots(viewPager);
         initImages();
@@ -107,7 +106,7 @@ public class PhotoUploadMiniFormViewHolder extends BaseViewHolder<CaseField> imp
         }
     }
 
-    public class MyAdapter extends PagerAdapter {
+    public class CasePhotoViewPagerAdapter extends PagerAdapter {
 
         @Override
         public int getCount() {
@@ -121,8 +120,7 @@ public class PhotoUploadMiniFormViewHolder extends BaseViewHolder<CaseField> imp
 
         @Override
         public void destroyItem(ViewGroup container, int position, Object object) {
-//            super.destroyItem(container, position, object);
-//            ((ViewPager) container).removeView(mImageViews[position % mImageViews.size()]);
+            container.removeView((View) object);
         }
 
         @Override
@@ -134,14 +132,14 @@ public class PhotoUploadMiniFormViewHolder extends BaseViewHolder<CaseField> imp
                     .getDimension(R.dimen.case_photo_view_pager_height_mini_form);
 
             List<String> previousPhotoPaths = CasePhotoCache.getPhotosPaths();
-
-            View swipeView = LayoutInflater.from(context).inflate(R.layout.case_photo_view_item, container, false);
-            ImageView imageView = (ImageView) swipeView.findViewById(R.id.case_photo_item);
+            View itemView = LayoutInflater.from(context).inflate(R.layout.case_photo_view_item, container, false);
+            ImageView imageView = (ImageView) itemView.findViewById(R.id.case_photo_item);
 
             Bitmap image = ImageCompressUtil.getThumbnail(previousPhotoPaths.get(position), width, height);
             imageView.setImageBitmap(image);
-            container.addView(imageView);
-            return imageView;
+
+            container.addView(itemView);
+            return itemView;
         }
     }
 }
