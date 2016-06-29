@@ -1,7 +1,5 @@
 package org.unicef.rapidreg.base.view;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -20,25 +18,24 @@ import android.widget.Toast;
 import org.unicef.rapidreg.IntentSender;
 import org.unicef.rapidreg.PrimeroApplication;
 import org.unicef.rapidreg.R;
-import org.unicef.rapidreg.childcase.CaseActivity;
-import org.unicef.rapidreg.childcase.CaseListFragment;
 import org.unicef.rapidreg.service.UserService;
-import org.unicef.rapidreg.service.cache.CaseFieldValueCache;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class BaseActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+public abstract class BaseActivity extends AppCompatActivity
+        implements NavigationView.OnNavigationItemSelectedListener {
+
     private static final int[][] COLOR_STATES = new int[][]{
             new int[]{android.R.attr.state_checked},
             new int[]{-android.R.attr.state_checked},};
 
     @BindView(R.id.toolbar)
     protected Toolbar toolbar;
+    @BindView(R.id.nav_view)
+    protected NavigationView navigationView;
     @BindView(R.id.drawer_layout)
     DrawerLayout drawer;
-    @BindView(R.id.nav_view)
-    NavigationView navigationView;
 
     IntentSender intentSender = new IntentSender();
 
@@ -77,12 +74,10 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
         drawer.openDrawer(GravityCompat.START);
     }
 
-
     @Override
     public void onBackPressed() {
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
-            getIntent().putExtra(CaseActivity.INTENT_KEY_CASE_MODE, CaseActivity.CaseMode.LIST);
         } else {
             super.onBackPressed();
         }
@@ -103,104 +98,8 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
         return true;
     }
 
-    public void navCaseAction() {
-        if (isCaseInEdit()) {
-            new AlertDialog.Builder(this)
-                    .setTitle("Quit")
-                    .setMessage("Are you sure to quit without saving?")
-                    .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                            redirectToCaseListPage();
-                        }
-                    })
-                    .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                        }
-                    }).show();
-        } else {
-            redirectToCaseListPage();
-        }
-    }
-
-    private void redirectToCaseListPage() {
-        setTopMenuItemsInCaseListPage();
-        navigationView.getMenu().findItem(R.id.nav_cases).setChecked(true);
-        getSupportFragmentManager().beginTransaction()
-                .replace(R.id.fragment_content, new CaseListFragment(),
-                        CaseListFragment.class.getSimpleName())
-                .commit();
-        CaseFieldValueCache.clearAudioFile();
-    }
-
-    public void setTopMenuItemsInCaseDetailPage() {
-        getIntent().putExtra(CaseActivity.INTENT_KEY_CASE_MODE, CaseActivity.CaseMode.DETAIL);
-        setEditCaseVisible(true);
-        setSaveCaseVisible(false);
-        setToggleCaseVisible(false);
-        setSearchCaseVisible(false);
-        setTittle(R.string.case_details);
-    }
-
-    public void setTopMenuItemsInCaseListPage() {
-        getIntent().putExtra(CaseActivity.INTENT_KEY_CASE_MODE, CaseActivity.CaseMode.LIST);
-        setEditCaseVisible(false);
-        setSaveCaseVisible(false);
-        setToggleCaseVisible(true);
-        setSearchCaseVisible(true);
-        setTittle(R.string.cases);
-    }
-
-    public void setTopMenuItemsInCaseEditPage() {
-        getIntent().putExtra(CaseActivity.INTENT_KEY_CASE_MODE, CaseActivity.CaseMode.EDIT);
-        setEditCaseVisible(false);
-        setSaveCaseVisible(true);
-        setToggleCaseVisible(false);
-        setSearchCaseVisible(false);
-        setTittle(R.string.edit);
-    }
-
-    public void setTopMenuItemsInCaseAdditionPage() {
-        getIntent().putExtra(CaseActivity.INTENT_KEY_CASE_MODE, CaseActivity.CaseMode.ADD);
-        setEditCaseVisible(false);
-        setToggleCaseVisible(false);
-        setSearchCaseVisible(false);
-        setSaveCaseVisible(true);
-        setTittle(R.string.cases);
-    }
-
-    public void setTopMenuItemsInCaseSearchPage() {
-        getIntent().putExtra(CaseActivity.INTENT_KEY_CASE_MODE, CaseActivity.CaseMode.SEARCH);
-        setEditCaseVisible(false);
-        setToggleCaseVisible(false);
-        setSaveCaseVisible(false);
-        setSearchCaseVisible(false);
-        setTittle(R.string.search);
-    }
-
-    public boolean isCaseInEdit() {
-        return toolbar.getMenu().findItem(R.id.save_case).isVisible();
-    }
-
-    private void setTittle(int resId) {
-        toolbar.setTitle(resId);
-    }
-
-    private void setSaveCaseVisible(boolean visible) {
-        toolbar.getMenu().findItem(R.id.save_case).setVisible(visible);
-    }
-
-    private void setEditCaseVisible(boolean visible) {
-        toolbar.getMenu().findItem(R.id.edit_case).setVisible(visible);
-    }
-
-    private void setSearchCaseVisible(boolean visible) {
-        toolbar.getMenu().findItem(R.id.search).setVisible(visible);
-    }
-
-    private void setToggleCaseVisible(boolean visible) {
-        toolbar.getMenu().findItem(R.id.toggle).setVisible(visible);
+    public PrimeroApplication getContext() {
+        return (PrimeroApplication) getApplication();
     }
 
     //TODO: Put logout into basePresenter in future
@@ -224,10 +123,6 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
         //TODO: alert box
     }
 
-    public PrimeroApplication getContext() {
-        return (PrimeroApplication) getApplication();
-    }
-
     private ColorStateList generateColors(int resId) {
         int[] color = new int[]{
                 ContextCompat.getColor(this, resId),
@@ -236,4 +131,6 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
 
         return new ColorStateList(COLOR_STATES, color);
     }
+
+    public abstract void navCaseAction();
 }

@@ -12,7 +12,6 @@ import org.unicef.rapidreg.R;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Set;
 
 public class CasePhotoAdapter extends BaseAdapter {
     private Context context;
@@ -33,15 +32,15 @@ public class CasePhotoAdapter extends BaseAdapter {
         }
     }
 
-    public List<Bitmap> getAllItems(){
+    public List<Bitmap> getAllItems() {
         return photos;
     }
 
-    public void removeItem(int index){
+    public void removeItem(int index) {
         photos.remove(index);
     }
 
-    public void clearItems(){
+    public void clearItems() {
         photos.clear();
     }
 

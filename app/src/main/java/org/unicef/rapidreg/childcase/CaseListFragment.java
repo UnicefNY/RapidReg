@@ -156,14 +156,11 @@ public class CaseListFragment extends MvpFragment<CaseListView, CaseListPresente
                     R.string.syncing_forms_text, Toast.LENGTH_LONG).show();
             return;
         }
-        getActivity().getSupportFragmentManager().beginTransaction()
-                .replace(R.id.fragment_content, new CaseRegisterWrapperFragment(),
-                        CaseRegisterWrapperFragment.class.getSimpleName())
-                .commit();
 
-        getActivity().getIntent().removeExtra(CaseActivity.INTENT_KEY_CASE_MODE);
+        floatingMenu.collapseImmediately();
+
         CaseActivity activity = (CaseActivity) getActivity();
-        activity.setTopMenuItemsInCaseAdditionPage();
+        activity.turnToFeature(CaseFeature.ADD);
     }
 
     public void toggleMode(boolean isShow) {
