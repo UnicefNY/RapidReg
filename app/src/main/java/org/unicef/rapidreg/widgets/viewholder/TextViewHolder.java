@@ -58,7 +58,7 @@ public class TextViewHolder extends BaseViewHolder<CaseField> {
             viewSwitcher.setDisplayedChild(GenericViewHolder.FORM_HAS_ANSWER_STATE);
         }
 
-        disableUnediatbleField(field, null);
+        disableUnediatbleField(field, valueView);
 
         if (field.isNumericField()) {
             valueView.setInputType(InputType.TYPE_CLASS_NUMBER);
