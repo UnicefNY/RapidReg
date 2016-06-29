@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,19 +28,17 @@ public class CasePhotoViewActivity extends AppCompatActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.case_photo_view_slider);
+
         Point size = new Point();
         getWindowManager().getDefaultDisplay().getSize(size);
-        Log.i("sjyuan", "width = " + size.x + ", height = " + size.y);
         viewPager = (ViewPager) findViewById(R.id.case_photo_view_slider);
         viewPager.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
 
-        viewPager.setAdapter(new MyAdapter());
+        viewPager.setAdapter(new CasePhotoViewPagerAdapter());
         viewPager.setCurrentItem(getIntent().getIntExtra("position", 0));
     }
 
-    public class MyAdapter extends PagerAdapter {
-
-//        private Map<Integer, ImageView> imageViews = new HashMap<>();
+    public class CasePhotoViewPagerAdapter extends PagerAdapter {
 
         @Override
         public int getCount() {
@@ -55,37 +52,26 @@ public class CasePhotoViewActivity extends AppCompatActivity {
 
         @Override
         public void destroyItem(ViewGroup container, int position, Object object) {
-            Log.i("sjyuan", "removed position = " + position);
-//            Log.i("sjyuan", "removed image view = " + imageViews.get(position).hashCode());
-//            container.removeView(imageViews.get(position));
+            container.removeView((View) object);
         }
 
         @Override
         public Object instantiateItem(ViewGroup container, int position) {
             Point size = new Point();
             getWindowManager().getDefaultDisplay().getSize(size);
-            Log.i("sjyuan", "size = " + size.toString());
 
             List<String> previousPhotoPaths = CasePhotoCache.getPhotosPaths();
 
-            View swipeView = LayoutInflater.from(CasePhotoViewActivity.this).inflate(R.layout.case_photo_view_item, container, false);
+            View itemView = LayoutInflater.from(CasePhotoViewActivity.this)
+                    .inflate(R.layout.case_photo_view_item, container, false);
 
-            ImageView imageView = (ImageView) swipeView.findViewById(R.id.case_photo_item);
+            ImageView imageView = (ImageView) itemView.findViewById(R.id.case_photo_item);
             imageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
-
             Bitmap image = ImageCompressUtil.compressBySize(previousPhotoPaths.get(position), size.x, size.y);
             imageView.setImageBitmap(image);
 
-            Log.i("sjyuan", "added position = " + position);
-            Log.i("sjyuan", "added image view = " + imageView.hashCode());
-
-            try {
-                container.addView(imageView);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-//            imageViews.put(position, imageView);
-            return imageView;
+            container.addView(itemView);
+            return itemView;
         }
     }
 }
