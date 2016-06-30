@@ -17,6 +17,8 @@ import org.unicef.rapidreg.forms.childcase.CaseField;
 import org.unicef.rapidreg.service.cache.CaseFieldValueCache;
 import org.unicef.rapidreg.service.cache.SubformCache;
 
+import java.util.Map;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -96,29 +98,21 @@ public class TextViewHolder extends BaseTextViewHolder {
                             viewSwitcher.setDisplayedChild(GenericViewHolder.FORM_NO_ANSWER_STATE);
                         } else {
                             viewSwitcher.setDisplayedChild(GenericViewHolder.FORM_HAS_ANSWER_STATE);
+                            if (!TextUtils.isEmpty(valueView.getText())) {
+                                if (isSubformField(field)) {
+                                    SubformCache.put(field.getParent(), getValues(field));
+                                } else {
+                                    CaseFieldValueCache.put(field.getDisplayName().get("en"), valueView.getText().toString());
+                                    if (!TextUtils.isEmpty(valueView.getText())) {
+                                        if (isSubformField(field)) {
+                                            SubformCache.put(field.getParent(), getValues(field));
+                                        } else {
+                                            CaseFieldValueCache.put(field.getDisplayName().get("en"), valueView.getText().toString());
+                                        }
+                                    }
+                                }
+                            }
                         }
-                    }
-                }
-            }
-        });
-        valueView.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                if (!TextUtils.isEmpty(valueView.getText())) {
-                    if (isSubformField(field)) {
-                        SubformCache.put(field.getParent(), getValues(field));
-                    } else {
-                        CaseFieldValueCache.put(field.getDisplayName().get("en"), valueView.getText().toString());
                     }
                 }
             }
