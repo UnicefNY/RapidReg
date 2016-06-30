@@ -18,7 +18,6 @@ import butterknife.OnClick;
 
 
 public class AudioUploadViewHolder extends BaseViewHolder {
-
     private static String mFileName = null;
 
     @BindView(R.id.record_button)
@@ -29,8 +28,8 @@ public class AudioUploadViewHolder extends BaseViewHolder {
     ImageView audioDeleteButton;
     @BindView(R.id.no_file_text_view)
     TextView noFileTextView;
-    private CaseActivity activity;
 
+    private CaseActivity activity;
 
     public AudioUploadViewHolder(Context context, View itemView) {
         super(context, itemView);
@@ -51,10 +50,24 @@ public class AudioUploadViewHolder extends BaseViewHolder {
         }
     }
 
+    @OnClick(R.id.play_button)
+    public void onPlayButtonClicked() {
+        Intent intent = new Intent(activity, AudioRecorderActivity.class);
+        intent.putExtra(AudioRecorderActivity.CURRENT_STATE, AudioRecorderActivity.START_PLAYING);
+        int requestCode = 2;
+        activity.startActivityForResult(intent, requestCode);
+    }
+
+    @OnClick(R.id.delete_button)
+    public void onDeleteButtonClicked() {
+        initAudioRecordUI();
+        CaseFieldValueCache.clearAudioFile();
+    }
+
     @OnClick(R.id.record_button)
     public void onRecordButtonClicked() {
         Intent intent = new Intent(activity, AudioRecorderActivity.class);
-        intent.putExtra("currentState", "StartRecording");
+        intent.putExtra(AudioRecorderActivity.CURRENT_STATE, AudioRecorderActivity.START_RECORDING);
         int requestCode = 1;
         activity.startActivityForResult(intent, requestCode);
         recordButton.setVisibility(View.GONE);
@@ -75,24 +88,8 @@ public class AudioUploadViewHolder extends BaseViewHolder {
         } else {
             recordButton.setVisibility(View.GONE);
             playButton.setVisibility(View.GONE);
-            noFileTextView.setText("No audio file exists.");
+            noFileTextView.setText(R.string.audio_file_not_exists);
         }
-    }
-
-
-    @OnClick(R.id.play_button)
-    public void onPlayButtonClicked() {
-        Intent intent = new Intent(activity, AudioRecorderActivity.class);
-        intent.putExtra("currentState", "StartPlaying");
-        int requestCode = 2;
-        activity.startActivityForResult(intent, requestCode);
-    }
-
-
-    @OnClick(R.id.delete_button)
-    public void onDeleteButtonClicked() {
-        initAudioRecordUI();
-        CaseFieldValueCache.clearAudioFile();
     }
 
     private void initAudioRecordUI() {
