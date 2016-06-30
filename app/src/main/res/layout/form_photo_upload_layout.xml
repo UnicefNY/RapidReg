@@ -8,7 +8,7 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="10dp"
-        android:background="@color/lighter_gray" />
+        android:background="@color/lighter_white" />
 
     <GridView
         android:id="@+id/photo_grid"
@@ -32,6 +32,6 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="10dp"
-        android:background="@color/lighter_gray" />
+        android:background="@color/lighter_white" />
 </LinearLayout>
 
