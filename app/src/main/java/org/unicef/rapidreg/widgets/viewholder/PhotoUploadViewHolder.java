@@ -157,8 +157,8 @@ public class PhotoUploadViewHolder extends BaseViewHolder<CaseField> {
             public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();
                 CasePhotoAdapter casePhotoAdapter = (CasePhotoAdapter) photoGrid.getAdapter();
-
                 CasePhotoCache.removePhoto(casePhotoAdapter.getAllItems().get(position));
+
                 if (CasePhotoCache.isEmpty()) {
                     casePhotoAdapter.clearItems();
                     Bitmap addPhotoIcon = BitmapFactory.decodeResource(context.getResources(), R.drawable.photo_camera);

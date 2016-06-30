@@ -180,7 +180,10 @@ public class CaseRegisterWrapperFragment extends Fragment {
                 }
             }
         }
+        addProfileFieldForDetailsPage();
+    }
 
+    private void addProfileFieldForDetailsPage() {
         if (((CaseActivity) getActivity()).getCurrentFeature() == CaseFeature.DETAILS) {
             CaseField caseField = new CaseField();
             caseField.setType(CaseField.TYPE_MINI_FORM_PROFILE);
