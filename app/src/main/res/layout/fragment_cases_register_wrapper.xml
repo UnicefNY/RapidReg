@@ -45,12 +45,12 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_below="@id/viewpagertab"
+            android:background="@color/lighter_gray"
             android:gravity="center_horizontal"
             android:paddingTop="@dimen/pull_back_text_padding"
             android:text="@string/pull_down_load_mini_form"
-            android:textSize="@dimen/text_size_14"
-            android:background="@color/lighter_gray"
-            android:textColor="@color/gray"/>
+            android:textColor="@color/gray"
+            android:textSize="@dimen/text_size_14"/>
 
         <org.unicef.rapidreg.base.view.SwipeChangeLayout
             android:id="@+id/full_form_swipe_layout"
@@ -76,12 +76,12 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:background="@color/lighter_gray"
             android:gravity="center_horizontal|bottom"
             android:paddingBottom="@dimen/pull_back_text_padding"
             android:text="@string/pull_up_load_full_form"
-            android:textSize="@dimen/text_size_16"
-            android:background="@color/lighter_gray"
-            android:textColor="@color/gray"/>
+            android:textColor="@color/gray"
+            android:textSize="@dimen/text_size_16"/>
 
         <org.unicef.rapidreg.base.view.SwipeChangeLayout
             android:id="@+id/mini_form_swipe_layout"
@@ -93,20 +93,18 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@color/white"/>
-
         </org.unicef.rapidreg.base.view.SwipeChangeLayout>
-
-        <com.getbase.floatingactionbutton.FloatingActionButton
-            android:id="@+id/edit_case"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentRight="true"
-            android:scrollY="3dp"
-            android:src="@drawable/edit_white"
-            app:fab_colorNormal="@color/ftn_blue"
-            app:fab_colorPressed="@color/ftn_blue"/>
-
     </RelativeLayout>
+
+    <com.getbase.floatingactionbutton.FloatingActionButton
+        android:id="@+id/edit_case"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:scrollY="3dp"
+        android:src="@drawable/edit_white"
+        app:fab_colorNormal="@color/ftn_blue"
+        app:fab_colorPressed="@color/ftn_blue"/>
 
 </RelativeLayout>
