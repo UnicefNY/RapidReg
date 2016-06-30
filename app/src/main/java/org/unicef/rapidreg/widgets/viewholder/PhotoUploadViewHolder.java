@@ -163,10 +163,12 @@ public class PhotoUploadViewHolder extends BaseViewHolder<CaseField> {
                     casePhotoAdapter.clearItems();
                     Bitmap addPhotoIcon = BitmapFactory.decodeResource(context.getResources(), R.drawable.photo_camera);
                     casePhotoAdapter.addItem(addPhotoIcon);
+
                 } else if (CasePhotoCache.isOneLessThanLimit()) {
                     casePhotoAdapter.removeItem(position);
                     Bitmap addPhotoIcon = BitmapFactory.decodeResource(context.getResources(), R.drawable.photo_add);
                     casePhotoAdapter.addItem(addPhotoIcon);
+
                 } else {
                     casePhotoAdapter.removeItem(position);
                 }
