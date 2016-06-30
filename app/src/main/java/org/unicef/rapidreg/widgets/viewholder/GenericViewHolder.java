@@ -19,7 +19,7 @@ import org.unicef.rapidreg.widgets.dialog.FiledDialogFactory;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class GenericViewHolder extends BaseViewHolder<CaseField> {
+public class GenericViewHolder extends BaseTextViewHolder {
 
     public static final String TAG = GenericViewHolder.class.getSimpleName();
     public static final int FORM_NO_ANSWER_STATE = 0;
@@ -89,11 +89,8 @@ public class GenericViewHolder extends BaseViewHolder<CaseField> {
                         } else {
                             viewSwitcher.setDisplayedChild(GenericViewHolder.FORM_HAS_ANSWER_STATE);
                             if (isSubformField(field)) {
-                                Log.d("fengbo", "field: " + field.getDisplayName().get("en"));
                                 SubformCache.put(field.getParent(), getValues(field));
-                                Log.d("fengbo", "cache: " + SubformCache.toJson());
                             } else {
-                                Log.d("fengbo", "no, field: " + field.getDisplayName().get("en"));
                                 CaseFieldValueCache.put(field.getDisplayName().get("en"), getResult());
                             }
                         }

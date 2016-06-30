@@ -18,7 +18,7 @@ import org.unicef.rapidreg.service.cache.SubformCache;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class TextViewHolder extends BaseViewHolder<CaseField> {
+public class TextViewHolder extends BaseTextViewHolder {
 
     public static final String TAG = TextViewHolder.class.getSimpleName();
 
