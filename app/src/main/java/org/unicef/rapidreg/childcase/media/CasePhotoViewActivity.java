@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,6 +24,7 @@ import java.util.Map;
 public class CasePhotoViewActivity extends AppCompatActivity {
 
     private ViewPager viewPager;
+    private Map<Integer, Bitmap> photos = new HashMap<>();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -36,6 +38,14 @@ public class CasePhotoViewActivity extends AppCompatActivity {
 
         viewPager.setAdapter(new CasePhotoViewPagerAdapter());
         viewPager.setCurrentItem(getIntent().getIntExtra("position", 0));
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        for (Bitmap bitmap : photos.values()) {
+            bitmap.recycle();
+        }
     }
 
     public class CasePhotoViewPagerAdapter extends PagerAdapter {
@@ -53,6 +63,7 @@ public class CasePhotoViewActivity extends AppCompatActivity {
         @Override
         public void destroyItem(ViewGroup container, int position, Object object) {
             container.removeView((View) object);
+            photos.remove(position);
         }
 
         @Override
@@ -69,6 +80,7 @@ public class CasePhotoViewActivity extends AppCompatActivity {
             imageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
             Bitmap image = ImageCompressUtil.compressBySize(previousPhotoPaths.get(position), size.x, size.y);
             imageView.setImageBitmap(image);
+            photos.put(position, image);
 
             container.addView(itemView);
             return itemView;

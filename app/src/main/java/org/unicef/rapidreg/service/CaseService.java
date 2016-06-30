@@ -219,7 +219,12 @@ public class CaseService {
             for (Map.Entry<Bitmap, String> photoBitPathEntry : photoBitPaths.entrySet()) {
                 CasePhoto casePhoto = new CasePhoto();
                 casePhoto.setPath(photoBitPathEntry.getValue());
-                casePhoto.setPhoto(new Blob(ImageCompressUtil.convertImageToBytes(photoBitPathEntry.getValue())));
+
+                Bitmap bitmap = ImageCompressUtil.compressBySize(photoBitPathEntry.getValue(), 720, 1080);
+                byte[] imageToBytes = ImageCompressUtil.convertImageToBytes(bitmap);
+                Log.i("sjyuan", "length = " + imageToBytes.length);
+
+                casePhoto.setPhoto(new Blob(imageToBytes));
                 casePhoto.setThumbnail(new Blob(ImageCompressUtil.convertImageToBytes(photoBitPathEntry.getKey())));
                 casePhoto.setCase(child);
                 casePhoto.save();
