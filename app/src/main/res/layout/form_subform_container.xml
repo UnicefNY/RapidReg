@@ -8,7 +8,7 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="10dp"
-        android:background="@color/lighter_gray" />
+        android:background="@color/lighter_white" />
 
     <Button
         android:id="@+id/add_subform"
