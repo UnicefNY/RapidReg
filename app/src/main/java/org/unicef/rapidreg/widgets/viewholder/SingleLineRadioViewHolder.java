@@ -51,6 +51,25 @@ public class SingleLineRadioViewHolder extends BaseViewHolder<CaseField> {
         options = field.getSelectOptions();
         firstOption.setText(options.get(0));
         secondOption.setText(options.get(1));
+
+        labelView.setHint(labelText);
+        disableUneditableField(isEditable(field), firstOption);
+        disableUneditableField(isEditable(field), secondOption);
+        setEditableBackgroundStyle(isEditable(field));
+
+        if (isSubformField(field)) {
+            if (!TextUtils.isEmpty(getValue(field))) {
+                setSelectedRadio(getValue(field));
+            }
+        } else {
+            if (!TextUtils.isEmpty(CaseFieldValueCache.get(getLabel(field)))) {
+                setSelectedRadio(CaseFieldValueCache.get(getLabel(field)));
+            }
+        }
+    }
+
+    @Override
+    public void setOnClickListener(final CaseField field) {
         optionGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
@@ -69,24 +88,6 @@ public class SingleLineRadioViewHolder extends BaseViewHolder<CaseField> {
                 }
             }
         });
-        labelView.setHint(labelText);
-        disableUneditableField(isEditable(field), firstOption);
-        disableUneditableField(isEditable(field), secondOption);
-        setEditableBackgroundStyle(isEditable(field));
-
-        if (isSubformField(field)) {
-            if (!TextUtils.isEmpty(getValue(field))) {
-                setSelectedRadio(getValue(field));
-            }
-        } else {
-            if (!TextUtils.isEmpty(CaseFieldValueCache.get(getLabel(field)))) {
-                setSelectedRadio(CaseFieldValueCache.get(getLabel(field)));
-            }
-        }
-    }
-
-    @Override
-    public void setOnClickListener(CaseField field) {
     }
 
     @Override
