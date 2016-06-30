@@ -23,6 +23,8 @@ public class CaseRegisterFragment extends MvpFragment<CaseRegisterView, CaseRegi
     @BindView(R.id.register_forms_content)
     RecyclerView fieldList;
 
+    private CaseRegisterAdapter caseRegisterAdapter;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater,
@@ -50,9 +52,14 @@ public class CaseRegisterFragment extends MvpFragment<CaseRegisterView, CaseRegi
 
     @Override
     public void initView(CaseRegisterAdapter adapter) {
+        caseRegisterAdapter = adapter;
         RecyclerView.LayoutManager layout = new LinearLayoutManager(getContext());
         layout.setAutoMeasureEnabled(true);
         fieldList.setLayoutManager(layout);
-        fieldList.setAdapter(adapter);
+        fieldList.setAdapter(caseRegisterAdapter);
+    }
+
+    public CaseRegisterAdapter getCaseRegisterAdapter() {
+        return caseRegisterAdapter;
     }
 }
