@@ -2,35 +2,36 @@
     android:id="@+id/photo_container"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="@color/white"
     android:orientation="vertical">
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="10dp"
-            android:background="@color/lighter_gray" />
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="10dp"
+        android:background="@color/lighter_gray" />
 
-        <GridView
-            android:id="@+id/photo_grid"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:columnWidth="90dp"
-            android:gravity="center"
-            android:horizontalSpacing="5dp"
-            android:numColumns="4"
-            android:stretchMode="columnWidth" />
+    <GridView
+        android:id="@+id/photo_grid"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:columnWidth="90dp"
+        android:gravity="center"
+        android:horizontalSpacing="5dp"
+        android:numColumns="4"
+        android:stretchMode="columnWidth" />
 
-        <TextView
-            android:id="@+id/no_photo_promote_view"
-            android:layout_width="match_parent"
-            android:layout_height="20dp"
-            android:layout_gravity="center_vertical"
-            android:layout_margin="5dp"
-            android:visibility="gone"
-            android:text="@string/no_photo_promote_info"/>
+    <TextView
+        android:id="@+id/no_photo_promote_view"
+        android:layout_width="match_parent"
+        android:layout_height="20dp"
+        android:layout_gravity="center_vertical"
+        android:layout_margin="5dp"
+        android:visibility="gone"
+        android:text="@string/no_photo_promote_info" />
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="10dp"
-            android:background="@color/lighter_gray" />
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="10dp"
+        android:background="@color/lighter_gray" />
 </LinearLayout>
 

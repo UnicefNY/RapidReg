@@ -12,6 +12,7 @@
         android:id="@+id/audio_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@color/white"
         android:orientation="horizontal">
 
         <ImageView
@@ -28,8 +29,8 @@
             android:layout_height="90dp"
             android:padding="10dp"
             android:scaleType="fitXY"
-            android:src="@drawable/play_210" 
-            android:visibility="gone"/>
+            android:src="@drawable/play_210"
+            android:visibility="gone" />
 
         <TextView
             android:id="@+id/no_file_text_view"
@@ -47,7 +48,7 @@
             android:src="@drawable/recycle_bin"
             android:layout_gravity="center_vertical"
             android:layout_marginRight="15dp"
-            android:visibility="gone"/>
+            android:visibility="gone" />
 
     </LinearLayout>
 
