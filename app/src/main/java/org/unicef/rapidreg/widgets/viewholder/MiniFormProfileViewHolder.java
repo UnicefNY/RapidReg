@@ -57,4 +57,14 @@ public class MiniFormProfileViewHolder extends BaseViewHolder<CaseField> {
     public void setOnClickListener(final CaseField field) {
 
     }
+
+    @Override
+    protected String getResult() {
+        return null;
+    }
+
+    @Override
+    public void setFieldEditable(boolean editable) {
+
+    }
 }

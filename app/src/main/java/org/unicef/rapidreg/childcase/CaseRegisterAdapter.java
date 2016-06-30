@@ -111,6 +111,8 @@ public class CaseRegisterAdapter extends RecyclerView.Adapter<BaseViewHolder> {
 
         if (!activity.getCurrentFeature().isInDetailMode()) {
             holder.setOnClickListener(field);
+        } else {
+            holder.setFieldEditable(false);
         }
     }
 

@@ -61,6 +61,16 @@ public class SubformViewHolder extends BaseViewHolder<CaseField> {
         });
     }
 
+    @Override
+    protected String getResult() {
+        return null;
+    }
+
+    @Override
+    public void setFieldEditable(boolean editable) {
+
+    }
+
     private int getInsertIndex() {
         return parent.getChildCount() - NUM_CHILD_VIEWS;
     }

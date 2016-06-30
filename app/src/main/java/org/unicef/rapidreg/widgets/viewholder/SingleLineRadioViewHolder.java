@@ -70,7 +70,9 @@ public class SingleLineRadioViewHolder extends BaseViewHolder<CaseField> {
             }
         });
         labelView.setHint(labelText);
-        disableUnediatbleField(field, optionGroup);
+        disableUneditableField(isEditable(field), firstOption);
+        disableUneditableField(isEditable(field), secondOption);
+        setEditableBackgroundStyle(isEditable(field));
 
         if (isSubformField(field)) {
             if (!TextUtils.isEmpty(getValue(field))) {
@@ -85,6 +87,17 @@ public class SingleLineRadioViewHolder extends BaseViewHolder<CaseField> {
 
     @Override
     public void setOnClickListener(CaseField field) {
+    }
+
+    @Override
+    protected String getResult() {
+        return null;
+    }
+
+    @Override
+    public void setFieldEditable(boolean editable) {
+        disableUneditableField(editable, firstOption);
+        disableUneditableField(editable, secondOption);
     }
 
     public void setSelectedRadio(String selectedRadio) {
