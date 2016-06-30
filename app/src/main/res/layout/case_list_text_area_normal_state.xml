@@ -27,7 +27,8 @@
             android:layout_gravity="center_vertical"
             android:layout_marginLeft="@dimen/matching_badge_left_margin"
             android:layout_marginStart="@dimen/matching_badge_left_margin"
-            android:background="@drawable/connected" />
+            android:background="@drawable/connected"
+            android:visibility="invisible" />
     </LinearLayout>
 
     <LinearLayout
