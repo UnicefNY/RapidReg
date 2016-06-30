@@ -21,9 +21,7 @@ import org.unicef.rapidreg.service.cache.CaseFieldValueCache;
 import org.unicef.rapidreg.service.cache.CasePhotoCache;
 import org.unicef.rapidreg.utils.ImageCompressUtil;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -130,17 +128,18 @@ public class PhotoUploadMiniFormViewHolder extends BaseViewHolder<CaseField> imp
         @Override
         public Object instantiateItem(ViewGroup container, int position) {
             View itemView = LayoutInflater.from(context).inflate(R.layout.case_photo_view_item, container, false);
-            ImageView imageView = (ImageView) itemView.findViewById(R.id.case_photo_item);
             container.addView(itemView);
+
+            ImageView imageView = (ImageView) itemView.findViewById(R.id.case_photo_item);
             new UpdateImageViewTask(imageView, position).execute();
+
             return itemView;
         }
 
 
         private class UpdateImageViewTask extends AsyncTask<String, Integer, Integer> {
-            private ImageView imageView;
-            private int position;
-
+            private final ImageView imageView;
+            private final int position;
 
             public UpdateImageViewTask(ImageView imageView, int position) {
                 this.imageView = imageView;

@@ -14,10 +14,6 @@ import org.unicef.rapidreg.forms.childcase.CaseField;
 import org.unicef.rapidreg.service.cache.CaseFieldValueCache;
 import org.unicef.rapidreg.service.cache.CaseFieldValueCache.CaseProfile;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Locale;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -40,7 +36,6 @@ public class MiniFormProfileViewHolder extends BaseViewHolder<CaseField> {
     @BindView(R.id.registration_date)
     TextView registrationDate;
 
-
     public MiniFormProfileViewHolder(Context context, View itemView) {
         super(context, itemView);
         ButterKnife.bind(this, itemView);
@@ -48,14 +43,14 @@ public class MiniFormProfileViewHolder extends BaseViewHolder<CaseField> {
 
     @Override
     public void setValue(CaseField field) {
-        idView.setText(CaseFieldValueCache.getProfileValue(CaseProfile.ID_NORMAL_STATE));
-        CaseListAdapter.Gender gender = CaseListAdapter.Gender.valueOf(CaseFieldValueCache.getProfileValue(CaseProfile.SEX).toUpperCase());
-        Drawable drawable = ResourcesCompat.getDrawable(context.getResources(), gender.getGenderId(), null);
-        genderBadge.setImageDrawable(drawable);
-        genderName.setText(gender.getName());
-        genderName.setTextColor(ContextCompat.getColor(context, gender.getColorId()));
-        age.setText(CaseFieldValueCache.getProfileValue(CaseProfile.AGE));
-        registrationDate.setText(CaseFieldValueCache.getProfileValue(CaseProfile.REGISTRATION_DATE));
+            idView.setText(CaseFieldValueCache.getProfileValue(CaseProfile.ID_NORMAL_STATE));
+            CaseListAdapter.Gender gender = CaseListAdapter.Gender.valueOf(CaseFieldValueCache.getProfileValue(CaseProfile.SEX).toUpperCase());
+            Drawable drawable = ResourcesCompat.getDrawable(context.getResources(), gender.getGenderId(), null);
+            genderBadge.setImageDrawable(drawable);
+            genderName.setText(gender.getName());
+            genderName.setTextColor(ContextCompat.getColor(context, gender.getColorId()));
+            age.setText(CaseFieldValueCache.getProfileValue(CaseProfile.AGE));
+            registrationDate.setText(CaseFieldValueCache.getProfileValue(CaseProfile.REGISTRATION_DATE));
     }
 
     @Override
