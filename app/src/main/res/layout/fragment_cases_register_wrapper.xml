@@ -45,7 +45,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_below="@id/viewpagertab"
-            android:background="@color/lighter_gray"
+            android:background="@color/lighter_white"
             android:gravity="center_horizontal"
             android:paddingTop="@dimen/pull_back_text_padding"
             android:text="@string/pull_down_load_mini_form"
@@ -76,7 +76,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/lighter_gray"
+            android:background="@color/lighter_white"
             android:gravity="center_horizontal|bottom"
             android:paddingBottom="@dimen/pull_back_text_padding"
             android:text="@string/pull_up_load_full_form"
