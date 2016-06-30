@@ -80,6 +80,10 @@ public class LoginActivity extends MvpActivity<LoginView, LoginPresenter> implem
         urlEditView.setSelection(0, urlEditView.length());
     }
 
+    @Override
+    public void onBackPressed() {
+        finish();
+    }
 
     private void hideUrlInputIfUserEverLoginSuccessfully() {
         changeUrlTextView.setVisibility(View.INVISIBLE);
