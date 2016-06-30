@@ -2,10 +2,8 @@ package org.unicef.rapidreg.widgets.viewholder;
 
 import android.content.Context;
 import android.content.res.Configuration;
-import android.text.Editable;
 import android.text.InputType;
 import android.text.TextUtils;
-import android.text.TextWatcher;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
@@ -16,8 +14,6 @@ import org.unicef.rapidreg.R;
 import org.unicef.rapidreg.forms.childcase.CaseField;
 import org.unicef.rapidreg.service.cache.CaseFieldValueCache;
 import org.unicef.rapidreg.service.cache.SubformCache;
-
-import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -113,6 +109,9 @@ public class TextViewHolder extends BaseTextViewHolder {
                                 }
                             }
                         }
+                        itemView.setClickable(true);
+                    } else {
+                        itemView.setClickable(false);
                     }
                 }
             }
