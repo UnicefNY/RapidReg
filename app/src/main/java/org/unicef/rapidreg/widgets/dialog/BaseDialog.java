@@ -77,6 +77,11 @@ public abstract class BaseDialog {
     }
 
     public static String[] getSelectOptions(String fieldType, CaseField field) {
+        if (fieldType.equals(CaseField.TYPE_SELECT_BOX)) {
+            fieldType = field.isMultiSelect() ? CaseField.TYPE_MULTI_SELECT_BOX :
+                    CaseField.TYPE_SINGLE_SELECT_BOX;
+        }
+
         List<CharSequence> items = new ArrayList<>();
         if (fieldType.equals(CaseField.TYPE_MULTI_SELECT_BOX)) {
             List<Map<String, String>> arrayList = field.getOptionStringsText().get("en");
