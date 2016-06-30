@@ -57,8 +57,9 @@ public abstract class BaseActivity extends AppCompatActivity
         View headerView = navigationView.getHeaderView(0);
         TextView textViewLoginUserLabel = (TextView) headerView.findViewById(R.id.login_user_label);
         textViewLoginUserLabel.setText(getIntent().getStringExtra(IntentSender.KEY_LOGIN_USER));
-        TextView organization = (TextView) headerView.findViewById(R.id.organization);
-        organization.setText(UserService.getInstance().getCurrentUser().getOrganisation());
+        TextView organizationView = (TextView) headerView.findViewById(R.id.organization);
+        String organisation = UserService.getInstance().getCurrentUser().getOrganisation();
+        organizationView.setText(organisation == null ? "" : organisation);
         TextView textViewLogoutLabel = (TextView) headerView.findViewById(R.id.logout_label);
 
         final BaseActivity baseActivity = this;
