@@ -18,6 +18,7 @@ import android.widget.Toast;
 import org.unicef.rapidreg.IntentSender;
 import org.unicef.rapidreg.PrimeroApplication;
 import org.unicef.rapidreg.R;
+import org.unicef.rapidreg.model.User;
 import org.unicef.rapidreg.service.UserService;
 import org.unicef.rapidreg.service.cache.PageModeCached;
 
@@ -58,8 +59,11 @@ public abstract class BaseActivity extends AppCompatActivity
         TextView textViewLoginUserLabel = (TextView) headerView.findViewById(R.id.login_user_label);
         textViewLoginUserLabel.setText(getIntent().getStringExtra(IntentSender.KEY_LOGIN_USER));
         TextView organizationView = (TextView) headerView.findViewById(R.id.organization);
-        String organisation = UserService.getInstance().getCurrentUser().getOrganisation();
-        organizationView.setText(organisation == null ? "" : organisation);
+        User currentUser = UserService.getInstance().getCurrentUser();
+        if (currentUser != null) {
+            String organisation = currentUser.getOrganisation();
+            organizationView.setText(organisation == null ? "" : organisation);
+        }
         TextView textViewLogoutLabel = (TextView) headerView.findViewById(R.id.logout_label);
 
         final BaseActivity baseActivity = this;
