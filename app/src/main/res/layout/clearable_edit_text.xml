@@ -11,7 +11,8 @@
         android:layout_height="@dimen/search_bar_item_height"
         android:background="@drawable/edit_view_shape"
         android:textColor="@color/font_dark"
-        android:textCursorDrawable="@null" />
+        android:textCursorDrawable="@null"
+        android:textSize="@dimen/text_size_16"/>
 
     <ImageButton
         android:id="@+id/clear_text"
