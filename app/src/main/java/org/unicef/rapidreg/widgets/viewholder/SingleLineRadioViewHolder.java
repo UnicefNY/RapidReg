@@ -87,11 +87,6 @@ public class SingleLineRadioViewHolder extends BaseViewHolder<CaseField> {
     public void setOnClickListener(CaseField field) {
     }
 
-    @Override
-    protected String getResult() {
-        return null;
-    }
-
     public void setSelectedRadio(String selectedRadio) {
         if (selectedRadio.equals(options.get(0))) {
             firstOption.setChecked(true);

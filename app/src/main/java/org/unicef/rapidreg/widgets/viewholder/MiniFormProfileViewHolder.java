@@ -43,23 +43,18 @@ public class MiniFormProfileViewHolder extends BaseViewHolder<CaseField> {
 
     @Override
     public void setValue(CaseField field) {
-            idView.setText(CaseFieldValueCache.getProfileValue(CaseProfile.ID_NORMAL_STATE));
-            CaseListAdapter.Gender gender = CaseListAdapter.Gender.valueOf(CaseFieldValueCache.getProfileValue(CaseProfile.SEX).toUpperCase());
-            Drawable drawable = ResourcesCompat.getDrawable(context.getResources(), gender.getGenderId(), null);
-            genderBadge.setImageDrawable(drawable);
-            genderName.setText(gender.getName());
-            genderName.setTextColor(ContextCompat.getColor(context, gender.getColorId()));
-            age.setText(CaseFieldValueCache.getProfileValue(CaseProfile.AGE));
-            registrationDate.setText(CaseFieldValueCache.getProfileValue(CaseProfile.REGISTRATION_DATE));
+        idView.setText(CaseFieldValueCache.getProfileValue(CaseProfile.ID_NORMAL_STATE));
+        CaseListAdapter.Gender gender = CaseListAdapter.Gender.valueOf(CaseFieldValueCache.getProfileValue(CaseProfile.SEX).toUpperCase());
+        Drawable drawable = ResourcesCompat.getDrawable(context.getResources(), gender.getGenderId(), null);
+        genderBadge.setImageDrawable(drawable);
+        genderName.setText(gender.getName());
+        genderName.setTextColor(ContextCompat.getColor(context, gender.getColorId()));
+        age.setText(CaseFieldValueCache.getProfileValue(CaseProfile.AGE));
+        registrationDate.setText(CaseFieldValueCache.getProfileValue(CaseProfile.REGISTRATION_DATE));
     }
 
     @Override
     public void setOnClickListener(final CaseField field) {
 
-    }
-
-    @Override
-    protected String getResult() {
-        return null;
     }
 }

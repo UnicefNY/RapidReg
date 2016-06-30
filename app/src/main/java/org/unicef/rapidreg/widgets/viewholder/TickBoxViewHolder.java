@@ -58,7 +58,6 @@ public class TickBoxViewHolder extends BaseViewHolder<CaseField> {
         });
     }
 
-    @Override
     protected String getResult() {
         return String.valueOf(valueView.isChecked());
     }

@@ -107,11 +107,6 @@ public class PhotoUploadViewHolder extends BaseViewHolder<CaseField> {
         });
     }
 
-    @Override
-    protected String getResult() {
-        return null;
-    }
-
     private void showViewPhotoDialog(final int position) {
         Intent intent = new Intent(activity, CasePhotoViewActivity.class);
         intent.putExtra("position", position);
