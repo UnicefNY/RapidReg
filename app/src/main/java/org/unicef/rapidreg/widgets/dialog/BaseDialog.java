@@ -77,13 +77,10 @@ public abstract class BaseDialog {
     }
 
     public static String[] getSelectOptions(String fieldType, CaseField field) {
-        if (fieldType.equals(CaseField.TYPE_SELECT_BOX)) {
-            fieldType = field.isMultiSelect() ? CaseField.TYPE_MULTI_SELECT_BOX :
-                    CaseField.TYPE_SINGLE_SELECT_BOX;
-        }
-
         List<CharSequence> items = new ArrayList<>();
-        if (fieldType.equals(CaseField.TYPE_MULTI_SELECT_BOX)) {
+
+        List<Object> options = field.getOptionStringsText().get("en");
+        if (options.get(0) instanceof Map) {
             List<Map<String, String>> arrayList = field.getOptionStringsText().get("en");
             for (Map<String, String> map : arrayList) {
                 items.add(map.get("display_text"));
@@ -91,6 +88,7 @@ public abstract class BaseDialog {
         } else {
             items = field.getOptionStringsText().get("en");
         }
+
         return items.toArray(new String[0]);
     }
 
