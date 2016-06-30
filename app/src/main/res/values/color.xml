@@ -162,5 +162,5 @@
     <color name="font_medium">#888888</color>
     <color name="font_light">#aaaaaa</color>
     <color name="tool_bar">#4e6af9</color>
-    <color name="order_bar">#f7f7f7</color>
+    <color name="lighter_white">#f7f7f7</color>
 </resources>
