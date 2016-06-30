@@ -85,6 +85,8 @@ public class SubformViewHolder extends BaseViewHolder<CaseField> {
                 updateIndexForFields();
             }
         });
+        deleteBtn.setVisibility(activity.getCurrentFeature().isInEditMode() ?
+                View.VISIBLE : View.GONE);
     }
 
     private void initFieldList(ViewGroup container) {
