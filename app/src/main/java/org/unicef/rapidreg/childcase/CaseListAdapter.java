@@ -86,7 +86,14 @@ public class CaseListAdapter extends RecyclerView.Adapter<CaseListAdapter.CaseLi
                 = new Gson().fromJson(subformJson, subformType);
 
         Gender gender = Gender.valueOf(caseInfo.get("Sex").toUpperCase());
-        holder.caseImage.setImageDrawable(getDefaultAvatar(gender.getAvatarId()));
+        try {
+            CasePhoto caseAvatorPhoto =  CasePhotoService.getInstance().getAllCasePhotos(caseItem.getId()).get(0);
+            Bitmap thumbnail = CasePhotoCache.syncAvatarPhotoBitmap(caseAvatorPhoto);
+            holder.caseImage.setImageDrawable(getDefaultAvatar(thumbnail));
+        } catch (IndexOutOfBoundsException e) {
+            holder.caseImage.setImageDrawable(getDefaultAvatar(gender.getAvatarId()));
+        };
+
 
         String shortUUID = getShortUUID(caseItem.getUniqueId());
         holder.idNormalState.setText(shortUUID);
@@ -161,11 +168,22 @@ public class CaseListAdapter extends RecyclerView.Adapter<CaseListAdapter.CaseLi
         return getRoundedDrawable(resId);
     }
 
+    private Drawable getDefaultAvatar(Bitmap photoBit) {
+        return getRoundedDrawable(photoBit);
+    }
+
+
     private Drawable getRoundedDrawable(int resId) {
         Resources resources = activity.getResources();
         Bitmap img = BitmapFactory.decodeResource(resources, resId);
         RoundedBitmapDrawable dr = RoundedBitmapDrawableFactory.create(resources, img);
         dr.setCornerRadius(Math.max(img.getWidth(), img.getHeight()) / 2.0f);
+        return dr;
+    }
+
+    private Drawable getRoundedDrawable(Bitmap photoBit) {
+        RoundedBitmapDrawable dr = RoundedBitmapDrawableFactory.create(activity.getResources(), photoBit);
+        dr.setCornerRadius(Math.max(photoBit.getWidth(), photoBit.getHeight()) / 2.0f);
         return dr;
     }
 

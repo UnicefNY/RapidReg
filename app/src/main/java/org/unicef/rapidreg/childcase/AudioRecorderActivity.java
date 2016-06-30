@@ -27,6 +27,7 @@ public class AudioRecorderActivity extends AppCompatActivity {
     public static final String CURRENT_STATE = "current_state";
     public static final int START_RECORDING = 0;
     public static final int START_PLAYING = 1;
+    public static final int RECODER_MIN_DURATION_MS = 4000;
 
     private static String mFileName = CaseFieldValueCache.AUDIO_FILE_PATH;
 
@@ -131,7 +132,7 @@ public class AudioRecorderActivity extends AppCompatActivity {
     }
 
     private void exitRecording() {
-        if (passedTime > 2000) {
+        if (passedTime > RECODER_MIN_DURATION_MS) {
             stopRecording();
             finish();
         } else {
