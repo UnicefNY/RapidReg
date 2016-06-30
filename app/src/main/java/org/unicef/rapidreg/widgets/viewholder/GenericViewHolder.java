@@ -52,7 +52,8 @@ public class GenericViewHolder extends BaseTextViewHolder {
 
         labelView.setHint(labelText);
         formQuestion.setHint(labelText);
-        disableUnediatbleField(field, null);
+        disableUneditableField(isEditable(field), null);
+        setEditableBackgroundStyle(isEditable(field));
 
         if (isSubformField(field)) {
             valueView.setText(getValue(field));
@@ -126,5 +127,10 @@ public class GenericViewHolder extends BaseTextViewHolder {
     @Override
     protected String getResult() {
         return valueView.getText().toString();
+    }
+
+    @Override
+    public void setFieldEditable(boolean editable) {
+        disableUneditableField(editable, null);
     }
 }

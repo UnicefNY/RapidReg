@@ -63,7 +63,8 @@ public class TextViewHolder extends BaseTextViewHolder {
             viewSwitcher.setDisplayedChild(GenericViewHolder.FORM_HAS_ANSWER_STATE);
         }
 
-        disableUnediatbleField(field, valueView);
+        disableUneditableField(isEditable(field), valueView);
+        setEditableBackgroundStyle(isEditable(field));
 
         if (field.isNumericField()) {
             valueView.setInputType(InputType.TYPE_CLASS_NUMBER);
@@ -108,5 +109,10 @@ public class TextViewHolder extends BaseTextViewHolder {
     @Override
     protected String getResult() {
         return valueView.getText().toString();
+    }
+
+    @Override
+    public void setFieldEditable(boolean editable) {
+        disableUneditableField(editable, valueView);
     }
 }

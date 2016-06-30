@@ -34,7 +34,8 @@ public class TickBoxViewHolder extends BaseViewHolder<CaseField> {
     @Override
     public void setValue(CaseField field) {
         labelView.setText(getLabel(field));
-        disableUnediatbleField(field, valueView);
+        disableUneditableField(isEditable(field), valueView);
+        setEditableBackgroundStyle(isEditable(field));
 
         if (isSubformField(field)) {
             valueView.setChecked(Boolean.valueOf(getValue(field)));
@@ -60,6 +61,11 @@ public class TickBoxViewHolder extends BaseViewHolder<CaseField> {
 
     protected String getResult() {
         return String.valueOf(valueView.isChecked());
+    }
+
+    @Override
+    public void setFieldEditable(boolean editable) {
+        disableUneditableField(editable, valueView);
     }
 
     private List<Map<String, String>> getValues(CaseField field, String isChecked) {

@@ -94,6 +94,16 @@ public class PhotoUploadMiniFormViewHolder extends BaseViewHolder<CaseField> imp
     }
 
     @Override
+    protected String getResult() {
+        return null;
+    }
+
+    @Override
+    public void setFieldEditable(boolean editable) {
+
+    }
+
+    @Override
     public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
 
     }
