@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import android.text.TextUtils;
 import android.util.Log;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -23,8 +22,12 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class AudioRecorderActivity extends AppCompatActivity {
-    private static final String LOG_TAG = "AudioRecordTest";
+    public static final String TAG = AudioRecorderActivity.class.getSimpleName();
     public static final int RECORDER_MAX_DURATION_MS = 60000;
+    public static final String CURRENT_STATE = "current_state";
+    public static final int START_RECORDING = 0;
+    public static final int START_PLAYING = 1;
+
     private static String mFileName = CaseFieldValueCache.AUDIO_FILE_PATH;
 
     @BindView(R.id.stop_button)
@@ -43,8 +46,7 @@ public class AudioRecorderActivity extends AppCompatActivity {
     private int audioDuration = 0;
     private long passedTime = 0;
 
-    private String currentMode;
-
+    private int currentMode;
 
     final Handler timerHandler = new Handler();
     Runnable timerRunnable = new Runnable() {
@@ -58,14 +60,7 @@ public class AudioRecorderActivity extends AppCompatActivity {
         }
     };
 
-    private String getTime(long millis) {
-        int seconds = (int) (millis / 1000);
-        int minutes = seconds / 60;
-        seconds = seconds % 60;
-
-        return String.format("%d:%02d", minutes, seconds);
-    }
-
+    @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_audio_record_layout);
@@ -73,39 +68,12 @@ public class AudioRecorderActivity extends AppCompatActivity {
 
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
-            currentMode = extras.getString("currentState");
-            if (TextUtils.equals(currentMode, "StartRecording")) {
+            currentMode = extras.getInt(CURRENT_STATE);
+            if (currentMode == START_RECORDING) {
                 recordAudio();
-            } else if (TextUtils.equals(currentMode, "StartPlaying")) {
+            } else if (currentMode == START_PLAYING) {
                 playAudio();
             }
-        }
-    }
-
-    @OnClick(R.id.stop_button)
-    public void onStopButtonClicked() {
-        exitAudioRecorder();
-    }
-
-    private void exitAudioRecorder() {
-        if (TextUtils.equals(currentMode, "StartRecording")) {
-            exitRecording();
-        } else if (TextUtils.equals(currentMode, "StartPlaying")) {
-            exitPlaying();
-        }
-    }
-
-    private void exitPlaying() {
-        onPlay(false);
-        finish();
-    }
-
-    private void exitRecording() {
-        if (passedTime > 4000) {
-            onRecord(false);
-            finish();
-        } else {
-            Toast.makeText(this, "Recording is too short", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -115,15 +83,41 @@ public class AudioRecorderActivity extends AppCompatActivity {
         exitAudioRecorder();
     }
 
+    public void startTiming() {
+        startTime = System.currentTimeMillis();
+        timerHandler.postDelayed(timerRunnable, 0);
+    }
+
+    public void stopTiming() {
+        timerHandler.removeCallbacks(timerRunnable);
+    }
+
     public void recordAudio() {
         onRecord(mStartRecording);
         mStartRecording = !mStartRecording;
     }
 
-
     public void playAudio() {
         onPlay(mStartPlaying);
         mStartPlaying = !mStartPlaying;
+    }
+
+    @OnClick(R.id.stop_button)
+    public void onStopButtonClicked() {
+        exitAudioRecorder();
+    }
+
+    private void exitAudioRecorder() {
+        if (currentMode == START_RECORDING) {
+            exitRecording();
+        } else if (currentMode == START_PLAYING) {
+            exitPlaying();
+        }
+    }
+
+    private void exitPlaying() {
+        stopPlaying();
+        finish();
     }
 
     private void onRecord(boolean start) {
@@ -133,6 +127,15 @@ public class AudioRecorderActivity extends AppCompatActivity {
         } else {
             stopTiming();
             stopRecording();
+        }
+    }
+
+    private void exitRecording() {
+        if (passedTime > 2000) {
+            stopRecording();
+            finish();
+        } else {
+            Toast.makeText(this, R.string.recording_is_too_short, Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -162,7 +165,7 @@ public class AudioRecorderActivity extends AppCompatActivity {
             mPlayer.start();
 
         } catch (IOException e) {
-            Log.e(LOG_TAG, "prepare() failed");
+            Log.e(TAG, "prepare() failed");
         }
     }
 
@@ -185,7 +188,7 @@ public class AudioRecorderActivity extends AppCompatActivity {
         try {
             mRecorder.prepare();
         } catch (IOException e) {
-            Log.e(LOG_TAG, "prepare() failed");
+            Log.e(TAG, "prepare() failed");
         }
         mRecorder.start();
         mRecorder.setOnInfoListener(new MediaRecorder.OnInfoListener() {
@@ -198,6 +201,7 @@ public class AudioRecorderActivity extends AppCompatActivity {
         });
     }
 
+
     private void stopRecording() {
         if (mRecorder != null) {
             mRecorder.stop();
@@ -206,13 +210,11 @@ public class AudioRecorderActivity extends AppCompatActivity {
         }
     }
 
+    private String getTime(long millis) {
+        int seconds = (int) (millis / 1000);
+        int minutes = seconds / 60;
+        seconds = seconds % 60;
 
-    public void startTiming() {
-        startTime = System.currentTimeMillis();
-        timerHandler.postDelayed(timerRunnable, 0);
-    }
-
-    public void stopTiming() {
-        timerHandler.removeCallbacks(timerRunnable);
+        return String.format("%d:%02d", minutes, seconds);
     }
 }
