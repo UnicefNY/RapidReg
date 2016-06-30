@@ -90,14 +90,9 @@ public class CaseListAdapter extends RecyclerView.Adapter<CaseListAdapter.CaseLi
             CasePhoto caseAvatorPhoto =  CasePhotoService.getInstance().getAllCasePhotos(caseItem.getId()).get(0);
             Bitmap thumbnail = CasePhotoCache.syncAvatarPhotoBitmap(caseAvatorPhoto);
             holder.caseImage.setImageDrawable(getDefaultAvatar(thumbnail));
-        } catch (IndexOutOfBoundsException e) {
-            e.printStackTrace();
-            holder.caseImage.setImageDrawable(getDefaultAvatar(gender.getAvatarId()));
-        } catch (NullPointerException e) {
-            e.printStackTrace();
+        } catch (Exception e) {
             holder.caseImage.setImageDrawable(getDefaultAvatar(gender.getAvatarId()));
         }
-
 
         String shortUUID = getShortUUID(caseItem.getUniqueId());
         holder.idNormalState.setText(shortUUID);
