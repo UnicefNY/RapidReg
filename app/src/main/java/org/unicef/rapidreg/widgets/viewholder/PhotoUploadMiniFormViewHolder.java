@@ -17,14 +17,13 @@ import android.widget.LinearLayout;
 import org.unicef.rapidreg.R;
 import org.unicef.rapidreg.childcase.CaseActivity;
 import org.unicef.rapidreg.forms.childcase.CaseField;
+import org.unicef.rapidreg.model.CasePhoto;
 import org.unicef.rapidreg.service.CasePhotoService;
 import org.unicef.rapidreg.service.cache.CaseFieldValueCache;
 import org.unicef.rapidreg.service.cache.CasePhotoCache;
 import org.unicef.rapidreg.utils.ImageCompressUtil;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -176,8 +175,13 @@ public class PhotoUploadMiniFormViewHolder extends BaseViewHolder<CaseField> imp
                 if (!isPhotosPrepared) {
                     synchronized (CasePhotoViewPagerAdapter.this) {
                         if (!isPhotosPrepared) {
-                            long caseId = Long.parseLong(CaseFieldValueCache.getProfileValue(CaseFieldValueCache.CaseProfile.ID));
-                            CasePhotoCache.syncCachingPhotos(CasePhotoService.getInstance().getAllCasePhotos(caseId));
+                            String caseIdStr = CaseFieldValueCache.getProfileValue(CaseFieldValueCache.CaseProfile.ID);
+                            long caseId = Long.parseLong(caseIdStr);
+                            List<CasePhoto> allCasePhotos = CasePhotoService.getInstance().getAllCasePhotos(caseId);
+                            for (CasePhoto allCasePhoto : allCasePhotos) {
+                                Log.i("sjyuan", allCasePhoto.toString());
+                            }
+                            CasePhotoCache.syncCachingPhotos(allCasePhotos);
                             isPhotosPrepared = true;
                         }
                     }

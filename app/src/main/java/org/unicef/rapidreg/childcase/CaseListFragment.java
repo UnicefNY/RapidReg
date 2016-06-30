@@ -149,7 +149,7 @@ public class CaseListFragment extends MvpFragment<CaseListView, CaseListPresente
 
     @OnClick(R.id.add_case)
     public void onCaseAddClicked() {
-        CaseFieldValueCache.clear();
+        CaseService.getInstance().clearCaseCache();
         SubformCache.clear();
         if (!CaseFormService.getInstance().isFormReady()) {
             Toast.makeText(getActivity(),

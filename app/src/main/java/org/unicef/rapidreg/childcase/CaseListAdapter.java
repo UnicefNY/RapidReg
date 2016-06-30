@@ -67,8 +67,6 @@ public class CaseListAdapter extends RecyclerView.Adapter<CaseListAdapter.CaseLi
 
     @Override
     public void onBindViewHolder(CaseListHolder holder, int position) {
-        CaseService.getInstance().clearCaseCache();
-
         final Case caseItem = caseList.get(position);
 
         final String caseJson = new String(caseItem.getContent().getBlob());
@@ -93,8 +91,8 @@ public class CaseListAdapter extends RecyclerView.Adapter<CaseListAdapter.CaseLi
         } catch (Exception e) {
             holder.caseImage.setImageDrawable(getDefaultAvatar(gender.getAvatarId()));
         }
-
-        String shortUUID = getShortUUID(caseItem.getUniqueId());
+        final String shortUUID = getShortUUID(caseItem.getUniqueId());
+        
         holder.idNormalState.setText(shortUUID);
         holder.idHiddenState.setText(shortUUID);
         holder.genderBadge.setImageDrawable(getDefaultGenderBadge(gender.getGenderId()));
@@ -103,19 +101,12 @@ public class CaseListAdapter extends RecyclerView.Adapter<CaseListAdapter.CaseLi
         holder.age.setText(caseInfo.get("Age"));
         holder.registrationDate.setText(dateFormat.format(caseItem.getRegistrationDate()));
 
-        CaseFieldValueCache.addProfileItem(CaseFieldValueCache.CaseProfile.ID_NORMAL_STATE, shortUUID);
-        CaseFieldValueCache.addProfileItem(CaseFieldValueCache.CaseProfile.SEX, caseInfo.get("Sex"));
-        CaseFieldValueCache.addProfileItem(CaseFieldValueCache.CaseProfile.REGISTRATION_DATE,
-                dateFormat.format(caseItem.getRegistrationDate()));
-        CaseFieldValueCache.addProfileItem(CaseFieldValueCache.CaseProfile.GENDER_NAME, shortUUID);
-        CaseFieldValueCache.addProfileItem(CaseFieldValueCache.CaseProfile.AGE, caseInfo.get("Age"));
-        CaseFieldValueCache.addProfileItem(CaseFieldValueCache.CaseProfile.ID, String.valueOf(caseItem.getId()));
-
-        setProfileForMiniForm(shortUUID);
-
         holder.view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                CaseService.getInstance().clearCaseCache();
+
+                setProfileForMiniForm(caseItem, caseInfo, shortUUID);
                 CaseFieldValueCache.setValues(caseInfo);
                 SubformCache.setValues(subformInfo);
                 List<CasePhoto> casePhotos = CasePhotoService.getInstance().getAllCasePhotos(caseItem.getId());
@@ -137,8 +128,14 @@ public class CaseListAdapter extends RecyclerView.Adapter<CaseListAdapter.CaseLi
         toggleTextArea(holder);
     }
 
-    private void setProfileForMiniForm(String shortUUID) {
-
+    private void setProfileForMiniForm(Case caseItem, Map<String, String> caseInfo, String shortUUID) {
+        CaseFieldValueCache.addProfileItem(CaseFieldValueCache.CaseProfile.ID_NORMAL_STATE, shortUUID);
+        CaseFieldValueCache.addProfileItem(CaseFieldValueCache.CaseProfile.SEX, caseInfo.get("Sex"));
+        CaseFieldValueCache.addProfileItem(CaseFieldValueCache.CaseProfile.REGISTRATION_DATE,
+                dateFormat.format(caseItem.getRegistrationDate()));
+        CaseFieldValueCache.addProfileItem(CaseFieldValueCache.CaseProfile.GENDER_NAME, shortUUID);
+        CaseFieldValueCache.addProfileItem(CaseFieldValueCache.CaseProfile.AGE, caseInfo.get("Age"));
+        CaseFieldValueCache.addProfileItem(CaseFieldValueCache.CaseProfile.ID, String.valueOf(caseItem.getId()));
     }
 
     @Override
