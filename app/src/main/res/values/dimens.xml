@@ -41,6 +41,8 @@
     <dimen name="case_spinner_height_opened">54dp</dimen>
     <dimen name="case_spinner_height_closed">40.7dp</dimen>
     <dimen name="case_spinner_arrow_right_margin">12dp</dimen>
+    <dimen name="case_avatar_width">68dp</dimen>
+    <dimen name="case_avatar_hight">68dp</dimen>
     <!--row in list end-->
 
     <!--search start-->
@@ -70,5 +72,7 @@
     <dimen name="case_photo_view_dot_margin_mini_form">-10dp</dimen>
 
     <!--case register end-->
+
+
 
 </resources>

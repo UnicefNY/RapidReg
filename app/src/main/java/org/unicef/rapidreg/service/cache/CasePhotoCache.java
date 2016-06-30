@@ -50,6 +50,12 @@ public class CasePhotoCache {
         }
     }
 
+    public static Bitmap syncAvatarPhotoBitmap(CasePhoto casePhoto) {
+        clearLocalCachedPhotoFiles();
+        Bitmap thumbnail = ImageCompressUtil.convertByteArrayToImage(casePhoto.getThumbnail().getBlob());
+        return thumbnail;
+    }
+
     public static void syncCachingPhotos(final List<CasePhoto> casePhotos) {
         clearLocalCachedPhotoFiles();
         int index = 0;

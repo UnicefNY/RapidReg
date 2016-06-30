@@ -19,18 +19,18 @@
             android:id="@+id/record_button"
             android:layout_width="90dp"
             android:layout_height="90dp"
-            android:padding="10dp"
-            android:scaleType="fitXY"
+            android:paddingLeft="@dimen/case_register_label_padding_left_right"
+            android:paddingRight="@dimen/case_register_label_padding_left_right"
             android:src="@drawable/mic_rec_210" />
 
         <ImageView
             android:id="@+id/play_button"
             android:layout_width="90dp"
             android:layout_height="90dp"
-            android:padding="10dp"
-            android:scaleType="fitXY"
-            android:src="@drawable/play_210"
-            android:visibility="gone" />
+            android:paddingLeft="@dimen/case_register_label_padding_left_right"
+            android:paddingRight="@dimen/case_register_label_padding_left_right"
+            android:src="@drawable/play_210" 
+            android:visibility="gone"/>
 
         <TextView
             android:id="@+id/no_file_text_view"
