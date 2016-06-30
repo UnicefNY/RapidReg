@@ -61,6 +61,8 @@ public class CaseRegisterWrapperFragment extends Fragment {
     private CaseFormRoot caseForm;
     private List<CaseSection> sections;
     private List<CaseField> miniFields;
+    private CaseRegisterAdapter miniFormAdapter;
+    private CaseRegisterAdapter fullFormAdapter;
 
     @Nullable
     @Override
@@ -72,8 +74,9 @@ public class CaseRegisterWrapperFragment extends Fragment {
         ButterKnife.bind(this, view);
         initCaseFormData();
         initFloatingActionButton();
-        initMiniFormContainer();
+        miniFormAdapter = new CaseRegisterAdapter(getActivity(), miniFields, true);
         initFullFormContainer();
+        initMiniFormContainer();
         return view;
     }
 
@@ -91,13 +94,11 @@ public class CaseRegisterWrapperFragment extends Fragment {
     }
 
     private void initMiniFormContainer() {
-        CaseRegisterAdapter caseRegisterAdapter =
-                new CaseRegisterAdapter(getActivity(), miniFields, true);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         if (!miniFields.isEmpty()) {
             miniFormContainer.setLayoutManager(layoutManager);
-            miniFormContainer.setAdapter(caseRegisterAdapter);
+            miniFormContainer.setAdapter(miniFormAdapter);
             miniFormSwipeLayout.setDragEdge(SwipeChangeLayout.DragEdge.BOTTOM);
             miniFormSwipeLayout.setShouldGoneContainer(miniFormLayout);
             miniFormSwipeLayout.setShouldShowContainer(fullFormLayout);
@@ -105,7 +106,9 @@ public class CaseRegisterWrapperFragment extends Fragment {
             miniFormSwipeLayout.setOnSwipeBackListener(new SwipeChangeLayout.SwipeBackListener() {
                 @Override
                 public void onViewPositionChanged(float fractionAnchor, float fractionScreen) {
-
+                    if (fullFormAdapter != null) {
+                        fullFormAdapter.notifyDataSetChanged();
+                    }
                 }
             });
         } else {
@@ -133,6 +136,7 @@ public class CaseRegisterWrapperFragment extends Fragment {
                 fullFormSwipeLayout.setScrollChild(
                         adapter.getPage(position).getView()
                                 .findViewById(R.id.register_forms_content));
+                fullFormAdapter = ((CaseRegisterFragment) adapter.getPage(position)).getCaseRegisterAdapter();
             }
 
             @Override
@@ -147,7 +151,7 @@ public class CaseRegisterWrapperFragment extends Fragment {
             fullFormSwipeLayout.setOnSwipeBackListener(new SwipeChangeLayout.SwipeBackListener() {
                 @Override
                 public void onViewPositionChanged(float fractionAnchor, float fractionScreen) {
-
+                    miniFormAdapter.notifyDataSetChanged();
                 }
             });
         } else {
