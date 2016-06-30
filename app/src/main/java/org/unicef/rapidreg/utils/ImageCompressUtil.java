@@ -22,7 +22,7 @@ public class ImageCompressUtil {
 
     public static byte[] convertImageToBytes(Bitmap imageSource) {
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
-        imageSource.compress(Bitmap.CompressFormat.JPEG, 30, stream);
+        imageSource.compress(Bitmap.CompressFormat.JPEG, 10, stream);
         return stream.toByteArray();
     }
 

@@ -178,9 +178,6 @@ public class PhotoUploadMiniFormViewHolder extends BaseViewHolder<CaseField> imp
                             String caseIdStr = CaseFieldValueCache.getProfileValue(CaseFieldValueCache.CaseProfile.ID);
                             long caseId = Long.parseLong(caseIdStr);
                             List<CasePhoto> allCasePhotos = CasePhotoService.getInstance().getAllCasePhotos(caseId);
-                            for (CasePhoto allCasePhoto : allCasePhotos) {
-                                Log.i("sjyuan", allCasePhoto.toString());
-                            }
                             CasePhotoCache.syncCachingPhotos(allCasePhotos);
                             isPhotosPrepared = true;
                         }
