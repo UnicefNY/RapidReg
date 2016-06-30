@@ -18,7 +18,7 @@
         android:id="@+id/delete_subform"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@null"
+        android:background="@color/white"
         android:text="@string/delete"
         android:textAllCaps="false"
         android:textColor="@color/ftn_red"

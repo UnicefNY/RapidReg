@@ -14,7 +14,7 @@
         android:id="@+id/add_subform"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@null"
+        android:background="@color/white"
         android:text="@string/add"
         android:textAllCaps="false"
         android:textColor="@color/ftn_blue"
