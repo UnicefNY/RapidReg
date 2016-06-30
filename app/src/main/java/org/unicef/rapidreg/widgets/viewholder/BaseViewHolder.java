@@ -60,7 +60,7 @@ public abstract class BaseViewHolder<T> extends RecyclerView.ViewHolder {
         if (editable) {
             itemView.setBackgroundResource(R.color.white);
         } else {
-            itemView.setBackgroundResource(R.color.gainsboro);
+            itemView.setBackgroundResource(R.color.lighter_gray);
         }
     }
 
