@@ -6,6 +6,7 @@ import android.graphics.Point;
 import android.os.AsyncTask;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,7 +22,9 @@ import org.unicef.rapidreg.service.cache.CaseFieldValueCache;
 import org.unicef.rapidreg.service.cache.CasePhotoCache;
 import org.unicef.rapidreg.utils.ImageCompressUtil;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -44,6 +47,7 @@ public class PhotoUploadMiniFormViewHolder extends BaseViewHolder<CaseField> imp
         super(context, itemView);
         ButterKnife.bind(this, itemView);
         caseActivity = (CaseActivity) context;
+        Log.i("sjyuan", "isPhotosPrepared = " + isPhotosPrepared);
     }
 
     @Override
@@ -132,15 +136,31 @@ public class PhotoUploadMiniFormViewHolder extends BaseViewHolder<CaseField> imp
 
         @Override
         public Object instantiateItem(ViewGroup container, int position) {
+            Log.i("sjyuan", "isPhotosPrepared = " + isPhotosPrepared + ", position = " + position);
             View itemView = LayoutInflater.from(context).inflate(R.layout.case_photo_view_item, container, false);
             container.addView(itemView);
 
             ImageView imageView = (ImageView) itemView.findViewById(R.id.case_photo_item);
-            new UpdateImageViewTask(imageView, position).execute();
 
+            if (isPhotosPrepared) {
+                renderPhoto(imageView, position);
+            } else {
+                new UpdateImageViewTask(imageView, position).execute();
+            }
             return itemView;
         }
 
+
+        private void renderPhoto(ImageView imageView, int position) {
+            Point size = new Point();
+            ((CaseActivity) context).getWindowManager().getDefaultDisplay().getSize(size);
+            int width = size.x;
+            int height = (int) context.getResources()
+                    .getDimension(R.dimen.case_photo_view_pager_height_mini_form);
+            List<String> previousPhotoPaths = CasePhotoCache.getPhotosPaths();
+            Bitmap image = ImageCompressUtil.getThumbnail(previousPhotoPaths.get(position), width, height);
+            imageView.setImageBitmap(image);
+        }
 
         private class UpdateImageViewTask extends AsyncTask<String, Integer, Integer> {
             private final ImageView imageView;
@@ -167,16 +187,10 @@ public class PhotoUploadMiniFormViewHolder extends BaseViewHolder<CaseField> imp
 
             @Override
             protected void onPostExecute(Integer integer) {
-                Point size = new Point();
-                ((CaseActivity) context).getWindowManager().getDefaultDisplay().getSize(size);
-                int width = size.x;
-                int height = (int) context.getResources()
-                        .getDimension(R.dimen.case_photo_view_pager_height_mini_form);
-                List<String> previousPhotoPaths = CasePhotoCache.getPhotosPaths();
-                Bitmap image = ImageCompressUtil.getThumbnail(previousPhotoPaths.get(position), width, height);
-                imageView.setImageBitmap(image);
+                renderPhoto(imageView, position);
                 CasePhotoViewPagerAdapter.this.notifyDataSetChanged();
             }
         }
     }
+
 }

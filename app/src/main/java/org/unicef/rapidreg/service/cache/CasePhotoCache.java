@@ -51,6 +51,7 @@ public class CasePhotoCache {
     }
 
     public static void syncCachingPhotos(final List<CasePhoto> casePhotos) {
+        clearLocalCachedPhotoFiles();
         int index = 0;
         for (CasePhoto casePhoto : casePhotos) {
             try {
