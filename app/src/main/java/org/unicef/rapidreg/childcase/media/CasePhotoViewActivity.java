@@ -71,15 +71,16 @@ public class CasePhotoViewActivity extends AppCompatActivity {
             Point size = new Point();
             getWindowManager().getDefaultDisplay().getSize(size);
 
-            List<String> previousPhotoPaths = CasePhotoCache.getPhotosPaths();
-
             View itemView = LayoutInflater.from(CasePhotoViewActivity.this)
                     .inflate(R.layout.case_photo_view_item, container, false);
-
             ImageView imageView = (ImageView) itemView.findViewById(R.id.case_photo_item);
             imageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
-            Bitmap image = ImageCompressUtil.compressBySize(previousPhotoPaths.get(position), size.x, size.y);
-            imageView.setImageBitmap(image);
+
+            List<String> previousPhotoPaths = CasePhotoCache.getPhotosPaths();
+            String filePath = previousPhotoPaths.get(position);
+
+            Bitmap image = ImageCompressUtil.compressBySize(filePath, size.x, size.y);
+            imageView.setImageBitmap(ImageCompressUtil.rotateBitmapByExif(filePath,image));
             photos.put(position, image);
 
             container.addView(itemView);

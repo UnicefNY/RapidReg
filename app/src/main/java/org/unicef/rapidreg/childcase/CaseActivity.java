@@ -68,7 +68,9 @@ public class CaseActivity extends BaseActivity {
         GridView photoGrid = (GridView) findViewById(R.id.photo_grid);
 
         List<Bitmap> previousPhotos = CasePhotoCache.getPhotosBits();
-        Bitmap newPhoto = ImageCompressUtil.getThumbnail(imagePath, 160);
+        Bitmap newPhoto = ImageCompressUtil.rotateBitmapByExif(imagePath,
+                ImageCompressUtil.getThumbnail(imagePath, 160));
+
         previousPhotos.add(newPhoto);
         CasePhotoCache.addPhoto(newPhoto, imagePath);
 
