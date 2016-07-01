@@ -33,7 +33,7 @@
         <activity
             android:name=".childcase.CaseActivity"
             android:configChanges="orientation|keyboardHidden"
-            android:launchMode="singleInstance"
+            android:launchMode="singleTop"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize" />
 
