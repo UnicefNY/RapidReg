@@ -13,6 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/white"
+        android:minHeight="@dimen/case_register_mini_heigh"
         android:orientation="horizontal">
 
         <ImageView
@@ -29,8 +30,8 @@
             android:layout_height="90dp"
             android:paddingLeft="@dimen/case_register_label_padding_left_right"
             android:paddingRight="@dimen/case_register_label_padding_left_right"
-            android:src="@drawable/play_210" 
-            android:visibility="gone"/>
+            android:src="@drawable/play_210"
+            android:visibility="gone" />
 
         <TextView
             android:id="@+id/no_file_text_view"
@@ -38,19 +39,20 @@
             android:layout_height="20dp"
             android:layout_gravity="center_vertical"
             android:layout_margin="5dp"
-            android:text=""
             android:layout_weight="1"
-            android:paddingLeft="@dimen/case_register_label_padding_left_right"
-            android:paddingRight="@dimen/case_register_label_padding_left_right"
-            android:textSize="@dimen/text_size_16"/>
+            android:paddingLeft="@dimen/case_register_field_padding_left_right"
+            android:paddingRight="@dimen/case_register_field_padding_left_right"
+            android:text=""
+            android:textColor="@color/font_medium"
+            android:textSize="@dimen/text_size_16" />
 
         <ImageView
             android:id="@+id/delete_button"
             android:layout_width="24dp"
             android:layout_height="24dp"
-            android:src="@drawable/recycle_bin"
             android:layout_gravity="center_vertical"
             android:layout_marginRight="15dp"
+            android:src="@drawable/recycle_bin"
             android:visibility="gone" />
 
     </LinearLayout>
