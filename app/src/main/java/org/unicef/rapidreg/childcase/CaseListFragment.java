@@ -15,14 +15,15 @@ import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ViewSwitcher;
 
 import com.getbase.floatingactionbutton.FloatingActionsMenu;
 import com.hannesdorfmann.mosby.mvp.MvpFragment;
 
 import org.unicef.rapidreg.R;
+import org.unicef.rapidreg.model.Case;
 import org.unicef.rapidreg.service.CaseFormService;
 import org.unicef.rapidreg.service.CaseService;
-import org.unicef.rapidreg.service.cache.CaseFieldValueCache;
 import org.unicef.rapidreg.service.cache.SubformCache;
 
 import java.util.Arrays;
@@ -45,6 +46,9 @@ public class CaseListFragment extends MvpFragment<CaseListView, CaseListPresente
     private static final int DEFAULT_SPINNER_STATE_POSITION =
             Arrays.asList(SPINNER_STATES).indexOf(SpinnerState.DATE_DES);
 
+    private static final int HAVE_RESULT_LIST = 0;
+    private static final int HAVE_NO_RESULT = 1;
+
     @BindView(R.id.list_container)
     RecyclerView caseListContainer;
 
@@ -56,6 +60,9 @@ public class CaseListFragment extends MvpFragment<CaseListView, CaseListPresente
 
     @BindView(R.id.container)
     LinearLayout container;
+
+    @BindView(R.id.list_result)
+    ViewSwitcher viewSwitcher;
 
     private CaseListAdapter adapter;
 
@@ -92,6 +99,11 @@ public class CaseListFragment extends MvpFragment<CaseListView, CaseListPresente
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         caseListContainer.setLayoutManager(layoutManager);
         caseListContainer.setAdapter(adapter);
+
+        List<Case> caseList = CaseService.getInstance().getCaseList();
+        int index = caseList.isEmpty() ? HAVE_NO_RESULT : HAVE_RESULT_LIST;
+        viewSwitcher.setDisplayedChild(index);
+
     }
 
     private void initOrderSpinner(final CaseListAdapter adapter) {

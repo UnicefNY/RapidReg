@@ -45,6 +45,7 @@
     <string name="click_to_search">Click to search</string>
     <string name="done">Done</string>
     <string name="no_search_result">Sorry, no results found for this search criteria.</string>
+    <string name="no_records">No records available.</string>
 
     <string-array name="order_array">
         <item>Create Time</item>
