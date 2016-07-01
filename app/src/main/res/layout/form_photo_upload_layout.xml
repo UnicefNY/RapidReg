@@ -29,6 +29,7 @@
         android:paddingLeft="@dimen/case_register_label_padding_left_right"
         android:paddingRight="@dimen/case_register_label_padding_left_right"
         android:text="@string/no_photo_promote_info"
+        android:textSize="@dimen/text_size_16"
         android:visibility="gone" />
 
     <View
