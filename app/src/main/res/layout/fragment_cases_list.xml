@@ -20,10 +20,24 @@
             android:background="@color/lighter_white"
             android:drawSelectorOnTop="true" />
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/list_container"
+        <ViewSwitcher
+            android:id="@+id/list_result"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent">
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/list_container"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="@string/no_records"
+                android:textColor="@color/font_dark"
+                android:textSize="@dimen/text_size_14" />
+        </ViewSwitcher>
     </LinearLayout>
 
     <com.getbase.floatingactionbutton.FloatingActionsMenu
