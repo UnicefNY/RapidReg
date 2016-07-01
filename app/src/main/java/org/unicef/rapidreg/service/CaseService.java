@@ -169,7 +169,8 @@ public class CaseService {
         child.setLastUpdatedDate(date);
         child.setContent(caseBlob);
         child.setName(getChildName(values));
-        child.setAge(Integer.parseInt(values.get(AGE)));
+        int age = values.get(AGE) != null ? Integer.parseInt(values.get(AGE)) : 0;
+        child.setAge(age);
         child.setCaregiver(getCaregiverName(values));
         child.setRegistrationDate(getRegisterDate(values));
         child.setAudio(audioFileDefault);
@@ -193,7 +194,8 @@ public class CaseService {
         child.setLastUpdatedDate(new Date(Calendar.getInstance().getTimeInMillis()));
         child.setContent(caseBlob);
         child.setName(getChildName(values));
-        child.setAge(Integer.parseInt(values.get(AGE)));
+        int age = values.get(AGE) != null ? Integer.parseInt(values.get(AGE)) : 0;
+        child.setAge(age);
         child.setCaregiver(getCaregiverName(values));
         child.setRegistrationDate(getRegisterDate(values));
         child.setAudio(audioFileDefault);
