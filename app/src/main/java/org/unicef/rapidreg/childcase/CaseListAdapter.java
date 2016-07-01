@@ -1,14 +1,10 @@
 package org.unicef.rapidreg.childcase;
 
 import android.content.Context;
-import android.content.res.Resources;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.res.ResourcesCompat;
-import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
-import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -38,6 +34,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class CaseListAdapter extends RecyclerView.Adapter<CaseListAdapter.CaseListHolder> {
     public static final String TAG = CaseListAdapter.class.getSimpleName();
@@ -91,11 +89,11 @@ public class CaseListAdapter extends RecyclerView.Adapter<CaseListAdapter.CaseLi
             gender = Gender.UNKNOWN;
         }
         try {
-            CasePhoto casePhoto =  CasePhotoService.getInstance().getAllCasePhotos(caseItem.getId()).get(0);
-            Bitmap thumbnail = CasePhotoCache.syncAvatarPhotoBitmap(casePhoto);
-            holder.caseImage.setImageDrawable(getDefaultAvatar(thumbnail));
+            CasePhoto caseAvatorPhoto = CasePhotoService.getInstance().getAllCasePhotos(caseItem.getId()).get(0);
+            Bitmap thumbnail = CasePhotoCache.syncAvatarPhotoBitmap(caseAvatorPhoto);
+            holder.caseImage.setImageBitmap(thumbnail);
         } catch (Exception e) {
-            holder.caseImage.setImageDrawable(getDefaultAvatar(gender.getAvatarId()));
+            holder.caseImage.setImageDrawable(activity.getResources().getDrawable(gender.getAvatarId()));
         }
         final String shortUUID = getShortUUID(caseItem.getUniqueId());
 
@@ -167,29 +165,6 @@ public class CaseListAdapter extends RecyclerView.Adapter<CaseListAdapter.CaseLi
         return ResourcesCompat.getDrawable(activity.getResources(), genderId, null);
     }
 
-    private Drawable getDefaultAvatar(int resId) {
-        return getRoundedDrawable(resId);
-    }
-
-    private Drawable getDefaultAvatar(Bitmap photoBit) {
-        return getRoundedDrawable(photoBit);
-    }
-
-
-    private Drawable getRoundedDrawable(int resId) {
-        Resources resources = activity.getResources();
-        Bitmap img = BitmapFactory.decodeResource(resources, resId);
-        RoundedBitmapDrawable dr = RoundedBitmapDrawableFactory.create(resources, img);
-        dr.setCornerRadius(Math.max(img.getWidth(), img.getHeight()) / 2.0f);
-        return dr;
-    }
-
-    private Drawable getRoundedDrawable(Bitmap photoBit) {
-        RoundedBitmapDrawable dr = RoundedBitmapDrawableFactory.create(activity.getResources(), photoBit);
-        dr.setCornerRadius(Math.max(photoBit.getWidth(), photoBit.getHeight()) / 2.0f);
-        return dr;
-    }
-
     private String getShortUUID(String uuid) {
         int length = uuid.length();
         return length > 7 ? uuid.substring(length - 7) : uuid;
@@ -223,16 +198,16 @@ public class CaseListAdapter extends RecyclerView.Adapter<CaseListAdapter.CaseLi
             genderName = (TextView) itemView.findViewById(R.id.gender_name);
             age = (TextView) itemView.findViewById(R.id.age);
             registrationDate = (TextView) itemView.findViewById(R.id.registration_date);
-            caseImage = (ImageView) itemView.findViewById(R.id.case_image);
+            caseImage = (CircleImageView) itemView.findViewById(R.id.case_image);
 
             viewSwitcher = (ViewSwitcher) itemView.findViewById(R.id.view_switcher);
         }
     }
 
     public enum Gender {
-        MALE("BOY", R.drawable.avatar_boy, R.drawable.boy, R.color.boy_blue),
-        FEMALE("GIRL", R.drawable.avatar_girl, R.drawable.girl, R.color.girl_red),
-        UNKNOWN(null, R.drawable.photo_placeholder, R.drawable.gender_default, R.color.transparent);
+        MALE("BOY", R.drawable.avatar_placeholder, R.drawable.boy, R.color.boy_blue),
+        FEMALE("GIRL", R.drawable.avatar_placeholder, R.drawable.girl, R.color.girl_red),
+        UNKNOWN(null, R.drawable.avatar_placeholder, R.drawable.gender_default, R.color.transparent);
 
         private String name;
         private int avatarId;

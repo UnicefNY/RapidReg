@@ -3,10 +3,12 @@
     android:layout_width="match_parent"
     android:layout_height="@dimen/row_height">
 
-    <ImageView
+    <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/case_image"
-        style="@style/Avatar" />
-
+        style="@style/Avatar"
+        android:src="@drawable/avatar_placeholder"
+        app:civ_border_color="#00000000"
+        app:civ_border_width="0dp" />
 
     <ViewSwitcher
         android:id="@+id/view_switcher"
