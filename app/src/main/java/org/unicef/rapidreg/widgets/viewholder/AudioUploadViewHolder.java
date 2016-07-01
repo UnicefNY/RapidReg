@@ -41,9 +41,6 @@ public class AudioUploadViewHolder extends BaseViewHolder {
         if (!activity.getCurrentFeature().isInEditMode()) {
             initPlayAudioUI();
         }
-        if (activity.getCurrentFeature().isInAddMode()) {
-            CaseFieldValueCache.clearAudioFile();
-        }
         if (StreamUtil.isFileExists(mFileName)) {
             initPlayAudioUI();
             showDeleteIconWhenIsEditMode();
