@@ -221,8 +221,8 @@ public class CaseService {
                 casePhoto.setPath(photoBitPathEntry.getValue());
 
                 Bitmap bitmap = ImageCompressUtil.compressBySize(photoBitPathEntry.getValue(), 720, 1080);
+                bitmap = ImageCompressUtil.compressByQuality(bitmap, 150);
                 byte[] imageToBytes = ImageCompressUtil.convertImageToBytes(bitmap);
-                Log.i("sjyuan", "length = " + imageToBytes.length);
 
                 casePhoto.setPhoto(new Blob(imageToBytes));
                 casePhoto.setThumbnail(new Blob(ImageCompressUtil.convertImageToBytes(photoBitPathEntry.getKey())));

@@ -25,8 +25,7 @@ import org.unicef.rapidreg.service.cache.PageModeCached;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public abstract class BaseActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+public abstract class BaseActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     private static final int[][] COLOR_STATES = new int[][]{
             new int[]{android.R.attr.state_checked},

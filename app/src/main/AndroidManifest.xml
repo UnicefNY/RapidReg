@@ -39,7 +39,7 @@
             android:name=".childcase.media.CasePhotoViewActivity"
             android:theme="@style/Transparent" />
         <activity
-            android:name=".childcase.AudioRecorderActivity"
+            android:name=".childcase.media.AudioRecorderActivity"
             android:theme="@style/Transparent" />
 
     </application>

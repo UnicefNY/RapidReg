@@ -1,4 +1,4 @@
-package org.unicef.rapidreg.childcase;
+package org.unicef.rapidreg.childcase.media;
 
 
 import android.media.MediaPlayer;

@@ -92,7 +92,7 @@ public class CaseListAdapter extends RecyclerView.Adapter<CaseListAdapter.CaseLi
             holder.caseImage.setImageDrawable(getDefaultAvatar(gender.getAvatarId()));
         }
         final String shortUUID = getShortUUID(caseItem.getUniqueId());
-        
+
         holder.idNormalState.setText(shortUUID);
         holder.idHiddenState.setText(shortUUID);
         holder.genderBadge.setImageDrawable(getDefaultGenderBadge(gender.getGenderId()));

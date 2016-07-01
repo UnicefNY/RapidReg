@@ -76,6 +76,7 @@ public class ImageCompressUtil {
         int quality = 100;
         bitmap.compress(Bitmap.CompressFormat.JPEG, quality, baos);
         boolean isCompressed = false;
+
         while (baos.toByteArray().length / 1024 > maxSize) {
             quality -= 10;
             baos.reset();
