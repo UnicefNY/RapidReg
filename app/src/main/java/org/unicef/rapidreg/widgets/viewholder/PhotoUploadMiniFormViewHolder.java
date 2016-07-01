@@ -38,6 +38,7 @@ public class PhotoUploadMiniFormViewHolder extends BaseViewHolder<CaseField> imp
     ViewGroup dotViewGroup;
 
     private CaseActivity caseActivity;
+
     private ImageView[] tips;
 
     private boolean isPhotosPrepared;
@@ -46,7 +47,6 @@ public class PhotoUploadMiniFormViewHolder extends BaseViewHolder<CaseField> imp
         super(context, itemView);
         ButterKnife.bind(this, itemView);
         caseActivity = (CaseActivity) context;
-        Log.i("sjyuan", "isPhotosPrepared = " + isPhotosPrepared);
     }
 
     @Override
@@ -120,7 +120,7 @@ public class PhotoUploadMiniFormViewHolder extends BaseViewHolder<CaseField> imp
 
         @Override
         public int getCount() {
-            return CasePhotoCache.size();
+            return CasePhotoCache.size() == 0 ? 1 : CasePhotoCache.size();
         }
 
         @Override
@@ -138,8 +138,12 @@ public class PhotoUploadMiniFormViewHolder extends BaseViewHolder<CaseField> imp
             Log.i("sjyuan", "isPhotosPrepared = " + isPhotosPrepared + ", position = " + position);
             View itemView = LayoutInflater.from(context).inflate(R.layout.case_photo_view_item, container, false);
             container.addView(itemView);
-
             ImageView imageView = (ImageView) itemView.findViewById(R.id.case_photo_item);
+
+            if (CasePhotoCache.size() == 0){
+                imageView.setImageResource(R.drawable.photo_placeholder);
+                return itemView;
+            }
 
             if (isPhotosPrepared) {
                 renderPhoto(imageView, position);
@@ -152,7 +156,7 @@ public class PhotoUploadMiniFormViewHolder extends BaseViewHolder<CaseField> imp
 
         private void renderPhoto(ImageView imageView, int position) {
             Point size = new Point();
-            ((CaseActivity) context).getWindowManager().getDefaultDisplay().getSize(size);
+            caseActivity.getWindowManager().getDefaultDisplay().getSize(size);
             int width = size.x;
             int height = (int) context.getResources()
                     .getDimension(R.dimen.case_photo_view_pager_height_mini_form);
