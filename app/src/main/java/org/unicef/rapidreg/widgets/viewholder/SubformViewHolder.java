@@ -6,6 +6,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewParent;
 import android.widget.Button;
 import android.widget.LinearLayout;
 
@@ -75,11 +76,19 @@ public class SubformViewHolder extends BaseViewHolder<CaseField> {
         return parent.getChildCount() - NUM_CHILD_VIEWS;
     }
 
+    private void clearFocus(View v) {
+        View container = (View) v.getParent();
+        View fieldList = container.findViewById(R.id.field_list);
+        fieldList.clearFocus();
+    }
+
     private void initDeleteBtn(ViewGroup container) {
         Button deleteBtn = (Button) container.findViewById(R.id.delete_subform);
         deleteBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                clearFocus(v);
+
                 updateSubformCache(parent.indexOfChild((View) v.getParent()));
                 parent.removeView((View) v.getParent());
                 updateIndexForFields();
