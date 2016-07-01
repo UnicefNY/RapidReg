@@ -47,6 +47,7 @@ public class PhotoUploadMiniFormViewHolder extends BaseViewHolder<CaseField> imp
         super(context, itemView);
         ButterKnife.bind(this, itemView);
         caseActivity = (CaseActivity) context;
+        caseActivity.findViewById(R.id.edit_case).setVisibility(View.INVISIBLE);
     }
 
     @Override
@@ -135,7 +136,6 @@ public class PhotoUploadMiniFormViewHolder extends BaseViewHolder<CaseField> imp
 
         @Override
         public Object instantiateItem(ViewGroup container, int position) {
-            Log.i("sjyuan", "isPhotosPrepared = " + isPhotosPrepared + ", position = " + position);
             View itemView = LayoutInflater.from(context).inflate(R.layout.case_photo_view_item, container, false);
             container.addView(itemView);
             ImageView imageView = (ImageView) itemView.findViewById(R.id.case_photo_item);
@@ -194,8 +194,10 @@ public class PhotoUploadMiniFormViewHolder extends BaseViewHolder<CaseField> imp
             protected void onPostExecute(Integer integer) {
                 renderPhoto(imageView, position);
                 CasePhotoViewPagerAdapter.this.notifyDataSetChanged();
+                if(isPhotosPrepared){
+                    caseActivity.findViewById(R.id.edit_case).setVisibility(View.VISIBLE);
+                }
             }
         }
     }
-
 }

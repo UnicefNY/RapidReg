@@ -23,6 +23,7 @@ import org.unicef.rapidreg.service.cache.SubformCache;
 import org.unicef.rapidreg.utils.ImageCompressUtil;
 import org.unicef.rapidreg.utils.StreamUtil;
 
+import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Type;
 import java.sql.Date;
@@ -147,16 +148,6 @@ public class CaseService {
         }
     }
 
-    public void clearCaseCache() {
-        CaseFieldValueCache.clear();
-        CasePhotoCache.clear();
-        SubformCache.clear();
-    }
-
-    public String createUniqueId() {
-        return UUID.randomUUID().toString();
-    }
-
     private void saveCase(Map<String, String> values,
                           Map<String, List<Map<String, String>>> subformValues,
                           Map<Bitmap, String> photoBitPaths) {
@@ -191,6 +182,16 @@ public class CaseService {
 
         saveCasePhoto(child, photoBitPaths);
         CaseFieldValueCache.clearAudioFile();
+    }
+
+    public void clearCaseCache() {
+        CaseFieldValueCache.clear();
+        CasePhotoCache.clear();
+        SubformCache.clear();
+    }
+
+    public String createUniqueId() {
+        return UUID.randomUUID().toString();
     }
 
     private void updateCase(Map<String, String> values,
@@ -229,22 +230,31 @@ public class CaseService {
     }
 
     private void saveCasePhoto(Case child, Map<Bitmap, String> photoBitPaths) {
-        if (photoBitPaths != null) {
-            for (Map.Entry<Bitmap, String> photoBitPathEntry : photoBitPaths.entrySet()) {
-                CasePhoto casePhoto = new CasePhoto();
-                casePhoto.setPath(photoBitPathEntry.getValue());
+        if (photoBitPaths == null) {
+            return;
+        }
 
-                Bitmap bitmap = ImageCompressUtil.compressBySize(photoBitPathEntry.getValue(), 720, 1080);
-                bitmap = ImageCompressUtil.compressByQuality(bitmap, 150);
+        for (Map.Entry<Bitmap, String> photoBitPathEntry : photoBitPaths.entrySet()) {
+            try {
+                CasePhoto casePhoto = new CasePhoto();
+                String filePath = photoBitPathEntry.getValue();
+                casePhoto.setPath(filePath);
+
+                Bitmap bitmap = ImageCompressUtil.compressImage(filePath,
+                        CasePhotoCache.MAX_WIDTH, CasePhotoCache.MAX_HEIGHT,
+                        CasePhotoCache.MAX_SIZE_KB);
+
                 byte[] imageToBytes = ImageCompressUtil.convertImageToBytes(bitmap);
 
                 casePhoto.setPhoto(new Blob(imageToBytes));
                 casePhoto.setThumbnail(new Blob(ImageCompressUtil.convertImageToBytes(photoBitPathEntry.getKey())));
                 casePhoto.setCase(child);
                 casePhoto.save();
+            } catch (IOException e) {
+                e.printStackTrace();
             }
-            CasePhotoCache.clearLocalCachedPhotoFiles();
         }
+        CasePhotoCache.clearLocalCachedPhotoFiles();
     }
 
     private Date getCurrentDate() {

@@ -8,6 +8,7 @@ import android.graphics.Matrix;
 import android.media.ExifInterface;
 import android.media.ThumbnailUtils;
 import android.provider.MediaStore;
+import android.util.Log;
 
 import java.io.ByteArrayOutputStream;
 import java.io.FileOutputStream;
@@ -16,9 +17,6 @@ import java.io.InputStream;
 
 
 public class ImageCompressUtil {
-    public static byte[] convertImageToBytes(String imagePath) {
-        return convertImageToBytes(BitmapFactory.decodeFile(imagePath));
-    }
 
     public static byte[] convertImageToBytes(Bitmap imageSource) {
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
@@ -42,6 +40,23 @@ public class ImageCompressUtil {
         return ThumbnailUtils.extractThumbnail(bitmap, width, height);
     }
 
+
+    public static  Bitmap compressImage(String filePath, int maxWidth, int maxHeight, int maxSize) throws IOException {
+        Bitmap bitmap;
+        int rotateDegree = readPictureRotateDegree(filePath);
+
+        if (rotateDegree == 90 || rotateDegree == 270) {
+            bitmap = compressBySize(filePath,
+                    maxWidth, maxHeight);
+        } else {
+            bitmap = compressBySize(filePath,
+                    maxHeight, maxWidth);
+        }
+        bitmap = compressByQuality(bitmap, maxSize);
+        bitmap = rotateBitmapByExif(filePath, bitmap);
+        return bitmap;
+    }
+
     public static Bitmap getThumbnail(ContentResolver contentResolver, String path) {
         Cursor cursor = contentResolver.query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
                 new String[]{MediaStore.MediaColumns._ID}, MediaStore.MediaColumns.DATA + "=?", new String[]{path}, null);
@@ -58,6 +73,8 @@ public class ImageCompressUtil {
                                         int targetHeight) {
         BitmapFactory.Options opts = new BitmapFactory.Options();
         opts.inJustDecodeBounds = true;
+
+        BitmapFactory.decodeFile(pathName, opts);
         int imgWidth = opts.outWidth;
         int imgHeight = opts.outHeight;
 
@@ -67,6 +84,7 @@ public class ImageCompressUtil {
         if (widthRatio > 1 || heightRatio > 1) {
             opts.inSampleSize = widthRatio > heightRatio ? widthRatio : heightRatio;
         }
+
         opts.inJustDecodeBounds = false;
         return BitmapFactory.decodeFile(pathName, opts);
     }
@@ -78,7 +96,7 @@ public class ImageCompressUtil {
         boolean isCompressed = false;
 
         while (baos.toByteArray().length / 1024 > maxSize) {
-            quality -= 10;
+            quality -= 5;
             baos.reset();
             bitmap.compress(Bitmap.CompressFormat.JPEG, quality, baos);
             isCompressed = true;
@@ -91,6 +109,59 @@ public class ImageCompressUtil {
         } else {
             return bitmap;
         }
+    }
+
+    public static int readPictureRotateDegree(String path) throws IOException {
+        int degree = 0;
+        ExifInterface exifInterface = new ExifInterface(path);
+        int orientation = exifInterface.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL);
+        switch (orientation) {
+            case ExifInterface.ORIENTATION_ROTATE_90:
+                degree = 90;
+                break;
+            case ExifInterface.ORIENTATION_ROTATE_180:
+                degree = 180;
+                break;
+            case ExifInterface.ORIENTATION_ROTATE_270:
+                degree = 270;
+                break;
+        }
+        return degree;
+    }
+
+    public static Bitmap rotateBitmapByExif(String srcPath, Bitmap bitmap) {
+        ExifInterface exif;
+        Bitmap newBitmap;
+        try {
+            exif = new ExifInterface(srcPath);
+            if (exif != null) {
+                int ori = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION,
+                        ExifInterface.ORIENTATION_NORMAL);
+                int degree = 0;
+                switch (ori) {
+                    case ExifInterface.ORIENTATION_ROTATE_90:
+                        degree = 90;
+                        break;
+                    case ExifInterface.ORIENTATION_ROTATE_180:
+                        degree = 180;
+                        break;
+                    case ExifInterface.ORIENTATION_ROTATE_270:
+                        degree = 270;
+                        break;
+                }
+                if (degree != 0) {
+                    Matrix m = new Matrix();
+                    m.postRotate(degree);
+                    newBitmap = Bitmap.createBitmap(bitmap, 0, 0,
+                            bitmap.getWidth(), bitmap.getHeight(), m, true);
+                    recycleBitmap(bitmap);
+                    return newBitmap;
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return bitmap;
     }
 
     public static Bitmap compressBySize(Bitmap bitmap, int targetWidth,
@@ -149,41 +220,6 @@ public class ImageCompressUtil {
         return bitmap;
     }
 
-    public static Bitmap rotateBitmapByExif(String srcPath, Bitmap bitmap) {
-        ExifInterface exif;
-        Bitmap newBitmap = null;
-        try {
-            exif = new ExifInterface(srcPath);
-            if (exif != null) {
-                int ori = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION,
-                        ExifInterface.ORIENTATION_NORMAL);
-                int digree = 0;
-                switch (ori) {
-                    case ExifInterface.ORIENTATION_ROTATE_90:
-                        digree = 90;
-                        break;
-                    case ExifInterface.ORIENTATION_ROTATE_180:
-                        digree = 180;
-                        break;
-                    case ExifInterface.ORIENTATION_ROTATE_270:
-                        digree = 270;
-                        break;
-                }
-                if (digree != 0) {
-                    Matrix m = new Matrix();
-                    m.postRotate(digree);
-                    newBitmap = Bitmap.createBitmap(bitmap, 0, 0,
-                            bitmap.getWidth(), bitmap.getHeight(), m, true);
-                    recycleBitmap(bitmap);
-                    return newBitmap;
-                }
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return bitmap;
-    }
-
     public static void recycleBitmap(Bitmap bitmap) {
         if (bitmap != null && !bitmap.isRecycled()) {
             bitmap.recycle();
@@ -195,5 +231,12 @@ public class ImageCompressUtil {
         FileOutputStream fos = new FileOutputStream(saveFilePath);
         image.compress(Bitmap.CompressFormat.PNG, 70, fos);
         fos.close();
+    }
+
+
+    public static Bitmap rotateImage(Bitmap img, int rotateDegree) {
+        Matrix matrix = new Matrix();
+        matrix.postRotate(rotateDegree);
+        return Bitmap.createBitmap(img, 0, 0, img.getWidth(), img.getHeight(), matrix, true);
     }
 }
