@@ -26,8 +26,10 @@
         android:layout_height="20dp"
         android:layout_gravity="center_vertical"
         android:layout_margin="5dp"
-        android:visibility="gone"
-        android:text="@string/no_photo_promote_info" />
+        android:paddingLeft="@dimen/case_register_label_padding_left_right"
+        android:paddingRight="@dimen/case_register_label_padding_left_right"
+        android:text="@string/no_photo_promote_info"
+        android:visibility="gone" />
 
     <View
         android:layout_width="match_parent"

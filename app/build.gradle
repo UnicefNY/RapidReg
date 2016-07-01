@@ -109,4 +109,6 @@ dependencies {
             'org.robolectric:robolectric:3.1',
             "org.powermock:powermock-module-junit4:${powerMockVersion}",
             "org.powermock:powermock-api-mockito:${powerMockVersion}"
+
+    compile 'de.hdodenhof:circleimageview:2.0.0'
 }
