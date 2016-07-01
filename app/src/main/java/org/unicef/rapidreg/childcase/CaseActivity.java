@@ -216,7 +216,19 @@ public class CaseActivity extends BaseActivity {
         caseListFragment.toggleMode(textAreaState.isDetailShow());
     }
 
+    private void clearFocusToMakeLastFieldSaved() {
+        CaseRegisterWrapperFragment fragment =
+                (CaseRegisterWrapperFragment) getSupportFragmentManager()
+                        .findFragmentByTag(CaseRegisterWrapperFragment.class.getSimpleName());
+
+        if (fragment != null) {
+            fragment.clearFocus();
+        }
+    }
+
     private boolean saveCase() {
+        clearFocusToMakeLastFieldSaved();
+
         if (validateRequiredField()) {
             Map<Bitmap, String> photoBitPaths = CasePhotoCache.getPhotoBitPaths();
             CaseService.getInstance().saveOrUpdateCase(CaseFieldValueCache.getValues(),
