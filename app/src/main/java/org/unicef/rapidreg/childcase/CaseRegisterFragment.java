@@ -62,4 +62,11 @@ public class CaseRegisterFragment extends MvpFragment<CaseRegisterView, CaseRegi
     public CaseRegisterAdapter getCaseRegisterAdapter() {
         return caseRegisterAdapter;
     }
+
+    public void clearFocus() {
+        View focusedChild = fieldList.getFocusedChild();
+        if (focusedChild != null) {
+            focusedChild.clearFocus();
+        }
+    }
 }

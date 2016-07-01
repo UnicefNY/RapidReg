@@ -204,4 +204,19 @@ public class CaseRegisterWrapperFragment extends Fragment {
         }
         return pages;
     }
+
+    public void clearFocus() {
+        View focusedChild = miniFormContainer.getFocusedChild();
+        if (focusedChild != null) {
+            focusedChild.clearFocus();
+        }
+
+        FragmentStatePagerItemAdapter adapter =
+                (FragmentStatePagerItemAdapter) viewPager.getAdapter();
+        CaseRegisterFragment fragment = (CaseRegisterFragment) adapter
+                .getPage(viewPager.getCurrentItem());
+        if (fragment != null) {
+            fragment.clearFocus();
+        }
+    }
 }
