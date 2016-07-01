@@ -70,6 +70,7 @@ public class GenericViewHolder extends BaseTextViewHolder {
 
     @Override
     public void setOnClickListener(final CaseField field) {
+        valueView.setFocusable(false);
         itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -99,6 +100,17 @@ public class GenericViewHolder extends BaseTextViewHolder {
                 }
             }
         });
+        valueView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                try {
+                    showFieldDialog(field, valueView);
+                } catch (Exception e) {
+                    Log.e(TAG, String.format("show dialog error. Field: %s", field), e);
+                }
+            }
+        });
+
     }
 
     private void showFieldDialog(CaseField field, TextView valueView) {

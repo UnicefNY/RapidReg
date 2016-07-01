@@ -175,8 +175,7 @@ public class SwipeChangeLayout extends ViewGroup {
                         View subChild;
                         for (int j = 0; j < subCount; j++) {
                             subChild = ((ViewGroup) child).getChildAt(j);
-                            if (subChild instanceof AbsListView || subChild instanceof ScrollView
-                                    || subChild instanceof RecyclerView) {
+                            if (subChild instanceof RecyclerView) {
                                 scrollChild = subChild;
                                 return;
                             }
@@ -406,7 +405,7 @@ public class SwipeChangeLayout extends ViewGroup {
     }
 
     private void smoothScrollToY(int finalTop) {
-        if (viewDragHelper.settleCapturedViewAt(0, finalTop)) {
+        if (viewDragHelper.settleCapturedViewAt(0, finalTop)){
             ViewCompat.postInvalidateOnAnimation(SwipeChangeLayout.this);
         }
     }
