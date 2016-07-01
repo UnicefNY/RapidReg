@@ -83,9 +83,15 @@ public class CaseListAdapter extends RecyclerView.Adapter<CaseListAdapter.CaseLi
         final Map<String, List<Map<String, String>>> subformInfo
                 = new Gson().fromJson(subformJson, subformType);
 
-        Gender gender = Gender.valueOf(caseInfo.get("Sex").toUpperCase());
+        Gender gender;
+
+        if (caseInfo.get("Sex") != null) {
+            gender = Gender.valueOf(caseInfo.get("Sex").toUpperCase());
+        } else {
+            gender = Gender.UNKNOWN;
+        }
         try {
-            CasePhoto caseAvatorPhoto =  CasePhotoService.getInstance().getAllCasePhotos(caseItem.getId()).get(0);
+            CasePhoto caseAvatorPhoto = CasePhotoService.getInstance().getAllCasePhotos(caseItem.getId()).get(0);
             Bitmap thumbnail = CasePhotoCache.syncAvatarPhotoBitmap(caseAvatorPhoto);
             holder.caseImage.setImageDrawable(getDefaultAvatar(thumbnail));
         } catch (Exception e) {
@@ -216,7 +222,8 @@ public class CaseListAdapter extends RecyclerView.Adapter<CaseListAdapter.CaseLi
 
     public enum Gender {
         MALE("BOY", R.drawable.avatar_boy, R.drawable.boy, R.color.boy_blue),
-        FEMALE("GIRL", R.drawable.avatar_girl, R.drawable.girl, R.color.girl_red);
+        FEMALE("GIRL", R.drawable.avatar_girl, R.drawable.girl, R.color.girl_red),
+        UNKNOWN(null, R.drawable.photo_placeholder, R.drawable.gender_default, R.color.transparent);
 
         private String name;
         private int avatarId;

@@ -44,7 +44,12 @@ public class MiniFormProfileViewHolder extends BaseViewHolder<CaseField> {
     @Override
     public void setValue(CaseField field) {
         idView.setText(CaseFieldValueCache.getProfileValue(CaseProfile.ID_NORMAL_STATE));
-        CaseListAdapter.Gender gender = CaseListAdapter.Gender.valueOf(CaseFieldValueCache.getProfileValue(CaseProfile.SEX).toUpperCase());
+        CaseListAdapter.Gender gender;
+        if (CaseFieldValueCache.getProfileValue(CaseProfile.SEX) != null) {
+            gender = CaseListAdapter.Gender.valueOf(CaseFieldValueCache.getProfileValue(CaseProfile.SEX).toUpperCase());
+        } else {
+            gender = CaseListAdapter.Gender.UNKNOWN;
+        }
         Drawable drawable = ResourcesCompat.getDrawable(context.getResources(), gender.getGenderId(), null);
         genderBadge.setImageDrawable(drawable);
         genderName.setText(gender.getName());
