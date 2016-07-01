@@ -135,7 +135,9 @@ public class SubformViewHolder extends BaseViewHolder<CaseField> {
 
     private void updateSubformCache(int index) {
         List<Map<String, String>> values = SubformCache.get(fieldParent);
-        values.remove(index);
+        if (values != null) {
+            values.remove(index);
+        }
     }
 
     private void addSubform() {
