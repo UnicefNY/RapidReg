@@ -24,6 +24,7 @@ import org.unicef.rapidreg.R;
 import org.unicef.rapidreg.model.Case;
 import org.unicef.rapidreg.service.CaseFormService;
 import org.unicef.rapidreg.service.CaseService;
+import org.unicef.rapidreg.service.cache.CaseFieldValueCache;
 import org.unicef.rapidreg.service.cache.SubformCache;
 
 import java.util.Arrays;
@@ -163,6 +164,7 @@ public class CaseListFragment extends MvpFragment<CaseListView, CaseListPresente
     public void onCaseAddClicked() {
         CaseService.getInstance().clearCaseCache();
         SubformCache.clear();
+        CaseFieldValueCache.clearAudioFile();
         if (!CaseFormService.getInstance().isFormReady()) {
             Toast.makeText(getActivity(),
                     R.string.syncing_forms_text, Toast.LENGTH_LONG).show();
