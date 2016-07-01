@@ -91,8 +91,8 @@ public class CaseListAdapter extends RecyclerView.Adapter<CaseListAdapter.CaseLi
             gender = Gender.UNKNOWN;
         }
         try {
-            CasePhoto caseAvatorPhoto = CasePhotoService.getInstance().getAllCasePhotos(caseItem.getId()).get(0);
-            Bitmap thumbnail = CasePhotoCache.syncAvatarPhotoBitmap(caseAvatorPhoto);
+            CasePhoto casePhoto =  CasePhotoService.getInstance().getAllCasePhotos(caseItem.getId()).get(0);
+            Bitmap thumbnail = CasePhotoCache.syncAvatarPhotoBitmap(casePhoto);
             holder.caseImage.setImageDrawable(getDefaultAvatar(thumbnail));
         } catch (Exception e) {
             holder.caseImage.setImageDrawable(getDefaultAvatar(gender.getAvatarId()));
@@ -104,7 +104,8 @@ public class CaseListAdapter extends RecyclerView.Adapter<CaseListAdapter.CaseLi
         holder.genderBadge.setImageDrawable(getDefaultGenderBadge(gender.getGenderId()));
         holder.genderName.setText(gender.getName());
         holder.genderName.setTextColor(ContextCompat.getColor(activity, gender.getColorId()));
-        holder.age.setText(caseInfo.get("Age"));
+        String age = caseInfo.get("Age");
+        holder.age.setText(isValidAge(age) ? age : "");
         holder.registrationDate.setText(dateFormat.format(caseItem.getRegistrationDate()));
 
         holder.view.setOnClickListener(new View.OnClickListener() {
@@ -192,6 +193,14 @@ public class CaseListAdapter extends RecyclerView.Adapter<CaseListAdapter.CaseLi
     private String getShortUUID(String uuid) {
         int length = uuid.length();
         return length > 7 ? uuid.substring(length - 7) : uuid;
+    }
+
+    private boolean isValidAge(String value) {
+        if (value == null) {
+            return false;
+        }
+
+        return Integer.valueOf(value) > 0;
     }
 
     public static class CaseListHolder extends RecyclerView.ViewHolder {

@@ -204,9 +204,9 @@ public class LoginPresenter extends MvpBasePresenter<LoginView> {
                         user.setLanguage(response.body().getLanguage());
                         user.setVerified(response.body().getVerified());
                         notifyEvent(new NeedCacheForOfflineEvent(user));
+                        notifyEvent(new NeedGoToLoginSuccessScreenEvent(username));
                         notifyEvent(new NeedLoadFormsEvent(getSessionId(response.headers()),
                                 FormLoadStateMachine.getInstance(MAX_LOAD_FORMS_NUM)));
-                        notifyEvent(new NeedGoToLoginSuccessScreenEvent(username));
                         showLoginResultMessage(HttpStatusCodeHandler.LOGIN_SUCCESS_MESSAGE);
                         Log.d(TAG, "login successfully");
                     } else {
