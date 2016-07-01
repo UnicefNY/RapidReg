@@ -142,6 +142,7 @@ public class PhotoUploadMiniFormViewHolder extends BaseViewHolder<CaseField> imp
 
             if (CasePhotoCache.size() == 0){
                 imageView.setImageResource(R.drawable.photo_placeholder);
+                caseActivity.findViewById(R.id.edit_case).setVisibility(View.VISIBLE);
                 return itemView;
             }
 

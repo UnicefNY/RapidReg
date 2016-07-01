@@ -48,10 +48,6 @@ public class CaseService {
     public static final String OTHER_NAME = "Other Name";
     public static final String CAREGIVER_NAME = "Name of Current Caregiver";
     public static final String REGISTRATION_DATE = "Date of Registration or Interview";
-    public static final String CASEWORKER_CODE = "Caseworker Code";
-    public static final String RECORD_CREATED_BY = "Record created by";
-    public static final String PREVIOUS_OWNER = "Previous Owner";
-    public static final String MODULE = "Module";
 
     private static final CaseService CASE_SERVICE = new CaseService();
     private CaseDao caseDao = new CaseDaoImpl();
@@ -151,13 +147,6 @@ public class CaseService {
     private void saveCase(Map<String, String> values,
                           Map<String, List<Map<String, String>>> subformValues,
                           Map<Bitmap, String> photoBitPaths) {
-
-        String username = UserService.getInstance().getCurrentUser().getUsername();
-        values.put(MODULE, "primeromodule-cp");
-        values.put(CASEWORKER_CODE, username);
-        values.put(RECORD_CREATED_BY, username);
-        values.put(PREVIOUS_OWNER, username);
-
         Gson gson = new Gson();
         Date date = new Date(Calendar.getInstance().getTimeInMillis());
         Blob caseBlob = new Blob(gson.toJson(values).getBytes());
@@ -171,13 +160,11 @@ public class CaseService {
         child.setLastUpdatedDate(date);
         child.setContent(caseBlob);
         child.setName(getChildName(values));
-        int age = values.get(AGE) != null ? Integer.parseInt(values.get(AGE)) : 0;
-        child.setAge(age);
+        child.setAge(Integer.parseInt(values.get(AGE)));
         child.setCaregiver(getCaregiverName(values));
         child.setRegistrationDate(getRegisterDate(values));
         child.setAudio(audioFileDefault);
         child.setSubform(subformBlob);
-        child.setCreatedBy(username);
         child.save();
 
         saveCasePhoto(child, photoBitPaths);
@@ -207,8 +194,7 @@ public class CaseService {
         child.setLastUpdatedDate(new Date(Calendar.getInstance().getTimeInMillis()));
         child.setContent(caseBlob);
         child.setName(getChildName(values));
-        int age = values.get(AGE) != null ? Integer.parseInt(values.get(AGE)) : 0;
-        child.setAge(age);
+        child.setAge(Integer.parseInt(values.get(AGE)));
         child.setCaregiver(getCaregiverName(values));
         child.setRegistrationDate(getRegisterDate(values));
         child.setAudio(audioFileDefault);
