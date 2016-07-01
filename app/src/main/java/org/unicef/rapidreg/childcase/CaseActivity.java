@@ -16,6 +16,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.MenuItem;
 import android.widget.GridView;
 import android.widget.Toast;
@@ -65,6 +66,7 @@ public class CaseActivity extends BaseActivity {
         if (TextUtils.isEmpty(imagePath)) {
             return;
         }
+
         GridView photoGrid = (GridView) findViewById(R.id.photo_grid);
 
         List<Bitmap> previousPhotos = CasePhotoCache.getPhotosBits();
@@ -78,6 +80,7 @@ public class CaseActivity extends BaseActivity {
             previousPhotos.add(BitmapFactory.decodeResource(getResources(), R.drawable.photo_add));
         }
         photoGrid.setAdapter(new CasePhotoAdapter(this, previousPhotos));
+
         imagePath = null;
     }
 
@@ -93,6 +96,29 @@ public class CaseActivity extends BaseActivity {
             onSelectFromGalleryResult(data);
         } else if (PhotoUploadViewHolder.REQUEST_CODE_CAMERA == requestCode) {
             onCaptureImageResult();
+        }
+    }
+
+    private void onSelectFromGalleryResult(Intent data) {
+        Uri uri = data.getData();
+        if (!TextUtils.isEmpty(uri.getAuthority())) {
+            Cursor cursor = getContentResolver().query(uri,
+                    new String[]{MediaStore.Images.Media.DATA}, null, null, null);
+            cursor.moveToFirst();
+            imagePath = cursor.getString(cursor
+                    .getColumnIndex(MediaStore.Images.Media.DATA));
+            cursor.close();
+        }
+    }
+
+    private void onCaptureImageResult() {
+        try {
+            Bitmap bitmap = BitmapFactory.decodeFile(CasePhotoCache.MEDIA_PATH_FOR_CAMERA);
+            imagePath = getOutputMediaFilePath();
+            ImageCompressUtil.storeImage(bitmap, imagePath);
+            bitmap.recycle();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
@@ -157,29 +183,6 @@ public class CaseActivity extends BaseActivity {
         caseToggleMenu = toolbar.getMenu().findItem(R.id.toggle);
     }
 
-    private void onSelectFromGalleryResult(Intent data) {
-        Uri uri = data.getData();
-        if (!TextUtils.isEmpty(uri.getAuthority())) {
-            Cursor cursor = getContentResolver().query(uri,
-                    new String[]{MediaStore.Images.Media.DATA}, null, null, null);
-            cursor.moveToFirst();
-            imagePath = cursor.getString(cursor
-                    .getColumnIndex(MediaStore.Images.Media.DATA));
-            cursor.close();
-        }
-    }
-
-    private void onCaptureImageResult() {
-        try {
-            Bitmap bitmap = BitmapFactory.decodeFile(CasePhotoCache.MEDIA_PATH_FOR_CAMERA);
-            imagePath = getOutputMediaFilePath();
-            ImageCompressUtil.storeImage(bitmap, imagePath);
-            bitmap.recycle();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
     private String getOutputMediaFilePath() {
         File mediaStorageDir = new File(Environment.getExternalStorageDirectory()
                 + File.separator + getApplicationContext().getPackageName());
@@ -230,7 +233,6 @@ public class CaseActivity extends BaseActivity {
 
     private boolean saveCase() {
         clearFocusToMakeLastFieldSaved();
-
         if (validateRequiredField()) {
             Map<Bitmap, String> photoBitPaths = CasePhotoCache.getPhotoBitPaths();
             CaseService.getInstance().saveOrUpdateCase(CaseFieldValueCache.getValues(),
