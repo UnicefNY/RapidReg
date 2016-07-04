@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import org.unicef.rapidreg.childcase.media.CasePhotoAdapter;
 import org.unicef.rapidreg.forms.childcase.CaseField;
 import org.unicef.rapidreg.widgets.viewholder.AudioUploadViewHolder;
 import org.unicef.rapidreg.widgets.viewholder.BaseViewHolder;
@@ -45,6 +46,7 @@ public class CaseRegisterAdapter extends RecyclerView.Adapter<BaseViewHolder> {
     protected LayoutInflater inflater;
     protected Resources resources;
     protected String packageName;
+    private CasePhotoAdapter adapter;
 
     public CaseRegisterAdapter(Context context, List<CaseField> fields, boolean isMiniForm) {
         this.fields = fields;
@@ -54,6 +56,11 @@ public class CaseRegisterAdapter extends RecyclerView.Adapter<BaseViewHolder> {
         inflater = LayoutInflater.from(context);
         resources = context.getResources();
         packageName = context.getPackageName();
+
+    }
+
+    public void setCasePhotoAdapter(CasePhotoAdapter adapter) {
+        this.adapter = adapter;
     }
 
     @Override
@@ -79,7 +86,7 @@ public class CaseRegisterAdapter extends RecyclerView.Adapter<BaseViewHolder> {
             case VIEW_HOLDER_PHOTO_UPLOAD_BOX:
                 return new PhotoUploadViewHolder(activity, inflater.inflate(resources
                                 .getIdentifier(PREFIX + CaseField.TYPE_PHOTO_UPLOAD_LAYOUT, LAYOUT, packageName),
-                        parent, false));
+                        parent, false), adapter);
 
             case VIEW_HOLDER_PHOTO_UPLOAD_BOX_MINI_FORM:
                 return new PhotoUploadMiniFormViewHolder(activity, inflater.inflate(resources
@@ -90,6 +97,7 @@ public class CaseRegisterAdapter extends RecyclerView.Adapter<BaseViewHolder> {
                 return new AudioUploadViewHolder(activity, inflater.inflate(resources
                                 .getIdentifier(PREFIX + CaseField.TYPE_AUDIO_UPLOAD_LAYOUT, LAYOUT, packageName),
                         parent, false));
+
             case VIEW_HOLDER_SUBFORM:
                 return new SubformViewHolder(activity, inflater.inflate(resources
                                 .getIdentifier(PREFIX + CaseField.TYPE_SUBFORM_FIELD, LAYOUT, packageName),
