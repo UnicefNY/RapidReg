@@ -1,13 +1,8 @@
 package org.unicef.rapidreg.widgets.viewholder;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.Point;
-import android.os.AsyncTask;
-import android.support.annotation.NonNull;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,19 +11,14 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.bumptech.glide.Glide;
-import com.raizlabs.android.dbflow.sql.language.CursorResult;
-import com.raizlabs.android.dbflow.structure.database.transaction.QueryTransaction;
+import com.raizlabs.android.dbflow.list.FlowCursorList;
 
 import org.unicef.rapidreg.R;
 import org.unicef.rapidreg.childcase.CaseActivity;
 import org.unicef.rapidreg.forms.childcase.CaseField;
 import org.unicef.rapidreg.model.CasePhoto;
 import org.unicef.rapidreg.service.CasePhotoService;
-import org.unicef.rapidreg.service.CaseService;
-import org.unicef.rapidreg.service.cache.CaseFieldValueCache;
 import org.unicef.rapidreg.service.cache.CasePhotoCache;
-
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -67,12 +57,6 @@ public class PhotoUploadMiniFormViewHolder extends BaseViewHolder<CaseField> imp
 
     private void initDots() {
 
-        CasePhotoService.getInstance().getAllCasesPhoto(CasePhotoService.getInstance().getCaseId(), new QueryTransaction.QueryResultCallback<CasePhoto>() {
-            @Override
-            public void onQueryResult(QueryTransaction transaction, @NonNull CursorResult<CasePhoto> tResult) {
-//                tResult.toList()
-            }
-        });
         tips = new ImageView[CasePhotoCache.size()];
         for (int i = 0; i < tips.length; i++) {
             tips[i] = new ImageView(context);
@@ -130,10 +114,16 @@ public class PhotoUploadMiniFormViewHolder extends BaseViewHolder<CaseField> imp
     }
 
     public class CasePhotoViewPagerAdapter extends PagerAdapter {
+        private FlowCursorList<CasePhoto> flowQueryList;
+
+        public CasePhotoViewPagerAdapter() {
+            flowQueryList =
+                    CasePhotoService.getInstance().getAllCasesPhotoFlowQueryList(CasePhotoService.getInstance().getCaseId());
+        }
 
         @Override
         public int getCount() {
-            return CasePhotoCache.size() == 0 ? 1 : CasePhotoCache.size();
+            return flowQueryList.getCount();
         }
 
         @Override
@@ -152,67 +142,9 @@ public class PhotoUploadMiniFormViewHolder extends BaseViewHolder<CaseField> imp
             container.addView(itemView);
             ImageView imageView = (ImageView) itemView.findViewById(R.id.case_photo_item);
 
-            if (CasePhotoCache.size() == 0){
-                imageView.setImageResource(R.drawable.photo_placeholder);
-                caseActivity.findViewById(R.id.edit_case).setVisibility(View.VISIBLE);
-                return itemView;
-            }
+            Glide.with(context).load(flowQueryList.getItem(position).getPhoto().getBlob()).into(imageView);
 
-            if (isPhotosPrepared) {
-                renderPhoto(imageView, position);
-            } else {
-                new UpdateImageViewTask(imageView, position).execute();
-            }
             return itemView;
-        }
-
-
-        private void renderPhoto(ImageView imageView, int position) {
-//            Point size = new Point();
-//            caseActivity.getWindowManager().getDefaultDisplay().getSize(size);
-//            int width = size.x;
-//            int height = (int) context.getResources()
-//                    .getDimension(R.dimen.case_photo_view_pager_height_mini_form);
-            List<String> previousPhotoPaths = CasePhotoCache.getPhotosPaths();
-            Glide.with(context).load(previousPhotoPaths.get(position)).into(imageView);
-//            Bitmap image = ImageCompressUtil.getThumbnail(previousPhotoPaths.get(position), width, height);
-//            imageView.setImageBitmap(image);
-        }
-
-        private class UpdateImageViewTask extends AsyncTask<String, Integer, Integer> {
-            private final ImageView imageView;
-            private final int position;
-
-            public UpdateImageViewTask(ImageView imageView, int position) {
-                this.imageView = imageView;
-                this.position = position;
-            }
-
-            @Override
-            protected Integer doInBackground(String... params) {
-                if (!isPhotosPrepared) {
-                    synchronized (CasePhotoViewPagerAdapter.this) {
-                        if (!isPhotosPrepared) {
-                            String caseIdStr = CaseFieldValueCache.getProfileValue(CaseFieldValueCache.CaseProfile.ID);
-                            long caseId = Long.parseLong(caseIdStr);
-                            List<CasePhoto> allCasePhotos = CasePhotoService.getInstance().getAllCasePhotos(caseId);
-                            CasePhotoCache.syncCachingPhotos(allCasePhotos);
-                            isPhotosPrepared = true;
-                        }
-                    }
-                }
-                return null;
-            }
-
-            @Override
-            protected void onPostExecute(Integer integer) {
-
-                renderPhoto(imageView, position);
-                CasePhotoViewPagerAdapter.this.notifyDataSetChanged();
-                if(isPhotosPrepared){
-                    caseActivity.findViewById(R.id.edit_case).setVisibility(View.VISIBLE);
-                }
-            }
         }
     }
 }
