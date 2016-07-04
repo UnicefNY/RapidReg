@@ -1,10 +1,8 @@
 package org.unicef.rapidreg.db.impl;
 
-import android.support.annotation.NonNull;
-
-import com.raizlabs.android.dbflow.sql.language.CursorResult;
+import com.raizlabs.android.dbflow.list.FlowCursorList;
+import com.raizlabs.android.dbflow.list.FlowQueryList;
 import com.raizlabs.android.dbflow.sql.language.SQLite;
-import com.raizlabs.android.dbflow.structure.database.transaction.QueryTransaction;
 
 import org.unicef.rapidreg.db.CasePhotoDao;
 import org.unicef.rapidreg.model.CasePhoto;
@@ -36,9 +34,9 @@ public class CasePhotoDaoImpl implements CasePhotoDao {
     }
 
     @Override
-    public void getAllCasesPhoto(long caseId, QueryTransaction.QueryResultCallback<CasePhoto> callback) {
-        SQLite.select()
+    public FlowCursorList<CasePhoto> getAllCasesPhotoFlowQueryList(long caseId) {
+        return SQLite.select()
                 .from(CasePhoto.class)
-                .where(CasePhoto_Table.case_id.eq(caseId)).async().queryResultCallback(callback).execute();
+                .where(CasePhoto_Table.case_id.eq(caseId)).cursorList();
     }
 }
