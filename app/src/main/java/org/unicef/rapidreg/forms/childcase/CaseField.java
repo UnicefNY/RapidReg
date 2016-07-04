@@ -13,6 +13,7 @@ import org.unicef.rapidreg.widgets.dialog.SingleTextDialog;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 public class CaseField {
@@ -214,14 +215,16 @@ public class CaseField {
     }
 
     public List<String> getSelectOptions() {
+        String language = Locale.getDefault().getLanguage();
+
         List<String> items = new ArrayList<>();
         if (getType().equals(CaseField.TYPE_MULTI_SELECT_BOX)) {
-            List<Map<String, String>> arrayList = getOptionStringsText().get("en");
+            List<Map<String, String>> arrayList = getOptionStringsText().get(language);
             for (Map<String, String> map : arrayList) {
                 items.add(map.get("display_text"));
             }
         } else {
-            items = getOptionStringsText().get("en");
+            items = getOptionStringsText().get(language);
         }
         return items;
     }

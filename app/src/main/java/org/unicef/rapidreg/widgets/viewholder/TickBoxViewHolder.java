@@ -13,6 +13,7 @@ import org.unicef.rapidreg.service.cache.SubformCache;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import butterknife.BindView;
@@ -69,17 +70,18 @@ public class TickBoxViewHolder extends BaseViewHolder<CaseField> {
     }
 
     private List<Map<String, String>> getValues(CaseField field, String isChecked) {
+        String language = Locale.getDefault().getLanguage();
         List<Map<String, String>> values = SubformCache.get(field.getParent()) == null ?
                 new ArrayList<Map<String, String>>() : SubformCache.get(field.getParent());
 
         Map<String, String> value;
         try {
             value = values.get(field.getIndex());
-            value.put(field.getDisplayName().get("en"), isChecked);
+            value.put(field.getDisplayName().get(language), isChecked);
             values.set(field.getIndex(), value);
         } catch (IndexOutOfBoundsException e) {
             value = new HashMap<>();
-            value.put(field.getDisplayName().get("en"), isChecked);
+            value.put(field.getDisplayName().get(language), isChecked);
             values.add(field.getIndex(), value);
         }
 

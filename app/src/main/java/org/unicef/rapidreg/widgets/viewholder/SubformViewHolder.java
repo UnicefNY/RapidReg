@@ -18,6 +18,7 @@ import org.unicef.rapidreg.service.cache.SubformCache;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import butterknife.BindView;
@@ -44,7 +45,7 @@ public class SubformViewHolder extends BaseViewHolder<CaseField> {
     @Override
     public void setValue(CaseField field) {
         fields = field.getSubForm().getFields();
-        fieldParent = field.getDisplayName().get("en");
+        fieldParent = field.getDisplayName().get(Locale.getDefault().getLanguage());
 
         attachParentToFields(fields, fieldParent);
         addSubformBtn.setText(String.format("%s %s", addSubformBtn.getText(), fieldParent));

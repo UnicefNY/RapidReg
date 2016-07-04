@@ -15,6 +15,7 @@ import org.unicef.rapidreg.service.cache.SubformCache;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import butterknife.BindView;
@@ -73,17 +74,20 @@ public class SingleLineRadioViewHolder extends BaseViewHolder<CaseField> {
         optionGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
+                String language = Locale.getDefault().getLanguage();
                 if (checkedId == firstOption.getId()) {
                     if (isSubformField(field)) {
                         SubformCache.put(field.getParent(), getValues(field, options.get(0)));
                     } else {
-                        CaseFieldValueCache.put(field.getDisplayName().get("en"), options.get(0));
+                        CaseFieldValueCache.put(field.getDisplayName()
+                                .get(language), options.get(0));
                     }
                 } else {
                     if (isSubformField(field)) {
                         SubformCache.put(field.getParent(), getValues(field, options.get(1)));
                     } else {
-                        CaseFieldValueCache.put(field.getDisplayName().get("en"), options.get(1));
+                        CaseFieldValueCache.put(field.getDisplayName()
+                                .get(language), options.get(1));
                     }
                 }
             }
@@ -112,17 +116,18 @@ public class SingleLineRadioViewHolder extends BaseViewHolder<CaseField> {
     }
 
     private List<Map<String, String>> getValues(CaseField field, String option) {
+        String language = Locale.getDefault().getLanguage();
         List<Map<String, String>> values = SubformCache.get(field.getParent()) == null ?
                 new ArrayList<Map<String, String>>() : SubformCache.get(field.getParent());
 
         Map<String, String> value;
         try {
             value = values.get(field.getIndex());
-            value.put(field.getDisplayName().get("en"), option);
+            value.put(field.getDisplayName().get(language), option);
             values.set(field.getIndex(), value);
         } catch (IndexOutOfBoundsException e) {
             value = new HashMap<>();
-            value.put(field.getDisplayName().get("en"), option);
+            value.put(field.getDisplayName().get(language), option);
             values.add(field.getIndex(), value);
         }
 

@@ -33,6 +33,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.UUID;
 
@@ -128,7 +129,7 @@ public class CaseService {
         List<String> result = new ArrayList<>();
         for (CaseField field : caseFields) {
             if (field.isRequired()) {
-                result.add(field.getDisplayName().get("en"));
+                result.add(field.getDisplayName().get(Locale.getDefault().getLanguage()));
             }
         }
         return result;

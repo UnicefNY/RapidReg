@@ -16,6 +16,8 @@ import org.unicef.rapidreg.service.cache.SubformCache;
 import org.unicef.rapidreg.widgets.dialog.BaseDialog;
 import org.unicef.rapidreg.widgets.dialog.FiledDialogFactory;
 
+import java.util.Locale;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -93,7 +95,8 @@ public class GenericViewHolder extends BaseTextViewHolder {
                             if (isSubformField(field)) {
                                 SubformCache.put(field.getParent(), getValues(field));
                             } else {
-                                CaseFieldValueCache.put(field.getDisplayName().get("en"), getResult());
+                                CaseFieldValueCache.put(field.getDisplayName()
+                                        .get(Locale.getDefault().getLanguage()), getResult());
                             }
                         }
                     }
