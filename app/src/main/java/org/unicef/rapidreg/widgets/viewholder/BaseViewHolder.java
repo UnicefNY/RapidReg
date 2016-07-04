@@ -30,7 +30,6 @@ public abstract class BaseViewHolder<T> extends RecyclerView.ViewHolder {
 
     public abstract void setOnClickListener(T field);
 
-    //TODO: need to get display name according to the current system language
     protected String getLabel(CaseField field) {
         return field.getDisplayName().get(Locale.getDefault().getLanguage());
     }
@@ -80,7 +79,7 @@ public abstract class BaseViewHolder<T> extends RecyclerView.ViewHolder {
             value = new ArrayMap<>();
         }
 
-        return value.get(getLabel(field));
+        return value.get(field.getName());
     }
 
     protected List<Map<String, String>> getValues(CaseField field) {

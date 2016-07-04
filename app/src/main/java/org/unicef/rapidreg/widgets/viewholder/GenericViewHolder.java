@@ -12,11 +12,8 @@ import org.unicef.rapidreg.R;
 import org.unicef.rapidreg.exception.DialogException;
 import org.unicef.rapidreg.forms.childcase.CaseField;
 import org.unicef.rapidreg.service.cache.CaseFieldValueCache;
-import org.unicef.rapidreg.service.cache.SubformCache;
 import org.unicef.rapidreg.widgets.dialog.BaseDialog;
 import org.unicef.rapidreg.widgets.dialog.FiledDialogFactory;
-
-import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -60,7 +57,7 @@ public class GenericViewHolder extends BaseTextViewHolder {
         if (isSubformField(field)) {
             valueView.setText(getValue(field));
         } else {
-            valueView.setText(CaseFieldValueCache.get(getLabel(field)));
+            valueView.setText(CaseFieldValueCache.get(field.getName()));
         }
 
         if (TextUtils.isEmpty(valueView.getText())) {
