@@ -1,34 +1,10 @@
 package org.unicef.rapidreg.service;
 
-import android.content.ContentResolver;
-import android.graphics.Bitmap;
-import android.util.Log;
-
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-import com.raizlabs.android.dbflow.data.Blob;
 import com.raizlabs.android.dbflow.list.FlowCursorList;
-import com.raizlabs.android.dbflow.list.FlowQueryList;
-import com.raizlabs.android.dbflow.structure.database.transaction.QueryTransaction;
 
-import org.unicef.rapidreg.db.CaseDao;
 import org.unicef.rapidreg.db.CasePhotoDao;
-import org.unicef.rapidreg.db.impl.CaseDaoImpl;
 import org.unicef.rapidreg.db.impl.CasePhotoDaoImpl;
-import org.unicef.rapidreg.forms.childcase.CaseField;
-import org.unicef.rapidreg.model.Case;
 import org.unicef.rapidreg.model.CasePhoto;
-import org.unicef.rapidreg.utils.ImageCompressUtil;
-
-import java.lang.reflect.Type;
-import java.sql.Date;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
 
 public class CasePhotoService {
     public static final String TAG = CasePhotoService.class.getSimpleName();
@@ -46,11 +22,7 @@ public class CasePhotoService {
         this.casePhotoDao = caseDao;
     }
 
-    public List<CasePhoto> getAllCasePhotos(long caseId){
-        return casePhotoDao.getAllCasesPhoto(caseId);
-    }
-
-    public CasePhoto getCaseFirstThumbnail(long caseId){
+    public CasePhoto getCaseFirstThumbnail(long caseId) {
         return casePhotoDao.getCaseFirstThumbnail(caseId);
     }
 
@@ -59,13 +31,13 @@ public class CasePhotoService {
     }
 
 
-        private long caseId;
+    private long caseId;
 
     public void setCaseId(long caseId) {
         this.caseId = caseId;
     }
 
     public long getCaseId() {
-        return  caseId;
+        return caseId;
     }
 }

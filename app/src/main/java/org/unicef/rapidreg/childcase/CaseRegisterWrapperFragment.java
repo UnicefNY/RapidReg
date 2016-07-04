@@ -10,6 +10,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.GridView;
 import android.widget.RelativeLayout;
 
 import com.getbase.floatingactionbutton.FloatingActionButton;
@@ -18,8 +19,13 @@ import com.ogaclejapan.smarttablayout.utils.v4.FragmentPagerItem;
 import com.ogaclejapan.smarttablayout.utils.v4.FragmentPagerItems;
 import com.ogaclejapan.smarttablayout.utils.v4.FragmentStatePagerItemAdapter;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 import org.unicef.rapidreg.R;
 import org.unicef.rapidreg.base.view.SwipeChangeLayout;
+import org.unicef.rapidreg.childcase.media.CasePhotoAdapter;
+import org.unicef.rapidreg.event.UpdateImageEvent;
 import org.unicef.rapidreg.forms.childcase.CaseField;
 import org.unicef.rapidreg.forms.childcase.CaseFormRoot;
 import org.unicef.rapidreg.forms.childcase.CaseSection;
@@ -64,25 +70,59 @@ public class CaseRegisterWrapperFragment extends Fragment {
     private CaseRegisterAdapter miniFormAdapter;
     private CaseRegisterAdapter fullFormAdapter;
 
+    private CasePhotoAdapter adapter;
+    private GridView photoGrid;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater,
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
+
         View view = inflater.inflate(R.layout.fragment_cases_register_wrapper, container, false);
         ButterKnife.bind(this, view);
         initCaseFormData();
         initFloatingActionButton();
+        adapter = new CasePhotoAdapter(getContext(), new ArrayList<String>());
         miniFormAdapter = new CaseRegisterAdapter(getActivity(), miniFields, true);
+        miniFormAdapter.setCasePhotoAdapter(adapter);
         initFullFormContainer();
         initMiniFormContainer();
+
+
+//        photoGrid = (GridView) ButterKnife.findById(view, R.id.photo_grid);
+//        if (photoGrid != null) {
+//            photoGrid.setAdapter(adapter);
+//        }
         return view;
     }
+
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);
+    }
+
 
     @OnClick(R.id.edit_case)
     public void onCaseEditClicked() {
         ((CaseActivity) getActivity()).turnToFeature(CaseFeature.EDIT);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN, sticky = true, priority = 1)
+    public void updateImageAdapter(UpdateImageEvent event) {
+        adapter.add(event.getImagePath());
+        adapter.notifyDataSetChanged();
+        //photoGrid.setAdapter(adapter);
+        EventBus.getDefault().removeStickyEvent(event);
     }
 
     private void initFloatingActionButton() {
