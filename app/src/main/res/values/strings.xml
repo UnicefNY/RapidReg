@@ -66,6 +66,16 @@
     <string name="quit_without_saving">Are you sure to quit without saving?</string>
     <string name="recording_is_too_short">Recording is too short</string>
     <string name="audio_file_not_exists">No audio file exists.</string>
+    
+    <!--Sync-->
+    <string name="last_sync_time">Last synchronization time</string>
+    <string name="record_count_for_last_sync">Record count for last synchronisation</string>
+    <string name="record_count_for_not_sync">Record count for not synced data</string>
+    <string name="place_holder_last_sync_time">06-15-2016 16:14</string>
+    <string name="place_holder_record_count_for_last_sync">49</string>
+    <string name="place_holder_record_count_for_not_sync">146</string>
+    <string name="button_sync_state_of_click_to_sync">Click to sync</string>
+    <!--Sync-->
 
     <!--Transparent theme-->
     <style name="Transparent" parent="AppTheme">

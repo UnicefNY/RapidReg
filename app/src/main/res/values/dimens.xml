@@ -70,9 +70,13 @@
     <dimen name="case_register_field_padding_top_bottom">9dp</dimen>
     <dimen name="case_photo_view_pager_height_mini_form">205dp</dimen>
     <dimen name="case_photo_view_dot_margin_mini_form">-10dp</dimen>
-
     <!--case register end-->
 
+    <!--sync start-->
+    <dimen name="sync_padding_left_right">20dp</dimen>
+    <dimen name="sync_padding_top_bottom">9dp</dimen>
+    <dimen name="sync_value_padding_top_bottom">26dp</dimen>
+    <!--sync end-->
 
 
 </resources>
