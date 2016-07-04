@@ -15,6 +15,7 @@ import org.unicef.rapidreg.service.cache.SubformCache;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import org.unicef.rapidreg.service.cache.CaseFieldValueCache;
@@ -41,7 +42,7 @@ public abstract class BaseDialog {
         this.context = context;
 
         builder = new AlertDialog.Builder(context);
-        builder.setTitle(caseField.getDisplayName().get("en"));
+        builder.setTitle(caseField.getDisplayName().get(Locale.getDefault().getLanguage()));
 
         builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
             @Override
@@ -56,7 +57,8 @@ public abstract class BaseDialog {
                 if (isSubformField()) {
                     SubformCache.put(caseField.getParent(), getValues());
                 } else {
-                    CaseFieldValueCache.put(caseField.getDisplayName().get("en"), getResult());
+                    String language = Locale.getDefault().getLanguage();
+                    CaseFieldValueCache.put(caseField.getDisplayName().get(language), getResult());
                 }
 
                 dialog.dismiss();
@@ -77,16 +79,17 @@ public abstract class BaseDialog {
     }
 
     public static String[] getSelectOptions(String fieldType, CaseField field) {
+        String language = Locale.getDefault().getLanguage();
         List<CharSequence> items = new ArrayList<>();
 
-        List<Object> options = field.getOptionStringsText().get("en");
+        List<Object> options = field.getOptionStringsText().get(language);
         if (options.get(0) instanceof Map) {
-            List<Map<String, String>> arrayList = field.getOptionStringsText().get("en");
+            List<Map<String, String>> arrayList = field.getOptionStringsText().get(language);
             for (Map<String, String> map : arrayList) {
                 items.add(map.get("display_text"));
             }
         } else {
-            items = field.getOptionStringsText().get("en");
+            items = field.getOptionStringsText().get(language);
         }
 
         return items.toArray(new String[0]);
@@ -109,17 +112,18 @@ public abstract class BaseDialog {
     }
 
     private List<Map<String, String>> getValues() {
+        String language = Locale.getDefault().getLanguage();
         List<Map<String, String>> values = SubformCache.get(caseField.getParent()) == null ?
                 new ArrayList<Map<String, String>>() : SubformCache.get(caseField.getParent());
 
         Map<String, String> value;
         try {
             value = values.get(caseField.getIndex());
-            value.put(caseField.getDisplayName().get("en"), getResult());
+            value.put(caseField.getDisplayName().get(language), getResult());
             values.set(caseField.getIndex(), value);
         } catch (IndexOutOfBoundsException e) {
             value = new HashMap<>();
-            value.put(caseField.getDisplayName().get("en"), getResult());
+            value.put(caseField.getDisplayName().get(language), getResult());
             values.add(caseField.getIndex(), value);
         }
 

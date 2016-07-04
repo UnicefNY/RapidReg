@@ -15,6 +15,8 @@ import org.unicef.rapidreg.forms.childcase.CaseField;
 import org.unicef.rapidreg.service.cache.CaseFieldValueCache;
 import org.unicef.rapidreg.service.cache.SubformCache;
 
+import java.util.Locale;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -88,6 +90,7 @@ public class TextViewHolder extends BaseTextViewHolder {
         valueView.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
+                String language = Locale.getDefault().getLanguage();
                 if (v.getId() == valueView.getId()) {
                     if (!hasFocus) {
                         if (TextUtils.isEmpty(valueView.getText())) {
@@ -98,12 +101,14 @@ public class TextViewHolder extends BaseTextViewHolder {
                                 if (isSubformField(field)) {
                                     SubformCache.put(field.getParent(), getValues(field));
                                 } else {
-                                    CaseFieldValueCache.put(field.getDisplayName().get("en"), valueView.getText().toString());
+                                    CaseFieldValueCache.put(field.getDisplayName()
+                                            .get(language), valueView.getText().toString());
                                     if (!TextUtils.isEmpty(valueView.getText())) {
                                         if (isSubformField(field)) {
                                             SubformCache.put(field.getParent(), getValues(field));
                                         } else {
-                                            CaseFieldValueCache.put(field.getDisplayName().get("en"), valueView.getText().toString());
+                                            CaseFieldValueCache.put(field.getDisplayName()
+                                                    .get(language), valueView.getText().toString());
                                         }
                                     }
                                 }

@@ -9,6 +9,7 @@ import org.unicef.rapidreg.service.cache.SubformCache;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 public abstract class BaseTextViewHolder extends BaseViewHolder<CaseField> {
@@ -17,17 +18,18 @@ public abstract class BaseTextViewHolder extends BaseViewHolder<CaseField> {
     }
 
     protected List<Map<String, String>> getValues(CaseField field) {
+        String language = Locale.getDefault().getLanguage();
         List<Map<String, String>> values = SubformCache.get(field.getParent()) == null ?
                 new ArrayList<Map<String, String>>() : SubformCache.get(field.getParent());
 
         Map<String, String> value;
         try {
             value = values.get(field.getIndex());
-            value.put(field.getDisplayName().get("en"), getResult());
+            value.put(field.getDisplayName().get(language), getResult());
             values.set(field.getIndex(), value);
         } catch (IndexOutOfBoundsException e) {
             value = new HashMap<>();
-            value.put(field.getDisplayName().get("en"), getResult());
+            value.put(field.getDisplayName().get(language), getResult());
             values.add(field.getIndex(), value);
         }
 
