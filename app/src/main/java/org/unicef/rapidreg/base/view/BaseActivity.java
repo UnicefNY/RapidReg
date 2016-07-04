@@ -1,5 +1,6 @@
 package org.unicef.rapidreg.base.view;
 
+import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -21,6 +22,7 @@ import org.unicef.rapidreg.R;
 import org.unicef.rapidreg.model.User;
 import org.unicef.rapidreg.service.UserService;
 import org.unicef.rapidreg.service.cache.PageModeCached;
+import org.unicef.rapidreg.sync.SyncActivity;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -36,7 +38,7 @@ public abstract class BaseActivity extends AppCompatActivity implements Navigati
     @BindView(R.id.nav_view)
     protected NavigationView navigationView;
     @BindView(R.id.drawer_layout)
-    DrawerLayout drawer;
+    protected DrawerLayout drawer;
 
     IntentSender intentSender = new IntentSender();
 
@@ -107,6 +109,7 @@ public abstract class BaseActivity extends AppCompatActivity implements Navigati
                 break;
             case R.id.nav_sync:
                 navigationView.setItemTextColor(syncColor);
+                navSyncAction();
                 break;
             default:
                 break;
@@ -114,6 +117,7 @@ public abstract class BaseActivity extends AppCompatActivity implements Navigati
         navigationView.getMenu().findItem(item.getItemId()).setChecked(true);
         return true;
     }
+
 
     public PrimeroApplication getContext() {
         return (PrimeroApplication) getApplication();
@@ -149,7 +153,12 @@ public abstract class BaseActivity extends AppCompatActivity implements Navigati
         return new ColorStateList(COLOR_STATES, color);
     }
 
+    private void navSyncAction() {
+        startActivity(new Intent(this, SyncActivity.class));
+    }
+
     protected abstract void navCaseAction();
 
     protected abstract void processBackButton();
+
 }
