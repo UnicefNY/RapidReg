@@ -102,7 +102,7 @@ public class CaseListAdapter extends RecyclerView.Adapter<CaseListAdapter.CaseLi
         holder.genderBadge.setImageDrawable(getDefaultGenderBadge(gender.getGenderId()));
         holder.genderName.setText(gender.getName());
         holder.genderName.setTextColor(ContextCompat.getColor(activity, gender.getColorId()));
-        String age = caseInfo.get("Age");
+        String age = caseInfo.get("age");
         holder.age.setText(isValidAge(age) ? age : "");
         holder.registrationDate.setText(dateFormat.format(caseItem.getRegistrationDate()));
 
