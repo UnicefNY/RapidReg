@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <group android:checkableBehavior="single">
+    <group
+        android:id="@+id/nav_group1"
+        android:checkableBehavior="single">
         <item
             android:id="@+id/nav_cases"
             android:checked="true"
@@ -11,6 +13,15 @@
             android:id="@+id/nav_tracing"
             android:icon="@drawable/tracing"
             android:title="Tracing request" />
+    </group>
+
+    <group
+        android:id="@+id/nav_group2"
+        android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_sync"
+            android:icon="@drawable/ic_autorenew_black_24dp"
+            android:title="Synchronization" />
     </group>
 
 </menu>

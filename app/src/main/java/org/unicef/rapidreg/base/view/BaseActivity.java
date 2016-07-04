@@ -42,6 +42,7 @@ public abstract class BaseActivity extends AppCompatActivity implements Navigati
 
     private ColorStateList caseColor;
     private ColorStateList trColor;
+    private ColorStateList syncColor;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -52,6 +53,7 @@ public abstract class BaseActivity extends AppCompatActivity implements Navigati
         navigationView.setItemIconTintList(null);
         caseColor = generateColors(R.color.ftn_green);
         trColor = generateColors(R.color.ftn_red);
+        syncColor = generateColors(R.color.ftn_blue);
         navigationView.setItemTextColor(caseColor);
 
         View headerView = navigationView.getHeaderView(0);
@@ -94,15 +96,22 @@ public abstract class BaseActivity extends AppCompatActivity implements Navigati
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
-        int id = item.getItemId();
         drawer.closeDrawer(GravityCompat.START);
-        if (id == R.id.nav_cases) {
-            navCaseAction();
-            navigationView.setItemTextColor(caseColor);
-        } else if (id == R.id.nav_tracing) {
-            navigationView.setItemTextColor(trColor);
+        switch (item.getItemId()) {
+            case R.id.nav_cases:
+                navCaseAction();
+                navigationView.setItemTextColor(caseColor);
+                break;
+            case R.id.nav_tracing:
+                navigationView.setItemTextColor(trColor);
+                break;
+            case R.id.nav_sync:
+                navigationView.setItemTextColor(syncColor);
+                break;
+            default:
+                break;
         }
-        navigationView.getMenu().findItem(id).setChecked(true);
+        navigationView.getMenu().findItem(item.getItemId()).setChecked(true);
         return true;
     }
 
