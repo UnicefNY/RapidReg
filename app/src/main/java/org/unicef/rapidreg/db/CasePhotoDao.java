@@ -1,5 +1,7 @@
 package org.unicef.rapidreg.db;
 
+import com.raizlabs.android.dbflow.list.FlowCursorList;
+import com.raizlabs.android.dbflow.list.FlowQueryList;
 import com.raizlabs.android.dbflow.structure.database.transaction.QueryTransaction;
 
 import org.unicef.rapidreg.model.CasePhoto;
@@ -13,5 +15,5 @@ public interface CasePhotoDao {
 
     void deleteCasePhotosByCaseId(long caseId);
 
-    void getAllCasesPhoto(long caseId, QueryTransaction.QueryResultCallback<CasePhoto> callback);
+    FlowCursorList<CasePhoto> getAllCasesPhotoFlowQueryList(long caseId);
 }

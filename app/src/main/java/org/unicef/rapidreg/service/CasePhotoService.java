@@ -7,6 +7,8 @@ import android.util.Log;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.raizlabs.android.dbflow.data.Blob;
+import com.raizlabs.android.dbflow.list.FlowCursorList;
+import com.raizlabs.android.dbflow.list.FlowQueryList;
 import com.raizlabs.android.dbflow.structure.database.transaction.QueryTransaction;
 
 import org.unicef.rapidreg.db.CaseDao;
@@ -52,9 +54,9 @@ public class CasePhotoService {
         return casePhotoDao.getCaseFirstThumbnail(caseId);
     }
 
-   public void getAllCasesPhoto(long caseId, QueryTransaction.QueryResultCallback<CasePhoto> callback) {
-        casePhotoDao.getAllCasesPhoto(caseId, callback);
-   }
+    public FlowCursorList<CasePhoto> getAllCasesPhotoFlowQueryList(long caseId) {
+        return casePhotoDao.getAllCasesPhotoFlowQueryList(caseId);
+    }
 
 
         private long caseId;
