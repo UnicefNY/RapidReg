@@ -13,9 +13,6 @@ import android.widget.ViewSwitcher;
 import org.unicef.rapidreg.R;
 import org.unicef.rapidreg.forms.childcase.CaseField;
 import org.unicef.rapidreg.service.cache.CaseFieldValueCache;
-import org.unicef.rapidreg.service.cache.SubformCache;
-
-import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -109,27 +106,18 @@ public class TextViewHolder extends BaseTextViewHolder {
     }
 
     @Override
+    public void setFieldEditable(boolean editable) {
+        disableUneditableField(editable, valueView);
+    }
+
+    @Override
     protected String getResult() {
         return valueView.getText().toString();
     }
 
     @Override
-    public void setFieldEditable(boolean editable) {
-        disableUneditableField(editable, valueView);
+    protected TextView getValueView() {
+        return valueView;
     }
 
-    private void saveValues(final CaseField field) {
-        String language = Locale.getDefault().getLanguage();
-
-        if (TextUtils.isEmpty(valueView.getText())) {
-            return;
-        }
-
-        if (isSubformField(field)) {
-            SubformCache.put(field.getParent(), getValues(field));
-        } else {
-            CaseFieldValueCache.put(field.getDisplayName().get(language),
-                    valueView.getText().toString());
-        }
-    }
 }
