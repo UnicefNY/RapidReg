@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:paddingLeft="@dimen/sync_padding_left_right"
+              android:paddingRight="@dimen/sync_padding_left_right"
+              android:paddingTop="@dimen/sync_padding_top_bottom"
+              android:paddingBottom="@dimen/sync_padding_top_bottom"
+              >
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/text_size_16"
+        android:textColor="@color/ftn_gray"
+        android:text="@string/last_sync_time"/>
+
+    <TextView
+        android:id="@+id/last_sync_time"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="@dimen/sync_padding_top_bottom"
+        android:paddingBottom="@dimen/sync_value_padding_top_bottom"
+        android:textSize="@dimen/text_size_20"
+        android:textColor="@color/ftn_blue"
+        android:text="@string/place_holder_last_sync_time"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/text_size_16"
+        android:textColor="@color/ftn_gray"
+        android:text="@string/record_count_for_last_sync"/>
+
+    <TextView
+        android:id="@+id/record_count_for_last_sync"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="@dimen/sync_padding_top_bottom"
+        android:paddingBottom="@dimen/sync_value_padding_top_bottom"
+        android:textSize="@dimen/text_size_20"
+        android:textColor="@color/ftn_blue"
+        android:text="@string/place_holder_record_count_for_last_sync"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/text_size_16"
+        android:textColor="@color/ftn_gray"
+        android:text="@string/record_count_for_not_sync"/>
+
+    <TextView
+        android:id="@+id/record_count_for_not_sync"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="@dimen/sync_padding_top_bottom"
+        android:paddingBottom="@dimen/sync_value_padding_top_bottom"
+        android:textSize="@dimen/text_size_20"
+        android:textColor="@color/ftn_blue"
+        android:text="@string/place_holder_record_count_for_not_sync"/>
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/boy_blue"
+        android:textColor="@color/white"
+        android:textSize="@dimen/text_size_20"
+        android:text="@string/button_sync_state_of_click_to_sync"/>
+
+</LinearLayout>
