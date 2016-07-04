@@ -13,6 +13,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.ViewSwitcher;
 
+import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -89,9 +90,10 @@ public class CaseListAdapter extends RecyclerView.Adapter<CaseListAdapter.CaseLi
             gender = Gender.UNKNOWN;
         }
         try {
-            CasePhoto caseAvatorPhoto = CasePhotoService.getInstance().getAllCasePhotos(caseItem.getId()).get(0);
-            Bitmap thumbnail = CasePhotoCache.syncAvatarPhotoBitmap(caseAvatorPhoto);
-            holder.caseImage.setImageBitmap(thumbnail);
+            CasePhoto caseAvatorPhoto = CasePhotoService.getInstance().getCaseFirstThumbnail(caseItem.getId());
+            Glide.with(holder.caseImage.getContext()).
+                    load((caseAvatorPhoto.getThumbnail().getBlob())).into(holder.caseImage);
+
         } catch (Exception e) {
             holder.caseImage.setImageDrawable(activity.getResources().getDrawable(gender.getAvatarId()));
         }
@@ -114,9 +116,10 @@ public class CaseListAdapter extends RecyclerView.Adapter<CaseListAdapter.CaseLi
                 setProfileForMiniForm(caseItem, caseInfo, shortUUID);
                 CaseFieldValueCache.setValues(caseInfo);
                 SubformCache.setValues(subformInfo);
-                List<CasePhoto> casePhotos = CasePhotoService.getInstance().getAllCasePhotos(caseItem.getId());
+                CasePhotoService.getInstance().setCaseId(caseItem.getId());
+                //List<CasePhoto> casePhotos = CasePhotoService.getInstance().getAllCasePhotos(caseItem.getId());
 
-                CasePhotoCache.syncPhotosPaths(casePhotos);
+                //CasePhotoCache.syncPhotosPaths(casePhotos);
 
                 activity.turnToFeature(CaseFeature.DETAILS);
 
