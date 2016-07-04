@@ -92,12 +92,7 @@ public class GenericViewHolder extends BaseTextViewHolder {
                             viewSwitcher.setDisplayedChild(GenericViewHolder.FORM_NO_ANSWER_STATE);
                         } else {
                             viewSwitcher.setDisplayedChild(GenericViewHolder.FORM_HAS_ANSWER_STATE);
-                            if (isSubformField(field)) {
-                                SubformCache.put(field.getParent(), getValues(field));
-                            } else {
-                                CaseFieldValueCache.put(field.getDisplayName()
-                                        .get(Locale.getDefault().getLanguage()), getResult());
-                            }
+                            saveValues(field);
                         }
                     }
                 }
@@ -142,6 +137,11 @@ public class GenericViewHolder extends BaseTextViewHolder {
     @Override
     protected String getResult() {
         return valueView.getText().toString();
+    }
+
+    @Override
+    protected TextView getValueView() {
+        return valueView;
     }
 
     @Override

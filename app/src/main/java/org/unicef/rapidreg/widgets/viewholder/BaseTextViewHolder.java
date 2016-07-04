@@ -1,9 +1,12 @@
 package org.unicef.rapidreg.widgets.viewholder;
 
 import android.content.Context;
+import android.text.TextUtils;
 import android.view.View;
+import android.widget.TextView;
 
 import org.unicef.rapidreg.forms.childcase.CaseField;
+import org.unicef.rapidreg.service.cache.CaseFieldValueCache;
 import org.unicef.rapidreg.service.cache.SubformCache;
 
 import java.util.ArrayList;
@@ -36,5 +39,22 @@ public abstract class BaseTextViewHolder extends BaseViewHolder<CaseField> {
         return values;
     }
 
+    protected void saveValues(final CaseField field) {
+        String language = Locale.getDefault().getLanguage();
+
+        if (TextUtils.isEmpty(getValueView().getText())) {
+            return;
+        }
+
+        if (isSubformField(field)) {
+            SubformCache.put(field.getParent(), getValues(field));
+        } else {
+            CaseFieldValueCache.put(field.getDisplayName().get(language),
+                    getValueView().getText().toString());
+        }
+    }
+
     protected abstract String getResult();
+
+    protected abstract TextView getValueView();
 }
