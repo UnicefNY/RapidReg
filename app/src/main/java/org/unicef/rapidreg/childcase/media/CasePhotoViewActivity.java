@@ -13,6 +13,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
+import com.bumptech.glide.Glide;
+
 import org.unicef.rapidreg.R;
 import org.unicef.rapidreg.service.cache.CasePhotoCache;
 import org.unicef.rapidreg.utils.ImageCompressUtil;
@@ -24,7 +26,6 @@ import java.util.Map;
 public class CasePhotoViewActivity extends AppCompatActivity {
 
     private ViewPager viewPager;
-    private Map<Integer, Bitmap> photos = new HashMap<>();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -40,13 +41,6 @@ public class CasePhotoViewActivity extends AppCompatActivity {
         viewPager.setCurrentItem(getIntent().getIntExtra("position", 0));
     }
 
-    @Override
-    protected void onStop() {
-        super.onStop();
-        for (Bitmap bitmap : photos.values()) {
-            bitmap.recycle();
-        }
-    }
 
     public class CasePhotoViewPagerAdapter extends PagerAdapter {
 
@@ -58,12 +52,6 @@ public class CasePhotoViewActivity extends AppCompatActivity {
         @Override
         public boolean isViewFromObject(View arg0, Object arg1) {
             return arg0 == arg1;
-        }
-
-        @Override
-        public void destroyItem(ViewGroup container, int position, Object object) {
-            container.removeView((View) object);
-            photos.remove(position);
         }
 
         @Override
@@ -79,9 +67,10 @@ public class CasePhotoViewActivity extends AppCompatActivity {
             List<String> previousPhotoPaths = CasePhotoCache.getPhotosPaths();
             String filePath = previousPhotoPaths.get(position);
 
-            Bitmap image = ImageCompressUtil.compressBySize(filePath, size.x, size.y);
-            imageView.setImageBitmap(ImageCompressUtil.rotateBitmapByExif(filePath,image));
-            photos.put(position, image);
+//            Bitmap image = ImageCompressUtil.compressBySize(filePath, size.x, size.y);
+//            imageView.setImageBitmap(ImageCompressUtil.rotateBitmapByExif(filePath,image));
+            Glide.with(CasePhotoViewActivity.this.getBaseContext()).load(filePath).into(imageView);
+            //photos.put(position, image);
 
             container.addView(itemView);
             return itemView;
