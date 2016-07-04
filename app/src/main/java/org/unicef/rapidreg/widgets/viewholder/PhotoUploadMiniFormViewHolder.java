@@ -6,9 +6,7 @@ import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewGroup.LayoutParams;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 
 import com.bumptech.glide.Glide;
 import com.raizlabs.android.dbflow.list.FlowCursorList;
@@ -18,25 +16,20 @@ import org.unicef.rapidreg.childcase.CaseActivity;
 import org.unicef.rapidreg.forms.childcase.CaseField;
 import org.unicef.rapidreg.model.CasePhoto;
 import org.unicef.rapidreg.service.CasePhotoService;
-import org.unicef.rapidreg.service.cache.CasePhotoCache;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import me.relex.circleindicator.CircleIndicator;
 
-public class PhotoUploadMiniFormViewHolder extends BaseViewHolder<CaseField> implements ViewPager.OnPageChangeListener {
+public class PhotoUploadMiniFormViewHolder extends BaseViewHolder<CaseField> {
     public static final String TAG = PhotoUploadMiniFormViewHolder.class.getSimpleName();
 
     @BindView(R.id.case_photo_view_slider)
     ViewPager viewPager;
 
-    @BindView(R.id.dot_view)
-    ViewGroup dotViewGroup;
+    @BindView(R.id.indicator)
+    CircleIndicator indicator;
 
     private CaseActivity caseActivity;
-
-    private ImageView[] tips;
-
-    private boolean isPhotosPrepared;
 
     public PhotoUploadMiniFormViewHolder(Context context, View itemView) {
         super(context, itemView);
@@ -48,44 +41,6 @@ public class PhotoUploadMiniFormViewHolder extends BaseViewHolder<CaseField> imp
     @Override
     public void setValue(CaseField field) {
         viewPager.setAdapter(new CasePhotoViewPagerAdapter());
-        viewPager.addOnPageChangeListener(this);
-        if (!isPhotosPrepared) {
-            initDots();
-        }
-    }
-
-
-    private void initDots() {
-
-        tips = new ImageView[CasePhotoCache.size()];
-        for (int i = 0; i < tips.length; i++) {
-            tips[i] = new ImageView(context);
-            tips[i].setLayoutParams(new LayoutParams(10, 10));
-            if (i == 0) {
-                tips[i].setBackgroundResource(R.drawable.page_indicator_focused);
-            } else {
-                tips[i].setBackgroundResource(R.drawable.page_indicator_unfocused);
-            }
-
-            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
-                    new ViewGroup.LayoutParams(LayoutParams.WRAP_CONTENT,
-                            LayoutParams.WRAP_CONTENT));
-            layoutParams.leftMargin = 5;
-            layoutParams.rightMargin = 5;
-            dotViewGroup.addView(tips[i], layoutParams);
-        }
-    }
-
-
-    @Override
-    public void onPageSelected(int position) {
-        for (int i = 0; i < tips.length; i++) {
-            if (i == position) {
-                tips[i].setBackgroundResource(R.drawable.page_indicator_focused);
-            } else {
-                tips[i].setBackgroundResource(R.drawable.page_indicator_unfocused);
-            }
-        }
     }
 
     @Override
@@ -99,19 +54,7 @@ public class PhotoUploadMiniFormViewHolder extends BaseViewHolder<CaseField> imp
     }
 
     @Override
-    public void setFieldEditable(boolean editable) {
-
-    }
-
-    @Override
-    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
-    }
-
-    @Override
-    public void onPageScrollStateChanged(int state) {
-
-    }
+    public void setFieldEditable(boolean editable) {}
 
     public class CasePhotoViewPagerAdapter extends PagerAdapter {
         private FlowCursorList<CasePhoto> flowQueryList;
@@ -139,11 +82,11 @@ public class PhotoUploadMiniFormViewHolder extends BaseViewHolder<CaseField> imp
         @Override
         public Object instantiateItem(ViewGroup container, int position) {
             View itemView = LayoutInflater.from(context).inflate(R.layout.case_photo_view_item, container, false);
-            container.addView(itemView);
-            ImageView imageView = (ImageView) itemView.findViewById(R.id.case_photo_item);
 
+            ImageView imageView = (ImageView) itemView.findViewById(R.id.case_photo_item);
             Glide.with(context).load(flowQueryList.getItem(position).getPhoto().getBlob()).into(imageView);
 
+            container.addView(itemView);
             return itemView;
         }
     }

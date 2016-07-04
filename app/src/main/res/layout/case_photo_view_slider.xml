@@ -12,19 +12,17 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/case_photo_view_pager_height_mini_form" />
 
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/case_photo_view_dot_margin_mini_form"
         android:orientation="vertical">
 
-        <LinearLayout
-            android:id="@+id/dot_view"
+        <me.relex.circleindicator.CircleIndicator
+            android:id="@id/indicator"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:gravity="center_horizontal"
-            android:orientation="horizontal" />
+            android:layout_height="48dp" />
     </RelativeLayout>
 
 </LinearLayout>
