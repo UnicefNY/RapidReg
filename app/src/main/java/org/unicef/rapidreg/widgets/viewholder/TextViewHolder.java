@@ -41,7 +41,8 @@ public class TextViewHolder extends BaseTextViewHolder {
     public TextViewHolder(Context context, View itemView) {
         super(context, itemView);
         ButterKnife.bind(this, itemView);
-        inputMethodManager = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+        inputMethodManager = (InputMethodManager)
+                context.getSystemService(Context.INPUT_METHOD_SERVICE);
     }
 
     @Override
@@ -90,29 +91,13 @@ public class TextViewHolder extends BaseTextViewHolder {
         valueView.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
-                String language = Locale.getDefault().getLanguage();
                 if (v.getId() == valueView.getId()) {
                     if (!hasFocus) {
                         if (TextUtils.isEmpty(valueView.getText())) {
                             viewSwitcher.setDisplayedChild(GenericViewHolder.FORM_NO_ANSWER_STATE);
                         } else {
                             viewSwitcher.setDisplayedChild(GenericViewHolder.FORM_HAS_ANSWER_STATE);
-                            if (!TextUtils.isEmpty(valueView.getText())) {
-                                if (isSubformField(field)) {
-                                    SubformCache.put(field.getParent(), getValues(field));
-                                } else {
-                                    CaseFieldValueCache.put(field.getDisplayName()
-                                            .get(language), valueView.getText().toString());
-                                    if (!TextUtils.isEmpty(valueView.getText())) {
-                                        if (isSubformField(field)) {
-                                            SubformCache.put(field.getParent(), getValues(field));
-                                        } else {
-                                            CaseFieldValueCache.put(field.getDisplayName()
-                                                    .get(language), valueView.getText().toString());
-                                        }
-                                    }
-                                }
-                            }
+                            saveValues(field);
                         }
                         itemView.setClickable(true);
                     } else {
@@ -131,5 +116,20 @@ public class TextViewHolder extends BaseTextViewHolder {
     @Override
     public void setFieldEditable(boolean editable) {
         disableUneditableField(editable, valueView);
+    }
+
+    private void saveValues(final CaseField field) {
+        String language = Locale.getDefault().getLanguage();
+
+        if (TextUtils.isEmpty(valueView.getText())) {
+            return;
+        }
+
+        if (isSubformField(field)) {
+            SubformCache.put(field.getParent(), getValues(field));
+        } else {
+            CaseFieldValueCache.put(field.getDisplayName().get(language),
+                    valueView.getText().toString());
+        }
     }
 }
