@@ -38,6 +38,13 @@
             android:windowSoftInputMode="adjustResize" />
 
         <activity
+            android:name=".sync.SyncActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustResize" />
+
+        <activity
             android:name=".childcase.media.CasePhotoViewActivity"
             android:launchMode="singleInstance"
             android:theme="@style/Transparent" />
