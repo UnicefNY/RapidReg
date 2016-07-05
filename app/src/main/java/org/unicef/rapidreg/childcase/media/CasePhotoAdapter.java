@@ -14,6 +14,8 @@ import org.unicef.rapidreg.R;
 import java.util.List;
 
 public class CasePhotoAdapter extends BaseAdapter {
+    private final static int MAX = 4;
+
     private Context context;
     private List<String> paths;
 
@@ -23,8 +25,17 @@ public class CasePhotoAdapter extends BaseAdapter {
         this.paths = paths;
     }
 
-    public void add(String path) {
+    public void addItem(String path) {
         paths.add(path);
+    }
+
+    public void addItem(long photoId) {
+        String dbPath = String.valueOf("photo_from_db_" + photoId);
+        paths.add(dbPath);
+    }
+
+    public void removeItem(int position) {
+        paths.remove(position);
     }
 
     @Override
@@ -42,6 +53,7 @@ public class CasePhotoAdapter extends BaseAdapter {
         return 0;
     }
 
+
     @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
         LayoutInflater inflater = (LayoutInflater) context
@@ -51,5 +63,13 @@ public class CasePhotoAdapter extends BaseAdapter {
 
         Glide.with(imageView.getContext()).load(paths.get(i)).into(imageView);
         return itemView;
+    }
+
+    public boolean isFull() {
+        return getCount() >= MAX;
+    }
+
+    public List<String> getAllItems() {
+        return paths;
     }
 }

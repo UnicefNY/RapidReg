@@ -23,7 +23,6 @@ import org.unicef.rapidreg.service.cache.SubformCache;
 import org.unicef.rapidreg.utils.ImageCompressUtil;
 import org.unicef.rapidreg.utils.StreamUtil;
 
-import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Type;
 import java.sql.Date;
@@ -136,21 +135,21 @@ public class CaseService {
 
     public void saveOrUpdateCase(Map<String, String> values,
                                  Map<String, List<Map<String, String>>> subformValues,
-                                 Map<Bitmap, String> photoBitPaths) {
+                                 List<String> photoPaths) {
 
         attachSubforms(values, subformValues);
 
         if (values.get(CASE_ID) == null) {
-            saveCase(values, subformValues, photoBitPaths);
+            saveCase(values, subformValues, photoPaths);
         } else {
             Log.d(TAG, "update the existing case");
-            updateCase(values, subformValues, photoBitPaths);
+            updateCase(values, subformValues, photoPaths);
         }
     }
 
     private void saveCase(Map<String, String> values,
                           Map<String, List<Map<String, String>>> subformValues,
-                          Map<Bitmap, String> photoBitPaths) {
+                          List<String> photoPath) {
 
         String username = UserService.getInstance().getCurrentUser().getUsername();
         values.put(MODULE, "primeromodule-cp");
@@ -180,13 +179,12 @@ public class CaseService {
         child.setCreatedBy(username);
         child.save();
 
-        saveCasePhoto(child, photoBitPaths);
+        saveCasePhoto(child, photoPath);
         CaseFieldValueCache.clearAudioFile();
     }
 
     public void clearCaseCache() {
         CaseFieldValueCache.clear();
-        CasePhotoCache.clear();
         SubformCache.clear();
     }
 
@@ -196,7 +194,7 @@ public class CaseService {
 
     private void updateCase(Map<String, String> values,
                             Map<String, List<Map<String, String>>> subformValues,
-                            Map<Bitmap, String> photoBitPaths) {
+                            List<String> photoBitPaths) {
         Gson gson = new Gson();
         Blob caseBlob = new Blob(gson.toJson(values).getBytes());
         Blob subformBlob = new Blob(gson.toJson(subformValues).getBytes());
@@ -229,32 +227,30 @@ public class CaseService {
         return blob;
     }
 
-    private void saveCasePhoto(Case child, Map<Bitmap, String> photoBitPaths) {
-        if (photoBitPaths == null) {
+    private void saveCasePhoto(Case child, List<String> photoPaths) {
+        if (photoPaths == null) {
             return;
         }
 
-        for (Map.Entry<Bitmap, String> photoBitPathEntry : photoBitPaths.entrySet()) {
+        for (String photoPath : photoPaths) {
             try {
                 CasePhoto casePhoto = new CasePhoto();
-                String filePath = photoBitPathEntry.getValue();
-                casePhoto.setPath(filePath);
+                String filePath = photoPath;
 
                 Bitmap bitmap = ImageCompressUtil.compressImage(filePath,
                         CasePhotoCache.MAX_WIDTH, CasePhotoCache.MAX_HEIGHT,
                         CasePhotoCache.MAX_SIZE_KB);
 
-                byte[] imageToBytes = ImageCompressUtil.convertImageToBytes(bitmap);
+                casePhoto.setPhoto(new Blob(ImageCompressUtil.convertImageToBytes(bitmap)));
+                casePhoto.setThumbnail(new Blob(ImageCompressUtil.convertImageToBytes(
+                        ImageCompressUtil.getThumbnail(photoPath, 80))));
 
-                casePhoto.setPhoto(new Blob(imageToBytes));
-                casePhoto.setThumbnail(new Blob(ImageCompressUtil.convertImageToBytes(photoBitPathEntry.getKey())));
                 casePhoto.setCase(child);
                 casePhoto.save();
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
-        CasePhotoCache.clearLocalCachedPhotoFiles();
     }
 
     private Date getCurrentDate() {
