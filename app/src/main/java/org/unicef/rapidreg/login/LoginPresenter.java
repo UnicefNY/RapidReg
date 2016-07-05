@@ -243,7 +243,7 @@ public class LoginPresenter extends MvpBasePresenter<LoginView> {
     }
 
     private void goToLoginSuccessScreen(String username) {
-        intentSender.showCasesActivity((Activity) context, username);
+        intentSender.showCasesActivity((Activity) context, username, true);
     }
 
     private void showLoadingIndicator(boolean active) {

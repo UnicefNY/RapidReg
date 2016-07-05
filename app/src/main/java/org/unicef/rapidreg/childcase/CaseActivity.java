@@ -16,7 +16,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.MenuItem;
 import android.widget.GridView;
 import android.widget.Toast;
@@ -127,7 +126,7 @@ public class CaseActivity extends BaseActivity {
         if (currentFeature.isInListMode()) {
             logOut(this);
         } else if (currentFeature.isInEditMode()) {
-            showQuitDialog();
+            showQuitDialog(R.id.nav_cases);
         } else {
             CaseFieldValueCache.clearAudioFile();
             turnToFeature(CaseFeature.LIST);
@@ -137,10 +136,21 @@ public class CaseActivity extends BaseActivity {
     @Override
     protected void navCaseAction() {
         if (currentFeature.isInEditMode()) {
-            showQuitDialog();
+            showQuitDialog(R.id.nav_cases);
         } else {
             CaseFieldValueCache.clearAudioFile();
             turnToFeature(CaseFeature.LIST);
+        }
+    }
+
+
+    @Override
+    protected void navSyncAction() {
+        if (currentFeature.isInEditMode()) {
+            showQuitDialog(R.id.nav_sync);
+        } else {
+            CaseFieldValueCache.clearAudioFile();
+            intentSender.showSyncActivity(this);
         }
     }
 
@@ -159,7 +169,7 @@ public class CaseActivity extends BaseActivity {
         return currentFeature;
     }
 
-    private void showQuitDialog() {
+    private void showQuitDialog(final int clickedButton) {
         new AlertDialog.Builder(this)
                 .setTitle(R.string.quit)
                 .setMessage(R.string.quit_without_saving)
@@ -167,7 +177,16 @@ public class CaseActivity extends BaseActivity {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         CaseFieldValueCache.clearAudioFile();
-                        turnToFeature(CaseFeature.LIST);
+                        switch (clickedButton) {
+                            case R.id.nav_cases:
+                                turnToFeature(CaseFeature.LIST);
+                                break;
+                            case R.id.nav_sync :
+                                intentSender.showSyncActivity(CaseActivity.this);
+                                break;
+                            default:
+                                break;
+                        }
                     }
                 })
                 .setNegativeButton(R.string.cancel, null)
