@@ -61,6 +61,7 @@
         android:text="@string/place_holder_record_count_for_not_sync"/>
 
     <Button
+        android:id="@+id/button_sync"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/boy_blue"
