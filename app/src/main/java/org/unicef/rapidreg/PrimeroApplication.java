@@ -30,7 +30,6 @@ public class PrimeroApplication extends Application {
     public void onCreate() {
         super.onCreate();
         context = getApplicationContext();
-        CasePhotoCache.initApplicationPackageName(context.getPackageName());
         initDB();
     }
 

@@ -24,7 +24,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/photo_camera"
-        android:id="@+id/addImageButton"/>
+        android:id="@+id/add_image_button"/>
 
     <TextView
         android:id="@+id/no_photo_promote_view"

@@ -52,8 +52,6 @@ public class CaseActivity extends BaseActivity {
     private String imagePath;
     private CaseFeature currentFeature;
 
-
-
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,29 +63,6 @@ public class CaseActivity extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
-
-//        if (TextUtils.isEmpty(imagePath)) {
-//            return;
-//        }
-
-
-//        List<Bitmap> previousPhotos = CasePhotoCache.getPhotosBits();
-//        Bitmap newPhoto = ImageCompressUtil.rotateBitmapByExif(imagePath,
-//                ImageCompressUtil.getThumbnail(imagePath, 160));
-//
-//        previousPhotos.add(newPhoto);
-//
-//        CasePhotoCache.addPhoto(newPhoto, imagePath);
-//
-//        if (CasePhotoCache.isUnderLimit()) {
-//            previousPhotos.add(BitmapFactory.decodeResource(getResources(), R.drawable.photo_add));
-//        }
-//        photoGrid = (GridView) findViewById(R.id.photo_grid);
-//        if (photoGrid != null) {
-//            photoGrid.setAdapter(adapter);
-//        }
-
-        //imagePath = null;
     }
 
     @Override
@@ -272,7 +247,7 @@ public class CaseActivity extends BaseActivity {
     private boolean saveCase() {
         clearFocusToMakeLastFieldSaved();
         if (validateRequiredField()) {
-            Map<Bitmap, String> photoBitPaths = CasePhotoCache.getPhotoBitPaths();
+            Map<Bitmap, String> photoBitPaths = null;
             CaseService.getInstance().saveOrUpdateCase(CaseFieldValueCache.getValues(),
                     SubformCache.getValues(),
                     photoBitPaths);

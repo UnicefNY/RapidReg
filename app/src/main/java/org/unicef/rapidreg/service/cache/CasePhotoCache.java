@@ -15,7 +15,6 @@ import java.util.List;
 import java.util.Map;
 
 public class CasePhotoCache {
-
     public static final int MAX_WIDTH = 1836;
     public static final int MAX_HEIGHT = 3264;
     public static final int MAX_SIZE_KB = 1000;
@@ -24,8 +23,6 @@ public class CasePhotoCache {
     public static final String MEDIA_PATH_FOR_CAMERA = Environment.getExternalStorageDirectory() +
             "/_media_path_for_camera_image.jpg";
     public static final Map<Integer, String> CASE_PHOTO_FILE_PATH_FROM_DB = new HashMap<>();
-
-    public static String applicationPackageName;
 
     private static Map<Bitmap, String> photoBitPaths = new LinkedHashMap<>();
 
@@ -36,93 +33,7 @@ public class CasePhotoCache {
         }
     }
 
-    public static void clearLocalCachedPhotoFiles() {
-        for (String filePath : CASE_PHOTO_FILE_PATH_FROM_DB.values()) {
-            File file = new File(filePath);
-            if (file.exists()) {
-                file.delete();
-            }
-        }
-    }
-
-    public static void syncPhotosPaths(List<CasePhoto> casePhotos) {
-        clearLocalCachedPhotoFiles();
-        int index = 0;
-        for (CasePhoto casePhoto : casePhotos) {
-            Bitmap thumbnail = ImageCompressUtil.convertByteArrayToImage(casePhoto.getThumbnail().getBlob());
-            addPhoto(thumbnail, CASE_PHOTO_FILE_PATH_FROM_DB.get(index++));
-        }
-    }
-
-    public static void syncCachingPhotos(final List<CasePhoto> casePhotos) {
-        clearLocalCachedPhotoFiles();
-        int index = 0;
-        for (CasePhoto casePhoto : casePhotos) {
-            try {
-                Bitmap bitmap = ImageCompressUtil.convertByteArrayToImage(casePhoto.getPhoto().getBlob());
-                ImageCompressUtil.storeImage(bitmap, CASE_PHOTO_FILE_PATH_FROM_DB.get(index++));
-                bitmap.recycle();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
-    public static boolean isEmpty() {
-        return photoBitPaths.isEmpty();
-    }
-
-    public static boolean isUnderLimit() {
-        return photoBitPaths.size() < PHOTO_LIMIT;
-    }
-
-    public static boolean isOneLessThanLimit() {
-        return PHOTO_LIMIT - 1 == photoBitPaths.size();
-    }
-
-    public static boolean isFull() {
-        return photoBitPaths.size() >= PHOTO_LIMIT;
-    }
-
     public static void clear() {
         photoBitPaths.clear();
-    }
-
-    public static int size() {
-        return photoBitPaths.size();
-    }
-
-    public static void initApplicationPackageName(String applicationPackageName) {
-        if (null == applicationPackageName) {
-            CasePhotoCache.applicationPackageName = applicationPackageName;
-        }
-    }
-
-    public static void addPhoto(Bitmap bitmap, String photoPath) {
-        photoBitPaths.put(bitmap, photoPath);
-    }
-
-    public static void removePhoto(Bitmap bitmap) {
-        photoBitPaths.remove(bitmap);
-    }
-
-    public static Map<Bitmap, String> getPhotoBitPaths() {
-        return photoBitPaths;
-    }
-
-    public static List<Bitmap> getPhotosBits() {
-        List<Bitmap> result = new ArrayList<>();
-        for (Bitmap photoBit : photoBitPaths.keySet()) {
-            result.add(photoBit);
-        }
-        return result;
-    }
-
-    public static List<String> getPhotosPaths() {
-        List<String> result = new ArrayList<>();
-        for (String photoPath : photoBitPaths.values()) {
-            result.add(photoPath);
-        }
-        return result;
     }
 }

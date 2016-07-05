@@ -239,7 +239,6 @@ public class CaseService {
             try {
                 CasePhoto casePhoto = new CasePhoto();
                 String filePath = photoBitPathEntry.getValue();
-                casePhoto.setPath(filePath);
 
                 Bitmap bitmap = ImageCompressUtil.compressImage(filePath,
                         CasePhotoCache.MAX_WIDTH, CasePhotoCache.MAX_HEIGHT,
@@ -255,7 +254,6 @@ public class CaseService {
                 e.printStackTrace();
             }
         }
-        CasePhotoCache.clearLocalCachedPhotoFiles();
     }
 
     private Date getCurrentDate() {
