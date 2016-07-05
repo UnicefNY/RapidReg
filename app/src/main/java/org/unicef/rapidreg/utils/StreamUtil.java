@@ -23,6 +23,7 @@ public class StreamUtil {
     public static void writeFile(byte[] byteFile, String filePath) throws IOException {
         BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(filePath));
         bos.write(byteFile);
+        bos.close();
     }
 
     public static boolean isFileExists(String filePath) {

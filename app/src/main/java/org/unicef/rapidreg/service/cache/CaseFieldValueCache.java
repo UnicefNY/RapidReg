@@ -45,7 +45,8 @@ public class CaseFieldValueCache {
     }
 
     public static void clearAudioFile() {
-        new File(AUDIO_FILE_PATH).delete();
+        File file = new File(AUDIO_FILE_PATH);
+        file.delete();
     }
 
     public static void addProfileItem(String key, String value) {
