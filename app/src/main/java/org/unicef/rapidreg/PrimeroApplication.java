@@ -22,16 +22,11 @@ public class PrimeroApplication extends Application {
         return context;
     }
 
-    public static boolean isDebugMode() {
-        String pkgName = context.getPackageName();
-        return (pkgName != null && pkgName.endsWith(".debug"));
-    }
-
     @Override
     public void onCreate() {
         super.onCreate();
         context = getApplicationContext();
-        
+
         if (BuildConfig.DEBUG) {
             Stetho.initializeWithDefaults(context);
         }
