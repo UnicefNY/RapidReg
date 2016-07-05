@@ -75,6 +75,13 @@
     <string name="place_holder_record_count_for_last_sync">49</string>
     <string name="place_holder_record_count_for_not_sync">146</string>
     <string name="button_sync_state_of_click_to_sync">Click to sync</string>
+    <string name="start_sync_message">Synchronizing, Please wait ...</string>
+    <string name="confirm_cancel_sync_message">Do you really want to cancel sync ?</string>
+    <string name="cancel_button_text">Cancel</string>
+    <string name="deny_button_text">No</string>
+    <string name="confirm_button_text">Yes</string>
+    <string name="sync_success_message">Sync Success !</string>
+    <string name="sync_error_message">Sync Failed !</string>
     <!--Sync-->
 
     <!--Transparent theme-->
