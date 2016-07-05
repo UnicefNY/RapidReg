@@ -3,6 +3,7 @@ package org.unicef.rapidreg;
 import android.app.Application;
 import android.content.Context;
 
+import com.facebook.stetho.Stetho;
 import com.raizlabs.android.dbflow.config.DatabaseConfig;
 import com.raizlabs.android.dbflow.config.DatabaseDefinition;
 import com.raizlabs.android.dbflow.config.FlowConfig;
@@ -30,6 +31,10 @@ public class PrimeroApplication extends Application {
     public void onCreate() {
         super.onCreate();
         context = getApplicationContext();
+
+        if (BuildConfig.DEBUG) {
+            Stetho.initializeWithDefaults(context);
+        }
         CasePhotoCache.initApplicationPackageName(context.getPackageName());
         initDB();
     }
