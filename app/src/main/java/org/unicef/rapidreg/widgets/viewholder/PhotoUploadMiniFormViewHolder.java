@@ -43,7 +43,9 @@ public class PhotoUploadMiniFormViewHolder extends BaseViewHolder<CaseField> {
     public void setValue(CaseField field) {
         viewPager.setAdapter(new CasePhotoViewPagerAdapter());
         indicator.setViewPager(viewPager);
+
     }
+
 
     @Override
     public void setOnClickListener(CaseField field) {
@@ -89,6 +91,7 @@ public class PhotoUploadMiniFormViewHolder extends BaseViewHolder<CaseField> {
             Glide.with(context).load(flowQueryList.getItem(position).getPhoto().getBlob()).into(imageView);
 
             container.addView(itemView);
+
 
             return itemView;
         }
