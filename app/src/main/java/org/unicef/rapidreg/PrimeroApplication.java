@@ -31,11 +31,11 @@ public class PrimeroApplication extends Application {
     public void onCreate() {
         super.onCreate();
         context = getApplicationContext();
-
+        
         if (BuildConfig.DEBUG) {
             Stetho.initializeWithDefaults(context);
         }
-        CasePhotoCache.initApplicationPackageName(context.getPackageName());
+
         initDB();
     }
 

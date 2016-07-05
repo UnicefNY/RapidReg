@@ -1,5 +1,6 @@
 package org.unicef.rapidreg.childcase;
 
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -10,7 +11,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.GridView;
 import android.widget.RelativeLayout;
 
 import com.getbase.floatingactionbutton.FloatingActionButton;
@@ -25,14 +25,19 @@ import org.greenrobot.eventbus.ThreadMode;
 import org.unicef.rapidreg.R;
 import org.unicef.rapidreg.base.view.SwipeChangeLayout;
 import org.unicef.rapidreg.childcase.media.CasePhotoAdapter;
+import org.unicef.rapidreg.event.SaveCaseEvent;
 import org.unicef.rapidreg.event.UpdateImageEvent;
 import org.unicef.rapidreg.forms.childcase.CaseField;
 import org.unicef.rapidreg.forms.childcase.CaseFormRoot;
 import org.unicef.rapidreg.forms.childcase.CaseSection;
 import org.unicef.rapidreg.service.CaseFormService;
+import org.unicef.rapidreg.service.CaseService;
+import org.unicef.rapidreg.service.cache.CaseFieldValueCache;
+import org.unicef.rapidreg.service.cache.SubformCache;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -69,9 +74,7 @@ public class CaseRegisterWrapperFragment extends Fragment {
     private List<CaseField> miniFields;
     private CaseRegisterAdapter miniFormAdapter;
     private CaseRegisterAdapter fullFormAdapter;
-
-    private CasePhotoAdapter adapter;
-    private GridView photoGrid;
+    private CasePhotoAdapter casePhotoAdapter;
 
     @Nullable
     @Override
@@ -84,17 +87,14 @@ public class CaseRegisterWrapperFragment extends Fragment {
         ButterKnife.bind(this, view);
         initCaseFormData();
         initFloatingActionButton();
-        adapter = new CasePhotoAdapter(getContext(), new ArrayList<String>());
+
+        casePhotoAdapter = new CasePhotoAdapter(getContext(), new ArrayList<String>());
         miniFormAdapter = new CaseRegisterAdapter(getActivity(), miniFields, true);
-        miniFormAdapter.setCasePhotoAdapter(adapter);
+        miniFormAdapter.setCasePhotoAdapter(casePhotoAdapter);
+
         initFullFormContainer();
         initMiniFormContainer();
 
-
-//        photoGrid = (GridView) ButterKnife.findById(view, R.id.photo_grid);
-//        if (photoGrid != null) {
-//            photoGrid.setAdapter(adapter);
-//        }
         return view;
     }
 
@@ -111,7 +111,6 @@ public class CaseRegisterWrapperFragment extends Fragment {
         EventBus.getDefault().unregister(this);
     }
 
-
     @OnClick(R.id.edit_case)
     public void onCaseEditClicked() {
         ((CaseActivity) getActivity()).turnToFeature(CaseFeature.EDIT);
@@ -119,9 +118,19 @@ public class CaseRegisterWrapperFragment extends Fragment {
 
     @Subscribe(threadMode = ThreadMode.MAIN, sticky = true, priority = 1)
     public void updateImageAdapter(UpdateImageEvent event) {
-        adapter.add(event.getImagePath());
-        adapter.notifyDataSetChanged();
-        //photoGrid.setAdapter(adapter);
+        casePhotoAdapter.addItem(event.getImagePath());
+        casePhotoAdapter.notifyDataSetChanged();
+        EventBus.getDefault().removeStickyEvent(event);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN, sticky = true, priority = 1)
+    public void saveCase(SaveCaseEvent event) {
+        List<String> photoPaths = casePhotoAdapter.getAllItems();
+
+        CaseService.getInstance().saveOrUpdateCase(CaseFieldValueCache.getValues(),
+                SubformCache.getValues(),
+                photoPaths);
+
         EventBus.getDefault().removeStickyEvent(event);
     }
 
@@ -147,6 +156,7 @@ public class CaseRegisterWrapperFragment extends Fragment {
                 @Override
                 public void onViewPositionChanged(float fractionAnchor, float fractionScreen) {
                     if (fullFormAdapter != null) {
+                        fullFormAdapter.setCasePhotoAdapter(casePhotoAdapter);
                         fullFormAdapter.notifyDataSetChanged();
                     }
                 }
@@ -177,6 +187,8 @@ public class CaseRegisterWrapperFragment extends Fragment {
                         adapter.getPage(position).getView()
                                 .findViewById(R.id.register_forms_content));
                 fullFormAdapter = ((CaseRegisterFragment) adapter.getPage(position)).getCaseRegisterAdapter();
+                fullFormAdapter.setCasePhotoAdapter(casePhotoAdapter);
+                fullFormAdapter.notifyDataSetChanged();
             }
 
             @Override

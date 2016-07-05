@@ -17,13 +17,12 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.MenuItem;
-import android.widget.GridView;
 import android.widget.Toast;
 
 import org.greenrobot.eventbus.EventBus;
 import org.unicef.rapidreg.R;
 import org.unicef.rapidreg.base.view.BaseActivity;
-import org.unicef.rapidreg.childcase.media.CasePhotoAdapter;
+import org.unicef.rapidreg.event.SaveCaseEvent;
 import org.unicef.rapidreg.event.UpdateImageEvent;
 import org.unicef.rapidreg.forms.childcase.CaseFormRoot;
 import org.unicef.rapidreg.forms.childcase.CaseSection;
@@ -52,42 +51,16 @@ public class CaseActivity extends BaseActivity {
     private String imagePath;
     private CaseFeature currentFeature;
 
-
-
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         initToolbar();
-
         turnToFeature(CaseFeature.LIST);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-
-//        if (TextUtils.isEmpty(imagePath)) {
-//            return;
-//        }
-
-
-//        List<Bitmap> previousPhotos = CasePhotoCache.getPhotosBits();
-//        Bitmap newPhoto = ImageCompressUtil.rotateBitmapByExif(imagePath,
-//                ImageCompressUtil.getThumbnail(imagePath, 160));
-//
-//        previousPhotos.add(newPhoto);
-//
-//        CasePhotoCache.addPhoto(newPhoto, imagePath);
-//
-//        if (CasePhotoCache.isUnderLimit()) {
-//            previousPhotos.add(BitmapFactory.decodeResource(getResources(), R.drawable.photo_add));
-//        }
-//        photoGrid = (GridView) findViewById(R.id.photo_grid);
-//        if (photoGrid != null) {
-//            photoGrid.setAdapter(adapter);
-//        }
-
-        //imagePath = null;
     }
 
     @Override
@@ -115,11 +88,7 @@ public class CaseActivity extends BaseActivity {
             imagePath = cursor.getString(cursor
                     .getColumnIndex(MediaStore.Images.Media.DATA));
             cursor.close();
-
-            UpdateImageEvent event = new UpdateImageEvent();
-            event.setImagePath(imagePath);
-
-            EventBus.getDefault().postSticky(event);
+            postSelectedImagePath();
         }
     }
 
@@ -129,15 +98,16 @@ public class CaseActivity extends BaseActivity {
             imagePath = getOutputMediaFilePath();
             ImageCompressUtil.storeImage(bitmap, imagePath);
             bitmap.recycle();
-
-            UpdateImageEvent event = new UpdateImageEvent();
-            event.setImagePath(imagePath);
-
-            EventBus.getDefault().postSticky(event);
-
+            postSelectedImagePath();
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    private void postSelectedImagePath() {
+        UpdateImageEvent event = new UpdateImageEvent();
+        event.setImagePath(imagePath);
+        EventBus.getDefault().postSticky(event);
     }
 
     @Override
@@ -251,11 +221,10 @@ public class CaseActivity extends BaseActivity {
 
     private boolean saveCase() {
         clearFocusToMakeLastFieldSaved();
+
         if (validateRequiredField()) {
-            Map<Bitmap, String> photoBitPaths = CasePhotoCache.getPhotoBitPaths();
-            CaseService.getInstance().saveOrUpdateCase(CaseFieldValueCache.getValues(),
-                    SubformCache.getValues(),
-                    photoBitPaths);
+            SaveCaseEvent event = new SaveCaseEvent();
+            EventBus.getDefault().postSticky(event);
             turnToFeature(CaseFeature.LIST);
         }
         return true;
