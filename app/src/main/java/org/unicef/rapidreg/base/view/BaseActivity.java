@@ -1,6 +1,5 @@
 package org.unicef.rapidreg.base.view;
 
-import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -22,7 +21,6 @@ import org.unicef.rapidreg.R;
 import org.unicef.rapidreg.model.User;
 import org.unicef.rapidreg.service.UserService;
 import org.unicef.rapidreg.service.cache.PageModeCached;
-import org.unicef.rapidreg.sync.SyncActivity;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -40,7 +38,7 @@ public abstract class BaseActivity extends AppCompatActivity implements Navigati
     @BindView(R.id.drawer_layout)
     protected DrawerLayout drawer;
 
-    IntentSender intentSender = new IntentSender();
+    protected IntentSender intentSender = new IntentSender();
 
     private ColorStateList caseColor;
     private ColorStateList trColor;
@@ -60,7 +58,7 @@ public abstract class BaseActivity extends AppCompatActivity implements Navigati
 
         View headerView = navigationView.getHeaderView(0);
         TextView textViewLoginUserLabel = (TextView) headerView.findViewById(R.id.login_user_label);
-        textViewLoginUserLabel.setText(getIntent().getStringExtra(IntentSender.KEY_LOGIN_USER));
+        textViewLoginUserLabel.setText(getIntent().getStringExtra(IntentSender.USER_NAME));
         TextView organizationView = (TextView) headerView.findViewById(R.id.organization);
         User currentUser = UserService.getInstance().getCurrentUser();
         if (currentUser != null) {
@@ -82,7 +80,11 @@ public abstract class BaseActivity extends AppCompatActivity implements Navigati
         drawer.setDrawerListener(toggle);
         toggle.syncState();
         navigationView.setNavigationItemSelectedListener(this);
-        drawer.openDrawer(GravityCompat.START);
+        if (getIntent().getBooleanExtra(IntentSender.IS_OPEN_MENU, false)) {
+            drawer.openDrawer(GravityCompat.START);
+        } else {
+            drawer.closeDrawer(GravityCompat.START);
+        }
     }
 
     @Override
@@ -153,9 +155,7 @@ public abstract class BaseActivity extends AppCompatActivity implements Navigati
         return new ColorStateList(COLOR_STATES, color);
     }
 
-    private void navSyncAction() {
-        startActivity(new Intent(this, SyncActivity.class));
-    }
+    protected abstract void navSyncAction();
 
     protected abstract void navCaseAction();
 
