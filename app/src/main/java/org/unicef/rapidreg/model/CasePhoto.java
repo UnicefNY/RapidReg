@@ -33,8 +33,6 @@ public class CasePhoto extends BaseModel {
     )})
     Case aCase;
 
-    @Column
-    String path;
 
     public CasePhoto() {
     }
@@ -55,20 +53,12 @@ public class CasePhoto extends BaseModel {
         this.photo = photo;
     }
 
-    public String getPath() {
-        return path;
-    }
-
     public Case getCase() {
         return aCase;
     }
 
     public void setCase(Case aCase) {
         this.aCase = aCase;
-    }
-
-    public void setPath(String path) {
-        this.path = path;
     }
 
     public Blob getThumbnail() {
@@ -86,7 +76,6 @@ public class CasePhoto extends BaseModel {
                 ", photo=" + photo +
                 ", thumbnail=" + thumbnail +
                 ", aCase=" + aCase +
-                ", path='" + path + '\'' +
                 '}';
     }
 }
