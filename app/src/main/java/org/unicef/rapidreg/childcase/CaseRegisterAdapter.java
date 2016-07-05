@@ -56,7 +56,6 @@ public class CaseRegisterAdapter extends RecyclerView.Adapter<BaseViewHolder> {
         inflater = LayoutInflater.from(context);
         resources = context.getResources();
         packageName = context.getPackageName();
-
     }
 
     public void setCasePhotoAdapter(CasePhotoAdapter adapter) {
@@ -70,19 +69,23 @@ public class CaseRegisterAdapter extends RecyclerView.Adapter<BaseViewHolder> {
                 return new TextViewHolder(activity, inflater.inflate(resources
                         .getIdentifier(PREFIX + CaseField.TYPE_TEXT_FIELD,
                                 LAYOUT, packageName), parent, false));
+
             case VIEW_HOLDER_RADIO_SINGLE_LINE:
                 return new SingleLineRadioViewHolder(activity, inflater.inflate(resources
                         .getIdentifier(PREFIX + CaseField.TYPE_SINGLE_LINE_RADIO,
                                 LAYOUT, packageName), parent, false));
+
             case VIEW_HOLDER_SELECT_SINGLE_LINE:
             case VIEW_HOLDER_GENERIC:
                 return new GenericViewHolder(activity, inflater.inflate(resources
                         .getIdentifier(PREFIX + CaseField.TYPE_TEXT_FIELD,
                                 LAYOUT, packageName), parent, false));
+
             case VIEW_HOLDER_TICK_BOX:
                 return new TickBoxViewHolder(activity, inflater.inflate(resources
                                 .getIdentifier(PREFIX + CaseField.TYPE_TICK_BOX, LAYOUT, packageName),
                         parent, false));
+
             case VIEW_HOLDER_PHOTO_UPLOAD_BOX:
                 return new PhotoUploadViewHolder(activity, inflater.inflate(resources
                                 .getIdentifier(PREFIX + CaseField.TYPE_PHOTO_UPLOAD_LAYOUT, LAYOUT, packageName),
