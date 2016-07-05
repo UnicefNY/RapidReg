@@ -17,13 +17,12 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.MenuItem;
-import android.widget.GridView;
 import android.widget.Toast;
 
 import org.greenrobot.eventbus.EventBus;
 import org.unicef.rapidreg.R;
 import org.unicef.rapidreg.base.view.BaseActivity;
-import org.unicef.rapidreg.childcase.media.CasePhotoAdapter;
+import org.unicef.rapidreg.event.SaveCaseEvent;
 import org.unicef.rapidreg.event.UpdateImageEvent;
 import org.unicef.rapidreg.forms.childcase.CaseFormRoot;
 import org.unicef.rapidreg.forms.childcase.CaseSection;
@@ -56,7 +55,6 @@ public class CaseActivity extends BaseActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         initToolbar();
-
         turnToFeature(CaseFeature.LIST);
     }
 
@@ -90,11 +88,7 @@ public class CaseActivity extends BaseActivity {
             imagePath = cursor.getString(cursor
                     .getColumnIndex(MediaStore.Images.Media.DATA));
             cursor.close();
-
-            UpdateImageEvent event = new UpdateImageEvent();
-            event.setImagePath(imagePath);
-
-            EventBus.getDefault().postSticky(event);
+            postSelectedImagePath();
         }
     }
 
@@ -104,15 +98,16 @@ public class CaseActivity extends BaseActivity {
             imagePath = getOutputMediaFilePath();
             ImageCompressUtil.storeImage(bitmap, imagePath);
             bitmap.recycle();
-
-            UpdateImageEvent event = new UpdateImageEvent();
-            event.setImagePath(imagePath);
-
-            EventBus.getDefault().postSticky(event);
-
+            postSelectedImagePath();
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    private void postSelectedImagePath() {
+        UpdateImageEvent event = new UpdateImageEvent();
+        event.setImagePath(imagePath);
+        EventBus.getDefault().postSticky(event);
     }
 
     @Override
@@ -226,11 +221,10 @@ public class CaseActivity extends BaseActivity {
 
     private boolean saveCase() {
         clearFocusToMakeLastFieldSaved();
+
         if (validateRequiredField()) {
-            Map<Bitmap, String> photoBitPaths = null;
-            CaseService.getInstance().saveOrUpdateCase(CaseFieldValueCache.getValues(),
-                    SubformCache.getValues(),
-                    photoBitPaths);
+            SaveCaseEvent event = new SaveCaseEvent();
+            EventBus.getDefault().postSticky(event);
             turnToFeature(CaseFeature.LIST);
         }
         return true;

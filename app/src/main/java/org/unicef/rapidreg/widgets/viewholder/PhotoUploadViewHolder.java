@@ -60,6 +60,7 @@ public class PhotoUploadViewHolder extends BaseViewHolder<CaseField> {
     @OnClick(R.id.add_image_button)
     void onClickAddImageButton() {
         showAddPhotoOptionDialog();
+        setOnItemClickListenerOnViewPage();
     }
 
     private void setAddPhotoButtonIcon() {

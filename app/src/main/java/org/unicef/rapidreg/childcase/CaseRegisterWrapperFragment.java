@@ -1,5 +1,6 @@
 package org.unicef.rapidreg.childcase;
 
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -24,14 +25,19 @@ import org.greenrobot.eventbus.ThreadMode;
 import org.unicef.rapidreg.R;
 import org.unicef.rapidreg.base.view.SwipeChangeLayout;
 import org.unicef.rapidreg.childcase.media.CasePhotoAdapter;
+import org.unicef.rapidreg.event.SaveCaseEvent;
 import org.unicef.rapidreg.event.UpdateImageEvent;
 import org.unicef.rapidreg.forms.childcase.CaseField;
 import org.unicef.rapidreg.forms.childcase.CaseFormRoot;
 import org.unicef.rapidreg.forms.childcase.CaseSection;
 import org.unicef.rapidreg.service.CaseFormService;
+import org.unicef.rapidreg.service.CaseService;
+import org.unicef.rapidreg.service.cache.CaseFieldValueCache;
+import org.unicef.rapidreg.service.cache.SubformCache;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -114,6 +120,17 @@ public class CaseRegisterWrapperFragment extends Fragment {
     public void updateImageAdapter(UpdateImageEvent event) {
         casePhotoAdapter.addItem(event.getImagePath());
         casePhotoAdapter.notifyDataSetChanged();
+        EventBus.getDefault().removeStickyEvent(event);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN, sticky = true, priority = 1)
+    public void saveCase(SaveCaseEvent event) {
+        List<String> photoPaths = casePhotoAdapter.getAllItems();
+
+        CaseService.getInstance().saveOrUpdateCase(CaseFieldValueCache.getValues(),
+                SubformCache.getValues(),
+                photoPaths);
+
         EventBus.getDefault().removeStickyEvent(event);
     }
 
