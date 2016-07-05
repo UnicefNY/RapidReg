@@ -43,7 +43,6 @@ public class PhotoUploadMiniFormViewHolder extends BaseViewHolder<CaseField> {
     public void setValue(CaseField field) {
         viewPager.setAdapter(new CasePhotoViewPagerAdapter());
         indicator.setViewPager(viewPager);
-
     }
 
     @Override
@@ -87,9 +86,16 @@ public class PhotoUploadMiniFormViewHolder extends BaseViewHolder<CaseField> {
         public Object instantiateItem(ViewGroup container, int position) {
             View itemView = LayoutInflater.from(context).inflate(R.layout.case_photo_view_item, container, false);
             ImageView imageView = (ImageView) itemView.findViewById(R.id.case_photo_item);
-            Glide.with(context).load(flowQueryList.getItem(position).getPhoto().getBlob()).into(imageView);
 
+            if (getCount() == 0){
+                imageView.setImageResource(R.drawable.photo_placeholder);
+                caseActivity.findViewById(R.id.edit_case).setVisibility(View.VISIBLE);
+                return itemView;
+            }
+
+            Glide.with(context).load(flowQueryList.getItem(position).getPhoto().getBlob()).into(imageView);
             container.addView(itemView);
+            caseActivity.findViewById(R.id.edit_case).setVisibility(View.VISIBLE);
             return itemView;
         }
     }
