@@ -9,6 +9,7 @@ import com.raizlabs.android.dbflow.config.DatabaseDefinition;
 import com.raizlabs.android.dbflow.structure.database.DatabaseHelperListener;
 import com.raizlabs.dbflow.android.sqlcipher.SQLCipherOpenHelper;
 
+import org.unicef.rapidreg.BuildConfig;
 import org.unicef.rapidreg.PrimeroApplication;
 import org.unicef.rapidreg.utils.EncryptHelper;
 
@@ -20,7 +21,7 @@ public class SQLCipherHelperImpl extends SQLCipherOpenHelper {
 
     @Override
     protected String getCipherSecret() {
-        return PrimeroApplication.isDebugMode() ? "primero" : generateEncryptionKey();
+        return BuildConfig.DEBUG ? "primero" : generateEncryptionKey();
     }
 
     private String generateEncryptionKey() {
