@@ -173,8 +173,9 @@ public class LoginPresenter extends MvpBasePresenter<LoginView> {
         cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         gson = new Gson();
         try {
-            NetworkServiceGenerator.changeApiBaseUrl(url);
-            client = NetworkServiceGenerator.createService(context, PrimeroClient.class);
+
+            NetworkServiceGenerator.getInstance().changeApiBaseUrl(url);
+            client = NetworkServiceGenerator.getInstance().createService(context, PrimeroClient.class);
         } catch (Exception e) {
             showLoginResultMessage(e.getMessage());
         }
