@@ -24,16 +24,10 @@ public class CasePhotoCache {
             "/_media_path_for_camera_image.jpg";
     public static final Map<Integer, String> CASE_PHOTO_FILE_PATH_FROM_DB = new HashMap<>();
 
-    private static Map<Bitmap, String> photoBitPaths = new LinkedHashMap<>();
-
     static {
         for (int i = 0; i < PHOTO_LIMIT; i++) {
             CASE_PHOTO_FILE_PATH_FROM_DB.put(i, Environment.getExternalStorageDirectory()
                     + File.separator + "case_photo_" + i + ".jpg");
         }
-    }
-
-    public static void clear() {
-        photoBitPaths.clear();
     }
 }
