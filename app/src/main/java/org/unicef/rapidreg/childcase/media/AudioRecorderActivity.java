@@ -45,7 +45,6 @@ public class AudioRecorderActivity extends AppCompatActivity {
 
     private long startTime = 0;
     private int audioDuration = 0;
-    private long passedTime = 0;
 
     private int currentMode;
 
@@ -56,7 +55,6 @@ public class AudioRecorderActivity extends AppCompatActivity {
             long millis = System.currentTimeMillis() - startTime;
 
             timerTextView.setText(getTime(millis));
-            passedTime = millis;
             timerHandler.postDelayed(this, 500);
         }
     };
@@ -132,12 +130,8 @@ public class AudioRecorderActivity extends AppCompatActivity {
     }
 
     private void exitRecording() {
-        if (passedTime > RECODER_MIN_DURATION_MS) {
-            stopRecording();
-            finish();
-        } else {
-            Toast.makeText(this, R.string.recording_is_too_short, Toast.LENGTH_SHORT).show();
-        }
+        stopRecording();
+        finish();
     }
 
     private void onPlay(boolean start) {
@@ -173,6 +167,7 @@ public class AudioRecorderActivity extends AppCompatActivity {
     private void stopPlaying() {
         if (mPlayer != null) {
             mPlayer.stop();
+            mPlayer.reset();
             mPlayer.release();
             mPlayer = null;
         }
@@ -181,9 +176,9 @@ public class AudioRecorderActivity extends AppCompatActivity {
     private void startRecording() {
         mRecorder = new MediaRecorder();
         mRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
-        mRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
+        mRecorder.setOutputFormat(MediaRecorder.OutputFormat.DEFAULT);
         mRecorder.setOutputFile(mFileName);
-        mRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
+        mRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.DEFAULT);
         mRecorder.setMaxDuration(RECORDER_MAX_DURATION_MS);
 
         try {
@@ -206,6 +201,7 @@ public class AudioRecorderActivity extends AppCompatActivity {
     private void stopRecording() {
         if (mRecorder != null) {
             mRecorder.stop();
+            mRecorder.reset();
             mRecorder.release();
             mRecorder = null;
         }
