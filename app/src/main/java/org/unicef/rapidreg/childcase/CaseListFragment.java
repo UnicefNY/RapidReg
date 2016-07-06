@@ -173,7 +173,7 @@ public class CaseListFragment extends MvpFragment<CaseListView, CaseListPresente
         floatingMenu.collapseImmediately();
 
         CaseActivity activity = (CaseActivity) getActivity();
-        activity.turnToFeature(CaseFeature.ADD);
+        activity.turnToFeature(CaseFeature.ADD, null);
     }
 
     public void toggleMode(boolean isShow) {
