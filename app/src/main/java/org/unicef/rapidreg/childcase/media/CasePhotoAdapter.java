@@ -61,12 +61,14 @@ public class CasePhotoAdapter extends BaseAdapter {
         View itemView = inflater.inflate(R.layout.form_photo_item, null);
         ImageView imageView = (ImageView) itemView.findViewById(R.id.photo_item);
         String path = paths.get(i);
+
+        int width = 80;
         try {
-            long caseId = Long.parseLong(path);
-            Glide.with(context).load(CasePhotoService.getInstance().getCasePhotoById(caseId)
-                    .getPhoto().getBlob()).into(imageView);
+            long photoId = Long.parseLong(path);
+            Glide.with(context).load(CasePhotoService.getInstance().getCasePhotoById(photoId)
+                    .getPhoto().getBlob()).override(width, width).centerCrop().into(imageView);
         } catch (NumberFormatException e) {
-            Glide.with(imageView.getContext()).load(path).into(imageView);
+            Glide.with(imageView.getContext()).load(path).override(width, width).centerCrop().into(imageView);
         }
         return itemView;
     }
