@@ -26,8 +26,8 @@
         android:layout_height="20dp"
         android:layout_gravity="center_vertical"
         android:layout_margin="5dp"
-        android:paddingLeft="@dimen/case_register_label_padding_left_right"
-        android:paddingRight="@dimen/case_register_label_padding_left_right"
+        android:paddingLeft="@dimen/case_register_field_padding_left_right"
+        android:paddingRight="@dimen/case_register_field_padding_left_right"
         android:text="@string/no_photo_promote_info"
         android:textSize="@dimen/text_size_16"
         android:visibility="gone" />
