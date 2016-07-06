@@ -41,22 +41,6 @@ public class ImageCompressUtil {
     }
 
 
-    public static  Bitmap compressImage(String filePath, int maxWidth, int maxHeight, int maxSize) throws IOException {
-        Bitmap bitmap;
-        int rotateDegree = readPictureRotateDegree(filePath);
-
-        if (rotateDegree == 90 || rotateDegree == 270) {
-            bitmap = compressBySize(filePath,
-                    maxWidth, maxHeight);
-        } else {
-            bitmap = compressBySize(filePath,
-                    maxHeight, maxWidth);
-        }
-        bitmap = compressByQuality(bitmap, maxSize);
-        bitmap = rotateBitmapByExif(filePath, bitmap);
-        return bitmap;
-    }
-
     public static Bitmap getThumbnail(ContentResolver contentResolver, String path) {
         Cursor cursor = contentResolver.query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
                 new String[]{MediaStore.MediaColumns._ID}, MediaStore.MediaColumns.DATA + "=?", new String[]{path}, null);
@@ -67,6 +51,22 @@ public class ImageCompressUtil {
         }
         cursor.close();
         return null;
+    }
+
+    public static  Bitmap compressImage(String filePath, int maxWidth, int maxHeight, int maxSize) throws IOException {
+        Bitmap bitmap;
+        int rotateDegree = readPictureRotateDegree(filePath);
+
+        if (rotateDegree == 90 || rotateDegree == 270) {
+            bitmap = compressBySize(filePath,
+                    maxHeight, maxWidth);
+        } else {
+            bitmap = compressBySize(filePath,
+                    maxWidth, maxHeight);
+        }
+        bitmap = compressByQuality(bitmap, maxSize);
+        bitmap = rotateBitmapByExif(filePath, bitmap);
+        return bitmap;
     }
 
     public static Bitmap compressBySize(String pathName, int targetWidth,
@@ -83,9 +83,11 @@ public class ImageCompressUtil {
 
         if (widthRatio > 1 || heightRatio > 1) {
             opts.inSampleSize = widthRatio > heightRatio ? widthRatio : heightRatio;
+        }else{
+            opts.inSampleSize = 1;
         }
-
         opts.inJustDecodeBounds = false;
+
         return BitmapFactory.decodeFile(pathName, opts);
     }
 

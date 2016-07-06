@@ -17,7 +17,7 @@ import org.unicef.rapidreg.childcase.CaseActivity;
 import org.unicef.rapidreg.childcase.media.CasePhotoAdapter;
 import org.unicef.rapidreg.childcase.media.CasePhotoViewActivity;
 import org.unicef.rapidreg.forms.childcase.CaseField;
-import org.unicef.rapidreg.service.cache.CasePhotoCache;
+import org.unicef.rapidreg.childcase.config.CasePhotoCoonfig;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -139,7 +139,7 @@ public class PhotoUploadViewHolder extends BaseViewHolder<CaseField> {
             @Override
             public void onClick(DialogInterface dialog, int item) {
                 if (fromCameraItem.equals(items[item])) {
-                    Uri saveUri = Uri.fromFile(new File(CasePhotoCache.MEDIA_PATH_FOR_CAMERA));
+                    Uri saveUri = Uri.fromFile(new File(CasePhotoCoonfig.MEDIA_PATH_FOR_CAMERA));
                     Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                     intent.putExtra(MediaStore.EXTRA_OUTPUT, saveUri);
                     ((CaseActivity) context).startActivityForResult(intent, REQUEST_CODE_CAMERA);

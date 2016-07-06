@@ -10,6 +10,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 
 import com.getbase.floatingactionbutton.FloatingActionButton;
@@ -135,8 +136,18 @@ public class CaseRegisterWrapperFragment extends Fragment {
     @Subscribe(threadMode = ThreadMode.MAIN, sticky = true, priority = 1)
     public void updateImageAdapter(UpdateImageEvent event) {
         casePhotoAdapter.addItem(event.getImagePath());
+        ImageButton view = (ImageButton) getActivity().findViewById(R.id.add_image_button);
+
+        if (!casePhotoAdapter.isEmpty()) {
+            view.setImageResource(R.drawable.photo_add);
+        }
+        if (casePhotoAdapter.isFull()) {
+            view.setVisibility(View.GONE);
+        }
+
         casePhotoAdapter.notifyDataSetChanged();
         EventBus.getDefault().removeStickyEvent(event);
+
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)

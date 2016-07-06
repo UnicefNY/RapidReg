@@ -29,7 +29,7 @@ import org.unicef.rapidreg.forms.childcase.CaseSection;
 import org.unicef.rapidreg.service.CaseFormService;
 import org.unicef.rapidreg.service.CaseService;
 import org.unicef.rapidreg.service.cache.CaseFieldValueCache;
-import org.unicef.rapidreg.service.cache.CasePhotoCache;
+import org.unicef.rapidreg.childcase.config.CasePhotoCoonfig;
 import org.unicef.rapidreg.utils.ImageCompressUtil;
 import org.unicef.rapidreg.widgets.viewholder.PhotoUploadViewHolder;
 
@@ -92,7 +92,7 @@ public class CaseActivity extends BaseActivity {
 
     private void onCaptureImageResult() {
         try {
-            Bitmap bitmap = BitmapFactory.decodeFile(CasePhotoCache.MEDIA_PATH_FOR_CAMERA);
+            Bitmap bitmap = BitmapFactory.decodeFile(CasePhotoCoonfig.MEDIA_PATH_FOR_CAMERA);
             imagePath = getOutputMediaFilePath();
             ImageCompressUtil.storeImage(bitmap, imagePath);
             bitmap.recycle();
