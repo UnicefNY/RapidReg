@@ -34,6 +34,7 @@ public class CaseRegisterFragment extends MvpFragment<CaseRegisterView, CaseRegi
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
+
         if (getArguments() != null) {
             casePhotoAdapter = new CasePhotoAdapter(getContext(),
                     getArguments().getStringArrayList("case_photos"));

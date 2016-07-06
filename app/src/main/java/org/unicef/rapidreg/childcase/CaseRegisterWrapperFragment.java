@@ -105,7 +105,6 @@ public class CaseRegisterWrapperFragment extends Fragment {
         return view;
     }
 
-
     @Override
     public void onStart() {
         super.onStart();
@@ -267,8 +266,10 @@ public class CaseRegisterWrapperFragment extends Fragment {
         for (CaseSection section : sections) {
             String[] values = section.getName().values().toArray(new String[0]);
             Bundle bundle = new Bundle();
+
             bundle.putStringArrayList("case_photos",
                     (ArrayList<String>) casePhotoAdapter.getAllItems());
+
             pages.add(FragmentPagerItem.of(values[0], CaseRegisterFragment.class, bundle));
         }
         return pages;

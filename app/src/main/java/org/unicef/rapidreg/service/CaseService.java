@@ -260,11 +260,13 @@ public class CaseService {
             casePhoto = new CasePhoto();
         }
         String filePath = photoPaths.get(index);
+
         Bitmap bitmap = ImageCompressUtil.compressImage(filePath,
                 CasePhotoCache.MAX_WIDTH, CasePhotoCache.MAX_HEIGHT,
                 CasePhotoCache.MAX_SIZE_KB);
         casePhoto.setThumbnail(new Blob(ImageCompressUtil.convertImageToBytes(
                 ImageCompressUtil.getThumbnail(bitmap, 80, 80))));
+
         casePhoto.setPhoto(new Blob(ImageCompressUtil.convertImageToBytes(bitmap)));
         casePhoto.setCase(child);
         return casePhoto;
