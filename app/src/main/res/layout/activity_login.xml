@@ -4,12 +4,15 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <ImageView
+    <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/logo"
         android:layout_width="@dimen/login_logo_size"
         android:layout_height="@dimen/login_logo_size"
+        android:src="@drawable/logo"
         android:layout_gravity="center_horizontal"
-        android:layout_marginTop="@dimen/login_logo_top_margin" />
+        android:layout_marginTop="@dimen/login_logo_top_margin"
+        app:civ_border_color="#00000000"
+        app:civ_border_width="0dp" />
 
     <EditText
         android:id="@+id/username"

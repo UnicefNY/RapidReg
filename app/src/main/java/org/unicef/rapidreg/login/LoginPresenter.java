@@ -2,7 +2,6 @@ package org.unicef.rapidreg.login;
 
 import android.app.Activity;
 import android.content.Context;
-import android.net.ConnectivityManager;
 import android.provider.Settings;
 import android.telephony.TelephonyManager;
 import android.util.Log;
@@ -48,7 +47,7 @@ public class LoginPresenter extends MvpBasePresenter<LoginView> {
     private static final int MAX_LOAD_FORMS_NUM = 3;
 
     private PrimeroClient client;
-    private ConnectivityManager cm;
+
     private Gson gson;
     private Context context;
     private IntentSender intentSender;
@@ -70,7 +69,7 @@ public class LoginPresenter extends MvpBasePresenter<LoginView> {
         if (isViewAttached()) {
             initContext(context, url);
             showLoadingIndicator(true);
-            if (NetworkStatusManager.isOnline(cm)) {
+            if (NetworkStatusManager.isOnline(context)) {
                 doLoginOnline(context, username, password, url);
             } else {
                 doLoginOffline(context, username, password);
@@ -170,7 +169,6 @@ public class LoginPresenter extends MvpBasePresenter<LoginView> {
     private void initContext(Context context, String url) {
         this.context = context;
         intentSender = new IntentSender();
-        cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         gson = new Gson();
         try {
 
