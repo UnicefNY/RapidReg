@@ -19,17 +19,19 @@
             android:id="@+id/photo_grid"
             android:layout_width="0dp"
             android:layout_weight="1"
-            android:layout_height="wrap_content"
+            android:layout_height="90dp"
             android:columnWidth="90dp"
             android:horizontalSpacing="5dp"
             android:numColumns="4"
             android:stretchMode="columnWidth" />
 
-
         <ImageButton
-            android:layout_width="80dp"
-
-            android:layout_height="80dp"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="20dp"
+            android:scaleType="fitXY"
+            android:background="@color/white"
             android:src="@drawable/photo_camera"
             android:id="@+id/add_image_button"/>
     </LinearLayout>

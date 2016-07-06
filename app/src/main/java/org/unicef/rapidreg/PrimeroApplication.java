@@ -13,7 +13,6 @@ import com.raizlabs.android.dbflow.structure.database.OpenHelper;
 
 import org.unicef.rapidreg.db.PrimeroDB;
 import org.unicef.rapidreg.db.SQLCipherHelperImpl;
-import org.unicef.rapidreg.service.cache.CasePhotoCache;
 
 public class PrimeroApplication extends Application {
     private static Context context;

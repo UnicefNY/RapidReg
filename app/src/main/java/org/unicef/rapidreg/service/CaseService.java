@@ -19,7 +19,7 @@ import org.unicef.rapidreg.forms.childcase.CaseField;
 import org.unicef.rapidreg.model.Case;
 import org.unicef.rapidreg.model.CasePhoto;
 import org.unicef.rapidreg.service.cache.CaseFieldValueCache;
-import org.unicef.rapidreg.service.cache.CasePhotoCache;
+import org.unicef.rapidreg.childcase.config.CasePhotoCoonfig;
 import org.unicef.rapidreg.service.cache.SubformCache;
 import org.unicef.rapidreg.utils.ImageCompressUtil;
 import org.unicef.rapidreg.utils.StreamUtil;
@@ -262,8 +262,8 @@ public class CaseService {
         String filePath = photoPaths.get(index);
 
         Bitmap bitmap = ImageCompressUtil.compressImage(filePath,
-                CasePhotoCache.MAX_WIDTH, CasePhotoCache.MAX_HEIGHT,
-                CasePhotoCache.MAX_SIZE_KB);
+                CasePhotoCoonfig.MAX_WIDTH, CasePhotoCoonfig.MAX_HEIGHT,
+                CasePhotoCoonfig.MAX_SIZE_KB);
         casePhoto.setThumbnail(new Blob(ImageCompressUtil.convertImageToBytes(
                 ImageCompressUtil.getThumbnail(bitmap, 80, 80))));
 
@@ -282,8 +282,8 @@ public class CaseService {
             casePhoto = casePhotoDao.getCasePhotoById(photoId);
         } catch (NumberFormatException e) {
             Bitmap bitmap = ImageCompressUtil.compressImage(filePath,
-                    CasePhotoCache.MAX_WIDTH, CasePhotoCache.MAX_HEIGHT,
-                    CasePhotoCache.MAX_SIZE_KB);
+                    CasePhotoCoonfig.MAX_WIDTH, CasePhotoCoonfig.MAX_HEIGHT,
+                    CasePhotoCoonfig.MAX_SIZE_KB);
             photo = new Blob(ImageCompressUtil.convertImageToBytes(bitmap));
             casePhoto = new CasePhoto();
             casePhoto.setThumbnail(new Blob(ImageCompressUtil.convertImageToBytes(
