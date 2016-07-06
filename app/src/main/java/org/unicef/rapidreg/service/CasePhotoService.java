@@ -6,6 +6,8 @@ import org.unicef.rapidreg.db.CasePhotoDao;
 import org.unicef.rapidreg.db.impl.CasePhotoDaoImpl;
 import org.unicef.rapidreg.model.CasePhoto;
 
+import java.util.List;
+
 public class CasePhotoService {
     public static final String TAG = CasePhotoService.class.getSimpleName();
 
@@ -26,10 +28,13 @@ public class CasePhotoService {
         return casePhotoDao.getCaseFirstThumbnail(caseId);
     }
 
+    public CasePhoto getCasePhotoById(long caseId) {
+        return casePhotoDao.getCasePhotoById(caseId);
+    }
+
     public FlowCursorList<CasePhoto> getAllCasesPhotoFlowQueryList(long caseId) {
         return casePhotoDao.getAllCasesPhotoFlowQueryList(caseId);
     }
-
 
     private long caseId;
 

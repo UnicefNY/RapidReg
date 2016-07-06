@@ -11,22 +11,23 @@ import android.widget.ImageView;
 import com.bumptech.glide.Glide;
 
 import org.unicef.rapidreg.R;
+import org.unicef.rapidreg.service.CasePhotoService;
 
 import java.util.List;
 
 public class CasePhotoViewAdapter extends PagerAdapter {
 
     private Context context;
-    private List<String> photos;
+    private List<String> paths;
 
     public CasePhotoViewAdapter(Context context, List<String> photos) {
         this.context = context;
-        this.photos = photos;
+        this.paths = photos;
     }
 
     @Override
     public int getCount() {
-        return photos.size();
+        return paths.size();
     }
 
     @Override
@@ -49,9 +50,14 @@ public class CasePhotoViewAdapter extends PagerAdapter {
         ImageView imageView = (ImageView) itemView.findViewById(R.id.case_photo_item);
         imageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
 
-        String filePath = photos.get(position);
-        Glide.with(context).load(filePath).into(imageView);
-
+        String path = paths.get(position);
+        try {
+            long caseId = Long.parseLong(path);
+            Glide.with(context).load(CasePhotoService.getInstance().getCasePhotoById(caseId)
+                    .getPhoto().getBlob()).into(imageView);
+        } catch (NumberFormatException e) {
+            Glide.with(context).load(path).into(imageView);
+        }
         container.addView(itemView);
         return itemView;
     }

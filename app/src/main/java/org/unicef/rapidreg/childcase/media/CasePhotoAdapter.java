@@ -10,12 +10,12 @@ import android.widget.ImageView;
 import com.bumptech.glide.Glide;
 
 import org.unicef.rapidreg.R;
+import org.unicef.rapidreg.service.CasePhotoService;
 
 import java.util.List;
 
 public class CasePhotoAdapter extends BaseAdapter {
     private final static int MAX = 4;
-
     private Context context;
     private List<String> paths;
 
@@ -30,7 +30,7 @@ public class CasePhotoAdapter extends BaseAdapter {
     }
 
     public void addItem(long photoId) {
-        String dbPath = String.valueOf("photo_from_db_" + photoId);
+        String dbPath = String.valueOf(photoId);
         paths.add(dbPath);
     }
 
@@ -60,8 +60,14 @@ public class CasePhotoAdapter extends BaseAdapter {
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View itemView = inflater.inflate(R.layout.form_photo_item, null);
         ImageView imageView = (ImageView) itemView.findViewById(R.id.photo_item);
-
-        Glide.with(imageView.getContext()).load(paths.get(i)).into(imageView);
+        String path = paths.get(i);
+        try {
+            long caseId = Long.parseLong(path);
+            Glide.with(context).load(CasePhotoService.getInstance().getCasePhotoById(caseId)
+                    .getPhoto().getBlob()).into(imageView);
+        } catch (NumberFormatException e) {
+            Glide.with(imageView.getContext()).load(path).into(imageView);
+        }
         return itemView;
     }
 
