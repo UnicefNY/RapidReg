@@ -86,7 +86,11 @@ public class PhotoUploadMiniFormViewHolder extends BaseViewHolder<CaseField> {
             View itemView = LayoutInflater.from(context).inflate(R.layout.case_photo_view_item, container, false);
             ImageView imageView = (ImageView) itemView.findViewById(R.id.case_photo_item);
 
-            Glide.with(context).load(flowQueryList.getItem(position).getPhoto().getBlob()).into(imageView);
+            Glide.with(context).load(flowQueryList.getItem(position).getPhoto().getBlob())
+                    .placeholder(R.drawable.photo_placeholder)
+                    .error(R.drawable.photo_placeholder)
+                    .centerCrop()
+                    .into(imageView);
             container.addView(itemView);
             caseActivity.findViewById(R.id.edit_case).setVisibility(View.VISIBLE);
             return itemView;
