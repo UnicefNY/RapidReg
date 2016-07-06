@@ -1,6 +1,7 @@
 package org.unicef.rapidreg.service;
 
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
@@ -11,6 +12,7 @@ import com.raizlabs.android.dbflow.sql.language.Condition;
 import com.raizlabs.android.dbflow.sql.language.ConditionGroup;
 import com.raizlabs.android.dbflow.sql.language.NameAlias;
 
+import org.unicef.rapidreg.childcase.config.CasePhotoConfig;
 import org.unicef.rapidreg.db.CaseDao;
 import org.unicef.rapidreg.db.CasePhotoDao;
 import org.unicef.rapidreg.db.impl.CaseDaoImpl;
@@ -19,11 +21,11 @@ import org.unicef.rapidreg.forms.childcase.CaseField;
 import org.unicef.rapidreg.model.Case;
 import org.unicef.rapidreg.model.CasePhoto;
 import org.unicef.rapidreg.service.cache.CaseFieldValueCache;
-import org.unicef.rapidreg.childcase.config.CasePhotoCoonfig;
 import org.unicef.rapidreg.service.cache.SubformCache;
 import org.unicef.rapidreg.utils.ImageCompressUtil;
 import org.unicef.rapidreg.utils.StreamUtil;
 
+import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Type;
 import java.sql.Date;
@@ -225,7 +227,7 @@ public class CaseService {
     }
 
     private void updateCasePhoto(Case child, List<String> photoPaths) throws IOException {
-        int previousCount = casePhotoDao.getAllCasesPhotoFlowQueryList(child.getId()).getCount();
+        int previousCount = casePhotoDao.getAllCasesPhotoFlowQueryList(child.getId()).size();
 
         if (previousCount < photoPaths.size()) {
             for (int i = 0; i < previousCount; i++) {
@@ -261,15 +263,24 @@ public class CaseService {
         }
         String filePath = photoPaths.get(index);
 
-        Bitmap bitmap = ImageCompressUtil.compressImage(filePath,
-                CasePhotoCoonfig.MAX_WIDTH, CasePhotoCoonfig.MAX_HEIGHT,
-                CasePhotoCoonfig.MAX_SIZE_KB);
+        Bitmap bitmap = handleImage(filePath);
+
         casePhoto.setThumbnail(new Blob(ImageCompressUtil.convertImageToBytes(
                 ImageCompressUtil.getThumbnail(bitmap, 80, 80))));
 
         casePhoto.setPhoto(new Blob(ImageCompressUtil.convertImageToBytes(bitmap)));
         casePhoto.setCase(child);
         return casePhoto;
+    }
+
+    private Bitmap handleImage(String filePath) throws IOException {
+        if (new File(filePath).length() <= 1024 * 1024 * 1) {
+            return BitmapFactory.decodeFile(filePath);
+        }
+
+        return ImageCompressUtil.compressImage(filePath,
+                CasePhotoConfig.MAX_WIDTH, CasePhotoConfig.MAX_HEIGHT,
+                CasePhotoConfig.MAX_SIZE_KB);
     }
 
     @NonNull
@@ -281,9 +292,7 @@ public class CaseService {
             long photoId = Long.parseLong(filePath);
             casePhoto = casePhotoDao.getCasePhotoById(photoId);
         } catch (NumberFormatException e) {
-            Bitmap bitmap = ImageCompressUtil.compressImage(filePath,
-                    CasePhotoCoonfig.MAX_WIDTH, CasePhotoCoonfig.MAX_HEIGHT,
-                    CasePhotoCoonfig.MAX_SIZE_KB);
+            Bitmap bitmap = handleImage(filePath);
             photo = new Blob(ImageCompressUtil.convertImageToBytes(bitmap));
             casePhoto = new CasePhoto();
             casePhoto.setThumbnail(new Blob(ImageCompressUtil.convertImageToBytes(

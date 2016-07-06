@@ -8,87 +8,29 @@ import android.graphics.Matrix;
 import android.media.ExifInterface;
 import android.media.ThumbnailUtils;
 import android.provider.MediaStore;
-import android.util.Log;
 
 import java.io.ByteArrayOutputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 
 
 public class ImageCompressUtil {
 
-    public static byte[] convertImageToBytes(Bitmap imageSource) {
+
+    public static byte[] convertImageToBytes(String imageSource) {
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
-        imageSource.compress(Bitmap.CompressFormat.JPEG, 10, stream);
+        BitmapFactory.decodeFile(imageSource).compress(Bitmap.CompressFormat.JPEG, 100, stream);
         return stream.toByteArray();
     }
 
-    public static Bitmap convertByteArrayToImage(byte[] byteSource) {
-        return BitmapFactory.decodeByteArray(byteSource, 0, byteSource.length);
-    }
-
-    public static Bitmap getThumbnail(String imagePath, int width, int height) {
-        return getThumbnail(BitmapFactory.decodeFile(imagePath), width, height);
-    }
-
-    public static Bitmap getThumbnail(String imagePath, int size) {
-        return getThumbnail(BitmapFactory.decodeFile(imagePath), size, size);
+    public static byte[] convertImageToBytes(Bitmap imageSource) {
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        imageSource.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+        return stream.toByteArray();
     }
 
     public static Bitmap getThumbnail(Bitmap bitmap, int width, int height) {
         return ThumbnailUtils.extractThumbnail(bitmap, width, height);
-    }
-
-
-    public static Bitmap getThumbnail(ContentResolver contentResolver, String path) {
-        Cursor cursor = contentResolver.query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-                new String[]{MediaStore.MediaColumns._ID}, MediaStore.MediaColumns.DATA + "=?", new String[]{path}, null);
-        if (cursor != null && cursor.moveToFirst()) {
-            int id = cursor.getInt(cursor.getColumnIndex(MediaStore.MediaColumns._ID));
-            cursor.close();
-            return MediaStore.Images.Thumbnails.getThumbnail(contentResolver, id, MediaStore.Images.Thumbnails.MICRO_KIND, null);
-        }
-        cursor.close();
-        return null;
-    }
-
-    public static  Bitmap compressImage(String filePath, int maxWidth, int maxHeight, int maxSize) throws IOException {
-        Bitmap bitmap;
-        int rotateDegree = readPictureRotateDegree(filePath);
-
-        if (rotateDegree == 90 || rotateDegree == 270) {
-            bitmap = compressBySize(filePath,
-                    maxHeight, maxWidth);
-        } else {
-            bitmap = compressBySize(filePath,
-                    maxWidth, maxHeight);
-        }
-        bitmap = compressByQuality(bitmap, maxSize);
-        bitmap = rotateBitmapByExif(filePath, bitmap);
-        return bitmap;
-    }
-
-    public static Bitmap compressBySize(String pathName, int targetWidth,
-                                        int targetHeight) {
-        BitmapFactory.Options opts = new BitmapFactory.Options();
-        opts.inJustDecodeBounds = true;
-
-        BitmapFactory.decodeFile(pathName, opts);
-        int imgWidth = opts.outWidth;
-        int imgHeight = opts.outHeight;
-
-        int widthRatio = (int) Math.ceil(imgWidth / (float) targetWidth);
-        int heightRatio = (int) Math.ceil(imgHeight / (float) targetHeight);
-
-        if (widthRatio > 1 || heightRatio > 1) {
-            opts.inSampleSize = widthRatio > heightRatio ? widthRatio : heightRatio;
-        }else{
-            opts.inSampleSize = 1;
-        }
-        opts.inJustDecodeBounds = false;
-
-        return BitmapFactory.decodeFile(pathName, opts);
     }
 
     public static Bitmap compressByQuality(Bitmap bitmap, int maxSize) {
@@ -166,62 +108,6 @@ public class ImageCompressUtil {
         return bitmap;
     }
 
-    public static Bitmap compressBySize(Bitmap bitmap, int targetWidth,
-                                        int targetHeight) {
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-        BitmapFactory.Options opts = new BitmapFactory.Options();
-        opts.inJustDecodeBounds = true;
-        bitmap = BitmapFactory.decodeByteArray(baos.toByteArray(), 0,
-                baos.toByteArray().length, opts);
-        int imgWidth = opts.outWidth;
-        int imgHeight = opts.outHeight;
-
-        int widthRatio = (int) Math.ceil(imgWidth / (float) targetWidth);
-        int heightRatio = (int) Math.ceil(imgHeight / (float) targetHeight);
-        if (widthRatio > 1 || heightRatio > 1) {
-            if (widthRatio > heightRatio) {
-                opts.inSampleSize = widthRatio;
-            } else {
-                opts.inSampleSize = heightRatio;
-            }
-        }
-        opts.inJustDecodeBounds = false;
-        Bitmap compressedBitmap = BitmapFactory.decodeByteArray(
-                baos.toByteArray(), 0, baos.toByteArray().length, opts);
-        recycleBitmap(bitmap);
-        return compressedBitmap;
-    }
-
-    public static Bitmap compressBySize(InputStream is, int targetWidth,
-                                        int targetHeight) throws IOException {
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        byte[] buff = new byte[1024];
-        int len;
-        while ((len = is.read(buff)) != -1) {
-            baos.write(buff, 0, len);
-        }
-
-        byte[] data = baos.toByteArray();
-        BitmapFactory.Options opts = new BitmapFactory.Options();
-        opts.inJustDecodeBounds = true;
-        Bitmap bitmap;
-        int imgWidth = opts.outWidth;
-        int imgHeight = opts.outHeight;
-        int widthRatio = (int) Math.ceil(imgWidth / (float) targetWidth);
-        int heightRatio = (int) Math.ceil(imgHeight / (float) targetHeight);
-        if (widthRatio > 1 || heightRatio > 1) {
-            if (widthRatio > heightRatio) {
-                opts.inSampleSize = widthRatio;
-            } else {
-                opts.inSampleSize = heightRatio;
-            }
-        }
-        opts.inJustDecodeBounds = false;
-        bitmap = BitmapFactory.decodeByteArray(data, 0, data.length, opts);
-        return bitmap;
-    }
-
     public static void recycleBitmap(Bitmap bitmap) {
         if (bitmap != null && !bitmap.isRecycled()) {
             bitmap.recycle();
@@ -235,6 +121,59 @@ public class ImageCompressUtil {
         fos.close();
     }
 
+
+    public static Bitmap compressImage(String filePath, float maxWidth, float maxHeight, int maxSizeKB) {
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inJustDecodeBounds = true;
+        BitmapFactory.decodeFile(filePath, options);
+        int imageHeight = options.outHeight;
+        int imageWidth = options.outWidth;
+
+        float imgRatio = imageWidth / imageHeight;
+        float maxRatio = maxWidth / maxHeight;
+
+        if (imageHeight > maxHeight || imageWidth > maxWidth) {
+            if (imgRatio < maxRatio) {
+                imgRatio = maxHeight / imageHeight;
+                imageWidth = (int) (imgRatio * imageWidth);
+                imageHeight = (int) maxHeight;
+            } else if (imgRatio > maxRatio) {
+                imgRatio = maxWidth / imageWidth;
+                imageHeight = (int) (imgRatio * imageHeight);
+                imageWidth = (int) maxWidth;
+            } else {
+                imageHeight = (int) maxHeight;
+                imageWidth = (int) maxWidth;
+
+            }
+        }
+        options.inSampleSize = calculateInSampleSize(options, imageWidth, imageHeight);
+        options.inJustDecodeBounds = false;
+        options.inTempStorage = new byte[16 * 1024];
+
+        Bitmap resizedImage = BitmapFactory.decodeFile(filePath, options);
+        Bitmap scaledBitmap = Bitmap.createScaledBitmap(resizedImage, imageWidth, imageHeight, true);
+        recycleBitmap(resizedImage);
+        return rotateBitmapByExif(filePath, scaledBitmap);
+    }
+
+    public static int calculateInSampleSize(BitmapFactory.Options options, int reqWidth, int reqHeight) {
+        final int height = options.outHeight;
+        final int width = options.outWidth;
+        int inSampleSize = 1;
+
+        if (height > reqHeight || width > reqWidth) {
+            final int heightRatio = Math.round((float) height / (float) reqHeight);
+            final int widthRatio = Math.round((float) width / (float) reqWidth);
+            inSampleSize = heightRatio < widthRatio ? heightRatio : widthRatio;
+        }
+        float totalPixels = width * height;
+        float totalReqPixelsCap = reqWidth * reqHeight * 2;
+        while (totalPixels / (inSampleSize * inSampleSize) > totalReqPixelsCap) {
+            inSampleSize++;
+        }
+        return inSampleSize;
+    }
 
     public static Bitmap rotateImage(Bitmap img, int rotateDegree) {
         Matrix matrix = new Matrix();

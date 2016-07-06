@@ -22,6 +22,7 @@ import android.widget.Toast;
 import org.greenrobot.eventbus.EventBus;
 import org.unicef.rapidreg.R;
 import org.unicef.rapidreg.base.view.BaseActivity;
+import org.unicef.rapidreg.childcase.config.CasePhotoConfig;
 import org.unicef.rapidreg.event.SaveCaseEvent;
 import org.unicef.rapidreg.event.UpdateImageEvent;
 import org.unicef.rapidreg.forms.childcase.CaseFormRoot;
@@ -29,7 +30,6 @@ import org.unicef.rapidreg.forms.childcase.CaseSection;
 import org.unicef.rapidreg.service.CaseFormService;
 import org.unicef.rapidreg.service.CaseService;
 import org.unicef.rapidreg.service.cache.CaseFieldValueCache;
-import org.unicef.rapidreg.childcase.config.CasePhotoCoonfig;
 import org.unicef.rapidreg.utils.ImageCompressUtil;
 import org.unicef.rapidreg.widgets.viewholder.PhotoUploadViewHolder;
 
@@ -92,7 +92,7 @@ public class CaseActivity extends BaseActivity {
 
     private void onCaptureImageResult() {
         try {
-            Bitmap bitmap = BitmapFactory.decodeFile(CasePhotoCoonfig.MEDIA_PATH_FOR_CAMERA);
+            Bitmap bitmap = BitmapFactory.decodeFile(CasePhotoConfig.MEDIA_PATH_FOR_CAMERA);
             imagePath = getOutputMediaFilePath();
             ImageCompressUtil.storeImage(bitmap, imagePath);
             bitmap.recycle();
@@ -130,8 +130,6 @@ public class CaseActivity extends BaseActivity {
         }
     }
 
-<<<<<<< 372adcdc56293ae61a7f1c1d66de9fa8b6daa055
-
     @Override
     protected void navSyncAction() {
         if (currentFeature.isInEditMode()) {
@@ -142,8 +140,6 @@ public class CaseActivity extends BaseActivity {
         }
     }
 
-    public void turnToFeature(CaseFeature feature) {
-=======
     public void turnToDetailOrEditPage(CaseFeature feature, long caseId) {
         try {
 
@@ -160,7 +156,6 @@ public class CaseActivity extends BaseActivity {
 
 
     public void turnToFeature(CaseFeature feature, Bundle args) {
->>>>>>> show photo after navigate to detail page
         currentFeature = feature;
         changeToolbarTitle(feature.getTitleId());
         changeToolbarIcon(feature);
@@ -169,7 +164,6 @@ public class CaseActivity extends BaseActivity {
             if (args != null) {
                 fragment.setArguments(args);
             }
-
             navToFragment(fragment);
         } catch (Exception e) {
             throw new RuntimeException("Fragment navigation error", e);
@@ -190,9 +184,9 @@ public class CaseActivity extends BaseActivity {
                         CaseFieldValueCache.clearAudioFile();
                         switch (clickedButton) {
                             case R.id.nav_cases:
-                                turnToFeature(CaseFeature.LIST);
+                                turnToFeature(CaseFeature.LIST, null);
                                 break;
-                            case R.id.nav_sync :
+                            case R.id.nav_sync:
                                 intentSender.showSyncActivity(CaseActivity.this);
                                 break;
                             default:

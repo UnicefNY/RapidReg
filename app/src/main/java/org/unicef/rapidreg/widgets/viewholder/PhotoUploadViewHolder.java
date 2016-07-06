@@ -14,10 +14,10 @@ import android.widget.TextView;
 
 import org.unicef.rapidreg.R;
 import org.unicef.rapidreg.childcase.CaseActivity;
+import org.unicef.rapidreg.childcase.config.CasePhotoConfig;
 import org.unicef.rapidreg.childcase.media.CasePhotoAdapter;
 import org.unicef.rapidreg.childcase.media.CasePhotoViewActivity;
 import org.unicef.rapidreg.forms.childcase.CaseField;
-import org.unicef.rapidreg.childcase.config.CasePhotoCoonfig;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -50,6 +50,8 @@ public class PhotoUploadViewHolder extends BaseViewHolder<CaseField> {
         this.context = context;
         this.adapter = adapter;
         photoGrid.setAdapter(adapter);
+
+        setViewPhotoListener();
     }
 
     @Override
@@ -60,7 +62,6 @@ public class PhotoUploadViewHolder extends BaseViewHolder<CaseField> {
     @OnClick(R.id.add_image_button)
     void onClickAddImageButton() {
         showAddPhotoOptionDialog();
-        setOnItemClickListenerOnViewPage();
     }
 
     private void setAddPhotoButtonIcon() {
@@ -82,25 +83,18 @@ public class PhotoUploadViewHolder extends BaseViewHolder<CaseField> {
         }
     }
 
-    private void setOnItemClickListenerOnViewPage() {
-        if (((CaseActivity) context).getCurrentFeature().isInDetailMode()) {
-            photoGrid.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
-                    showViewPhotoDialog(position);
-                }
-            });
-        }
-    }
-
-    @Override
-    public void setOnClickListener(CaseField field) {
+    private void setViewPhotoListener() {
         photoGrid.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
                 showViewPhotoDialog(position);
             }
         });
+    }
+
+    @Override
+    public void setOnClickListener(CaseField field) {
+        setViewPhotoListener();
 
         photoGrid.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
@@ -139,7 +133,7 @@ public class PhotoUploadViewHolder extends BaseViewHolder<CaseField> {
             @Override
             public void onClick(DialogInterface dialog, int item) {
                 if (fromCameraItem.equals(items[item])) {
-                    Uri saveUri = Uri.fromFile(new File(CasePhotoCoonfig.MEDIA_PATH_FOR_CAMERA));
+                    Uri saveUri = Uri.fromFile(new File(CasePhotoConfig.MEDIA_PATH_FOR_CAMERA));
                     Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                     intent.putExtra(MediaStore.EXTRA_OUTPUT, saveUri);
                     ((CaseActivity) context).startActivityForResult(intent, REQUEST_CODE_CAMERA);

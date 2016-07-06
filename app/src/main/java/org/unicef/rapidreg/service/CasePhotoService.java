@@ -32,7 +32,7 @@ public class CasePhotoService {
         return casePhotoDao.getCasePhotoById(caseId);
     }
 
-    public FlowCursorList<CasePhoto> getAllCasesPhotoFlowQueryList(long caseId) {
+    public List<CasePhoto> getAllCasesPhotoFlowQueryList(long caseId) {
         return casePhotoDao.getAllCasesPhotoFlowQueryList(caseId);
     }
 
