@@ -1,20 +1,11 @@
 package org.unicef.rapidreg.login;
 
 import android.app.ProgressDialog;
-import android.content.Context;
-import android.content.res.Resources;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.drawable.Drawable;
-import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
-import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -41,8 +32,7 @@ public class LoginActivity extends MvpActivity<LoginView, LoginPresenter> implem
     EditText urlEditView;
     @BindView(R.id.change_url)
     TextView changeUrlTextView;
-    @BindView(R.id.logo)
-    ImageView logoView;
+
 
     private ProgressDialog loginProgressDialog;
 
@@ -51,8 +41,6 @@ public class LoginActivity extends MvpActivity<LoginView, LoginPresenter> implem
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
-
-        logoView.setImageDrawable(getRoundedDrawable(R.drawable.logo));
 
         hideUrlInputIfUserEverLoginSuccessfully();
         loginProgressDialog = new ProgressDialog(this);
@@ -69,8 +57,8 @@ public class LoginActivity extends MvpActivity<LoginView, LoginPresenter> implem
 
     @OnClick(R.id.change_url)
     public void onChangeUrlTextClicked() {
-        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        if (!NetworkStatusManager.isOnline(cm)) {
+
+        if (!NetworkStatusManager.isOnline(this)) {
             Toast.makeText(this, "Network is not accessible!", Toast.LENGTH_LONG).show();
             return;
         }
@@ -171,12 +159,4 @@ public class LoginActivity extends MvpActivity<LoginView, LoginPresenter> implem
         urlEditView.setError(e);
     }
 
-    private Drawable getRoundedDrawable(int resId) {
-        Resources resources = this.getResources();
-        Bitmap img = BitmapFactory.decodeResource(resources, resId);
-        RoundedBitmapDrawable dr = RoundedBitmapDrawableFactory.create(resources, img);
-        dr.setCornerRadius(Math.max(img.getWidth(), img.getHeight()) / 2.0f);
-
-        return dr;
-    }
 }
