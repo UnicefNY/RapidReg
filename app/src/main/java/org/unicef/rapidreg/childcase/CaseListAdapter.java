@@ -139,7 +139,7 @@ public class CaseListAdapter extends RecyclerView.Adapter<CaseListAdapter.CaseLi
         CaseFieldValueCache.addProfileItem(CaseFieldValueCache.CaseProfile.REGISTRATION_DATE,
                 dateFormat.format(caseItem.getRegistrationDate()));
         CaseFieldValueCache.addProfileItem(CaseFieldValueCache.CaseProfile.GENDER_NAME, shortUUID);
-        CaseFieldValueCache.addProfileItem(CaseFieldValueCache.CaseProfile.AGE, caseInfo.get("Age"));
+        CaseFieldValueCache.addProfileItem(CaseFieldValueCache.CaseProfile.AGE, caseInfo.get("age"));
         CaseFieldValueCache.addProfileItem(CaseFieldValueCache.CaseProfile.ID, String.valueOf(caseItem.getId()));
     }
 

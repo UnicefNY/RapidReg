@@ -58,7 +58,7 @@ public abstract class BaseDialog {
                     SubformCache.put(caseField.getParent(), getValues());
                 } else {
                     String language = Locale.getDefault().getLanguage();
-                    CaseFieldValueCache.put(caseField.getDisplayName().get(language), getResult());
+                    CaseFieldValueCache.put(caseField.getName(), getResult());
                 }
 
                 dialog.dismiss();
