@@ -11,7 +11,7 @@ public interface CasePhotoDao {
 
     void deleteCasePhotosByCaseId(long caseId);
 
-    FlowCursorList<CasePhoto> getAllCasesPhotoFlowQueryList(long caseId);
+    List<CasePhoto> getAllCasesPhotoFlowQueryList(long caseId);
 
     CasePhoto getCasePhotoById(long id);
 

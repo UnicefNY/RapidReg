@@ -126,9 +126,9 @@ public class CaseRegisterWrapperFragment extends Fragment {
     private CasePhotoAdapter initCasePhotoAdapter() {
         casePhotoAdapter = new CasePhotoAdapter(getContext(), new ArrayList<String>());
 
-        FlowCursorList<CasePhoto> casesPhotoFlowQueryList = CasePhotoService.getInstance().getAllCasesPhotoFlowQueryList(caseId);
-        for (int i = 0; i < casesPhotoFlowQueryList.getCount(); i++) {
-            casePhotoAdapter.addItem(casesPhotoFlowQueryList.getItem(i).getId());
+        List<CasePhoto> casesPhotoFlowQueryList = CasePhotoService.getInstance().getAllCasesPhotoFlowQueryList(caseId);
+        for (int i = 0; i < casesPhotoFlowQueryList.size(); i++) {
+            casePhotoAdapter.addItem(casesPhotoFlowQueryList.get(i).getId());
         }
         return casePhotoAdapter;
     }

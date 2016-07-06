@@ -9,13 +9,15 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
-import com.raizlabs.android.dbflow.list.FlowCursorList;
 
 import org.unicef.rapidreg.R;
 import org.unicef.rapidreg.childcase.CaseActivity;
 import org.unicef.rapidreg.forms.childcase.CaseField;
 import org.unicef.rapidreg.model.CasePhoto;
 import org.unicef.rapidreg.service.CasePhotoService;
+
+import java.util.List;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import me.relex.circleindicator.CircleIndicator;
@@ -54,10 +56,11 @@ public class PhotoUploadMiniFormViewHolder extends BaseViewHolder<CaseField> {
     }
 
     @Override
-    public void setFieldEditable(boolean editable) {}
+    public void setFieldEditable(boolean editable) {
+    }
 
     public class CasePhotoViewPagerAdapter extends PagerAdapter {
-        private FlowCursorList<CasePhoto> flowQueryList;
+        private List<CasePhoto> flowQueryList;
 
         public CasePhotoViewPagerAdapter() {
             flowQueryList = CasePhotoService.getInstance().getAllCasesPhotoFlowQueryList(CasePhotoService.getInstance().getCaseId());
@@ -65,7 +68,7 @@ public class PhotoUploadMiniFormViewHolder extends BaseViewHolder<CaseField> {
 
         @Override
         public int getCount() {
-            return flowQueryList.getCount();
+            return flowQueryList.size();
         }
 
         @Override
@@ -83,13 +86,12 @@ public class PhotoUploadMiniFormViewHolder extends BaseViewHolder<CaseField> {
             View itemView = LayoutInflater.from(context).inflate(R.layout.case_photo_view_item, container, false);
             ImageView imageView = (ImageView) itemView.findViewById(R.id.case_photo_item);
 
-            Glide.with(context).load(flowQueryList.getItem(position).getPhoto().getBlob())
+            Glide.with(context).load(flowQueryList.get(position).getPhoto().getBlob())
                     .placeholder(R.drawable.photo_placeholder)
                     .error(R.drawable.photo_placeholder)
                     .centerCrop()
                     .into(imageView);
             container.addView(itemView);
-            caseActivity.findViewById(R.id.edit_case).setVisibility(View.VISIBLE);
             return itemView;
         }
     }
