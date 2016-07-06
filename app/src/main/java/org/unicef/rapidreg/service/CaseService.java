@@ -1,6 +1,7 @@
 package org.unicef.rapidreg.service;
 
 import android.graphics.Bitmap;
+import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.google.gson.Gson;
@@ -180,17 +181,19 @@ public class CaseService {
         child.setCreatedBy(username);
         child.save();
 
-        saveCasePhoto(child, photoPath);
+        try {
+            saveCasePhoto(child, photoPath);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
         CaseFieldValueCache.clearAudioFile();
     }
 
-    public void clearCaseCache() {
-        CaseFieldValueCache.clear();
-        SubformCache.clear();
-    }
-
-    public String createUniqueId() {
-        return UUID.randomUUID().toString();
+    private void saveCasePhoto(Case child, List<String> photoPaths) throws IOException {
+        for (int i = 0; i < photoPaths.size(); i++) {
+            generateSaveOrUpdateCasePhoto(child, photoPaths, i).save();
+        }
     }
 
     private void updateCase(Map<String, String> values,
@@ -213,10 +216,90 @@ public class CaseService {
         child.setAudio(audioFileDefault);
         child.setSubform(subformBlob);
         child.update();
-
-        casePhotoDao.deleteCasePhotosByCaseId(child.getId());
+        try {
+            updateCasePhoto(child, photoBitPaths);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         CaseFieldValueCache.clearAudioFile();
-        saveCasePhoto(child, photoBitPaths);
+    }
+
+    private void updateCasePhoto(Case child, List<String> photoPaths) throws IOException {
+        int previousCount = casePhotoDao.getAllCasesPhotoFlowQueryList(child.getId()).getCount();
+
+        if (previousCount < photoPaths.size()) {
+            for (int i = 0; i < previousCount; i++) {
+                CasePhoto casePhoto = generateUpdateCasePhoto(child, photoPaths, i);
+                casePhoto.update();
+            }
+            for (int i = previousCount; i < photoPaths.size(); i++) {
+                CasePhoto casePhoto = generateSaveOrUpdateCasePhoto(child, photoPaths, i);
+                if (casePhoto.getId() == 0) {
+                    casePhoto.save();
+                } else {
+                    casePhoto.update();
+                }
+            }
+        } else {
+            for (int i = 0; i < photoPaths.size(); i++) {
+                CasePhoto casePhoto = generateUpdateCasePhoto(child, photoPaths, i);
+                casePhoto.update();
+            }
+            for (int i = photoPaths.size(); i < previousCount; i++) {
+                CasePhoto casePhoto = casePhotoDao.getCasePhotoById(i + 1);
+                casePhoto.setPhoto(null);
+                casePhoto.setThumbnail(null);
+                casePhoto.update();
+            }
+        }
+    }
+
+    private CasePhoto generateSaveOrUpdateCasePhoto(Case child, List<String> photoPaths, int index) throws IOException {
+        CasePhoto casePhoto = casePhotoDao.getCasePhotoById(index + 1);
+        if (casePhoto == null) {
+            casePhoto = new CasePhoto();
+        }
+        String filePath = photoPaths.get(index);
+        Bitmap bitmap = ImageCompressUtil.compressImage(filePath,
+                CasePhotoCache.MAX_WIDTH, CasePhotoCache.MAX_HEIGHT,
+                CasePhotoCache.MAX_SIZE_KB);
+        casePhoto.setThumbnail(new Blob(ImageCompressUtil.convertImageToBytes(
+                ImageCompressUtil.getThumbnail(bitmap, 80, 80))));
+        casePhoto.setPhoto(new Blob(ImageCompressUtil.convertImageToBytes(bitmap)));
+        casePhoto.setCase(child);
+        return casePhoto;
+    }
+
+    @NonNull
+    private CasePhoto generateUpdateCasePhoto(Case child, List<String> photoPaths, int index) throws IOException {
+        CasePhoto casePhoto;
+        String filePath = photoPaths.get(index);
+        Blob photo;
+        try {
+            long photoId = Long.parseLong(filePath);
+            casePhoto = casePhotoDao.getCasePhotoById(photoId);
+        } catch (NumberFormatException e) {
+            Bitmap bitmap = ImageCompressUtil.compressImage(filePath,
+                    CasePhotoCache.MAX_WIDTH, CasePhotoCache.MAX_HEIGHT,
+                    CasePhotoCache.MAX_SIZE_KB);
+            photo = new Blob(ImageCompressUtil.convertImageToBytes(bitmap));
+            casePhoto = new CasePhoto();
+            casePhoto.setThumbnail(new Blob(ImageCompressUtil.convertImageToBytes(
+                    ImageCompressUtil.getThumbnail(bitmap, 80, 80))));
+            casePhoto.setCase(child);
+            casePhoto.setPhoto(photo);
+        }
+        casePhoto.setId(index + 1);
+        return casePhoto;
+    }
+
+    public void clearCaseCache() {
+        CaseFieldValueCache.clear();
+        SubformCache.clear();
+    }
+
+    public String createUniqueId() {
+        return UUID.randomUUID().toString();
     }
 
     private Blob getAudioBlob(Blob blob) {
@@ -226,32 +309,6 @@ public class CaseService {
             e.printStackTrace();
         }
         return blob;
-    }
-
-    private void saveCasePhoto(Case child, List<String> photoPaths) {
-        if (photoPaths == null) {
-            return;
-        }
-
-        for (String photoPath : photoPaths) {
-            try {
-                CasePhoto casePhoto = new CasePhoto();
-                String filePath = photoPath;
-
-                Bitmap bitmap = ImageCompressUtil.compressImage(filePath,
-                        CasePhotoCache.MAX_WIDTH, CasePhotoCache.MAX_HEIGHT,
-                        CasePhotoCache.MAX_SIZE_KB);
-
-                casePhoto.setPhoto(new Blob(ImageCompressUtil.convertImageToBytes(bitmap)));
-                casePhoto.setThumbnail(new Blob(ImageCompressUtil.convertImageToBytes(
-                        ImageCompressUtil.getThumbnail(photoPath, 80))));
-
-                casePhoto.setCase(child);
-                casePhoto.save();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
     }
 
     private Date getCurrentDate() {
@@ -268,7 +325,6 @@ public class CaseService {
                 Log.e(TAG, "date format error");
             }
         }
-
         return getCurrentDate();
     }
 
@@ -296,5 +352,4 @@ public class CaseService {
             values.put(key, gson.toJson(subformValues.get(key)));
         }
     }
-
 }

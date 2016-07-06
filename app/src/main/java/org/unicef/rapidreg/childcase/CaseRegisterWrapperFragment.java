@@ -1,6 +1,5 @@
 package org.unicef.rapidreg.childcase;
 
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -18,6 +17,7 @@ import com.ogaclejapan.smarttablayout.SmartTabLayout;
 import com.ogaclejapan.smarttablayout.utils.v4.FragmentPagerItem;
 import com.ogaclejapan.smarttablayout.utils.v4.FragmentPagerItems;
 import com.ogaclejapan.smarttablayout.utils.v4.FragmentStatePagerItemAdapter;
+import com.raizlabs.android.dbflow.list.FlowCursorList;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -30,14 +30,15 @@ import org.unicef.rapidreg.event.UpdateImageEvent;
 import org.unicef.rapidreg.forms.childcase.CaseField;
 import org.unicef.rapidreg.forms.childcase.CaseFormRoot;
 import org.unicef.rapidreg.forms.childcase.CaseSection;
+import org.unicef.rapidreg.model.CasePhoto;
 import org.unicef.rapidreg.service.CaseFormService;
+import org.unicef.rapidreg.service.CasePhotoService;
 import org.unicef.rapidreg.service.CaseService;
 import org.unicef.rapidreg.service.cache.CaseFieldValueCache;
 import org.unicef.rapidreg.service.cache.SubformCache;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -76,6 +77,8 @@ public class CaseRegisterWrapperFragment extends Fragment {
     private CaseRegisterAdapter fullFormAdapter;
     private CasePhotoAdapter casePhotoAdapter;
 
+    private long caseId;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater,
@@ -85,12 +88,16 @@ public class CaseRegisterWrapperFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_cases_register_wrapper, container, false);
         ButterKnife.bind(this, view);
+
+        if (getArguments() != null) {
+            caseId = getArguments().getLong("case_id");
+        }
+
         initCaseFormData();
         initFloatingActionButton();
 
-        casePhotoAdapter = new CasePhotoAdapter(getContext(), new ArrayList<String>());
         miniFormAdapter = new CaseRegisterAdapter(getActivity(), miniFields, true);
-        miniFormAdapter.setCasePhotoAdapter(casePhotoAdapter);
+        miniFormAdapter.setCasePhotoAdapter(initCasePhotoAdapter());
 
         initFullFormContainer();
         initMiniFormContainer();
@@ -113,7 +120,17 @@ public class CaseRegisterWrapperFragment extends Fragment {
 
     @OnClick(R.id.edit_case)
     public void onCaseEditClicked() {
-        ((CaseActivity) getActivity()).turnToFeature(CaseFeature.EDIT);
+        ((CaseActivity) getActivity()).turnToDetailOrEditPage(CaseFeature.EDIT, caseId);
+    }
+
+    private CasePhotoAdapter initCasePhotoAdapter() {
+        casePhotoAdapter = new CasePhotoAdapter(getContext(), new ArrayList<String>());
+
+        FlowCursorList<CasePhoto> casesPhotoFlowQueryList = CasePhotoService.getInstance().getAllCasesPhotoFlowQueryList(caseId);
+        for (int i = 0; i < casesPhotoFlowQueryList.getCount(); i++) {
+            casePhotoAdapter.addItem(casesPhotoFlowQueryList.getItem(i).getId());
+        }
+        return casePhotoAdapter;
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN, sticky = true, priority = 1)
@@ -123,15 +140,12 @@ public class CaseRegisterWrapperFragment extends Fragment {
         EventBus.getDefault().removeStickyEvent(event);
     }
 
-    @Subscribe(threadMode = ThreadMode.MAIN, sticky = true, priority = 1)
+    @Subscribe(threadMode = ThreadMode.MAIN)
     public void saveCase(SaveCaseEvent event) {
         List<String> photoPaths = casePhotoAdapter.getAllItems();
-
         CaseService.getInstance().saveOrUpdateCase(CaseFieldValueCache.getValues(),
                 SubformCache.getValues(),
                 photoPaths);
-
-        EventBus.getDefault().removeStickyEvent(event);
     }
 
     private void initFloatingActionButton() {
@@ -252,7 +266,10 @@ public class CaseRegisterWrapperFragment extends Fragment {
         FragmentPagerItems pages = new FragmentPagerItems(getActivity());
         for (CaseSection section : sections) {
             String[] values = section.getName().values().toArray(new String[0]);
-            pages.add(FragmentPagerItem.of(values[0], CaseRegisterFragment.class));
+            Bundle bundle = new Bundle();
+            bundle.putStringArrayList("case_photos",
+                    (ArrayList<String>) casePhotoAdapter.getAllItems());
+            pages.add(FragmentPagerItem.of(values[0], CaseRegisterFragment.class, bundle));
         }
         return pages;
     }

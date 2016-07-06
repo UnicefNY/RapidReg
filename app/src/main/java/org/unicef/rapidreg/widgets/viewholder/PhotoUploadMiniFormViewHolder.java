@@ -35,7 +35,6 @@ public class PhotoUploadMiniFormViewHolder extends BaseViewHolder<CaseField> {
         super(context, itemView);
         ButterKnife.bind(this, itemView);
         caseActivity = (CaseActivity) context;
-        caseActivity.findViewById(R.id.edit_case).setVisibility(View.INVISIBLE);
     }
 
     @Override
@@ -55,15 +54,13 @@ public class PhotoUploadMiniFormViewHolder extends BaseViewHolder<CaseField> {
     }
 
     @Override
-    public void setFieldEditable(boolean editable) {
-    }
+    public void setFieldEditable(boolean editable) {}
 
     public class CasePhotoViewPagerAdapter extends PagerAdapter {
         private FlowCursorList<CasePhoto> flowQueryList;
 
         public CasePhotoViewPagerAdapter() {
-            flowQueryList = CasePhotoService.getInstance()
-                    .getAllCasesPhotoFlowQueryList(CasePhotoService.getInstance().getCaseId());
+            flowQueryList = CasePhotoService.getInstance().getAllCasesPhotoFlowQueryList(CasePhotoService.getInstance().getCaseId());
         }
 
         @Override
