@@ -114,12 +114,10 @@ public class CaseListAdapter extends RecyclerView.Adapter<CaseListAdapter.CaseLi
                 setProfileForMiniForm(caseItem, caseInfo, shortUUID);
                 CaseFieldValueCache.setValues(caseInfo);
                 SubformCache.setValues(subformInfo);
+
                 CasePhotoService.getInstance().setCaseId(caseItem.getId());
-                //List<CasePhoto> casePhotos = CasePhotoService.getInstance().getAllCasePhotos(caseItem.getId());
 
-                //CasePhotoCache.syncPhotosPaths(casePhotos);
-
-                activity.turnToFeature(CaseFeature.DETAILS);
+                activity.turnToDetailOrEditPage(CaseFeature.DETAILS, caseItem.getId());
 
                 try {
                     CaseFieldValueCache.clearAudioFile();

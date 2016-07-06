@@ -14,7 +14,6 @@ public enum CaseFeature {
     private int titleId;
     private Class clz;
 
-
     CaseFeature(int titleId, Class clz) {
         this.titleId = titleId;
         this.clz = clz;
