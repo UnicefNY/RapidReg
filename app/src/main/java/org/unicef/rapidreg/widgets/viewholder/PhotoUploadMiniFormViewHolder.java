@@ -36,7 +36,6 @@ public class PhotoUploadMiniFormViewHolder extends BaseViewHolder<CaseField> {
         super(context, itemView);
         ButterKnife.bind(this, itemView);
         this.context = context;
-
     }
 
     @Override
