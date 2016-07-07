@@ -24,21 +24,23 @@ import org.unicef.rapidreg.model.CaseForm;
 import org.unicef.rapidreg.model.LoginRequestBody;
 import org.unicef.rapidreg.model.LoginResponse;
 import org.unicef.rapidreg.model.User;
+import org.unicef.rapidreg.network.AuthService;
 import org.unicef.rapidreg.network.HttpStatusCodeHandler;
-import org.unicef.rapidreg.network.NetworkServiceGenerator;
 import org.unicef.rapidreg.network.NetworkStatusManager;
-import org.unicef.rapidreg.network.PrimeroClient;
 import org.unicef.rapidreg.service.CaseFormService;
 import org.unicef.rapidreg.service.UserService;
 import org.unicef.rapidreg.utils.EncryptHelper;
+import org.unicef.rapidreg.widgets.PrimeroConfiguration;
 
 import java.util.List;
 import java.util.Locale;
 
 import okhttp3.Headers;
-import retrofit2.Call;
-import retrofit2.Callback;
 import retrofit2.Response;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action1;
+import rx.schedulers.Schedulers;
+import rx.subscriptions.CompositeSubscription;
 
 import static org.unicef.rapidreg.service.CaseFormService.FormLoadStateMachine;
 
@@ -46,7 +48,8 @@ public class LoginPresenter extends MvpBasePresenter<LoginView> {
     public static final String TAG = LoginPresenter.class.getSimpleName();
     private static final int MAX_LOAD_FORMS_NUM = 3;
 
-    private PrimeroClient client;
+    private AuthService authService;
+    private CompositeSubscription subscriptions;
 
     private Gson gson;
     private Context context;
@@ -102,6 +105,8 @@ public class LoginPresenter extends MvpBasePresenter<LoginView> {
     @Override
     public void detachView(boolean retainInstance) {
         super.detachView(retainInstance);
+        EventBus.getDefault().unregister(this);
+        subscriptions.clear();
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -127,39 +132,40 @@ public class LoginPresenter extends MvpBasePresenter<LoginView> {
         stateMachine.addOnce();
         Log.d(TAG, String.format("this is %s time(s) to load forms", stateMachine.getCurrentNum()));
 
-        Call<CaseFormRoot> call = client.getForm(event.getCookie(),
-                Locale.getDefault().getLanguage(), true, "case");
 
-        call.enqueue(new Callback<CaseFormRoot>() {
-            @Override
-            public void onResponse(Call<CaseFormRoot> call, Response<CaseFormRoot> response) {
-                if (response.isSuccessful()) {
-                    CaseFormRoot form = response.body();
-                    CaseForm caseForm = new CaseForm(new Blob(gson.toJson(form).getBytes()));
-                    CaseFormService.getInstance().saveOrUpdateCaseForm(caseForm);
+        subscriptions.add(authService.getFormRx(event.getCookie(),
+                Locale.getDefault().getLanguage(), true, "case").subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Action1<CaseFormRoot>() {
+                    @Override
+                    public void call(CaseFormRoot caseFormRoot) {
+                        if (caseFormRoot != null) {
+                            CaseFormRoot form = caseFormRoot;
+                            CaseForm caseForm = new CaseForm(new Blob(gson.toJson(form).getBytes()));
+                            CaseFormService.getInstance().saveOrUpdateCaseForm(caseForm);
 
-                    EventBus.getDefault().unregister(this);
-                    Log.i(TAG, "load form successfully");
-                } else {
-                    Log.d(TAG, String.format("error code: %s", response.code()));
-                    reloadFormsIfNeeded(event.getCookie(), stateMachine);
-                }
-            }
+                            //EventBus.getDefault().unregister(this);
+                            Log.i(TAG, "load form successfully");
+                        } else {
+                            //Log.d(TAG, String.format("error code: %s", response.code()));
+                            reloadFormsIfNeeded(event.getCookie(), stateMachine);
+                        }
+                    }
+                }, new Action1<Throwable>() {
+                    @Override
+                    public void call(Throwable throwable) {
+                        if (isViewAttached()) {
+                            showNetworkErrorMessage(throwable, false);
+                            showLoadingIndicator(false);
+                        }
+                        reloadFormsIfNeeded(event.getCookie(), stateMachine);
+                    }
+                }));
 
-            @Override
-            public void onFailure(Call<CaseFormRoot> call, Throwable t) {
-                if (isViewAttached()) {
-                    showNetworkErrorMessage(t, false);
-                    showLoadingIndicator(false);
-                }
-                reloadFormsIfNeeded(event.getCookie(), stateMachine);
-            }
-        });
     }
 
     private void reloadFormsIfNeeded(String cookie, FormLoadStateMachine stateMachine) {
         if (stateMachine.hasReachMaxRetryNum()) {
-            EventBus.getDefault().unregister(this);
+            //EventBus.getDefault().unregister(this);
             Log.d(TAG, "reach the max retry number, stop trying");
         } else {
             notifyEvent(new NeedLoadFormsEvent(cookie, stateMachine));
@@ -170,10 +176,11 @@ public class LoginPresenter extends MvpBasePresenter<LoginView> {
         this.context = context;
         intentSender = new IntentSender();
         gson = new Gson();
+        subscriptions = new CompositeSubscription();
         try {
+            PrimeroConfiguration.setApiBaseUrl(url);
+            authService = new AuthService(context);
 
-            NetworkServiceGenerator.getInstance().changeApiBaseUrl(url);
-            client = NetworkServiceGenerator.getInstance().createService(context, PrimeroClient.class);
         } catch (Exception e) {
             showLoginResultMessage(e.getMessage());
         }
@@ -186,46 +193,48 @@ public class LoginPresenter extends MvpBasePresenter<LoginView> {
         String androidId = Settings.Secure.getString(context.getContentResolver(),
                 Settings.Secure.ANDROID_ID);
 
-        Call<LoginResponse> call = client.login(new LoginRequestBody(
+        subscriptions.add(authService.loginRx(new LoginRequestBody(
                 username,
                 password,
                 tm.getLine1Number(),
-                androidId));
-        call.enqueue(new Callback<LoginResponse>() {
-            @Override
-            public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
-                if (isViewAttached()) {
-                    showLoadingIndicator(false);
-                    if (response.isSuccessful()) {
-                        User user = new User(username, EncryptHelper.encrypt(password), true, url);
-                        user.setDbKey(response.body().getDb_key());
-                        user.setOrganisation(response.body().getOrganization());
-                        user.setLanguage(response.body().getLanguage());
-                        user.setVerified(response.body().getVerified());
-                        notifyEvent(new NeedCacheForOfflineEvent(user));
-                        notifyEvent(new NeedGoToLoginSuccessScreenEvent(username));
-                        notifyEvent(new NeedLoadFormsEvent(getSessionId(response.headers()),
-                                FormLoadStateMachine.getInstance(MAX_LOAD_FORMS_NUM)));
-                        showLoginResultMessage(HttpStatusCodeHandler.LOGIN_SUCCESS_MESSAGE);
-                        Log.d(TAG, "login successfully");
-                    } else {
-                        showLoginResultMessage(HttpStatusCodeHandler
-                                .getHttpStatusMessage(response.code()));
-                        notifyEvent(new NeedDoLoginOffLineEvent(context, username, password));
-                        Log.d(TAG, "login failed");
+                androidId)).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Action1<Response<LoginResponse>>() {
+                    @Override
+                    public void call(Response<LoginResponse> response) {
+                        if (isViewAttached()) {
+                            showLoadingIndicator(false);
+                            if (response.isSuccessful()) {
+                                LoginResponse loginResponse = response.body();
+                                User user = new User(username, EncryptHelper.encrypt(password), true, url);
+                                user.setDbKey(loginResponse.getDb_key());
+                                user.setOrganisation(loginResponse.getOrganization());
+                                user.setLanguage(loginResponse.getLanguage());
+                                user.setVerified(loginResponse.getVerified());
+                                notifyEvent(new NeedCacheForOfflineEvent(user));
+                                notifyEvent(new NeedGoToLoginSuccessScreenEvent(username));
+                                notifyEvent(new NeedLoadFormsEvent(getSessionId(response.headers()),
+                                        FormLoadStateMachine.getInstance(MAX_LOAD_FORMS_NUM)));
+                                showLoginResultMessage(HttpStatusCodeHandler.LOGIN_SUCCESS_MESSAGE);
+                                Log.d(TAG, "login successfully");
+                            } else {
+                                showLoginResultMessage(HttpStatusCodeHandler
+                                        .getHttpStatusMessage(response.code()));
+                                notifyEvent(new NeedDoLoginOffLineEvent(context, username, password));
+                                Log.d(TAG, "login failed");
+                            }
+                        }
                     }
-                }
-            }
+                }, new Action1<Throwable>() {
+                    @Override
+                    public void call(Throwable throwable) {
+                        if (isViewAttached()) {
+                            showNetworkErrorMessage(throwable, false);
+                            showLoadingIndicator(false);
+                            notifyEvent(new NeedDoLoginOffLineEvent(context, username, password));
+                        }
+                    }
+                }));
 
-            @Override
-            public void onFailure(Call<LoginResponse> call, Throwable t) {
-                if (isViewAttached()) {
-                    showNetworkErrorMessage(t, false);
-                    showLoadingIndicator(false);
-                    notifyEvent(new NeedDoLoginOffLineEvent(context, username, password));
-                }
-            }
-        });
     }
 
     private void doLoginOffline(Context context, String username, String password) {
