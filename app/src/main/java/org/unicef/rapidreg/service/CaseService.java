@@ -248,7 +248,7 @@ public class CaseService {
                 casePhoto.update();
             }
             for (int i = photoPaths.size(); i < previousCount; i++) {
-                CasePhoto casePhoto = casePhotoDao.getCasePhotoById(i + 1);
+                CasePhoto casePhoto = casePhotoDao.getSpecialOrderCasePhotoByCaseId(child.getId(), i + 1);
                 casePhoto.setPhoto(null);
                 casePhoto.setThumbnail(null);
                 casePhoto.update();
@@ -257,7 +257,7 @@ public class CaseService {
     }
 
     private CasePhoto generateSaveOrUpdateCasePhoto(Case child, List<String> photoPaths, int index) throws IOException {
-        CasePhoto casePhoto = casePhotoDao.getCasePhotoById(index + 1);
+        CasePhoto casePhoto = casePhotoDao.getSpecialOrderCasePhotoByCaseId(child.getId(), index + 1);
         if (casePhoto == null) {
             casePhoto = new CasePhoto();
         }
@@ -266,25 +266,18 @@ public class CaseService {
         Bitmap bitmap = handleImage(filePath);
 
         casePhoto.setThumbnail(new Blob(ImageCompressUtil.convertImageToBytes(
-                ImageCompressUtil.getThumbnail(bitmap, 80, 80))));
+                ImageCompressUtil.getThumbnail(bitmap, CasePhotoConfig.THUMBNAIL_SIZE,
+                        CasePhotoConfig.THUMBNAIL_SIZE))));
 
         casePhoto.setPhoto(new Blob(ImageCompressUtil.convertImageToBytes(bitmap)));
         casePhoto.setCase(child);
+        casePhoto.setOrder(index + 1);
         return casePhoto;
     }
 
-    private Bitmap handleImage(String filePath) throws IOException {
-        if (new File(filePath).length() <= 1024 * 1024 * 1) {
-            return BitmapFactory.decodeFile(filePath);
-        }
-
-        return ImageCompressUtil.compressImage(filePath,
-                CasePhotoConfig.MAX_WIDTH, CasePhotoConfig.MAX_HEIGHT,
-                CasePhotoConfig.MAX_SIZE_KB);
-    }
-
     @NonNull
-    private CasePhoto generateUpdateCasePhoto(Case child, List<String> photoPaths, int index) throws IOException {
+    private CasePhoto generateUpdateCasePhoto(Case child, List<String> photoPaths, int index)
+            throws IOException {
         CasePhoto casePhoto;
         String filePath = photoPaths.get(index);
         Blob photo;
@@ -296,12 +289,24 @@ public class CaseService {
             photo = new Blob(ImageCompressUtil.convertImageToBytes(bitmap));
             casePhoto = new CasePhoto();
             casePhoto.setThumbnail(new Blob(ImageCompressUtil.convertImageToBytes(
-                    ImageCompressUtil.getThumbnail(bitmap, 80, 80))));
+                    ImageCompressUtil.getThumbnail(bitmap, CasePhotoConfig.THUMBNAIL_SIZE,
+                            CasePhotoConfig.THUMBNAIL_SIZE))));
             casePhoto.setCase(child);
             casePhoto.setPhoto(photo);
         }
-        casePhoto.setId(index + 1);
+        casePhoto.setId(casePhotoDao.getSpecialOrderCasePhotoByCaseId(child.getId(), index + 1).getId());
+        casePhoto.setOrder(index + 1);
         return casePhoto;
+    }
+
+    private Bitmap handleImage(String filePath) throws IOException {
+        if (new File(filePath).length() <= 1024 * 1024 * 1) {
+            return BitmapFactory.decodeFile(filePath);
+        }
+
+        return ImageCompressUtil.compressImage(filePath,
+                CasePhotoConfig.MAX_WIDTH, CasePhotoConfig.MAX_HEIGHT,
+                CasePhotoConfig.MAX_SIZE_KB);
     }
 
     public void clearCaseCache() {

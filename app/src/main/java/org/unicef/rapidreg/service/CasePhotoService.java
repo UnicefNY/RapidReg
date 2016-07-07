@@ -13,7 +13,6 @@ public class CasePhotoService {
 
     private static final CasePhotoService CASE_SERVICE = new CasePhotoService(new CasePhotoDaoImpl());
 
-
     private CasePhotoDao casePhotoDao;
 
     public static CasePhotoService getInstance() {
