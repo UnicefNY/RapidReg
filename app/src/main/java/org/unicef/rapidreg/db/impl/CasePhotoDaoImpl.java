@@ -11,11 +11,7 @@ import java.util.List;
 public class CasePhotoDaoImpl implements CasePhotoDao {
     @Override
     public CasePhoto getCaseFirstThumbnail(long caseId) {
-        return SQLite.select()
-                .from(CasePhoto.class)
-                .where(CasePhoto_Table.case_id.eq(caseId))
-                .groupBy(CasePhoto_Table.thumbnail)
-                .querySingle();
+        return SQLite.select().from(CasePhoto.class).where(CasePhoto_Table.case_id.eq(caseId)).querySingle();
     }
 
     @Override
@@ -35,6 +31,13 @@ public class CasePhotoDaoImpl implements CasePhotoDao {
         return SQLite.select()
                 .from(CasePhoto.class)
                 .where(CasePhoto_Table.id.eq(id)).querySingle();
+    }
+
+    @Override
+    public CasePhoto getSpecialOrderCasePhotoByCaseId(long caseId, int order) {
+        return SQLite.select()
+                .from(CasePhoto.class)
+                .where(CasePhoto_Table.case_id.eq(caseId)).and(CasePhoto_Table.order.eq(order)).querySingle();
     }
 
     @Override

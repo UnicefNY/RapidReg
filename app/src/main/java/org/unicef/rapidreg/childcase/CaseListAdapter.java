@@ -91,10 +91,10 @@ public class CaseListAdapter extends RecyclerView.Adapter<CaseListAdapter.CaseLi
             CasePhoto caseAvatorPhoto = CasePhotoService.getInstance().getCaseFirstThumbnail(caseItem.getId());
             Glide.with(holder.caseImage.getContext()).
                     load((caseAvatorPhoto.getThumbnail().getBlob())).into(holder.caseImage);
-
         } catch (Exception e) {
             holder.caseImage.setImageDrawable(activity.getResources().getDrawable(gender.getAvatarId()));
         }
+
         final String shortUUID = getShortUUID(caseItem.getUniqueId());
 
         holder.idNormalState.setText(shortUUID);

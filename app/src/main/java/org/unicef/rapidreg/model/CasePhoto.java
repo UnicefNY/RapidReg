@@ -6,10 +6,8 @@ import com.raizlabs.android.dbflow.annotation.ForeignKeyReference;
 import com.raizlabs.android.dbflow.annotation.ModelContainer;
 import com.raizlabs.android.dbflow.annotation.PrimaryKey;
 import com.raizlabs.android.dbflow.annotation.Table;
-import com.raizlabs.android.dbflow.config.FlowManager;
 import com.raizlabs.android.dbflow.data.Blob;
 import com.raizlabs.android.dbflow.structure.BaseModel;
-import com.raizlabs.android.dbflow.structure.container.ForeignKeyContainer;
 
 import org.unicef.rapidreg.db.PrimeroDB;
 
@@ -22,6 +20,10 @@ public class CasePhoto extends BaseModel {
 
     @Column
     Blob photo;
+
+    @Column
+    int order;
+
 
     @Column
     Blob thumbnail;
@@ -69,11 +71,20 @@ public class CasePhoto extends BaseModel {
         this.thumbnail = thumbnail;
     }
 
+    public int getOrder() {
+        return order;
+    }
+
+    public void setOrder(int order) {
+        this.order = order;
+    }
+
     @Override
     public String toString() {
         return "CasePhoto{" +
                 "id=" + id +
                 ", photo=" + photo +
+                ", order=" + order +
                 ", thumbnail=" + thumbnail +
                 ", aCase=" + aCase +
                 '}';
