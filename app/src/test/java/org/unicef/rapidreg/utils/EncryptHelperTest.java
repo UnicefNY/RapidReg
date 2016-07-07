@@ -31,7 +31,6 @@ public class EncryptHelperTest {
     public void should_verify_plain_text_with_encrypted_text() {
         String encryptedText = EncryptHelper.encrypt(plainText);
         boolean isMatched = EncryptHelper.isMatched(plainText, encryptedText);
-
         assertThat(isMatched, is(true));
     }
 }

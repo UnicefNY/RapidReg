@@ -122,7 +122,7 @@ public class ImageCompressUtil {
     }
 
 
-    public static Bitmap compressImage(String filePath, float maxWidth, float maxHeight, int maxSizeKB) {
+    public static Bitmap compressImage(String filePath, float maxWidth, float maxHeight) {
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inJustDecodeBounds = true;
         BitmapFactory.decodeFile(filePath, options);
