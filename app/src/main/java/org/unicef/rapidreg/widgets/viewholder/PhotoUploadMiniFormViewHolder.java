@@ -68,7 +68,7 @@ public class PhotoUploadMiniFormViewHolder extends BaseViewHolder<CaseField> {
 
         @Override
         public int getCount() {
-            return flowQueryList.size();
+            return flowQueryList.isEmpty() ? 1 : flowQueryList.size();
         }
 
         @Override
@@ -83,14 +83,16 @@ public class PhotoUploadMiniFormViewHolder extends BaseViewHolder<CaseField> {
 
         @Override
         public Object instantiateItem(ViewGroup container, int position) {
-            View itemView = LayoutInflater.from(context).inflate(R.layout.case_photo_view_item, container, false);
+            View itemView = LayoutInflater.from(context).inflate(R.layout.case_photo_view_item,
+                    container, false);
             ImageView imageView = (ImageView) itemView.findViewById(R.id.case_photo_item);
 
-            Glide.with(context).load(flowQueryList.get(position).getPhoto().getBlob())
-                    .placeholder(R.drawable.photo_placeholder)
-                    .error(R.drawable.photo_placeholder)
-                    .centerCrop()
-                    .into(imageView);
+            if (flowQueryList.isEmpty()) {
+                Glide.with(context).load(R.drawable.photo_placeholder).centerCrop().into(imageView);
+            } else {
+                Glide.with(context).load(flowQueryList.get(position).getPhoto().getBlob())
+                        .centerCrop().into(imageView);
+            }
             container.addView(itemView);
             return itemView;
         }
