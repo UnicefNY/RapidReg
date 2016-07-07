@@ -11,7 +11,6 @@ import android.widget.ImageView;
 import com.bumptech.glide.Glide;
 
 import org.unicef.rapidreg.R;
-import org.unicef.rapidreg.childcase.CaseActivity;
 import org.unicef.rapidreg.forms.childcase.CaseField;
 import org.unicef.rapidreg.model.CasePhoto;
 import org.unicef.rapidreg.service.CasePhotoService;
@@ -31,12 +30,13 @@ public class PhotoUploadMiniFormViewHolder extends BaseViewHolder<CaseField> {
     @BindView(R.id.indicator)
     CircleIndicator indicator;
 
-    private CaseActivity caseActivity;
+    private Context context;
 
     public PhotoUploadMiniFormViewHolder(Context context, View itemView) {
         super(context, itemView);
         ButterKnife.bind(this, itemView);
-        caseActivity = (CaseActivity) context;
+        this.context = context;
+
     }
 
     @Override
