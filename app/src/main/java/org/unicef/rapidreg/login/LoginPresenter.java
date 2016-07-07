@@ -30,7 +30,7 @@ import org.unicef.rapidreg.network.NetworkStatusManager;
 import org.unicef.rapidreg.service.CaseFormService;
 import org.unicef.rapidreg.service.UserService;
 import org.unicef.rapidreg.utils.EncryptHelper;
-import org.unicef.rapidreg.widgets.PrimeroConfiguration;
+import org.unicef.rapidreg.PrimeroConfiguration;
 
 import java.util.List;
 import java.util.Locale;
@@ -205,6 +205,9 @@ public class LoginPresenter extends MvpBasePresenter<LoginView> {
                             showLoadingIndicator(false);
                             if (response.isSuccessful()) {
                                 LoginResponse loginResponse = response.body();
+
+                                PrimeroConfiguration.setCookie(getSessionId(response.headers()));
+
                                 User user = new User(username, EncryptHelper.encrypt(password), true, url);
                                 user.setDbKey(loginResponse.getDb_key());
                                 user.setOrganisation(loginResponse.getOrganization());
@@ -212,7 +215,7 @@ public class LoginPresenter extends MvpBasePresenter<LoginView> {
                                 user.setVerified(loginResponse.getVerified());
                                 notifyEvent(new NeedCacheForOfflineEvent(user));
                                 notifyEvent(new NeedGoToLoginSuccessScreenEvent(username));
-                                notifyEvent(new NeedLoadFormsEvent(getSessionId(response.headers()),
+                                notifyEvent(new NeedLoadFormsEvent(PrimeroConfiguration.getCookie(),
                                         FormLoadStateMachine.getInstance(MAX_LOAD_FORMS_NUM)));
                                 showLoginResultMessage(HttpStatusCodeHandler.LOGIN_SUCCESS_MESSAGE);
                                 Log.d(TAG, "login successfully");
