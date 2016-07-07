@@ -6,7 +6,7 @@ import android.content.Context;
 import org.unicef.rapidreg.forms.childcase.CaseFormRoot;
 import org.unicef.rapidreg.model.LoginRequestBody;
 import org.unicef.rapidreg.model.LoginResponse;
-import org.unicef.rapidreg.widgets.PrimeroConfiguration;
+import org.unicef.rapidreg.PrimeroConfiguration;
 
 import retrofit2.Response;
 import rx.Observable;
