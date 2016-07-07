@@ -5,7 +5,7 @@ import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 
 import org.unicef.rapidreg.R;
 
@@ -24,7 +24,7 @@ public class CasePhotoViewActivity extends AppCompatActivity {
 
         Point size = new Point();
         getWindowManager().getDefaultDisplay().getSize(size);
-        viewPager.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+        viewPager.setLayoutParams(new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT));
 
         viewPager.setAdapter(new CasePhotoViewAdapter(this,

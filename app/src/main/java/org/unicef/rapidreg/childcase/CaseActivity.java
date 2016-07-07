@@ -30,7 +30,6 @@ import org.unicef.rapidreg.service.CaseFormService;
 import org.unicef.rapidreg.service.CaseService;
 import org.unicef.rapidreg.service.cache.CaseFieldValueCache;
 import org.unicef.rapidreg.service.cache.CasePhotoCache;
-import org.unicef.rapidreg.service.cache.SubformCache;
 import org.unicef.rapidreg.utils.ImageCompressUtil;
 import org.unicef.rapidreg.widgets.viewholder.PhotoUploadViewHolder;
 
@@ -39,7 +38,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 
 public class CaseActivity extends BaseActivity {
     private DetailState textAreaState = DetailState.VISIBILITY;
@@ -55,7 +53,7 @@ public class CaseActivity extends BaseActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         initToolbar();
-        turnToFeature(CaseFeature.LIST);
+        turnToFeature(CaseFeature.LIST, null);
     }
 
     @Override
@@ -118,7 +116,7 @@ public class CaseActivity extends BaseActivity {
             showQuitDialog();
         } else {
             CaseFieldValueCache.clearAudioFile();
-            turnToFeature(CaseFeature.LIST);
+            turnToFeature(CaseFeature.LIST, null);
         }
     }
 
@@ -128,16 +126,36 @@ public class CaseActivity extends BaseActivity {
             showQuitDialog();
         } else {
             CaseFieldValueCache.clearAudioFile();
-            turnToFeature(CaseFeature.LIST);
+            turnToFeature(CaseFeature.LIST, null);
         }
     }
 
-    public void turnToFeature(CaseFeature feature) {
+    public void turnToDetailOrEditPage(CaseFeature feature, long caseId) {
+        try {
+
+            Bundle args = new Bundle();
+            args.putLong("case_id", caseId);
+
+            currentFeature = feature;
+
+            turnToFeature(feature, args);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    public void turnToFeature(CaseFeature feature, Bundle args) {
         currentFeature = feature;
         changeToolbarTitle(feature.getTitleId());
         changeToolbarIcon(feature);
         try {
-            navToFragment(feature.getFragment());
+            Fragment fragment = feature.getFragment();
+            if (args != null) {
+                fragment.setArguments(args);
+            }
+
+            navToFragment(fragment);
         } catch (Exception e) {
             throw new RuntimeException("Fragment navigation error", e);
         }
@@ -155,7 +173,7 @@ public class CaseActivity extends BaseActivity {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         CaseFieldValueCache.clearAudioFile();
-                        turnToFeature(CaseFeature.LIST);
+                        turnToFeature(CaseFeature.LIST, null);
                     }
                 })
                 .setNegativeButton(R.string.cancel, null)
@@ -189,7 +207,7 @@ public class CaseActivity extends BaseActivity {
                     showHideCaseDetail();
                     return true;
                 case R.id.search:
-                    turnToFeature(CaseFeature.SEARCH);
+                    turnToFeature(CaseFeature.SEARCH, null);
                     return true;
                 case R.id.save_case:
                     return saveCase();
@@ -197,7 +215,6 @@ public class CaseActivity extends BaseActivity {
                     return false;
             }
         }
-
     }
 
     private void showHideCaseDetail() {
@@ -225,7 +242,7 @@ public class CaseActivity extends BaseActivity {
         if (validateRequiredField()) {
             SaveCaseEvent event = new SaveCaseEvent();
             EventBus.getDefault().postSticky(event);
-            turnToFeature(CaseFeature.LIST);
+            turnToFeature(CaseFeature.LIST, null);
         }
         return true;
     }

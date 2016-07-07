@@ -36,7 +36,6 @@ public class PhotoUploadMiniFormViewHolder extends BaseViewHolder<CaseField> {
         super(context, itemView);
         ButterKnife.bind(this, itemView);
         caseActivity = (CaseActivity) context;
-        caseActivity.findViewById(R.id.edit_case).setVisibility(View.INVISIBLE);
     }
 
     @Override
@@ -56,15 +55,13 @@ public class PhotoUploadMiniFormViewHolder extends BaseViewHolder<CaseField> {
     }
 
     @Override
-    public void setFieldEditable(boolean editable) {
-    }
+    public void setFieldEditable(boolean editable) {}
 
     public class CasePhotoViewPagerAdapter extends PagerAdapter {
         private FlowCursorList<CasePhoto> flowQueryList;
 
         public CasePhotoViewPagerAdapter() {
-            flowQueryList = CasePhotoService.getInstance()
-                    .getAllCasesPhotoFlowQueryList(CasePhotoService.getInstance().getCaseId());
+            flowQueryList = CasePhotoService.getInstance().getAllCasesPhotoFlowQueryList(CasePhotoService.getInstance().getCaseId());
         }
 
         @Override
@@ -86,10 +83,6 @@ public class PhotoUploadMiniFormViewHolder extends BaseViewHolder<CaseField> {
         public Object instantiateItem(ViewGroup container, int position) {
             View itemView = LayoutInflater.from(context).inflate(R.layout.case_photo_view_item, container, false);
             ImageView imageView = (ImageView) itemView.findViewById(R.id.case_photo_item);
-
-            if (getCount() == 0) {
-                caseActivity.findViewById(R.id.edit_case).setVisibility(View.VISIBLE);
-            }
 
             Glide.with(context).load(flowQueryList.getItem(position).getPhoto().getBlob())
                     .placeholder(R.drawable.photo_placeholder)

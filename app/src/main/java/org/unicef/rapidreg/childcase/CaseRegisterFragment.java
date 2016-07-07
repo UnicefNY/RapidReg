@@ -13,6 +13,7 @@ import com.hannesdorfmann.mosby.mvp.MvpFragment;
 import com.ogaclejapan.smarttablayout.utils.v4.FragmentPagerItem;
 
 import org.unicef.rapidreg.R;
+import org.unicef.rapidreg.childcase.media.CasePhotoAdapter;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -25,13 +26,18 @@ public class CaseRegisterFragment extends MvpFragment<CaseRegisterView, CaseRegi
 
     private CaseRegisterAdapter caseRegisterAdapter;
 
+    private CasePhotoAdapter casePhotoAdapter;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater,
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
-
+        if (getArguments() != null) {
+            casePhotoAdapter = new CasePhotoAdapter(getContext(),
+                    getArguments().getStringArrayList("case_photos"));
+        }
         return inflater.inflate(R.layout.fragment_cases_register, container, false);
     }
 
@@ -57,6 +63,7 @@ public class CaseRegisterFragment extends MvpFragment<CaseRegisterView, CaseRegi
         layout.setAutoMeasureEnabled(true);
         fieldList.setLayoutManager(layout);
         fieldList.setAdapter(caseRegisterAdapter);
+        caseRegisterAdapter.setCasePhotoAdapter(casePhotoAdapter);
     }
 
     public CaseRegisterAdapter getCaseRegisterAdapter() {
