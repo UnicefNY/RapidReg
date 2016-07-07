@@ -25,6 +25,4 @@ public interface AuthServiceInterface {
             @Query("locale") String locale,
             @Query("mobile") Boolean isMobile,
             @Query("parent_form") String parentForm);
-
-
 }
