@@ -1,7 +1,5 @@
 package org.unicef.rapidreg.service;
 
-import com.raizlabs.android.dbflow.list.FlowCursorList;
-
 import org.unicef.rapidreg.db.CasePhotoDao;
 import org.unicef.rapidreg.db.impl.CasePhotoDaoImpl;
 import org.unicef.rapidreg.model.CasePhoto;

@@ -18,7 +18,6 @@ import com.ogaclejapan.smarttablayout.SmartTabLayout;
 import com.ogaclejapan.smarttablayout.utils.v4.FragmentPagerItem;
 import com.ogaclejapan.smarttablayout.utils.v4.FragmentPagerItems;
 import com.ogaclejapan.smarttablayout.utils.v4.FragmentStatePagerItemAdapter;
-import com.raizlabs.android.dbflow.list.FlowCursorList;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -277,10 +276,8 @@ public class CaseRegisterWrapperFragment extends Fragment {
         for (CaseSection section : sections) {
             String[] values = section.getName().values().toArray(new String[0]);
             Bundle bundle = new Bundle();
-
             bundle.putStringArrayList("case_photos",
                     (ArrayList<String>) casePhotoAdapter.getAllItems());
-
             pages.add(FragmentPagerItem.of(values[0], CaseRegisterFragment.class, bundle));
         }
         return pages;
