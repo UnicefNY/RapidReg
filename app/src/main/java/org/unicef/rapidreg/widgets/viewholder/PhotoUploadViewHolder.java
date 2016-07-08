@@ -72,15 +72,7 @@ public class PhotoUploadViewHolder extends BaseViewHolder<CaseField> {
             }
             return;
         }
-
-        if (adapter.isEmpty()) {
-            addImageButton.setImageResource(R.drawable.photo_camera);
-        } else if (adapter.isFull()) {
-            addImageButton.setVisibility(View.GONE);
-        } else {
-            addImageButton.setVisibility(View.VISIBLE);
-            addImageButton.setImageResource(R.drawable.photo_add);
-        }
+        resetAddPhotoButtonStatus();
     }
 
     private void setViewPhotoListener() {
@@ -159,14 +151,7 @@ public class PhotoUploadViewHolder extends BaseViewHolder<CaseField> {
                 casePhotoAdapter.removeItem(position);
                 casePhotoAdapter.notifyDataSetChanged();
 
-                if (adapter.isEmpty()) {
-                    addImageButton.setImageResource(R.drawable.photo_camera);
-                } else if (adapter.isFull()) {
-                    addImageButton.setVisibility(View.GONE);
-                } else {
-                    addImageButton.setVisibility(View.VISIBLE);
-                    addImageButton.setImageResource(R.drawable.photo_add);
-                }
+                resetAddPhotoButtonStatus();
             }
         }).setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
             @Override
@@ -175,5 +160,16 @@ public class PhotoUploadViewHolder extends BaseViewHolder<CaseField> {
             }
         });
         builder.create().show();
+    }
+
+    private void resetAddPhotoButtonStatus() {
+        if (adapter.isEmpty()) {
+            addImageButton.setImageResource(R.drawable.photo_camera);
+        } else if (adapter.isFull()) {
+            addImageButton.setVisibility(View.GONE);
+        } else {
+            addImageButton.setVisibility(View.VISIBLE);
+            addImageButton.setImageResource(R.drawable.photo_add);
+        }
     }
 }
