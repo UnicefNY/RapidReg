@@ -63,6 +63,7 @@ public class CaseField {
     @SerializedName("subform")
     @Expose
     private CaseSection subForm;
+
     @SerializedName("show_on_minify_form")
     @Expose
     private boolean isShowOnMiniForm;

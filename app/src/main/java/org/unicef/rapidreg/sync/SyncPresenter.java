@@ -11,6 +11,7 @@ import com.hannesdorfmann.mosby.mvp.MvpBasePresenter;
 
 import org.unicef.rapidreg.PrimeroConfiguration;
 import org.unicef.rapidreg.network.SyncService;
+import org.unicef.rapidreg.network.UploadCaseBody;
 import org.unicef.rapidreg.service.CaseService;
 
 import java.lang.reflect.Type;
@@ -163,12 +164,17 @@ public class SyncPresenter extends MvpBasePresenter<SyncView> {
                 "   \"posted_from\": \"Mobile\",\n" +
                 "   \"couchrest-type\": \"Child\"\n" +
                 "}}";
-        syncService.postCase(PrimeroConfiguration.getCookie(), true, requestBody)
+        syncService.postCase(PrimeroConfiguration.getCookie(), true, UploadCaseBody.body)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread()).subscribe(new Action1<Response<String>>() {
             @Override
             public void call(Response<String> response) {
                 Log.i(TAG, response.toString());
+            }
+        }, new Action1<Throwable>() {
+            @Override
+            public void call(Throwable throwable) {
+                Log.i(TAG, throwable.toString());
             }
         });
     }

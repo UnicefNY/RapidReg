@@ -39,7 +39,7 @@ public class SyncService extends BaseRetrofitService {
     public Observable<Response<String>> postCase(
             String cookie,
             Boolean isMobile,
-            String requestBody) {
+            Map<String, Map<String, String>> requestBody) {
         return serviceInterface.postCase(cookie, requestBody);
     }
 }
