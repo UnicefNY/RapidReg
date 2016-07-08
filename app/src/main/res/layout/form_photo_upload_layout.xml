@@ -36,12 +36,6 @@
             android:id="@+id/add_image_button"/>
     </LinearLayout>
 
-    <ImageButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/photo_camera"
-        android:id="@+id/add_image_button"/>
-
     <TextView
         android:id="@+id/no_photo_promote_view"
         android:layout_width="match_parent"
