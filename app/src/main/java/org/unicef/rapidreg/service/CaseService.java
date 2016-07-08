@@ -57,6 +57,7 @@ public class CaseService {
     public static final String MODULE = "Module";
 
     private static final CaseService CASE_SERVICE = new CaseService();
+
     private CaseDao caseDao = new CaseDaoImpl();
     private CasePhotoDao casePhotoDao = new CasePhotoDaoImpl();
 
@@ -108,7 +109,6 @@ public class CaseService {
 
     public List<Case> getSearchResult(String uniqueId, String name, int ageFrom, int ageTo,
                                       String caregiver, Date date) {
-
         ConditionGroup conditionGroup = ConditionGroup.clause();
         conditionGroup.and(Condition.column(NameAlias.builder(Case.COLUMN_UNIQUE_ID).build())
                 .like(getWrappedCondition(uniqueId)));
@@ -141,7 +141,7 @@ public class CaseService {
                                  Map<String, List<Map<String, String>>> subformValues,
                                  List<String> photoPaths) {
 
-        attachSubforms(values, subformValues);
+        attachSubForms(values, subformValues);
 
         if (values.get(CASE_ID) == null) {
             saveCase(values, subformValues, photoPaths);
@@ -151,9 +151,9 @@ public class CaseService {
         }
     }
 
-    private void saveCase(Map<String, String> values,
-                          Map<String, List<Map<String, String>>> subformValues,
-                          List<String> photoPath) {
+    public void saveCase(Map<String, String> values,
+                         Map<String, List<Map<String, String>>> subFormValues,
+                         List<String> photoPath) {
 
         String username = UserService.getInstance().getCurrentUser().getUsername();
         values.put(MODULE, "primeromodule-cp");
@@ -164,7 +164,7 @@ public class CaseService {
         Gson gson = new Gson();
         Date date = new Date(Calendar.getInstance().getTimeInMillis());
         Blob caseBlob = new Blob(gson.toJson(values).getBytes());
-        Blob subformBlob = new Blob(gson.toJson(subformValues).getBytes());
+        Blob subFormBlob = new Blob(gson.toJson(subFormValues).getBytes());
         Blob audioFileDefault = null;
         audioFileDefault = getAudioBlob(audioFileDefault);
 
@@ -179,7 +179,7 @@ public class CaseService {
         child.setCaregiver(getCaregiverName(values));
         child.setRegistrationDate(getRegisterDate(values));
         child.setAudio(audioFileDefault);
-        child.setSubform(subformBlob);
+        child.setSubform(subFormBlob);
         child.setCreatedBy(username);
         child.save();
 
@@ -188,22 +188,21 @@ public class CaseService {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
         CaseFieldValueCache.clearAudioFile();
     }
 
-    private void saveCasePhoto(Case child, List<String> photoPaths) throws IOException {
+    public void saveCasePhoto(Case child, List<String> photoPaths) throws IOException {
         for (int i = 0; i < photoPaths.size(); i++) {
-            generateSaveOrUpdateCasePhoto(child, photoPaths, i).save();
+            generateSaveCasePhoto(child, photoPaths, i).save();
         }
     }
 
-    private void updateCase(Map<String, String> values,
-                            Map<String, List<Map<String, String>>> subformValues,
-                            List<String> photoBitPaths) {
+    public void updateCase(Map<String, String> values,
+                           Map<String, List<Map<String, String>>> subFormValues,
+                           List<String> photoBitPaths) {
         Gson gson = new Gson();
         Blob caseBlob = new Blob(gson.toJson(values).getBytes());
-        Blob subformBlob = new Blob(gson.toJson(subformValues).getBytes());
+        Blob subFormBlob = new Blob(gson.toJson(subFormValues).getBytes());
         Blob audioFileDefault = null;
         audioFileDefault = getAudioBlob(audioFileDefault);
 
@@ -216,7 +215,7 @@ public class CaseService {
         child.setCaregiver(getCaregiverName(values));
         child.setRegistrationDate(getRegisterDate(values));
         child.setAudio(audioFileDefault);
-        child.setSubform(subformBlob);
+        child.setSubform(subFormBlob);
         child.update();
         try {
             updateCasePhoto(child, photoBitPaths);
@@ -226,7 +225,7 @@ public class CaseService {
         CaseFieldValueCache.clearAudioFile();
     }
 
-    private void updateCasePhoto(Case child, List<String> photoPaths) throws IOException {
+    public void updateCasePhoto(Case child, List<String> photoPaths) throws IOException {
         int previousCount = casePhotoDao.getAllCasesPhotoFlowQueryList(child.getId()).size();
 
         if (previousCount < photoPaths.size()) {
@@ -235,7 +234,7 @@ public class CaseService {
                 casePhoto.update();
             }
             for (int i = previousCount; i < photoPaths.size(); i++) {
-                CasePhoto casePhoto = generateSaveOrUpdateCasePhoto(child, photoPaths, i);
+                CasePhoto casePhoto = generateSaveCasePhoto(child, photoPaths, i);
                 if (casePhoto.getId() == 0) {
                     casePhoto.save();
                 } else {
@@ -256,15 +255,13 @@ public class CaseService {
         }
     }
 
-    private CasePhoto generateSaveOrUpdateCasePhoto(Case child, List<String> photoPaths, int index) throws IOException {
+    private CasePhoto generateSaveCasePhoto(Case child, List<String> photoPaths, int index) throws IOException {
         CasePhoto casePhoto = casePhotoDao.getSpecialOrderCasePhotoByCaseId(child.getId(), index + 1);
         if (casePhoto == null) {
             casePhoto = new CasePhoto();
         }
         String filePath = photoPaths.get(index);
-
-        Bitmap bitmap = handleImage(filePath);
-
+        Bitmap bitmap = preProcessImage(filePath);
         casePhoto.setThumbnail(new Blob(ImageCompressUtil.convertImageToBytes(
                 ImageCompressUtil.getThumbnail(bitmap, CasePhotoConfig.THUMBNAIL_SIZE,
                         CasePhotoConfig.THUMBNAIL_SIZE))));
@@ -285,7 +282,7 @@ public class CaseService {
             long photoId = Long.parseLong(filePath);
             casePhoto = casePhotoDao.getCasePhotoById(photoId);
         } catch (NumberFormatException e) {
-            Bitmap bitmap = handleImage(filePath);
+            Bitmap bitmap = preProcessImage(filePath);
             photo = new Blob(ImageCompressUtil.convertImageToBytes(bitmap));
             casePhoto = new CasePhoto();
             casePhoto.setThumbnail(new Blob(ImageCompressUtil.convertImageToBytes(
@@ -299,14 +296,12 @@ public class CaseService {
         return casePhoto;
     }
 
-    private Bitmap handleImage(String filePath) throws IOException {
+    private Bitmap preProcessImage(String filePath) throws IOException {
         if (new File(filePath).length() <= 1024 * 1024 * 1) {
             return BitmapFactory.decodeFile(filePath);
         }
-
         return ImageCompressUtil.compressImage(filePath,
-                CasePhotoConfig.MAX_WIDTH, CasePhotoConfig.MAX_HEIGHT,
-                CasePhotoConfig.MAX_SIZE_KB);
+                CasePhotoConfig.MAX_WIDTH, CasePhotoConfig.MAX_HEIGHT);
     }
 
     public void clearCaseCache() {
@@ -361,11 +356,10 @@ public class CaseService {
         return "%" + queryStr + "%";
     }
 
-    private void attachSubforms(Map<String, String> values, Map<String, List<Map<String, String>>> subformValues) {
+    private void attachSubForms(Map<String, String> values, Map<String, List<Map<String, String>>> subFormValues) {
         Gson gson = new Gson();
-
-        for (String key : subformValues.keySet()) {
-            values.put(key, gson.toJson(subformValues.get(key)));
+        for (String key : subFormValues.keySet()) {
+            values.put(key, gson.toJson(subFormValues.get(key)));
         }
     }
 }
