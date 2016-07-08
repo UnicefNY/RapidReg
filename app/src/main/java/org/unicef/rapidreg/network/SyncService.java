@@ -3,11 +3,13 @@ package org.unicef.rapidreg.network;
 
 import android.content.Context;
 
+import com.google.gson.JsonElement;
+
 import org.unicef.rapidreg.PrimeroConfiguration;
 
-import java.util.ArrayList;
-import java.util.Map;
+import java.util.List;
 
+import okhttp3.ResponseBody;
 import retrofit2.Response;
 import rx.Observable;
 
@@ -27,7 +29,7 @@ public class SyncService extends BaseRetrofitService {
     }
 
 
-    public Observable<Response<ArrayList<Map<String, Object>>>> getAllCasesRx(
+    public Observable<Response<List<JsonElement>>> getAllCasesRx(
             String cookie,
             String locale,
             Boolean isMobile) {

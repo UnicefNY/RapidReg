@@ -48,7 +48,7 @@ public class LoginPresenter extends MvpBasePresenter<LoginView> {
     public static final String TAG = LoginPresenter.class.getSimpleName();
     private static final int MAX_LOAD_FORMS_NUM = 3;
 
-    private AuthService authService;
+
     private CompositeSubscription subscriptions;
 
     private Gson gson;
@@ -106,6 +106,7 @@ public class LoginPresenter extends MvpBasePresenter<LoginView> {
     public void detachView(boolean retainInstance) {
         super.detachView(retainInstance);
         EventBus.getDefault().unregister(this);
+
         subscriptions.clear();
     }
 
@@ -126,43 +127,6 @@ public class LoginPresenter extends MvpBasePresenter<LoginView> {
         goToLoginSuccessScreen(event.getUserName());
     }
 
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onNeedLoadFormsEvent(final NeedLoadFormsEvent event) {
-        final FormLoadStateMachine stateMachine = event.getStateMachine();
-        stateMachine.addOnce();
-        Log.d(TAG, String.format("this is %s time(s) to load forms", stateMachine.getCurrentNum()));
-
-
-        subscriptions.add(authService.getFormRx(event.getCookie(),
-                Locale.getDefault().getLanguage(), true, "case").subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Action1<CaseFormRoot>() {
-                    @Override
-                    public void call(CaseFormRoot caseFormRoot) {
-                        if (caseFormRoot != null) {
-                            CaseFormRoot form = caseFormRoot;
-                            CaseForm caseForm = new CaseForm(new Blob(gson.toJson(form).getBytes()));
-                            CaseFormService.getInstance().saveOrUpdateCaseForm(caseForm);
-
-                            //EventBus.getDefault().unregister(this);
-                            Log.i(TAG, "load form successfully");
-                        } else {
-                            //Log.d(TAG, String.format("error code: %s", response.code()));
-                            reloadFormsIfNeeded(event.getCookie(), stateMachine);
-                        }
-                    }
-                }, new Action1<Throwable>() {
-                    @Override
-                    public void call(Throwable throwable) {
-                        if (isViewAttached()) {
-                            showNetworkErrorMessage(throwable, false);
-                            showLoadingIndicator(false);
-                        }
-                        reloadFormsIfNeeded(event.getCookie(), stateMachine);
-                    }
-                }));
-
-    }
-
     private void reloadFormsIfNeeded(String cookie, FormLoadStateMachine stateMachine) {
         if (stateMachine.hasReachMaxRetryNum()) {
             //EventBus.getDefault().unregister(this);
@@ -179,7 +143,7 @@ public class LoginPresenter extends MvpBasePresenter<LoginView> {
         subscriptions = new CompositeSubscription();
         try {
             PrimeroConfiguration.setApiBaseUrl(url);
-            authService = new AuthService(context);
+            AuthService.getInstance().init(context);
 
         } catch (Exception e) {
             showLoginResultMessage(e.getMessage());
@@ -193,7 +157,7 @@ public class LoginPresenter extends MvpBasePresenter<LoginView> {
         String androidId = Settings.Secure.getString(context.getContentResolver(),
                 Settings.Secure.ANDROID_ID);
 
-        subscriptions.add(authService.loginRx(new LoginRequestBody(
+        subscriptions.add(AuthService.getInstance().loginRx(new LoginRequestBody(
                 username,
                 password,
                 tm.getLine1Number(),
@@ -215,8 +179,9 @@ public class LoginPresenter extends MvpBasePresenter<LoginView> {
                                 user.setVerified(loginResponse.getVerified());
                                 notifyEvent(new NeedCacheForOfflineEvent(user));
                                 notifyEvent(new NeedGoToLoginSuccessScreenEvent(username));
-                                notifyEvent(new NeedLoadFormsEvent(PrimeroConfiguration.getCookie(),
+                                EventBus.getDefault().postSticky(new NeedLoadFormsEvent(PrimeroConfiguration.getCookie(),
                                         FormLoadStateMachine.getInstance(MAX_LOAD_FORMS_NUM)));
+
                                 showLoginResultMessage(HttpStatusCodeHandler.LOGIN_SUCCESS_MESSAGE);
                                 Log.d(TAG, "login successfully");
                             } else {

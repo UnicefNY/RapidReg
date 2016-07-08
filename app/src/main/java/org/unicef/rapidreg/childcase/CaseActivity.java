@@ -16,17 +16,26 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+import com.raizlabs.android.dbflow.data.Blob;
+
 import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 import org.unicef.rapidreg.R;
 import org.unicef.rapidreg.base.view.BaseActivity;
 import org.unicef.rapidreg.childcase.config.CasePhotoConfig;
+import org.unicef.rapidreg.event.NeedLoadFormsEvent;
 import org.unicef.rapidreg.event.SaveCaseEvent;
 import org.unicef.rapidreg.event.UpdateImageEvent;
 import org.unicef.rapidreg.forms.childcase.CaseFormRoot;
 import org.unicef.rapidreg.forms.childcase.CaseSection;
+import org.unicef.rapidreg.model.CaseForm;
+import org.unicef.rapidreg.network.AuthService;
 import org.unicef.rapidreg.service.CaseFormService;
 import org.unicef.rapidreg.service.CaseService;
 import org.unicef.rapidreg.service.cache.CaseFieldValueCache;
@@ -38,8 +47,16 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
+
+import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action1;
+import rx.functions.Func2;
+import rx.schedulers.Schedulers;
+import rx.subscriptions.CompositeSubscription;
 
 public class CaseActivity extends BaseActivity {
+    public static final String TAG = CaseActivity.class.getSimpleName();
     private DetailState textAreaState = DetailState.VISIBILITY;
 
     private MenuItem caseSaveMenu;
@@ -49,12 +66,25 @@ public class CaseActivity extends BaseActivity {
     private String imagePath;
     private CaseFeature currentFeature;
 
+    private CompositeSubscription subscriptions;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        subscriptions = new CompositeSubscription();
         initToolbar();
         turnToFeature(CaseFeature.LIST, null);
+
+        EventBus.getDefault().register(this);
     }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        EventBus.getDefault().unregister(this);
+    }
+
 
     @Override
     protected void onResume() {
@@ -306,6 +336,52 @@ public class CaseActivity extends BaseActivity {
                 break;
         }
     }
+
+    @Subscribe(threadMode = ThreadMode.MAIN, sticky = true, priority = 1)
+    public void onNeedLoadFormsEvent(final NeedLoadFormsEvent event) {
+
+        EventBus.getDefault().removeStickyEvent(event);
+        final CaseFormService.FormLoadStateMachine stateMachine = event.getStateMachine();
+        stateMachine.addOnce();
+        Log.d(TAG, String.format("this is %s time(s) to load forms", stateMachine.getCurrentNum()));
+
+        final Gson gson = new Gson();
+
+        subscriptions.add(AuthService.getInstance().getFormRx(event.getCookie(),
+                Locale.getDefault().getLanguage(), true, "case")
+//                .retry(new Func2<Integer, Throwable, Boolean>() {
+//                    @Override
+//                    public Boolean call(Integer integer, Throwable throwable) {
+//                        return null;
+//                    }
+//                })
+                .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Action1<CaseFormRoot>() {
+                    @Override
+                    public void call(CaseFormRoot caseFormRoot) {
+                        if (caseFormRoot != null) {
+                            CaseFormRoot form = caseFormRoot;
+                            CaseForm caseForm = new CaseForm(new Blob(gson.toJson(form).getBytes()));
+                            CaseFormService.getInstance().saveOrUpdateCaseForm(caseForm);
+
+                            Log.i(TAG, "load form successfully");
+                        } else {
+                            //reloadFormsIfNeeded(event.getCookie(), stateMachine);
+                        }
+                    }
+                }, new Action1<Throwable>() {
+                    @Override
+                    public void call(Throwable throwable) {
+//                        if (isViewAttached()) {
+                            //showNetworkErrorMessage(throwable, false);
+                            //showLoadingIndicator(false);
+//                        }
+//                        reloadFormsIfNeeded(event.getCookie(), stateMachine);
+                    }
+                }));
+
+    }
+
 
     private void changeToolbarTitle(int resId) {
         toolbar.setTitle(resId);

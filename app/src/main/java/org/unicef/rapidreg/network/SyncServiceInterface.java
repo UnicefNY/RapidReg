@@ -1,9 +1,11 @@
 package org.unicef.rapidreg.network;
 
 
-import java.util.ArrayList;
-import java.util.Map;
+import com.google.gson.JsonElement;
 
+import java.util.List;
+
+import okhttp3.ResponseBody;
 import retrofit2.Response;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
@@ -14,7 +16,7 @@ import rx.Observable;
 public interface SyncServiceInterface {
 
     @GET("/api/cases?")
-    Observable<Response<ArrayList<Map<String, Object>>>> getAllCases(
+    Observable<Response<List<JsonElement>>> getAllCases(
             @Header("Cookie") String cookie,
             @Query("locale") String locale);
 
