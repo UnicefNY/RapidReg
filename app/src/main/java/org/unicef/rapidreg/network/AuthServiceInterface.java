@@ -15,7 +15,6 @@ import rx.Observable;
 
 
 public interface AuthServiceInterface {
-
     @POST("/api/login")
     Observable<Response<LoginResponse>> login(@Body LoginRequestBody body);
 
