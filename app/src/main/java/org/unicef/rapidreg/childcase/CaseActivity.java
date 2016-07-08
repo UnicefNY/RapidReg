@@ -49,9 +49,10 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
+import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
-import rx.functions.Func2;
+import rx.functions.Func1;
 import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
 
@@ -349,34 +350,32 @@ public class CaseActivity extends BaseActivity {
 
         subscriptions.add(AuthService.getInstance().getFormRx(event.getCookie(),
                 Locale.getDefault().getLanguage(), true, "case")
-//                .retry(new Func2<Integer, Throwable, Boolean>() {
-//                    @Override
-//                    public Boolean call(Integer integer, Throwable throwable) {
-//                        return null;
-//                    }
-//                })
+                .flatMap(new Func1<CaseFormRoot, Observable<CaseFormRoot>>() {
+                    @Override
+                    public Observable<CaseFormRoot> call(CaseFormRoot caseFormRoot) {
+                        if (caseFormRoot == null) {
+                            return Observable.error(new Exception());
+                        }
+                        return Observable.just(caseFormRoot);
+                    }
+                })
+                .retry(3)
                 .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Action1<CaseFormRoot>() {
                     @Override
                     public void call(CaseFormRoot caseFormRoot) {
-                        if (caseFormRoot != null) {
-                            CaseFormRoot form = caseFormRoot;
-                            CaseForm caseForm = new CaseForm(new Blob(gson.toJson(form).getBytes()));
-                            CaseFormService.getInstance().saveOrUpdateCaseForm(caseForm);
 
-                            Log.i(TAG, "load form successfully");
-                        } else {
-                            //reloadFormsIfNeeded(event.getCookie(), stateMachine);
-                        }
+                        CaseFormRoot form = caseFormRoot;
+                        CaseForm caseForm = new CaseForm(new Blob(gson.toJson(form).getBytes()));
+                        CaseFormService.getInstance().saveOrUpdateCaseForm(caseForm);
+
+                        Log.i(TAG, "load form successfully");
+
                     }
                 }, new Action1<Throwable>() {
                     @Override
                     public void call(Throwable throwable) {
-//                        if (isViewAttached()) {
-                            //showNetworkErrorMessage(throwable, false);
-                            //showLoadingIndicator(false);
-//                        }
-//                        reloadFormsIfNeeded(event.getCookie(), stateMachine);
+                        Log.i(TAG, throwable.getMessage());
                     }
                 }));
 
