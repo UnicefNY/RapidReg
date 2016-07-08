@@ -21,7 +21,16 @@ public class AuthService extends BaseRetrofitService {
         return PrimeroConfiguration.getApiBaseUrl();
     }
 
-    public AuthService(Context context) throws Exception {
+    private static AuthService self = null;
+    public static AuthService getInstance() {
+        if (self == null) {
+            self = new AuthService();
+        }
+
+        return self;
+    }
+
+    public void init(Context context) throws Exception {
         createRetrofit(context);
         serviceInterface = getRetrofit().create(AuthServiceInterface.class);
     }
