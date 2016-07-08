@@ -215,3 +215,5 @@ public class CaseSearchFragment extends MvpFragment<CaseListView, CaseListPresen
                 caregiver, getDate(registrationDate));
     }
 }
+
+
