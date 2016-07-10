@@ -90,6 +90,17 @@ module Screen
         puts actual_value
       end
 
+      def editForm(field, old_value, new_value)
+        if new_value.include?("<Radio>")
+          option = new_value.split('>')[1].strip
+          findByXpath("//android.widget.TextView[@text='#{field}']")
+          clickByXpath("//android.widget.RadioButton[@text='#{option}']")
+        else
+          findByXpath("//android.widget.EditText[@text='#{old_value}']").clear
+          findByXpath("//android.widget.EditText[@text='']").send_keys(new_value)
+        end
+      end
+
     end
   end
 end

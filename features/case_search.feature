@@ -1,4 +1,4 @@
-Feature: Search cases
+Feature: Case search
   As a worker, I want to search cases by specific fields, and search result should be displayed in a list.
   Fields include: id, name, age, current caregiver, registration date.
 
