@@ -27,23 +27,27 @@ module Screen
       end
 
       def logout
-        clickByXpath("//android.widget.CheckedTextView[@text='Logout']")
+        clickById("logout_label")
       end
 
       def getCurrentUser
-        findById("login_user_label")
+        findById("login_user_label").text
+      end
+
+      def getUserOrganization
+        findById("organization").text
       end
 
       def set_login_username(username)
-        findById("editview_username").send_keys("#{username}")
+        findById("username").send_keys("#{username}")
       end
 
       def set_login_password(password)
-        findById("editview_password").send_keys("#{password}")
+        findById("password").send_keys("#{password}")
       end
 
       def set_login_url(url)
-        findById("editview_url").send_keys("#{url}")
+        findById("url").send_keys("#{url}")
       end
 
       def sign_in

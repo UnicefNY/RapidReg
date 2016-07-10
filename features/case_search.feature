@@ -3,8 +3,8 @@ Feature: Search cases
   Fields include: id, name, age, current caregiver, registration date.
 
   Background:
-#    Given I login RapidReg with "primero" account
-    Given I press "login" button
+    Given I login RapidReg with "primero" account
+#    Given I press "login" button
     And I press menu tab "Cases"
 
   Scenario: Search fields

@@ -24,5 +24,9 @@ end
 
 And /^I should see current user is "(.*?)"$/ do |username|
   sleep 5   # must
-  login_page.getCurrentUser.equal?("#{username}")
+  login_page.getCurrentUser.equal?("#{username}")     #TODO
+end
+
+And /^the organization is "(.*?)"$/ do |org|
+  login_page.getUserOrganization.equal?("#{org}")     #TODO
 end
