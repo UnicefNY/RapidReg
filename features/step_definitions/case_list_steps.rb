@@ -21,3 +21,10 @@ When /^I order by "Registration date descending order"$/ do
   base_page.clickById("order_spinner")
   base_page.clickByXpath("//android.widget.ListView[1]/android.widget.RelativeLayout[4]")
 end
+
+And /^I edit the value of "(.*?)" from "(.*?)" to "(.*?)"$/ do |field, old_value, new_value|
+  until base_page.ifTextExist(field) do
+    case_page.scrollToNextFields
+  end
+  case_page.editForm(field, old_value, new_value)
+end

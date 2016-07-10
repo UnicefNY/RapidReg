@@ -1,5 +1,4 @@
 And /^I switch to full form$/ do
-  case_page.scrollToNextFields
   case_page.switchToFullForm
   sleep 5
 end
@@ -45,10 +44,6 @@ When /^I press the Back button$/ do
   base_page.pressBackButton
 end
 
-=begin
-type: android.widget.ViewSwitcher
-text:
-index: 0
-=end
+
 
 

@@ -1,4 +1,4 @@
-Feature: Create new case through full form.
+Feature: Create new case
   As a logged in user, I want to be able to create new case through full form / mini form.
 
   Background:
@@ -14,7 +14,7 @@ Feature: Create new case through full form.
       | Sex       | <Radio> Male       |
       | Age       | 10                 |
     And I press "save_case" button
-    Then I should see a case with sex "Boy" and age "10"
+    Then I should see a case with sex "BOY" and age "10"
 
   Scenario: As a logged in user, I create a new case through full form.
     When I switch to full form
@@ -23,7 +23,7 @@ Feature: Create new case through full form.
       | Sex | <Radio> Male |
       | Age | 10           |
     And I press "save_case" button
-    Then I should see a case with sex "Boy" and age "10"
+    Then I should see a case with sex "BOY" and age "10"
 
   Scenario: Leave the creating page without saving.
     When I press the Back button
