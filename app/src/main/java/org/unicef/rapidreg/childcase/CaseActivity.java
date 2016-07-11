@@ -306,7 +306,7 @@ public class CaseActivity extends BaseActivity {
         }
 
         for (String field : requiredFieldNames) {
-            if (TextUtils.isEmpty(CaseFieldValueCache.getValues().get(field))) {
+            if (TextUtils.isEmpty((CharSequence) CaseFieldValueCache.getValues().get(field))) {
                 Toast.makeText(CaseActivity.this, R.string.required_field_is_not_filled,
                         Toast.LENGTH_LONG).show();
                 return false;

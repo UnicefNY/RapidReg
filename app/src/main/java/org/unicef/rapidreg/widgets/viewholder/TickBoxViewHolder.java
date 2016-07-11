@@ -41,7 +41,7 @@ public class TickBoxViewHolder extends BaseViewHolder<CaseField> {
         if (isSubformField(field)) {
             valueView.setChecked(Boolean.valueOf(getValue(field)));
         } else {
-            valueView.setChecked(Boolean.valueOf(CaseFieldValueCache.get(getLabel(field))));
+            valueView.setChecked((Boolean) CaseFieldValueCache.get(getLabel(field)));
         }
     }
 

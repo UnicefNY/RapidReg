@@ -57,7 +57,7 @@ public class GenericViewHolder extends BaseTextViewHolder {
         if (isSubformField(field)) {
             valueView.setText(getValue(field));
         } else {
-            valueView.setText(CaseFieldValueCache.get(field.getName()));
+            valueView.setText((String) CaseFieldValueCache.get(field.getName()));
         }
 
         if (TextUtils.isEmpty(valueView.getText())) {

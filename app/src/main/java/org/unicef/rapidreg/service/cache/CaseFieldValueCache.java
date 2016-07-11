@@ -21,9 +21,9 @@ public class CaseFieldValueCache {
 
     private static Map<String, String> caseProfile = new HashMap<>();
 
-    private static Map<String, String> values = new HashMap<>();
+    private static Map<String, Object> values = new HashMap<>();
 
-    public static Map<String, String> getValues() {
+    public static Map<String, Object> getValues() {
         return values;
     }
 
@@ -35,7 +35,7 @@ public class CaseFieldValueCache {
         values.put(key, value);
     }
 
-    public static String get(String key) {
+    public static Object get(String key) {
         return values.get(key);
     }
 

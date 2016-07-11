@@ -8,6 +8,7 @@ import com.google.gson.JsonElement;
 import org.unicef.rapidreg.PrimeroConfiguration;
 
 import java.util.List;
+import java.util.Map;
 
 import okhttp3.ResponseBody;
 import retrofit2.Response;
@@ -36,10 +37,10 @@ public class SyncService extends BaseRetrofitService {
         return serviceInterface.getAllCases(cookie, locale);
     }
 
-    public Observable<Response<String>> postCase(
+    public Observable<Response<JsonElement>> postCase(
             String cookie,
             Boolean isMobile,
-            Map<String, Map<String, String>> requestBody) {
+            Object requestBody) {
         return serviceInterface.postCase(cookie, requestBody);
     }
 }
