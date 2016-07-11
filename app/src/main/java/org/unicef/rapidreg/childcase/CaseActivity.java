@@ -342,9 +342,6 @@ public class CaseActivity extends BaseActivity {
     public void onNeedLoadFormsEvent(final NeedLoadFormsEvent event) {
 
         EventBus.getDefault().removeStickyEvent(event);
-        final CaseFormService.FormLoadStateMachine stateMachine = event.getStateMachine();
-        stateMachine.addOnce();
-        Log.d(TAG, String.format("this is %s time(s) to load forms", stateMachine.getCurrentNum()));
 
         final Gson gson = new Gson();
 
