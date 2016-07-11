@@ -96,7 +96,7 @@ public class LoginActivity extends MvpActivity<LoginView, LoginPresenter> implem
     @NonNull
     @Override
     public LoginPresenter createPresenter() {
-        return new LoginPresenter();
+        return new LoginPresenter(this);
     }
 
     @Override
