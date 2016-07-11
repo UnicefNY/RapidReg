@@ -4,6 +4,7 @@ package org.unicef.rapidreg.network;
 import com.google.gson.JsonElement;
 
 import java.util.List;
+import java.util.Map;
 
 import okhttp3.ResponseBody;
 import retrofit2.Response;
@@ -23,7 +24,7 @@ public interface SyncServiceInterface {
             @Query("locale") String locale);
 
     @POST("/api/cases")
-    Observable<Response<String>> postCase(
+    Observable<Response<JsonElement>> postCase(
             @Header("Cookie") String cookie,
-            @Body Map<String, Map<String, String>> requestBody);
+            @Body Object requestBody);
 }
