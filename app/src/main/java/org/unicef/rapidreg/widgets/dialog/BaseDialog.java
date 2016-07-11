@@ -11,15 +11,13 @@ import org.unicef.rapidreg.R;
 import org.unicef.rapidreg.forms.childcase.CaseField;
 import org.unicef.rapidreg.service.cache.CaseFieldValueCache;
 import org.unicef.rapidreg.service.cache.SubformCache;
+import org.unicef.rapidreg.widgets.viewholder.GenericViewHolder;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-
-import org.unicef.rapidreg.service.cache.CaseFieldValueCache;
-import org.unicef.rapidreg.widgets.viewholder.GenericViewHolder;
 
 public abstract class BaseDialog {
     protected CaseField caseField;

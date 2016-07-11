@@ -63,8 +63,8 @@ public class SingleLineRadioViewHolder extends BaseViewHolder<CaseField> {
                 setSelectedRadio(getValue(field));
             }
         } else {
-            if (!TextUtils.isEmpty(CaseFieldValueCache.get(getLabel(field)))) {
-                setSelectedRadio(CaseFieldValueCache.get(getLabel(field)));
+            if (!TextUtils.isEmpty((CharSequence) CaseFieldValueCache.get(getLabel(field)))) {
+                setSelectedRadio(CaseFieldValueCache.get(getLabel(field)).toString());
             }
         }
     }
