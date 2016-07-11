@@ -137,7 +137,7 @@ public class CaseService {
         return result;
     }
 
-    public void saveOrUpdateCase(Map<String, String> values,
+    public void saveOrUpdateCase(Map<String, Object> values,
                                  Map<String, List<Map<String, String>>> subformValues,
                                  List<String> photoPaths) {
 
@@ -151,7 +151,7 @@ public class CaseService {
         }
     }
 
-    public void saveCase(Map<String, String> values,
+    public void saveCase(Map<String, Object> values,
                          Map<String, List<Map<String, String>>> subFormValues,
                          List<String> photoPath) {
 
@@ -174,7 +174,7 @@ public class CaseService {
         child.setLastUpdatedDate(date);
         child.setContent(caseBlob);
         child.setName(getChildName(values));
-        int age = values.get(AGE) != null ? Integer.parseInt(values.get(AGE)) : 0;
+        int age = values.get(AGE) != null ? (int) values.get(AGE) : 0;
         child.setAge(age);
         child.setCaregiver(getCaregiverName(values));
         child.setRegistrationDate(getRegisterDate(values));
@@ -197,7 +197,7 @@ public class CaseService {
         }
     }
 
-    public void updateCase(Map<String, String> values,
+    public void updateCase(Map<String, Object> values,
                            Map<String, List<Map<String, String>>> subFormValues,
                            List<String> photoBitPaths) {
         Gson gson = new Gson();
@@ -206,11 +206,11 @@ public class CaseService {
         Blob audioFileDefault = null;
         audioFileDefault = getAudioBlob(audioFileDefault);
 
-        Case child = caseDao.getCaseByUniqueId(values.get(CASE_ID));
+        Case child = caseDao.getCaseByUniqueId((String) values.get(CASE_ID));
         child.setLastUpdatedDate(new Date(Calendar.getInstance().getTimeInMillis()));
         child.setContent(caseBlob);
         child.setName(getChildName(values));
-        int age = values.get(AGE) != null ? Integer.parseInt(values.get(AGE)) : 0;
+        int age = values.get(AGE) != null ? (int) values.get(AGE) : 0;
         child.setAge(age);
         child.setCaregiver(getCaregiverName(values));
         child.setRegistrationDate(getRegisterDate(values));
@@ -326,11 +326,11 @@ public class CaseService {
         return new Date(Calendar.getInstance().getTimeInMillis());
     }
 
-    private Date getRegisterDate(Map<String, String> values) {
+    private Date getRegisterDate(Map<String, Object> values) {
         if (values.containsKey(REGISTRATION_DATE)) {
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM/dd/yyyy");
             try {
-                java.util.Date date = simpleDateFormat.parse(values.get(REGISTRATION_DATE));
+                java.util.Date date = simpleDateFormat.parse((String) values.get(REGISTRATION_DATE));
                 return new Date(date.getTime());
             } catch (ParseException e) {
                 Log.e(TAG, "date format error");
@@ -339,7 +339,7 @@ public class CaseService {
         return getCurrentDate();
     }
 
-    private String getChildName(Map<String, String> values) {
+    private String getChildName(Map<String, Object> values) {
         return values.get(FULL_NAME) + " "
                 + values.get(FIRST_NAME) + " "
                 + values.get(MIDDLE_NAME) + " "
@@ -348,7 +348,7 @@ public class CaseService {
                 + values.get(OTHER_NAME);
     }
 
-    private String getCaregiverName(Map<String, String> values) {
+    private String getCaregiverName(Map<String, Object> values) {
         return "" + values.get(CAREGIVER_NAME);
     }
 
@@ -356,7 +356,7 @@ public class CaseService {
         return "%" + queryStr + "%";
     }
 
-    private void attachSubForms(Map<String, String> values, Map<String, List<Map<String, String>>> subFormValues) {
+    private void attachSubForms(Map<String, Object> values, Map<String, List<Map<String, String>>> subFormValues) {
         Gson gson = new Gson();
         for (String key : subFormValues.keySet()) {
             values.put(key, gson.toJson(subFormValues.get(key)));
