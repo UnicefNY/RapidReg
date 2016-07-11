@@ -62,29 +62,4 @@ public class CaseFormService {
                 null : new Gson().fromJson(formJson, CaseFormRoot.class);
     }
 
-    public static class FormLoadStateMachine {
-        private int retryNum = 0;
-        private int maxRetryNum;
-
-        public static FormLoadStateMachine getInstance(int maxRetryNum) {
-            return new FormLoadStateMachine(maxRetryNum);
-        }
-
-        private FormLoadStateMachine(int maxRetryNum) {
-            this.maxRetryNum = maxRetryNum;
-            retryNum = 0;
-        }
-
-        public void addOnce() {
-            retryNum++;
-        }
-
-        public boolean hasReachMaxRetryNum() {
-            return retryNum >= maxRetryNum;
-        }
-
-        public int getCurrentNum() {
-            return retryNum;
-        }
-    }
 }
