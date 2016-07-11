@@ -8,32 +8,22 @@ import android.util.Log;
 
 import com.google.gson.Gson;
 import com.hannesdorfmann.mosby.mvp.MvpBasePresenter;
-import com.raizlabs.android.dbflow.data.Blob;
 
 import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
 import org.unicef.rapidreg.IntentSender;
+import org.unicef.rapidreg.PrimeroConfiguration;
 import org.unicef.rapidreg.R;
-import org.unicef.rapidreg.event.NeedCacheForOfflineEvent;
-import org.unicef.rapidreg.event.NeedDoLoginOffLineEvent;
-import org.unicef.rapidreg.event.NeedGoToLoginSuccessScreenEvent;
 import org.unicef.rapidreg.event.NeedLoadFormsEvent;
-import org.unicef.rapidreg.forms.childcase.CaseFormRoot;
-import org.unicef.rapidreg.model.CaseForm;
 import org.unicef.rapidreg.model.LoginRequestBody;
 import org.unicef.rapidreg.model.LoginResponse;
 import org.unicef.rapidreg.model.User;
 import org.unicef.rapidreg.network.AuthService;
 import org.unicef.rapidreg.network.HttpStatusCodeHandler;
 import org.unicef.rapidreg.network.NetworkStatusManager;
-import org.unicef.rapidreg.service.CaseFormService;
 import org.unicef.rapidreg.service.UserService;
 import org.unicef.rapidreg.utils.EncryptHelper;
-import org.unicef.rapidreg.PrimeroConfiguration;
 
 import java.util.List;
-import java.util.Locale;
 
 import okhttp3.Headers;
 import retrofit2.Response;
@@ -42,18 +32,26 @@ import rx.functions.Action1;
 import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
 
-import static org.unicef.rapidreg.service.CaseFormService.FormLoadStateMachine;
-
 public class LoginPresenter extends MvpBasePresenter<LoginView> {
     public static final String TAG = LoginPresenter.class.getSimpleName();
-    private static final int MAX_LOAD_FORMS_NUM = 3;
-
 
     private CompositeSubscription subscriptions;
 
-    private Gson gson;
     private Context context;
+    private Gson gson;
     private IntentSender intentSender;
+
+    public LoginPresenter(Context context) {
+        this.context = context;
+        intentSender = new IntentSender();
+        gson = new Gson();
+        subscriptions = new CompositeSubscription();
+        try {
+            AuthService.getInstance().init(context);
+        } catch (Exception e) {
+            showLoginResultMessage(e.getMessage());
+        }
+    }
 
     public String fetchURL() {
         try {
@@ -69,15 +67,21 @@ public class LoginPresenter extends MvpBasePresenter<LoginView> {
         if (!validate(context, username, password, url)) {
             return;
         }
-        if (isViewAttached()) {
-            initContext(context, url);
-            showLoadingIndicator(true);
-            if (NetworkStatusManager.isOnline(context)) {
-                doLoginOnline(context, username, password, url);
-            } else {
-                doLoginOffline(context, username, password);
-            }
+
+        PrimeroConfiguration.setApiBaseUrl(url);
+        try {
+            AuthService.getInstance().init(context);
+        } catch (Exception e) {
+            showLoginResultMessage(e.getMessage());
         }
+
+        showLoadingIndicator(true);
+        if (NetworkStatusManager.isOnline(context)) {
+            doLoginOnline(context, username, password, url);
+        } else {
+            doLoginOffline(context, username, password);
+        }
+
     }
 
     public boolean validate(Context context, String username, String password, String url) {
@@ -99,55 +103,13 @@ public class LoginPresenter extends MvpBasePresenter<LoginView> {
     @Override
     public void attachView(LoginView view) {
         super.attachView(view);
-        EventBus.getDefault().register(this);
     }
 
     @Override
     public void detachView(boolean retainInstance) {
         super.detachView(retainInstance);
-        EventBus.getDefault().unregister(this);
 
         subscriptions.clear();
-    }
-
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onNeedDoLoginOffLineEvent(NeedDoLoginOffLineEvent event) {
-        doLoginOffline(event.getContext(), event.getUsername(), event.getPassword());
-    }
-
-    @Subscribe(threadMode = ThreadMode.BACKGROUND)
-    public void onNeedCacheForOfflineEvent(NeedCacheForOfflineEvent event) {
-        UserService service = UserService.getInstance();
-        service.setCurrentUser(event.getUser());
-        service.saveOrUpdateUser(event.getUser());
-    }
-
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onNeedGoToLoginSuccessScreenEvent(NeedGoToLoginSuccessScreenEvent event) {
-        goToLoginSuccessScreen(event.getUserName());
-    }
-
-    private void reloadFormsIfNeeded(String cookie, FormLoadStateMachine stateMachine) {
-        if (stateMachine.hasReachMaxRetryNum()) {
-            //EventBus.getDefault().unregister(this);
-            Log.d(TAG, "reach the max retry number, stop trying");
-        } else {
-            notifyEvent(new NeedLoadFormsEvent(cookie, stateMachine));
-        }
-    }
-
-    private void initContext(Context context, String url) {
-        this.context = context;
-        intentSender = new IntentSender();
-        gson = new Gson();
-        subscriptions = new CompositeSubscription();
-        try {
-            PrimeroConfiguration.setApiBaseUrl(url);
-            AuthService.getInstance().init(context);
-
-        } catch (Exception e) {
-            showLoginResultMessage(e.getMessage());
-        }
     }
 
     private void doLoginOnline(final Context context, final String username,
@@ -177,17 +139,22 @@ public class LoginPresenter extends MvpBasePresenter<LoginView> {
                                 user.setOrganisation(loginResponse.getOrganization());
                                 user.setLanguage(loginResponse.getLanguage());
                                 user.setVerified(loginResponse.getVerified());
-                                notifyEvent(new NeedCacheForOfflineEvent(user));
-                                notifyEvent(new NeedGoToLoginSuccessScreenEvent(username));
-                                EventBus.getDefault().postSticky(new NeedLoadFormsEvent(PrimeroConfiguration.getCookie(),
-                                        FormLoadStateMachine.getInstance(MAX_LOAD_FORMS_NUM)));
+
+                                UserService service = UserService.getInstance();
+                                service.setCurrentUser(user);
+                                service.saveOrUpdateUser(user);
+
+                                goToLoginSuccessScreen(username);
+
+                                EventBus.getDefault().postSticky(new NeedLoadFormsEvent(PrimeroConfiguration.getCookie()));
 
                                 showLoginResultMessage(HttpStatusCodeHandler.LOGIN_SUCCESS_MESSAGE);
                                 Log.d(TAG, "login successfully");
                             } else {
                                 showLoginResultMessage(HttpStatusCodeHandler
                                         .getHttpStatusMessage(response.code()));
-                                notifyEvent(new NeedDoLoginOffLineEvent(context, username, password));
+                                doLoginOffline(context, username, password);
+
                                 Log.d(TAG, "login failed");
                             }
                         }
@@ -198,7 +165,7 @@ public class LoginPresenter extends MvpBasePresenter<LoginView> {
                         if (isViewAttached()) {
                             showNetworkErrorMessage(throwable, false);
                             showLoadingIndicator(false);
-                            notifyEvent(new NeedDoLoginOffLineEvent(context, username, password));
+                            doLoginOffline(context, username, password);
                         }
                     }
                 }));
@@ -232,10 +199,6 @@ public class LoginPresenter extends MvpBasePresenter<LoginView> {
 
     private void showNetworkErrorMessage(Throwable t, boolean pullToRefresh) {
         getView().showError(t, false);
-    }
-
-    private void notifyEvent(Object event) {
-        EventBus.getDefault().post(event);
     }
 
     private String getSessionId(Headers headers) {
