@@ -21,12 +21,3 @@ And /^I clear up above "(.*?)" search conditions$/ do |num|
   num.to_i.times { base_page.clickById("clear_text") }
 end
 
-
-=begin
-type: android.widget.EditText
-text: ID
-
-id: fab_expand_menu_button
-id: add_tracing_request
-id: add_case
-=end

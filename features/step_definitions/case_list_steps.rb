@@ -1,4 +1,8 @@
 Then /^I should see the case's "(.*?)" is "(.*?)"$/ do |case_field, case_value|
+  if case_value == "Today's date"
+    time = Time.now
+    case_value = time.strftime("%b %d, %Y")
+  end
   actual_value = base_page.findById(case_field).text
   raise("NOT find value: #{case_value}") unless actual_value == case_value
 end

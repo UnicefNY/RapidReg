@@ -10,11 +10,18 @@ Feature: Create new case
 
   Scenario: As a logged in user, I create a new case through mini form.
     When I fill in the following:
-      | Full Name | Tom Justin Clinton |
-      | Sex       | <Radio> Male       |
-      | Age       | 10                 |
+      | Full Name             | Tom Justin Clinton |
+      | Sex                   | <Radio> Male       |
+      | Age                   | 10                 |
+      | Is the age estimated? | <Checkbox> Yes     |
     And I press "save_case" button
     Then I should see a case with sex "BOY" and age "10"
+    When I click the case
+    Then I should see following:
+      | Full Name | Tom Justin Clinton |
+      | Sex                   | <Radio> Male       |
+      | Age                   | 10                 |
+      | Is the age estimated? | <Checkbox> Yes     |
 
   Scenario: As a logged in user, I create a new case through full form.
     When I switch to full form
@@ -26,10 +33,8 @@ Feature: Create new case
     Then I should see a case with sex "BOY" and age "10"
 
   Scenario: Leave the creating page without saving.
-    When I press the Back button
-    Then I should see "Are you sure to quit without saving?"
-    When I switch to full form
-    And I press the Back button
+    When I click to open navigation drawer
+    And I press menu tab "Cases"
     Then I should see "Are you sure to quit without saving?"
 
 
