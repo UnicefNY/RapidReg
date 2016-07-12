@@ -6,7 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class SubformCache {
+public class SubFormCache {
     private static Map<String, List<Map<String, String>>> values = new HashMap<>();
 
     public static Map<String, List<Map<String, String>>> getValues() {

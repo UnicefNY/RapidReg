@@ -9,12 +9,10 @@ import android.widget.ViewSwitcher;
 
 import org.unicef.rapidreg.R;
 import org.unicef.rapidreg.forms.childcase.CaseField;
-import org.unicef.rapidreg.service.cache.CaseFieldValueCache;
-import org.unicef.rapidreg.service.cache.SubformCache;
+import org.unicef.rapidreg.service.cache.ItemValues;
 import org.unicef.rapidreg.widgets.viewholder.GenericViewHolder;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -23,21 +21,18 @@ public abstract class BaseDialog {
     protected CaseField caseField;
     protected TextView resultView;
     protected ViewSwitcher viewSwitcher;
+    protected ItemValues itemValues;
 
     private AlertDialog.Builder builder;
     private Context context;
 
-    public BaseDialog(final Context context, final CaseField caseField,
-                      final TextView resultView) {
-        this(context, caseField, resultView, null);
-    }
-
-    public BaseDialog(final Context context, final CaseField caseField,
+    public BaseDialog(final Context context, final CaseField caseField, final ItemValues itemValues,
                       final TextView resultView, final ViewSwitcher viewSwitcher) {
         this.caseField = caseField;
         this.resultView = resultView;
         this.viewSwitcher = viewSwitcher;
         this.context = context;
+        this.itemValues = itemValues;
 
         builder = new AlertDialog.Builder(context);
         builder.setTitle(caseField.getDisplayName().get(Locale.getDefault().getLanguage()));
@@ -45,18 +40,19 @@ public abstract class BaseDialog {
         builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                if (!TextUtils.isEmpty(getResult())) {
+                if (getResult() != null && !TextUtils.isEmpty(getResult().toString())) {
                     BaseDialog.this.viewSwitcher.setDisplayedChild(GenericViewHolder.FORM_HAS_ANSWER_STATE);
                 } else {
                     BaseDialog.this.viewSwitcher.setDisplayedChild(GenericViewHolder.FORM_NO_ANSWER_STATE);
                 }
-                BaseDialog.this.resultView.setText(getResult());
+                BaseDialog.this.resultView.setText(getResult() == null ? null : getResult().toString());
 
-                if (isSubformField()) {
-                    SubformCache.put(caseField.getParent(), getValues());
-                } else {
+                if (isSubFormField()) {
                     String language = Locale.getDefault().getLanguage();
-                    CaseFieldValueCache.put(caseField.getName(), getResult());
+                    itemValues.addChildrenItemForParent(caseField.getParent(), caseField.getIndex(),
+                            caseField.getDisplayName().get(language), getResult());
+                } else {
+                    itemValues.addItem(caseField.getName(), getResult());
                 }
 
                 dialog.dismiss();
@@ -103,28 +99,9 @@ public abstract class BaseDialog {
 
     public abstract void initView();
 
-    public abstract String getResult();
+    public abstract Object getResult();
 
-    private boolean isSubformField() {
+    private boolean isSubFormField() {
         return caseField.getParent() != null;
-    }
-
-    private List<Map<String, String>> getValues() {
-        String language = Locale.getDefault().getLanguage();
-        List<Map<String, String>> values = SubformCache.get(caseField.getParent()) == null ?
-                new ArrayList<Map<String, String>>() : SubformCache.get(caseField.getParent());
-
-        Map<String, String> value;
-        try {
-            value = values.get(caseField.getIndex());
-            value.put(caseField.getDisplayName().get(language), getResult());
-            values.set(caseField.getIndex(), value);
-        } catch (IndexOutOfBoundsException e) {
-            value = new HashMap<>();
-            value.put(caseField.getDisplayName().get(language), getResult());
-            values.add(caseField.getIndex(), value);
-        }
-
-        return values;
     }
 }

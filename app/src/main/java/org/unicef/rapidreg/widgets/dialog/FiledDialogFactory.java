@@ -6,26 +6,16 @@ import android.widget.ViewSwitcher;
 
 import org.unicef.rapidreg.exception.DialogException;
 import org.unicef.rapidreg.forms.childcase.CaseField;
+import org.unicef.rapidreg.service.cache.ItemValues;
 
 public class FiledDialogFactory {
     public static BaseDialog createDialog(CaseField.FieldType fieldType, Context context,
-                                          CaseField caseField,
-                                          TextView resultView) throws DialogException {
-        try {
-            return fieldType.getClz().getConstructor(Context.class, CaseField.class, TextView.class)
-                    .newInstance(context, caseField, resultView);
-        } catch (Exception e) {
-            throw new DialogException(String.format("fieldType: %s", fieldType), e);
-        }
-    }
-
-    public static BaseDialog createDialog(CaseField.FieldType fieldType, Context context,
-                                          CaseField caseField, TextView resultView,
+                                          CaseField caseField, ItemValues itemValues, TextView resultView,
                                           ViewSwitcher viewSwitcher) throws DialogException {
         try {
             return fieldType.getClz().getConstructor(Context.class, CaseField.class,
-                    TextView.class, ViewSwitcher.class)
-                    .newInstance(context, caseField, resultView, viewSwitcher);
+                    ItemValues.class, TextView.class, ViewSwitcher.class)
+                    .newInstance(context, caseField, itemValues, resultView, viewSwitcher);
         } catch (Exception e) {
             throw new DialogException(String.format("fieldType: %s", fieldType), e);
         }

@@ -7,13 +7,16 @@ import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import com.getbase.floatingactionbutton.FloatingActionButton;
+import com.google.gson.Gson;
 import com.ogaclejapan.smarttablayout.SmartTabLayout;
 import com.ogaclejapan.smarttablayout.utils.v4.FragmentPagerItem;
 import com.ogaclejapan.smarttablayout.utils.v4.FragmentPagerItems;
@@ -30,15 +33,19 @@ import org.unicef.rapidreg.event.UpdateImageEvent;
 import org.unicef.rapidreg.forms.childcase.CaseField;
 import org.unicef.rapidreg.forms.childcase.CaseFormRoot;
 import org.unicef.rapidreg.forms.childcase.CaseSection;
+import org.unicef.rapidreg.model.Case;
 import org.unicef.rapidreg.model.CasePhoto;
 import org.unicef.rapidreg.service.CaseFormService;
 import org.unicef.rapidreg.service.CasePhotoService;
 import org.unicef.rapidreg.service.CaseService;
-import org.unicef.rapidreg.service.cache.CaseFieldValueCache;
-import org.unicef.rapidreg.service.cache.SubformCache;
+import org.unicef.rapidreg.service.cache.ItemValues;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -77,6 +84,8 @@ public class CaseRegisterWrapperFragment extends Fragment {
     private CaseRegisterAdapter fullFormAdapter;
     private CasePhotoAdapter casePhotoAdapter;
 
+    private ItemValues itemValues;
+
     private long caseId;
 
     @Nullable
@@ -91,12 +100,22 @@ public class CaseRegisterWrapperFragment extends Fragment {
 
         if (getArguments() != null) {
             caseId = getArguments().getLong("case_id");
+            Case caseItem = CaseService.getInstance().getCaseById(caseId);
+            String caseJson = new String(caseItem.getContent().getBlob());
+            String subFormJson = new String(caseItem.getSubform().getBlob());
+            itemValues = CaseService.getInstance().generateItemValues(caseJson, subFormJson);
+            itemValues.addStringItem(CaseService.CASE_ID, caseItem.getUniqueId());
+            itemValues.addStringItem(CaseService.CASE_ID, caseItem.getUniqueId());
+            initProfile(caseItem);
+        }
+        if (itemValues == null) {
+            itemValues = new ItemValues();
         }
 
         initCaseFormData();
         initFloatingActionButton();
 
-        miniFormAdapter = new CaseRegisterAdapter(getActivity(), miniFields, true);
+        miniFormAdapter = new CaseRegisterAdapter(getActivity(), miniFields, itemValues, true);
         miniFormAdapter.setCasePhotoAdapter(initCasePhotoAdapter());
 
         initFullFormContainer();
@@ -104,6 +123,19 @@ public class CaseRegisterWrapperFragment extends Fragment {
 
         return view;
     }
+
+    private void initProfile(Case caseItem) {
+        DateFormat dateFormat = SimpleDateFormat.getDateInstance(DateFormat.MEDIUM, Locale.US);
+        String shortUUID = CaseService.getInstance().getShortUUID(caseItem.getUniqueId());
+        itemValues.addStringItem(ItemValues.CaseProfile.ID_NORMAL_STATE,
+                shortUUID);
+        itemValues.addStringItem(ItemValues.CaseProfile.REGISTRATION_DATE,
+                dateFormat.format(caseItem.getRegistrationDate()));
+        itemValues.addStringItem(ItemValues.CaseProfile.GENDER_NAME,
+                shortUUID);
+        itemValues.addNumberItem(ItemValues.CaseProfile.ID, caseItem.getId());
+    }
+
 
     @Override
     public void onStart() {
@@ -151,10 +183,29 @@ public class CaseRegisterWrapperFragment extends Fragment {
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void saveCase(SaveCaseEvent event) {
-        List<String> photoPaths = casePhotoAdapter.getAllItems();
-        CaseService.getInstance().saveOrUpdateCase(CaseFieldValueCache.getValues(),
-                SubformCache.getValues(),
-                photoPaths);
+        if (validateRequiredField()) {
+            List<String> photoPaths = casePhotoAdapter.getAllItems();
+            CaseService.getInstance().saveOrUpdateCase(itemValues, photoPaths);
+        }
+    }
+
+    private boolean validateRequiredField() {
+        CaseFormRoot caseForm = CaseFormService.getInstance().getCurrentForm();
+        List<String> requiredFieldNames = new ArrayList<>();
+
+        for (CaseSection section : caseForm.getSections()) {
+            Collections.addAll(requiredFieldNames, CaseService.getInstance()
+                    .fetchRequiredFiledNames(section.getFields()).toArray(new String[0]));
+        }
+
+        for (String field : requiredFieldNames) {
+            if (TextUtils.isEmpty((CharSequence) itemValues.getValues().get(field))) {
+                Toast.makeText(getActivity(), R.string.required_field_is_not_filled,
+                        Toast.LENGTH_LONG).show();
+                return false;
+            }
+        }
+        return true;
     }
 
     private void initFloatingActionButton() {
@@ -179,6 +230,7 @@ public class CaseRegisterWrapperFragment extends Fragment {
                 @Override
                 public void onViewPositionChanged(float fractionAnchor, float fractionScreen) {
                     if (fullFormAdapter != null) {
+                        fullFormAdapter.setItemValues(itemValues);
                         fullFormAdapter.setCasePhotoAdapter(casePhotoAdapter);
                         fullFormAdapter.notifyDataSetChanged();
                     }
@@ -209,7 +261,11 @@ public class CaseRegisterWrapperFragment extends Fragment {
                 fullFormSwipeLayout.setScrollChild(
                         adapter.getPage(position).getView()
                                 .findViewById(R.id.register_forms_content));
-                fullFormAdapter = ((CaseRegisterFragment) adapter.getPage(position)).getCaseRegisterAdapter();
+                CaseRegisterFragment currentPage = (CaseRegisterFragment) adapter.getPage(position);
+
+                itemValues = currentPage.getItemValues();
+                fullFormAdapter = currentPage.getCaseRegisterAdapter();
+                fullFormAdapter.setItemValues(itemValues);
                 fullFormAdapter.setCasePhotoAdapter(casePhotoAdapter);
                 fullFormAdapter.notifyDataSetChanged();
             }
@@ -278,6 +334,7 @@ public class CaseRegisterWrapperFragment extends Fragment {
             Bundle bundle = new Bundle();
             bundle.putStringArrayList("case_photos",
                     (ArrayList<String>) casePhotoAdapter.getAllItems());
+            bundle.putString("item_values", new Gson().toJson(itemValues.getValues()));
             pages.add(FragmentPagerItem.of(values[0], CaseRegisterFragment.class, bundle));
         }
         return pages;

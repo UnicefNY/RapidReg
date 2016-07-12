@@ -6,20 +6,20 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewParent;
 import android.widget.Button;
 import android.widget.LinearLayout;
+
+import com.google.gson.JsonArray;
 
 import org.unicef.rapidreg.R;
 import org.unicef.rapidreg.childcase.CaseActivity;
 import org.unicef.rapidreg.childcase.CaseRegisterAdapter;
 import org.unicef.rapidreg.forms.childcase.CaseField;
-import org.unicef.rapidreg.service.cache.SubformCache;
+import org.unicef.rapidreg.service.cache.ItemValues;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -35,8 +35,8 @@ public class SubformViewHolder extends BaseViewHolder<CaseField> {
     private List<CaseField> fields;
     private String fieldParent;
 
-    public SubformViewHolder(Context context, View itemView) {
-        super(context, itemView);
+    public SubformViewHolder(Context context, View itemView, ItemValues itemValues) {
+        super(context, itemView, itemValues);
         ButterKnife.bind(this, itemView);
         activity = (CaseActivity) context;
         parent = (ViewGroup) itemView;
@@ -50,7 +50,7 @@ public class SubformViewHolder extends BaseViewHolder<CaseField> {
         attachParentToFields(fields, fieldParent);
         addSubformBtn.setText(String.format("%s %s", addSubformBtn.getText(), fieldParent));
 
-        restoreSubforms();
+        restoreSubForms();
     }
 
     @Override
@@ -58,13 +58,13 @@ public class SubformViewHolder extends BaseViewHolder<CaseField> {
         addSubformBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                addSubform();
+                addSubForm();
             }
         });
     }
 
     @Override
-    protected String getResult() {
+    protected Boolean getResult() {
         return null;
     }
 
@@ -90,7 +90,7 @@ public class SubformViewHolder extends BaseViewHolder<CaseField> {
             public void onClick(View v) {
                 clearFocus(v);
 
-                updateSubformCache(parent.indexOfChild((View) v.getParent()));
+                updateSubFormCache(parent.indexOfChild((View) v.getParent()));
                 parent.removeView((View) v.getParent());
                 updateIndexForFields();
             }
@@ -107,7 +107,10 @@ public class SubformViewHolder extends BaseViewHolder<CaseField> {
 
         List<CaseField> fields = cloneFields();
         assignIndexForFields(fields, getInsertIndex());
-        CaseRegisterAdapter adapter = new CaseRegisterAdapter(activity, fields, false);
+
+        CaseRegisterAdapter adapter = new CaseRegisterAdapter(activity, fields,
+                null, false);
+
         fieldList.setAdapter(adapter);
     }
 
@@ -143,14 +146,14 @@ public class SubformViewHolder extends BaseViewHolder<CaseField> {
         return fieldList;
     }
 
-    private void updateSubformCache(int index) {
-        List<Map<String, String>> values = SubformCache.get(fieldParent);
+    private void updateSubFormCache(int index) {
+        JsonArray values = itemValues.getChildrenAsJsonArray(fieldParent);
         if (values != null) {
             values.remove(index);
         }
     }
 
-    private void addSubform() {
+    private void addSubForm() {
         LayoutInflater inflater = LayoutInflater.from(activity);
         ViewGroup container = (LinearLayout) inflater
                 .inflate(R.layout.form_subform, parent, false);
@@ -160,12 +163,14 @@ public class SubformViewHolder extends BaseViewHolder<CaseField> {
         parent.addView(container, getInsertIndex());
     }
 
-    private void restoreSubforms() {
-        List<Map<String, String>> values = SubformCache.get(fieldParent) == null ?
-                new ArrayList<Map<String, String>>() : SubformCache.get(fieldParent);
-
-        for (int i = 0; i < values.size(); i++) {
-            addSubform();
+    private void restoreSubForms() {
+        JsonArray childrenArray = itemValues.getChildrenAsJsonArray(fieldParent);
+        if (childrenArray == null) {
+            childrenArray = new JsonArray();
+            itemValues.addChildren(fieldParent, childrenArray);
+        }
+        for (int i = 0; i < childrenArray.size(); i++) {
+            addSubForm();
         }
     }
 }

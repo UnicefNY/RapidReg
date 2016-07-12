@@ -8,13 +8,14 @@ import android.widget.TextView;
 import android.widget.ViewSwitcher;
 
 import org.unicef.rapidreg.forms.childcase.CaseField;
+import org.unicef.rapidreg.service.cache.ItemValues;
 
 public class NumericDialog extends BaseDialog {
 
     private EditText editText;
 
-    public NumericDialog(Context context, CaseField caseField, TextView resultView, ViewSwitcher viewSwitcher) {
-        super(context, caseField, resultView, viewSwitcher);
+    public NumericDialog(Context context, CaseField caseField, ItemValues itemValues, TextView resultView, ViewSwitcher viewSwitcher) {
+        super(context, caseField, itemValues, resultView, viewSwitcher);
     }
 
     @Override
@@ -27,7 +28,7 @@ public class NumericDialog extends BaseDialog {
     }
 
     @Override
-    public String getResult() {
-        return editText.getText().toString();
+    public Number getResult() {
+        return Integer.parseInt(editText.getText().toString());
     }
 }

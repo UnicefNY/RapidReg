@@ -7,9 +7,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import org.unicef.rapidreg.R;
-import org.unicef.rapidreg.childcase.media.AudioRecorderActivity;
 import org.unicef.rapidreg.childcase.CaseActivity;
-import org.unicef.rapidreg.service.cache.CaseFieldValueCache;
+import org.unicef.rapidreg.childcase.media.AudioRecorderActivity;
+import org.unicef.rapidreg.service.CaseService;
+import org.unicef.rapidreg.service.cache.ItemValues;
 import org.unicef.rapidreg.utils.StreamUtil;
 
 import butterknife.BindView;
@@ -31,12 +32,12 @@ public class AudioUploadViewHolder extends BaseViewHolder {
 
     private CaseActivity activity;
 
-    public AudioUploadViewHolder(Context context, View itemView) {
-        super(context, itemView);
+    public AudioUploadViewHolder(Context context, View itemView, ItemValues itemValues) {
+        super(context, itemView, itemValues);
         ButterKnife.bind(this, itemView);
         activity = (CaseActivity) context;
 
-        mFileName = CaseFieldValueCache.AUDIO_FILE_PATH;
+        mFileName = CaseService.AUDIO_FILE_PATH;
     }
 
     @Override
@@ -50,7 +51,7 @@ public class AudioUploadViewHolder extends BaseViewHolder {
         if (audiofileExists) {
             initPlayAudioUI();
             showDeleteIconWhenIsEditMode();
-        } else if (activity.getCurrentFeature().isInEditMode()){
+        } else if (activity.getCurrentFeature().isInEditMode()) {
             initAudioRecordUI();
         }
     }
@@ -61,7 +62,7 @@ public class AudioUploadViewHolder extends BaseViewHolder {
     }
 
     @Override
-    protected String getResult() {
+    protected Boolean getResult() {
         return null;
     }
 
@@ -81,7 +82,7 @@ public class AudioUploadViewHolder extends BaseViewHolder {
     @OnClick(R.id.delete_button)
     public void onDeleteButtonClicked() {
         initAudioRecordUI();
-        CaseFieldValueCache.clearAudioFile();
+        CaseService.clearAudioFile();
     }
 
     @OnClick(R.id.record_button)

@@ -11,8 +11,7 @@ import android.widget.TextView;
 import org.unicef.rapidreg.R;
 import org.unicef.rapidreg.childcase.CaseListAdapter;
 import org.unicef.rapidreg.forms.childcase.CaseField;
-import org.unicef.rapidreg.service.cache.CaseFieldValueCache;
-import org.unicef.rapidreg.service.cache.CaseFieldValueCache.CaseProfile;
+import org.unicef.rapidreg.service.cache.ItemValues;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -36,17 +35,17 @@ public class MiniFormProfileViewHolder extends BaseViewHolder<CaseField> {
     @BindView(R.id.registration_date)
     TextView registrationDate;
 
-    public MiniFormProfileViewHolder(Context context, View itemView) {
-        super(context, itemView);
+    public MiniFormProfileViewHolder(Context context, View itemView, ItemValues itemValues) {
+        super(context, itemView, itemValues);
         ButterKnife.bind(this, itemView);
     }
 
     @Override
     public void setValue(CaseField field) {
-        idView.setText(CaseFieldValueCache.getProfileValue(CaseProfile.ID_NORMAL_STATE));
+        idView.setText(itemValues.getAsString(ItemValues.CaseProfile.ID_NORMAL_STATE));
         CaseListAdapter.Gender gender;
-        if (CaseFieldValueCache.getProfileValue(CaseProfile.SEX) != null) {
-            gender = CaseListAdapter.Gender.valueOf(CaseFieldValueCache.getProfileValue(CaseProfile.SEX).toUpperCase());
+        if (itemValues.getAsString("Sex") != null) {
+            gender = CaseListAdapter.Gender.valueOf(itemValues.getAsString("Sex").toUpperCase());
         } else {
             gender = CaseListAdapter.Gender.UNKNOWN;
         }
@@ -54,18 +53,13 @@ public class MiniFormProfileViewHolder extends BaseViewHolder<CaseField> {
         genderBadge.setImageDrawable(drawable);
         genderName.setText(gender.getName());
         genderName.setTextColor(ContextCompat.getColor(context, gender.getColorId()));
-        age.setText(CaseFieldValueCache.getProfileValue(CaseProfile.AGE));
-        registrationDate.setText(CaseFieldValueCache.getProfileValue(CaseProfile.REGISTRATION_DATE));
+        age.setText(itemValues.getAsString("age"));
+        registrationDate.setText(itemValues.getAsString(ItemValues.CaseProfile.REGISTRATION_DATE));
     }
 
     @Override
     public void setOnClickListener(final CaseField field) {
 
-    }
-
-    @Override
-    protected String getResult() {
-        return null;
     }
 
     @Override
