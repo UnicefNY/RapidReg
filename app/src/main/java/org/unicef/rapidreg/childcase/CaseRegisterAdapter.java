@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 
 import org.unicef.rapidreg.childcase.media.CasePhotoAdapter;
 import org.unicef.rapidreg.forms.childcase.CaseField;
+import org.unicef.rapidreg.service.cache.ItemValues;
 import org.unicef.rapidreg.widgets.viewholder.AudioUploadViewHolder;
 import org.unicef.rapidreg.widgets.viewholder.BaseViewHolder;
 import org.unicef.rapidreg.widgets.viewholder.GenericViewHolder;
@@ -48,9 +49,12 @@ public class CaseRegisterAdapter extends RecyclerView.Adapter<BaseViewHolder> {
     protected String packageName;
     private CasePhotoAdapter adapter;
 
-    public CaseRegisterAdapter(Context context, List<CaseField> fields, boolean isMiniForm) {
+    private ItemValues itemValues;
+
+    public CaseRegisterAdapter(Context context, List<CaseField> fields, ItemValues itemValues, boolean isMiniForm) {
         this.fields = fields;
         this.activity = (CaseActivity) context;
+        this.itemValues = itemValues;
         this.isMiniForm = isMiniForm;
 
         inflater = LayoutInflater.from(context);
@@ -62,54 +66,58 @@ public class CaseRegisterAdapter extends RecyclerView.Adapter<BaseViewHolder> {
         this.adapter = adapter;
     }
 
+    public void setItemValues(ItemValues itemValues){
+        this.itemValues = itemValues;
+    }
+
     @Override
     public BaseViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         switch (viewType) {
             case VIEW_HOLDER_TEXT:
                 return new TextViewHolder(activity, inflater.inflate(resources
                         .getIdentifier(PREFIX + CaseField.TYPE_TEXT_FIELD,
-                                LAYOUT, packageName), parent, false));
+                                LAYOUT, packageName), parent, false), itemValues);
 
             case VIEW_HOLDER_RADIO_SINGLE_LINE:
                 return new SingleLineRadioViewHolder(activity, inflater.inflate(resources
                         .getIdentifier(PREFIX + CaseField.TYPE_SINGLE_LINE_RADIO,
-                                LAYOUT, packageName), parent, false));
+                                LAYOUT, packageName), parent, false), itemValues);
 
             case VIEW_HOLDER_SELECT_SINGLE_LINE:
             case VIEW_HOLDER_GENERIC:
                 return new GenericViewHolder(activity, inflater.inflate(resources
                         .getIdentifier(PREFIX + CaseField.TYPE_TEXT_FIELD,
-                                LAYOUT, packageName), parent, false));
+                                LAYOUT, packageName), parent, false), itemValues);
 
             case VIEW_HOLDER_TICK_BOX:
                 return new TickBoxViewHolder(activity, inflater.inflate(resources
                                 .getIdentifier(PREFIX + CaseField.TYPE_TICK_BOX, LAYOUT, packageName),
-                        parent, false));
+                        parent, false), itemValues);
 
             case VIEW_HOLDER_PHOTO_UPLOAD_BOX:
                 return new PhotoUploadViewHolder(activity, inflater.inflate(resources
                                 .getIdentifier(PREFIX + CaseField.TYPE_PHOTO_UPLOAD_LAYOUT, LAYOUT, packageName),
-                        parent, false), adapter);
+                        parent, false), itemValues, adapter);
 
             case VIEW_HOLDER_PHOTO_UPLOAD_BOX_MINI_FORM:
                 return new PhotoUploadMiniFormViewHolder(activity, inflater.inflate(resources
                                 .getIdentifier(CaseField.TYPE_PHOTO_VIEW_SLIDER, LAYOUT, packageName),
-                        parent, false));
+                        parent, false),itemValues);
 
             case VIEW_HOLDER_AUDIO_UPLOAD_BOX:
                 return new AudioUploadViewHolder(activity, inflater.inflate(resources
                                 .getIdentifier(PREFIX + CaseField.TYPE_AUDIO_UPLOAD_LAYOUT, LAYOUT, packageName),
-                        parent, false));
+                        parent, false),itemValues);
 
             case VIEW_HOLDER_SUBFORM:
                 return new SubformViewHolder(activity, inflater.inflate(resources
-                                .getIdentifier(PREFIX + CaseField.TYPE_SUBFORM_FIELD, LAYOUT, packageName),
-                        parent, false));
+                                .getIdentifier(PREFIX + CaseField.TYPE_SUBFORM_FIELD, LAYOUT,  packageName),
+                        parent, false),itemValues);
 
             case VIEW_HOLDER_MINI_FORM_PROFILE:
                 return new MiniFormProfileViewHolder(activity, inflater.inflate(resources
                                 .getIdentifier(PREFIX + CaseField.TYPE_MINI_FORM_PROFILE, LAYOUT, packageName),
-                        parent, false));
+                        parent, false),itemValues);
             default:
                 return new SeparatorViewHolder(activity, new View(activity));
         }

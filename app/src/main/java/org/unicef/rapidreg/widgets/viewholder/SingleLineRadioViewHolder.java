@@ -9,14 +9,10 @@ import android.widget.TextView;
 
 import org.unicef.rapidreg.R;
 import org.unicef.rapidreg.forms.childcase.CaseField;
-import org.unicef.rapidreg.service.cache.CaseFieldValueCache;
-import org.unicef.rapidreg.service.cache.SubformCache;
+import org.unicef.rapidreg.service.cache.ItemValues;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -37,8 +33,11 @@ public class SingleLineRadioViewHolder extends BaseViewHolder<CaseField> {
 
     private List<String> options;
 
-    public SingleLineRadioViewHolder(Context context, View itemView) {
-        super(context, itemView);
+    private String result;
+
+
+    public SingleLineRadioViewHolder(Context context, View itemView, ItemValues itemValues) {
+        super(context, itemView, itemValues);
         ButterKnife.bind(this, itemView);
     }
 
@@ -58,13 +57,13 @@ public class SingleLineRadioViewHolder extends BaseViewHolder<CaseField> {
         disableUneditableField(isEditable(field), secondOption);
         setEditableBackgroundStyle(isEditable(field));
 
-        if (isSubformField(field)) {
-            if (!TextUtils.isEmpty(getValue(field))) {
-                setSelectedRadio(getValue(field));
+        if (isSubFormField(field)) {
+            if (!TextUtils.isEmpty(getValueForSubForm(field))) {
+                setSelectedRadio(getValueForSubForm(field));
             }
         } else {
-            if (!TextUtils.isEmpty((CharSequence) CaseFieldValueCache.get(getLabel(field)))) {
-                setSelectedRadio(CaseFieldValueCache.get(getLabel(field)).toString());
+            if (!TextUtils.isEmpty(itemValues.getAsString(getLabel(field)))) {
+                setSelectedRadio(itemValues.getAsString(getLabel(field)));
             }
         }
     }
@@ -75,20 +74,11 @@ public class SingleLineRadioViewHolder extends BaseViewHolder<CaseField> {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
                 String language = Locale.getDefault().getLanguage();
-                if (checkedId == firstOption.getId()) {
-                    if (isSubformField(field)) {
-                        SubformCache.put(field.getParent(), getValues(field, options.get(0)));
-                    } else {
-                        CaseFieldValueCache.put(field.getDisplayName()
-                                .get(language), options.get(0));
-                    }
+                result = (checkedId == firstOption.getId() ? options.get(0) : options.get(1));
+                if (isSubFormField(field)) {
+                    itemValues.addStringItem(field.getDisplayName().get(language), getResult());
                 } else {
-                    if (isSubformField(field)) {
-                        SubformCache.put(field.getParent(), getValues(field, options.get(1)));
-                    } else {
-                        CaseFieldValueCache.put(field.getDisplayName()
-                                .get(language), options.get(1));
-                    }
+                    itemValues.addStringItem(field.getDisplayName().get(language), getResult());
                 }
             }
         });
@@ -96,7 +86,7 @@ public class SingleLineRadioViewHolder extends BaseViewHolder<CaseField> {
 
     @Override
     protected String getResult() {
-        return null;
+        return result;
     }
 
     @Override
@@ -113,24 +103,5 @@ public class SingleLineRadioViewHolder extends BaseViewHolder<CaseField> {
             firstOption.setChecked(false);
             secondOption.setChecked(true);
         }
-    }
-
-    private List<Map<String, String>> getValues(CaseField field, String option) {
-        String language = Locale.getDefault().getLanguage();
-        List<Map<String, String>> values = SubformCache.get(field.getParent()) == null ?
-                new ArrayList<Map<String, String>>() : SubformCache.get(field.getParent());
-
-        Map<String, String> value;
-        try {
-            value = values.get(field.getIndex());
-            value.put(field.getDisplayName().get(language), option);
-            values.set(field.getIndex(), value);
-        } catch (IndexOutOfBoundsException e) {
-            value = new HashMap<>();
-            value.put(field.getDisplayName().get(language), option);
-            values.add(field.getIndex(), value);
-        }
-
-        return values;
     }
 }

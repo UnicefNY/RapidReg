@@ -6,6 +6,7 @@ import android.widget.TextView;
 import android.widget.ViewSwitcher;
 
 import org.unicef.rapidreg.forms.childcase.CaseField;
+import org.unicef.rapidreg.service.cache.ItemValues;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -16,8 +17,8 @@ public class MultipleSelectDialog extends BaseDialog {
     private List<String> result;
     private String[] optionItems;
 
-    public MultipleSelectDialog(Context context, CaseField caseField, TextView resultView, ViewSwitcher viewSwitcher) {
-        super(context, caseField, resultView, viewSwitcher);
+    public MultipleSelectDialog(Context context, CaseField caseField, ItemValues itemValues, TextView resultView, ViewSwitcher viewSwitcher) {
+        super(context, caseField, itemValues, resultView, viewSwitcher);
         result = new ArrayList<>();
     }
 
@@ -56,15 +57,7 @@ public class MultipleSelectDialog extends BaseDialog {
     }
 
     @Override
-    public String getResult() {
-        StringBuilder strResult = new StringBuilder();
-        for (int i = 0; i < result.size(); i++) {
-            if (i < result.size() - 1) {
-                strResult.append(result.get(i) + ",");
-            } else {
-                strResult.append(result.get(i));
-            }
-        }
-        return strResult.toString();
+    public List<String> getResult() {
+        return result;
     }
 }

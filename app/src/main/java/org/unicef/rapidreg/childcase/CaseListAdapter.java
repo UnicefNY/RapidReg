@@ -13,26 +13,21 @@ import android.widget.TextView;
 import android.widget.ViewSwitcher;
 
 import com.bumptech.glide.Glide;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 
 import org.unicef.rapidreg.R;
 import org.unicef.rapidreg.model.Case;
 import org.unicef.rapidreg.model.CasePhoto;
 import org.unicef.rapidreg.service.CasePhotoService;
 import org.unicef.rapidreg.service.CaseService;
-import org.unicef.rapidreg.service.cache.CaseFieldValueCache;
-import org.unicef.rapidreg.service.cache.SubformCache;
+import org.unicef.rapidreg.service.cache.ItemValues;
 import org.unicef.rapidreg.utils.StreamUtil;
 
 import java.io.IOException;
-import java.lang.reflect.Type;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -65,64 +60,45 @@ public class CaseListAdapter extends RecyclerView.Adapter<CaseListAdapter.CaseLi
     @Override
     public void onBindViewHolder(CaseListHolder holder, int position) {
         final Case caseItem = caseList.get(position);
-
         final String caseJson = new String(caseItem.getContent().getBlob());
-        final String subformJson = new String(caseItem.getSubform().getBlob());
-        final Type caseType = new TypeToken<Map<String, String>>() {
-        }.getType();
+        final String subFormJson = new String(caseItem.getSubform().getBlob());
 
-        final Map<String, String> caseInfo = new Gson().fromJson(caseJson, caseType);
-        caseInfo.put(CaseService.CASE_ID, caseItem.getUniqueId());
-
-        final Type subformType = new TypeToken<Map<String, List<Map<String, String>>>>() {
-        }.getType();
-
-        final Map<String, List<Map<String, String>>> subformInfo
-                = new Gson().fromJson(subformJson, subformType);
+        final ItemValues itemValues = CaseService.getInstance().generateItemValues(caseJson, subFormJson);
 
         Gender gender;
-
-        if (caseInfo.get("Sex") != null) {
-            gender = Gender.valueOf(caseInfo.get("Sex").toUpperCase());
-        } else {
+        try {
+            gender = Gender.valueOf(itemValues.getAsString("Sex").toUpperCase());
+        } catch (Exception e) {
             gender = Gender.UNKNOWN;
         }
+
         try {
-            CasePhoto caseAvatorPhoto = CasePhotoService.getInstance().getCaseFirstThumbnail(caseItem.getId());
+            CasePhoto headerPhoto = CasePhotoService.getInstance().getCaseFirstThumbnail(caseItem.getId());
             Glide.with(holder.caseImage.getContext()).
-                    load((caseAvatorPhoto.getThumbnail().getBlob())).into(holder.caseImage);
+                    load((headerPhoto.getThumbnail().getBlob())).into(holder.caseImage);
         } catch (Exception e) {
             holder.caseImage.setImageDrawable(activity.getResources().getDrawable(gender.getAvatarId()));
         }
 
-        final String shortUUID = getShortUUID(caseItem.getUniqueId());
+        final String shortUUID = CaseService.getInstance().getShortUUID(caseItem.getUniqueId());
 
         holder.idNormalState.setText(shortUUID);
         holder.idHiddenState.setText(shortUUID);
         holder.genderBadge.setImageDrawable(getDefaultGenderBadge(gender.getGenderId()));
         holder.genderName.setText(gender.getName());
         holder.genderName.setTextColor(ContextCompat.getColor(activity, gender.getColorId()));
-        String age = caseInfo.get("age");
+        String age = itemValues.getAsString("age");
         holder.age.setText(isValidAge(age) ? age : "");
         holder.registrationDate.setText(dateFormat.format(caseItem.getRegistrationDate()));
 
         holder.view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                CaseService.getInstance().clearCaseCache();
-
-                setProfileForMiniForm(caseItem, caseInfo, shortUUID);
-                CaseFieldValueCache.setValues(caseInfo);
-                SubformCache.setValues(subformInfo);
-
-                CasePhotoService.getInstance().setCaseId(caseItem.getId());
-
                 activity.turnToDetailOrEditPage(CaseFeature.DETAILS, caseItem.getId());
-
                 try {
-                    CaseFieldValueCache.clearAudioFile();
+                    CaseService.clearAudioFile();
                     if (caseItem.getAudio() != null) {
-                        StreamUtil.writeFile(caseItem.getAudio().getBlob(), CaseFieldValueCache.AUDIO_FILE_PATH);
+                        StreamUtil.writeFile(caseItem.getAudio().getBlob(), CaseService.AUDIO_FILE_PATH);
                     }
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -130,16 +106,6 @@ public class CaseListAdapter extends RecyclerView.Adapter<CaseListAdapter.CaseLi
             }
         });
         toggleTextArea(holder);
-    }
-
-    private void setProfileForMiniForm(Case caseItem, Map<String, String> caseInfo, String shortUUID) {
-        CaseFieldValueCache.addProfileItem(CaseFieldValueCache.CaseProfile.ID_NORMAL_STATE, shortUUID);
-        CaseFieldValueCache.addProfileItem(CaseFieldValueCache.CaseProfile.SEX, caseInfo.get("Sex"));
-        CaseFieldValueCache.addProfileItem(CaseFieldValueCache.CaseProfile.REGISTRATION_DATE,
-                dateFormat.format(caseItem.getRegistrationDate()));
-        CaseFieldValueCache.addProfileItem(CaseFieldValueCache.CaseProfile.GENDER_NAME, shortUUID);
-        CaseFieldValueCache.addProfileItem(CaseFieldValueCache.CaseProfile.AGE, caseInfo.get("age"));
-        CaseFieldValueCache.addProfileItem(CaseFieldValueCache.CaseProfile.ID, String.valueOf(caseItem.getId()));
     }
 
     @Override
@@ -162,11 +128,6 @@ public class CaseListAdapter extends RecyclerView.Adapter<CaseListAdapter.CaseLi
 
     private Drawable getDefaultGenderBadge(int genderId) {
         return ResourcesCompat.getDrawable(activity.getResources(), genderId, null);
-    }
-
-    private String getShortUUID(String uuid) {
-        int length = uuid.length();
-        return length > 7 ? uuid.substring(length - 7) : uuid;
     }
 
     private boolean isValidAge(String value) {

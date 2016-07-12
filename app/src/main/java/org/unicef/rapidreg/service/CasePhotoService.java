@@ -32,14 +32,4 @@ public class CasePhotoService {
     public List<CasePhoto> getAllCasesPhotoFlowQueryList(long caseId) {
         return casePhotoDao.getAllCasesPhotoFlowQueryList(caseId);
     }
-
-    private long caseId;
-
-    public void setCaseId(long caseId) {
-        this.caseId = caseId;
-    }
-
-    public long getCaseId() {
-        return caseId;
-    }
 }

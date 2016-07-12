@@ -12,7 +12,7 @@ import android.widget.ViewSwitcher;
 
 import org.unicef.rapidreg.R;
 import org.unicef.rapidreg.forms.childcase.CaseField;
-import org.unicef.rapidreg.service.cache.CaseFieldValueCache;
+import org.unicef.rapidreg.service.cache.ItemValues;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -35,8 +35,8 @@ public class TextViewHolder extends BaseTextViewHolder {
 
     private InputMethodManager inputMethodManager;
 
-    public TextViewHolder(Context context, View itemView) {
-        super(context, itemView);
+    public TextViewHolder(Context context, View itemView, ItemValues itemValues) {
+        super(context, itemView, itemValues);
         ButterKnife.bind(this, itemView);
         inputMethodManager = (InputMethodManager)
                 context.getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -52,10 +52,10 @@ public class TextViewHolder extends BaseTextViewHolder {
 
         labelView.setHint(labelText);
         formQuestion.setHint(labelText);
-        if (isSubformField(field)) {
-            valueView.setText(getValue(field));
+        if (isSubFormField(field)) {
+            valueView.setText(getValueForSubForm(field));
         } else {
-            valueView.setText((String) CaseFieldValueCache.get(field.getName()));
+            valueView.setText(itemValues.getAsString(field.getName()));
         }
         if (TextUtils.isEmpty(valueView.getText())) {
             viewSwitcher.setDisplayedChild(GenericViewHolder.FORM_NO_ANSWER_STATE);

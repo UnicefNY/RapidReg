@@ -8,7 +8,7 @@ import org.unicef.rapidreg.forms.childcase.CaseField;
 public class SeparatorViewHolder extends BaseViewHolder<CaseField> {
 
     public SeparatorViewHolder(Context context, View itemView) {
-        super(context, itemView);
+        super(context, itemView, null);
     }
 
     @Override
@@ -19,11 +19,6 @@ public class SeparatorViewHolder extends BaseViewHolder<CaseField> {
     @Override
     public void setOnClickListener(CaseField field) {
 
-    }
-
-    @Override
-    protected String getResult() {
-        return null;
     }
 
     @Override

@@ -14,6 +14,7 @@ import com.ogaclejapan.smarttablayout.utils.v4.FragmentPagerItem;
 
 import org.unicef.rapidreg.R;
 import org.unicef.rapidreg.childcase.media.CasePhotoAdapter;
+import org.unicef.rapidreg.service.cache.ItemValues;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -28,6 +29,8 @@ public class CaseRegisterFragment extends MvpFragment<CaseRegisterView, CaseRegi
 
     private CasePhotoAdapter casePhotoAdapter;
 
+    private ItemValues itemValues;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater,
@@ -38,6 +41,7 @@ public class CaseRegisterFragment extends MvpFragment<CaseRegisterView, CaseRegi
         if (getArguments() != null) {
             casePhotoAdapter = new CasePhotoAdapter(getContext(),
                     getArguments().getStringArrayList("case_photos"));
+            itemValues =  ItemValues.fromJson(getArguments().getString("item_values"));
         }
         return inflater.inflate(R.layout.fragment_cases_register, container, false);
     }
@@ -65,10 +69,15 @@ public class CaseRegisterFragment extends MvpFragment<CaseRegisterView, CaseRegi
         fieldList.setLayoutManager(layout);
         fieldList.setAdapter(caseRegisterAdapter);
         caseRegisterAdapter.setCasePhotoAdapter(casePhotoAdapter);
+        caseRegisterAdapter.setItemValues(itemValues);
     }
 
     public CaseRegisterAdapter getCaseRegisterAdapter() {
         return caseRegisterAdapter;
+    }
+
+    public ItemValues getItemValues(){
+        return itemValues;
     }
 
     public void clearFocus() {
