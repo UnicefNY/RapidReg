@@ -80,16 +80,6 @@ module Screen
         fillInForm("Age", age)
       end
 
-
-      def verifyFormValue(field, value)
-        element = findByXpath("//android.widget.TextView[@text='#{field}']")
-        puts "'#{element.text}':"
-        sleep 2
-        scrollLittleUp
-        actual_value = findByXpath("//android.widget.EditText[@text='#{value}']").text
-        puts actual_value
-      end
-
       def editForm(field, old_value, new_value)
         if new_value.include?("<Radio>")
           option = new_value.split('>')[1].strip

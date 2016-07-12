@@ -14,4 +14,5 @@ Feature: Main menu
     When I press menu button
     Then I should see current user is "primero"
 
-
+   #TODO
+  Scenario: Switch between tabs
