@@ -2,10 +2,13 @@ package org.unicef.rapidreg.service;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 import com.raizlabs.android.dbflow.data.Blob;
 import com.raizlabs.android.dbflow.sql.language.Condition;
@@ -20,8 +23,7 @@ import org.unicef.rapidreg.db.impl.CasePhotoDaoImpl;
 import org.unicef.rapidreg.forms.childcase.CaseField;
 import org.unicef.rapidreg.model.Case;
 import org.unicef.rapidreg.model.CasePhoto;
-import org.unicef.rapidreg.service.cache.CaseFieldValueCache;
-import org.unicef.rapidreg.service.cache.SubformCache;
+import org.unicef.rapidreg.service.cache.ItemValues;
 import org.unicef.rapidreg.utils.ImageCompressUtil;
 import org.unicef.rapidreg.utils.StreamUtil;
 
@@ -56,6 +58,8 @@ public class CaseService {
     public static final String PREVIOUS_OWNER = "Previous Owner";
     public static final String MODULE = "Module";
 
+    public static final String AUDIO_FILE_PATH = Environment.getExternalStorageDirectory().getAbsolutePath() + "/audiorecordtest.3gp";
+
     private static final CaseService CASE_SERVICE = new CaseService();
 
     private CaseDao caseDao = new CaseDaoImpl();
@@ -72,8 +76,17 @@ public class CaseService {
         this.caseDao = caseDao;
     }
 
+    public static void clearAudioFile() {
+        File file = new File(AUDIO_FILE_PATH);
+        file.delete();
+    }
+
     public List<Case> getCaseList() {
         return caseDao.getAllCasesOrderByDate(false);
+    }
+
+    public Case getCaseById(long caseId) {
+        return caseDao.getCaseById(caseId);
     }
 
     public List<Case> getCaseListOrderByDateASC() {
@@ -137,34 +150,29 @@ public class CaseService {
         return result;
     }
 
-    public void saveOrUpdateCase(Map<String, Object> values,
-                                 Map<String, List<Map<String, String>>> subformValues,
-                                 List<String> photoPaths) {
+    public void saveOrUpdateCase(ItemValues itemValues, List<String> photoPaths) {
 
-        attachSubForms(values, subformValues);
-
-        if (values.get(CASE_ID) == null) {
-            saveCase(values, subformValues, photoPaths);
+        if (itemValues.getAsString(CASE_ID) == null) {
+            saveCase(itemValues, photoPaths);
         } else {
             Log.d(TAG, "update the existing case");
-            updateCase(values, subformValues, photoPaths);
+            updateCase(itemValues, photoPaths);
         }
     }
 
-    public void saveCase(Map<String, Object> values,
-                         Map<String, List<Map<String, String>>> subFormValues,
+    public void saveCase(ItemValues itemValues,
                          List<String> photoPath) {
 
         String username = UserService.getInstance().getCurrentUser().getUsername();
-        values.put(MODULE, "primeromodule-cp");
-        values.put(CASEWORKER_CODE, username);
-        values.put(RECORD_CREATED_BY, username);
-        values.put(PREVIOUS_OWNER, username);
+        itemValues.addStringItem(MODULE, "primeromodule-cp");
+        itemValues.addStringItem(CASEWORKER_CODE, username);
+        itemValues.addStringItem(RECORD_CREATED_BY, username);
+        itemValues.addStringItem(PREVIOUS_OWNER, username);
 
         Gson gson = new Gson();
         Date date = new Date(Calendar.getInstance().getTimeInMillis());
-        Blob caseBlob = new Blob(gson.toJson(values).getBytes());
-        Blob subFormBlob = new Blob(gson.toJson(subFormValues).getBytes());
+        Blob caseBlob = new Blob(gson.toJson(itemValues.getValues()).getBytes());
+        Blob subFormBlob = new Blob(gson.toJson(itemValues.getChildrenAsJsonObject()).getBytes());
         Blob audioFileDefault = null;
         audioFileDefault = getAudioBlob(audioFileDefault);
 
@@ -173,11 +181,11 @@ public class CaseService {
         child.setCreateDate(date);
         child.setLastUpdatedDate(date);
         child.setContent(caseBlob);
-        child.setName(getChildName(values));
-        int age = values.get(AGE) != null ? (int) values.get(AGE) : 0;
+        child.setName(getChildName(itemValues));
+        int age = itemValues.getAsInt(AGE) != null ? itemValues.getAsInt(AGE) : 0;
         child.setAge(age);
-        child.setCaregiver(getCaregiverName(values));
-        child.setRegistrationDate(getRegisterDate(values));
+        child.setCaregiver(getCaregiverName(itemValues));
+        child.setRegistrationDate(getRegisterDate(itemValues));
         child.setAudio(audioFileDefault);
         child.setSubform(subFormBlob);
         child.setCreatedBy(username);
@@ -188,7 +196,7 @@ public class CaseService {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        CaseFieldValueCache.clearAudioFile();
+        clearAudioFile();
     }
 
     public void saveCasePhoto(Case child, List<String> photoPaths) throws IOException {
@@ -197,23 +205,22 @@ public class CaseService {
         }
     }
 
-    public void updateCase(Map<String, Object> values,
-                           Map<String, List<Map<String, String>>> subFormValues,
+    public void updateCase(ItemValues itemValues,
                            List<String> photoBitPaths) {
         Gson gson = new Gson();
-        Blob caseBlob = new Blob(gson.toJson(values).getBytes());
-        Blob subFormBlob = new Blob(gson.toJson(subFormValues).getBytes());
+        Blob caseBlob = new Blob(gson.toJson(itemValues.getValues()).getBytes());
+        Blob subFormBlob = new Blob(gson.toJson(itemValues.getChildrenAsJsonObject()).getBytes());
         Blob audioFileDefault = null;
         audioFileDefault = getAudioBlob(audioFileDefault);
 
-        Case child = caseDao.getCaseByUniqueId((String) values.get(CASE_ID));
+        Case child = caseDao.getCaseByUniqueId(itemValues.getAsString(CASE_ID));
         child.setLastUpdatedDate(new Date(Calendar.getInstance().getTimeInMillis()));
         child.setContent(caseBlob);
-        child.setName(getChildName(values));
-        int age = values.get(AGE) != null ? (int) values.get(AGE) : 0;
+        child.setName(getChildName(itemValues));
+        int age = itemValues.getAsInt(AGE) != null ? itemValues.getAsInt(AGE) : 0;
         child.setAge(age);
-        child.setCaregiver(getCaregiverName(values));
-        child.setRegistrationDate(getRegisterDate(values));
+        child.setCaregiver(getCaregiverName(itemValues));
+        child.setRegistrationDate(getRegisterDate(itemValues));
         child.setAudio(audioFileDefault);
         child.setSubform(subFormBlob);
         child.update();
@@ -222,7 +229,7 @@ public class CaseService {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        CaseFieldValueCache.clearAudioFile();
+        clearAudioFile();
     }
 
     public void updateCasePhoto(Case child, List<String> photoPaths) throws IOException {
@@ -253,6 +260,21 @@ public class CaseService {
                 casePhoto.update();
             }
         }
+    }
+
+    public ItemValues generateItemValues(String parentJson, String childJson) {
+        final JsonObject caseInfo = new Gson().fromJson(parentJson, JsonObject.class);
+        final JsonObject subFormInfo = new Gson().fromJson(childJson, JsonObject.class);
+        ItemValues itemValues = new ItemValues(caseInfo);
+        for (Map.Entry<String, JsonElement> element : subFormInfo.entrySet()) {
+            itemValues.addChildren(element.getKey(), element.getValue().getAsJsonArray());
+        }
+        return itemValues;
+    }
+
+    public String getShortUUID(String uuid) {
+        int length = uuid.length();
+        return length > 7 ? uuid.substring(length - 7) : uuid;
     }
 
     private CasePhoto generateSaveCasePhoto(Case child, List<String> photoPaths, int index) throws IOException {
@@ -304,18 +326,13 @@ public class CaseService {
                 CasePhotoConfig.MAX_WIDTH, CasePhotoConfig.MAX_HEIGHT);
     }
 
-    public void clearCaseCache() {
-        CaseFieldValueCache.clear();
-        SubformCache.clear();
-    }
-
     public String createUniqueId() {
         return UUID.randomUUID().toString();
     }
 
     private Blob getAudioBlob(Blob blob) {
         try {
-            blob = new Blob(StreamUtil.readFile(CaseFieldValueCache.AUDIO_FILE_PATH));
+            blob = new Blob(StreamUtil.readFile(AUDIO_FILE_PATH));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -326,11 +343,11 @@ public class CaseService {
         return new Date(Calendar.getInstance().getTimeInMillis());
     }
 
-    private Date getRegisterDate(Map<String, Object> values) {
-        if (values.containsKey(REGISTRATION_DATE)) {
+    private Date getRegisterDate(ItemValues itemValues) {
+        if (itemValues.has(REGISTRATION_DATE)) {
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM/dd/yyyy");
             try {
-                java.util.Date date = simpleDateFormat.parse((String) values.get(REGISTRATION_DATE));
+                java.util.Date date = simpleDateFormat.parse(itemValues.getAsString(REGISTRATION_DATE));
                 return new Date(date.getTime());
             } catch (ParseException e) {
                 Log.e(TAG, "date format error");
@@ -339,27 +356,20 @@ public class CaseService {
         return getCurrentDate();
     }
 
-    private String getChildName(Map<String, Object> values) {
-        return values.get(FULL_NAME) + " "
-                + values.get(FIRST_NAME) + " "
-                + values.get(MIDDLE_NAME) + " "
-                + values.get(SURNAME) + " "
-                + values.get(NICKNAME) + " "
-                + values.get(OTHER_NAME);
+    private String getChildName(ItemValues values) {
+        return values.getAsString(FULL_NAME) + " "
+                + values.getAsString(FIRST_NAME) + " "
+                + values.getAsString(MIDDLE_NAME) + " "
+                + values.getAsString(SURNAME) + " "
+                + values.getAsString(NICKNAME) + " "
+                + values.getAsString(OTHER_NAME);
     }
 
-    private String getCaregiverName(Map<String, Object> values) {
-        return "" + values.get(CAREGIVER_NAME);
+    private String getCaregiverName(ItemValues itemValues) {
+        return "" + itemValues.getAsString(CAREGIVER_NAME);
     }
 
     private String getWrappedCondition(String queryStr) {
         return "%" + queryStr + "%";
-    }
-
-    private void attachSubForms(Map<String, Object> values, Map<String, List<Map<String, String>>> subFormValues) {
-        Gson gson = new Gson();
-        for (String key : subFormValues.keySet()) {
-            values.put(key, gson.toJson(subFormValues.get(key)));
-        }
     }
 }

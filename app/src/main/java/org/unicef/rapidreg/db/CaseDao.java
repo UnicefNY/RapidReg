@@ -14,4 +14,6 @@ public interface CaseDao {
     List<Case> getAllCasesOrderByAge(boolean isASC);
 
     List<Case> getCaseListByConditionGroup(ConditionGroup conditionGroup);
+
+    Case getCaseById(long caseId);
 }
