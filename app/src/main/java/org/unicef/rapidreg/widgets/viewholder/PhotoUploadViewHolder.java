@@ -18,6 +18,7 @@ import org.unicef.rapidreg.childcase.config.CasePhotoConfig;
 import org.unicef.rapidreg.childcase.media.CasePhotoAdapter;
 import org.unicef.rapidreg.childcase.media.CasePhotoViewActivity;
 import org.unicef.rapidreg.forms.childcase.CaseField;
+import org.unicef.rapidreg.service.cache.ItemValues;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -44,8 +45,8 @@ public class PhotoUploadViewHolder extends BaseViewHolder<CaseField> {
 
     private CasePhotoAdapter adapter;
 
-    public PhotoUploadViewHolder(Context context, View itemView, CasePhotoAdapter adapter) {
-        super(context, itemView);
+    public PhotoUploadViewHolder(Context context, View itemView, ItemValues itemValues, CasePhotoAdapter adapter) {
+        super(context, itemView, itemValues);
         ButterKnife.bind(this, itemView);
         this.context = context;
         this.adapter = adapter;
@@ -69,6 +70,7 @@ public class PhotoUploadViewHolder extends BaseViewHolder<CaseField> {
             addImageButton.setVisibility(View.GONE);
             if (adapter.isEmpty()) {
                 noPhotoPromoteView.setVisibility(View.VISIBLE);
+                photoGrid.setVisibility(View.GONE);
             }
             return;
         }
@@ -98,7 +100,7 @@ public class PhotoUploadViewHolder extends BaseViewHolder<CaseField> {
     }
 
     @Override
-    protected String getResult() {
+    protected Boolean getResult() {
         return null;
     }
 

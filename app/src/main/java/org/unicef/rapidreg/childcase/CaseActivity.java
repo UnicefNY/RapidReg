@@ -18,7 +18,6 @@ import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.raizlabs.android.dbflow.data.Blob;
@@ -33,20 +32,15 @@ import org.unicef.rapidreg.event.NeedLoadFormsEvent;
 import org.unicef.rapidreg.event.SaveCaseEvent;
 import org.unicef.rapidreg.event.UpdateImageEvent;
 import org.unicef.rapidreg.forms.childcase.CaseFormRoot;
-import org.unicef.rapidreg.forms.childcase.CaseSection;
 import org.unicef.rapidreg.model.CaseForm;
 import org.unicef.rapidreg.network.AuthService;
 import org.unicef.rapidreg.service.CaseFormService;
 import org.unicef.rapidreg.service.CaseService;
-import org.unicef.rapidreg.service.cache.CaseFieldValueCache;
 import org.unicef.rapidreg.utils.ImageCompressUtil;
 import org.unicef.rapidreg.widgets.viewholder.PhotoUploadViewHolder;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 import java.util.Locale;
 
 import rx.Observable;
@@ -146,7 +140,7 @@ public class CaseActivity extends BaseActivity {
         } else if (currentFeature.isInEditMode()) {
             showQuitDialog(R.id.nav_cases);
         } else {
-            CaseFieldValueCache.clearAudioFile();
+            CaseService.clearAudioFile();
             turnToFeature(CaseFeature.LIST, null);
         }
     }
@@ -156,7 +150,7 @@ public class CaseActivity extends BaseActivity {
         if (currentFeature.isInEditMode()) {
             showQuitDialog(R.id.nav_cases);
         } else {
-            CaseFieldValueCache.clearAudioFile();
+            CaseService.clearAudioFile();
             turnToFeature(CaseFeature.LIST, null);
         }
     }
@@ -166,7 +160,7 @@ public class CaseActivity extends BaseActivity {
         if (currentFeature.isInEditMode()) {
             showQuitDialog(R.id.nav_sync);
         } else {
-            CaseFieldValueCache.clearAudioFile();
+            CaseService.clearAudioFile();
             intentSender.showSyncActivity(this);
         }
     }
@@ -212,7 +206,7 @@ public class CaseActivity extends BaseActivity {
                 .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        CaseFieldValueCache.clearAudioFile();
+                        CaseService.clearAudioFile();
                         switch (clickedButton) {
                             case R.id.nav_cases:
                                 turnToFeature(CaseFeature.LIST, null);
@@ -287,33 +281,12 @@ public class CaseActivity extends BaseActivity {
 
     private boolean saveCase() {
         clearFocusToMakeLastFieldSaved();
-
-        if (validateRequiredField()) {
-            SaveCaseEvent event = new SaveCaseEvent();
-            EventBus.getDefault().postSticky(event);
-            turnToFeature(CaseFeature.LIST, null);
-        }
+        SaveCaseEvent event = new SaveCaseEvent();
+        EventBus.getDefault().postSticky(event);
+        turnToFeature(CaseFeature.LIST, null);
         return true;
     }
 
-    private boolean validateRequiredField() {
-        CaseFormRoot caseForm = CaseFormService.getInstance().getCurrentForm();
-        List<String> requiredFieldNames = new ArrayList<>();
-
-        for (CaseSection section : caseForm.getSections()) {
-            Collections.addAll(requiredFieldNames, CaseService.getInstance()
-                    .fetchRequiredFiledNames(section.getFields()).toArray(new String[0]));
-        }
-
-        for (String field : requiredFieldNames) {
-            if (TextUtils.isEmpty((CharSequence) CaseFieldValueCache.getValues().get(field))) {
-                Toast.makeText(CaseActivity.this, R.string.required_field_is_not_filled,
-                        Toast.LENGTH_LONG).show();
-                return false;
-            }
-        }
-        return true;
-    }
 
     private void hideAllToolbarIcons() {
         caseToggleMenu.setVisible(false);

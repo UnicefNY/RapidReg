@@ -11,7 +11,7 @@ import android.widget.ViewSwitcher;
 import org.unicef.rapidreg.R;
 import org.unicef.rapidreg.exception.DialogException;
 import org.unicef.rapidreg.forms.childcase.CaseField;
-import org.unicef.rapidreg.service.cache.CaseFieldValueCache;
+import org.unicef.rapidreg.service.cache.ItemValues;
 import org.unicef.rapidreg.widgets.dialog.BaseDialog;
 import org.unicef.rapidreg.widgets.dialog.FiledDialogFactory;
 
@@ -36,8 +36,8 @@ public class GenericViewHolder extends BaseTextViewHolder {
     @BindView(R.id.form_question)
     TextView formQuestion;
 
-    public GenericViewHolder(Context context, View itemView) {
-        super(context, itemView);
+    public GenericViewHolder(Context context, View itemView, ItemValues itemValues) {
+        super(context, itemView, itemValues);
         ButterKnife.bind(this, itemView);
     }
 
@@ -54,10 +54,10 @@ public class GenericViewHolder extends BaseTextViewHolder {
         disableUneditableField(isEditable(field), null);
         setEditableBackgroundStyle(isEditable(field));
 
-        if (isSubformField(field)) {
-            valueView.setText(getValue(field));
+        if (isSubFormField(field)) {
+            valueView.setText(getValueForSubForm(field));
         } else {
-            valueView.setText((String) CaseFieldValueCache.get(field.getName()));
+            valueView.setText(itemValues.getAsString(field.getName()));
         }
 
         if (TextUtils.isEmpty(valueView.getText())) {
@@ -123,6 +123,7 @@ public class GenericViewHolder extends BaseTextViewHolder {
                     CaseField.FieldType.valueOf(fieldType.toUpperCase()),
                     context,
                     field,
+                    itemValues,
                     valueView,
                     viewSwitcher);
             dialog.show();

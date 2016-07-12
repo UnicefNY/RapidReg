@@ -10,10 +10,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import org.unicef.rapidreg.R;
-import org.unicef.rapidreg.service.cache.CaseFieldValueCache;
+import org.unicef.rapidreg.service.CaseService;
 
 import java.io.IOException;
 
@@ -29,7 +28,7 @@ public class AudioRecorderActivity extends AppCompatActivity {
     public static final int START_PLAYING = 1;
     public static final int RECODER_MIN_DURATION_MS = 4000;
 
-    private static String mFileName = CaseFieldValueCache.AUDIO_FILE_PATH;
+    private static String mFileName = CaseService.AUDIO_FILE_PATH;
 
     @BindView(R.id.stop_button)
     ImageView stopButton;

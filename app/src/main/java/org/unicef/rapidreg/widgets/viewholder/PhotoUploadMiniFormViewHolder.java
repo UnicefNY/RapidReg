@@ -14,6 +14,7 @@ import org.unicef.rapidreg.R;
 import org.unicef.rapidreg.forms.childcase.CaseField;
 import org.unicef.rapidreg.model.CasePhoto;
 import org.unicef.rapidreg.service.CasePhotoService;
+import org.unicef.rapidreg.service.cache.ItemValues;
 
 import java.util.List;
 
@@ -32,8 +33,8 @@ public class PhotoUploadMiniFormViewHolder extends BaseViewHolder<CaseField> {
 
     private Context context;
 
-    public PhotoUploadMiniFormViewHolder(Context context, View itemView) {
-        super(context, itemView);
+    public PhotoUploadMiniFormViewHolder(Context context, View itemView, ItemValues itemValues) {
+        super(context, itemView, itemValues);
         ButterKnife.bind(this, itemView);
         this.context = context;
     }
@@ -50,7 +51,7 @@ public class PhotoUploadMiniFormViewHolder extends BaseViewHolder<CaseField> {
     }
 
     @Override
-    protected String getResult() {
+    protected Boolean getResult() {
         return null;
     }
 
@@ -62,7 +63,8 @@ public class PhotoUploadMiniFormViewHolder extends BaseViewHolder<CaseField> {
         private List<CasePhoto> flowQueryList;
 
         public CasePhotoViewPagerAdapter() {
-            flowQueryList = CasePhotoService.getInstance().getAllCasesPhotoFlowQueryList(CasePhotoService.getInstance().getCaseId());
+            flowQueryList = CasePhotoService.getInstance().getAllCasesPhotoFlowQueryList(
+                    itemValues.getAsInt(ItemValues.CaseProfile.ID));
         }
 
         @Override
