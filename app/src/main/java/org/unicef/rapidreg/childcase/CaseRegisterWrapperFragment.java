@@ -232,7 +232,6 @@ public class CaseRegisterWrapperFragment extends Fragment {
                     if (fullFormAdapter != null) {
                         fullFormAdapter.setItemValues(itemValues);
                         fullFormAdapter.setCasePhotoAdapter(casePhotoAdapter);
-                        fullFormAdapter.notifyDataSetChanged();
                     }
                 }
             });
@@ -267,7 +266,6 @@ public class CaseRegisterWrapperFragment extends Fragment {
                 fullFormAdapter = currentPage.getCaseRegisterAdapter();
                 fullFormAdapter.setItemValues(itemValues);
                 fullFormAdapter.setCasePhotoAdapter(casePhotoAdapter);
-                fullFormAdapter.notifyDataSetChanged();
             }
 
             @Override
