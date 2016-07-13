@@ -3,7 +3,6 @@ package org.unicef.rapidreg.widgets.viewholder;
 import android.content.Context;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -51,6 +50,8 @@ public class SubFormViewHolder extends BaseViewHolder<CaseField> {
 
         attachParentToFields(fields, fieldParent);
         addSubFormBtn.setText(String.format("%s %s", context.getString(R.string.add), fieldParent));
+        addSubFormBtn.setVisibility(activity.getCurrentFeature().isInEditMode() ?
+                View.VISIBLE : View.GONE);
         restoreSubForms();
     }
 
@@ -89,8 +90,6 @@ public class SubFormViewHolder extends BaseViewHolder<CaseField> {
             }
         });
         deleteBtn.setVisibility(activity.getCurrentFeature().isInEditMode() ?
-                View.VISIBLE : View.GONE);
-        addSubFormBtn.setVisibility(activity.getCurrentFeature().isInEditMode() ?
                 View.VISIBLE : View.GONE);
     }
 
