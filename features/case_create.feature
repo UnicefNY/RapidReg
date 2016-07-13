@@ -18,7 +18,7 @@ Feature: Create new case
     Then I should see a case with sex "BOY" and age "10"
     When I click the case
     Then I should see following:
-      | Full Name | Tom Justin Clinton |
+      | Full Name             | Tom Justin Clinton |
       | Sex                   | <Radio> Male       |
       | Age                   | 10                 |
       | Is the age estimated? | <Checkbox> Yes     |
