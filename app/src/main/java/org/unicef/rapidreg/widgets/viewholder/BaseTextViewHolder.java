@@ -5,15 +5,15 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.TextView;
 
-import org.unicef.rapidreg.forms.childcase.CaseField;
+import org.unicef.rapidreg.forms.Field;
 import org.unicef.rapidreg.service.cache.ItemValues;
 
-public abstract class BaseTextViewHolder extends BaseViewHolder<CaseField> {
+public abstract class BaseTextViewHolder extends BaseViewHolder<Field> {
     public BaseTextViewHolder(Context context, View itemView, ItemValues itemValues) {
         super(context, itemView, itemValues);
     }
 
-    protected void saveValues(final CaseField field) {
+    protected void saveValues(final Field field) {
         if (TextUtils.isEmpty(getValueView().getText())) {
             return;
         }

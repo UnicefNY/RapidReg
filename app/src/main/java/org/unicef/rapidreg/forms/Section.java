@@ -1,4 +1,4 @@
-package org.unicef.rapidreg.forms.childcase;
+package org.unicef.rapidreg.forms;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class CaseSection {
+public class Section {
     @SerializedName("name")
     @Expose
     private Map<String, String> name;
@@ -22,7 +22,7 @@ public class CaseSection {
     private String baseLanguage;
     @SerializedName("fields")
     @Expose
-    private List<CaseField> fields = new ArrayList<>();
+    private List<Field> fields = new ArrayList<>();
 
     public Map<String, String> getName() {
         return name;
@@ -56,11 +56,11 @@ public class CaseSection {
         this.baseLanguage = baseLanguage;
     }
 
-    public List<CaseField> getFields() {
+    public List<Field> getFields() {
         return fields;
     }
 
-    public void setFields(List<CaseField> fields) {
+    public void setFields(List<Field> fields) {
         this.fields = fields;
     }
 
@@ -71,7 +71,7 @@ public class CaseSection {
         sb.append("order: ").append(order).append("\n");
         sb.append("helpText: ").append(helpText).append("\n");
         sb.append("baseLanguage: ").append(baseLanguage).append("\n");
-        for (CaseField field : fields) {
+        for (Field field : fields) {
             sb.append(field);
         }
 

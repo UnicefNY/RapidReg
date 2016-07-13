@@ -1,7 +1,7 @@
 package org.unicef.rapidreg.network;
 
 
-import org.unicef.rapidreg.forms.childcase.CaseFormRoot;
+import org.unicef.rapidreg.forms.CaseFormRoot;
 import org.unicef.rapidreg.model.LoginRequestBody;
 import org.unicef.rapidreg.model.LoginResponse;
 

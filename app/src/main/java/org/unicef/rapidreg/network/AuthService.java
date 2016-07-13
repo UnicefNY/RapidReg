@@ -3,10 +3,10 @@ package org.unicef.rapidreg.network;
 
 import android.content.Context;
 
-import org.unicef.rapidreg.forms.childcase.CaseFormRoot;
+import org.unicef.rapidreg.PrimeroConfiguration;
+import org.unicef.rapidreg.forms.CaseFormRoot;
 import org.unicef.rapidreg.model.LoginRequestBody;
 import org.unicef.rapidreg.model.LoginResponse;
-import org.unicef.rapidreg.PrimeroConfiguration;
 
 import retrofit2.Response;
 import rx.Observable;
@@ -22,6 +22,7 @@ public class AuthService extends BaseRetrofitService {
     }
 
     private static AuthService self = null;
+
     public static AuthService getInstance() {
         if (self == null) {
             self = new AuthService();

@@ -2,7 +2,7 @@ package org.unicef.rapidreg.childcase.config;
 
 import android.os.Environment;
 
-public class CasePhotoConfig {
+public class PhotoConfig {
     public static final float MAX_WIDTH = 1080;
     public static final float MAX_HEIGHT = 1920;
     public static final int MAX_SIZE_KB = 1000;
