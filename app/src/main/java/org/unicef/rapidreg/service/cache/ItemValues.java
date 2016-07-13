@@ -45,6 +45,7 @@ public class ItemValues {
         values.add(itemKey, array);
     }
 
+
     public Boolean getAsBoolean(String key) {
         if (values.get(key) == null) {
             return Boolean.valueOf(null);
@@ -82,6 +83,23 @@ public class ItemValues {
             return values.get(childName).getAsJsonArray();
         }
         return null;
+    }
+
+    public void addChild(String childName, JsonObject child) {
+        JsonArray children = getChildrenAsJsonArray(childName);
+        if (children == null) {
+            children = new JsonArray();
+            addChildren(childName, children);
+        }
+        children.add(child);
+    }
+
+    public int getChildrenSize(String childName) {
+        try {
+            return getChildrenAsJsonArray(childName).size();
+        } catch (Exception e) {
+            return 0;
+        }
     }
 
     public ItemValues getChildAsItemValues(String childName, int index) {

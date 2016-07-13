@@ -1,6 +1,8 @@
 package org.unicef.rapidreg.login;
 
+import android.app.Application;
 import android.os.Build;
+import android.os.Environment;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -23,7 +25,7 @@ public class LoginPresenterTest {
 
     @Before
     public void setUp() throws Exception {
-        loginPresenter = new LoginPresenter();
+        loginPresenter = new LoginPresenter(RuntimeEnvironment.application);
         loginView = mock(LoginView.class);
         loginPresenter.attachView(loginView);
     }
