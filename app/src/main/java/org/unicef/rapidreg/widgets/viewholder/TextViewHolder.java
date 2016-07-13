@@ -11,7 +11,7 @@ import android.widget.TextView;
 import android.widget.ViewSwitcher;
 
 import org.unicef.rapidreg.R;
-import org.unicef.rapidreg.forms.childcase.CaseField;
+import org.unicef.rapidreg.forms.Field;
 import org.unicef.rapidreg.service.cache.ItemValues;
 
 import butterknife.BindView;
@@ -43,7 +43,7 @@ public class TextViewHolder extends BaseTextViewHolder {
     }
 
     @Override
-    public void setValue(CaseField field) {
+    public void setValue(Field field) {
         String labelText = getLabel(field);
 
         if (isRequired(field)) {
@@ -74,7 +74,7 @@ public class TextViewHolder extends BaseTextViewHolder {
     }
 
     @Override
-    public void setOnClickListener(final CaseField field) {
+    public void setOnClickListener(final Field field) {
         itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
