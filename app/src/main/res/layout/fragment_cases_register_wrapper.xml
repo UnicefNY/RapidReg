@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:app="http://schemas.android.com/apk/res-auto"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
     <RelativeLayout
         android:id="@+id/full_form_layout"
@@ -39,7 +39,7 @@
             app:stl_overlineThickness="0dp"
             app:stl_titleOffset="24dp"
             app:stl_underlineColor="#4D000000"
-            app:stl_underlineThickness="1dp"/>
+            app:stl_underlineThickness="1dp" />
 
         <TextView
             android:layout_width="match_parent"
@@ -50,9 +50,9 @@
             android:paddingTop="@dimen/pull_back_text_padding"
             android:text="@string/pull_down_load_mini_form"
             android:textColor="@color/gray"
-            android:textSize="@dimen/text_size_14"/>
+            android:textSize="@dimen/text_size_14" />
 
-        <org.unicef.rapidreg.base.view.SwipeChangeLayout
+        <org.unicef.rapidreg.base.SwipeChangeLayout
             android:id="@+id/full_form_swipe_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -62,9 +62,9 @@
                 android:id="@+id/viewpager"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@color/white"/>
+                android:background="@color/white" />
 
-        </org.unicef.rapidreg.base.view.SwipeChangeLayout>
+        </org.unicef.rapidreg.base.SwipeChangeLayout>
 
     </RelativeLayout>
 
@@ -81,9 +81,9 @@
             android:paddingBottom="@dimen/pull_back_text_padding"
             android:text="@string/pull_up_load_full_form"
             android:textColor="@color/gray"
-            android:textSize="@dimen/text_size_16"/>
+            android:textSize="@dimen/text_size_16" />
 
-        <org.unicef.rapidreg.base.view.SwipeChangeLayout
+        <org.unicef.rapidreg.base.SwipeChangeLayout
             android:id="@+id/mini_form_swipe_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
@@ -92,8 +92,8 @@
                 android:id="@+id/mini_form_container"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@color/white"/>
-        </org.unicef.rapidreg.base.view.SwipeChangeLayout>
+                android:background="@color/white" />
+        </org.unicef.rapidreg.base.SwipeChangeLayout>
     </RelativeLayout>
 
     <com.getbase.floatingactionbutton.FloatingActionButton
@@ -105,6 +105,6 @@
         android:scrollY="3dp"
         android:src="@drawable/edit_white"
         app:fab_colorNormal="@color/ftn_blue"
-        app:fab_colorPressed="@color/ftn_blue"/>
+        app:fab_colorPressed="@color/ftn_blue" />
 
 </RelativeLayout>
