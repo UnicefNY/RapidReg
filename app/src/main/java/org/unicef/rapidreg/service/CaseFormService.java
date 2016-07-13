@@ -39,7 +39,7 @@ public class CaseFormService {
         return caseForm;
     }
 
-    public void saveOrUpdateCaseForm(CaseForm caseForm) {
+    public void saveOrUpdateForm(CaseForm caseForm) {
         CaseForm existingCaseForm = caseFormDao.getCaseForm();
 
         if (existingCaseForm == null) {
