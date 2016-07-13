@@ -17,7 +17,7 @@ import org.unicef.rapidreg.childcase.CaseActivity;
 import org.unicef.rapidreg.childcase.config.CasePhotoConfig;
 import org.unicef.rapidreg.childcase.media.CasePhotoAdapter;
 import org.unicef.rapidreg.childcase.media.CasePhotoViewActivity;
-import org.unicef.rapidreg.forms.childcase.CaseField;
+import org.unicef.rapidreg.forms.Field;
 import org.unicef.rapidreg.service.cache.ItemValues;
 
 import java.io.File;
@@ -27,7 +27,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class PhotoUploadViewHolder extends BaseViewHolder<CaseField> {
+public class PhotoUploadViewHolder extends BaseViewHolder<Field> {
     public static final String TAG = PhotoUploadViewHolder.class.getSimpleName();
     public static final int REQUEST_CODE_GALLERY = 1;
     public static final int REQUEST_CODE_CAMERA = 2;
@@ -56,7 +56,7 @@ public class PhotoUploadViewHolder extends BaseViewHolder<CaseField> {
     }
 
     @Override
-    public void setValue(CaseField field) {
+    public void setValue(Field field) {
         setAddPhotoButtonIcon();
     }
 
@@ -87,7 +87,7 @@ public class PhotoUploadViewHolder extends BaseViewHolder<CaseField> {
     }
 
     @Override
-    public void setOnClickListener(CaseField field) {
+    public void setOnClickListener(Field field) {
         setViewPhotoListener();
 
         photoGrid.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {

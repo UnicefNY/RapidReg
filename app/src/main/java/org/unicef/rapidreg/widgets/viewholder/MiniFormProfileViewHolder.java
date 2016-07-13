@@ -10,13 +10,13 @@ import android.widget.TextView;
 
 import org.unicef.rapidreg.R;
 import org.unicef.rapidreg.childcase.CaseListAdapter;
-import org.unicef.rapidreg.forms.childcase.CaseField;
+import org.unicef.rapidreg.forms.Field;
 import org.unicef.rapidreg.service.cache.ItemValues;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class MiniFormProfileViewHolder extends BaseViewHolder<CaseField> {
+public class MiniFormProfileViewHolder extends BaseViewHolder<Field> {
 
     public static final String TAG = MiniFormProfileViewHolder.class.getSimpleName();
 
@@ -41,7 +41,7 @@ public class MiniFormProfileViewHolder extends BaseViewHolder<CaseField> {
     }
 
     @Override
-    public void setValue(CaseField field) {
+    public void setValue(Field field) {
         idView.setText(itemValues.getAsString(ItemValues.CaseProfile.ID_NORMAL_STATE));
         CaseListAdapter.Gender gender;
         if (itemValues.getAsString("sex") != null) {
@@ -58,7 +58,7 @@ public class MiniFormProfileViewHolder extends BaseViewHolder<CaseField> {
     }
 
     @Override
-    public void setOnClickListener(final CaseField field) {
+    public void setOnClickListener(final Field field) {
 
     }
 

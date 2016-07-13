@@ -20,7 +20,7 @@ import org.unicef.rapidreg.db.CaseDao;
 import org.unicef.rapidreg.db.CasePhotoDao;
 import org.unicef.rapidreg.db.impl.CaseDaoImpl;
 import org.unicef.rapidreg.db.impl.CasePhotoDaoImpl;
-import org.unicef.rapidreg.forms.childcase.CaseField;
+import org.unicef.rapidreg.forms.Field;
 import org.unicef.rapidreg.model.Case;
 import org.unicef.rapidreg.model.CasePhoto;
 import org.unicef.rapidreg.service.cache.ItemValues;
@@ -140,9 +140,9 @@ public class CaseService {
         return caseDao.getCaseListByConditionGroup(conditionGroup);
     }
 
-    public List<String> fetchRequiredFiledNames(List<CaseField> caseFields) {
+    public List<String> fetchRequiredFiledNames(List<Field> fields) {
         List<String> result = new ArrayList<>();
-        for (CaseField field : caseFields) {
+        for (Field field : fields) {
             if (field.isRequired()) {
                 result.add(field.getDisplayName().get(Locale.getDefault().getLanguage()));
             }

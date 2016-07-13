@@ -9,9 +9,9 @@ import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
 import org.unicef.rapidreg.db.CaseFormDao;
 import org.unicef.rapidreg.db.impl.CaseFormDaoImpl;
-import org.unicef.rapidreg.forms.childcase.CaseField;
-import org.unicef.rapidreg.forms.childcase.CaseFormRoot;
-import org.unicef.rapidreg.forms.childcase.CaseSection;
+import org.unicef.rapidreg.forms.CaseFormRoot;
+import org.unicef.rapidreg.forms.Field;
+import org.unicef.rapidreg.forms.Section;
 
 import java.io.IOException;
 
@@ -77,19 +77,19 @@ public class CaseFormServiceTest {
 
         assertThat(form.getSections().size(), is(1));
 
-        CaseSection caseSection = form.getSections().get(0);
-        assertThat(caseSection.getName().get("en"), is("Basic Identity"));
-        assertThat(caseSection.getOrder(), is(10));
-        assertThat(caseSection.getHelpText().get("en"), is(""));
-        assertThat(caseSection.getBaseLanguage(), is("en"));
+        Section section = form.getSections().get(0);
+        assertThat(section.getName().get("en"), is("Basic Identity"));
+        assertThat(section.getOrder(), is(10));
+        assertThat(section.getHelpText().get("en"), is(""));
+        assertThat(section.getBaseLanguage(), is("en"));
 
-        CaseField caseField = caseSection.getFields().get(0);
-        assertThat(caseField.getName(), is("case_id"));
-        assertThat(caseField.getDisplayName().get("en"), is("Long ID"));
-        assertThat(caseField.getHelpText().get("en"), is(""));
-        assertThat(caseField.getType(), is("text_field"));
-        assertThat(caseField.getOptionStringsText().get("en").size(), is(0));
-        assertThat(caseField.getSubForm(), is(nullValue()));
+        Field field = section.getFields().get(0);
+        assertThat(field.getName(), is("case_id"));
+        assertThat(field.getDisplayName().get("en"), is("Long ID"));
+        assertThat(field.getHelpText().get("en"), is(""));
+        assertThat(field.getType(), is("text_field"));
+        assertThat(field.getOptionStringsText().get("en").size(), is(0));
+        assertThat(field.getSubForm(), is(nullValue()));
     }
 
 }

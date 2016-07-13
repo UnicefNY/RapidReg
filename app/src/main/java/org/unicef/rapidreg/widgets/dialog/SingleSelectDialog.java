@@ -5,7 +5,7 @@ import android.content.DialogInterface;
 import android.widget.TextView;
 import android.widget.ViewSwitcher;
 
-import org.unicef.rapidreg.forms.childcase.CaseField;
+import org.unicef.rapidreg.forms.Field;
 import org.unicef.rapidreg.service.cache.ItemValues;
 
 import java.util.Arrays;
@@ -15,16 +15,16 @@ public class SingleSelectDialog extends BaseDialog {
     private String result;
     private String[] optionItems;
 
-    public SingleSelectDialog(Context context, CaseField caseField,
+    public SingleSelectDialog(Context context, Field field,
                               ItemValues itemValues, TextView resultView, ViewSwitcher viewSwitcher) {
-        super(context, caseField, itemValues, resultView, viewSwitcher);
+        super(context, field, itemValues, resultView, viewSwitcher);
         result = resultView.getText().toString().trim();
     }
 
     @Override
     public void initView() {
-        String fieldType = caseField.getType();
-        optionItems = getSelectOptions(fieldType, caseField);
+        String fieldType = field.getType();
+        optionItems = getSelectOptions(fieldType, field);
 
         int selectIndex = Arrays.asList(optionItems).indexOf(result);
         selectIndex = selectIndex == -1 ? 0 : selectIndex;

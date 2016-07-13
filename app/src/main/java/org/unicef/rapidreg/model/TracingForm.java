@@ -6,11 +6,11 @@ import com.raizlabs.android.dbflow.data.Blob;
 import org.unicef.rapidreg.db.PrimeroDB;
 
 @Table(database = PrimeroDB.class)
-public class CaseForm extends BaseForm {
-    public CaseForm() {
+public class TracingForm extends BaseForm {
+    public TracingForm() {
     }
 
-    public CaseForm(Blob form) {
+    public TracingForm(Blob form) {
         super(form);
     }
 }
