@@ -67,7 +67,7 @@ public class CaseListAdapter extends RecyclerView.Adapter<CaseListAdapter.CaseLi
 
         Gender gender;
         try {
-            gender = Gender.valueOf(itemValues.getAsString("Sex").toUpperCase());
+            gender = Gender.valueOf(itemValues.getAsString("sex").toUpperCase());
         } catch (Exception e) {
             gender = Gender.UNKNOWN;
         }
