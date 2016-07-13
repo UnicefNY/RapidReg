@@ -50,7 +50,7 @@ public class SubFormViewHolder extends BaseViewHolder<Field> {
 
         attachParentToFields(fields, fieldParent);
         addSubFormBtn.setText(String.format("%s %s", context.getString(R.string.add), fieldParent));
-        addSubFormBtn.setVisibility(activity.getCurrentFeature().isInEditMode() ?
+        addSubFormBtn.setVisibility(activity.getCurrentFeature().isEditMode() ?
                 View.VISIBLE : View.GONE);
         restoreSubForms();
     }
@@ -65,7 +65,6 @@ public class SubFormViewHolder extends BaseViewHolder<Field> {
             }
         });
     }
-
 
     @Override
     public void setFieldEditable(boolean editable) {
@@ -89,7 +88,7 @@ public class SubFormViewHolder extends BaseViewHolder<Field> {
                 updateIndexForFields();
             }
         });
-        deleteBtn.setVisibility(activity.getCurrentFeature().isInEditMode() ?
+        deleteBtn.setVisibility(activity.getCurrentFeature().isEditMode() ?
                 View.VISIBLE : View.GONE);
     }
 
