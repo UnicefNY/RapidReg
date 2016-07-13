@@ -162,7 +162,6 @@ public class CaseService {
 
     public void saveCase(ItemValues itemValues,
                          List<String> photoPath) {
-
         String username = UserService.getInstance().getCurrentUser().getUsername();
         itemValues.addStringItem(MODULE, "primeromodule-cp");
         itemValues.addStringItem(CASEWORKER_CODE, username);
