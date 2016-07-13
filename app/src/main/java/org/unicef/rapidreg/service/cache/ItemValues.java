@@ -20,7 +20,6 @@ public class ItemValues {
         this.values = values;
     }
 
-
     public static ItemValues fromJson(String json) {
         return new ItemValues(new Gson().fromJson(json, JsonObject.class));
     }
@@ -44,7 +43,6 @@ public class ItemValues {
     public void addArrayItem(String itemKey, JsonArray array) {
         values.add(itemKey, array);
     }
-
 
     public Boolean getAsBoolean(String key) {
         if (values.get(key) == null) {
@@ -71,13 +69,6 @@ public class ItemValues {
         return values;
     }
 
-    public ItemValues getChildrenAsItemValues(String childName) {
-        if (values.has(childName)) {
-            return new ItemValues(values.get(childName).getAsJsonObject());
-        }
-        return new ItemValues();
-    }
-
     public JsonArray getChildrenAsJsonArray(String childName) {
         if (values.has(childName)) {
             return values.get(childName).getAsJsonArray();
@@ -95,11 +86,10 @@ public class ItemValues {
     }
 
     public int getChildrenSize(String childName) {
-        try {
-            return getChildrenAsJsonArray(childName).size();
-        } catch (Exception e) {
+        if (getChildrenAsJsonArray(childName) == null){
             return 0;
         }
+        return getChildrenAsJsonArray(childName).size();
     }
 
     public ItemValues getChildAsItemValues(String childName, int index) {
