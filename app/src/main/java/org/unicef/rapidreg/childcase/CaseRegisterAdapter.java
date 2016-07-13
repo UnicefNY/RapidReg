@@ -18,7 +18,7 @@ import org.unicef.rapidreg.widgets.viewholder.PhotoUploadMiniFormViewHolder;
 import org.unicef.rapidreg.widgets.viewholder.PhotoUploadViewHolder;
 import org.unicef.rapidreg.widgets.viewholder.SeparatorViewHolder;
 import org.unicef.rapidreg.widgets.viewholder.SingleLineRadioViewHolder;
-import org.unicef.rapidreg.widgets.viewholder.SubformViewHolder;
+import org.unicef.rapidreg.widgets.viewholder.SubFormViewHolder;
 import org.unicef.rapidreg.widgets.viewholder.TextViewHolder;
 import org.unicef.rapidreg.widgets.viewholder.TickBoxViewHolder;
 
@@ -110,7 +110,7 @@ public class CaseRegisterAdapter extends RecyclerView.Adapter<BaseViewHolder> {
                         parent, false),itemValues);
 
             case VIEW_HOLDER_SUBFORM:
-                return new SubformViewHolder(activity, inflater.inflate(resources
+                return new SubFormViewHolder(activity, inflater.inflate(resources
                                 .getIdentifier(PREFIX + CaseField.TYPE_SUBFORM_FIELD, LAYOUT,  packageName),
                         parent, false),itemValues);
 

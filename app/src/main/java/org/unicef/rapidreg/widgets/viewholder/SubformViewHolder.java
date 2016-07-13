@@ -3,7 +3,6 @@ package org.unicef.rapidreg.widgets.viewholder;
 import android.content.Context;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,18 +25,18 @@ import java.util.Locale;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class SubformViewHolder extends BaseViewHolder<CaseField> {
+public class SubFormViewHolder extends BaseViewHolder<CaseField> {
     public static final int NUM_CHILD_VIEWS = 2;
 
     @BindView(R.id.add_subform)
-    Button addSubformBtn;
+    Button addSubFormBtn;
 
     private CaseActivity activity;
     private ViewGroup parent;
     private List<CaseField> fields;
     private String fieldParent;
 
-    public SubformViewHolder(Context context, View itemView, ItemValues itemValues) {
+    public SubFormViewHolder(Context context, View itemView, ItemValues itemValues) {
         super(context, itemView, itemValues);
         ButterKnife.bind(this, itemView);
         activity = (CaseActivity) context;
@@ -50,18 +49,18 @@ public class SubformViewHolder extends BaseViewHolder<CaseField> {
         fieldParent = field.getDisplayName().get(Locale.getDefault().getLanguage());
 
         attachParentToFields(fields, fieldParent);
-        addSubformBtn.setText(String.format("%s %s", context.getString(R.string.add), fieldParent));
-        Log.i("sjyuan", "init Current children size = " + itemValues.getChildrenSize(fieldParent));
+        addSubFormBtn.setText(String.format("%s %s", context.getString(R.string.add), fieldParent));
+        addSubFormBtn.setVisibility(activity.getCurrentFeature().isInEditMode() ?
+                View.VISIBLE : View.GONE);
         restoreSubForms();
     }
 
     @Override
     public void setOnClickListener(CaseField field) {
-        addSubformBtn.setOnClickListener(new View.OnClickListener() {
+        addSubFormBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 itemValues.addChild(fieldParent, new JsonObject());
-                Log.i("sjyuan", "After additon, Current children size = " + itemValues.getChildrenSize(fieldParent));
                 addSubForm(itemValues.getChildrenSize(fieldParent) - 1);
             }
         });
@@ -79,14 +78,14 @@ public class SubformViewHolder extends BaseViewHolder<CaseField> {
         fieldList.clearFocus();
     }
 
-    private void initDeleteBtn(ViewGroup container, final int index) {
+    private void initDeleteBtn(ViewGroup container) {
         Button deleteBtn = (Button) container.findViewById(R.id.delete_subform);
         deleteBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 clearFocus(v);
-                removeSubForm(index);
-                parent.removeViewAt(index);
+                removeSubForm(parent.indexOfChild((View) v.getParent()));
+                parent.removeView((View) v.getParent());
                 updateIndexForFields();
             }
         });
@@ -95,7 +94,6 @@ public class SubformViewHolder extends BaseViewHolder<CaseField> {
     }
 
     private void initFieldList(ViewGroup container, int index) {
-        Log.i("sjyuan", "initFieldList index = " + index);
         RecyclerView fieldList = (RecyclerView) container.findViewById(R.id.field_list);
         RecyclerView.LayoutManager layout = new LinearLayoutManager(activity);
         layout.setAutoMeasureEnabled(true);
@@ -105,7 +103,7 @@ public class SubformViewHolder extends BaseViewHolder<CaseField> {
         assignIndexForFields(fields, index);
 
         CaseRegisterAdapter adapter = new CaseRegisterAdapter(activity, fields,
-                itemValues.getChildAsItemValues(fieldParent, index), false);
+            itemValues.getChildAsItemValues(fieldParent, index), false);
 
         fieldList.setAdapter(adapter);
     }
@@ -117,15 +115,13 @@ public class SubformViewHolder extends BaseViewHolder<CaseField> {
     }
 
     private void assignIndexForFields(List<CaseField> fields, int index) {
-        Log.i("sjyuan", "assignIndexForFields index= " + index);
         for (CaseField field : fields) {
             field.setIndex(index);
         }
     }
 
     private void updateIndexForFields() {
-
-        for (int i = 0; i <= itemValues.getChildrenAsJsonArray(fieldParent).size(); i++) {
+        for (int i = 0; i < itemValues.getChildrenAsJsonArray(fieldParent).size(); i++) {
             View child = parent.getChildAt(i);
             RecyclerView fieldList = (RecyclerView) child.findViewById(R.id.field_list);
             CaseRegisterAdapter adapter = (CaseRegisterAdapter) fieldList.getAdapter();
@@ -156,7 +152,7 @@ public class SubformViewHolder extends BaseViewHolder<CaseField> {
         ViewGroup container = (LinearLayout) inflater
                 .inflate(R.layout.form_subform, parent, false);
 
-        initDeleteBtn(container, index);
+        initDeleteBtn(container);
         initFieldList(container, index);
         parent.addView(container, index);
     }
@@ -166,12 +162,6 @@ public class SubformViewHolder extends BaseViewHolder<CaseField> {
         if (childrenArray == null) {
             return;
         }
-//        try {
-//            Log.i("sjyuan", "child count = " + parent.getChildCount());
-//            parent.removeViews(0, childrenArray.size());
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
         for (int i = 0; i < childrenArray.size(); i++) {
             addSubForm(i);
         }
