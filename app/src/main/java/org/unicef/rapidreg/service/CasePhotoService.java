@@ -9,7 +9,8 @@ import java.util.List;
 public class CasePhotoService {
     public static final String TAG = CasePhotoService.class.getSimpleName();
 
-    private static final CasePhotoService CASE_SERVICE = new CasePhotoService(new CasePhotoDaoImpl());
+    private static final CasePhotoService CASE_SERVICE
+            = new CasePhotoService(new CasePhotoDaoImpl());
 
     private CasePhotoDao casePhotoDao;
 
@@ -21,15 +22,15 @@ public class CasePhotoService {
         this.casePhotoDao = caseDao;
     }
 
-    public CasePhoto getCaseFirstThumbnail(long caseId) {
-        return casePhotoDao.getCaseFirstThumbnail(caseId);
+    public CasePhoto getFirstThumbnail(long caseId) {
+        return casePhotoDao.getFirstThumbnail(caseId);
     }
 
-    public CasePhoto getCasePhotoById(long caseId) {
-        return casePhotoDao.getCasePhotoById(caseId);
+    public CasePhoto getById(long caseId) {
+        return casePhotoDao.getById(caseId);
     }
 
-    public List<CasePhoto> getAllCasesPhotoFlowQueryList(long caseId) {
-        return casePhotoDao.getAllCasesPhotoFlowQueryList(caseId);
+    public List<CasePhoto> getByCaseId(long caseId) {
+        return casePhotoDao.getByCaseId(caseId);
     }
 }

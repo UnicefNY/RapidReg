@@ -65,7 +65,7 @@ public class CasePhotoAdapter extends BaseAdapter {
         int width = 80;
         try {
             long photoId = Long.parseLong(path);
-            Glide.with(context).load(CasePhotoService.getInstance().getCasePhotoById(photoId)
+            Glide.with(context).load(CasePhotoService.getInstance().getById(photoId)
                     .getPhoto().getBlob()).override(width, width).centerCrop().into(imageView);
         } catch (NumberFormatException e) {
             Glide.with(imageView.getContext()).load(path).override(width, width).centerCrop().into(imageView);

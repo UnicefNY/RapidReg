@@ -5,15 +5,11 @@ import org.unicef.rapidreg.model.CasePhoto;
 import java.util.List;
 
 public interface CasePhotoDao {
-    CasePhoto getCaseFirstThumbnail(long caseId);
+    CasePhoto getFirstThumbnail(long caseId);
 
-    void deleteCasePhotosByCaseId(long caseId);
+    List<CasePhoto> getByCaseId(long caseId);
 
-    List<CasePhoto> getAllCasesPhotoFlowQueryList(long caseId);
+    CasePhoto getByCaseIdAndOrder(long caseId, int order);
 
-    CasePhoto getCasePhotoById(long id);
-
-    CasePhoto getSpecialOrderCasePhotoByCaseId(long caseId, int order);
-
-    void deletePhotoById(long id);
+    CasePhoto getById(long id);
 }
