@@ -43,20 +43,20 @@ import java.util.UUID;
 
 public class CaseService {
     public static final String TAG = CaseService.class.getSimpleName();
-    public static final String CASE_ID = "Case ID";
-    public static final String AGE = "Age";
-    public static final String FULL_NAME = "Full Name";
-    public static final String FIRST_NAME = "First Name";
-    public static final String MIDDLE_NAME = "Middle Name";
-    public static final String SURNAME = "Surname";
-    public static final String NICKNAME = "Nickname";
-    public static final String OTHER_NAME = "Other Name";
-    public static final String CAREGIVER_NAME = "Name of Current Caregiver";
-    public static final String REGISTRATION_DATE = "Date of Registration or Interview";
-    public static final String CASEWORKER_CODE = "Caseworker Code";
-    public static final String RECORD_CREATED_BY = "Record created by";
-    public static final String PREVIOUS_OWNER = "Previous Owner";
-    public static final String MODULE = "Module";
+    public static final String CASE_ID = "case_id";
+    public static final String AGE = "age";
+    public static final String FULL_NAME = "name";
+    public static final String FIRST_NAME = "name_first";
+    public static final String MIDDLE_NAME = "name_middle";
+    public static final String SURNAME = "name_last";
+    public static final String NICKNAME = "name_nickname";
+    public static final String OTHER_NAME = "name_other";
+    public static final String CAREGIVER_NAME = "name_caregiver";
+    public static final String REGISTRATION_DATE = "registration_date";
+    public static final String CASEWORKER_CODE = "owned_by";
+    public static final String RECORD_CREATED_BY = "created_by";
+    public static final String PREVIOUS_OWNER = "previously_owned_by";
+    public static final String MODULE = "module_id";
 
     public static final String AUDIO_FILE_PATH = Environment.getExternalStorageDirectory().getAbsolutePath() + "/audiorecordtest.3gp";
 
