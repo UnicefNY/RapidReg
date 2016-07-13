@@ -62,8 +62,8 @@ public class SingleLineRadioViewHolder extends BaseViewHolder<CaseField> {
                 setSelectedRadio(getValueForSubForm(field));
             }
         } else {
-            if (!TextUtils.isEmpty(itemValues.getAsString(getLabel(field)))) {
-                setSelectedRadio(itemValues.getAsString(getLabel(field)));
+            if (!TextUtils.isEmpty(itemValues.getAsString(field.getName()))) {
+                setSelectedRadio(itemValues.getAsString(field.getName()));
             }
         }
     }
@@ -73,13 +73,8 @@ public class SingleLineRadioViewHolder extends BaseViewHolder<CaseField> {
         optionGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
-                String language = Locale.getDefault().getLanguage();
                 result = (checkedId == firstOption.getId() ? options.get(0) : options.get(1));
-                if (isSubFormField(field)) {
-                    itemValues.addStringItem(field.getDisplayName().get(language), getResult());
-                } else {
-                    itemValues.addStringItem(field.getDisplayName().get(language), getResult());
-                }
+                itemValues.addStringItem(field.getName(), getResult());
             }
         });
     }

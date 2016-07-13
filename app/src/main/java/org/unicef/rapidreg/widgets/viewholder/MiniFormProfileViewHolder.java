@@ -44,8 +44,8 @@ public class MiniFormProfileViewHolder extends BaseViewHolder<CaseField> {
     public void setValue(CaseField field) {
         idView.setText(itemValues.getAsString(ItemValues.CaseProfile.ID_NORMAL_STATE));
         CaseListAdapter.Gender gender;
-        if (itemValues.getAsString("Sex") != null) {
-            gender = CaseListAdapter.Gender.valueOf(itemValues.getAsString("Sex").toUpperCase());
+        if (itemValues.getAsString("sex") != null) {
+            gender = CaseListAdapter.Gender.valueOf(itemValues.getAsString("sex").toUpperCase());
         } else {
             gender = CaseListAdapter.Gender.UNKNOWN;
         }

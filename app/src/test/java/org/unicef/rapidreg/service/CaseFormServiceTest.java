@@ -20,7 +20,6 @@ import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-import static org.unicef.rapidreg.service.CaseFormService.FormLoadStateMachine;
 
 @RunWith(RobolectricTestRunner.class)
 public class CaseFormServiceTest {
@@ -28,7 +27,6 @@ public class CaseFormServiceTest {
 
     private static CaseFormService caseFormService;
     private static CaseFormDao caseFormDao;
-    private FormLoadStateMachine stateMachine;
 
     private String formForm = "{\n" +
             "  \"Children\": [\n" +
@@ -70,7 +68,6 @@ public class CaseFormServiceTest {
 
     @Before
     public void setUp() throws Exception {
-        stateMachine = FormLoadStateMachine.getInstance(MAX_RETRY_NUM);
     }
 
     @Test
@@ -95,23 +92,4 @@ public class CaseFormServiceTest {
         assertThat(caseField.getSubForm(), is(nullValue()));
     }
 
-    @Test
-    public void should_return_false_when_do_not_reach_max_retry_num() {
-        assertThat(stateMachine.hasReachMaxRetryNum(), is(false));
-
-        stateMachine.addOnce();
-        assertThat(stateMachine.hasReachMaxRetryNum(), is(false));
-
-        stateMachine.addOnce();
-        assertThat(stateMachine.hasReachMaxRetryNum(), is(false));
-    }
-
-    @Test
-    public void should_return_true_when_reach_max_retry_num() {
-        stateMachine.addOnce();
-        stateMachine.addOnce();
-        stateMachine.addOnce();
-
-        assertThat(stateMachine.hasReachMaxRetryNum(), is(true));
-    }
 }
