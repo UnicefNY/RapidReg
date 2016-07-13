@@ -9,27 +9,27 @@ import org.unicef.rapidreg.db.PrimeroDB;
 
 @Table(database = PrimeroDB.class)
 @ModelContainer
-public class CasePhoto extends RecordPhoto {
+public class TracingPhoto extends RecordPhoto {
 
     @ForeignKey(references = {@ForeignKeyReference(
-            columnName = "case_id",
+            columnName = "tracing_id",
             columnType = long.class,
             foreignKeyColumnName = "id"
     )})
-    Case childCase;
+    Tracing tracing;
 
-    public Case getCase() {
-        return childCase;
+    public Tracing getTracing() {
+        return tracing;
     }
 
-    public void setCase(Case childCase) {
-        this.childCase = childCase;
+    public void setTracing(Tracing tracing) {
+        this.tracing = tracing;
     }
 
     @Override
     public String toString() {
-        return "CasePhoto{" +
-                "childCase=" + childCase +
+        return "TracingPhoto{" +
+                "tracing=" + tracing +
                 "} " + super.toString();
     }
 }

@@ -53,7 +53,7 @@ public class CasePhotoViewAdapter extends PagerAdapter {
         String path = paths.get(position);
         try {
             long caseId = Long.parseLong(path);
-            Glide.with(context).load(CasePhotoService.getInstance().getCasePhotoById(caseId)
+            Glide.with(context).load(CasePhotoService.getInstance().getById(caseId)
                     .getPhoto().getBlob()).into(imageView);
         } catch (NumberFormatException e) {
             Glide.with(context).load(path).into(imageView);

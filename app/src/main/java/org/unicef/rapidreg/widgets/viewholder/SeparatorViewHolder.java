@@ -3,21 +3,21 @@ package org.unicef.rapidreg.widgets.viewholder;
 import android.content.Context;
 import android.view.View;
 
-import org.unicef.rapidreg.forms.childcase.CaseField;
+import org.unicef.rapidreg.forms.Field;
 
-public class SeparatorViewHolder extends BaseViewHolder<CaseField> {
+public class SeparatorViewHolder extends BaseViewHolder<Field> {
 
     public SeparatorViewHolder(Context context, View itemView) {
         super(context, itemView, null);
     }
 
     @Override
-    public void setValue(CaseField field) {
+    public void setValue(Field field) {
         itemView.setVisibility(View.GONE);
     }
 
     @Override
-    public void setOnClickListener(CaseField field) {
+    public void setOnClickListener(Field field) {
 
     }
 
