@@ -10,8 +10,10 @@ import com.google.gson.reflect.TypeToken;
 import com.hannesdorfmann.mosby.mvp.MvpBasePresenter;
 
 import org.unicef.rapidreg.PrimeroConfiguration;
+import org.unicef.rapidreg.model.Case;
 import org.unicef.rapidreg.network.SyncService;
 import org.unicef.rapidreg.service.CaseService;
+import org.unicef.rapidreg.service.cache.ItemValues;
 
 import java.lang.reflect.Type;
 import java.util.List;
@@ -110,26 +112,28 @@ public class SyncPresenter extends MvpBasePresenter<SyncView> {
     }
 
     private void startUpLoadCases() {
-        JsonObject parent = new JsonObject();
-        JsonObject child = new JsonObject();
-        child.addProperty("module_id", "primeromodule-cp");
-        child.addProperty("date_of_birth", "2006/01/10");
-        child.addProperty("case_id", "56798b3e-c5b8-44d9-a8c1-2593b2b127c9");
-        parent.add("child", child);
 
-        syncService.postCase(PrimeroConfiguration.getCookie(), true, parent)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread()).subscribe(new Action1<Response<JsonElement>>() {
-            @Override
-            public void call(Response<JsonElement> response) {
-                Log.i(TAG, response.toString());
-            }
-        }, new Action1<Throwable>() {
-            @Override
-            public void call(Throwable throwable) {
-                Log.i(TAG, throwable.toString());
-            }
-        });
+        List<Case> caseList = CaseService.getInstance().getCaseList();
+        for (Case item: caseList) {
+            ItemValues values = ItemValues.fromJson(new String(item.getContent().getBlob()));
+            values.addStringItem("case_id", item.getUniqueId());
+
+            syncService.postCase(PrimeroConfiguration.getCookie(), true, values.getValues())
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread()).subscribe(new Action1<Response<JsonElement>>() {
+                @Override
+                public void call(Response<JsonElement> response) {
+                    Log.i(TAG, response.toString());
+                }
+            }, new Action1<Throwable>() {
+                @Override
+                public void call(Throwable throwable) {
+                    Log.i(TAG, throwable.toString());
+                }
+            });
+        }
+
+
     }
 
     private void startDownLoadCaseForms() {
