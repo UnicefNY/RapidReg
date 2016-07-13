@@ -27,7 +27,7 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 import org.unicef.rapidreg.R;
 import org.unicef.rapidreg.base.view.BaseActivity;
-import org.unicef.rapidreg.childcase.config.CasePhotoConfig;
+import org.unicef.rapidreg.childcase.config.PhotoConfig;
 import org.unicef.rapidreg.event.NeedLoadFormsEvent;
 import org.unicef.rapidreg.event.SaveCaseEvent;
 import org.unicef.rapidreg.event.UpdateImageEvent;
@@ -117,7 +117,7 @@ public class CaseActivity extends BaseActivity {
 
     private void onCaptureImageResult() {
         try {
-            Bitmap bitmap = BitmapFactory.decodeFile(CasePhotoConfig.MEDIA_PATH_FOR_CAMERA);
+            Bitmap bitmap = BitmapFactory.decodeFile(PhotoConfig.MEDIA_PATH_FOR_CAMERA);
             imagePath = getOutputMediaFilePath();
             ImageCompressUtil.storeImage(bitmap, imagePath);
             bitmap.recycle();

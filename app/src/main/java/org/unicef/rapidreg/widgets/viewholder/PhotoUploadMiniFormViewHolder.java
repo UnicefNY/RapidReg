@@ -63,7 +63,7 @@ public class PhotoUploadMiniFormViewHolder extends BaseViewHolder<Field> {
         private List<CasePhoto> flowQueryList;
 
         public CasePhotoViewPagerAdapter() {
-            flowQueryList = CasePhotoService.getInstance().getAllCasesPhotoFlowQueryList(
+            flowQueryList = CasePhotoService.getInstance().getByCaseId(
                     itemValues.getAsInt(ItemValues.CaseProfile.ID));
         }
 

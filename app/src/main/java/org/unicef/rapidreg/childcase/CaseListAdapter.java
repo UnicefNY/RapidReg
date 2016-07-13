@@ -16,7 +16,7 @@ import com.bumptech.glide.Glide;
 
 import org.unicef.rapidreg.R;
 import org.unicef.rapidreg.model.Case;
-import org.unicef.rapidreg.model.CasePhoto;
+import org.unicef.rapidreg.model.RecordPhoto;
 import org.unicef.rapidreg.service.CasePhotoService;
 import org.unicef.rapidreg.service.CaseService;
 import org.unicef.rapidreg.service.cache.ItemValues;
@@ -73,7 +73,7 @@ public class CaseListAdapter extends RecyclerView.Adapter<CaseListAdapter.CaseLi
         }
 
         try {
-            CasePhoto headerPhoto = CasePhotoService.getInstance().getCaseFirstThumbnail(caseItem.getId());
+            RecordPhoto headerPhoto = CasePhotoService.getInstance().getFirstThumbnail(caseItem.getId());
             Glide.with(holder.caseImage.getContext()).
                     load((headerPhoto.getThumbnail().getBlob())).into(holder.caseImage);
         } catch (Exception e) {
