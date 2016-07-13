@@ -10,38 +10,35 @@ import java.util.List;
 
 public class CasePhotoDaoImpl implements CasePhotoDao {
     @Override
-    public CasePhoto getCaseFirstThumbnail(long caseId) {
-        return SQLite.select().from(CasePhoto.class).where(CasePhoto_Table.case_id.eq(caseId)).querySingle();
+    public CasePhoto getFirstThumbnail(long caseId) {
+        return SQLite.select().from(CasePhoto.class)
+                .where(CasePhoto_Table.case_id.eq(caseId))
+                .querySingle();
     }
 
     @Override
-    public void deleteCasePhotosByCaseId(long caseId) {
-        SQLite.delete().from(CasePhoto.class).where(CasePhoto_Table.case_id.eq(caseId)).execute();
-    }
-
-    @Override
-    public List<CasePhoto> getAllCasesPhotoFlowQueryList(long caseId) {
+    public List<CasePhoto> getByCaseId(long caseId) {
         return SQLite.select()
                 .from(CasePhoto.class)
-                .where(CasePhoto_Table.case_id.eq(caseId)).and(CasePhoto_Table.photo.isNotNull()).queryList();
+                .where(CasePhoto_Table.case_id.eq(caseId))
+                .and(CasePhoto_Table.photo.isNotNull())
+                .queryList();
     }
 
     @Override
-    public CasePhoto getCasePhotoById(long id) {
+    public CasePhoto getById(long id) {
         return SQLite.select()
                 .from(CasePhoto.class)
-                .where(CasePhoto_Table.id.eq(id)).querySingle();
+                .where(CasePhoto_Table.id.eq(id))
+                .querySingle();
     }
 
     @Override
-    public CasePhoto getSpecialOrderCasePhotoByCaseId(long caseId, int order) {
+    public CasePhoto getByCaseIdAndOrder(long caseId, int order) {
         return SQLite.select()
                 .from(CasePhoto.class)
-                .where(CasePhoto_Table.case_id.eq(caseId)).and(CasePhoto_Table.order.eq(order)).querySingle();
-    }
-
-    @Override
-    public void deletePhotoById(long id) {
-        SQLite.delete().from(CasePhoto.class).where(CasePhoto_Table.id.eq(id)).execute();
+                .where(CasePhoto_Table.case_id.eq(caseId))
+                .and(CasePhoto_Table.order.eq(order))
+                .querySingle();
     }
 }
