@@ -30,9 +30,9 @@ import org.unicef.rapidreg.base.view.SwipeChangeLayout;
 import org.unicef.rapidreg.childcase.media.CasePhotoAdapter;
 import org.unicef.rapidreg.event.SaveCaseEvent;
 import org.unicef.rapidreg.event.UpdateImageEvent;
-import org.unicef.rapidreg.forms.childcase.CaseField;
-import org.unicef.rapidreg.forms.childcase.CaseFormRoot;
-import org.unicef.rapidreg.forms.childcase.CaseSection;
+import org.unicef.rapidreg.forms.CaseFormRoot;
+import org.unicef.rapidreg.forms.Field;
+import org.unicef.rapidreg.forms.Section;
 import org.unicef.rapidreg.model.Case;
 import org.unicef.rapidreg.model.CasePhoto;
 import org.unicef.rapidreg.service.CaseFormService;
@@ -78,8 +78,8 @@ public class CaseRegisterWrapperFragment extends Fragment {
     FloatingActionButton editCaseButton;
 
     private CaseFormRoot caseForm;
-    private List<CaseSection> sections;
-    private List<CaseField> miniFields;
+    private List<Section> sections;
+    private List<Field> miniFields;
     private CaseRegisterAdapter miniFormAdapter;
     private CaseRegisterAdapter fullFormAdapter;
     private CasePhotoAdapter casePhotoAdapter;
@@ -193,7 +193,7 @@ public class CaseRegisterWrapperFragment extends Fragment {
         CaseFormRoot caseForm = CaseFormService.getInstance().getCurrentForm();
         List<String> requiredFieldNames = new ArrayList<>();
 
-        for (CaseSection section : caseForm.getSections()) {
+        for (Section section : caseForm.getSections()) {
             Collections.addAll(requiredFieldNames, CaseService.getInstance()
                     .fetchRequiredFiledNames(section.getFields()).toArray(new String[0]));
         }
@@ -298,13 +298,13 @@ public class CaseRegisterWrapperFragment extends Fragment {
     }
 
     private void getMiniFields() {
-        for (CaseSection section : sections) {
-            for (CaseField caseField : section.getFields()) {
-                if (caseField.isShowOnMiniForm()) {
-                    if (caseField.isPhotoUploadBox()) {
-                        miniFields.add(0, caseField);
+        for (Section section : sections) {
+            for (Field field : section.getFields()) {
+                if (field.isShowOnMiniForm()) {
+                    if (field.isPhotoUploadBox()) {
+                        miniFields.add(0, field);
                     } else {
-                        miniFields.add(caseField);
+                        miniFields.add(field);
                     }
                 }
             }
@@ -314,12 +314,12 @@ public class CaseRegisterWrapperFragment extends Fragment {
 
     private void addProfileFieldForDetailsPage() {
         if (((CaseActivity) getActivity()).getCurrentFeature() == CaseFeature.DETAILS) {
-            CaseField caseField = new CaseField();
-            caseField.setType(CaseField.TYPE_MINI_FORM_PROFILE);
+            Field field = new Field();
+            field.setType(Field.TYPE_MINI_FORM_PROFILE);
             try {
-                miniFields.add(1, caseField);
+                miniFields.add(1, field);
             } catch (Exception e) {
-                miniFields.add(caseField);
+                miniFields.add(field);
             }
         }
     }
@@ -327,7 +327,7 @@ public class CaseRegisterWrapperFragment extends Fragment {
     @NonNull
     private FragmentPagerItems getPages() {
         FragmentPagerItems pages = new FragmentPagerItems(getActivity());
-        for (CaseSection section : sections) {
+        for (Section section : sections) {
             String[] values = section.getName().values().toArray(new String[0]);
             Bundle bundle = new Bundle();
             bundle.putStringArrayList("case_photos",

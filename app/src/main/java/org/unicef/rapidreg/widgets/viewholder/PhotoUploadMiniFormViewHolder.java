@@ -11,7 +11,7 @@ import android.widget.ImageView;
 import com.bumptech.glide.Glide;
 
 import org.unicef.rapidreg.R;
-import org.unicef.rapidreg.forms.childcase.CaseField;
+import org.unicef.rapidreg.forms.Field;
 import org.unicef.rapidreg.model.CasePhoto;
 import org.unicef.rapidreg.service.CasePhotoService;
 import org.unicef.rapidreg.service.cache.ItemValues;
@@ -22,7 +22,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import me.relex.circleindicator.CircleIndicator;
 
-public class PhotoUploadMiniFormViewHolder extends BaseViewHolder<CaseField> {
+public class PhotoUploadMiniFormViewHolder extends BaseViewHolder<Field> {
     public static final String TAG = PhotoUploadMiniFormViewHolder.class.getSimpleName();
 
     @BindView(R.id.case_photo_view_slider)
@@ -40,13 +40,13 @@ public class PhotoUploadMiniFormViewHolder extends BaseViewHolder<CaseField> {
     }
 
     @Override
-    public void setValue(CaseField field) {
+    public void setValue(Field field) {
         viewPager.setAdapter(new CasePhotoViewPagerAdapter());
         indicator.setViewPager(viewPager);
     }
 
     @Override
-    public void setOnClickListener(CaseField field) {
+    public void setOnClickListener(Field field) {
 
     }
 

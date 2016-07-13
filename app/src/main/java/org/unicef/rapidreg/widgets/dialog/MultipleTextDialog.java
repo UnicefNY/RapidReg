@@ -6,15 +6,15 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.ViewSwitcher;
 
-import org.unicef.rapidreg.forms.childcase.CaseField;
+import org.unicef.rapidreg.forms.Field;
 import org.unicef.rapidreg.service.cache.ItemValues;
 
 public class MultipleTextDialog extends BaseDialog {
 
     private EditText editText;
 
-    public MultipleTextDialog(Context context, CaseField caseField, ItemValues itemValues, TextView resultView, ViewSwitcher viewSwitcher) {
-        super(context, caseField, itemValues, resultView, viewSwitcher);
+    public MultipleTextDialog(Context context, Field field, ItemValues itemValues, TextView resultView, ViewSwitcher viewSwitcher) {
+        super(context, field, itemValues, resultView, viewSwitcher);
     }
 
     @Override

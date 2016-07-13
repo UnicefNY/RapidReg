@@ -1,4 +1,4 @@
-package org.unicef.rapidreg.forms.childcase;
+package org.unicef.rapidreg.forms;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-public class CaseField {
+public class Field {
     public static final String TYPE_SELECT_BOX = "select_box";
     public static final String TYPE_SINGLE_SELECT_BOX = "single_select_box";
     public static final String TYPE_SINGLE_LINE_RADIO = "single_line_radio";
@@ -62,7 +62,7 @@ public class CaseField {
     private Map<String, List> optionStringsText;
     @SerializedName("subform")
     @Expose
-    private CaseSection subForm;
+    private Section subForm;
 
     @SerializedName("show_on_minify_form")
     @Expose
@@ -136,11 +136,11 @@ public class CaseField {
         this.optionStringsText = optionStringsText;
     }
 
-    public CaseSection getSubForm() {
+    public Section getSubForm() {
         return subForm;
     }
 
-    public void setSubForm(CaseSection subForm) {
+    public void setSubForm(Section subForm) {
         this.subForm = subForm;
     }
 
@@ -219,7 +219,7 @@ public class CaseField {
         String language = Locale.getDefault().getLanguage();
 
         List<String> items = new ArrayList<>();
-        if (getType().equals(CaseField.TYPE_MULTI_SELECT_BOX)) {
+        if (getType().equals(Field.TYPE_MULTI_SELECT_BOX)) {
             List<Map<String, String>> arrayList = getOptionStringsText().get(language);
             for (Map<String, String> map : arrayList) {
                 items.add(map.get("display_text"));
@@ -248,8 +248,8 @@ public class CaseField {
         return sb.toString();
     }
 
-    public CaseField copy() {
-        CaseField newField = new CaseField();
+    public Field copy() {
+        Field newField = new Field();
         newField.setName(name);
         newField.setEditable(editable);
         newField.setRequired(required);

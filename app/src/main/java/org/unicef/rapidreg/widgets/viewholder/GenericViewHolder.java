@@ -10,7 +10,7 @@ import android.widget.ViewSwitcher;
 
 import org.unicef.rapidreg.R;
 import org.unicef.rapidreg.exception.DialogException;
-import org.unicef.rapidreg.forms.childcase.CaseField;
+import org.unicef.rapidreg.forms.Field;
 import org.unicef.rapidreg.service.cache.ItemValues;
 import org.unicef.rapidreg.widgets.dialog.BaseDialog;
 import org.unicef.rapidreg.widgets.dialog.FiledDialogFactory;
@@ -42,7 +42,7 @@ public class GenericViewHolder extends BaseTextViewHolder {
     }
 
     @Override
-    public void setValue(CaseField field) {
+    public void setValue(Field field) {
         String labelText = getLabel(field);
 
         if (isRequired(field)) {
@@ -68,7 +68,7 @@ public class GenericViewHolder extends BaseTextViewHolder {
     }
 
     @Override
-    public void setOnClickListener(final CaseField field) {
+    public void setOnClickListener(final Field field) {
         valueView.setFocusable(false);
         itemView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -108,19 +108,19 @@ public class GenericViewHolder extends BaseTextViewHolder {
 
     }
 
-    private void showFieldDialog(CaseField field, TextView valueView) {
+    private void showFieldDialog(Field field, TextView valueView) {
         String fieldType = field.getType();
 
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setTitle(getLabel(field));
 
-        if (fieldType.equals(CaseField.TYPE_SELECT_BOX)) {
-            fieldType = field.isMultiSelect() ? CaseField.TYPE_MULTI_SELECT_BOX :
-                    CaseField.TYPE_SINGLE_SELECT_BOX;
+        if (fieldType.equals(Field.TYPE_SELECT_BOX)) {
+            fieldType = field.isMultiSelect() ? Field.TYPE_MULTI_SELECT_BOX :
+                    Field.TYPE_SINGLE_SELECT_BOX;
         }
         try {
             BaseDialog dialog = FiledDialogFactory.createDialog(
-                    CaseField.FieldType.valueOf(fieldType.toUpperCase()),
+                    Field.FieldType.valueOf(fieldType.toUpperCase()),
                     context,
                     field,
                     itemValues,
