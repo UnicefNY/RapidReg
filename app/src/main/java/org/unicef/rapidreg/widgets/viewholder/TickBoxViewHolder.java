@@ -6,13 +6,13 @@ import android.widget.CheckBox;
 import android.widget.TextView;
 
 import org.unicef.rapidreg.R;
-import org.unicef.rapidreg.forms.childcase.CaseField;
+import org.unicef.rapidreg.forms.Field;
 import org.unicef.rapidreg.service.cache.ItemValues;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class TickBoxViewHolder extends BaseViewHolder<CaseField> {
+public class TickBoxViewHolder extends BaseViewHolder<Field> {
 
     @BindView(R.id.label)
     TextView labelView;
@@ -26,7 +26,7 @@ public class TickBoxViewHolder extends BaseViewHolder<CaseField> {
     }
 
     @Override
-    public void setValue(CaseField field) {
+    public void setValue(Field field) {
         labelView.setText(getLabel(field));
         disableUneditableField(isEditable(field), valueView);
         setEditableBackgroundStyle(isEditable(field));
@@ -39,7 +39,7 @@ public class TickBoxViewHolder extends BaseViewHolder<CaseField> {
     }
 
     @Override
-    public void setOnClickListener(final CaseField field) {
+    public void setOnClickListener(final Field field) {
         valueView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

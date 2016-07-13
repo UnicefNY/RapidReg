@@ -8,16 +8,15 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import org.unicef.rapidreg.R;
-import org.unicef.rapidreg.forms.childcase.CaseField;
+import org.unicef.rapidreg.forms.Field;
 import org.unicef.rapidreg.service.cache.ItemValues;
 
 import java.util.List;
-import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class SingleLineRadioViewHolder extends BaseViewHolder<CaseField> {
+public class SingleLineRadioViewHolder extends BaseViewHolder<Field> {
 
     @BindView(R.id.label)
     TextView labelView;
@@ -42,7 +41,7 @@ public class SingleLineRadioViewHolder extends BaseViewHolder<CaseField> {
     }
 
     @Override
-    public void setValue(final CaseField field) {
+    public void setValue(final Field field) {
         String labelText = getLabel(field);
 
         if (isRequired(field)) {
@@ -69,7 +68,7 @@ public class SingleLineRadioViewHolder extends BaseViewHolder<CaseField> {
     }
 
     @Override
-    public void setOnClickListener(final CaseField field) {
+    public void setOnClickListener(final Field field) {
         optionGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {

@@ -5,15 +5,15 @@ import android.widget.DatePicker;
 import android.widget.TextView;
 import android.widget.ViewSwitcher;
 
-import org.unicef.rapidreg.forms.childcase.CaseField;
+import org.unicef.rapidreg.forms.Field;
 import org.unicef.rapidreg.service.cache.ItemValues;
 
 public class DateDialog extends BaseDialog {
     private String result;
     private DatePicker datePicker;
 
-    public DateDialog(Context context, CaseField caseField, ItemValues itemValues, TextView resultView, ViewSwitcher viewSwitcher) {
-        super(context, caseField, itemValues, resultView, viewSwitcher);
+    public DateDialog(Context context, Field field, ItemValues itemValues, TextView resultView, ViewSwitcher viewSwitcher) {
+        super(context, field, itemValues, resultView, viewSwitcher);
         result = resultView.getText().toString().trim();
     }
 

@@ -31,7 +31,7 @@ import org.unicef.rapidreg.childcase.config.CasePhotoConfig;
 import org.unicef.rapidreg.event.NeedLoadFormsEvent;
 import org.unicef.rapidreg.event.SaveCaseEvent;
 import org.unicef.rapidreg.event.UpdateImageEvent;
-import org.unicef.rapidreg.forms.childcase.CaseFormRoot;
+import org.unicef.rapidreg.forms.CaseFormRoot;
 import org.unicef.rapidreg.model.CaseForm;
 import org.unicef.rapidreg.network.AuthService;
 import org.unicef.rapidreg.service.CaseFormService;
