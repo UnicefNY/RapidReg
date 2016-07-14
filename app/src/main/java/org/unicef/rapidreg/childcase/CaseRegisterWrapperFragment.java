@@ -16,7 +16,6 @@ import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.getbase.floatingactionbutton.FloatingActionButton;
-import com.google.gson.Gson;
 import com.ogaclejapan.smarttablayout.SmartTabLayout;
 import com.ogaclejapan.smarttablayout.utils.v4.FragmentPagerItem;
 import com.ogaclejapan.smarttablayout.utils.v4.FragmentPagerItems;
@@ -52,7 +51,6 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class CaseRegisterWrapperFragment extends Fragment {
-
     @BindView(R.id.viewpager)
     ViewPager viewPager;
 
@@ -88,6 +86,7 @@ public class CaseRegisterWrapperFragment extends Fragment {
 
     private long caseId;
 
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater,
@@ -104,7 +103,6 @@ public class CaseRegisterWrapperFragment extends Fragment {
             String caseJson = new String(caseItem.getContent().getBlob());
             String subFormJson = new String(caseItem.getSubform().getBlob());
             itemValues = CaseService.getInstance().generateItemValues(caseJson, subFormJson);
-            itemValues.addStringItem(CaseService.CASE_ID, caseItem.getUniqueId());
             itemValues.addStringItem(CaseService.CASE_ID, caseItem.getUniqueId());
             initProfile(caseItem);
         }
@@ -135,7 +133,6 @@ public class CaseRegisterWrapperFragment extends Fragment {
                 shortUUID);
         itemValues.addNumberItem(ItemValues.CaseProfile.ID, caseItem.getId());
     }
-
 
     @Override
     public void onStart() {
@@ -175,10 +172,8 @@ public class CaseRegisterWrapperFragment extends Fragment {
         if (casePhotoAdapter.isFull()) {
             view.setVisibility(View.GONE);
         }
-
         casePhotoAdapter.notifyDataSetChanged();
         EventBus.getDefault().removeStickyEvent(event);
-
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -244,33 +239,27 @@ public class CaseRegisterWrapperFragment extends Fragment {
     }
 
     private void initFullFormContainer() {
-        final FragmentStatePagerItemAdapter adapter = new FragmentStatePagerItemAdapter(
+        final FragmentStatePagerItemAdapter pagerItemAdapter = new FragmentStatePagerItemAdapter(
                 getActivity().getSupportFragmentManager(), getPages());
-        viewPager.setAdapter(adapter);
+        viewPager.setAdapter(pagerItemAdapter);
         viewPagerTab.setViewPager(viewPager);
 
         viewPagerTab.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
             }
 
             @Override
             public void onPageSelected(int position) {
                 fullFormSwipeLayout.setScrollChild(
-                        adapter.getPage(position).getView()
-                                .findViewById(R.id.register_forms_content));
-                CaseRegisterFragment currentPage = (CaseRegisterFragment) adapter.getPage(position);
-
-                itemValues = currentPage.getItemValues();
+                        pagerItemAdapter.getPage(position).getView().findViewById(R.id.register_forms_content));
+                CaseRegisterFragment currentPage = (CaseRegisterFragment) pagerItemAdapter.getPage(position);
                 fullFormAdapter = currentPage.getCaseRegisterAdapter();
-                fullFormAdapter.setItemValues(itemValues);
                 fullFormAdapter.setCasePhotoAdapter(casePhotoAdapter);
             }
 
             @Override
             public void onPageScrollStateChanged(int state) {
-
             }
         });
         if (miniFields.size() != 0) {
@@ -332,8 +321,10 @@ public class CaseRegisterWrapperFragment extends Fragment {
             Bundle bundle = new Bundle();
             bundle.putStringArrayList("case_photos",
                     (ArrayList<String>) casePhotoAdapter.getAllItems());
-            bundle.putString("item_values", new Gson().toJson(itemValues.getValues()));
-            pages.add(FragmentPagerItem.of(values[0], CaseRegisterFragment.class, bundle));
+            bundle.putSerializable("item_values", itemValues);
+            FragmentPagerItem pagerItem = FragmentPagerItem.of(values[0], CaseRegisterFragment.class, bundle);
+            pages.add(pagerItem);
+
         }
         return pages;
     }
@@ -344,8 +335,7 @@ public class CaseRegisterWrapperFragment extends Fragment {
             focusedChild.clearFocus();
         }
 
-        FragmentStatePagerItemAdapter adapter =
-                (FragmentStatePagerItemAdapter) viewPager.getAdapter();
+        FragmentStatePagerItemAdapter adapter = (FragmentStatePagerItemAdapter) viewPager.getAdapter();
         CaseRegisterFragment fragment = (CaseRegisterFragment) adapter
                 .getPage(viewPager.getCurrentItem());
         if (fragment != null) {

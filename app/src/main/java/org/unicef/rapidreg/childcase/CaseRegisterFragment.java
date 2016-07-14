@@ -42,7 +42,8 @@ public class CaseRegisterFragment extends MvpFragment<CaseRegisterView, CaseRegi
         if (getArguments() != null) {
             casePhotoAdapter = new CasePhotoAdapter(getContext(),
                     getArguments().getStringArrayList("case_photos"));
-            itemValues =  ItemValues.fromJson(getArguments().getString("item_values"));
+            itemValues = (ItemValues) getArguments().getSerializable("item_values");
+            getArguments().remove("item_values");
         }
         return inflater.inflate(R.layout.fragment_cases_register, container, false);
     }
@@ -68,17 +69,13 @@ public class CaseRegisterFragment extends MvpFragment<CaseRegisterView, CaseRegi
         RecyclerView.LayoutManager layout = new LinearLayoutManager(getContext());
         layout.setAutoMeasureEnabled(true);
         fieldList.setLayoutManager(layout);
-        fieldList.setAdapter(caseRegisterAdapter);
         caseRegisterAdapter.setCasePhotoAdapter(casePhotoAdapter);
         caseRegisterAdapter.setItemValues(itemValues);
+        fieldList.setAdapter(caseRegisterAdapter);
     }
 
     public CaseRegisterAdapter getCaseRegisterAdapter() {
         return caseRegisterAdapter;
-    }
-
-    public ItemValues getItemValues(){
-        return itemValues;
     }
 
     public void clearFocus() {
