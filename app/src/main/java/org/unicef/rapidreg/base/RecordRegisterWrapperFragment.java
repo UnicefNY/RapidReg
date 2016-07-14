@@ -140,6 +140,35 @@ public abstract class RecordRegisterWrapperFragment extends Fragment {
 
     }
 
+    public void clearFocus() {
+        View focusedChild = miniFormContainer.getFocusedChild();
+        if (focusedChild != null) {
+            focusedChild.clearFocus();
+        }
+
+        FragmentStatePagerItemAdapter adapter =
+                (FragmentStatePagerItemAdapter) viewPager.getAdapter();
+        RecordRegisterFragment fragment = (RecordRegisterFragment) adapter.getPage(viewPager.getCurrentItem());
+        if (fragment != null) {
+            fragment.clearFocus();
+        }
+    }
+
+    protected void getMiniFields() {
+        for (Section section : sections) {
+            for (Field field : section.getFields()) {
+                if (field.isShowOnMiniForm()) {
+                    if (field.isPhotoUploadBox()) {
+                        miniFields.add(0, field);
+                    } else {
+                        miniFields.add(field);
+                    }
+                }
+            }
+        }
+        addProfileFieldForDetailsPage();
+    }
+
     private void initFloatingActionButton() {
         if (((RecordActivity) getActivity()).getCurrentFeature().isDetailMode()) {
             editButton.setVisibility(View.VISIBLE);
@@ -220,21 +249,6 @@ public abstract class RecordRegisterWrapperFragment extends Fragment {
         }
     }
 
-    protected void getMiniFields() {
-        for (Section section : sections) {
-            for (Field field : section.getFields()) {
-                if (field.isShowOnMiniForm()) {
-                    if (field.isPhotoUploadBox()) {
-                        miniFields.add(0, field);
-                    } else {
-                        miniFields.add(field);
-                    }
-                }
-            }
-        }
-        addProfileFieldForDetailsPage();
-    }
-
     private void addProfileFieldForDetailsPage() {
         if (((RecordActivity) getActivity()).getCurrentFeature().isDetailMode()) {
             Field field = new Field();
@@ -244,20 +258,6 @@ public abstract class RecordRegisterWrapperFragment extends Fragment {
             } catch (Exception e) {
                 miniFields.add(field);
             }
-        }
-    }
-
-    public void clearFocus() {
-        View focusedChild = miniFormContainer.getFocusedChild();
-        if (focusedChild != null) {
-            focusedChild.clearFocus();
-        }
-
-        FragmentStatePagerItemAdapter adapter =
-                (FragmentStatePagerItemAdapter) viewPager.getAdapter();
-        RecordRegisterFragment fragment = (RecordRegisterFragment) adapter.getPage(viewPager.getCurrentItem());
-        if (fragment != null) {
-            fragment.clearFocus();
         }
     }
 

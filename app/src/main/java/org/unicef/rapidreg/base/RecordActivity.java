@@ -23,7 +23,6 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 import org.unicef.rapidreg.R;
-import org.unicef.rapidreg.childcase.config.PhotoConfig;
 import org.unicef.rapidreg.event.NeedLoadFormsEvent;
 import org.unicef.rapidreg.event.UpdateImageEvent;
 import org.unicef.rapidreg.forms.CaseFormRoot;
@@ -104,117 +103,6 @@ public abstract class RecordActivity extends BaseActivity {
         }
     }
 
-    private void onSelectFromGalleryResult(Intent data) {
-        Uri uri = data.getData();
-        if (!TextUtils.isEmpty(uri.getAuthority())) {
-            Cursor cursor = getContentResolver().query(uri,
-                    new String[]{MediaStore.Images.Media.DATA}, null, null, null);
-            cursor.moveToFirst();
-            imagePath = cursor.getString(cursor
-                    .getColumnIndex(MediaStore.Images.Media.DATA));
-            cursor.close();
-            postSelectedImagePath();
-        }
-    }
-
-    public Feature getCurrentFeature() {
-        return currentFeature;
-    }
-
-    public void turnToFeature(Feature feature, Bundle args) {
-        currentFeature = feature;
-        changeToolbarTitle(feature.getTitleId());
-        changeToolbarIcon(feature);
-        try {
-            Fragment fragment = feature.getFragment();
-            if (args != null) {
-                fragment.setArguments(args);
-            }
-            navToFragment(fragment);
-        } catch (Exception e) {
-            throw new RuntimeException("Fragment navigation error", e);
-        }
-    }
-
-    public void turnToDetailOrEditPage(Feature feature, long recordId) {
-        try {
-
-            Bundle args = new Bundle();
-            args.putLong(RecordService.RECORD_ID, recordId);
-
-            currentFeature = feature;
-
-            turnToFeature(feature, args);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    private String getOutputMediaFilePath() {
-        File mediaStorageDir = new File(Environment.getExternalStorageDirectory()
-                + File.separator + getApplicationContext().getPackageName());
-        if (!mediaStorageDir.exists()) {
-            mediaStorageDir.mkdirs();
-        }
-        return mediaStorageDir.getPath() + File.separator + System.currentTimeMillis() + ".jpg";
-    }
-
-    private void onCaptureImageResult() {
-        try {
-            Bitmap bitmap = BitmapFactory.decodeFile(PhotoConfig.MEDIA_PATH_FOR_CAMERA);
-            imagePath = getOutputMediaFilePath();
-            ImageCompressUtil.storeImage(bitmap, imagePath);
-            bitmap.recycle();
-            postSelectedImagePath();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void postSelectedImagePath() {
-        UpdateImageEvent event = new UpdateImageEvent();
-        event.setImagePath(imagePath);
-        EventBus.getDefault().postSticky(event);
-    }
-
-    private void initToolbar() {
-        toolbar.inflateMenu(R.menu.toolbar_main);
-        toolbar.setOnMenuItemClickListener(new MenuItemListener());
-
-        saveMenu = toolbar.getMenu().findItem(R.id.save);
-        searchMenu = toolbar.getMenu().findItem(R.id.search);
-        showHideMenu = toolbar.getMenu().findItem(R.id.toggle);
-    }
-
-    protected void changeToolbarTitle(int resId) {
-        toolbar.setTitle(resId);
-    }
-
-    protected void changeToolbarIcon(Feature feature) {
-        hideAllToolbarIcons();
-
-        if (feature.isListMode()) {
-            showHideMenu.setVisible(true);
-            searchMenu.setVisible(true);
-        } else if (feature.isEditMode()) {
-            saveMenu.setVisible(true);
-        }
-    }
-
-    private void hideAllToolbarIcons() {
-        showHideMenu.setVisible(false);
-        searchMenu.setVisible(false);
-        saveMenu.setVisible(false);
-    }
-
-    private void navToFragment(Fragment target) {
-        if (target != null) {
-            String tag = target.getClass().getSimpleName();
-            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-            transaction.replace(R.id.fragment_content, target, tag).commit();
-        }
-    }
-
     @Subscribe(threadMode = ThreadMode.MAIN, sticky = true, priority = 1)
     public void onNeedLoadFormsEvent(final NeedLoadFormsEvent event) {
         EventBus.getDefault().removeStickyEvent(event);
@@ -281,6 +169,117 @@ public abstract class RecordActivity extends BaseActivity {
                         Log.i(TAG, throwable.getMessage());
                     }
                 }));
+    }
+
+    public Feature getCurrentFeature() {
+        return currentFeature;
+    }
+
+    public void turnToFeature(Feature feature, Bundle args) {
+        currentFeature = feature;
+        changeToolbarTitle(feature.getTitleId());
+        changeToolbarIcon(feature);
+        try {
+            Fragment fragment = feature.getFragment();
+            if (args != null) {
+                fragment.setArguments(args);
+            }
+            navToFragment(fragment);
+        } catch (Exception e) {
+            throw new RuntimeException("Fragment navigation error", e);
+        }
+    }
+
+    public void turnToDetailOrEditPage(Feature feature, long recordId) {
+        try {
+
+            Bundle args = new Bundle();
+            args.putLong(RecordService.RECORD_ID, recordId);
+
+            currentFeature = feature;
+
+            turnToFeature(feature, args);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    protected void changeToolbarTitle(int resId) {
+        toolbar.setTitle(resId);
+    }
+
+    protected void changeToolbarIcon(Feature feature) {
+        hideAllToolbarIcons();
+
+        if (feature.isListMode()) {
+            showHideMenu.setVisible(true);
+            searchMenu.setVisible(true);
+        } else if (feature.isEditMode()) {
+            saveMenu.setVisible(true);
+        }
+    }
+
+    private void onSelectFromGalleryResult(Intent data) {
+        Uri uri = data.getData();
+        if (!TextUtils.isEmpty(uri.getAuthority())) {
+            Cursor cursor = getContentResolver().query(uri,
+                    new String[]{MediaStore.Images.Media.DATA}, null, null, null);
+            cursor.moveToFirst();
+            imagePath = cursor.getString(cursor
+                    .getColumnIndex(MediaStore.Images.Media.DATA));
+            cursor.close();
+            postSelectedImagePath();
+        }
+    }
+
+    private String getOutputMediaFilePath() {
+        File mediaStorageDir = new File(Environment.getExternalStorageDirectory()
+                + File.separator + getApplicationContext().getPackageName());
+        if (!mediaStorageDir.exists()) {
+            mediaStorageDir.mkdirs();
+        }
+        return mediaStorageDir.getPath() + File.separator + System.currentTimeMillis() + ".jpg";
+    }
+
+    private void onCaptureImageResult() {
+        try {
+            Bitmap bitmap = BitmapFactory.decodeFile(PhotoConfig.MEDIA_PATH_FOR_CAMERA);
+            imagePath = getOutputMediaFilePath();
+            ImageCompressUtil.storeImage(bitmap, imagePath);
+            bitmap.recycle();
+            postSelectedImagePath();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void postSelectedImagePath() {
+        UpdateImageEvent event = new UpdateImageEvent();
+        event.setImagePath(imagePath);
+        EventBus.getDefault().postSticky(event);
+    }
+
+    private void initToolbar() {
+        toolbar.inflateMenu(R.menu.toolbar_main);
+        toolbar.setOnMenuItemClickListener(new MenuItemListener());
+
+        saveMenu = toolbar.getMenu().findItem(R.id.save);
+        searchMenu = toolbar.getMenu().findItem(R.id.search);
+        showHideMenu = toolbar.getMenu().findItem(R.id.toggle);
+    }
+
+    private void hideAllToolbarIcons() {
+        showHideMenu.setVisible(false);
+        searchMenu.setVisible(false);
+        saveMenu.setVisible(false);
+    }
+
+    private void navToFragment(Fragment target) {
+        if (target != null) {
+            String tag = target.getClass().getSimpleName();
+            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+            transaction.replace(R.id.fragment_content, target, tag).commit();
+        }
     }
 
     protected abstract void showHideDetail();

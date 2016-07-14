@@ -79,27 +79,11 @@ public abstract class RecordListFragment extends MvpFragment<RecordListView, Rec
         initFloatingMenu();
     }
 
-    private void initFloatingMenu() {
-        floatingMenu.setOnFloatingActionsMenuUpdateListener(
-                new FloatingActionsMenu.OnFloatingActionsMenuUpdateListener() {
-                    @Override
-                    public void onMenuExpanded() {
-                        setListAlpha(0.5f);
-                    }
-
-                    @Override
-                    public void onMenuCollapsed() {
-                        setListAlpha(1.0f);
-                    }
-                });
-    }
-
     @OnClick(R.id.add_case)
     public void onCaseAddClicked() {
         RecordService.clearAudioFile();
         if (!CaseFormService.getInstance().isFormReady()) {
-            Toast.makeText(getActivity(),
-                    R.string.syncing_forms_text, Toast.LENGTH_LONG).show();
+            Toast.makeText(getActivity(), R.string.syncing_forms_text, Toast.LENGTH_LONG).show();
             return;
         }
         floatingMenu.collapseImmediately();
@@ -112,8 +96,7 @@ public abstract class RecordListFragment extends MvpFragment<RecordListView, Rec
     public void onTracingAddClicked() {
         RecordService.clearAudioFile();
         if (!TracingFormService.getInstance().isFormReady()) {
-            Toast.makeText(getActivity(),
-                    R.string.syncing_forms_text, Toast.LENGTH_LONG).show();
+            Toast.makeText(getActivity(), R.string.syncing_forms_text, Toast.LENGTH_LONG).show();
             return;
         }
         floatingMenu.collapseImmediately();
@@ -128,6 +111,21 @@ public abstract class RecordListFragment extends MvpFragment<RecordListView, Rec
 
     private void setListAlpha(float value) {
         container.setAlpha(value);
+    }
+
+    private void initFloatingMenu() {
+        floatingMenu.setOnFloatingActionsMenuUpdateListener(
+                new FloatingActionsMenu.OnFloatingActionsMenuUpdateListener() {
+                    @Override
+                    public void onMenuExpanded() {
+                        setListAlpha(0.5f);
+                    }
+
+                    @Override
+                    public void onMenuCollapsed() {
+                        setListAlpha(1.0f);
+                    }
+                });
     }
 
     protected abstract void initOrderSpinner(final RecordListAdapter adapter);

@@ -161,17 +161,6 @@ public abstract class RecordSearchFragment extends MvpFragment<RecordListView, R
         adapter.notifyDataSetChanged();
     }
 
-    private String getFirstValidValue(Map<String, String> values) {
-        for (String key : values.keySet()) {
-            String value = values.get(key);
-            if (!TextUtils.isEmpty(value)) {
-                return value;
-            }
-        }
-
-        return getResources().getString(R.string.click_to_search);
-    }
-
     protected Date getDate(String value) {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM/dd/yyyy");
         try {
@@ -193,6 +182,17 @@ public abstract class RecordSearchFragment extends MvpFragment<RecordListView, R
         values.put(REGISTRATION_DATE, registrationDate.getText().toString());
 
         return values;
+    }
+
+    private String getFirstValidValue(Map<String, String> values) {
+        for (String key : values.keySet()) {
+            String value = values.get(key);
+            if (!TextUtils.isEmpty(value)) {
+                return value;
+            }
+        }
+
+        return getResources().getString(R.string.click_to_search);
     }
 
     protected abstract List<? extends RecordModel> getSearchResult(Map<String, String> filters);

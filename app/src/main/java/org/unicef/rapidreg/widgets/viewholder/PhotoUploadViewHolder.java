@@ -13,10 +13,10 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import org.unicef.rapidreg.R;
+import org.unicef.rapidreg.base.PhotoConfig;
 import org.unicef.rapidreg.base.RecordPhotoAdapter;
 import org.unicef.rapidreg.childcase.CaseActivity;
 import org.unicef.rapidreg.childcase.CasePhotoViewActivity;
-import org.unicef.rapidreg.childcase.config.PhotoConfig;
 import org.unicef.rapidreg.forms.Field;
 import org.unicef.rapidreg.service.cache.ItemValues;
 import org.unicef.rapidreg.tracing.TracingPhotoViewActivity;

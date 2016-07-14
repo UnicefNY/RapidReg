@@ -26,7 +26,6 @@ public class AudioRecorderActivity extends AppCompatActivity {
     public static final String CURRENT_STATE = "current_state";
     public static final int START_RECORDING = 0;
     public static final int START_PLAYING = 1;
-    public static final int RECODER_MIN_DURATION_MS = 4000;
 
     private static String mFileName = RecordService.AUDIO_FILE_PATH;
 
@@ -195,7 +194,6 @@ public class AudioRecorderActivity extends AppCompatActivity {
             }
         });
     }
-
 
     private void stopRecording() {
         if (mRecorder != null) {
