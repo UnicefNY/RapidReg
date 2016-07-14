@@ -15,4 +15,7 @@ public interface SyncView extends MvpView {
     public void showSyncSuccessMessage();
 
     public void setDataViews(String syncDate, String hasSyncAmount, String notSyncAmount);
+
+    public void setProgressMax(int max);
+    public void setProgressIncrease();
 }

@@ -78,6 +78,10 @@ public class CaseService extends RecordService {
         return caseDao.getAllCasesOrderByAge(false);
     }
 
+    public Case getCaseByUniqueId(String uniqueId) {
+        return caseDao.getCaseByUniqueId(uniqueId);
+    }
+
     public Map<String, String> getCaseMapByUniqueId(String uniqueId) {
         Case child = caseDao.getCaseByUniqueId(uniqueId);
         if (child == null) {
@@ -124,7 +128,6 @@ public class CaseService extends RecordService {
     }
 
     public void save(ItemValues itemValues, List<String> photoPath) {
-
         String username = UserService.getInstance().getCurrentUser().getUsername();
         itemValues.addStringItem(MODULE, "primeromodule-cp");
         itemValues.addStringItem(CASEWORKER_CODE, username);
