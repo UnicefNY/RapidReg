@@ -15,6 +15,4 @@ public interface Feature {
     boolean isListMode();
 
     boolean isDetailMode();
-
-    boolean isInAddMode();
 }

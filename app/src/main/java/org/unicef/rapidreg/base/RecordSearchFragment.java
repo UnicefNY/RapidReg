@@ -18,11 +18,7 @@ import android.widget.ViewSwitcher;
 import com.hannesdorfmann.mosby.mvp.MvpFragment;
 
 import org.unicef.rapidreg.R;
-import org.unicef.rapidreg.childcase.CaseListAdapter;
-import org.unicef.rapidreg.childcase.CaseListPresenter;
-import org.unicef.rapidreg.childcase.CaseListView;
-import org.unicef.rapidreg.model.Case;
-import org.unicef.rapidreg.service.CaseService;
+import org.unicef.rapidreg.model.RecordModel;
 import org.unicef.rapidreg.widgets.ClearableEditText;
 
 import java.sql.Date;
@@ -37,22 +33,22 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.OnTextChanged;
 
-public class RecordSearchFragment extends MvpFragment<CaseListView, CaseListPresenter>
-        implements CaseListView {
+public abstract class RecordSearchFragment extends MvpFragment<RecordListView, RecordListPresenter>
+        implements RecordListView {
     public static final String TAG = RecordSearchFragment.class.getSimpleName();
+
+    protected static final String ID = "id";
+    protected static final String NAME = "name";
+    protected static final String AGE_FROM = "age_from";
+    protected static final String AGE_TO = "age_to";
+    protected static final String CAREGIVER = "caregiver";
+    protected static final String REGISTRATION_DATE = "registration_date";
 
     private static final int HAVE_RESULT_LIST = 0;
     private static final int HAVE_NO_RESULT = 1;
 
-    private static final String ID = "id";
-    private static final String NAME = "name";
-    private static final String AGE_FROM = "age_from";
-    private static final String AGE_TO = "age_to";
-    private static final String CAREGIVER = "caregiver";
-    private static final String REGISTRATION_DATE = "registration_date";
-
     @BindView(R.id.list_container)
-    RecyclerView caseListContainer;
+    RecyclerView listContainer;
 
     @BindView(R.id.view_switcher)
     ViewSwitcher viewSwitcher;
@@ -84,13 +80,13 @@ public class RecordSearchFragment extends MvpFragment<CaseListView, CaseListPres
     @BindView(R.id.search_result)
     ViewSwitcher searchResultSwitcher;
 
-    private CaseListAdapter adapter;
+    private RecordListAdapter adapter;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_cases_search, container, false);
+        return inflater.inflate(R.layout.fragment_records_search, container, false);
     }
 
     @Override
@@ -101,18 +97,13 @@ public class RecordSearchFragment extends MvpFragment<CaseListView, CaseListPres
     }
 
     @Override
-    public CaseListPresenter createPresenter() {
-        return new CaseListPresenter();
-    }
-
-    @Override
-    public void initView(final CaseListAdapter adapter) {
+    public void initView(final RecordListAdapter adapter) {
         this.adapter = adapter;
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        caseListContainer.setLayoutManager(layoutManager);
-        caseListContainer.setAdapter(adapter);
+        listContainer.setLayoutManager(layoutManager);
+        listContainer.setAdapter(adapter);
     }
 
     @OnClick(R.id.search_bar)
@@ -161,7 +152,7 @@ public class RecordSearchFragment extends MvpFragment<CaseListView, CaseListPres
         Map<String, String> values = getFilterValues();
         searchBarTitle.setText(getFirstValidValue(values));
 
-        List<Case> searchResult = getSearchResult(values);
+        List<? extends RecordModel> searchResult = getSearchResult(values);
 
         int resultIndex = searchResult.isEmpty() ? HAVE_NO_RESULT : HAVE_RESULT_LIST;
         searchResultSwitcher.setDisplayedChild(resultIndex);
@@ -181,7 +172,7 @@ public class RecordSearchFragment extends MvpFragment<CaseListView, CaseListPres
         return getResources().getString(R.string.click_to_search);
     }
 
-    private Date getDate(String value) {
+    protected Date getDate(String value) {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM/dd/yyyy");
         try {
             java.util.Date date = simpleDateFormat.parse(value);
@@ -204,19 +195,7 @@ public class RecordSearchFragment extends MvpFragment<CaseListView, CaseListPres
         return values;
     }
 
-    private List<Case> getSearchResult(Map<String, String> filters) {
-        String id = filters.get(ID);
-        String name = filters.get(NAME);
-        String from = filters.get(AGE_FROM);
-        int ageFrom = TextUtils.isEmpty(from) ? Case.MIN_AGE : Integer.valueOf(from);
-        String to = filters.get(AGE_TO);
-        int ageTo = TextUtils.isEmpty(to) ? Case.MAX_AGE : Integer.valueOf(to);
-        String caregiver = filters.get(CAREGIVER);
-        String registrationDate = filters.get(REGISTRATION_DATE);
-
-        return CaseService.getInstance().getSearchResult(id, name, ageFrom, ageTo,
-                caregiver, getDate(registrationDate));
-    }
+    protected abstract List<? extends RecordModel> getSearchResult(Map<String, String> filters);
 }
 
 

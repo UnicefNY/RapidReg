@@ -45,7 +45,7 @@ public class TracingListFragment extends RecordListFragment {
     @Override
     protected void initOrderSpinner(final RecordListAdapter adapter) {
         orderSpinner.setAdapter(new SpinnerAdapter(getActivity(),
-                R.layout.list_spinner_opened, Arrays.asList(SPINNER_STATES)));
+                R.layout.record_list_spinner_opened, Arrays.asList(SPINNER_STATES)));
         orderSpinner.setSelection(DEFAULT_SPINNER_STATE_POSITION);
         orderSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override

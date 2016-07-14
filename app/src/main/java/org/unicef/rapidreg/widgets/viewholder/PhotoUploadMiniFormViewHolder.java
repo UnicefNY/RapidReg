@@ -11,11 +11,14 @@ import android.widget.ImageView;
 import com.bumptech.glide.Glide;
 
 import org.unicef.rapidreg.R;
+import org.unicef.rapidreg.childcase.CaseActivity;
 import org.unicef.rapidreg.forms.Field;
-import org.unicef.rapidreg.model.CasePhoto;
+import org.unicef.rapidreg.model.RecordPhoto;
 import org.unicef.rapidreg.service.CasePhotoService;
+import org.unicef.rapidreg.service.TracingPhotoService;
 import org.unicef.rapidreg.service.cache.ItemValues;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -25,7 +28,7 @@ import me.relex.circleindicator.CircleIndicator;
 public class PhotoUploadMiniFormViewHolder extends BaseViewHolder<Field> {
     public static final String TAG = PhotoUploadMiniFormViewHolder.class.getSimpleName();
 
-    @BindView(R.id.case_photo_view_slider)
+    @BindView(R.id.record_photo_view_slider)
     ViewPager viewPager;
 
     @BindView(R.id.indicator)
@@ -41,7 +44,7 @@ public class PhotoUploadMiniFormViewHolder extends BaseViewHolder<Field> {
 
     @Override
     public void setValue(Field field) {
-        viewPager.setAdapter(new CasePhotoViewPagerAdapter());
+        viewPager.setAdapter(new RecordPhotoViewPagerAdapter());
         indicator.setViewPager(viewPager);
     }
 
@@ -59,12 +62,14 @@ public class PhotoUploadMiniFormViewHolder extends BaseViewHolder<Field> {
     public void setFieldEditable(boolean editable) {
     }
 
-    public class CasePhotoViewPagerAdapter extends PagerAdapter {
-        private List<CasePhoto> flowQueryList;
+    public class RecordPhotoViewPagerAdapter extends PagerAdapter {
+        private List<? extends RecordPhoto> flowQueryList = new ArrayList<>();
 
-        public CasePhotoViewPagerAdapter() {
-            flowQueryList = CasePhotoService.getInstance().getByCaseId(
-                    itemValues.getAsInt(ItemValues.CaseProfile.ID));
+        public RecordPhotoViewPagerAdapter() {
+            Integer id = itemValues.getAsInt(ItemValues.RecordProfile.ID);
+            flowQueryList = context instanceof CaseActivity ?
+                    CasePhotoService.getInstance().getByCaseId(id)
+                    : TracingPhotoService.getInstance().getByTracingId(id);
         }
 
         @Override
@@ -84,9 +89,9 @@ public class PhotoUploadMiniFormViewHolder extends BaseViewHolder<Field> {
 
         @Override
         public Object instantiateItem(ViewGroup container, int position) {
-            View itemView = LayoutInflater.from(context).inflate(R.layout.case_photo_view_item,
+            View itemView = LayoutInflater.from(context).inflate(R.layout.record_photo_view_item,
                     container, false);
-            ImageView imageView = (ImageView) itemView.findViewById(R.id.case_photo_item);
+            ImageView imageView = (ImageView) itemView.findViewById(R.id.record_photo_item);
 
             if (flowQueryList.isEmpty()) {
                 Glide.with(context).load(R.drawable.photo_placeholder).centerCrop().into(imageView);

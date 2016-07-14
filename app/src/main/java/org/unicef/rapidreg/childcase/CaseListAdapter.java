@@ -67,7 +67,6 @@ public class CaseListAdapter extends RecordListAdapter {
                         StreamUtil.writeFile(record.getAudio().getBlob(), RecordService.AUDIO_FILE_PATH);
                     }
                 } catch (IOException e) {
-                    e.printStackTrace();
                 }
             }
         });

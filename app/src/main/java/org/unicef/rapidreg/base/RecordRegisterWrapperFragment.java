@@ -1,24 +1,19 @@
 package org.unicef.rapidreg.base;
 
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
-import android.widget.Toast;
 
 import com.getbase.floatingactionbutton.FloatingActionButton;
-import com.google.gson.Gson;
 import com.ogaclejapan.smarttablayout.SmartTabLayout;
-import com.ogaclejapan.smarttablayout.utils.v4.FragmentPagerItem;
 import com.ogaclejapan.smarttablayout.utils.v4.FragmentPagerItems;
 import com.ogaclejapan.smarttablayout.utils.v4.FragmentStatePagerItemAdapter;
 
@@ -26,36 +21,23 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 import org.unicef.rapidreg.R;
-import org.unicef.rapidreg.base.SwipeChangeLayout;
-import org.unicef.rapidreg.childcase.CaseActivity;
-import org.unicef.rapidreg.childcase.CaseFeature;
-import org.unicef.rapidreg.childcase.CasePhotoAdapter;
-import org.unicef.rapidreg.childcase.CaseRegisterFragment;
-import org.unicef.rapidreg.childcase.media.CasePhotoAdapter;
-import org.unicef.rapidreg.event.SaveCaseEvent;
 import org.unicef.rapidreg.event.UpdateImageEvent;
-import org.unicef.rapidreg.forms.CaseFormRoot;
 import org.unicef.rapidreg.forms.Field;
+import org.unicef.rapidreg.forms.RecordForm;
 import org.unicef.rapidreg.forms.Section;
-import org.unicef.rapidreg.model.Case;
-import org.unicef.rapidreg.model.CasePhoto;
-import org.unicef.rapidreg.service.CaseFormService;
-import org.unicef.rapidreg.service.CasePhotoService;
-import org.unicef.rapidreg.service.CaseService;
+import org.unicef.rapidreg.model.RecordModel;
+import org.unicef.rapidreg.service.RecordService;
 import org.unicef.rapidreg.service.cache.ItemValues;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 
-public class RecordRegisterWrapperFragment extends Fragment {
+public abstract class RecordRegisterWrapperFragment extends Fragment {
 
     @BindView(R.id.viewpager)
     ViewPager viewPager;
@@ -78,19 +60,18 @@ public class RecordRegisterWrapperFragment extends Fragment {
     @BindView(R.id.mini_form_container)
     RecyclerView miniFormContainer;
 
-    @BindView(R.id.edit_case)
-    FloatingActionButton editCaseButton;
+    @BindView(R.id.edit)
+    FloatingActionButton editButton;
 
-    private CaseFormRoot caseForm;
-    private List<Section> sections;
-    private List<Field> miniFields;
-    private CaseRegisterAdapter miniFormAdapter;
-    private CaseRegisterAdapter fullFormAdapter;
-    private CasePhotoAdapter casePhotoAdapter;
 
-    private ItemValues itemValues;
-
-    private long caseId;
+    protected ItemValues itemValues;
+    protected long recordId;
+    protected RecordForm form;
+    protected List<Section> sections;
+    protected List<Field> miniFields;
+    protected RecordRegisterAdapter miniFormAdapter;
+    protected RecordRegisterAdapter fullFormAdapter;
+    protected RecordPhotoAdapter recordPhotoAdapter;
 
     @Nullable
     @Override
@@ -99,28 +80,20 @@ public class RecordRegisterWrapperFragment extends Fragment {
                              @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
 
-        View view = inflater.inflate(R.layout.fragment_cases_register_wrapper, container, false);
+        View view = inflater.inflate(R.layout.fragment_register_wrapper, container, false);
         ButterKnife.bind(this, view);
 
-        if (getArguments() != null) {
-            caseId = getArguments().getLong("case_id");
-            Case caseItem = CaseService.getInstance().getById(caseId);
-            String caseJson = new String(caseItem.getContent().getBlob());
-            String subFormJson = new String(caseItem.getSubform().getBlob());
-            itemValues = ItemValues.generateItemValues(caseJson, subFormJson);
-            itemValues.addStringItem(CaseService.CASE_ID, caseItem.getUniqueId());
-            itemValues.addStringItem(CaseService.CASE_ID, caseItem.getUniqueId());
-            initProfile(caseItem);
-        }
+        initItemValues();
+
         if (itemValues == null) {
             itemValues = new ItemValues();
         }
 
-        initCaseFormData();
+        initFormData();
         initFloatingActionButton();
 
-        miniFormAdapter = new CaseRegisterAdapter(getActivity(), miniFields, itemValues, true);
-        miniFormAdapter.setCasePhotoAdapter(initCasePhotoAdapter());
+        miniFormAdapter = new RecordRegisterAdapter(getActivity(), miniFields, itemValues, true);
+        miniFormAdapter.setPhotoAdapter(initPhotoAdapter());
 
         initFullFormContainer();
         initMiniFormContainer();
@@ -128,18 +101,15 @@ public class RecordRegisterWrapperFragment extends Fragment {
         return view;
     }
 
-    private void initProfile(Case caseItem) {
+    protected void initProfile(RecordModel item) {
         DateFormat dateFormat = SimpleDateFormat.getDateInstance(DateFormat.MEDIUM, Locale.US);
-        String shortUUID = CaseService.getInstance().getShortUUID(caseItem.getUniqueId());
-        itemValues.addStringItem(ItemValues.CaseProfile.ID_NORMAL_STATE,
-                shortUUID);
-        itemValues.addStringItem(ItemValues.CaseProfile.REGISTRATION_DATE,
-                dateFormat.format(caseItem.getRegistrationDate()));
-        itemValues.addStringItem(ItemValues.CaseProfile.GENDER_NAME,
-                shortUUID);
-        itemValues.addNumberItem(ItemValues.CaseProfile.ID, caseItem.getId());
+        String shortUUID = RecordService.getShortUUID(item.getUniqueId());
+        itemValues.addStringItem(ItemValues.RecordProfile.ID_NORMAL_STATE, shortUUID);
+        itemValues.addStringItem(ItemValues.RecordProfile.REGISTRATION_DATE,
+                dateFormat.format(item.getRegistrationDate()));
+        itemValues.addStringItem(ItemValues.RecordProfile.GENDER_NAME, shortUUID);
+        itemValues.addNumberItem(ItemValues.RecordProfile.ID, item.getId());
     }
-
 
     @Override
     public void onStart() {
@@ -153,70 +123,28 @@ public class RecordRegisterWrapperFragment extends Fragment {
         EventBus.getDefault().unregister(this);
     }
 
-    @OnClick(R.id.edit_case)
-    public void onCaseEditClicked() {
-        ((CaseActivity) getActivity()).turnToDetailOrEditPage(CaseFeature.EDIT, caseId);
-    }
-
-    private CasePhotoAdapter initCasePhotoAdapter() {
-        casePhotoAdapter = new CasePhotoAdapter(getContext(), new ArrayList<String>());
-
-        List<CasePhoto> casesPhotoFlowQueryList = CasePhotoService.getInstance().getByCaseId(caseId);
-        for (int i = 0; i < casesPhotoFlowQueryList.size(); i++) {
-            casePhotoAdapter.addItem(casesPhotoFlowQueryList.get(i).getId());
-        }
-        return casePhotoAdapter;
-    }
-
     @Subscribe(threadMode = ThreadMode.MAIN, sticky = true, priority = 1)
     public void updateImageAdapter(UpdateImageEvent event) {
-        casePhotoAdapter.addItem(event.getImagePath());
+        recordPhotoAdapter.addItem(event.getImagePath());
         ImageButton view = (ImageButton) getActivity().findViewById(R.id.add_image_button);
 
-        if (!casePhotoAdapter.isEmpty()) {
+        if (!recordPhotoAdapter.isEmpty()) {
             view.setImageResource(R.drawable.photo_add);
         }
-        if (casePhotoAdapter.isFull()) {
+        if (recordPhotoAdapter.isFull()) {
             view.setVisibility(View.GONE);
         }
 
-        casePhotoAdapter.notifyDataSetChanged();
+        recordPhotoAdapter.notifyDataSetChanged();
         EventBus.getDefault().removeStickyEvent(event);
 
     }
 
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void saveCase(SaveCaseEvent event) {
-        if (validateRequiredField()) {
-            List<String> photoPaths = casePhotoAdapter.getAllItems();
-            CaseService.getInstance().saveOrUpdate(itemValues, photoPaths);
-        }
-    }
-
-    private boolean validateRequiredField() {
-        CaseFormRoot caseForm = CaseFormService.getInstance().getCurrentForm();
-        List<String> requiredFieldNames = new ArrayList<>();
-
-        for (Section section : caseForm.getSections()) {
-            Collections.addAll(requiredFieldNames, CaseService.getInstance()
-                    .fetchRequiredFiledNames(section.getFields()).toArray(new String[0]));
-        }
-
-        for (String field : requiredFieldNames) {
-            if (TextUtils.isEmpty((CharSequence) itemValues.getValues().get(field))) {
-                Toast.makeText(getActivity(), R.string.required_field_is_not_filled,
-                        Toast.LENGTH_LONG).show();
-                return false;
-            }
-        }
-        return true;
-    }
-
     private void initFloatingActionButton() {
-        if (((CaseActivity) getActivity()).getCurrentFeature() == CaseFeature.DETAILS) {
-            editCaseButton.setVisibility(View.VISIBLE);
+        if (((RecordActivity) getActivity()).getCurrentFeature().isDetailMode()) {
+            editButton.setVisibility(View.VISIBLE);
         } else {
-            editCaseButton.setVisibility(View.GONE);
+            editButton.setVisibility(View.GONE);
         }
     }
 
@@ -235,7 +163,7 @@ public class RecordRegisterWrapperFragment extends Fragment {
                 public void onViewPositionChanged(float fractionAnchor, float fractionScreen) {
                     if (fullFormAdapter != null) {
                         fullFormAdapter.setItemValues(itemValues);
-                        fullFormAdapter.setCasePhotoAdapter(casePhotoAdapter);
+                        fullFormAdapter.setPhotoAdapter(recordPhotoAdapter);
                     }
                 }
             });
@@ -264,12 +192,12 @@ public class RecordRegisterWrapperFragment extends Fragment {
                 fullFormSwipeLayout.setScrollChild(
                         adapter.getPage(position).getView()
                                 .findViewById(R.id.register_forms_content));
-                CaseRegisterFragment currentPage = (CaseRegisterFragment) adapter.getPage(position);
+                RecordRegisterFragment currentPage = (RecordRegisterFragment) adapter.getPage(position);
 
                 itemValues = currentPage.getItemValues();
-                fullFormAdapter = currentPage.getCaseRegisterAdapter();
+                fullFormAdapter = currentPage.getRegisterAdapter();
                 fullFormAdapter.setItemValues(itemValues);
-                fullFormAdapter.setCasePhotoAdapter(casePhotoAdapter);
+                fullFormAdapter.setPhotoAdapter(recordPhotoAdapter);
             }
 
             @Override
@@ -292,16 +220,7 @@ public class RecordRegisterWrapperFragment extends Fragment {
         }
     }
 
-    private void initCaseFormData() {
-        caseForm = CaseFormService.getInstance().getCurrentForm();
-        sections = caseForm.getSections();
-        miniFields = new ArrayList<>();
-        if (caseForm != null) {
-            getMiniFields();
-        }
-    }
-
-    private void getMiniFields() {
+    protected void getMiniFields() {
         for (Section section : sections) {
             for (Field field : section.getFields()) {
                 if (field.isShowOnMiniForm()) {
@@ -317,7 +236,7 @@ public class RecordRegisterWrapperFragment extends Fragment {
     }
 
     private void addProfileFieldForDetailsPage() {
-        if (((CaseActivity) getActivity()).getCurrentFeature() == CaseFeature.DETAILS) {
+        if (((RecordActivity) getActivity()).getCurrentFeature().isDetailMode()) {
             Field field = new Field();
             field.setType(Field.TYPE_MINI_FORM_PROFILE);
             try {
@@ -328,20 +247,6 @@ public class RecordRegisterWrapperFragment extends Fragment {
         }
     }
 
-    @NonNull
-    private FragmentPagerItems getPages() {
-        FragmentPagerItems pages = new FragmentPagerItems(getActivity());
-        for (Section section : sections) {
-            String[] values = section.getName().values().toArray(new String[0]);
-            Bundle bundle = new Bundle();
-            bundle.putStringArrayList("case_photos",
-                    (ArrayList<String>) casePhotoAdapter.getAllItems());
-            bundle.putString("item_values", new Gson().toJson(itemValues.getValues()));
-            pages.add(FragmentPagerItem.of(values[0], CaseRegisterFragment.class, bundle));
-        }
-        return pages;
-    }
-
     public void clearFocus() {
         View focusedChild = miniFormContainer.getFocusedChild();
         if (focusedChild != null) {
@@ -350,10 +255,17 @@ public class RecordRegisterWrapperFragment extends Fragment {
 
         FragmentStatePagerItemAdapter adapter =
                 (FragmentStatePagerItemAdapter) viewPager.getAdapter();
-        CaseRegisterFragment fragment = (CaseRegisterFragment) adapter
-                .getPage(viewPager.getCurrentItem());
+        RecordRegisterFragment fragment = (RecordRegisterFragment) adapter.getPage(viewPager.getCurrentItem());
         if (fragment != null) {
             fragment.clearFocus();
         }
     }
+
+    protected abstract void initItemValues();
+
+    protected abstract void initFormData();
+
+    protected abstract RecordPhotoAdapter initPhotoAdapter();
+
+    protected abstract FragmentPagerItems getPages();
 }

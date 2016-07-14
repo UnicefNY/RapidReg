@@ -183,7 +183,7 @@ public class ItemValues {
         }
     }
 
-    public static class CaseProfile {
+    public static class RecordProfile {
         public static final String ID_NORMAL_STATE = "_id_normal_state";
         public static final String GENDER_NAME = "_gender_name";
         public static final String REGISTRATION_DATE = "_registration_date";

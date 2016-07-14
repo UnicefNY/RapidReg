@@ -1,25 +1,15 @@
 package org.unicef.rapidreg.base;
 
 import android.content.Context;
-import android.graphics.Point;
 import android.support.v4.view.PagerAdapter;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-
-import com.bumptech.glide.Glide;
-
-import org.unicef.rapidreg.R;
-import org.unicef.rapidreg.childcase.media.RecordPhotoViewActivity;
-import org.unicef.rapidreg.service.CasePhotoService;
 
 import java.util.List;
 
-public class RecordPhotoViewAdapter extends PagerAdapter {
-
-    private Context context;
-    private List<String> paths;
+public abstract class RecordPhotoViewAdapter extends PagerAdapter {
+    protected Context context;
+    protected List<String> paths;
 
     public RecordPhotoViewAdapter(Context context, List<String> photos) {
         this.context = context;
@@ -39,27 +29,5 @@ public class RecordPhotoViewAdapter extends PagerAdapter {
     @Override
     public boolean isViewFromObject(View arg0, Object arg1) {
         return arg0 == arg1;
-    }
-
-    @Override
-    public Object instantiateItem(ViewGroup container, int position) {
-        Point size = new Point();
-        ((RecordPhotoViewActivity) context).getWindowManager().getDefaultDisplay().getSize(size);
-
-        View itemView = LayoutInflater.from(context)
-                .inflate(R.layout.case_photo_view_item, container, false);
-        ImageView imageView = (ImageView) itemView.findViewById(R.id.case_photo_item);
-        imageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
-
-        String path = paths.get(position);
-        try {
-            long caseId = Long.parseLong(path);
-            Glide.with(context).load(CasePhotoService.getInstance().getById(caseId)
-                    .getPhoto().getBlob()).into(imageView);
-        } catch (NumberFormatException e) {
-            Glide.with(context).load(path).into(imageView);
-        }
-        container.addView(itemView);
-        return itemView;
     }
 }

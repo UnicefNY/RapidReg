@@ -14,6 +14,9 @@ import java.util.Locale;
 import java.util.UUID;
 
 public class RecordService {
+    public static final String RECORD_ID = "record_id";
+    public static final String ITEM_VALUES = "item_values";
+    public static final String RECORD_PHOTOS = "record_photos";
     public static final String AGE = "age";
     public static final String FULL_NAME = "name";
     public static final String FIRST_NAME = "name_first";
@@ -45,7 +48,7 @@ public class RecordService {
         return length > 7 ? uuid.substring(length - 7) : uuid;
     }
 
-    public List<String> fetchRequiredFiledNames(List<Field> fields) {
+    public static List<String> fetchRequiredFiledNames(List<Field> fields) {
         List<String> result = new ArrayList<>();
         for (Field field : fields) {
             if (field.isRequired()) {
