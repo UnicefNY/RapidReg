@@ -52,10 +52,6 @@ public abstract class RecordRegisterFragment extends MvpFragment<RecordRegisterV
         return recordRegisterAdapter;
     }
 
-    public ItemValues getItemValues() {
-        return itemValues;
-    }
-
     public void clearFocus() {
         View focusedChild = fieldList.getFocusedChild();
         if (focusedChild != null) {

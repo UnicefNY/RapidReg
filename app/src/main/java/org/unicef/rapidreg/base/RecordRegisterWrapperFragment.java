@@ -191,7 +191,6 @@ public abstract class RecordRegisterWrapperFragment extends Fragment {
                 @Override
                 public void onViewPositionChanged(float fractionAnchor, float fractionScreen) {
                     if (fullFormAdapter != null) {
-                        fullFormAdapter.setItemValues(itemValues);
                         fullFormAdapter.setPhotoAdapter(recordPhotoAdapter);
                     }
                 }
@@ -219,13 +218,10 @@ public abstract class RecordRegisterWrapperFragment extends Fragment {
             @Override
             public void onPageSelected(int position) {
                 fullFormSwipeLayout.setScrollChild(
-                        adapter.getPage(position).getView()
-                                .findViewById(R.id.register_forms_content));
+                        adapter.getPage(position).getView().findViewById(R.id.register_forms_content));
                 RecordRegisterFragment currentPage = (RecordRegisterFragment) adapter.getPage(position);
 
-                itemValues = currentPage.getItemValues();
                 fullFormAdapter = currentPage.getRegisterAdapter();
-                fullFormAdapter.setItemValues(itemValues);
                 fullFormAdapter.setPhotoAdapter(recordPhotoAdapter);
             }
 

@@ -55,7 +55,6 @@ public class CaseRegisterWrapperFragment extends RecordRegisterWrapperFragment {
             String subFormJson = new String(caseItem.getSubform().getBlob());
             itemValues = ItemValues.generateItemValues(caseJson, subFormJson);
             itemValues.addStringItem(RecordService.RECORD_ID, caseItem.getUniqueId());
-            itemValues.addStringItem(RecordService.RECORD_ID, caseItem.getUniqueId());
             initProfile(caseItem);
         }
     }
