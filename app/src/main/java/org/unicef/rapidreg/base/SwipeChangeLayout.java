@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.unicef.rapidreg.base.view;
+package org.unicef.rapidreg.base;
 
 import android.app.Activity;
 import android.content.Context;
@@ -25,20 +25,18 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AbsListView;
-import android.widget.ScrollView;
 
 /**
  * Swipe or Pull to finish a Activity.
- * <p/>
+ * <p>
  * This layout must be a root layout and contains only one direct child view.
- * <p/>
+ * <p>
  * The activity must use a theme that with translucent style.
  * <style name="Theme.Swipe.Back" parent="AppTheme">
  * <item name="android:windowIsTranslucent">true</item>
  * <item name="android:windowBackground">@android:color/transparent</item>
  * </style>
- * <p/>
+ * <p>
  * Created by Eric on 15/1/8.
  */
 public class SwipeChangeLayout extends ViewGroup {
@@ -405,7 +403,7 @@ public class SwipeChangeLayout extends ViewGroup {
     }
 
     private void smoothScrollToY(int finalTop) {
-        if (viewDragHelper.settleCapturedViewAt(0, finalTop)){
+        if (viewDragHelper.settleCapturedViewAt(0, finalTop)) {
             ViewCompat.postInvalidateOnAnimation(SwipeChangeLayout.this);
         }
     }

@@ -26,7 +26,7 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 import org.unicef.rapidreg.R;
-import org.unicef.rapidreg.base.view.BaseActivity;
+import org.unicef.rapidreg.base.BaseActivity;
 import org.unicef.rapidreg.childcase.config.PhotoConfig;
 import org.unicef.rapidreg.event.NeedLoadFormsEvent;
 import org.unicef.rapidreg.event.SaveCaseEvent;
