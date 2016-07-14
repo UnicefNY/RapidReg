@@ -1,4 +1,4 @@
-package org.unicef.rapidreg.childcase.media;
+package org.unicef.rapidreg.base;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -14,13 +14,13 @@ import org.unicef.rapidreg.service.CasePhotoService;
 
 import java.util.List;
 
-public class CasePhotoAdapter extends BaseAdapter {
+public class RecordPhotoAdapter extends BaseAdapter {
     private final static int MAX = 4;
     private Context context;
     private List<String> paths;
 
 
-    public CasePhotoAdapter(Context context, List<String> paths) {
+    public RecordPhotoAdapter(Context context, List<String> paths) {
         this.context = context;
         this.paths = paths;
     }

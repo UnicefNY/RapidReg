@@ -1,4 +1,4 @@
-package org.unicef.rapidreg.childcase.media;
+package org.unicef.rapidreg.childcase;
 
 import android.graphics.Point;
 import android.os.Bundle;
@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 
 import org.unicef.rapidreg.R;
+import org.unicef.rapidreg.childcase.CasePhotoViewAdapter;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;

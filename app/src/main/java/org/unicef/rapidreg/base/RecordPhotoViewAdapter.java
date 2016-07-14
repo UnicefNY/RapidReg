@@ -1,4 +1,4 @@
-package org.unicef.rapidreg.childcase.media;
+package org.unicef.rapidreg.base;
 
 import android.content.Context;
 import android.graphics.Point;
@@ -11,16 +11,17 @@ import android.widget.ImageView;
 import com.bumptech.glide.Glide;
 
 import org.unicef.rapidreg.R;
+import org.unicef.rapidreg.childcase.media.RecordPhotoViewActivity;
 import org.unicef.rapidreg.service.CasePhotoService;
 
 import java.util.List;
 
-public class CasePhotoViewAdapter extends PagerAdapter {
+public class RecordPhotoViewAdapter extends PagerAdapter {
 
     private Context context;
     private List<String> paths;
 
-    public CasePhotoViewAdapter(Context context, List<String> photos) {
+    public RecordPhotoViewAdapter(Context context, List<String> photos) {
         this.context = context;
         this.paths = photos;
     }
@@ -43,7 +44,7 @@ public class CasePhotoViewAdapter extends PagerAdapter {
     @Override
     public Object instantiateItem(ViewGroup container, int position) {
         Point size = new Point();
-        ((CasePhotoViewActivity) context).getWindowManager().getDefaultDisplay().getSize(size);
+        ((RecordPhotoViewActivity) context).getWindowManager().getDefaultDisplay().getSize(size);
 
         View itemView = LayoutInflater.from(context)
                 .inflate(R.layout.case_photo_view_item, container, false);
