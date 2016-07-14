@@ -42,7 +42,7 @@ public class MiniFormProfileViewHolder extends BaseViewHolder<Field> {
 
     @Override
     public void setValue(Field field) {
-        idView.setText(itemValues.getAsString(ItemValues.CaseProfile.ID_NORMAL_STATE));
+        idView.setText(itemValues.getAsString(ItemValues.RecordProfile.ID_NORMAL_STATE));
         CaseListAdapter.Gender gender;
         if (itemValues.getAsString("sex") != null) {
             gender = CaseListAdapter.Gender.valueOf(itemValues.getAsString("sex").toUpperCase());
@@ -54,7 +54,7 @@ public class MiniFormProfileViewHolder extends BaseViewHolder<Field> {
         genderName.setText(gender.getName());
         genderName.setTextColor(ContextCompat.getColor(context, gender.getColorId()));
         age.setText(itemValues.getAsString("age"));
-        registrationDate.setText(itemValues.getAsString(ItemValues.CaseProfile.REGISTRATION_DATE));
+        registrationDate.setText(itemValues.getAsString(ItemValues.RecordProfile.REGISTRATION_DATE));
     }
 
     @Override

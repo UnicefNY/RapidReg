@@ -123,8 +123,7 @@ public class SyncPresenter extends MvpBasePresenter<SyncView> {
     }
 
     private void startUpLoadCases() {
-
-        final List<Case> caseList = CaseService.getInstance().getCaseList();
+        final List<Case> caseList = CaseService.getInstance().getAll();
         getView().setProgressMax(caseList.size());
         Observable.just(caseList)
                 .flatMap(new Func1<List<Case>, Observable<Case>>() {

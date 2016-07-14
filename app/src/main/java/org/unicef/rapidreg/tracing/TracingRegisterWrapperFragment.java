@@ -1,4 +1,4 @@
-package org.unicef.rapidreg.childcase;
+package org.unicef.rapidreg.tracing;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -14,15 +14,15 @@ import org.greenrobot.eventbus.ThreadMode;
 import org.unicef.rapidreg.R;
 import org.unicef.rapidreg.base.RecordPhotoAdapter;
 import org.unicef.rapidreg.base.RecordRegisterWrapperFragment;
-import org.unicef.rapidreg.event.SaveCaseEvent;
-import org.unicef.rapidreg.forms.CaseFormRoot;
+import org.unicef.rapidreg.event.SaveTracingEvent;
 import org.unicef.rapidreg.forms.Section;
-import org.unicef.rapidreg.model.Case;
-import org.unicef.rapidreg.model.CasePhoto;
-import org.unicef.rapidreg.service.CaseFormService;
-import org.unicef.rapidreg.service.CasePhotoService;
-import org.unicef.rapidreg.service.CaseService;
+import org.unicef.rapidreg.forms.TracingFormRoot;
+import org.unicef.rapidreg.model.Tracing;
+import org.unicef.rapidreg.model.TracingPhoto;
 import org.unicef.rapidreg.service.RecordService;
+import org.unicef.rapidreg.service.TracingFormService;
+import org.unicef.rapidreg.service.TracingPhotoService;
+import org.unicef.rapidreg.service.TracingService;
 import org.unicef.rapidreg.service.cache.ItemValues;
 
 import java.util.ArrayList;
@@ -31,38 +31,24 @@ import java.util.List;
 
 import butterknife.OnClick;
 
-public class CaseRegisterWrapperFragment extends RecordRegisterWrapperFragment {
-
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void saveCase(SaveCaseEvent event) {
-        if (validateRequiredField()) {
-            List<String> photoPaths = recordPhotoAdapter.getAllItems();
-            CaseService.getInstance().saveOrUpdate(itemValues, photoPaths);
-        }
-    }
-
-    @OnClick(R.id.edit)
-    public void onEditClicked() {
-        ((CaseActivity) getActivity()).turnToDetailOrEditPage(CaseFeature.EDIT, recordId);
-    }
-
+public class TracingRegisterWrapperFragment extends RecordRegisterWrapperFragment {
     @Override
     protected void initItemValues() {
         if (getArguments() != null) {
             recordId = getArguments().getLong(RecordService.RECORD_ID);
-            Case caseItem = CaseService.getInstance().getById(recordId);
-            String caseJson = new String(caseItem.getContent().getBlob());
-            String subFormJson = new String(caseItem.getSubform().getBlob());
-            itemValues = ItemValues.generateItemValues(caseJson, subFormJson);
-            itemValues.addStringItem(RecordService.RECORD_ID, caseItem.getUniqueId());
-            itemValues.addStringItem(RecordService.RECORD_ID, caseItem.getUniqueId());
-            initProfile(caseItem);
+            Tracing tracingItem = TracingService.getInstance().getById(recordId);
+            String tracingJson = new String(tracingItem.getContent().getBlob());
+            String subFormJson = new String(tracingItem.getSubform().getBlob());
+            itemValues = ItemValues.generateItemValues(tracingJson, subFormJson);
+            itemValues.addStringItem(RecordService.RECORD_ID, tracingItem.getUniqueId());
+            itemValues.addStringItem(RecordService.RECORD_ID, tracingItem.getUniqueId());
+            initProfile(tracingItem);
         }
     }
 
     @Override
     protected void initFormData() {
-        form = CaseFormService.getInstance().getCurrentForm();
+        form = TracingFormService.getInstance().getCurrentForm();
         sections = form.getSections();
         miniFields = new ArrayList<>();
         if (form != null) {
@@ -72,11 +58,11 @@ public class CaseRegisterWrapperFragment extends RecordRegisterWrapperFragment {
 
     @Override
     protected RecordPhotoAdapter initPhotoAdapter() {
-        recordPhotoAdapter = new CasePhotoAdapter(getContext(), new ArrayList<String>());
+        recordPhotoAdapter = new TracingPhotoAdapter(getContext(), new ArrayList<String>());
 
-        List<CasePhoto> cases = CasePhotoService.getInstance().getByCaseId(recordId);
-        for (int i = 0; i < cases.size(); i++) {
-            recordPhotoAdapter.addItem(cases.get(i).getId());
+        List<TracingPhoto> tracings = TracingPhotoService.getInstance().getByTracingId(recordId);
+        for (int i = 0; i < tracings.size(); i++) {
+            recordPhotoAdapter.addItem(tracings.get(i).getId());
         }
         return recordPhotoAdapter;
     }
@@ -90,16 +76,29 @@ public class CaseRegisterWrapperFragment extends RecordRegisterWrapperFragment {
             bundle.putStringArrayList(RecordService.RECORD_PHOTOS,
                     (ArrayList<String>) recordPhotoAdapter.getAllItems());
             bundle.putString(RecordService.ITEM_VALUES, new Gson().toJson(itemValues.getValues()));
-            pages.add(FragmentPagerItem.of(values[0], CaseRegisterFragment.class, bundle));
+            pages.add(FragmentPagerItem.of(values[0], TracingRegisterFragment.class, bundle));
         }
         return pages;
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void saveTracing(SaveTracingEvent event) {
+        if (validateRequiredField()) {
+            List<String> photoPaths = recordPhotoAdapter.getAllItems();
+            TracingService.getInstance().saveOrUpdate(itemValues, photoPaths);
+        }
+    }
+
+    @OnClick(R.id.edit)
+    public void onEditClicked() {
+        ((TracingActivity) getActivity()).turnToDetailOrEditPage(TracingFeature.EDIT, recordId);
+    }
+
     private boolean validateRequiredField() {
-        CaseFormRoot caseForm = CaseFormService.getInstance().getCurrentForm();
+        TracingFormRoot tracingForm = TracingFormService.getInstance().getCurrentForm();
         List<String> requiredFieldNames = new ArrayList<>();
 
-        for (Section section : caseForm.getSections()) {
+        for (Section section : tracingForm.getSections()) {
             Collections.addAll(requiredFieldNames, RecordService
                     .fetchRequiredFiledNames(section.getFields()).toArray(new String[0]));
         }

@@ -29,7 +29,7 @@ public class Field {
     public static final String TYPE_GENERIC_LAYOUT = "generic_field";
     public static final String TYPE_RADIO_BUTTON = "radio_button";
     public static final String TYPE_NUMERIC_FIELD = "numeric_field";
-    public static final String TYPE_PHOTO_VIEW_SLIDER = "case_photo_view_slider";
+    public static final String TYPE_PHOTO_VIEW_SLIDER = "record_photo_view_slider";
 
     public static final String TYPE_MINI_FORM_PROFILE = "mini_form_profile";
 
