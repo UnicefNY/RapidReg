@@ -1,24 +1,24 @@
-package org.unicef.rapidreg.childcase;
+package org.unicef.rapidreg.tracing;
 
 import android.text.TextUtils;
 
 import org.unicef.rapidreg.base.RecordListPresenter;
 import org.unicef.rapidreg.base.RecordSearchFragment;
-import org.unicef.rapidreg.model.Case;
 import org.unicef.rapidreg.model.RecordModel;
-import org.unicef.rapidreg.service.CaseService;
+import org.unicef.rapidreg.model.Tracing;
+import org.unicef.rapidreg.service.TracingService;
 
 import java.util.List;
 import java.util.Map;
 
-public class CaseSearchFragment extends RecordSearchFragment {
+public class TracingSearchFragment extends RecordSearchFragment {
     @Override
     public RecordListPresenter createPresenter() {
-        return new RecordListPresenter(RecordModel.CASE);
+        return new RecordListPresenter(RecordModel.TRACING);
     }
 
     @Override
-    protected List<Case> getSearchResult(Map<String, String> filters) {
+    protected List<Tracing> getSearchResult(Map<String, String> filters) {
         String id = filters.get(ID);
         String name = filters.get(NAME);
         String from = filters.get(AGE_FROM);
@@ -28,9 +28,7 @@ public class CaseSearchFragment extends RecordSearchFragment {
         String caregiver = filters.get(CAREGIVER);
         String registrationDate = filters.get(REGISTRATION_DATE);
 
-        return CaseService.getInstance().getSearchResult(id, name, ageFrom, ageTo,
+        return TracingService.getInstance().getSearchResult(id, name, ageFrom, ageTo,
                 caregiver, getDate(registrationDate));
     }
 }
-
-

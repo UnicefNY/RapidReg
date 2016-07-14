@@ -1,4 +1,4 @@
-package org.unicef.rapidreg.childcase.media;
+package org.unicef.rapidreg.base;
 
 
 import android.media.MediaPlayer;
@@ -12,7 +12,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import org.unicef.rapidreg.R;
-import org.unicef.rapidreg.service.CaseService;
+import org.unicef.rapidreg.service.RecordService;
 
 import java.io.IOException;
 
@@ -26,9 +26,8 @@ public class AudioRecorderActivity extends AppCompatActivity {
     public static final String CURRENT_STATE = "current_state";
     public static final int START_RECORDING = 0;
     public static final int START_PLAYING = 1;
-    public static final int RECODER_MIN_DURATION_MS = 4000;
 
-    private static String mFileName = CaseService.AUDIO_FILE_PATH;
+    private static String mFileName = RecordService.AUDIO_FILE_PATH;
 
     @BindView(R.id.stop_button)
     ImageView stopButton;
@@ -195,7 +194,6 @@ public class AudioRecorderActivity extends AppCompatActivity {
             }
         });
     }
-
 
     private void stopRecording() {
         if (mRecorder != null) {
