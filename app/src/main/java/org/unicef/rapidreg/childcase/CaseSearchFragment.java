@@ -163,7 +163,7 @@ public class CaseSearchFragment extends MvpFragment<CaseListView, CaseListPresen
         int resultIndex = searchResult.isEmpty() ? HAVE_NO_RESULT : HAVE_RESULT_LIST;
         searchResultSwitcher.setDisplayedChild(resultIndex);
 
-        adapter.setCaseList(searchResult);
+        adapter.setRecordList(searchResult);
         adapter.notifyDataSetChanged();
     }
 

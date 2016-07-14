@@ -1,4 +1,4 @@
-package org.unicef.rapidreg.childcase;
+package org.unicef.rapidreg.tracing;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -8,17 +8,17 @@ import android.support.annotation.Nullable;
 import org.greenrobot.eventbus.EventBus;
 import org.unicef.rapidreg.R;
 import org.unicef.rapidreg.base.RecordActivity;
-import org.unicef.rapidreg.event.SaveCaseEvent;
-import org.unicef.rapidreg.service.CaseService;
+import org.unicef.rapidreg.event.SaveTracingEvent;
+import org.unicef.rapidreg.service.TracingService;
 
-public class CaseActivity extends RecordActivity {
-    public static final String TAG = CaseActivity.class.getSimpleName();
+public class TracingActivity extends RecordActivity {
+    public static final String TAG = TracingActivity.class.getSimpleName();
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        turnToFeature(CaseFeature.LIST, null);
+        turnToFeature(TracingFeature.LIST, null);
     }
 
     @Override
@@ -26,30 +26,30 @@ public class CaseActivity extends RecordActivity {
         if (currentFeature.isListMode()) {
             logOut(this);
         } else if (currentFeature.isEditMode()) {
-            showQuitDialog(R.id.nav_cases);
+            showQuitDialog(R.id.nav_tracing);
         } else {
-            CaseService.clearAudioFile();
-            turnToFeature(CaseFeature.LIST, null);
+            TracingService.clearAudioFile();
+            turnToFeature(TracingFeature.LIST, null);
         }
     }
 
     @Override
     protected void navCaseAction() {
-        if (currentFeature.isEditMode()) {
-            showQuitDialog(R.id.nav_cases);
+        if (currentFeature.isDetailMode()) {
+            showQuitDialog(R.id.nav_tracing);
         } else {
-            CaseService.clearAudioFile();
-            turnToFeature(CaseFeature.LIST, null);
+            TracingService.clearAudioFile();
+            intentSender.showCasesActivity(this, null, false);
         }
     }
 
     @Override
     protected void navTracingAction() {
-        if (currentFeature.isDetailMode()) {
-            showQuitDialog(R.id.nav_cases);
+        if (currentFeature.isEditMode()) {
+            showQuitDialog(R.id.nav_tracing);
         } else {
-            CaseService.clearAudioFile();
-            intentSender.showTracingActivity(this);
+            TracingService.clearAudioFile();
+            turnToFeature(TracingFeature.LIST, null);
         }
     }
 
@@ -61,13 +61,13 @@ public class CaseActivity extends RecordActivity {
                 .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        CaseService.clearAudioFile();
+                        TracingService.clearAudioFile();
                         switch (clickedButton) {
-                            case R.id.nav_cases:
-                                turnToFeature(CaseFeature.LIST, null);
+                            case R.id.nav_tracing:
+                                turnToFeature(TracingFeature.LIST, null);
                                 break;
                             case R.id.nav_sync:
-                                intentSender.showSyncActivity(CaseActivity.this);
+                                intentSender.showSyncActivity(TracingActivity.this);
                                 break;
                             default:
                                 break;
@@ -80,24 +80,24 @@ public class CaseActivity extends RecordActivity {
 
     @Override
     protected void search() {
-        turnToFeature(CaseFeature.SEARCH, null);
+        turnToFeature(TracingFeature.SEARCH, null);
     }
 
     @Override
     protected void save() {
         clearFocusToMakeLastFieldSaved();
-        SaveCaseEvent event = new SaveCaseEvent();
+        SaveTracingEvent event = new SaveTracingEvent();
         EventBus.getDefault().postSticky(event);
-        turnToFeature(CaseFeature.LIST, null);
+        turnToFeature(TracingFeature.LIST, null);
     }
 
     private void clearFocusToMakeLastFieldSaved() {
-        CaseRegisterWrapperFragment fragment =
-                (CaseRegisterWrapperFragment) getSupportFragmentManager()
-                        .findFragmentByTag(CaseRegisterWrapperFragment.class.getSimpleName());
-
-        if (fragment != null) {
-            fragment.clearFocus();
-        }
+//        TracingRegisterWrapperFragment fragment =
+//                (TracingRegisterWrapperFragment) getSupportFragmentManager()
+//                        .findFragmentByTag(TracingRegisterWrapperFragment.class.getSimpleName());
+//
+//        if (fragment != null) {
+//            fragment.clearFocus();
+//        }
     }
 }

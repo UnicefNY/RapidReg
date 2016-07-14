@@ -1,4 +1,4 @@
-package org.unicef.rapidreg.childcase;
+package org.unicef.rapidreg.tracing;
 
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.View;
@@ -8,19 +8,16 @@ import org.unicef.rapidreg.R;
 import org.unicef.rapidreg.base.RecordListAdapter;
 import org.unicef.rapidreg.base.RecordListFragment;
 import org.unicef.rapidreg.base.RecordListPresenter;
-import org.unicef.rapidreg.model.Case;
 import org.unicef.rapidreg.model.RecordModel;
-import org.unicef.rapidreg.service.CaseService;
+import org.unicef.rapidreg.model.Tracing;
+import org.unicef.rapidreg.service.TracingService;
 
 import java.util.Arrays;
 import java.util.List;
 
-
-public class CaseListFragment extends RecordListFragment {
+public class TracingListFragment extends RecordListFragment {
 
     private static final SpinnerState[] SPINNER_STATES = {
-            SpinnerState.AGE_ASC,
-            SpinnerState.AGE_DES,
             SpinnerState.DATE_ASC,
             SpinnerState.DATE_DES};
 
@@ -29,7 +26,7 @@ public class CaseListFragment extends RecordListFragment {
 
     @Override
     public RecordListPresenter createPresenter() {
-        return new RecordListPresenter(RecordModel.CASE);
+        return new RecordListPresenter(RecordModel.TRACING);
     }
 
     @Override
@@ -39,8 +36,8 @@ public class CaseListFragment extends RecordListFragment {
         listContainer.setLayoutManager(layoutManager);
         listContainer.setAdapter(adapter);
 
-        List<Case> cases = CaseService.getInstance().getAll();
-        int index = cases.isEmpty() ? HAVE_NO_RESULT : HAVE_RESULT_LIST;
+        List<Tracing> tracings = TracingService.getInstance().getAll();
+        int index = tracings.isEmpty() ? HAVE_NO_RESULT : HAVE_RESULT_LIST;
         viewSwitcher.setDisplayedChild(index);
 
     }
@@ -63,14 +60,8 @@ public class CaseListFragment extends RecordListFragment {
             }
 
             private void handleItemSelection(int position) {
-                CaseService service = CaseService.getInstance();
+                TracingService service = TracingService.getInstance();
                 switch (SPINNER_STATES[position]) {
-                    case AGE_ASC:
-                        adapter.setRecordList(service.getAllOrderByAgeASC());
-                        break;
-                    case AGE_DES:
-                        adapter.setRecordList(service.getAllOrderByAgeDES());
-                        break;
                     case DATE_ASC:
                         adapter.setRecordList(service.getAllOrderByDateASC());
                         break;

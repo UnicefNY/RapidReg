@@ -100,10 +100,10 @@ public class CaseRegisterWrapperFragment extends Fragment {
 
         if (getArguments() != null) {
             caseId = getArguments().getLong("case_id");
-            Case caseItem = CaseService.getInstance().getCaseById(caseId);
+            Case caseItem = CaseService.getInstance().getById(caseId);
             String caseJson = new String(caseItem.getContent().getBlob());
             String subFormJson = new String(caseItem.getSubform().getBlob());
-            itemValues = CaseService.getInstance().generateItemValues(caseJson, subFormJson);
+            itemValues = ItemValues.generateItemValues(caseJson, subFormJson);
             itemValues.addStringItem(CaseService.CASE_ID, caseItem.getUniqueId());
             itemValues.addStringItem(CaseService.CASE_ID, caseItem.getUniqueId());
             initProfile(caseItem);

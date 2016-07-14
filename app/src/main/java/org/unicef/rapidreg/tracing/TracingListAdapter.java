@@ -1,4 +1,4 @@
-package org.unicef.rapidreg.childcase;
+package org.unicef.rapidreg.tracing;
 
 import android.content.Context;
 import android.support.v4.content.ContextCompat;
@@ -10,16 +10,15 @@ import org.unicef.rapidreg.R;
 import org.unicef.rapidreg.base.RecordListAdapter;
 import org.unicef.rapidreg.model.RecordModel;
 import org.unicef.rapidreg.model.RecordPhoto;
-import org.unicef.rapidreg.service.CasePhotoService;
 import org.unicef.rapidreg.service.RecordService;
+import org.unicef.rapidreg.service.TracingPhotoService;
 import org.unicef.rapidreg.service.cache.ItemValues;
 import org.unicef.rapidreg.utils.StreamUtil;
 
 import java.io.IOException;
 
-public class CaseListAdapter extends RecordListAdapter {
-
-    public CaseListAdapter(Context context) {
+public class TracingListAdapter extends RecordListAdapter {
+    public TracingListAdapter(Context context) {
         super(context);
     }
 
@@ -40,7 +39,7 @@ public class CaseListAdapter extends RecordListAdapter {
         }
 
         try {
-            RecordPhoto headerPhoto = CasePhotoService.getInstance().getFirstThumbnail(record.getId());
+            RecordPhoto headerPhoto = TracingPhotoService.getInstance().getFirstThumbnail(record.getId());
             Glide.with(holder.image.getContext()).load((headerPhoto.getThumbnail().getBlob())).into(holder.image);
         } catch (Exception e) {
             holder.image.setImageDrawable(activity.getResources().getDrawable(gender.getAvatarId()));
@@ -60,7 +59,7 @@ public class CaseListAdapter extends RecordListAdapter {
         holder.view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                activity.turnToDetailOrEditPage(CaseFeature.DETAILS, record.getId());
+                activity.turnToDetailOrEditPage(TracingFeature.DETAILS, record.getId());
                 try {
                     RecordService.clearAudioFile();
                     if (record.getAudio() != null) {
@@ -75,8 +74,8 @@ public class CaseListAdapter extends RecordListAdapter {
     }
 
     public enum Gender {
-        MALE("BOY", R.drawable.avatar_placeholder, R.drawable.boy, R.color.boy_blue),
-        FEMALE("GIRL", R.drawable.avatar_placeholder, R.drawable.girl, R.color.girl_red),
+        MALE("MALE", R.drawable.avatar_placeholder, R.drawable.boy, R.color.boy_blue),
+        FEMALE("FEMALE", R.drawable.avatar_placeholder, R.drawable.girl, R.color.girl_red),
         UNKNOWN(null, R.drawable.avatar_placeholder, R.drawable.gender_default, R.color.transparent);
 
         private String name;

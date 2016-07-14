@@ -181,7 +181,7 @@ public abstract class RecordActivity extends BaseActivity {
         toolbar.inflateMenu(R.menu.toolbar_main);
         toolbar.setOnMenuItemClickListener(new MenuItemListener());
 
-        saveMenu = toolbar.getMenu().findItem(R.id.save_case);
+        saveMenu = toolbar.getMenu().findItem(R.id.save);
         searchMenu = toolbar.getMenu().findItem(R.id.search);
         showHideMenu = toolbar.getMenu().findItem(R.id.toggle);
     }
@@ -218,10 +218,10 @@ public abstract class RecordActivity extends BaseActivity {
     private void showHideDetail() {
         textAreaState = textAreaState.getNextState();
 
-//        showHideMenu.setIcon(textAreaState.getResId());
-//        RecordListFragment listFragment = (RecordListFragment) getSupportFragmentManager()
-//                .findFragmentByTag(RecordListFragment.class.getSimpleName());
-//        listFragment.toggleMode(textAreaState.isDetailShow());
+        showHideMenu.setIcon(textAreaState.getResId());
+        RecordListFragment listFragment = (RecordListFragment) getSupportFragmentManager()
+                .findFragmentByTag(RecordListFragment.class.getSimpleName());
+        listFragment.toggleMode(textAreaState.isDetailShow());
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN, sticky = true, priority = 1)
@@ -264,11 +264,11 @@ public abstract class RecordActivity extends BaseActivity {
                 Locale.getDefault().getLanguage(), true, "tracing_request")
                 .flatMap(new Func1<TracingFormRoot, Observable<TracingFormRoot>>() {
                     @Override
-                    public Observable<TracingFormRoot> call(TracingFormRoot caseFormRoot) {
-                        if (caseFormRoot == null) {
+                    public Observable<TracingFormRoot> call(TracingFormRoot tracingFormRoot) {
+                        if (tracingFormRoot == null) {
                             return Observable.error(new Exception());
                         }
-                        return Observable.just(caseFormRoot);
+                        return Observable.just(tracingFormRoot);
                     }
                 })
                 .retry(3)
@@ -308,7 +308,7 @@ public abstract class RecordActivity extends BaseActivity {
                 case R.id.search:
                     search();
                     return true;
-                case R.id.save_case:
+                case R.id.save:
                     save();
                     return true;
                 default:

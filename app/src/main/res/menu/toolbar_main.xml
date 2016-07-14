@@ -9,7 +9,7 @@
         app:showAsAction="ifRoom"
         android:icon="@drawable/visible" />
     <item
-        android:id="@+id/save_case"
+        android:id="@+id/save"
         android:title="@string/save"
         android:visible="false"
         app:showAsAction="always" />
