@@ -30,5 +30,5 @@ And /^I edit the value of "(.*?)" from "(.*?)" to "(.*?)"$/ do |field, old_value
   until base_page.ifTextExist(field) do
     case_page.scrollToNextFields
   end
-  case_page.editForm(field, old_value, new_value)
+  base_form.editForm(field, old_value, new_value)
 end
