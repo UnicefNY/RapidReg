@@ -1,6 +1,7 @@
 package org.unicef.rapidreg.sync;
 
 import android.content.Context;
+import android.text.TextUtils;
 import android.util.Log;
 
 import com.google.gson.Gson;
@@ -149,7 +150,11 @@ public class SyncPresenter extends MvpBasePresenter<SyncView> {
                         JsonObject jsonObject = new JsonObject();
                         jsonObject.add("child", values.getValues());
 
-                        return syncService.postCase(PrimeroConfiguration.getCookie(), true, jsonObject);
+                        if (!TextUtils.isEmpty(item.getInternalId())) {
+                            return syncService.putCase(PrimeroConfiguration.getCookie(), true, jsonObject);
+                        } else {
+                            return syncService.postCase(PrimeroConfiguration.getCookie(), true, jsonObject);
+                        }
                     }
                 })
                 .subscribeOn(Schedulers.io())
@@ -162,8 +167,7 @@ public class SyncPresenter extends MvpBasePresenter<SyncView> {
 
                         JsonObject jsonObject = response.body().getAsJsonObject();
 
-                        try
-                        {
+                        try {
                             String caseId = jsonObject.get("case_id").getAsString();
                             Case item = CaseService.getInstance().getCaseByUniqueId(caseId);
                             if (item != null) {
@@ -173,9 +177,7 @@ public class SyncPresenter extends MvpBasePresenter<SyncView> {
                                 item.setContent(new Blob(jsonObject.toString().getBytes()));
                                 item.save();
                             }
-                        }
-                        catch (Exception e)
-                        {
+                        } catch (Exception e) {
                             return;
                         }
 
