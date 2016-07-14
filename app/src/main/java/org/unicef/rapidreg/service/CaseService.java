@@ -80,6 +80,10 @@ public class CaseService extends RecordService {
         return caseDao.getAllCasesOrderByAge(false);
     }
 
+    public Case getCaseByUniqueId(String uniqueId) {
+        return caseDao.getCaseByUniqueId(uniqueId);
+    }
+
     public Map<String, String> getCaseMapByUniqueId(String uniqueId) {
         Case child = caseDao.getCaseByUniqueId(uniqueId);
         if (child == null) {
