@@ -13,9 +13,7 @@
     <ViewSwitcher
         android:id="@+id/view_switcher"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:inAnimation="@android:anim/fade_in"
-        android:outAnimation="@android:anim/fade_out">
+        android:layout_height="wrap_content">
 
         <include layout="@layout/case_list_text_area_normal_state"/>
 
