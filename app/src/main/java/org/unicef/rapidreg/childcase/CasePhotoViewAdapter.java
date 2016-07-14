@@ -1,4 +1,4 @@
 package org.unicef.rapidreg.childcase;
 
-public class CaseRegisterFragment {
+public class CasePhotoViewAdapter {
 }

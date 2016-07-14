@@ -1,4 +1,4 @@
-package org.unicef.rapidreg.childcase;
+package org.unicef.rapidreg.base;
 
 import android.content.Context;
 import android.content.res.Resources;
@@ -7,6 +7,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import org.unicef.rapidreg.base.RecordActivity;
+import org.unicef.rapidreg.childcase.CaseActivity;
+import org.unicef.rapidreg.childcase.CaseFeature;
 import org.unicef.rapidreg.childcase.media.CasePhotoAdapter;
 import org.unicef.rapidreg.forms.Field;
 import org.unicef.rapidreg.service.cache.ItemValues;
@@ -24,7 +27,7 @@ import org.unicef.rapidreg.widgets.viewholder.TickBoxViewHolder;
 
 import java.util.List;
 
-public class CaseRegisterAdapter extends RecyclerView.Adapter<BaseViewHolder> {
+public class RecordRegisterAdapter extends RecyclerView.Adapter<BaseViewHolder> {
 
     private static final String LAYOUT = "layout";
     private static final String PREFIX = "form_";
@@ -43,7 +46,7 @@ public class CaseRegisterAdapter extends RecyclerView.Adapter<BaseViewHolder> {
     private boolean isMiniForm;
 
     private List<Field> fields;
-    private CaseActivity activity;
+    private RecordActivity activity;
     protected LayoutInflater inflater;
     protected Resources resources;
     protected String packageName;
@@ -51,7 +54,7 @@ public class CaseRegisterAdapter extends RecyclerView.Adapter<BaseViewHolder> {
 
     private ItemValues itemValues;
 
-    public CaseRegisterAdapter(Context context, List<Field> fields, ItemValues itemValues, boolean isMiniForm) {
+    public RecordRegisterAdapter(Context context, List<Field> fields, ItemValues itemValues, boolean isMiniForm) {
         this.fields = fields;
         this.activity = (CaseActivity) context;
         this.itemValues = itemValues;
