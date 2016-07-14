@@ -20,8 +20,11 @@ import java.util.List;
 import java.util.Map;
 
 import retrofit2.Response;
+import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action0;
 import rx.functions.Action1;
+import rx.functions.Func1;
 import rx.schedulers.Schedulers;
 
 public class SyncPresenter extends MvpBasePresenter<SyncView> {
@@ -77,9 +80,9 @@ public class SyncPresenter extends MvpBasePresenter<SyncView> {
 
             try {
                 startUpLoadCases();
-                startDownLoadCaseForms();
-                startDownLoadCases();
-                doSyncSuccessAction();
+//                startDownLoadCaseForms();
+//                startDownLoadCases();
+//                doSyncSuccessAction();
             } catch (Exception e) {
                 doSyncFailureAction();
             }
@@ -111,29 +114,65 @@ public class SyncPresenter extends MvpBasePresenter<SyncView> {
 
     }
 
+    private Observable<Response<JsonElement>> getItems(int index, int max, JsonObject jsonObject) {
+
+        return syncService.postCase(PrimeroConfiguration.getCookie(), true, jsonObject);
+
+    }
+
     private void startUpLoadCases() {
 
-        List<Case> caseList = CaseService.getInstance().getCaseList();
-        for (Case item: caseList) {
-            ItemValues values = ItemValues.fromJson(new String(item.getContent().getBlob()));
-            values.addStringItem("case_id", item.getUniqueId());
+        final List<Case> caseList = CaseService.getInstance().getCaseList();
+        getView().setProgressMax(caseList.size());
+        Observable.just(caseList)
+                .flatMap(new Func1<List<Case>, Observable<Case>>() {
+                    @Override
+                    public Observable<Case> call(List<Case> cases) {
+                        return Observable.from(cases);
+                    }
+                })
+                .filter(new Func1<Case, Boolean>() {
+                    @Override
+                    public Boolean call(Case item) {
+                        return !item.isSynced();
+                    }
+                })
+                .concatMap(new Func1<Case, Observable<Response<JsonElement>>>() {
+                    @Override
+                    public Observable<Response<JsonElement>> call(Case item) {
+                        ItemValues values = ItemValues.fromJson(new String(item.getContent().getBlob()));
+                        values.addStringItem("case_id", item.getUniqueId());
+                        values.addStringItem("short_id",
+                                item.getUniqueId().substring(item.getUniqueId().length() - 7, item.getUniqueId().length()));
 
-            syncService.postCase(PrimeroConfiguration.getCookie(), true, values.getValues())
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread()).subscribe(new Action1<Response<JsonElement>>() {
-                @Override
-                public void call(Response<JsonElement> response) {
-                    Log.i(TAG, response.toString());
-                }
-            }, new Action1<Throwable>() {
-                @Override
-                public void call(Throwable throwable) {
-                    Log.i(TAG, throwable.toString());
-                }
-            });
-        }
+                        JsonObject jsonObject = new JsonObject();
+                        jsonObject.add("child", values.getValues());
 
+                        return syncService.postCase(PrimeroConfiguration.getCookie(), true, jsonObject);
+                    }
+                })
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Action1<Response<JsonElement>>() {
+                    @Override
+                    public void call(Response<JsonElement> response) {
+                        Log.i(TAG, response.toString());
+                        getView().setProgressIncrease();
+                        JsonElement element = response.body();
+                        //CaseService.getInstance().saveOrUpdate();
 
+                    }
+                }, new Action1<Throwable>() {
+                    @Override
+                    public void call(Throwable throwable) {
+                        Log.i(TAG, throwable.toString());
+                    }
+                }, new Action0() {
+                    @Override
+                    public void call() {
+                        getView().hideSyncProgressDialog();
+                    }
+                });
     }
 
     private void startDownLoadCaseForms() {

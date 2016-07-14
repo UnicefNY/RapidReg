@@ -60,6 +60,7 @@ public class SyncFragment extends MvpFragment<SyncView, SyncPresenter> implement
     public void showSyncProgressDialog() {
         syncProgressDialog = new ProgressDialog(getActivity());
         syncProgressDialog.setMessage(startSyncMessage);
+        syncProgressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
         syncProgressDialog.setCancelable(false);
         syncProgressDialog.setButton(DialogInterface.BUTTON_NEGATIVE,
                 cancelButtonText,
@@ -105,6 +106,21 @@ public class SyncFragment extends MvpFragment<SyncView, SyncPresenter> implement
     }
 
     @Override
+    public void setProgressMax(int max) {
+        if (syncProgressDialog.isShowing()) {
+            syncProgressDialog.setProgress(0);
+            syncProgressDialog.setMax(max);
+        }
+    }
+
+    @Override
+    public void setProgressIncrease() {
+        if (syncProgressDialog.isShowing()) {
+            syncProgressDialog.incrementProgressBy(1);
+        }
+    }
+
+    @Override
     public void showSyncSuccessMessage() {
         Toast.makeText(getActivity(), syncSuccessMessage, Toast.LENGTH_SHORT).show();
     }
@@ -112,6 +128,7 @@ public class SyncFragment extends MvpFragment<SyncView, SyncPresenter> implement
     @Override
     public void showSyncErrorMessage() {
         Toast.makeText(getActivity(), syncErrorMessage, Toast.LENGTH_SHORT).show();
+
     }
 
 }
