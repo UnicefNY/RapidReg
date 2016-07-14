@@ -8,6 +8,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 import com.hannesdorfmann.mosby.mvp.MvpBasePresenter;
+import com.raizlabs.android.dbflow.data.Blob;
 
 import org.unicef.rapidreg.PrimeroConfiguration;
 import org.unicef.rapidreg.model.Case;
@@ -158,8 +159,26 @@ public class SyncPresenter extends MvpBasePresenter<SyncView> {
                     public void call(Response<JsonElement> response) {
                         Log.i(TAG, response.toString());
                         getView().setProgressIncrease();
-                        JsonElement element = response.body();
-                        //CaseService.getInstance().saveOrUpdate();
+
+                        JsonObject jsonObject = response.body().getAsJsonObject();
+
+                        try
+                        {
+                            String caseId = jsonObject.get("case_id").getAsString();
+                            Case item = CaseService.getInstance().getCaseByUniqueId(caseId);
+                            if (item != null) {
+                                item.setInternalId(jsonObject.get("_id").getAsString());
+                                item.setInternalRev(jsonObject.get("_rev").getAsString());
+                                item.setSynced(true);
+                                item.setContent(new Blob(jsonObject.toString().getBytes()));
+                                item.save();
+                            }
+                        }
+                        catch (Exception e)
+                        {
+                            return;
+                        }
+
 
                     }
                 }, new Action1<Throwable>() {
