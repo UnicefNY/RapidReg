@@ -26,8 +26,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class SubFormViewHolder extends BaseViewHolder<Field> {
-    public static final int NUM_CHILD_VIEWS = 2;
-
     @BindView(R.id.add_subform)
     Button addSubFormBtn;
 
