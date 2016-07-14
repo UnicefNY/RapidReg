@@ -8,19 +8,18 @@ import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 
 import org.unicef.rapidreg.R;
-import org.unicef.rapidreg.childcase.CasePhotoViewAdapter;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class CasePhotoViewActivity extends AppCompatActivity {
-    @BindView(R.id.case_photo_view_slider)
+    @BindView(R.id.record_photo_view_slider)
     ViewPager viewPager;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.case_photo_view_slider);
+        setContentView(R.layout.record_photo_view_slider);
         ButterKnife.bind(this);
 
         Point size = new Point();

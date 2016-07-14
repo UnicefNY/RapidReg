@@ -32,7 +32,7 @@ import org.unicef.rapidreg.model.CaseForm;
 import org.unicef.rapidreg.model.TracingForm;
 import org.unicef.rapidreg.network.AuthService;
 import org.unicef.rapidreg.service.CaseFormService;
-import org.unicef.rapidreg.service.CaseService;
+import org.unicef.rapidreg.service.RecordService;
 import org.unicef.rapidreg.service.TracingFormService;
 import org.unicef.rapidreg.utils.ImageCompressUtil;
 import org.unicef.rapidreg.widgets.viewholder.PhotoUploadViewHolder;
@@ -99,7 +99,7 @@ public abstract class RecordActivity extends BaseActivity {
         if (currentFeature.isEditMode()) {
             showQuitDialog(R.id.nav_sync);
         } else {
-            CaseService.clearAudioFile();
+            RecordService.clearAudioFile();
             intentSender.showSyncActivity(this);
         }
     }
@@ -140,7 +140,7 @@ public abstract class RecordActivity extends BaseActivity {
         try {
 
             Bundle args = new Bundle();
-            args.putLong("record_id", recordId);
+            args.putLong(RecordService.RECORD_ID, recordId);
 
             currentFeature = feature;
 
@@ -215,15 +215,6 @@ public abstract class RecordActivity extends BaseActivity {
         }
     }
 
-    private void showHideDetail() {
-        textAreaState = textAreaState.getNextState();
-
-        showHideMenu.setIcon(textAreaState.getResId());
-        RecordListFragment listFragment = (RecordListFragment) getSupportFragmentManager()
-                .findFragmentByTag(RecordListFragment.class.getSimpleName());
-        listFragment.toggleMode(textAreaState.isDetailShow());
-    }
-
     @Subscribe(threadMode = ThreadMode.MAIN, sticky = true, priority = 1)
     public void onNeedLoadFormsEvent(final NeedLoadFormsEvent event) {
         EventBus.getDefault().removeStickyEvent(event);
@@ -291,6 +282,8 @@ public abstract class RecordActivity extends BaseActivity {
                     }
                 }));
     }
+
+    protected abstract void showHideDetail();
 
     protected abstract void search();
 

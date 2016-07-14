@@ -51,6 +51,10 @@ public class TracingService extends RecordService {
         this.tracingDao = tracingDao;
     }
 
+    public Tracing getById(long caseId) {
+        return tracingDao.getTracingById(caseId);
+    }
+
     public List<Tracing> getAll() {
         return tracingDao.getAllTracingsOrderByDate(false);
     }
@@ -64,8 +68,8 @@ public class TracingService extends RecordService {
     }
 
 
-    public List<Tracing> getAllSearchResult(String uniqueId, String name, int ageFrom,
-                                            int ageTo, String caregiver, Date date) {
+    public List<Tracing> getSearchResult(String uniqueId, String name, int ageFrom,
+                                         int ageTo, String caregiver, Date date) {
 
         ConditionGroup searchCondition = getSearchCondition(uniqueId, name, ageFrom, ageTo, caregiver, date);
 

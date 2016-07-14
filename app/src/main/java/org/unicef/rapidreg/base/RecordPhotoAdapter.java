@@ -10,11 +10,11 @@ import android.widget.ImageView;
 import com.bumptech.glide.Glide;
 
 import org.unicef.rapidreg.R;
-import org.unicef.rapidreg.service.CasePhotoService;
+import org.unicef.rapidreg.model.RecordPhoto;
 
 import java.util.List;
 
-public class RecordPhotoAdapter extends BaseAdapter {
+public abstract class RecordPhotoAdapter extends BaseAdapter {
     private final static int MAX = 4;
     private Context context;
     private List<String> paths;
@@ -65,8 +65,8 @@ public class RecordPhotoAdapter extends BaseAdapter {
         int width = 80;
         try {
             long photoId = Long.parseLong(path);
-            Glide.with(context).load(CasePhotoService.getInstance().getById(photoId)
-                    .getPhoto().getBlob()).override(width, width).centerCrop().into(imageView);
+            Glide.with(context).load(getPhotoById(photoId).getPhoto().getBlob())
+                    .override(width, width).centerCrop().into(imageView);
         } catch (NumberFormatException e) {
             Glide.with(imageView.getContext()).load(path).override(width, width).centerCrop().into(imageView);
         }
@@ -80,4 +80,6 @@ public class RecordPhotoAdapter extends BaseAdapter {
     public List<String> getAllItems() {
         return paths;
     }
+
+    protected abstract RecordPhoto getPhotoById(long id);
 }

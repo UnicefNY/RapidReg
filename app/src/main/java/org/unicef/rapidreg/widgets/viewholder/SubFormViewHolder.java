@@ -13,8 +13,8 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
 import org.unicef.rapidreg.R;
+import org.unicef.rapidreg.base.RecordRegisterAdapter;
 import org.unicef.rapidreg.childcase.CaseActivity;
-import org.unicef.rapidreg.childcase.CaseRegisterAdapter;
 import org.unicef.rapidreg.forms.Field;
 import org.unicef.rapidreg.service.cache.ItemValues;
 
@@ -101,7 +101,7 @@ public class SubFormViewHolder extends BaseViewHolder<Field> {
         List<Field> fields = cloneFields();
         assignIndexForFields(fields, index);
 
-        CaseRegisterAdapter adapter = new CaseRegisterAdapter(activity, fields,
+        RecordRegisterAdapter adapter = new RecordRegisterAdapter(activity, fields,
                 itemValues.getChildAsItemValues(fieldParent, index), false);
 
         fieldList.setAdapter(adapter);
@@ -123,7 +123,7 @@ public class SubFormViewHolder extends BaseViewHolder<Field> {
         for (int i = 0; i < itemValues.getChildrenAsJsonArray(fieldParent).size(); i++) {
             View child = parent.getChildAt(i);
             RecyclerView fieldList = (RecyclerView) child.findViewById(R.id.field_list);
-            CaseRegisterAdapter adapter = (CaseRegisterAdapter) fieldList.getAdapter();
+            RecordRegisterAdapter adapter = (RecordRegisterAdapter) fieldList.getAdapter();
             List<Field> fields = adapter.getFields();
             assignIndexForFields(fields, i);
         }

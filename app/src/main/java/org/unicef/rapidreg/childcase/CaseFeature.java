@@ -46,8 +46,4 @@ public enum CaseFeature implements Feature {
     public boolean isDetailMode() {
         return this == DETAILS;
     }
-
-    public boolean isInAddMode() {
-        return this == ADD;
-    }
 }

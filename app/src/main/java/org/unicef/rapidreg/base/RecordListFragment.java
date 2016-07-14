@@ -60,7 +60,7 @@ public abstract class RecordListFragment extends MvpFragment<RecordListView, Rec
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable final ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_cases_list, container, false);
+        return inflater.inflate(R.layout.fragment_records_list, container, false);
     }
 
     @Override
@@ -186,8 +186,7 @@ public abstract class RecordListFragment extends MvpFragment<RecordListView, Rec
             SpinnerState state = states.get(position);
 
             LayoutInflater inflater = LayoutInflater.from(getActivity());
-            int layoutId = isDropDownView ?
-                    R.layout.list_spinner_opened : R.layout.case_list_spinner_closed;
+            int layoutId = isDropDownView ? R.layout.record_list_spinner_opened : R.layout.record_list_spinner_closed;
             View view = inflater.inflate(layoutId, parent, false);
 
             ImageView indicator = (ImageView) view.findViewById(R.id.indicator);

@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="@dimen/row_height">
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/row_height">
 
     <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/case_image"
-        style="@style/Avatar"
-        android:src="@drawable/avatar_placeholder"
-        app:civ_border_color="#00000000"
-        app:civ_border_width="0dp" />
+                                                  android:id="@+id/record_image"
+                                                  style="@style/Avatar"
+                                                  android:src="@drawable/avatar_placeholder"
+                                                  app:civ_border_color="#00000000"
+                                                  app:civ_border_width="0dp"/>
 
     <ViewSwitcher
         android:id="@+id/view_switcher"
@@ -17,11 +17,11 @@
         android:inAnimation="@android:anim/fade_in"
         android:outAnimation="@android:anim/fade_out">
 
-        <include layout="@layout/case_list_text_area_normal_state" />
+        <include layout="@layout/case_list_text_area_normal_state"/>
 
-        <include layout="@layout/case_list_text_area_hidden_state" />
+        <include layout="@layout/case_list_text_area_hidden_state"/>
     </ViewSwitcher>
 
-    <include layout="@layout/list_item_border" />
+    <include layout="@layout/list_item_border"/>
 
 </RelativeLayout>

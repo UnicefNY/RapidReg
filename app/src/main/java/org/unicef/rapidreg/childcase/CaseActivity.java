@@ -18,6 +18,8 @@ public class CaseActivity extends RecordActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        navigationView.setCheckedItem(R.id.nav_cases);
+        navigationView.setItemTextColor(caseColor);
         turnToFeature(CaseFeature.LIST, null);
     }
 
@@ -79,6 +81,16 @@ public class CaseActivity extends RecordActivity {
     }
 
     @Override
+    protected void showHideDetail() {
+        textAreaState = textAreaState.getNextState();
+
+        showHideMenu.setIcon(textAreaState.getResId());
+        CaseListFragment listFragment = (CaseListFragment) getSupportFragmentManager()
+                .findFragmentByTag(CaseListFragment.class.getSimpleName());
+        listFragment.toggleMode(textAreaState.isDetailShow());
+    }
+
+    @Override
     protected void search() {
         turnToFeature(CaseFeature.SEARCH, null);
     }
@@ -92,9 +104,8 @@ public class CaseActivity extends RecordActivity {
     }
 
     private void clearFocusToMakeLastFieldSaved() {
-        CaseRegisterWrapperFragment fragment =
-                (CaseRegisterWrapperFragment) getSupportFragmentManager()
-                        .findFragmentByTag(CaseRegisterWrapperFragment.class.getSimpleName());
+        CaseRegisterWrapperFragment fragment = (CaseRegisterWrapperFragment) getSupportFragmentManager()
+                .findFragmentByTag(CaseRegisterWrapperFragment.class.getSimpleName());
 
         if (fragment != null) {
             fragment.clearFocus();

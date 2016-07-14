@@ -43,7 +43,7 @@ public abstract class RecordListAdapter extends RecyclerView.Adapter<RecordListA
     @Override
     public RecordListHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         ViewGroup itemView = (ViewGroup) LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.case_list, parent, false);
+                .inflate(R.layout.record_list, parent, false);
 
         return new RecordListHolder(itemView);
     }
@@ -98,7 +98,7 @@ public abstract class RecordListAdapter extends RecyclerView.Adapter<RecordListA
             genderName = (TextView) itemView.findViewById(R.id.gender_name);
             age = (TextView) itemView.findViewById(R.id.age);
             registrationDate = (TextView) itemView.findViewById(R.id.registration_date);
-            image = (CircleImageView) itemView.findViewById(R.id.case_image);
+            image = (CircleImageView) itemView.findViewById(R.id.record_image);
             viewSwitcher = (ViewSwitcher) itemView.findViewById(R.id.view_switcher);
         }
     }

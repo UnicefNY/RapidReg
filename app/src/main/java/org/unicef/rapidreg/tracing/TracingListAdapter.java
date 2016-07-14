@@ -66,7 +66,6 @@ public class TracingListAdapter extends RecordListAdapter {
                         StreamUtil.writeFile(record.getAudio().getBlob(), RecordService.AUDIO_FILE_PATH);
                     }
                 } catch (IOException e) {
-                    e.printStackTrace();
                 }
             }
         });

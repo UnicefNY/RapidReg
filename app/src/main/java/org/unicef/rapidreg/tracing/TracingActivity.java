@@ -18,6 +18,8 @@ public class TracingActivity extends RecordActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        navigationView.setCheckedItem(R.id.nav_tracing);
+        navigationView.setItemTextColor(tracingColor);
         turnToFeature(TracingFeature.LIST, null);
     }
 
@@ -79,6 +81,16 @@ public class TracingActivity extends RecordActivity {
     }
 
     @Override
+    protected void showHideDetail() {
+        textAreaState = textAreaState.getNextState();
+
+        showHideMenu.setIcon(textAreaState.getResId());
+        TracingListFragment listFragment = (TracingListFragment) getSupportFragmentManager()
+                .findFragmentByTag(TracingListFragment.class.getSimpleName());
+        listFragment.toggleMode(textAreaState.isDetailShow());
+    }
+
+    @Override
     protected void search() {
         turnToFeature(TracingFeature.SEARCH, null);
     }
@@ -92,12 +104,11 @@ public class TracingActivity extends RecordActivity {
     }
 
     private void clearFocusToMakeLastFieldSaved() {
-//        TracingRegisterWrapperFragment fragment =
-//                (TracingRegisterWrapperFragment) getSupportFragmentManager()
-//                        .findFragmentByTag(TracingRegisterWrapperFragment.class.getSimpleName());
-//
-//        if (fragment != null) {
-//            fragment.clearFocus();
-//        }
+        TracingRegisterWrapperFragment fragment = (TracingRegisterWrapperFragment) getSupportFragmentManager()
+                .findFragmentByTag(TracingRegisterWrapperFragment.class.getSimpleName());
+
+        if (fragment != null) {
+            fragment.clearFocus();
+        }
     }
 }

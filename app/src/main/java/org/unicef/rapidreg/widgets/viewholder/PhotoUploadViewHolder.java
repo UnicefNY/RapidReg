@@ -13,12 +13,13 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import org.unicef.rapidreg.R;
+import org.unicef.rapidreg.base.RecordPhotoAdapter;
 import org.unicef.rapidreg.childcase.CaseActivity;
+import org.unicef.rapidreg.childcase.CasePhotoViewActivity;
 import org.unicef.rapidreg.childcase.config.PhotoConfig;
-import org.unicef.rapidreg.childcase.media.CasePhotoAdapter;
-import org.unicef.rapidreg.childcase.media.CasePhotoViewActivity;
 import org.unicef.rapidreg.forms.Field;
 import org.unicef.rapidreg.service.cache.ItemValues;
+import org.unicef.rapidreg.tracing.TracingPhotoViewActivity;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -43,9 +44,9 @@ public class PhotoUploadViewHolder extends BaseViewHolder<Field> {
 
     private Context context;
 
-    private CasePhotoAdapter adapter;
+    private RecordPhotoAdapter adapter;
 
-    public PhotoUploadViewHolder(Context context, View itemView, ItemValues itemValues, CasePhotoAdapter adapter) {
+    public PhotoUploadViewHolder(Context context, View itemView, ItemValues itemValues, RecordPhotoAdapter adapter) {
         super(context, itemView, itemValues);
         ButterKnife.bind(this, itemView);
         this.context = context;
@@ -110,7 +111,8 @@ public class PhotoUploadViewHolder extends BaseViewHolder<Field> {
     }
 
     private void showViewPhotoDialog(final int position) {
-        Intent intent = new Intent(context, CasePhotoViewActivity.class);
+        Class clz = context instanceof CaseActivity ? CasePhotoViewActivity.class : TracingPhotoViewActivity.class;
+        Intent intent = new Intent(context, clz);
         intent.putExtra("position", position);
         intent.putStringArrayListExtra("photos", (ArrayList<String>) adapter.getAllItems());
         context.startActivity(intent);
@@ -149,7 +151,7 @@ public class PhotoUploadViewHolder extends BaseViewHolder<Field> {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();
-                CasePhotoAdapter casePhotoAdapter = (CasePhotoAdapter) photoGrid.getAdapter();
+                RecordPhotoAdapter casePhotoAdapter = (RecordPhotoAdapter) photoGrid.getAdapter();
                 casePhotoAdapter.removeItem(position);
                 casePhotoAdapter.notifyDataSetChanged();
 
