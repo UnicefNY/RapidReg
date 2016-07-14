@@ -33,6 +33,19 @@ import butterknife.OnClick;
 
 public class CaseRegisterWrapperFragment extends RecordRegisterWrapperFragment {
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void saveCase(SaveCaseEvent event) {
+        if (validateRequiredField()) {
+            List<String> photoPaths = recordPhotoAdapter.getAllItems();
+            CaseService.getInstance().saveOrUpdate(itemValues, photoPaths);
+        }
+    }
+
+    @OnClick(R.id.edit)
+    public void onEditClicked() {
+        ((CaseActivity) getActivity()).turnToDetailOrEditPage(CaseFeature.EDIT, recordId);
+    }
+
     @Override
     protected void initItemValues() {
         if (getArguments() != null) {
@@ -80,19 +93,6 @@ public class CaseRegisterWrapperFragment extends RecordRegisterWrapperFragment {
             pages.add(FragmentPagerItem.of(values[0], CaseRegisterFragment.class, bundle));
         }
         return pages;
-    }
-
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void saveCase(SaveCaseEvent event) {
-        if (validateRequiredField()) {
-            List<String> photoPaths = recordPhotoAdapter.getAllItems();
-            CaseService.getInstance().saveOrUpdate(itemValues, photoPaths);
-        }
-    }
-
-    @OnClick(R.id.edit)
-    public void onEditClicked() {
-        ((CaseActivity) getActivity()).turnToDetailOrEditPage(CaseFeature.EDIT, recordId);
     }
 
     private boolean validateRequiredField() {

@@ -11,7 +11,7 @@ import com.raizlabs.android.dbflow.sql.language.Condition;
 import com.raizlabs.android.dbflow.sql.language.ConditionGroup;
 import com.raizlabs.android.dbflow.sql.language.NameAlias;
 
-import org.unicef.rapidreg.childcase.config.PhotoConfig;
+import org.unicef.rapidreg.base.PhotoConfig;
 import org.unicef.rapidreg.db.TracingDao;
 import org.unicef.rapidreg.db.TracingPhotoDao;
 import org.unicef.rapidreg.db.TracingPhotoDaoImpl;

@@ -1,4 +1,4 @@
-package org.unicef.rapidreg.childcase.config;
+package org.unicef.rapidreg.base;
 
 import android.os.Environment;
 
