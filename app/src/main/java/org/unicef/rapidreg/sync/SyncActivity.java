@@ -16,6 +16,9 @@ public class SyncActivity extends BaseActivity {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.fragment_content, new SyncFragment(), null).commit();
         drawer.closeDrawer(GravityCompat.START);
+
+        navigationView.setCheckedItem(R.id.nav_sync);
+        navigationView.setItemTextColor(syncColor);
     }
 
     @Override
@@ -29,7 +32,12 @@ public class SyncActivity extends BaseActivity {
     }
 
     @Override
-    protected void processBackButton() {
+    protected void navTracingAction() {
+        intentSender.showTracingActivity(this);
+    }
 
+    @Override
+    protected void processBackButton() {
+        finish();
     }
 }

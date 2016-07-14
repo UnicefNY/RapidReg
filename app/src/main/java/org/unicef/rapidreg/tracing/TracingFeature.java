@@ -1,4 +1,4 @@
-package org.unicef.rapidreg.childcase;
+package org.unicef.rapidreg.tracing;
 
 import android.support.v4.app.Fragment;
 
@@ -6,17 +6,17 @@ import org.unicef.rapidreg.R;
 import org.unicef.rapidreg.base.Feature;
 import org.unicef.rapidreg.exception.FragmentSwitchException;
 
-public enum CaseFeature implements Feature {
-    LIST(R.string.cases, CaseListFragment.class),
-    ADD(R.string.new_case, CaseRegisterWrapperFragment.class),
-    EDIT(R.string.edit, CaseRegisterWrapperFragment.class),
-    DETAILS(R.string.case_details, CaseRegisterWrapperFragment.class),
-    SEARCH(R.string.search, CaseSearchFragment.class);
+public enum TracingFeature implements Feature {
+    LIST(R.string.tracing, TracingListFragment.class),
+    ADD(R.string.new_tracing, TracingRegisterWrapperFragment.class),
+    EDIT(R.string.edit, TracingRegisterWrapperFragment.class),
+    DETAILS(R.string.tracing_details, TracingRegisterWrapperFragment.class),
+    SEARCH(R.string.search, TracingSearchFragment.class);
 
     private int titleId;
     private Class clz;
 
-    CaseFeature(int titleId, Class clz) {
+    TracingFeature(int titleId, Class clz) {
         this.titleId = titleId;
         this.clz = clz;
     }

@@ -12,4 +12,6 @@ public interface TracingDao {
     List<Tracing> getAllTracingsOrderByDate(boolean isASC);
 
     List<Tracing> getAllTracingsByConditionGroup(ConditionGroup conditionGroup);
+
+    Tracing getTracingById(long tracingId);
 }

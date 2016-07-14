@@ -1,4 +1,4 @@
-package org.unicef.rapidreg.childcase;
+package org.unicef.rapidreg.tracing;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -14,12 +14,12 @@ import org.unicef.rapidreg.model.RecordModel;
 import org.unicef.rapidreg.service.RecordService;
 import org.unicef.rapidreg.service.cache.ItemValues;
 
-public class CaseRegisterFragment extends RecordRegisterFragment {
+public class TracingRegisterFragment extends RecordRegisterFragment {
 
     @NonNull
     @Override
     public RecordRegisterPresenter createPresenter() {
-        return new RecordRegisterPresenter(RecordModel.CASE);
+        return new RecordRegisterPresenter(RecordModel.TRACING);
     }
 
     @Nullable
@@ -30,7 +30,7 @@ public class CaseRegisterFragment extends RecordRegisterFragment {
 
 
         if (getArguments() != null) {
-            photoAdapter = new CasePhotoAdapter(getContext(),
+            photoAdapter = new TracingPhotoAdapter(getContext(),
                     getArguments().getStringArrayList(RecordService.RECORD_PHOTOS));
             itemValues = ItemValues.fromJson(getArguments().getString(ITEM_VALUES));
         }
