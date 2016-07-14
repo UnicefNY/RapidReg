@@ -14,6 +14,9 @@ import java.util.Locale;
 import java.util.UUID;
 
 public class RecordService {
+    public static final String RECORD_ID = "record_id";
+    public static final String ITEM_VALUES = "item_values";
+    public static final String RECORD_PHOTOS = "record_photos";
     public static final String AGE = "age";
     public static final String FULL_NAME = "name";
     public static final String FIRST_NAME = "name_first";
@@ -31,12 +34,21 @@ public class RecordService {
     public static final String AUDIO_FILE_PATH = Environment.getExternalStorageDirectory()
             .getAbsolutePath() + "/audiorecordtest.3gp";
 
+    public static RecordService getInstance() {
+        return new RecordService();
+    }
+
     public static void clearAudioFile() {
         File file = new File(AUDIO_FILE_PATH);
         file.delete();
     }
 
-    public List<String> fetchRequiredFiledNames(List<Field> fields) {
+    public static String getShortUUID(String uuid) {
+        int length = uuid.length();
+        return length > 7 ? uuid.substring(length - 7) : uuid;
+    }
+
+    public static List<String> fetchRequiredFiledNames(List<Field> fields) {
         List<String> result = new ArrayList<>();
         for (Field field : fields) {
             if (field.isRequired()) {
@@ -48,11 +60,6 @@ public class RecordService {
 
     public String createUniqueId() {
         return UUID.randomUUID().toString();
-    }
-
-    public String getShortUUID(String uuid) {
-        int length = uuid.length();
-        return length > 7 ? uuid.substring(length - 7) : uuid;
     }
 
     protected String getName(ItemValues values) {

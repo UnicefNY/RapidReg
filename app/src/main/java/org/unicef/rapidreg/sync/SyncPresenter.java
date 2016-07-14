@@ -113,8 +113,8 @@ public class SyncPresenter extends MvpBasePresenter<SyncView> {
 
     private void startUpLoadCases() {
 
-        List<Case> caseList = CaseService.getInstance().getCaseList();
-        for (Case item: caseList) {
+        List<Case> caseList = CaseService.getInstance().getAll();
+        for (Case item : caseList) {
             ItemValues values = ItemValues.fromJson(new String(item.getContent().getBlob()));
             values.addStringItem("case_id", item.getUniqueId());
 

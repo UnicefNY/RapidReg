@@ -6,15 +6,13 @@ import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 import com.raizlabs.android.dbflow.data.Blob;
 import com.raizlabs.android.dbflow.sql.language.Condition;
 import com.raizlabs.android.dbflow.sql.language.ConditionGroup;
 import com.raizlabs.android.dbflow.sql.language.NameAlias;
 
-import org.unicef.rapidreg.childcase.config.PhotoConfig;
+import org.unicef.rapidreg.base.PhotoConfig;
 import org.unicef.rapidreg.db.CaseDao;
 import org.unicef.rapidreg.db.CasePhotoDao;
 import org.unicef.rapidreg.db.impl.CaseDaoImpl;
@@ -56,27 +54,27 @@ public class CaseService extends RecordService {
         this.caseDao = caseDao;
     }
 
-    public List<Case> getCaseList() {
+    public List<Case> getAll() {
         return caseDao.getAllCasesOrderByDate(false);
     }
 
-    public Case getCaseById(long caseId) {
+    public Case getById(long caseId) {
         return caseDao.getCaseById(caseId);
     }
 
-    public List<Case> getCaseListOrderByDateASC() {
+    public List<Case> getAllOrderByDateASC() {
         return caseDao.getAllCasesOrderByDate(true);
     }
 
-    public List<Case> getCaseListOrderByDateDES() {
+    public List<Case> getAllOrderByDateDES() {
         return caseDao.getAllCasesOrderByDate(false);
     }
 
-    public List<Case> getCaseListOrderByAgeASC() {
+    public List<Case> getAllOrderByAgeASC() {
         return caseDao.getAllCasesOrderByAge(true);
     }
 
-    public List<Case> getCaseListOrderByAgeDES() {
+    public List<Case> getAllOrderByAgeDES() {
         return caseDao.getAllCasesOrderByAge(false);
     }
 
@@ -126,6 +124,7 @@ public class CaseService extends RecordService {
     }
 
     public void save(ItemValues itemValues, List<String> photoPath) {
+
         String username = UserService.getInstance().getCurrentUser().getUsername();
         itemValues.addStringItem(MODULE, "primeromodule-cp");
         itemValues.addStringItem(CASEWORKER_CODE, username);
@@ -222,16 +221,6 @@ public class CaseService extends RecordService {
                 CasePhoto.update();
             }
         }
-    }
-
-    public ItemValues generateItemValues(String parentJson, String childJson) {
-        final JsonObject caseInfo = new Gson().fromJson(parentJson, JsonObject.class);
-        final JsonObject subFormInfo = new Gson().fromJson(childJson, JsonObject.class);
-        ItemValues itemValues = new ItemValues(caseInfo);
-        for (Map.Entry<String, JsonElement> element : subFormInfo.entrySet()) {
-            itemValues.addChildren(element.getKey(), element.getValue().getAsJsonArray());
-        }
-        return itemValues;
     }
 
     private CasePhoto generateSavePhoto(Case child, List<String> photoPaths, int index) throws IOException {

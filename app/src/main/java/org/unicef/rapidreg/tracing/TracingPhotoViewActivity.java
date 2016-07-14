@@ -1,4 +1,4 @@
-package org.unicef.rapidreg.childcase.media;
+package org.unicef.rapidreg.tracing;
 
 import android.graphics.Point;
 import android.os.Bundle;
@@ -12,14 +12,14 @@ import org.unicef.rapidreg.R;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class CasePhotoViewActivity extends AppCompatActivity {
-    @BindView(R.id.case_photo_view_slider)
+public class TracingPhotoViewActivity extends AppCompatActivity {
+    @BindView(R.id.record_photo_view_slider)
     ViewPager viewPager;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.case_photo_view_slider);
+        setContentView(R.layout.record_photo_view_slider);
         ButterKnife.bind(this);
 
         Point size = new Point();
@@ -27,7 +27,7 @@ public class CasePhotoViewActivity extends AppCompatActivity {
         viewPager.setLayoutParams(new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT));
 
-        viewPager.setAdapter(new CasePhotoViewAdapter(this,
+        viewPager.setAdapter(new TracingPhotoViewAdapter(this,
                 getIntent().getStringArrayListExtra("photos")));
         viewPager.setCurrentItem(getIntent().getIntExtra("position", 0));
     }

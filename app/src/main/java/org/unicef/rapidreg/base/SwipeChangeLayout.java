@@ -1,19 +1,3 @@
-/*
- * Copyright 2015 Eric Liu
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 package org.unicef.rapidreg.base;
 
 import android.app.Activity;
@@ -26,87 +10,41 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 
-/**
- * Swipe or Pull to finish a Activity.
- * <p>
- * This layout must be a root layout and contains only one direct child view.
- * <p>
- * The activity must use a theme that with translucent style.
- * <style name="Theme.Swipe.Back" parent="AppTheme">
- * <item name="android:windowIsTranslucent">true</item>
- * <item name="android:windowBackground">@android:color/transparent</item>
- * </style>
- * <p>
- * Created by Eric on 15/1/8.
- */
-public class SwipeChangeLayout extends ViewGroup {
 
-    private static final String TAG = "SwipeChangeLayout";
+public class SwipeChangeLayout extends ViewGroup {
+    public static final String TAG = SwipeChangeLayout.class.getSimpleName();
 
     public enum DragEdge {
-        TOP,
-
-        BOTTOM
+        TOP, BOTTOM
     }
 
     private DragEdge dragEdge = DragEdge.TOP;
+    private static final double AUTO_FINISHED_SPEED_LIMIT = 2000.0;
+    private final ViewDragHelper viewDragHelper;
+    private View target;
+    private View scrollChild;
+    private int verticalDragRange = 0;
+    private int draggingState = 0;
+    private int draggingOffset;
+    private ViewGroup shouldGoneContainer;
+    private ViewGroup shouldShowContainer;
+    private boolean enablePullToBack = true;
+    private static final float BACK_FACTOR = 0.2f;
+    private float finishAnchor = 0;
+    private boolean enableFlingBack = true;
+    private SwipeBackListener swipeBackListener;
+
+    public void setFinishAnchor(float offset) {
+        finishAnchor = offset;
+    }
 
     public void setDragEdge(DragEdge dragEdge) {
         this.dragEdge = dragEdge;
     }
 
-
-    private static final double AUTO_FINISHED_SPEED_LIMIT = 2000.0;
-
-    private final ViewDragHelper viewDragHelper;
-
-    private View target;
-
-    private View scrollChild;
-
-    private int verticalDragRange = 0;
-
-    private int draggingState = 0;
-
-    private int draggingOffset;
-
-    private ViewGroup shouldGoneContainer;
-
-    private ViewGroup shouldShowContainer;
-
-    /**
-     * Whether allow to pull this layout.
-     */
-    private boolean enablePullToBack = true;
-
-    private static final float BACK_FACTOR = 0.2f;
-
-    /**
-     * the anchor of calling finish.
-     */
-    private float finishAnchor = 0;
-
-    /**
-     * Set the anchor of calling finish.
-     *
-     * @param offset
-     */
-    public void setFinishAnchor(float offset) {
-        finishAnchor = offset;
-    }
-
-    private boolean enableFlingBack = true;
-
-    /**
-     * Whether allow to finish activity by fling the layout.
-     *
-     * @param b
-     */
     public void setEnableFlingBack(boolean b) {
         enableFlingBack = b;
     }
-
-    private SwipeBackListener swipeBackListener;
 
     public void setOnSwipeBackListener(SwipeBackListener listener) {
         swipeBackListener = listener;
@@ -135,53 +73,6 @@ public class SwipeChangeLayout extends ViewGroup {
 
     public void setShouldGoneContainer(ViewGroup shouldGoneContainer) {
         this.shouldGoneContainer = shouldGoneContainer;
-    }
-
-    private void ensureTarget() {
-        if (target == null) {
-            if (getChildCount() > 1) {
-                throw new IllegalStateException("SwipeBackLayout must contains only one direct child");
-            }
-            target = getChildAt(0);
-
-            if (scrollChild == null && target != null) {
-                if (target instanceof ViewGroup) {
-                    findScrollView((ViewGroup) target);
-                } else {
-                    scrollChild = target;
-                }
-
-            }
-        }
-    }
-
-    /**
-     * Find out the scrollable child view from a ViewGroup.
-     *
-     * @param viewGroup
-     */
-    private void findScrollView(ViewGroup viewGroup) {
-        scrollChild = viewGroup;
-        if (viewGroup.getChildCount() > 0) {
-            int count = viewGroup.getChildCount();
-            View child;
-            for (int i = 0; i < count; i++) {
-                child = viewGroup.getChildAt(i);
-                if (child instanceof ViewGroup) {
-                    if (((ViewGroup) child).getChildCount() > 0) {
-                        int subCount = ((ViewGroup) child).getChildCount();
-                        View subChild;
-                        for (int j = 0; j < subCount; j++) {
-                            subChild = ((ViewGroup) child).getChildAt(j);
-                            if (subChild instanceof RecyclerView) {
-                                scrollChild = subChild;
-                                return;
-                            }
-                        }
-                    }
-                }
-            }
-        }
     }
 
     @Override
@@ -230,16 +121,6 @@ public class SwipeChangeLayout extends ViewGroup {
         }
     }
 
-    private int getDragRange() {
-        switch (dragEdge) {
-            case TOP:
-            case BOTTOM:
-                return verticalDragRange;
-            default:
-                return verticalDragRange;
-        }
-    }
-
     @Override
     public boolean onInterceptTouchEvent(MotionEvent ev) {
         boolean handled = false;
@@ -271,6 +152,58 @@ public class SwipeChangeLayout extends ViewGroup {
 
     public boolean canChildScrollDown() {
         return ViewCompat.canScrollVertically(scrollChild, 1);
+    }
+
+    private int getDragRange() {
+        switch (dragEdge) {
+            case TOP:
+            case BOTTOM:
+                return verticalDragRange;
+            default:
+                return verticalDragRange;
+        }
+    }
+
+    private void ensureTarget() {
+        if (target == null) {
+            if (getChildCount() > 1) {
+                throw new IllegalStateException("SwipeBackLayout must contains only one direct child");
+            }
+            target = getChildAt(0);
+
+            if (scrollChild == null && target != null) {
+                if (target instanceof ViewGroup) {
+                    findScrollView((ViewGroup) target);
+                } else {
+                    scrollChild = target;
+                }
+
+            }
+        }
+    }
+
+    private void findScrollView(ViewGroup viewGroup) {
+        scrollChild = viewGroup;
+        if (viewGroup.getChildCount() > 0) {
+            int count = viewGroup.getChildCount();
+            View child;
+            for (int i = 0; i < count; i++) {
+                child = viewGroup.getChildAt(i);
+                if (child instanceof ViewGroup) {
+                    if (((ViewGroup) child).getChildCount() > 0) {
+                        int subCount = ((ViewGroup) child).getChildCount();
+                        View subChild;
+                        for (int j = 0; j < subCount; j++) {
+                            subChild = ((ViewGroup) child).getChildAt(j);
+                            if (subChild instanceof RecyclerView) {
+                                scrollChild = subChild;
+                                return;
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 
     private void finish() {
@@ -419,5 +352,4 @@ public class SwipeChangeLayout extends ViewGroup {
         void onViewPositionChanged(float fractionAnchor, float fractionScreen);
 
     }
-
 }
