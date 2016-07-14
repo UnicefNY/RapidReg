@@ -25,6 +25,16 @@ public class ItemValues {
         return new ItemValues(new Gson().fromJson(json, JsonObject.class));
     }
 
+    public static ItemValues generateItemValues(String parentJson, String childJson) {
+        final JsonObject caseInfo = new Gson().fromJson(parentJson, JsonObject.class);
+        final JsonObject subFormInfo = new Gson().fromJson(childJson, JsonObject.class);
+        ItemValues itemValues = new ItemValues(caseInfo);
+        for (Map.Entry<String, JsonElement> element : subFormInfo.entrySet()) {
+            itemValues.addChildren(element.getKey(), element.getValue().getAsJsonArray());
+        }
+        return itemValues;
+    }
+
     public void addItem(String itemKey, Object itemValue) {
         addItemToJsonObject(values, itemKey, itemValue);
     }

@@ -6,8 +6,6 @@ import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
 import com.raizlabs.android.dbflow.data.Blob;
 import com.raizlabs.android.dbflow.sql.language.Condition;
 import com.raizlabs.android.dbflow.sql.language.ConditionGroup;
@@ -32,7 +30,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
-import java.util.Map;
 
 public class TracingService extends RecordService {
     public static final String TAG = TracingService.class.getSimpleName();
@@ -54,21 +51,21 @@ public class TracingService extends RecordService {
         this.tracingDao = tracingDao;
     }
 
-    public List<Tracing> getTracingList() {
+    public List<Tracing> getAll() {
         return tracingDao.getAllTracingsOrderByDate(false);
     }
 
-    public List<Tracing> getTracingListOrderByDateASC() {
+    public List<Tracing> getAllOrderByDateASC() {
         return tracingDao.getAllTracingsOrderByDate(true);
     }
 
-    public List<Tracing> getTracingListOrderByDateDES() {
+    public List<Tracing> getAllOrderByDateDES() {
         return tracingDao.getAllTracingsOrderByDate(false);
     }
 
 
-    public List<Tracing> getTracingsSearchResult(String uniqueId, String name, int ageFrom,
-                                                 int ageTo, String caregiver, Date date) {
+    public List<Tracing> getAllSearchResult(String uniqueId, String name, int ageFrom,
+                                            int ageTo, String caregiver, Date date) {
 
         ConditionGroup searchCondition = getSearchCondition(uniqueId, name, ageFrom, ageTo, caregiver, date);
 
@@ -208,16 +205,6 @@ public class TracingService extends RecordService {
                 TracingPhoto.update();
             }
         }
-    }
-
-    public ItemValues generateItemValues(String parentJson, String childJson) {
-        final JsonObject info = new Gson().fromJson(parentJson, JsonObject.class);
-        final JsonObject subFormInfo = new Gson().fromJson(childJson, JsonObject.class);
-        ItemValues itemValues = new ItemValues(info);
-        for (Map.Entry<String, JsonElement> element : subFormInfo.entrySet()) {
-            itemValues.addChildren(element.getKey(), element.getValue().getAsJsonArray());
-        }
-        return itemValues;
     }
 
     private TracingPhoto generateSavePhoto(Tracing parent, List<String> photoPaths, int index) throws IOException {

@@ -31,9 +31,18 @@ public class RecordService {
     public static final String AUDIO_FILE_PATH = Environment.getExternalStorageDirectory()
             .getAbsolutePath() + "/audiorecordtest.3gp";
 
+    public static RecordService getInstance() {
+        return new RecordService();
+    }
+
     public static void clearAudioFile() {
         File file = new File(AUDIO_FILE_PATH);
         file.delete();
+    }
+
+    public static String getShortUUID(String uuid) {
+        int length = uuid.length();
+        return length > 7 ? uuid.substring(length - 7) : uuid;
     }
 
     public List<String> fetchRequiredFiledNames(List<Field> fields) {
@@ -48,11 +57,6 @@ public class RecordService {
 
     public String createUniqueId() {
         return UUID.randomUUID().toString();
-    }
-
-    public String getShortUUID(String uuid) {
-        int length = uuid.length();
-        return length > 7 ? uuid.substring(length - 7) : uuid;
     }
 
     protected String getName(ItemValues values) {

@@ -29,6 +29,11 @@ public class SyncActivity extends BaseActivity {
     }
 
     @Override
+    protected void navTracingAction() {
+        intentSender.showTracingActivity(this);
+    }
+
+    @Override
     protected void processBackButton() {
 
     }
