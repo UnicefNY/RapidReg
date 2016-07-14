@@ -46,12 +46,8 @@ public class LoginPresenter extends MvpBasePresenter<LoginView> {
         intentSender = new IntentSender();
         gson = new Gson();
         subscriptions = new CompositeSubscription();
-        try {
-            AuthService.getInstance().init(context);
-        } catch (Exception e) {
-            showLoginResultMessage(e.getMessage());
-        }
     }
+
 
     public String fetchURL() {
         try {

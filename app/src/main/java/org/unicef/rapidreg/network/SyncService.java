@@ -43,6 +43,13 @@ public class SyncService extends BaseRetrofitService {
             Object requestBody) {
         return serviceInterface.postCase(cookie, requestBody);
     }
+
+    public Observable<Response<JsonElement>> putCase(
+            String cookie,
+            Boolean isMobile,
+            Object requestBody) {
+        return serviceInterface.putCase(cookie, requestBody);
+    }
 }
 
 

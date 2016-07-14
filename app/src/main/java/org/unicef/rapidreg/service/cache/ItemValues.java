@@ -80,13 +80,6 @@ public class ItemValues implements Serializable{
         return values;
     }
 
-    public ItemValues getChildrenAsItemValues(String childName) {
-        if (values.has(childName)) {
-            return new ItemValues(values.get(childName).getAsJsonObject());
-        }
-        return new ItemValues();
-    }
-
     public JsonArray getChildrenAsJsonArray(String childName) {
         if (values.has(childName)) {
             return values.get(childName).getAsJsonArray();
