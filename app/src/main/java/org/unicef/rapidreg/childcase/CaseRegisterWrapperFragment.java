@@ -87,7 +87,9 @@ public class CaseRegisterWrapperFragment extends RecordRegisterWrapperFragment {
             Bundle bundle = new Bundle();
             bundle.putStringArrayList(RecordService.RECORD_PHOTOS,
                     (ArrayList<String>) recordPhotoAdapter.getAllItems());
+
             bundle.putSerializable(RecordService.ITEM_VALUES, itemValues);
+
             pages.add(FragmentPagerItem.of(values[0], CaseRegisterFragment.class, bundle));
         }
         return pages;
