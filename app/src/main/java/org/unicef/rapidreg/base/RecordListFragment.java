@@ -79,6 +79,11 @@ public abstract class RecordListFragment extends MvpFragment<RecordListView, Rec
         initFloatingMenu();
     }
 
+    @OnClick(R.id.container)
+    public void onContainerClicked() {
+        floatingMenu.collapse();
+    }
+
     @OnClick(R.id.add_case)
     public void onCaseAddClicked() {
         RecordService.clearAudioFile();
