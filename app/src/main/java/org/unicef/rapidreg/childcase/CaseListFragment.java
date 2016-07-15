@@ -37,6 +37,7 @@ public class CaseListFragment extends RecordListFragment {
 
     @Override
     protected void initListContainer(final RecordListAdapter adapter) {
+        super.initListContainer(adapter);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         listContainer.setLayoutManager(layoutManager);
