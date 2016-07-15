@@ -17,6 +17,7 @@ public class SyncActivity extends BaseActivity {
         transaction.replace(R.id.fragment_content, new SyncFragment(), null).commit();
         drawer.closeDrawer(GravityCompat.START);
 
+        toolbar.setTitle(R.string.sync);
         navigationView.setCheckedItem(R.id.nav_sync);
         navigationView.setItemTextColor(syncColor);
     }

@@ -42,6 +42,7 @@
     <string name="case_details">Case details</string>
     <string name="tracing">Tracing request</string>
     <string name="tracing_details">Tracing request details</string>
+    <string name="sync">Synchronization</string>
     <!-- Title -->
     <string name="click_to_search">Click to search</string>
     <string name="done">Done</string>
