@@ -40,8 +40,7 @@ public class TracingRegisterWrapperFragment extends RecordRegisterWrapperFragmen
             String tracingJson = new String(tracingItem.getContent().getBlob());
             String subFormJson = new String(tracingItem.getSubform().getBlob());
             itemValues = ItemValues.generateItemValues(tracingJson, subFormJson);
-            itemValues.addStringItem(RecordService.RECORD_ID, tracingItem.getUniqueId());
-            itemValues.addStringItem(RecordService.RECORD_ID, tracingItem.getUniqueId());
+            itemValues.addStringItem(TracingService.TRACING_ID, tracingItem.getUniqueId());
             initProfile(tracingItem);
         }
     }

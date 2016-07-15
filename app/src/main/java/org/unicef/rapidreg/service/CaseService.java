@@ -36,7 +36,7 @@ import java.util.Map;
 
 public class CaseService extends RecordService {
     public static final String TAG = CaseService.class.getSimpleName();
-    public static final String CASE_ID = "case_id";
+    public static final String CASE_ID = "case_id_display";
 
     private static final CaseService CASE_SERVICE = new CaseService();
 
