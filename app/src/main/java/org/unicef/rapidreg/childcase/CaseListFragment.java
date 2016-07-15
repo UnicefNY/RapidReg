@@ -56,6 +56,7 @@ public class CaseListFragment extends RecordListFragment {
         orderSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                floatingMenu.collapse();
                 handleItemSelection(position);
                 adapter.notifyDataSetChanged();
             }
