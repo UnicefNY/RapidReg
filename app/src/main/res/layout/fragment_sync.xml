@@ -66,6 +66,7 @@
         android:layout_height="wrap_content"
         android:background="@color/boy_blue"
         android:textColor="@color/white"
+        android:textAllCaps="false"
         android:textSize="@dimen/text_size_20"
         android:text="@string/button_sync_state_of_click_to_sync"/>
 

@@ -74,6 +74,10 @@ public class SyncPresenter extends MvpBasePresenter<SyncView> {
 //                                    = new Gson().fromJson(subformJson, subformType);
     }
 
+    public void tryToSync() {
+        getView().showAttemptSyncDialog();
+    }
+
     public void doSync() {
         if (isViewAttached()) {
             getView().showSyncProgressDialog();
