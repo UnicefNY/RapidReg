@@ -9,7 +9,7 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 
-public class ItemValues implements Serializable{
+public class ItemValues implements Serializable {
 
     private JsonObject values;
 
@@ -97,7 +97,7 @@ public class ItemValues implements Serializable{
     }
 
     public int getChildrenSize(String childName) {
-        if (getChildrenAsJsonArray(childName) == null){
+        if (getChildrenAsJsonArray(childName) == null) {
             return 0;
         }
         return getChildrenAsJsonArray(childName).size();
@@ -160,6 +160,29 @@ public class ItemValues implements Serializable{
             array.add(element);
         }
         return array;
+    }
+
+    public static ItemValues fromItemValuesMap(ItemValuesMap itemValuesMap) {
+        JsonObject result = new JsonObject();
+        Map<String, Object> values = itemValuesMap.getValues();
+        for (Map.Entry<String, Object> element : values.entrySet()) {
+            String childName = element.getKey();
+            if (element.getValue() instanceof List) {
+                JsonArray childrenArray = new JsonArray();
+                List<Map<String, Object>> children = (List<Map<String, Object>>) element.getValue();
+                for (Map<String, Object> child : children) {
+                    JsonObject childItem = new JsonObject();
+                    for (Map.Entry<String, Object> childEntry : child.entrySet()) {
+                        addItemToJsonObject(childItem, childEntry.getKey(), childEntry.getValue());
+                    }
+                    childrenArray.add(childItem);
+                }
+                result.add(childName, childrenArray);
+            } else {
+                addItemToJsonObject(result, childName, element.getValue());
+            }
+        }
+        return new ItemValues(result);
     }
 
     public static void addItemToJsonObject(JsonObject jsonObject, String itemKey, Object itemValue) {
