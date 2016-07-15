@@ -66,7 +66,7 @@
     <string name="new_case">New case</string>
     <string name="new_tracing">New tracing request</string>
     <string name="quit">Quit</string>
-    <string name="quit_without_saving">Are you sure to quit without saving?</string>
+    <string name="quit_without_saving">Are you sure you want to quit without saving?</string>
     <string name="recording_is_too_short">Recording is too short</string>
     <string name="audio_file_not_exists">No audio file exists.</string>
 
@@ -85,6 +85,7 @@
     <string name="confirm_button_text">Yes</string>
     <string name="sync_success_message">Sync Success !</string>
     <string name="sync_error_message">Sync Failed !</string>
+    <string name="remove_photo_confirmation">Are you sure you want to remove this photo?</string>
     <!--Sync-->
 
     <!--Transparent theme-->
