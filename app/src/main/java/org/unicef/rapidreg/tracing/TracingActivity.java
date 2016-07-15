@@ -40,8 +40,8 @@ public class TracingActivity extends RecordActivity {
 
     @Override
     protected void navCaseAction() {
-        if (currentFeature.isDetailMode()) {
-            showQuitDialog(R.id.nav_tracing);
+        if (currentFeature.isEditMode()) {
+            showQuitDialog(R.id.nav_cases);
         } else {
             TracingService.clearAudioFile();
             intentSender.showCasesActivity(this, false);
@@ -70,6 +70,9 @@ public class TracingActivity extends RecordActivity {
                         switch (clickedButton) {
                             case R.id.nav_tracing:
                                 turnToFeature(TracingFeature.LIST, null);
+                                break;
+                            case R.id.nav_cases:
+                                intentSender.showCasesActivity(TracingActivity.this, false);
                                 break;
                             case R.id.nav_sync:
                                 intentSender.showSyncActivity(TracingActivity.this);
