@@ -140,7 +140,7 @@ public class LoginPresenter extends MvpBasePresenter<LoginView> {
                                 service.setCurrentUser(user);
                                 service.saveOrUpdateUser(user);
 
-                                goToLoginSuccessScreen(username);
+                                goToLoginSuccessScreen();
 
                                 EventBus.getDefault().postSticky(new NeedLoadFormsEvent(PrimeroConfiguration.getCookie()));
 
@@ -177,12 +177,12 @@ public class LoginPresenter extends MvpBasePresenter<LoginView> {
 
         if (verifiedCode == UserService.VerifiedCode.OK) {
             service.setCurrentUser(service.getUser(username));
-            goToLoginSuccessScreen(username);
+            goToLoginSuccessScreen();
         }
     }
 
-    private void goToLoginSuccessScreen(String username) {
-        intentSender.showCasesActivity((Activity) context, username, true);
+    private void goToLoginSuccessScreen() {
+        intentSender.showCasesActivity((Activity) context, true);
     }
 
     private void showLoadingIndicator(boolean active) {

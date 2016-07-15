@@ -28,7 +28,7 @@ public class SyncActivity extends BaseActivity {
 
     @Override
     protected void navCaseAction() {
-        intentSender.showCasesActivity(this, null, false);
+        intentSender.showCasesActivity(this, false);
     }
 
     @Override
