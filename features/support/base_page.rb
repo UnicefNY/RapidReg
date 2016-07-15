@@ -110,10 +110,6 @@ module GestureModule
     end
   end
 
-  def pressBackButton
-    @driver.key_event 4
-  end
-
 end
 
 class RapidRegAppPage

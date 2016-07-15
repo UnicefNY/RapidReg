@@ -13,8 +13,8 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
 import org.unicef.rapidreg.R;
+import org.unicef.rapidreg.base.RecordRegisterAdapter;
 import org.unicef.rapidreg.childcase.CaseActivity;
-import org.unicef.rapidreg.childcase.CaseRegisterAdapter;
 import org.unicef.rapidreg.forms.Field;
 import org.unicef.rapidreg.service.cache.ItemValues;
 
@@ -26,8 +26,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class SubFormViewHolder extends BaseViewHolder<Field> {
-    public static final int NUM_CHILD_VIEWS = 2;
-
     @BindView(R.id.add_subform)
     Button addSubFormBtn;
 
@@ -50,7 +48,7 @@ public class SubFormViewHolder extends BaseViewHolder<Field> {
 
         attachParentToFields(fields, fieldParent);
         addSubFormBtn.setText(String.format("%s %s", context.getString(R.string.add), fieldParent));
-        addSubFormBtn.setVisibility(activity.getCurrentFeature().isInEditMode() ?
+        addSubFormBtn.setVisibility(activity.getCurrentFeature().isEditMode() ?
                 View.VISIBLE : View.GONE);
         restoreSubForms();
     }
@@ -65,7 +63,6 @@ public class SubFormViewHolder extends BaseViewHolder<Field> {
             }
         });
     }
-
 
     @Override
     public void setFieldEditable(boolean editable) {
@@ -89,7 +86,7 @@ public class SubFormViewHolder extends BaseViewHolder<Field> {
                 updateIndexForFields();
             }
         });
-        deleteBtn.setVisibility(activity.getCurrentFeature().isInEditMode() ?
+        deleteBtn.setVisibility(activity.getCurrentFeature().isEditMode() ?
                 View.VISIBLE : View.GONE);
     }
 
@@ -102,7 +99,7 @@ public class SubFormViewHolder extends BaseViewHolder<Field> {
         List<Field> fields = cloneFields();
         assignIndexForFields(fields, index);
 
-        CaseRegisterAdapter adapter = new CaseRegisterAdapter(activity, fields,
+        RecordRegisterAdapter adapter = new RecordRegisterAdapter(activity, fields,
                 itemValues.getChildAsItemValues(fieldParent, index), false);
 
         fieldList.setAdapter(adapter);
@@ -124,7 +121,7 @@ public class SubFormViewHolder extends BaseViewHolder<Field> {
         for (int i = 0; i < itemValues.getChildrenAsJsonArray(fieldParent).size(); i++) {
             View child = parent.getChildAt(i);
             RecyclerView fieldList = (RecyclerView) child.findViewById(R.id.field_list);
-            CaseRegisterAdapter adapter = (CaseRegisterAdapter) fieldList.getAdapter();
+            RecordRegisterAdapter adapter = (RecordRegisterAdapter) fieldList.getAdapter();
             List<Field> fields = adapter.getFields();
             assignIndexForFields(fields, i);
         }

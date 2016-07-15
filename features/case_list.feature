@@ -8,15 +8,15 @@ Feature: Case list and sorting
     When I create case "Tom"
     Then I should see the case's "gender_name" is "BOY"
     And I should see the case's "age" is "10"
-#    And I should see the case's "registration_date" is "Today's date"
+    And I should see the case's "registration_date" is "Today's date"
     When I press "toggle" button
     Then I should not see "BOY"
     And I should not see "10"
-#    And I should not see "Today's date"
+    And I should not see "Today's date"
     When I press "toggle" button
     Then I should see the case's "gender_name" is "BOY"
     And I should see the case's "age" is "10"
-#    And I should see the case's "registration_date" is "Today's date"
+    And I should see the case's "registration_date" is "Today's date"
 
 
   Scenario: Order by Age/Registration date

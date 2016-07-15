@@ -12,6 +12,7 @@ end
 
 When /^I press "(.*?)" button$/ do |button|
   base_page.clickById(button)
+  sleep 5
 end
 
 Then /^I should see "(.*?)"$/ do |text|
@@ -23,10 +24,12 @@ When /^I logout$/ do
 end
 
 And /^I should see current user is "(.*?)"$/ do |username|
-  sleep 5   # must
-  login_page.getCurrentUser.equal?("#{username}")     #TODO
+  sleep 10   # must
+  actual_user = login_page.getCurrentUser
+  raise ("NOT right #{username} for #{actual_user}") unless username == actual_user
 end
 
 And /^the organization is "(.*?)"$/ do |org|
-  login_page.getUserOrganization.equal?("#{org}")     #TODO
+  actual_org = login_page.getUserOrganization
+  raise ("NOT right #{org} for #{actual_org}") unless org == actual_org
 end

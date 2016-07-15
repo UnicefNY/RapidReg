@@ -26,6 +26,10 @@ module AndroidPageDomain
   def case_page
     @casePage = Screen::Android::CasePage.new
   end
+
+  def base_form
+    @baseForm = Screen::Android::BaseForm.new
+  end
 end
 
 World(AndroidPageDomain)
