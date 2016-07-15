@@ -5,7 +5,6 @@ import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.widget.Toast;
 
-import com.google.gson.Gson;
 import com.ogaclejapan.smarttablayout.utils.v4.FragmentPagerItem;
 import com.ogaclejapan.smarttablayout.utils.v4.FragmentPagerItems;
 
@@ -54,7 +53,7 @@ public class CaseRegisterWrapperFragment extends RecordRegisterWrapperFragment {
             String caseJson = new String(caseItem.getContent().getBlob());
             String subFormJson = new String(caseItem.getSubform().getBlob());
             itemValues = ItemValues.generateItemValues(caseJson, subFormJson);
-            itemValues.addStringItem(RecordService.RECORD_ID, caseItem.getUniqueId());
+            itemValues.addStringItem(CaseService.CASE_ID, caseItem.getUniqueId());
             initProfile(caseItem);
         }
     }

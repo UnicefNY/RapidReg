@@ -33,7 +33,7 @@ import java.util.List;
 
 public class TracingService extends RecordService {
     public static final String TAG = TracingService.class.getSimpleName();
-    public static final String TRACING_ID = "tracing_request_id";
+    public static final String TRACING_ID = "tracing_request_id_display";
 
     private static final TracingService TRACING_SERVICE = new TracingService();
 
