@@ -22,6 +22,8 @@
         android:layout_marginRight="@dimen/login_input_margin"
         android:layout_marginTop="@dimen/login_username_top_margin"
         android:hint="@string/username_hint_text"
+        android:singleLine="true"
+        android:imeOptions="actionDone"
         android:text="primero"
         android:textColor="@color/font_dark" />
 

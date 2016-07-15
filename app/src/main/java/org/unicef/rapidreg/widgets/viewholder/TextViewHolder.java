@@ -69,6 +69,8 @@ public class TextViewHolder extends BaseTextViewHolder {
         if (field.isNumericField()) {
             valueView.setInputType(InputType.TYPE_CLASS_NUMBER);
             valueView.setRawInputType(Configuration.KEYBOARD_12KEY);
+        } else {
+            valueView.setInputType(InputType.TYPE_CLASS_TEXT);
         }
 
     }

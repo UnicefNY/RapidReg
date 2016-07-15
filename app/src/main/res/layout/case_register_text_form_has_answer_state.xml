@@ -18,8 +18,9 @@
         android:paddingBottom="@dimen/case_register_field_padding_top_bottom"
         android:textColor="@color/black"
         android:textSize="@dimen/text_size_16"
-        android:singleLine="false"
+        android:singleLine="true"
         android:textIsSelectable="false"
+        android:imeOptions="actionDone"
         android:background="@null"
         android:textCursorDrawable="@null"/>
 
