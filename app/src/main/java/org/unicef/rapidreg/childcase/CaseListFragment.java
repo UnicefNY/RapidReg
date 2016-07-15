@@ -4,6 +4,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.view.View;
 import android.widget.AdapterView;
 
+import org.unicef.rapidreg.IntentSender;
 import org.unicef.rapidreg.R;
 import org.unicef.rapidreg.base.RecordListAdapter;
 import org.unicef.rapidreg.base.RecordListFragment;
@@ -14,6 +15,8 @@ import org.unicef.rapidreg.service.CaseService;
 
 import java.util.Arrays;
 import java.util.List;
+
+import butterknife.OnClick;
 
 
 public class CaseListFragment extends RecordListFragment {
@@ -82,5 +85,11 @@ public class CaseListFragment extends RecordListFragment {
                 }
             }
         });
+    }
+
+    @OnClick(R.id.add_tracing_request)
+    public void onTracingAddClicked() {
+        CaseService.clearAudioFile();
+        new IntentSender().showTracingAddPage(getActivity());
     }
 }

@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 
 import org.greenrobot.eventbus.EventBus;
+import org.unicef.rapidreg.IntentSender;
 import org.unicef.rapidreg.R;
 import org.unicef.rapidreg.base.RecordActivity;
 import org.unicef.rapidreg.event.SaveCaseEvent;
@@ -20,7 +21,9 @@ public class CaseActivity extends RecordActivity {
 
         navigationView.setCheckedItem(R.id.nav_cases);
         navigationView.setItemTextColor(caseColor);
-        turnToFeature(CaseFeature.LIST, null);
+
+        boolean showAddPage = getIntent().getBooleanExtra(IntentSender.SHOW_ADD_PAGE, false);
+        turnToFeature(showAddPage ? CaseFeature.ADD : CaseFeature.LIST, null);
     }
 
     @Override
