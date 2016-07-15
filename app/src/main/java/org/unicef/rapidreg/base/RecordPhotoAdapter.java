@@ -1,4 +1,4 @@
-package org.unicef.rapidreg.childcase.media;
+package org.unicef.rapidreg.base;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -10,17 +10,17 @@ import android.widget.ImageView;
 import com.bumptech.glide.Glide;
 
 import org.unicef.rapidreg.R;
-import org.unicef.rapidreg.service.CasePhotoService;
+import org.unicef.rapidreg.model.RecordPhoto;
 
 import java.util.List;
 
-public class CasePhotoAdapter extends BaseAdapter {
+public abstract class RecordPhotoAdapter extends BaseAdapter {
     private final static int MAX = 4;
     private Context context;
     private List<String> paths;
 
 
-    public CasePhotoAdapter(Context context, List<String> paths) {
+    public RecordPhotoAdapter(Context context, List<String> paths) {
         this.context = context;
         this.paths = paths;
     }
@@ -65,8 +65,8 @@ public class CasePhotoAdapter extends BaseAdapter {
         int width = 80;
         try {
             long photoId = Long.parseLong(path);
-            Glide.with(context).load(CasePhotoService.getInstance().getById(photoId)
-                    .getPhoto().getBlob()).override(width, width).centerCrop().into(imageView);
+            Glide.with(context).load(getPhotoById(photoId).getPhoto().getBlob())
+                    .override(width, width).centerCrop().into(imageView);
         } catch (NumberFormatException e) {
             Glide.with(imageView.getContext()).load(path).override(width, width).centerCrop().into(imageView);
         }
@@ -80,4 +80,6 @@ public class CasePhotoAdapter extends BaseAdapter {
     public List<String> getAllItems() {
         return paths;
     }
+
+    protected abstract RecordPhoto getPhotoById(long id);
 }

@@ -30,6 +30,12 @@ public class TracingDaoImpl implements TracingDao {
                 .queryList();
     }
 
+    @Override
+    public Tracing getTracingById(long tracingId) {
+        return SQLite.select().from(Tracing.class).where(Tracing_Table.id.eq(tracingId)).querySingle();
+    }
+
+
     private List<Tracing> getTracingsByDateASC() {
         return SQLite.select().from(Tracing.class)
                 .orderBy(Tracing_Table.registration_date, true).queryList();

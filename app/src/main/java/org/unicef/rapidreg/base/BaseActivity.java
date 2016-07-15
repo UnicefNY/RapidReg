@@ -40,9 +40,9 @@ public abstract class BaseActivity extends AppCompatActivity implements Navigati
 
     protected IntentSender intentSender = new IntentSender();
 
-    private ColorStateList caseColor;
-    private ColorStateList trColor;
-    private ColorStateList syncColor;
+    protected ColorStateList caseColor;
+    protected ColorStateList tracingColor;
+    protected ColorStateList syncColor;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -52,7 +52,7 @@ public abstract class BaseActivity extends AppCompatActivity implements Navigati
 
         navigationView.setItemIconTintList(null);
         caseColor = generateColors(R.color.ftn_green);
-        trColor = generateColors(R.color.ftn_red);
+        tracingColor = generateColors(R.color.ftn_red);
         syncColor = generateColors(R.color.ftn_blue);
         navigationView.setItemTextColor(caseColor);
 
@@ -107,7 +107,8 @@ public abstract class BaseActivity extends AppCompatActivity implements Navigati
                 navigationView.setItemTextColor(caseColor);
                 break;
             case R.id.nav_tracing:
-                navigationView.setItemTextColor(trColor);
+                navTracingAction();
+                navigationView.setItemTextColor(tracingColor);
                 break;
             case R.id.nav_sync:
                 navigationView.setItemTextColor(syncColor);
@@ -158,6 +159,8 @@ public abstract class BaseActivity extends AppCompatActivity implements Navigati
     protected abstract void navSyncAction();
 
     protected abstract void navCaseAction();
+
+    protected abstract void navTracingAction();
 
     protected abstract void processBackButton();
 

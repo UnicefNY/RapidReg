@@ -5,10 +5,11 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 
-public class ItemValues {
+public class ItemValues implements Serializable{
 
     private JsonObject values;
 
@@ -22,6 +23,16 @@ public class ItemValues {
 
     public static ItemValues fromJson(String json) {
         return new ItemValues(new Gson().fromJson(json, JsonObject.class));
+    }
+
+    public static ItemValues generateItemValues(String parentJson, String childJson) {
+        final JsonObject caseInfo = new Gson().fromJson(parentJson, JsonObject.class);
+        final JsonObject subFormInfo = new Gson().fromJson(childJson, JsonObject.class);
+        ItemValues itemValues = new ItemValues(caseInfo);
+        for (Map.Entry<String, JsonElement> element : subFormInfo.entrySet()) {
+            itemValues.addChildren(element.getKey(), element.getValue().getAsJsonArray());
+        }
+        return itemValues;
     }
 
     public void addItem(String itemKey, Object itemValue) {
@@ -163,7 +174,7 @@ public class ItemValues {
         }
     }
 
-    public static class CaseProfile {
+    public static class RecordProfile {
         public static final String ID_NORMAL_STATE = "_id_normal_state";
         public static final String GENDER_NAME = "_gender_name";
         public static final String REGISTRATION_DATE = "_registration_date";

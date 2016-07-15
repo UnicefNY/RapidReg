@@ -54,7 +54,7 @@ public class LoginPresenter extends MvpBasePresenter<LoginView> {
             User user = UserService.getInstance().getAllUsers().get(0);
             return user.getServerUrl();
         } catch (Exception e) {
-            Log.w("user login", "No user ever login successfully, so url doesn't exist!");
+            Log.w("user login", "No user ever log in successfully, so url doesn't exist!");
             return "";
         }
     }
@@ -145,7 +145,7 @@ public class LoginPresenter extends MvpBasePresenter<LoginView> {
                                 EventBus.getDefault().postSticky(new NeedLoadFormsEvent(PrimeroConfiguration.getCookie()));
 
                                 showLoginResultMessage(HttpStatusCodeHandler.LOGIN_SUCCESS_MESSAGE);
-                                Log.d(TAG, "login successfully");
+                                Log.d(TAG, "login successful");
                             } else {
                                 showLoginResultMessage(HttpStatusCodeHandler
                                         .getHttpStatusMessage(response.code()));

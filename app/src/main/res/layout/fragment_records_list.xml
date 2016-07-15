@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".childcase.CaseActivity">
+                                                 xmlns:app="http://schemas.android.com/apk/res-auto"
+                                                 xmlns:tools="http://schemas.android.com/tools"
+                                                 android:layout_width="match_parent"
+                                                 android:layout_height="match_parent"
+                                                 tools:context=".childcase.CaseActivity">
 
     <LinearLayout
         android:id="@+id/container"
@@ -18,7 +18,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/lighter_white"
-            android:drawSelectorOnTop="true" />
+            android:drawSelectorOnTop="true"/>
 
         <ViewSwitcher
             android:id="@+id/list_result"
@@ -28,7 +28,7 @@
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/list_container"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+                android:layout_height="match_parent"/>
 
             <TextView
                 android:layout_width="match_parent"
@@ -36,7 +36,7 @@
                 android:gravity="center"
                 android:text="@string/no_records"
                 android:textColor="@color/font_dark"
-                android:textSize="@dimen/text_size_14" />
+                android:textSize="@dimen/text_size_14"/>
         </ViewSwitcher>
     </LinearLayout>
 
@@ -58,7 +58,7 @@
             android:src="@drawable/tracing_white"
             app:fab_colorNormal="@color/ftn_red"
             app:fab_colorPressed="@color/ftn_red"
-            app:fab_title="Add Tracing Request" />
+            app:fab_title="Add Tracing Request"/>
 
         <com.getbase.floatingactionbutton.FloatingActionButton
             android:id="@+id/add_case"
@@ -68,7 +68,7 @@
             android:src="@drawable/cases_white"
             app:fab_colorNormal="@color/ftn_green"
             app:fab_colorPressed="@color/ftn_green"
-            app:fab_title="Add Case" />
+            app:fab_title="Add Case"/>
     </com.getbase.floatingactionbutton.FloatingActionsMenu>
 
 </android.support.design.widget.CoordinatorLayout>
