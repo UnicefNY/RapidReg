@@ -82,21 +82,6 @@ public class CaseService extends RecordService {
         return caseDao.getCaseByUniqueId(uniqueId);
     }
 
-    public Map<String, String> getCaseMapByUniqueId(String uniqueId) {
-        Case child = caseDao.getCaseByUniqueId(uniqueId);
-        if (child == null) {
-            return new HashMap<>();
-        }
-        String caseJson = new String(child.getContent().getBlob());
-        Type type = new TypeToken<Map<String, String>>() {
-        }.getType();
-        Map<String, String> values = new Gson().fromJson(caseJson, type);
-
-        values.put(CASE_ID, uniqueId);
-
-        return values;
-    }
-
     public List<Case> getSearchResult(String uniqueId, String name, int ageFrom, int ageTo,
                                       String caregiver, Date date) {
         ConditionGroup conditionGroup = ConditionGroup.clause();
