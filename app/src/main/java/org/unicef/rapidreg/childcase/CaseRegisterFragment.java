@@ -14,6 +14,10 @@ import org.unicef.rapidreg.model.RecordModel;
 import org.unicef.rapidreg.service.RecordService;
 import org.unicef.rapidreg.service.cache.ItemValues;
 
+import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
+
 public class CaseRegisterFragment extends RecordRegisterFragment {
 
     @NonNull
@@ -32,7 +36,6 @@ public class CaseRegisterFragment extends RecordRegisterFragment {
             photoAdapter = new CasePhotoAdapter(getContext(),
                     getArguments().getStringArrayList(RecordService.RECORD_PHOTOS));
             itemValues = (ItemValues) getArguments().getSerializable(ITEM_VALUES);
-//            getArguments().remove(ITEM_VALUES);
         }
         return inflater.inflate(R.layout.fragment_register, container, false);
     }
