@@ -67,18 +67,13 @@ public class TracingService extends RecordService {
         return tracingDao.getAllTracingsOrderByDate(false);
     }
 
-
-    public List<Tracing> getSearchResult(String uniqueId, String name, int ageFrom,
-                                         int ageTo, String caregiver, Date date) {
-
-        ConditionGroup searchCondition = getSearchCondition(uniqueId, name, ageFrom, ageTo, caregiver, date);
+    public List<Tracing> getSearchResult(String uniqueId, String name, int ageFrom, int ageTo, Date date) {
+        ConditionGroup searchCondition = getSearchCondition(uniqueId, name, ageFrom, ageTo, date);
 
         return tracingDao.getAllTracingsByConditionGroup(searchCondition);
     }
 
-    private ConditionGroup getSearchCondition(String uniqueId, String name, int ageFrom, int ageTo,
-                                              String caregiver, Date date) {
-
+    private ConditionGroup getSearchCondition(String uniqueId, String name, int ageFrom, int ageTo, Date date) {
         ConditionGroup conditionGroup = ConditionGroup.clause();
         conditionGroup.and(Condition.column(NameAlias.builder(RecordModel.COLUMN_UNIQUE_ID).build())
                 .like(getWrappedCondition(uniqueId)));
@@ -86,8 +81,6 @@ public class TracingService extends RecordService {
                 .like(getWrappedCondition(name)));
         conditionGroup.and(Condition.column(NameAlias.builder(RecordModel.COLUMN_AGE).build())
                 .between(ageFrom).and(ageTo));
-        conditionGroup.and(Condition.column(NameAlias.builder(RecordModel.COLUMN_CAREGIVER).build())
-                .like(getWrappedCondition(caregiver)));
 
         if (date != null) {
             conditionGroup.and(Condition.column(
