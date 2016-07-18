@@ -37,9 +37,6 @@ public class RecordService {
     public static final String INQUIRY_DATE = "inquiry_date";
 
     public static final String AUDIO_FILE_PATH = PrimeroConfiguration.getInternalFilePath() + "/audioFile.3gp";
-    public static final String MEDIA_PATH_FOR_CAMERA = PrimeroConfiguration.getInternalFilePath() +
-            "/_media_path_for_camera_image.jpg";
-
 
     public static RecordService getInstance() {
         return new RecordService();
