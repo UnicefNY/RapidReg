@@ -29,6 +29,9 @@ public class RecordService {
     public static final String RECORD_CREATED_BY = "created_by";
     public static final String PREVIOUS_OWNER = "previously_owned_by";
     public static final String MODULE = "module_id";
+    public static final String RELATION_NAME = "relation_name";
+    public static final String RELATION_AGE = "relation_age";
+    public static final String RELATION_NICKNAME = "relation_nickname";
 
     public static final String AUDIO_FILE_PATH = PrimeroConfiguration.getInternalFilePath() + "/audioFile.3gp";
     public static final String MEDIA_PATH_FOR_CAMERA = PrimeroConfiguration.getInternalFilePath() +
@@ -61,15 +64,6 @@ public class RecordService {
 
     public String createUniqueId() {
         return UUID.randomUUID().toString();
-    }
-
-    protected String getName(ItemValues values) {
-        return values.getAsString(FULL_NAME) + " "
-                + values.getAsString(FIRST_NAME) + " "
-                + values.getAsString(MIDDLE_NAME) + " "
-                + values.getAsString(SURNAME) + " "
-                + values.getAsString(NICKNAME) + " "
-                + values.getAsString(OTHER_NAME);
     }
 
     protected String getCaregiverName(ItemValues itemValues) {
