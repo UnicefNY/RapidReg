@@ -48,37 +48,40 @@ public abstract class RecordSearchFragment extends MvpFragment<RecordListView, R
     private static final int HAVE_NO_RESULT = 1;
 
     @BindView(R.id.list_container)
-    RecyclerView listContainer;
+    protected RecyclerView listContainer;
 
     @BindView(R.id.view_switcher)
-    ViewSwitcher viewSwitcher;
+    protected ViewSwitcher viewSwitcher;
 
     @BindView(R.id.search_bar_title)
-    TextView searchBarTitle;
+    protected TextView searchBarTitle;
 
     @BindView(R.id.id)
-    ClearableEditText id;
+    protected ClearableEditText id;
 
     @BindView(R.id.name)
-    ClearableEditText name;
+    protected ClearableEditText name;
 
     @BindView(R.id.age_from)
-    ClearableEditText ageFrom;
+    protected ClearableEditText ageFrom;
 
     @BindView(R.id.age_to)
-    ClearableEditText ageTo;
+    protected ClearableEditText ageTo;
 
     @BindView(R.id.caregiver)
-    ClearableEditText caregiver;
+    protected ClearableEditText caregiver;
+
+    @BindView(R.id.caregiver_separator)
+    protected View caregiverSeparator;
 
     @BindView(R.id.registration_date)
-    TextView registrationDate;
+    protected TextView registrationDate;
 
     @BindView(R.id.registration_date_clear)
-    ImageButton registrationDateClear;
+    protected ImageButton registrationDateClear;
 
     @BindView(R.id.search_result)
-    ViewSwitcher searchResultSwitcher;
+    protected ViewSwitcher searchResultSwitcher;
 
     private RecordListAdapter adapter;
 
