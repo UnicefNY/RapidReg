@@ -6,13 +6,12 @@ import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.raizlabs.android.dbflow.data.Blob;
 import com.raizlabs.android.dbflow.sql.language.Condition;
 import com.raizlabs.android.dbflow.sql.language.ConditionGroup;
 import com.raizlabs.android.dbflow.sql.language.NameAlias;
 
-import org.unicef.rapidreg.base.PhotoConfig;
+import org.unicef.rapidreg.PrimeroConfiguration;
 import org.unicef.rapidreg.db.CaseDao;
 import org.unicef.rapidreg.db.CasePhotoDao;
 import org.unicef.rapidreg.db.impl.CaseDaoImpl;
@@ -25,14 +24,11 @@ import org.unicef.rapidreg.utils.StreamUtil;
 
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.Type;
 import java.sql.Date;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class CaseService extends RecordService {
     public static final String TAG = CaseService.class.getSimpleName();
@@ -215,8 +211,8 @@ public class CaseService extends RecordService {
         String filePath = photoPaths.get(index);
         Bitmap bitmap = preProcessImage(filePath);
         CasePhoto.setThumbnail(new Blob(ImageCompressUtil.convertImageToBytes(
-                ImageCompressUtil.getThumbnail(bitmap, PhotoConfig.THUMBNAIL_SIZE,
-                        PhotoConfig.THUMBNAIL_SIZE))));
+                ImageCompressUtil.getThumbnail(bitmap, PrimeroConfiguration.PHOTO_THUMBNAIL_SIZE,
+                        PrimeroConfiguration.PHOTO_THUMBNAIL_SIZE))));
 
         CasePhoto.setPhoto(new Blob(ImageCompressUtil.convertImageToBytes(bitmap)));
         CasePhoto.setCase(child);
@@ -237,8 +233,8 @@ public class CaseService extends RecordService {
             photo = new Blob(ImageCompressUtil.convertImageToBytes(bitmap));
             casePhoto = new CasePhoto();
             casePhoto.setThumbnail(new Blob(ImageCompressUtil.convertImageToBytes(
-                    ImageCompressUtil.getThumbnail(bitmap, PhotoConfig.THUMBNAIL_SIZE,
-                            PhotoConfig.THUMBNAIL_SIZE))));
+                    ImageCompressUtil.getThumbnail(bitmap, PrimeroConfiguration.PHOTO_THUMBNAIL_SIZE,
+                            PrimeroConfiguration.PHOTO_THUMBNAIL_SIZE))));
             casePhoto.setCase(child);
             casePhoto.setPhoto(photo);
         }
@@ -252,7 +248,7 @@ public class CaseService extends RecordService {
             return BitmapFactory.decodeFile(filePath);
         }
         return ImageCompressUtil.compressImage(filePath,
-                PhotoConfig.MAX_WIDTH, PhotoConfig.MAX_HEIGHT);
+                PrimeroConfiguration.PHOTO_MAX_WIDTH, PrimeroConfiguration.PHOTO_MAX_HEIGHT);
     }
 
     private Blob getAudioBlob(Blob blob) {

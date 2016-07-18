@@ -243,7 +243,7 @@ public abstract class RecordActivity extends BaseActivity {
 
     private void onCaptureImageResult() {
         try {
-            Bitmap bitmap = BitmapFactory.decodeFile(PhotoConfig.MEDIA_PATH_FOR_CAMERA);
+            Bitmap bitmap = BitmapFactory.decodeFile(RecordService.MEDIA_PATH_FOR_CAMERA);
             imagePath = getOutputMediaFilePath();
             ImageCompressUtil.storeImage(bitmap, imagePath);
             bitmap.recycle();
