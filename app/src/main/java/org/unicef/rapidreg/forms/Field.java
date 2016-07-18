@@ -1,5 +1,7 @@
 package org.unicef.rapidreg.forms;
 
+import android.text.TextUtils;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -228,6 +230,13 @@ public class Field {
             items = getOptionStringsText().get(language);
         }
         return items;
+    }
+
+    public boolean isMarkForMobileField() {
+       if (TextUtils.equals( this.name ,"marked_for_mobile")) {
+            return true;
+        }
+        return false;
     }
 
     @Override
