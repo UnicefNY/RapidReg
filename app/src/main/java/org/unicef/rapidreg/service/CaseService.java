@@ -287,13 +287,4 @@ public class CaseService extends RecordService {
                 + values.getAsString(NICKNAME) + " "
                 + values.getAsString(OTHER_NAME);
     }
-
-    private String getName(ItemValues values) {
-        return values.getAsString(FULL_NAME) + " "
-                + values.getAsString(FIRST_NAME) + " "
-                + values.getAsString(MIDDLE_NAME) + " "
-                + values.getAsString(SURNAME) + " "
-                + values.getAsString(NICKNAME) + " "
-                + values.getAsString(OTHER_NAME);
-    }
 }
