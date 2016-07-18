@@ -110,14 +110,21 @@ public class CaseService extends RecordService {
     }
 
     public void save(ItemValues itemValues, List<String> photoPath) {
+        Calendar cal = Calendar.getInstance();
+
         String username = UserService.getInstance().getCurrentUser().getUsername();
         itemValues.addStringItem(MODULE, "primeromodule-cp");
         itemValues.addStringItem(CASEWORKER_CODE, username);
         itemValues.addStringItem(RECORD_CREATED_BY, username);
         itemValues.addStringItem(PREVIOUS_OWNER, username);
 
+        if (!itemValues.has(REGISTRATION_DATE)) {
+            itemValues.addStringItem(REGISTRATION_DATE, String.format("%s/%s/%s", cal.get(Calendar.YEAR),
+                    cal.get(Calendar.MONTH) + 1, cal.get(Calendar.DAY_OF_MONTH)));
+        }
+
         Gson gson = new Gson();
-        Date date = new Date(Calendar.getInstance().getTimeInMillis());
+        Date date = new Date(cal.getTimeInMillis());
         Blob blob = new Blob(gson.toJson(itemValues.getValues()).getBytes());
         Blob audioFileDefault = null;
         audioFileDefault = getAudioBlob(audioFileDefault);
@@ -262,16 +269,14 @@ public class CaseService extends RecordService {
     }
 
     private Date getRegisterDate(ItemValues itemValues) {
-        if (itemValues.has(REGISTRATION_DATE)) {
-            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM/dd/yyyy");
-            try {
-                java.util.Date date = simpleDateFormat.parse(itemValues.getAsString(REGISTRATION_DATE));
-                return new Date(date.getTime());
-            } catch (ParseException e) {
-                Log.e(TAG, "date format error");
-            }
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy/MM/dd");
+        try {
+            java.util.Date date = simpleDateFormat.parse(itemValues.getAsString(REGISTRATION_DATE));
+            return new Date(date.getTime());
+        } catch (ParseException e) {
+            Log.e(TAG, "date format error");
+            return getCurrentDate();
         }
-        return getCurrentDate();
     }
 
     private String getName(ItemValues values) {

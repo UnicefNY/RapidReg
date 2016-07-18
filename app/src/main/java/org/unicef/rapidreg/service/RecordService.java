@@ -34,6 +34,7 @@ public class RecordService {
     public static final String RELATION_AGE = "relation_age";
     public static final String RELATION_NICKNAME = "relation_nickname";
     public static final String SEX = "sex";
+    public static final String INQUIRY_DATE = "inquiry_date";
 
     public static final String AUDIO_FILE_PATH = PrimeroConfiguration.getInternalFilePath() + "/audioFile.3gp";
     public static final String MEDIA_PATH_FOR_CAMERA = PrimeroConfiguration.getInternalFilePath() +
