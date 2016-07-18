@@ -1,7 +1,6 @@
 package org.unicef.rapidreg.service;
 
-import android.os.Environment;
-
+import org.unicef.rapidreg.PrimeroConfiguration;
 import org.unicef.rapidreg.forms.Field;
 import org.unicef.rapidreg.service.cache.ItemValues;
 
@@ -31,8 +30,7 @@ public class RecordService {
     public static final String PREVIOUS_OWNER = "previously_owned_by";
     public static final String MODULE = "module_id";
 
-    public static final String AUDIO_FILE_PATH = Environment.getExternalStorageDirectory()
-            .getAbsolutePath() + "/audiorecordtest.3gp";
+    public static final String AUDIO_FILE_PATH = PrimeroConfiguration.getInternalFilePath() + "/audioFile.3gp";
 
     public static RecordService getInstance() {
         return new RecordService();
