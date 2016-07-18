@@ -59,7 +59,7 @@ public class CaseRegisterWrapperFragment extends RecordRegisterWrapperFragment {
             String caseJson = new String(caseItem.getContent().getBlob());
             try {
                 itemValues = new ItemValuesMap(JsonUtils.toMap(ItemValues.generateItemValues(caseJson).getValues()));
-                itemValues.addStringItem(RecordService.RECORD_ID, caseItem.getUniqueId());
+                itemValues.addStringItem(CaseService.CASE_ID, caseItem.getUniqueId());
             } catch (JSONException e) {
                 e.printStackTrace();
             }
