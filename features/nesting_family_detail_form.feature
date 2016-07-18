@@ -25,7 +25,7 @@ Feature: Nested Family Details Form
       | Is this family member alive?                           | <Select> Unknown |
       | If dead, please provide details                        | <Text> Not sure  |
       | Age                                                    | 39               |
-    And I press "save_case" button
+    And I press "save" button
     When I click the case
     And I switch to full form
     And I scroll to "Family Details" form

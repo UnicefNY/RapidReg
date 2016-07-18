@@ -8,9 +8,11 @@ end
 
 And /^I scroll to "(.*?)" form$/ do |form_name|
   $current_form = case_page.getCurrentFormName
+  puts $current_form
   until $current_form == form_name do
     case_page.scrollToNextForm
     $current_form = case_page.getCurrentFormName
+    puts $current_form
   end
 end
 
