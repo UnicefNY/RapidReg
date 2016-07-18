@@ -40,12 +40,9 @@ Feature: Basic Identify Form
       | Landmark                                 | A huge mountain                                      |
       | Is this address permanent?               | <Checkbox> No                                        |
       | Current Telephone                        | 336-555-1313                                         |
-    And I press "save_case" button
+    And I press "save" button
     Then I should see a case with sex "BOY" and age "10"
     When I click the case
-    Then I should see following:
-      | Full Name | Tom Justin Clinton |
-      | Age       | 10                 |
     And I switch to full form
     And I scroll to "Basic Identity" form
     Then I should see following:
