@@ -48,13 +48,15 @@ public class CaseRegisterWrapperFragment extends RecordRegisterWrapperFragment {
 
     @OnClick(R.id.edit)
     public void onEditClicked() {
-        ((CaseActivity) getActivity()).turnToDetailOrEditPage(CaseFeature.EDIT, recordId);
+        Bundle args = new Bundle();
+        args.putLong(CaseService.CASE_ID, recordId);
+        ((CaseActivity) getActivity()).turnToDetailOrEditPage(CaseFeature.EDIT, args);
     }
 
     @Override
     protected void initItemValues() {
         if (getArguments() != null) {
-            recordId = getArguments().getLong(RecordService.RECORD_ID);
+            recordId = getArguments().getLong(CaseService.CASE_ID);
             Case caseItem = CaseService.getInstance().getById(recordId);
             String caseJson = new String(caseItem.getContent().getBlob());
             try {

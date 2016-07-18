@@ -1,6 +1,7 @@
 package org.unicef.rapidreg.childcase;
 
 import android.content.Context;
+import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.view.View;
 
@@ -11,7 +12,9 @@ import org.unicef.rapidreg.base.RecordListAdapter;
 import org.unicef.rapidreg.model.RecordModel;
 import org.unicef.rapidreg.model.RecordPhoto;
 import org.unicef.rapidreg.service.CasePhotoService;
+import org.unicef.rapidreg.service.CaseService;
 import org.unicef.rapidreg.service.RecordService;
+import org.unicef.rapidreg.service.TracingService;
 import org.unicef.rapidreg.service.cache.ItemValues;
 import org.unicef.rapidreg.utils.StreamUtil;
 
@@ -59,7 +62,9 @@ public class CaseListAdapter extends RecordListAdapter {
         holder.view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                activity.turnToDetailOrEditPage(CaseFeature.DETAILS, record.getId());
+                Bundle args = new Bundle();
+                args.putLong(CaseService.CASE_ID, record.getId());
+                activity.turnToDetailOrEditPage(CaseFeature.DETAILS, args);
                 try {
                     RecordService.clearAudioFile();
                     if (record.getAudio() != null) {

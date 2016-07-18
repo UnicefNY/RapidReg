@@ -93,7 +93,6 @@ public class TracingService extends RecordService {
             conditionGroup.and(Condition.column(
                     NameAlias.builder(RecordModel.COLUMN_REGISTRATION_DATE).build()).eq(date));
         }
-
         return conditionGroup;
     }
 
