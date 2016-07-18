@@ -1,6 +1,7 @@
 package org.unicef.rapidreg.tracing;
 
 import android.content.Context;
+import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.view.View;
 
@@ -10,8 +11,10 @@ import org.unicef.rapidreg.R;
 import org.unicef.rapidreg.base.RecordListAdapter;
 import org.unicef.rapidreg.model.RecordModel;
 import org.unicef.rapidreg.model.RecordPhoto;
+import org.unicef.rapidreg.service.CaseService;
 import org.unicef.rapidreg.service.RecordService;
 import org.unicef.rapidreg.service.TracingPhotoService;
+import org.unicef.rapidreg.service.TracingService;
 import org.unicef.rapidreg.service.cache.ItemValues;
 import org.unicef.rapidreg.utils.StreamUtil;
 
@@ -56,7 +59,9 @@ public class TracingListAdapter extends RecordListAdapter {
         holder.view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                activity.turnToDetailOrEditPage(TracingFeature.DETAILS, record.getId());
+                Bundle args = new Bundle();
+                args.putLong(TracingService.TRACING_ID, record.getId());
+                activity.turnToDetailOrEditPage(TracingFeature.DETAILS, args);
                 try {
                     RecordService.clearAudioFile();
                     if (record.getAudio() != null) {
