@@ -100,7 +100,7 @@ public class CaseService extends RecordService {
 
     public void saveOrUpdate(ItemValues itemValues, List<String> photoPaths) {
 
-        if (itemValues.getAsString(RECORD_ID) == null) {
+        if (itemValues.getAsString(CASE_ID) == null) {
             save(itemValues, photoPaths);
         } else {
             Log.d(TAG, "update the existing case");
