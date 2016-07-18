@@ -1,7 +1,9 @@
 package org.unicef.rapidreg.tracing;
 
 import android.text.TextUtils;
+import android.view.View;
 
+import org.unicef.rapidreg.base.RecordListAdapter;
 import org.unicef.rapidreg.base.RecordListPresenter;
 import org.unicef.rapidreg.base.RecordSearchFragment;
 import org.unicef.rapidreg.model.RecordModel;
@@ -15,6 +17,13 @@ public class TracingSearchFragment extends RecordSearchFragment {
     @Override
     public RecordListPresenter createPresenter() {
         return new RecordListPresenter(RecordModel.TRACING);
+    }
+
+    @Override
+    public void initView(final RecordListAdapter adapter) {
+        super.initView(adapter);
+        caregiver.setVisibility(View.GONE);
+        caregiverSeparator.setVisibility(View.GONE);
     }
 
     @Override
