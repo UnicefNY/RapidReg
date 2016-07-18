@@ -23,9 +23,9 @@ public class DateDialog extends BaseDialog {
         datePicker.setCalendarViewShown(false);
         if (!"".equals(result)) {
             String[] date = result.split("/");
-            int year = Integer.valueOf(date[2]);
-            int month = Integer.valueOf(date[0]) - 1;
-            int day = Integer.valueOf(date[1]);
+            int year = Integer.valueOf(date[0]);
+            int month = Integer.valueOf(date[1]) - 1;
+            int day = Integer.valueOf(date[2]);
             datePicker.updateDate(year, month, day);
         }
         getBuilder().setView(datePicker);
@@ -33,7 +33,7 @@ public class DateDialog extends BaseDialog {
 
     @Override
     public String getResult() {
-        return String.format("%s/%s/%s", datePicker.getMonth() + 1,
-                datePicker.getDayOfMonth(), datePicker.getYear());
+        return String.format("%s/%s/%s", datePicker.getYear(), datePicker.getMonth() + 1,
+                datePicker.getDayOfMonth());
     }
 }
