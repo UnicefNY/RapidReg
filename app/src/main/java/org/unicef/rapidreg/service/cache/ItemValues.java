@@ -9,7 +9,7 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 
-public class ItemValues implements Serializable{
+public class ItemValues implements Serializable {
 
     private JsonObject values;
 
@@ -25,14 +25,9 @@ public class ItemValues implements Serializable{
         return new ItemValues(new Gson().fromJson(json, JsonObject.class));
     }
 
-    public static ItemValues generateItemValues(String parentJson, String childJson) {
+    public static ItemValues generateItemValues(String parentJson) {
         final JsonObject caseInfo = new Gson().fromJson(parentJson, JsonObject.class);
-        final JsonObject subFormInfo = new Gson().fromJson(childJson, JsonObject.class);
-        ItemValues itemValues = new ItemValues(caseInfo);
-        for (Map.Entry<String, JsonElement> element : subFormInfo.entrySet()) {
-            itemValues.addChildren(element.getKey(), element.getValue().getAsJsonArray());
-        }
-        return itemValues;
+        return new ItemValues(caseInfo);
     }
 
     public void addItem(String itemKey, Object itemValue) {
@@ -97,7 +92,7 @@ public class ItemValues implements Serializable{
     }
 
     public int getChildrenSize(String childName) {
-        if (getChildrenAsJsonArray(childName) == null){
+        if (getChildrenAsJsonArray(childName) == null) {
             return 0;
         }
         return getChildrenAsJsonArray(childName).size();

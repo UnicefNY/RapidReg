@@ -4,6 +4,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.view.View;
 import android.widget.AdapterView;
 
+import org.unicef.rapidreg.IntentSender;
 import org.unicef.rapidreg.R;
 import org.unicef.rapidreg.base.RecordListAdapter;
 import org.unicef.rapidreg.base.RecordListFragment;
@@ -14,6 +15,8 @@ import org.unicef.rapidreg.service.TracingService;
 
 import java.util.Arrays;
 import java.util.List;
+
+import butterknife.OnClick;
 
 public class TracingListFragment extends RecordListFragment {
 
@@ -31,6 +34,7 @@ public class TracingListFragment extends RecordListFragment {
 
     @Override
     protected void initListContainer(final RecordListAdapter adapter) {
+        super.initListContainer(adapter);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         listContainer.setLayoutManager(layoutManager);
@@ -50,6 +54,7 @@ public class TracingListFragment extends RecordListFragment {
         orderSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                floatingMenu.collapse();
                 handleItemSelection(position);
                 adapter.notifyDataSetChanged();
             }
@@ -73,5 +78,11 @@ public class TracingListFragment extends RecordListFragment {
                 }
             }
         });
+    }
+
+    @OnClick(R.id.add_case)
+    public void onCaseAddClicked() {
+        TracingService.clearAudioFile();
+        new IntentSender().showCaseAddPage(getActivity());
     }
 }

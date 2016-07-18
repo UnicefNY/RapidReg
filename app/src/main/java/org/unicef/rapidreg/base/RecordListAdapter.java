@@ -74,7 +74,6 @@ public abstract class RecordListAdapter extends RecyclerView.Adapter<RecordListA
         if (value == null) {
             return false;
         }
-
         return Integer.valueOf(value) > 0;
     }
 

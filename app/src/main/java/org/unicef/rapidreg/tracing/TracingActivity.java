@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 
 import org.greenrobot.eventbus.EventBus;
+import org.unicef.rapidreg.IntentSender;
 import org.unicef.rapidreg.R;
 import org.unicef.rapidreg.base.RecordActivity;
 import org.unicef.rapidreg.event.SaveTracingEvent;
@@ -20,7 +21,9 @@ public class TracingActivity extends RecordActivity {
 
         navigationView.setCheckedItem(R.id.nav_tracing);
         navigationView.setItemTextColor(tracingColor);
-        turnToFeature(TracingFeature.LIST, null);
+
+        boolean showAddPage = getIntent().getBooleanExtra(IntentSender.SHOW_ADD_PAGE, false);
+        turnToFeature(showAddPage ? TracingFeature.ADD : TracingFeature.LIST, null);
     }
 
     @Override
@@ -37,11 +40,11 @@ public class TracingActivity extends RecordActivity {
 
     @Override
     protected void navCaseAction() {
-        if (currentFeature.isDetailMode()) {
-            showQuitDialog(R.id.nav_tracing);
+        if (currentFeature.isEditMode()) {
+            showQuitDialog(R.id.nav_cases);
         } else {
             TracingService.clearAudioFile();
-            intentSender.showCasesActivity(this, null, false);
+            intentSender.showCasesActivity(this, false);
         }
     }
 
@@ -67,6 +70,9 @@ public class TracingActivity extends RecordActivity {
                         switch (clickedButton) {
                             case R.id.nav_tracing:
                                 turnToFeature(TracingFeature.LIST, null);
+                                break;
+                            case R.id.nav_cases:
+                                intentSender.showCasesActivity(TracingActivity.this, false);
                                 break;
                             case R.id.nav_sync:
                                 intentSender.showSyncActivity(TracingActivity.this);

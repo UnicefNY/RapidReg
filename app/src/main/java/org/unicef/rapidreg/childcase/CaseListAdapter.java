@@ -28,9 +28,8 @@ public class CaseListAdapter extends RecordListAdapter {
         final RecordModel record = recordList.get(position);
 
         final String recordJson = new String(record.getContent().getBlob());
-        final String subFormJson = new String(record.getSubform().getBlob());
 
-        final ItemValues itemValues = ItemValues.generateItemValues(recordJson, subFormJson);
+        final ItemValues itemValues = ItemValues.generateItemValues(recordJson);
 
         Gender gender;
         try {

@@ -12,6 +12,7 @@ import org.unicef.rapidreg.R;
 import org.unicef.rapidreg.childcase.CaseListAdapter;
 import org.unicef.rapidreg.forms.Field;
 import org.unicef.rapidreg.service.cache.ItemValues;
+import org.unicef.rapidreg.service.cache.ItemValuesMap;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -35,7 +36,7 @@ public class MiniFormProfileViewHolder extends BaseViewHolder<Field> {
     @BindView(R.id.registration_date)
     TextView registrationDate;
 
-    public MiniFormProfileViewHolder(Context context, View itemView, ItemValues itemValues) {
+    public MiniFormProfileViewHolder(Context context, View itemView, ItemValuesMap itemValues) {
         super(context, itemView, itemValues);
         ButterKnife.bind(this, itemView);
     }

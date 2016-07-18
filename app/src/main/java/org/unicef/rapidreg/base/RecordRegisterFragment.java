@@ -11,6 +11,7 @@ import com.ogaclejapan.smarttablayout.utils.v4.FragmentPagerItem;
 
 import org.unicef.rapidreg.R;
 import org.unicef.rapidreg.service.cache.ItemValues;
+import org.unicef.rapidreg.service.cache.ItemValuesMap;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -24,7 +25,7 @@ public abstract class RecordRegisterFragment extends MvpFragment<RecordRegisterV
     RecyclerView fieldList;
 
     protected RecordPhotoAdapter photoAdapter;
-    protected ItemValues itemValues;
+    protected ItemValuesMap itemValues;
 
     private RecordRegisterAdapter recordRegisterAdapter;
 

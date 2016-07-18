@@ -58,10 +58,12 @@ public abstract class BaseActivity extends AppCompatActivity implements Navigati
 
         View headerView = navigationView.getHeaderView(0);
         TextView textViewLoginUserLabel = (TextView) headerView.findViewById(R.id.login_user_label);
-        textViewLoginUserLabel.setText(getIntent().getStringExtra(IntentSender.USER_NAME));
         TextView organizationView = (TextView) headerView.findViewById(R.id.organization);
         User currentUser = UserService.getInstance().getCurrentUser();
         if (currentUser != null) {
+            String username = currentUser.getUsername();
+            textViewLoginUserLabel.setText(username == null ? "" : username);
+
             String organisation = currentUser.getOrganisation();
             organizationView.setText(organisation == null ? "" : organisation);
         }

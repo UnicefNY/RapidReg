@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 
 import org.unicef.rapidreg.forms.Field;
 import org.unicef.rapidreg.service.cache.ItemValues;
+import org.unicef.rapidreg.service.cache.ItemValuesMap;
 import org.unicef.rapidreg.widgets.viewholder.AudioUploadViewHolder;
 import org.unicef.rapidreg.widgets.viewholder.BaseViewHolder;
 import org.unicef.rapidreg.widgets.viewholder.GenericViewHolder;
@@ -48,9 +49,9 @@ public class RecordRegisterAdapter extends RecyclerView.Adapter<BaseViewHolder> 
     protected String packageName;
     private RecordPhotoAdapter adapter;
 
-    private ItemValues itemValues;
+    private ItemValuesMap itemValues;
 
-    public RecordRegisterAdapter(Context context, List<Field> fields, ItemValues itemValues, boolean isMiniForm) {
+    public RecordRegisterAdapter(Context context, List<Field> fields, ItemValuesMap itemValues, boolean isMiniForm) {
         this.fields = fields;
         this.activity = (RecordActivity) context;
         this.itemValues = itemValues;
@@ -65,7 +66,7 @@ public class RecordRegisterAdapter extends RecyclerView.Adapter<BaseViewHolder> 
         this.adapter = adapter;
     }
 
-    public void setItemValues(ItemValues itemValues) {
+    public void setItemValues(ItemValuesMap itemValues) {
         this.itemValues = itemValues;
     }
 

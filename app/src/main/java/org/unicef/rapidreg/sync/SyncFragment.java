@@ -36,6 +36,10 @@ public class SyncFragment extends MvpFragment<SyncView, SyncPresenter> implement
     @BindString(R.string.cancel_button_text) String cancelButtonText;
     @BindString(R.string.sync_success_message) String syncSuccessMessage;
     @BindString(R.string.sync_error_message) String syncErrorMessage;
+    @BindString(R.string.try_to_sync_message) String tryToSyncMessage;
+    @BindString(R.string.not_now_button_text) String notNowButtonText;
+    @BindString(R.string.stop_sync_button_text) String stopSyncButtonText;
+    @BindString(R.string.continue_sync_button_text) String continueSyncButtonText;
 
     @Nullable
     @Override
@@ -53,7 +57,7 @@ public class SyncFragment extends MvpFragment<SyncView, SyncPresenter> implement
 
     @OnClick(R.id.button_sync)
     public void onSyncClick() {
-        presenter.doSync();
+        presenter.tryToSync();
     }
 
     @Override
@@ -83,13 +87,13 @@ public class SyncFragment extends MvpFragment<SyncView, SyncPresenter> implement
         new AlertDialog.Builder(getActivity())
                 .setMessage(confirmCancelSyncMessage)
                 .setCancelable(false)
-                .setNegativeButton(denyButtonText, new DialogInterface.OnClickListener() {
+                .setNegativeButton(continueSyncButtonText, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         syncProgressDialog.show();
                     }
                 })
-                .setPositiveButton(confirmButtonText, new DialogInterface.OnClickListener() {
+                .setPositiveButton(stopSyncButtonText, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         presenter.doCancelSync();
@@ -118,6 +122,26 @@ public class SyncFragment extends MvpFragment<SyncView, SyncPresenter> implement
         if (syncProgressDialog.isShowing()) {
             syncProgressDialog.incrementProgressBy(1);
         }
+    }
+
+    @Override
+    public void showAttemptSyncDialog() {
+        new AlertDialog.Builder(getActivity())
+                .setMessage(tryToSyncMessage)
+                .setCancelable(false)
+                .setNegativeButton(notNowButtonText, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                    }
+                })
+                .setPositiveButton(confirmButtonText, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        presenter.doSync();
+                    }
+                })
+                .show();
     }
 
     @Override
