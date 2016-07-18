@@ -5,9 +5,9 @@ import android.view.View;
 
 import org.unicef.rapidreg.forms.Field;
 
-public class SeparatorViewHolder extends BaseViewHolder<Field> {
+public class DefaultViewHolder extends BaseViewHolder<Field> {
 
-    public SeparatorViewHolder(Context context, View itemView) {
+    public DefaultViewHolder(Context context, View itemView) {
         super(context, itemView, null);
     }
 
@@ -18,7 +18,6 @@ public class SeparatorViewHolder extends BaseViewHolder<Field> {
 
     @Override
     public void setOnClickListener(Field field) {
-
     }
 
     @Override
