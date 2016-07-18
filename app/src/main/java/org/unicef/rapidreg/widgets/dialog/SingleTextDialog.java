@@ -6,13 +6,13 @@ import android.widget.TextView;
 import android.widget.ViewSwitcher;
 
 import org.unicef.rapidreg.forms.Field;
-import org.unicef.rapidreg.service.cache.ItemValues;
+import org.unicef.rapidreg.service.cache.ItemValuesMap;
 
 public class SingleTextDialog extends BaseDialog {
 
     private EditText editText;
 
-    public SingleTextDialog(Context context, Field field, ItemValues itemValues, TextView resultView, ViewSwitcher viewSwitcher) {
+    public SingleTextDialog(Context context, Field field, ItemValuesMap itemValues, TextView resultView, ViewSwitcher viewSwitcher) {
         super(context, field, itemValues, resultView, viewSwitcher);
     }
 

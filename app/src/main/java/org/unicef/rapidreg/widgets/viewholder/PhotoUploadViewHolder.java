@@ -19,6 +19,7 @@ import org.unicef.rapidreg.childcase.CaseActivity;
 import org.unicef.rapidreg.childcase.CasePhotoViewActivity;
 import org.unicef.rapidreg.forms.Field;
 import org.unicef.rapidreg.service.cache.ItemValues;
+import org.unicef.rapidreg.service.cache.ItemValuesMap;
 import org.unicef.rapidreg.tracing.TracingPhotoViewActivity;
 
 import java.io.File;
@@ -46,7 +47,7 @@ public class PhotoUploadViewHolder extends BaseViewHolder<Field> {
 
     private RecordPhotoAdapter adapter;
 
-    public PhotoUploadViewHolder(Context context, View itemView, ItemValues itemValues, RecordPhotoAdapter adapter) {
+    public PhotoUploadViewHolder(Context context, View itemView, ItemValuesMap itemValues, RecordPhotoAdapter adapter) {
         super(context, itemView, itemValues);
         ButterKnife.bind(this, itemView);
         this.context = context;

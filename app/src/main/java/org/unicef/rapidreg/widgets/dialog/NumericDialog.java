@@ -7,14 +7,16 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.ViewSwitcher;
 
+import com.google.gson.internal.LazilyParsedNumber;
+
 import org.unicef.rapidreg.forms.Field;
-import org.unicef.rapidreg.service.cache.ItemValues;
+import org.unicef.rapidreg.service.cache.ItemValuesMap;
 
 public class NumericDialog extends BaseDialog {
 
     private EditText editText;
 
-    public NumericDialog(Context context, Field field, ItemValues itemValues, TextView resultView, ViewSwitcher viewSwitcher) {
+    public NumericDialog(Context context, Field field, ItemValuesMap itemValues, TextView resultView, ViewSwitcher viewSwitcher) {
         super(context, field, itemValues, resultView, viewSwitcher);
     }
 
@@ -29,6 +31,6 @@ public class NumericDialog extends BaseDialog {
 
     @Override
     public Number getResult() {
-        return Integer.parseInt(editText.getText().toString());
+        return new LazilyParsedNumber(editText.getText().toString());
     }
 }

@@ -2,9 +2,10 @@ package org.unicef.rapidreg.service.cache;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
+
+import org.json.JSONException;
+import org.unicef.rapidreg.utils.JsonUtils;
 
 import java.io.Serializable;
 import java.lang.reflect.Type;
@@ -30,6 +31,7 @@ public class ItemValuesMap implements Serializable {
         Map<String, Object> values = new Gson().fromJson(json, type);
         return new ItemValuesMap(values);
     }
+
 
     public static ItemValuesMap generateItemValues(String parentJson) {
         Type parentType = new TypeToken<Map<String, Object>>() {
@@ -67,14 +69,14 @@ public class ItemValuesMap implements Serializable {
         if (values.get(key) == null) {
             return null;
         }
-        return (String) values.get(key);
+        return values.get(key).toString();
     }
 
-    public Integer getAsInt(String key) {
+    public Long getAsLong(String key) {
         if (values.get(key) == null) {
             return null;
         }
-        return Integer.valueOf(values.get(key).toString());
+        return Long.valueOf(values.get(key).toString());
     }
 
     public Map<String, Object> getValues() {
@@ -165,24 +167,10 @@ public class ItemValuesMap implements Serializable {
 
     public static ItemValuesMap fromItemValuesJsonObject(ItemValues itemValues) {
         Map<String, Object> result = new HashMap<>();
-        JsonObject values = itemValues.getValues();
-        for (Map.Entry<String, JsonElement> element : values.entrySet()) {
-            String childName = element.getKey();
-            if (element.getValue() instanceof JsonArray) {
-                JsonArray childrenArray = element.getValue().getAsJsonArray();
-                List<Map<String, Object>> children = new ArrayList<>();
-                for (JsonElement child : childrenArray) {
-                    Map<String, Object> childItem = new HashMap<>();
-                    for (Map.Entry<String, JsonElement> entry : child.getAsJsonObject().entrySet()) {
-                        childItem.put(entry.getKey(), entry.getValue().getAsJsonObject().get(entry.getKey()));
-                    }
-                    children.add(childItem);
-                }
-                result.put(childName, children);
-            } else if (element.getValue() instanceof JsonObject) {
-                JsonObject item = element.getValue().getAsJsonObject();
-                result.put(childName, item.get(childName));
-            }
+        try {
+            result = JsonUtils.toMap(itemValues.getValues());
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
         return new ItemValuesMap(result);
     }

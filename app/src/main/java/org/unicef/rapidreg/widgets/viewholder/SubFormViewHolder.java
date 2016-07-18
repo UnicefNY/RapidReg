@@ -16,11 +16,13 @@ import org.unicef.rapidreg.R;
 import org.unicef.rapidreg.base.RecordRegisterAdapter;
 import org.unicef.rapidreg.childcase.CaseActivity;
 import org.unicef.rapidreg.forms.Field;
-import org.unicef.rapidreg.service.cache.ItemValues;
+import org.unicef.rapidreg.service.cache.ItemValuesMap;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -34,7 +36,7 @@ public class SubFormViewHolder extends BaseViewHolder<Field> {
     private List<Field> fields;
     private String fieldParent;
 
-    public SubFormViewHolder(Context context, View itemView, ItemValues itemValues) {
+    public SubFormViewHolder(Context context, View itemView, ItemValuesMap itemValues) {
         super(context, itemView, itemValues);
         ButterKnife.bind(this, itemView);
         activity = (CaseActivity) context;
@@ -58,7 +60,7 @@ public class SubFormViewHolder extends BaseViewHolder<Field> {
         addSubFormBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                itemValues.addChild(fieldParent, new JsonObject());
+                itemValues.addChild(fieldParent, new HashMap<String, Object>());
                 addSubForm(itemValues.getChildrenSize(fieldParent) - 1);
             }
         });
@@ -138,7 +140,7 @@ public class SubFormViewHolder extends BaseViewHolder<Field> {
     }
 
     private void removeSubForm(int index) {
-        JsonArray values = itemValues.getChildrenAsJsonArray(fieldParent);
+        List<Map<String, Object>> values = itemValues.getChildrenAsJsonArray(fieldParent);
         if (values != null) {
             values.remove(index);
         }
@@ -155,7 +157,7 @@ public class SubFormViewHolder extends BaseViewHolder<Field> {
     }
 
     private void restoreSubForms() {
-        JsonArray childrenArray = itemValues.getChildrenAsJsonArray(fieldParent);
+        List<Map<String, Object>> childrenArray = itemValues.getChildrenAsJsonArray(fieldParent);
         if (childrenArray == null) {
             return;
         }

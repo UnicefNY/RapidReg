@@ -28,6 +28,7 @@ import org.unicef.rapidreg.forms.Section;
 import org.unicef.rapidreg.model.RecordModel;
 import org.unicef.rapidreg.service.RecordService;
 import org.unicef.rapidreg.service.cache.ItemValues;
+import org.unicef.rapidreg.service.cache.ItemValuesMap;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -64,7 +65,7 @@ public abstract class RecordRegisterWrapperFragment extends Fragment {
     FloatingActionButton editButton;
 
 
-    protected ItemValues itemValues;
+    protected ItemValuesMap itemValues;
     protected long recordId;
     protected RecordForm form;
     protected List<Section> sections;
@@ -86,7 +87,7 @@ public abstract class RecordRegisterWrapperFragment extends Fragment {
         initItemValues();
 
         if (itemValues == null) {
-            itemValues = new ItemValues();
+            itemValues = new ItemValuesMap();
         }
 
         initFormData();

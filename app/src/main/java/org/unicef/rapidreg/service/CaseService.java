@@ -104,7 +104,7 @@ public class CaseService extends RecordService {
 
     public void saveOrUpdate(ItemValues itemValues, List<String> photoPaths) {
 
-        if (itemValues.getAsString(CASE_ID) == null) {
+        if (itemValues.getAsString(RECORD_ID) == null) {
             save(itemValues, photoPaths);
         } else {
             Log.d(TAG, "update the existing case");
@@ -162,7 +162,7 @@ public class CaseService extends RecordService {
         Blob audioFileDefault = null;
         audioFileDefault = getAudioBlob(audioFileDefault);
 
-        Case child = caseDao.getCaseByUniqueId(itemValues.getAsString(CASE_ID));
+        Case child = caseDao.getCaseByUniqueId(itemValues.getAsString(RECORD_ID));
         child.setLastUpdatedDate(new Date(Calendar.getInstance().getTimeInMillis()));
         child.setContent(caseBlob);
         child.setName(getName(itemValues));

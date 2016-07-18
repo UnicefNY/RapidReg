@@ -7,7 +7,7 @@ import android.widget.TextView;
 
 import org.unicef.rapidreg.R;
 import org.unicef.rapidreg.forms.Field;
-import org.unicef.rapidreg.service.cache.ItemValues;
+import org.unicef.rapidreg.service.cache.ItemValuesMap;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -20,7 +20,7 @@ public class TickBoxViewHolder extends BaseViewHolder<Field> {
     @BindView(R.id.value)
     CheckBox valueView;
 
-    public TickBoxViewHolder(Context context, View itemView, ItemValues itemValues) {
+    public TickBoxViewHolder(Context context, View itemView, ItemValuesMap itemValues) {
         super(context, itemView, itemValues);
         ButterKnife.bind(this, itemView);
     }

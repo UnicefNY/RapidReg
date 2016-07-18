@@ -9,7 +9,7 @@ import android.widget.ViewSwitcher;
 
 import org.unicef.rapidreg.R;
 import org.unicef.rapidreg.forms.Field;
-import org.unicef.rapidreg.service.cache.ItemValues;
+import org.unicef.rapidreg.service.cache.ItemValuesMap;
 import org.unicef.rapidreg.widgets.viewholder.GenericViewHolder;
 
 import java.util.ArrayList;
@@ -21,12 +21,12 @@ public abstract class BaseDialog {
     protected Field field;
     protected TextView resultView;
     protected ViewSwitcher viewSwitcher;
-    protected ItemValues itemValues;
+    protected ItemValuesMap itemValues;
 
     private AlertDialog.Builder builder;
     private Context context;
 
-    public BaseDialog(final Context context, final Field field, final ItemValues itemValues,
+    public BaseDialog(final Context context, final Field field, final ItemValuesMap itemValues,
                       final TextView resultView, final ViewSwitcher viewSwitcher) {
         this.field = field;
         this.resultView = resultView;

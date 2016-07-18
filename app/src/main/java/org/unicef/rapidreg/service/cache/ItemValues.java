@@ -25,14 +25,9 @@ public class ItemValues implements Serializable {
         return new ItemValues(new Gson().fromJson(json, JsonObject.class));
     }
 
-    public static ItemValues generateItemValues(String parentJson, String childJson) {
+    public static ItemValues generateItemValues(String parentJson) {
         final JsonObject caseInfo = new Gson().fromJson(parentJson, JsonObject.class);
-        final JsonObject subFormInfo = new Gson().fromJson(childJson, JsonObject.class);
-        ItemValues itemValues = new ItemValues(caseInfo);
-        for (Map.Entry<String, JsonElement> element : subFormInfo.entrySet()) {
-            itemValues.addChildren(element.getKey(), element.getValue().getAsJsonArray());
-        }
-        return itemValues;
+        return new ItemValues(caseInfo);
     }
 
     public void addItem(String itemKey, Object itemValue) {
@@ -160,29 +155,6 @@ public class ItemValues implements Serializable {
             array.add(element);
         }
         return array;
-    }
-
-    public static ItemValues fromItemValuesMap(ItemValuesMap itemValuesMap) {
-        JsonObject result = new JsonObject();
-        Map<String, Object> values = itemValuesMap.getValues();
-        for (Map.Entry<String, Object> element : values.entrySet()) {
-            String childName = element.getKey();
-            if (element.getValue() instanceof List) {
-                JsonArray childrenArray = new JsonArray();
-                List<Map<String, Object>> children = (List<Map<String, Object>>) element.getValue();
-                for (Map<String, Object> child : children) {
-                    JsonObject childItem = new JsonObject();
-                    for (Map.Entry<String, Object> childEntry : child.entrySet()) {
-                        addItemToJsonObject(childItem, childEntry.getKey(), childEntry.getValue());
-                    }
-                    childrenArray.add(childItem);
-                }
-                result.add(childName, childrenArray);
-            } else {
-                addItemToJsonObject(result, childName, element.getValue());
-            }
-        }
-        return new ItemValues(result);
     }
 
     public static void addItemToJsonObject(JsonObject jsonObject, String itemKey, Object itemValue) {
