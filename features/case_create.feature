@@ -14,7 +14,7 @@ Feature: Create new case
       | Sex                   | <Radio> Male       |
       | Age                   | 10                 |
       | Is the age estimated? | <Checkbox> Yes     |
-    And I press "save_case" button
+    And I press "save" button
     Then I should see a case with sex "BOY" and age "10"
     When I click the case
     Then I should see following:
@@ -29,7 +29,7 @@ Feature: Create new case
     And I fill in the following:
       | Sex | <Radio> Male |
       | Age | 10           |
-    And I press "save_case" button
+    And I press "save" button
     Then I should see a case with sex "BOY" and age "10"
 
   Scenario: Leave the creating page without saving.
