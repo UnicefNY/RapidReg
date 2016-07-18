@@ -90,6 +90,8 @@
     <string name="sync_error_message">Sorry, the synchronisation request is not completed for network issue.</string>
     <string name="try_to_sync_message">Are you sure to sync records ?</string>
     <string name="remove_photo_confirmation">Are you sure you want to remove this photo?</string>
+    <string name="save_success">Recorded saved</string>
+    <string name="save_failed">Record saved failed</string>
     <!--Sync-->
 
     <!--Transparent theme-->

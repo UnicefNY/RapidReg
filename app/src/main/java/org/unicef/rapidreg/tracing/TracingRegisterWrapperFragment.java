@@ -88,7 +88,14 @@ public class TracingRegisterWrapperFragment extends RecordRegisterWrapperFragmen
             List<String> photoPaths = recordPhotoAdapter.getAllItems();
             ItemValues itemValues = new ItemValues(new Gson()
                     .fromJson(new Gson().toJson(this.itemValues.getValues()), JsonObject.class));
-            TracingService.getInstance().saveOrUpdate(itemValues, photoPaths);
+            boolean saveStatus = saveAndGetSucceedStatus(itemValues,photoPaths);
+            if ( saveStatus == true ) {
+                Toast.makeText(getActivity(), R.string.save_success,
+                        Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(getActivity(), R.string.save_failed,
+                        Toast.LENGTH_SHORT).show();
+            }
         }
     }
 
@@ -114,6 +121,16 @@ public class TracingRegisterWrapperFragment extends RecordRegisterWrapperFragmen
                         Toast.LENGTH_LONG).show();
                 return false;
             }
+        }
+        return true;
+    }
+
+    private boolean saveAndGetSucceedStatus(ItemValues itemValues, List<String> photoPaths) {
+        try {
+            TracingService.getInstance().saveOrUpdate(itemValues, photoPaths);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
         }
         return true;
     }
