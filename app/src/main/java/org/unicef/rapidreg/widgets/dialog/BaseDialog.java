@@ -24,7 +24,7 @@ public abstract class BaseDialog {
     protected ItemValuesMap itemValues;
 
     private AlertDialog.Builder builder;
-    private Context context;
+    protected Context context;
 
     public BaseDialog(final Context context, final Field field, final ItemValuesMap itemValues,
                       final TextView resultView, final ViewSwitcher viewSwitcher) {
@@ -94,7 +94,7 @@ public abstract class BaseDialog {
 
     public abstract Object getResult();
 
-    private boolean isSubFormField() {
+    protected boolean isSubFormField() {
         return field.getParent() != null;
     }
 }
