@@ -10,6 +10,7 @@ import android.widget.TextView;
 import org.unicef.rapidreg.R;
 import org.unicef.rapidreg.forms.Field;
 import org.unicef.rapidreg.service.cache.ItemValues;
+import org.unicef.rapidreg.service.cache.ItemValuesMap;
 
 import java.util.List;
 
@@ -35,7 +36,7 @@ public class SingleLineRadioViewHolder extends BaseViewHolder<Field> {
     private String result;
 
 
-    public SingleLineRadioViewHolder(Context context, View itemView, ItemValues itemValues) {
+    public SingleLineRadioViewHolder(Context context, View itemView, ItemValuesMap itemValues) {
         super(context, itemView, itemValues);
         ButterKnife.bind(this, itemView);
     }

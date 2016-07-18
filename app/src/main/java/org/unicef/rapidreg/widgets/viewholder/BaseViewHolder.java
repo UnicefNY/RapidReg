@@ -4,21 +4,20 @@ import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
-import com.google.gson.JsonObject;
-
 import org.unicef.rapidreg.R;
 import org.unicef.rapidreg.forms.Field;
-import org.unicef.rapidreg.service.cache.ItemValues;
+import org.unicef.rapidreg.service.cache.ItemValuesMap;
 
 import java.util.Locale;
+import java.util.Map;
 
 public abstract class BaseViewHolder<T> extends RecyclerView.ViewHolder {
 
     protected View itemView;
     protected Context context;
-    protected ItemValues itemValues;
+    protected ItemValuesMap itemValues;
 
-    public BaseViewHolder(Context context, View itemView, ItemValues itemValues) {
+    public BaseViewHolder(Context context, View itemView, ItemValuesMap itemValues) {
         super(itemView);
         this.itemView = itemView;
         this.context = context;
@@ -72,9 +71,9 @@ public abstract class BaseViewHolder<T> extends RecyclerView.ViewHolder {
             return null;
         }
 
-        JsonObject value = itemValues.getValues();
-        if (value.has(field.getName())) {
-            return value.get(field.getName()).getAsString();
+        Map<String, Object> value = itemValues.getValues();
+        if (value.containsKey(field.getName())) {
+            return value.get(field.getName()).toString();
         }
         return null;
     }

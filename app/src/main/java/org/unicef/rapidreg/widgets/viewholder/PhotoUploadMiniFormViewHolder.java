@@ -17,6 +17,7 @@ import org.unicef.rapidreg.model.RecordPhoto;
 import org.unicef.rapidreg.service.CasePhotoService;
 import org.unicef.rapidreg.service.TracingPhotoService;
 import org.unicef.rapidreg.service.cache.ItemValues;
+import org.unicef.rapidreg.service.cache.ItemValuesMap;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,7 +37,7 @@ public class PhotoUploadMiniFormViewHolder extends BaseViewHolder<Field> {
 
     private Context context;
 
-    public PhotoUploadMiniFormViewHolder(Context context, View itemView, ItemValues itemValues) {
+    public PhotoUploadMiniFormViewHolder(Context context, View itemView, ItemValuesMap itemValues) {
         super(context, itemView, itemValues);
         ButterKnife.bind(this, itemView);
         this.context = context;
@@ -66,7 +67,7 @@ public class PhotoUploadMiniFormViewHolder extends BaseViewHolder<Field> {
         private List<? extends RecordPhoto> flowQueryList = new ArrayList<>();
 
         public RecordPhotoViewPagerAdapter() {
-            Integer id = itemValues.getAsInt(ItemValues.RecordProfile.ID);
+            Long id = itemValues.getAsLong(ItemValues.RecordProfile.ID);
             flowQueryList = context instanceof CaseActivity ?
                     CasePhotoService.getInstance().getByCaseId(id)
                     : TracingPhotoService.getInstance().getByTracingId(id);

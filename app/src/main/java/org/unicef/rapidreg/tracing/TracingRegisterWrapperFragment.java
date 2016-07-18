@@ -6,6 +6,7 @@ import android.text.TextUtils;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import com.ogaclejapan.smarttablayout.utils.v4.FragmentPagerItem;
 import com.ogaclejapan.smarttablayout.utils.v4.FragmentPagerItems;
 
@@ -24,6 +25,7 @@ import org.unicef.rapidreg.service.TracingFormService;
 import org.unicef.rapidreg.service.TracingPhotoService;
 import org.unicef.rapidreg.service.TracingService;
 import org.unicef.rapidreg.service.cache.ItemValues;
+import org.unicef.rapidreg.service.cache.ItemValuesMap;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -38,9 +40,8 @@ public class TracingRegisterWrapperFragment extends RecordRegisterWrapperFragmen
             recordId = getArguments().getLong(RecordService.RECORD_ID);
             Tracing tracingItem = TracingService.getInstance().getById(recordId);
             String tracingJson = new String(tracingItem.getContent().getBlob());
-            String subFormJson = new String(tracingItem.getSubform().getBlob());
-            itemValues = ItemValues.generateItemValues(tracingJson, subFormJson);
-            itemValues.addStringItem(TracingService.TRACING_ID, tracingItem.getUniqueId());
+            itemValues = ItemValuesMap.fromItemValuesJsonObject(ItemValues.generateItemValues(tracingJson));
+            itemValues.addStringItem(RecordService.RECORD_ID, tracingItem.getUniqueId());
             initProfile(tracingItem);
         }
     }
@@ -84,6 +85,8 @@ public class TracingRegisterWrapperFragment extends RecordRegisterWrapperFragmen
     public void saveTracing(SaveTracingEvent event) {
         if (validateRequiredField()) {
             List<String> photoPaths = recordPhotoAdapter.getAllItems();
+            ItemValues itemValues = new ItemValues(new Gson()
+                    .fromJson(new Gson().toJson(this.itemValues.getValues()), JsonObject.class));
             TracingService.getInstance().saveOrUpdate(itemValues, photoPaths);
         }
     }

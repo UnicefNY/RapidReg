@@ -13,6 +13,7 @@ import org.unicef.rapidreg.base.RecordRegisterPresenter;
 import org.unicef.rapidreg.model.RecordModel;
 import org.unicef.rapidreg.service.RecordService;
 import org.unicef.rapidreg.service.cache.ItemValues;
+import org.unicef.rapidreg.service.cache.ItemValuesMap;
 
 public class TracingRegisterFragment extends RecordRegisterFragment {
 
@@ -28,11 +29,10 @@ public class TracingRegisterFragment extends RecordRegisterFragment {
                              @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
 
-
         if (getArguments() != null) {
             photoAdapter = new TracingPhotoAdapter(getContext(),
                     getArguments().getStringArrayList(RecordService.RECORD_PHOTOS));
-            itemValues = ItemValues.fromJson(getArguments().getString(ITEM_VALUES));
+            itemValues = (ItemValuesMap) getArguments().getSerializable(ITEM_VALUES);
         }
         return inflater.inflate(R.layout.fragment_register, container, false);
     }

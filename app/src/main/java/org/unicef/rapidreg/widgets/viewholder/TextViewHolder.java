@@ -13,6 +13,7 @@ import android.widget.ViewSwitcher;
 import org.unicef.rapidreg.R;
 import org.unicef.rapidreg.forms.Field;
 import org.unicef.rapidreg.service.cache.ItemValues;
+import org.unicef.rapidreg.service.cache.ItemValuesMap;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -35,7 +36,7 @@ public class TextViewHolder extends BaseTextViewHolder {
 
     private InputMethodManager inputMethodManager;
 
-    public TextViewHolder(Context context, View itemView, ItemValues itemValues) {
+    public TextViewHolder(Context context, View itemView, ItemValuesMap itemValues) {
         super(context, itemView, itemValues);
         ButterKnife.bind(this, itemView);
         inputMethodManager = (InputMethodManager)

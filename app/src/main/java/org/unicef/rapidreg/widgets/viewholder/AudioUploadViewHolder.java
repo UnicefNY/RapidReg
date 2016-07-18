@@ -10,7 +10,7 @@ import org.unicef.rapidreg.R;
 import org.unicef.rapidreg.base.AudioRecorderActivity;
 import org.unicef.rapidreg.childcase.CaseActivity;
 import org.unicef.rapidreg.service.CaseService;
-import org.unicef.rapidreg.service.cache.ItemValues;
+import org.unicef.rapidreg.service.cache.ItemValuesMap;
 import org.unicef.rapidreg.utils.StreamUtil;
 
 import butterknife.BindView;
@@ -32,7 +32,7 @@ public class AudioUploadViewHolder extends BaseViewHolder {
 
     private CaseActivity activity;
 
-    public AudioUploadViewHolder(Context context, View itemView, ItemValues itemValues) {
+    public AudioUploadViewHolder(Context context, View itemView, ItemValuesMap itemValues) {
         super(context, itemView, itemValues);
         ButterKnife.bind(this, itemView);
         activity = (CaseActivity) context;

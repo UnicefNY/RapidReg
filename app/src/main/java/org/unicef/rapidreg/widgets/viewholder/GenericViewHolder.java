@@ -12,6 +12,7 @@ import org.unicef.rapidreg.R;
 import org.unicef.rapidreg.exception.DialogException;
 import org.unicef.rapidreg.forms.Field;
 import org.unicef.rapidreg.service.cache.ItemValues;
+import org.unicef.rapidreg.service.cache.ItemValuesMap;
 import org.unicef.rapidreg.widgets.dialog.BaseDialog;
 import org.unicef.rapidreg.widgets.dialog.FiledDialogFactory;
 
@@ -36,7 +37,7 @@ public class GenericViewHolder extends BaseTextViewHolder {
     @BindView(R.id.form_question)
     TextView formQuestion;
 
-    public GenericViewHolder(Context context, View itemView, ItemValues itemValues) {
+    public GenericViewHolder(Context context, View itemView, ItemValuesMap itemValues) {
         super(context, itemView, itemValues);
         ButterKnife.bind(this, itemView);
     }
