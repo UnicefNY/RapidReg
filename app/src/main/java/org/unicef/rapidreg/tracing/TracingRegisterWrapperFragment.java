@@ -20,6 +20,7 @@ import org.unicef.rapidreg.forms.Section;
 import org.unicef.rapidreg.forms.TracingFormRoot;
 import org.unicef.rapidreg.model.Tracing;
 import org.unicef.rapidreg.model.TracingPhoto;
+import org.unicef.rapidreg.service.CaseService;
 import org.unicef.rapidreg.service.RecordService;
 import org.unicef.rapidreg.service.TracingFormService;
 import org.unicef.rapidreg.service.TracingPhotoService;
@@ -37,7 +38,7 @@ public class TracingRegisterWrapperFragment extends RecordRegisterWrapperFragmen
     @Override
     protected void initItemValues() {
         if (getArguments() != null) {
-            recordId = getArguments().getLong(RecordService.RECORD_ID);
+            recordId = getArguments().getLong(TracingService.TRACING_ID);
             Tracing tracingItem = TracingService.getInstance().getById(recordId);
             String tracingJson = new String(tracingItem.getContent().getBlob());
             itemValues = ItemValuesMap.fromItemValuesJsonObject(ItemValues.generateItemValues(tracingJson));
@@ -93,7 +94,9 @@ public class TracingRegisterWrapperFragment extends RecordRegisterWrapperFragmen
 
     @OnClick(R.id.edit)
     public void onEditClicked() {
-        ((TracingActivity) getActivity()).turnToDetailOrEditPage(TracingFeature.EDIT, recordId);
+        Bundle args = new Bundle();
+        args.putLong(TracingService.TRACING_ID, recordId);
+        ((TracingActivity) getActivity()).turnToDetailOrEditPage(TracingFeature.EDIT, args);
     }
 
     private boolean validateRequiredField() {

@@ -122,23 +122,6 @@ public class ItemValuesMap implements Serializable {
         values.put(childName, children);
     }
 
-    public void addChildrenItemForParent(String childName, int index, String itemKey, Object itemValue) {
-        List<Map<String, Object>> children = getChildrenAsJsonArray(childName);
-        if (children == null) {
-            children = new ArrayList<>();
-            addChildren(childName, children);
-        }
-
-        Map<String, Object> child;
-        try {
-            child = children.get(index);
-        } catch (IndexOutOfBoundsException e) {
-            child = new HashMap<>();
-            children.add(child);
-        }
-        child.put(itemKey, itemValue);
-    }
-
     public boolean has(String key) {
         return values.containsKey(key);
     }
