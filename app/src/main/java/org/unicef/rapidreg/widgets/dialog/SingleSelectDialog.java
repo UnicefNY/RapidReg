@@ -6,7 +6,7 @@ import android.widget.TextView;
 import android.widget.ViewSwitcher;
 
 import org.unicef.rapidreg.forms.Field;
-import org.unicef.rapidreg.service.cache.ItemValues;
+import org.unicef.rapidreg.service.cache.ItemValuesMap;
 
 import java.util.Arrays;
 
@@ -16,7 +16,7 @@ public class SingleSelectDialog extends BaseDialog {
     private String[] optionItems;
 
     public SingleSelectDialog(Context context, Field field,
-                              ItemValues itemValues, TextView resultView, ViewSwitcher viewSwitcher) {
+                              ItemValuesMap itemValues, TextView resultView, ViewSwitcher viewSwitcher) {
         super(context, field, itemValues, resultView, viewSwitcher);
         result = resultView.getText().toString().trim();
     }

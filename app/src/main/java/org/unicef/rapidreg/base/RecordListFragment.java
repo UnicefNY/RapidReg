@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -79,6 +80,11 @@ public abstract class RecordListFragment extends MvpFragment<RecordListView, Rec
         initFloatingMenu();
     }
 
+    @OnClick(R.id.container)
+    public void onContainerClicked() {
+        floatingMenu.collapse();
+    }
+
     @OnClick(R.id.add_case)
     public void onCaseAddClicked() {
         RecordService.clearAudioFile();
@@ -109,6 +115,29 @@ public abstract class RecordListFragment extends MvpFragment<RecordListView, Rec
         adapter.toggleViews(isShow);
     }
 
+    protected void initListContainer(final RecordListAdapter adapter) {
+        listContainer.addOnItemTouchListener(new RecyclerView.OnItemTouchListener() {
+            @Override
+            public boolean onInterceptTouchEvent(RecyclerView rv, MotionEvent e) {
+                if (floatingMenu.isExpanded()) {
+                    floatingMenu.collapse();
+                    return true;
+                }
+                return false;
+            }
+
+            @Override
+            public void onTouchEvent(RecyclerView rv, MotionEvent e) {
+
+            }
+
+            @Override
+            public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
+
+            }
+        });
+    }
+
     private void setListAlpha(float value) {
         container.setAlpha(value);
     }
@@ -129,8 +158,6 @@ public abstract class RecordListFragment extends MvpFragment<RecordListView, Rec
     }
 
     protected abstract void initOrderSpinner(final RecordListAdapter adapter);
-
-    protected abstract void initListContainer(final RecordListAdapter adapter);
 
     public enum SpinnerState {
         AGE_ASC(R.drawable.age_up, "Age ascending order", "Age"),

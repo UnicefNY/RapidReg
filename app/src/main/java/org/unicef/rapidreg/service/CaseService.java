@@ -36,7 +36,7 @@ import java.util.Map;
 
 public class CaseService extends RecordService {
     public static final String TAG = CaseService.class.getSimpleName();
-    public static final String CASE_ID = "case_id";
+    public static final String CASE_ID = "case_id_display";
 
     private static final CaseService CASE_SERVICE = new CaseService();
 
@@ -82,21 +82,6 @@ public class CaseService extends RecordService {
         return caseDao.getCaseByUniqueId(uniqueId);
     }
 
-    public Map<String, String> getCaseMapByUniqueId(String uniqueId) {
-        Case child = caseDao.getCaseByUniqueId(uniqueId);
-        if (child == null) {
-            return new HashMap<>();
-        }
-        String caseJson = new String(child.getContent().getBlob());
-        Type type = new TypeToken<Map<String, String>>() {
-        }.getType();
-        Map<String, String> values = new Gson().fromJson(caseJson, type);
-
-        values.put(CASE_ID, uniqueId);
-
-        return values;
-    }
-
     public List<Case> getSearchResult(String uniqueId, String name, int ageFrom, int ageTo,
                                       String caregiver, Date date) {
         ConditionGroup conditionGroup = ConditionGroup.clause();
@@ -119,7 +104,7 @@ public class CaseService extends RecordService {
 
     public void saveOrUpdate(ItemValues itemValues, List<String> photoPaths) {
 
-        if (itemValues.getAsString(CASE_ID) == null) {
+        if (itemValues.getAsString(RECORD_ID) == null) {
             save(itemValues, photoPaths);
         } else {
             Log.d(TAG, "update the existing case");
@@ -177,7 +162,7 @@ public class CaseService extends RecordService {
         Blob audioFileDefault = null;
         audioFileDefault = getAudioBlob(audioFileDefault);
 
-        Case child = caseDao.getCaseByUniqueId(itemValues.getAsString(CASE_ID));
+        Case child = caseDao.getCaseByUniqueId(itemValues.getAsString(RECORD_ID));
         child.setLastUpdatedDate(new Date(Calendar.getInstance().getTimeInMillis()));
         child.setContent(caseBlob);
         child.setName(getName(itemValues));

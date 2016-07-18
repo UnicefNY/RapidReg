@@ -6,11 +6,13 @@ import android.text.TextUtils;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import com.ogaclejapan.smarttablayout.utils.v4.FragmentPagerItem;
 import com.ogaclejapan.smarttablayout.utils.v4.FragmentPagerItems;
 
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
+import org.json.JSONException;
 import org.unicef.rapidreg.R;
 import org.unicef.rapidreg.base.RecordPhotoAdapter;
 import org.unicef.rapidreg.base.RecordRegisterWrapperFragment;
@@ -24,6 +26,8 @@ import org.unicef.rapidreg.service.CasePhotoService;
 import org.unicef.rapidreg.service.CaseService;
 import org.unicef.rapidreg.service.RecordService;
 import org.unicef.rapidreg.service.cache.ItemValues;
+import org.unicef.rapidreg.service.cache.ItemValuesMap;
+import org.unicef.rapidreg.utils.JsonUtils;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -37,6 +41,7 @@ public class CaseRegisterWrapperFragment extends RecordRegisterWrapperFragment {
     public void saveCase(SaveCaseEvent event) {
         if (validateRequiredField()) {
             List<String> photoPaths = recordPhotoAdapter.getAllItems();
+            ItemValues itemValues = new ItemValues(new Gson().fromJson(new Gson().toJson(this.itemValues.getValues()), JsonObject.class));
             CaseService.getInstance().saveOrUpdate(itemValues, photoPaths);
         }
     }
@@ -52,9 +57,12 @@ public class CaseRegisterWrapperFragment extends RecordRegisterWrapperFragment {
             recordId = getArguments().getLong(RecordService.RECORD_ID);
             Case caseItem = CaseService.getInstance().getById(recordId);
             String caseJson = new String(caseItem.getContent().getBlob());
-            String subFormJson = new String(caseItem.getSubform().getBlob());
-            itemValues = ItemValues.generateItemValues(caseJson, subFormJson);
-            itemValues.addStringItem(RecordService.RECORD_ID, caseItem.getUniqueId());
+            try {
+                itemValues = new ItemValuesMap(JsonUtils.toMap(ItemValues.generateItemValues(caseJson).getValues()));
+                itemValues.addStringItem(RecordService.RECORD_ID, caseItem.getUniqueId());
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
             initProfile(caseItem);
         }
     }
@@ -88,6 +96,7 @@ public class CaseRegisterWrapperFragment extends RecordRegisterWrapperFragment {
             Bundle bundle = new Bundle();
             bundle.putStringArrayList(RecordService.RECORD_PHOTOS,
                     (ArrayList<String>) recordPhotoAdapter.getAllItems());
+
             bundle.putSerializable(RecordService.ITEM_VALUES, itemValues);
             pages.add(FragmentPagerItem.of(values[0], CaseRegisterFragment.class, bundle));
         }
@@ -102,7 +111,6 @@ public class CaseRegisterWrapperFragment extends RecordRegisterWrapperFragment {
             Collections.addAll(requiredFieldNames, RecordService
                     .fetchRequiredFiledNames(section.getFields()).toArray(new String[0]));
         }
-
         for (String field : requiredFieldNames) {
             if (TextUtils.isEmpty((CharSequence) itemValues.getValues().get(field))) {
                 Toast.makeText(getActivity(), R.string.required_field_is_not_filled,

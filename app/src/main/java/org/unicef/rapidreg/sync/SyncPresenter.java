@@ -70,6 +70,12 @@ public class SyncPresenter extends MvpBasePresenter<SyncView> {
         EventBus.getDefault().unregister(this);
     }
 
+    public void tryToSync() {
+        if (isViewAttached()) {
+            getView().showAttemptSyncDialog();
+        }
+    }
+
     public void doSync() {
         if (isViewAttached()) {
 

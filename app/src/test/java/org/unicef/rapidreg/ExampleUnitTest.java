@@ -1,5 +1,8 @@
 package org.unicef.rapidreg;
 
+import com.google.gson.JsonObject;
+import com.google.gson.internal.LazilyParsedNumber;
+
 import org.junit.Test;
 
 import java.util.concurrent.TimeUnit;
@@ -113,5 +116,14 @@ public class ExampleUnitTest {
         // will fail. If retryWhen() resubscribes to the root Observable, then
         // this test will succeed.
         assertTrue(rootUsageCounter.current() > 1);
+    }
+
+    @Test
+    public void testA() {
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("a",3.6);
+        System.out.println(jsonObject.get("a").getAsInt());
+        System.out.println(Double.valueOf(new LazilyParsedNumber("3.6").toString()).longValue());
+        System.out.println(Boolean.valueOf("TRu").toString());
     }
 }

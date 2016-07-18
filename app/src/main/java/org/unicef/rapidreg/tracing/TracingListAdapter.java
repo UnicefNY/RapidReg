@@ -25,11 +25,8 @@ public class TracingListAdapter extends RecordListAdapter {
     @Override
     public void onBindViewHolder(RecordListHolder holder, int position) {
         final RecordModel record = recordList.get(position);
-
         final String recordJson = new String(record.getContent().getBlob());
-        final String subFormJson = new String(record.getSubform().getBlob());
-
-        final ItemValues itemValues = ItemValues.generateItemValues(recordJson, subFormJson);
+        final ItemValues itemValues = ItemValues.generateItemValues(recordJson);
 
         Gender gender;
         try {

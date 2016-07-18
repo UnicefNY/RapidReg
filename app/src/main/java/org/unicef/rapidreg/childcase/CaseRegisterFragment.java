@@ -13,6 +13,11 @@ import org.unicef.rapidreg.base.RecordRegisterPresenter;
 import org.unicef.rapidreg.model.RecordModel;
 import org.unicef.rapidreg.service.RecordService;
 import org.unicef.rapidreg.service.cache.ItemValues;
+import org.unicef.rapidreg.service.cache.ItemValuesMap;
+
+import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
 
 public class CaseRegisterFragment extends RecordRegisterFragment {
 
@@ -31,8 +36,7 @@ public class CaseRegisterFragment extends RecordRegisterFragment {
         if (getArguments() != null) {
             photoAdapter = new CasePhotoAdapter(getContext(),
                     getArguments().getStringArrayList(RecordService.RECORD_PHOTOS));
-            itemValues = (ItemValues) getArguments().getSerializable(ITEM_VALUES);
-            getArguments().remove(ITEM_VALUES);
+            itemValues = (ItemValuesMap) getArguments().getSerializable(ITEM_VALUES);
         }
         return inflater.inflate(R.layout.fragment_register, container, false);
     }
