@@ -33,7 +33,7 @@ public class TracingListAdapter extends RecordListAdapter {
 
         Gender gender;
         try {
-            gender = Gender.valueOf(itemValues.getAsString("sex").toUpperCase());
+            gender = Gender.valueOf(itemValues.getAsString(RecordService.SEX).toUpperCase());
         } catch (Exception e) {
             gender = Gender.UNKNOWN;
         }
@@ -52,7 +52,7 @@ public class TracingListAdapter extends RecordListAdapter {
         holder.genderBadge.setImageDrawable(getDefaultGenderBadge(gender.getGenderId()));
         holder.genderName.setText(gender.getName());
         holder.genderName.setTextColor(ContextCompat.getColor(activity, gender.getColorId()));
-        String age = itemValues.getAsString("age");
+        String age = itemValues.getAsString(RecordService.RELATION_AGE);
         holder.age.setText(isValidAge(age) ? age : "");
         holder.registrationDate.setText(dateFormat.format(record.getRegistrationDate()));
 
