@@ -11,7 +11,6 @@ import android.widget.ViewSwitcher;
 import org.unicef.rapidreg.R;
 import org.unicef.rapidreg.exception.DialogException;
 import org.unicef.rapidreg.forms.Field;
-import org.unicef.rapidreg.service.cache.ItemValues;
 import org.unicef.rapidreg.service.cache.ItemValuesMap;
 import org.unicef.rapidreg.widgets.dialog.BaseDialog;
 import org.unicef.rapidreg.widgets.dialog.FiledDialogFactory;
