@@ -34,10 +34,8 @@ public class TracingSearchFragment extends RecordSearchFragment {
         int ageFrom = TextUtils.isEmpty(from) ? RecordModel.MIN_AGE : Integer.valueOf(from);
         String to = filters.get(AGE_TO);
         int ageTo = TextUtils.isEmpty(to) ? RecordModel.MAX_AGE : Integer.valueOf(to);
-        String caregiver = filters.get(CAREGIVER);
         String registrationDate = filters.get(REGISTRATION_DATE);
 
-        return TracingService.getInstance().getSearchResult(id, name, ageFrom, ageTo,
-                caregiver, getDate(registrationDate));
+        return TracingService.getInstance().getSearchResult(id, name, ageFrom, ageTo, getDate(registrationDate));
     }
 }

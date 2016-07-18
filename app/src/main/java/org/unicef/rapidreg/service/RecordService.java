@@ -6,8 +6,9 @@ import org.unicef.rapidreg.service.cache.ItemValues;
 
 import java.io.File;
 import java.sql.Date;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 import java.util.UUID;
@@ -76,6 +77,12 @@ public class RecordService {
     }
 
     protected Date getCurrentDate() {
-        return new Date(Calendar.getInstance().getTimeInMillis());
+        SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
+        try {
+            java.util.Date today = dateFormat.parse(dateFormat.format(new java.util.Date()));
+            return new Date(today.getTime());
+        } catch (ParseException e) {
+            return null;
+        }
     }
 }
