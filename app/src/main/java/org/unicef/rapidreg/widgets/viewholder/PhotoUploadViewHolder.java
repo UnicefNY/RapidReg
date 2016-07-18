@@ -13,12 +13,12 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import org.unicef.rapidreg.R;
+import org.unicef.rapidreg.base.PhotoConfig;
 import org.unicef.rapidreg.base.RecordActivity;
 import org.unicef.rapidreg.base.RecordPhotoAdapter;
 import org.unicef.rapidreg.childcase.CaseActivity;
 import org.unicef.rapidreg.childcase.CasePhotoViewActivity;
 import org.unicef.rapidreg.forms.Field;
-import org.unicef.rapidreg.service.RecordService;
 import org.unicef.rapidreg.service.cache.ItemValuesMap;
 import org.unicef.rapidreg.tracing.TracingPhotoViewActivity;
 
@@ -130,7 +130,7 @@ public class PhotoUploadViewHolder extends BaseViewHolder<Field> {
             @Override
             public void onClick(DialogInterface dialog, int item) {
                 if (fromCameraItem.equals(items[item])) {
-                    Uri saveUri = Uri.fromFile(new File(RecordService.MEDIA_PATH_FOR_CAMERA));
+                    Uri saveUri = Uri.fromFile(new File(PhotoConfig.MEDIA_PATH_FOR_CAMERA));
                     Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                     intent.putExtra(MediaStore.EXTRA_OUTPUT, saveUri);
                     ((RecordActivity) context).startActivityForResult(intent, REQUEST_CODE_CAMERA);

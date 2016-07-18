@@ -11,7 +11,7 @@ import com.raizlabs.android.dbflow.sql.language.Condition;
 import com.raizlabs.android.dbflow.sql.language.ConditionGroup;
 import com.raizlabs.android.dbflow.sql.language.NameAlias;
 
-import org.unicef.rapidreg.PrimeroConfiguration;
+import org.unicef.rapidreg.base.PhotoConfig;
 import org.unicef.rapidreg.db.TracingDao;
 import org.unicef.rapidreg.db.TracingPhotoDao;
 import org.unicef.rapidreg.db.TracingPhotoDaoImpl;
@@ -214,8 +214,8 @@ public class TracingService extends RecordService {
         String filePath = photoPaths.get(index);
         Bitmap bitmap = preProcessImage(filePath);
         TracingPhoto.setThumbnail(new Blob(ImageCompressUtil.convertImageToBytes(
-                ImageCompressUtil.getThumbnail(bitmap, PrimeroConfiguration.PHOTO_THUMBNAIL_SIZE,
-                        PrimeroConfiguration.PHOTO_THUMBNAIL_SIZE))));
+                ImageCompressUtil.getThumbnail(bitmap, PhotoConfig.THUMBNAIL_SIZE,
+                        PhotoConfig.THUMBNAIL_SIZE))));
 
         TracingPhoto.setPhoto(new Blob(ImageCompressUtil.convertImageToBytes(bitmap)));
         TracingPhoto.setTracing(parent);
@@ -236,8 +236,8 @@ public class TracingService extends RecordService {
             photo = new Blob(ImageCompressUtil.convertImageToBytes(bitmap));
             tracingPhoto = new TracingPhoto();
             tracingPhoto.setThumbnail(new Blob(ImageCompressUtil.convertImageToBytes(
-                    ImageCompressUtil.getThumbnail(bitmap, PrimeroConfiguration.PHOTO_THUMBNAIL_SIZE,
-                            PrimeroConfiguration.PHOTO_THUMBNAIL_SIZE))));
+                    ImageCompressUtil.getThumbnail(bitmap, PhotoConfig.THUMBNAIL_SIZE,
+                            PhotoConfig.THUMBNAIL_SIZE))));
             tracingPhoto.setTracing(tracing);
             tracingPhoto.setPhoto(photo);
         }
@@ -252,7 +252,7 @@ public class TracingService extends RecordService {
             return BitmapFactory.decodeFile(filePath);
         }
         return ImageCompressUtil.compressImage(filePath,
-                PrimeroConfiguration.PHOTO_MAX_WIDTH, PrimeroConfiguration.PHOTO_MAX_HEIGHT);
+                PhotoConfig.MAX_WIDTH, PhotoConfig.MAX_HEIGHT);
     }
 
     private Blob getAudioBlob(Blob blob) {
