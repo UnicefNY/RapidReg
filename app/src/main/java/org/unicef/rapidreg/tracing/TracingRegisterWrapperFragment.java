@@ -41,7 +41,7 @@ public class TracingRegisterWrapperFragment extends RecordRegisterWrapperFragmen
             Tracing tracingItem = TracingService.getInstance().getById(recordId);
             String tracingJson = new String(tracingItem.getContent().getBlob());
             itemValues = ItemValuesMap.fromItemValuesJsonObject(ItemValues.generateItemValues(tracingJson));
-            itemValues.addStringItem(RecordService.RECORD_ID, tracingItem.getUniqueId());
+            itemValues.addStringItem(TracingService.TRACING_ID, tracingItem.getUniqueId());
             initProfile(tracingItem);
         }
     }
@@ -75,7 +75,7 @@ public class TracingRegisterWrapperFragment extends RecordRegisterWrapperFragmen
             Bundle bundle = new Bundle();
             bundle.putStringArrayList(RecordService.RECORD_PHOTOS,
                     (ArrayList<String>) recordPhotoAdapter.getAllItems());
-            bundle.putString(RecordService.ITEM_VALUES, new Gson().toJson(itemValues.getValues()));
+            bundle.putSerializable(RecordService.ITEM_VALUES, itemValues);
             pages.add(FragmentPagerItem.of(values[0], TracingRegisterFragment.class, bundle));
         }
         return pages;

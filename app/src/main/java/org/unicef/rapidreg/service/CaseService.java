@@ -159,7 +159,7 @@ public class CaseService extends RecordService {
         Blob audioFileDefault = null;
         audioFileDefault = getAudioBlob(audioFileDefault);
 
-        Case child = caseDao.getCaseByUniqueId(itemValues.getAsString(RECORD_ID));
+        Case child = caseDao.getCaseByUniqueId(itemValues.getAsString(CASE_ID));
         child.setLastUpdatedDate(new Date(Calendar.getInstance().getTimeInMillis()));
         child.setContent(caseBlob);
         child.setName(getName(itemValues));
