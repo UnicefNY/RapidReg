@@ -54,7 +54,7 @@
         <item>Age</item>
     </string-array>
 
-    <string name="pull_down_load_mini_form">... Pull Down To Show Mini Form ...</string>
+    <string name="pull_down_load_mini_form">... Pull Down To Show Short Form ...</string>
     <string name="pull_up_load_full_form">... Swipe Up To Show More Details ...</string>
     <string name="swipe_up_to_show_more_details">Swipe Up To Show More Details</string>
     <string name="no_photo_promote_info">No photo file exists.</string>
