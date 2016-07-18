@@ -280,10 +280,4 @@ public class TracingService extends RecordService {
                 + values.getAsString(RELATION_AGE) + " "
                 + values.getAsString(RELATION_NICKNAME);
     }
-
-    private String getName(ItemValues values) {
-        return values.getAsString(RELATION_NAME) + " "
-                + values.getAsString(RELATION_AGE) + " "
-                + values.getAsString(RELATION_NICKNAME);
-    }
 }
