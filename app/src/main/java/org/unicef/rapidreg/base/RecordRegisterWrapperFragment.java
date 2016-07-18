@@ -167,7 +167,9 @@ public abstract class RecordRegisterWrapperFragment extends Fragment {
                 }
             }
         }
-        addProfileFieldForDetailsPage();
+        if (!miniFields.isEmpty()) {
+            addProfileFieldForDetailsPage();
+        }
     }
 
     private void initFloatingActionButton() {
