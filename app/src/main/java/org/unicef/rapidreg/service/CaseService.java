@@ -18,6 +18,7 @@ import org.unicef.rapidreg.db.impl.CaseDaoImpl;
 import org.unicef.rapidreg.db.impl.CasePhotoDaoImpl;
 import org.unicef.rapidreg.model.Case;
 import org.unicef.rapidreg.model.CasePhoto;
+import org.unicef.rapidreg.model.RecordModel;
 import org.unicef.rapidreg.service.cache.ItemValues;
 import org.unicef.rapidreg.utils.ImageCompressUtil;
 import org.unicef.rapidreg.utils.StreamUtil;
@@ -81,13 +82,13 @@ public class CaseService extends RecordService {
     public List<Case> getSearchResult(String uniqueId, String name, int ageFrom, int ageTo,
                                       String caregiver, Date date) {
         ConditionGroup conditionGroup = ConditionGroup.clause();
-        conditionGroup.and(Condition.column(NameAlias.builder(Case.COLUMN_UNIQUE_ID).build())
+        conditionGroup.and(Condition.column(NameAlias.builder(RecordModel.COLUMN_UNIQUE_ID).build())
                 .like(getWrappedCondition(uniqueId)));
-        conditionGroup.and(Condition.column(NameAlias.builder(Case.COLUMN_NAME).build())
+        conditionGroup.and(Condition.column(NameAlias.builder(RecordModel.COLUMN_NAME).build())
                 .like(getWrappedCondition(name)));
-        conditionGroup.and(Condition.column(NameAlias.builder(Case.COLUMN_AGE).build())
+        conditionGroup.and(Condition.column(NameAlias.builder(RecordModel.COLUMN_AGE).build())
                 .between(ageFrom).and(ageTo));
-        conditionGroup.and(Condition.column(NameAlias.builder(Case.COLUMN_CAREGIVER).build())
+        conditionGroup.and(Condition.column(NameAlias.builder(RecordModel.COLUMN_CAREGIVER).build())
                 .like(getWrappedCondition(caregiver)));
 
         if (date != null) {
