@@ -119,7 +119,6 @@ public class TracingService extends RecordService {
         Gson gson = new Gson();
         Date date = new Date(Calendar.getInstance().getTimeInMillis());
         Blob tracingBlob = new Blob(gson.toJson(itemValues.getValues()).getBytes());
-        Blob subFormBlob = new Blob(gson.toJson(itemValues.getChildrenAsJsonObject()).getBytes());
         Blob audioFileDefault = null;
         audioFileDefault = getAudioBlob(audioFileDefault);
 
@@ -134,7 +133,6 @@ public class TracingService extends RecordService {
         tracing.setCaregiver(getCaregiverName(itemValues));
         tracing.setRegistrationDate(getRegisterDate(itemValues));
         tracing.setAudio(audioFileDefault);
-        tracing.setSubform(subFormBlob);
         tracing.setCreatedBy(username);
         tracing.save();
 
@@ -156,7 +154,6 @@ public class TracingService extends RecordService {
                        List<String> photoBitPaths) {
         Gson gson = new Gson();
         Blob blob = new Blob(gson.toJson(itemValues.getValues()).getBytes());
-        Blob subFormBlob = new Blob(gson.toJson(itemValues.getChildrenAsJsonObject()).getBytes());
         Blob audioFileDefault = null;
         audioFileDefault = getAudioBlob(audioFileDefault);
 
@@ -169,7 +166,6 @@ public class TracingService extends RecordService {
         tracing.setCaregiver(getCaregiverName(itemValues));
         tracing.setRegistrationDate(getRegisterDate(itemValues));
         tracing.setAudio(audioFileDefault);
-        tracing.setSubform(subFormBlob);
         tracing.update();
 
         try {
