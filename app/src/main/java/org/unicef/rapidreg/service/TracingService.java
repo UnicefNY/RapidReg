@@ -127,7 +127,7 @@ public class TracingService extends RecordService {
         tracing.setLastUpdatedDate(date);
         tracing.setContent(tracingBlob);
         tracing.setName(getName(itemValues));
-        int age = itemValues.getAsInt(AGE) != null ? itemValues.getAsInt(AGE) : 0;
+        int age = itemValues.getAsInt(RELATION_AGE) != null ? itemValues.getAsInt(RELATION_AGE) : 0;
         tracing.setAge(age);
         tracing.setCaregiver(getCaregiverName(itemValues));
         tracing.setRegistrationDate(getRegisterDate(itemValues));
@@ -277,5 +277,11 @@ public class TracingService extends RecordService {
             }
         }
         return getCurrentDate();
+    }
+
+    private String getName(ItemValues values) {
+        return values.getAsString(RELATION_NAME) + " "
+                + values.getAsString(RELATION_AGE) + " "
+                + values.getAsString(RELATION_NICKNAME);
     }
 }
