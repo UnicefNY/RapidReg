@@ -122,7 +122,6 @@ public class CaseService extends RecordService {
         Gson gson = new Gson();
         Date date = new Date(Calendar.getInstance().getTimeInMillis());
         Blob blob = new Blob(gson.toJson(itemValues.getValues()).getBytes());
-        Blob subFormBlob = new Blob(gson.toJson(itemValues.getChildrenAsJsonObject()).getBytes());
         Blob audioFileDefault = null;
         audioFileDefault = getAudioBlob(audioFileDefault);
 
@@ -137,7 +136,6 @@ public class CaseService extends RecordService {
         child.setCaregiver(getCaregiverName(itemValues));
         child.setRegistrationDate(getRegisterDate(itemValues));
         child.setAudio(audioFileDefault);
-        child.setSubform(subFormBlob);
         child.setCreatedBy(username);
         child.save();
 
@@ -158,7 +156,6 @@ public class CaseService extends RecordService {
     public void update(ItemValues itemValues, List<String> photoBitPaths) {
         Gson gson = new Gson();
         Blob caseBlob = new Blob(gson.toJson(itemValues.getValues()).getBytes());
-        Blob subFormBlob = new Blob(gson.toJson(itemValues.getChildrenAsJsonObject()).getBytes());
         Blob audioFileDefault = null;
         audioFileDefault = getAudioBlob(audioFileDefault);
 
@@ -171,7 +168,6 @@ public class CaseService extends RecordService {
         child.setCaregiver(getCaregiverName(itemValues));
         child.setRegistrationDate(getRegisterDate(itemValues));
         child.setAudio(audioFileDefault);
-        child.setSubform(subFormBlob);
         child.update();
         try {
             updatePhoto(child, photoBitPaths);

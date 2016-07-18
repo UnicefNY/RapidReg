@@ -8,9 +8,7 @@ import com.google.gson.JsonElement;
 import org.unicef.rapidreg.PrimeroConfiguration;
 
 import java.util.List;
-import java.util.Map;
 
-import okhttp3.ResponseBody;
 import retrofit2.Response;
 import rx.Observable;
 
