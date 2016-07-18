@@ -14,7 +14,6 @@ import org.unicef.rapidreg.model.RecordPhoto;
 import org.unicef.rapidreg.service.CasePhotoService;
 import org.unicef.rapidreg.service.CaseService;
 import org.unicef.rapidreg.service.RecordService;
-import org.unicef.rapidreg.service.TracingService;
 import org.unicef.rapidreg.service.cache.ItemValues;
 import org.unicef.rapidreg.utils.StreamUtil;
 
@@ -36,7 +35,7 @@ public class CaseListAdapter extends RecordListAdapter {
 
         Gender gender;
         try {
-            gender = Gender.valueOf(itemValues.getAsString("sex").toUpperCase());
+            gender = Gender.valueOf(itemValues.getAsString(RecordService.SEX).toUpperCase());
         } catch (Exception e) {
             gender = Gender.UNKNOWN;
         }
@@ -55,7 +54,7 @@ public class CaseListAdapter extends RecordListAdapter {
         holder.genderBadge.setImageDrawable(getDefaultGenderBadge(gender.getGenderId()));
         holder.genderName.setText(gender.getName());
         holder.genderName.setTextColor(ContextCompat.getColor(activity, gender.getColorId()));
-        String age = itemValues.getAsString("age");
+        String age = itemValues.getAsString(RecordService.AGE);
         holder.age.setText(isValidAge(age) ? age : "");
         holder.registrationDate.setText(dateFormat.format(record.getRegistrationDate()));
 
