@@ -8,15 +8,14 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import org.unicef.rapidreg.forms.Field;
-import org.unicef.rapidreg.service.cache.ItemValues;
 import org.unicef.rapidreg.service.cache.ItemValuesMap;
 import org.unicef.rapidreg.widgets.viewholder.AudioUploadViewHolder;
 import org.unicef.rapidreg.widgets.viewholder.BaseViewHolder;
+import org.unicef.rapidreg.widgets.viewholder.DefaultViewHolder;
 import org.unicef.rapidreg.widgets.viewholder.GenericViewHolder;
 import org.unicef.rapidreg.widgets.viewholder.MiniFormProfileViewHolder;
 import org.unicef.rapidreg.widgets.viewholder.PhotoUploadMiniFormViewHolder;
 import org.unicef.rapidreg.widgets.viewholder.PhotoUploadViewHolder;
-import org.unicef.rapidreg.widgets.viewholder.SeparatorViewHolder;
 import org.unicef.rapidreg.widgets.viewholder.SingleLineRadioViewHolder;
 import org.unicef.rapidreg.widgets.viewholder.SubFormViewHolder;
 import org.unicef.rapidreg.widgets.viewholder.TextViewHolder;
@@ -119,7 +118,7 @@ public class RecordRegisterAdapter extends RecyclerView.Adapter<BaseViewHolder> 
                                 .getIdentifier(PREFIX + Field.TYPE_MINI_FORM_PROFILE, LAYOUT, packageName),
                         parent, false), itemValues);
             default:
-                return new SeparatorViewHolder(activity, new View(activity));
+                return new DefaultViewHolder(activity, new View(activity));
         }
     }
 
@@ -149,9 +148,6 @@ public class RecordRegisterAdapter extends RecyclerView.Adapter<BaseViewHolder> 
         }
         if (field.isRadioButton()) {
             return VIEW_HOLDER_RADIO_SINGLE_LINE;
-        }
-        if (field.isSeparator()) {
-            return VIEW_HOLDER_SEPARATOR;
         }
         if (field.isTickBox()) {
             return VIEW_HOLDER_TICK_BOX;
