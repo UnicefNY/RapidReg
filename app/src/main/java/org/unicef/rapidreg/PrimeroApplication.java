@@ -30,6 +30,8 @@ public class PrimeroApplication extends Application {
             Stetho.initializeWithDefaults(context);
         }
 
+        PrimeroConfiguration.setInternalFilePath(context.getFilesDir().getPath() );
+
         initDB();
     }
 
