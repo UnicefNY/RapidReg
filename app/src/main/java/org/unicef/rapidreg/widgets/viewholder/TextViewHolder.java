@@ -18,7 +18,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class TextViewHolder extends BaseTextViewHolder {
-
     public static final String TAG = TextViewHolder.class.getSimpleName();
 
     @BindView(R.id.label)
@@ -52,16 +51,8 @@ public class TextViewHolder extends BaseTextViewHolder {
 
         labelView.setHint(labelText);
         formQuestion.setHint(labelText);
-        if (isSubFormField(field)) {
-            valueView.setText(getValueForSubForm(field));
-        } else {
-            valueView.setText(itemValues.getAsString(field.getName()));
-        }
-        if (TextUtils.isEmpty(valueView.getText())) {
-            viewSwitcher.setDisplayedChild(GenericViewHolder.FORM_NO_ANSWER_STATE);
-        } else {
-            viewSwitcher.setDisplayedChild(GenericViewHolder.FORM_HAS_ANSWER_STATE);
-        }
+
+        initValueViewData(field);
 
         disableUneditableField(isEditable(field), valueView);
         setEditableBackgroundStyle(isEditable(field));
@@ -73,6 +64,13 @@ public class TextViewHolder extends BaseTextViewHolder {
             valueView.setInputType(InputType.TYPE_CLASS_TEXT);
         }
 
+        if (TextUtils.isEmpty(valueView.getText())) {
+            viewSwitcher.setDisplayedChild(GenericViewHolder.FORM_NO_ANSWER_STATE);
+        } else {
+            viewSwitcher.setDisplayedChild(GenericViewHolder.FORM_HAS_ANSWER_STATE);
+        }
+
+        initValueViewStatus();
     }
 
     @Override
