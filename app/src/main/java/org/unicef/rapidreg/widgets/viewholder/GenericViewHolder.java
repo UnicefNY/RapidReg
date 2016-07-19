@@ -9,6 +9,7 @@ import android.widget.TextView;
 import android.widget.ViewSwitcher;
 
 import org.unicef.rapidreg.R;
+import org.unicef.rapidreg.base.RecordActivity;
 import org.unicef.rapidreg.exception.DialogException;
 import org.unicef.rapidreg.forms.Field;
 import org.unicef.rapidreg.service.cache.ItemValuesMap;
@@ -51,20 +52,19 @@ public class GenericViewHolder extends BaseTextViewHolder {
 
         labelView.setHint(labelText);
         formQuestion.setHint(labelText);
+
+        initValueViewData(field);
+
         disableUneditableField(isEditable(field), null);
         setEditableBackgroundStyle(isEditable(field));
-
-        if (isSubFormField(field)) {
-            valueView.setText(getValueForSubForm(field));
-        } else {
-            valueView.setText(itemValues.getAsString(field.getName()));
-        }
 
         if (TextUtils.isEmpty(valueView.getText())) {
             viewSwitcher.setDisplayedChild(GenericViewHolder.FORM_NO_ANSWER_STATE);
         } else {
             viewSwitcher.setDisplayedChild(GenericViewHolder.FORM_HAS_ANSWER_STATE);
         }
+
+        initValueViewStatus();
     }
 
     @Override
