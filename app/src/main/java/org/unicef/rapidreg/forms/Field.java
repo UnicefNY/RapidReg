@@ -233,7 +233,7 @@ public class Field {
     }
 
     public boolean isMarkForMobileField() {
-        return TextUtils.equals( this.name ,"marked_for_mobile") ? true : false;
+        return TextUtils.equals( this.name ,"marked_for_mobile");
     }
 
     @Override
