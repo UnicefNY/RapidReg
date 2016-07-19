@@ -1,18 +1,12 @@
 package org.unicef.rapidreg.widgets.dialog;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.text.TextUtils;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.ArrayAdapter;
-import android.widget.EditText;
-import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.ViewSwitcher;
 
-import org.unicef.rapidreg.R;
 import org.unicef.rapidreg.forms.Field;
 import org.unicef.rapidreg.service.cache.ItemValuesMap;
 import org.unicef.rapidreg.widgets.viewholder.GenericViewHolder;
@@ -42,7 +36,7 @@ public class SingleSelectDialog extends BaseDialog {
         selectIndex = selectIndex == -1 ? 0 : selectIndex;
         result = optionItems[selectIndex];
 
-        dialog = new SearchAbleDialog(context,field.getDisplayName().get(Locale.getDefault().getLanguage()) ,optionItems);
+        dialog = new SearchAbleDialog(context, field.getDisplayName().get(Locale.getDefault().getLanguage()), optionItems);
 
         dialog.setOnClick(new SearchAbleDialog.SearchAbleDialogOnClickListener() {
             @Override
@@ -69,14 +63,7 @@ public class SingleSelectDialog extends BaseDialog {
                 }
                 resultView.setText(getResult() == null ? null : getResult().toString());
 
-                if (isSubFormField()) {
-                    String language = Locale.getDefault().getLanguage();
-                    itemValues.addChildrenItemForParent(field.getParent(), field.getIndex(),
-                            field.getDisplayName().get(language), getResult());
-                } else {
-                    itemValues.addItem(field.getName(), getResult());
-                }
-
+                itemValues.addItem(field.getName(), getResult());
                 dialog.dismiss();
             }
         });
