@@ -14,7 +14,7 @@ And /^I create case "(.*?)"$/ do |case_instance|
   base_page.clickById("fab_expand_menu_button")
   base_page.clickById("add_case")
   base_form.fillInMiniForm(test_case[case_instance])
-  base_page.clickById("save_case")
+  base_page.clickById("save")
 end
 
 And /^I clear up above "(.*?)" search conditions$/ do |num|

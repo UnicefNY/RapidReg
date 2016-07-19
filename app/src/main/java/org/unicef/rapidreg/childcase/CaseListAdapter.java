@@ -1,6 +1,7 @@
 package org.unicef.rapidreg.childcase;
 
 import android.content.Context;
+import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.view.View;
 
@@ -11,6 +12,7 @@ import org.unicef.rapidreg.base.RecordListAdapter;
 import org.unicef.rapidreg.model.RecordModel;
 import org.unicef.rapidreg.model.RecordPhoto;
 import org.unicef.rapidreg.service.CasePhotoService;
+import org.unicef.rapidreg.service.CaseService;
 import org.unicef.rapidreg.service.RecordService;
 import org.unicef.rapidreg.service.cache.ItemValues;
 import org.unicef.rapidreg.utils.StreamUtil;
@@ -33,7 +35,7 @@ public class CaseListAdapter extends RecordListAdapter {
 
         Gender gender;
         try {
-            gender = Gender.valueOf(itemValues.getAsString("sex").toUpperCase());
+            gender = Gender.valueOf(itemValues.getAsString(RecordService.SEX).toUpperCase());
         } catch (Exception e) {
             gender = Gender.UNKNOWN;
         }
@@ -52,14 +54,16 @@ public class CaseListAdapter extends RecordListAdapter {
         holder.genderBadge.setImageDrawable(getDefaultGenderBadge(gender.getGenderId()));
         holder.genderName.setText(gender.getName());
         holder.genderName.setTextColor(ContextCompat.getColor(activity, gender.getColorId()));
-        String age = itemValues.getAsString("age");
+        String age = itemValues.getAsString(RecordService.AGE);
         holder.age.setText(isValidAge(age) ? age : "");
         holder.registrationDate.setText(dateFormat.format(record.getRegistrationDate()));
 
         holder.view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                activity.turnToDetailOrEditPage(CaseFeature.DETAILS, record.getId());
+                Bundle args = new Bundle();
+                args.putLong(CaseService.CASE_ID, record.getId());
+                activity.turnToDetailOrEditPage(CaseFeature.DETAILS, args);
                 try {
                     RecordService.clearAudioFile();
                     if (record.getAudio() != null) {

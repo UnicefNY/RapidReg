@@ -190,18 +190,9 @@ public abstract class RecordActivity extends BaseActivity {
         }
     }
 
-    public void turnToDetailOrEditPage(Feature feature, long recordId) {
-        try {
-
-            Bundle args = new Bundle();
-            args.putLong(RecordService.RECORD_ID, recordId);
-
-            currentFeature = feature;
-
-            turnToFeature(feature, args);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+    public void turnToDetailOrEditPage(Feature feature, Bundle args) {
+        currentFeature = feature;
+        turnToFeature(feature, args);
     }
 
     protected void changeToolbarTitle(int resId) {

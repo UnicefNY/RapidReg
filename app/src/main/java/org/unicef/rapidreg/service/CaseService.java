@@ -19,6 +19,7 @@ import org.unicef.rapidreg.db.impl.CaseDaoImpl;
 import org.unicef.rapidreg.db.impl.CasePhotoDaoImpl;
 import org.unicef.rapidreg.model.Case;
 import org.unicef.rapidreg.model.CasePhoto;
+import org.unicef.rapidreg.model.RecordModel;
 import org.unicef.rapidreg.service.cache.ItemValues;
 import org.unicef.rapidreg.utils.ImageCompressUtil;
 import org.unicef.rapidreg.utils.StreamUtil;
@@ -85,13 +86,13 @@ public class CaseService extends RecordService {
     public List<Case> getSearchResult(String uniqueId, String name, int ageFrom, int ageTo,
                                       String caregiver, Date date) {
         ConditionGroup conditionGroup = ConditionGroup.clause();
-        conditionGroup.and(Condition.column(NameAlias.builder(Case.COLUMN_UNIQUE_ID).build())
+        conditionGroup.and(Condition.column(NameAlias.builder(RecordModel.COLUMN_UNIQUE_ID).build())
                 .like(getWrappedCondition(uniqueId)));
-        conditionGroup.and(Condition.column(NameAlias.builder(Case.COLUMN_NAME).build())
+        conditionGroup.and(Condition.column(NameAlias.builder(RecordModel.COLUMN_NAME).build())
                 .like(getWrappedCondition(name)));
-        conditionGroup.and(Condition.column(NameAlias.builder(Case.COLUMN_AGE).build())
+        conditionGroup.and(Condition.column(NameAlias.builder(RecordModel.COLUMN_AGE).build())
                 .between(ageFrom).and(ageTo));
-        conditionGroup.and(Condition.column(NameAlias.builder(Case.COLUMN_CAREGIVER).build())
+        conditionGroup.and(Condition.column(NameAlias.builder(RecordModel.COLUMN_CAREGIVER).build())
                 .like(getWrappedCondition(caregiver)));
 
         if (date != null) {
@@ -104,7 +105,7 @@ public class CaseService extends RecordService {
 
     public void saveOrUpdate(ItemValues itemValues, List<String> photoPaths) {
 
-        if (itemValues.getAsString(RECORD_ID) == null) {
+        if (itemValues.getAsString(CASE_ID) == null) {
             save(itemValues, photoPaths);
         } else {
             Log.d(TAG, "update the existing case");
@@ -113,14 +114,21 @@ public class CaseService extends RecordService {
     }
 
     public void save(ItemValues itemValues, List<String> photoPath) {
+        Calendar cal = Calendar.getInstance();
+
         String username = UserService.getInstance().getCurrentUser().getUsername();
         itemValues.addStringItem(MODULE, "primeromodule-cp");
         itemValues.addStringItem(CASEWORKER_CODE, username);
         itemValues.addStringItem(RECORD_CREATED_BY, username);
         itemValues.addStringItem(PREVIOUS_OWNER, username);
 
+        if (!itemValues.has(REGISTRATION_DATE)) {
+            itemValues.addStringItem(REGISTRATION_DATE, String.format("%s/%s/%s", cal.get(Calendar.YEAR),
+                    cal.get(Calendar.MONTH) + 1, cal.get(Calendar.DAY_OF_MONTH)));
+        }
+
         Gson gson = new Gson();
-        Date date = new Date(Calendar.getInstance().getTimeInMillis());
+        Date date = new Date(cal.getTimeInMillis());
         Blob blob = new Blob(gson.toJson(itemValues.getValues()).getBytes());
         Blob audioFileDefault = null;
         audioFileDefault = getAudioBlob(audioFileDefault);
@@ -159,7 +167,7 @@ public class CaseService extends RecordService {
         Blob audioFileDefault = null;
         audioFileDefault = getAudioBlob(audioFileDefault);
 
-        Case child = caseDao.getCaseByUniqueId(itemValues.getAsString(RECORD_ID));
+        Case child = caseDao.getCaseByUniqueId(itemValues.getAsString(CASE_ID));
         child.setLastUpdatedDate(new Date(Calendar.getInstance().getTimeInMillis()));
         child.setContent(caseBlob);
         child.setName(getName(itemValues));
@@ -265,15 +273,22 @@ public class CaseService extends RecordService {
     }
 
     private Date getRegisterDate(ItemValues itemValues) {
-        if (itemValues.has(REGISTRATION_DATE)) {
-            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM/dd/yyyy");
-            try {
-                java.util.Date date = simpleDateFormat.parse(itemValues.getAsString(REGISTRATION_DATE));
-                return new Date(date.getTime());
-            } catch (ParseException e) {
-                Log.e(TAG, "date format error");
-            }
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy/MM/dd");
+        try {
+            java.util.Date date = simpleDateFormat.parse(itemValues.getAsString(REGISTRATION_DATE));
+            return new Date(date.getTime());
+        } catch (ParseException e) {
+            Log.e(TAG, "date format error");
+            return getCurrentDate();
         }
-        return getCurrentDate();
+    }
+
+    private String getName(ItemValues values) {
+        return values.getAsString(FULL_NAME) + " "
+                + values.getAsString(FIRST_NAME) + " "
+                + values.getAsString(MIDDLE_NAME) + " "
+                + values.getAsString(SURNAME) + " "
+                + values.getAsString(NICKNAME) + " "
+                + values.getAsString(OTHER_NAME);
     }
 }

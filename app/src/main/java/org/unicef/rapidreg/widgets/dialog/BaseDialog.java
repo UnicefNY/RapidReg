@@ -47,14 +47,7 @@ public abstract class BaseDialog {
                 }
                 BaseDialog.this.resultView.setText(getResult() == null ? null : getResult().toString());
 
-                if (isSubFormField()) {
-                    String language = Locale.getDefault().getLanguage();
-                    itemValues.addChildrenItemForParent(field.getParent(), field.getIndex(),
-                            field.getDisplayName().get(language), getResult());
-                } else {
-                    itemValues.addItem(field.getName(), getResult());
-                }
-
+                itemValues.addItem(field.getName(), getResult());
                 dialog.dismiss();
             }
         });

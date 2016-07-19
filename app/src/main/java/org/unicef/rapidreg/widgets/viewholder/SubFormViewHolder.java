@@ -9,12 +9,9 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
-
 import org.unicef.rapidreg.R;
+import org.unicef.rapidreg.base.RecordActivity;
 import org.unicef.rapidreg.base.RecordRegisterAdapter;
-import org.unicef.rapidreg.childcase.CaseActivity;
 import org.unicef.rapidreg.forms.Field;
 import org.unicef.rapidreg.service.cache.ItemValuesMap;
 
@@ -31,7 +28,7 @@ public class SubFormViewHolder extends BaseViewHolder<Field> {
     @BindView(R.id.add_subform)
     Button addSubFormBtn;
 
-    private CaseActivity activity;
+    private RecordActivity activity;
     private ViewGroup parent;
     private List<Field> fields;
     private String fieldParent;
@@ -39,7 +36,7 @@ public class SubFormViewHolder extends BaseViewHolder<Field> {
     public SubFormViewHolder(Context context, View itemView, ItemValuesMap itemValues) {
         super(context, itemView, itemValues);
         ButterKnife.bind(this, itemView);
-        activity = (CaseActivity) context;
+        activity = (RecordActivity) context;
         parent = (ViewGroup) itemView;
     }
 

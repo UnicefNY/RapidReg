@@ -20,6 +20,7 @@ import org.unicef.rapidreg.forms.Section;
 import org.unicef.rapidreg.forms.TracingFormRoot;
 import org.unicef.rapidreg.model.Tracing;
 import org.unicef.rapidreg.model.TracingPhoto;
+import org.unicef.rapidreg.service.CaseService;
 import org.unicef.rapidreg.service.RecordService;
 import org.unicef.rapidreg.service.TracingFormService;
 import org.unicef.rapidreg.service.TracingPhotoService;
@@ -37,11 +38,11 @@ public class TracingRegisterWrapperFragment extends RecordRegisterWrapperFragmen
     @Override
     protected void initItemValues() {
         if (getArguments() != null) {
-            recordId = getArguments().getLong(RecordService.RECORD_ID);
+            recordId = getArguments().getLong(TracingService.TRACING_ID);
             Tracing tracingItem = TracingService.getInstance().getById(recordId);
             String tracingJson = new String(tracingItem.getContent().getBlob());
             itemValues = ItemValuesMap.fromItemValuesJsonObject(ItemValues.generateItemValues(tracingJson));
-            itemValues.addStringItem(RecordService.RECORD_ID, tracingItem.getUniqueId());
+            itemValues.addStringItem(TracingService.TRACING_ID, tracingItem.getUniqueId());
             initProfile(tracingItem);
         }
     }
@@ -75,7 +76,7 @@ public class TracingRegisterWrapperFragment extends RecordRegisterWrapperFragmen
             Bundle bundle = new Bundle();
             bundle.putStringArrayList(RecordService.RECORD_PHOTOS,
                     (ArrayList<String>) recordPhotoAdapter.getAllItems());
-            bundle.putString(RecordService.ITEM_VALUES, new Gson().toJson(itemValues.getValues()));
+            bundle.putSerializable(RecordService.ITEM_VALUES, itemValues);
             pages.add(FragmentPagerItem.of(values[0], TracingRegisterFragment.class, bundle));
         }
         return pages;
@@ -87,13 +88,22 @@ public class TracingRegisterWrapperFragment extends RecordRegisterWrapperFragmen
             List<String> photoPaths = recordPhotoAdapter.getAllItems();
             ItemValues itemValues = new ItemValues(new Gson()
                     .fromJson(new Gson().toJson(this.itemValues.getValues()), JsonObject.class));
-            TracingService.getInstance().saveOrUpdate(itemValues, photoPaths);
+            boolean saveStatus = saveAndGetSucceedStatus(itemValues,photoPaths);
+            if ( saveStatus == true ) {
+                Toast.makeText(getActivity(), R.string.save_success,
+                        Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(getActivity(), R.string.save_failed,
+                        Toast.LENGTH_SHORT).show();
+            }
         }
     }
 
     @OnClick(R.id.edit)
     public void onEditClicked() {
-        ((TracingActivity) getActivity()).turnToDetailOrEditPage(TracingFeature.EDIT, recordId);
+        Bundle args = new Bundle();
+        args.putLong(TracingService.TRACING_ID, recordId);
+        ((TracingActivity) getActivity()).turnToDetailOrEditPage(TracingFeature.EDIT, args);
     }
 
     private boolean validateRequiredField() {
@@ -111,6 +121,16 @@ public class TracingRegisterWrapperFragment extends RecordRegisterWrapperFragmen
                         Toast.LENGTH_LONG).show();
                 return false;
             }
+        }
+        return true;
+    }
+
+    private boolean saveAndGetSucceedStatus(ItemValues itemValues, List<String> photoPaths) {
+        try {
+            TracingService.getInstance().saveOrUpdate(itemValues, photoPaths);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
         }
         return true;
     }

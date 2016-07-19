@@ -6,6 +6,8 @@ public class PrimeroConfiguration {
 
     private static String cookie = null;
 
+    private static String internalFilePath = null;
+
     public static String getApiBaseUrl() {
         return apiBaseUrl;
     }
@@ -20,5 +22,14 @@ public class PrimeroConfiguration {
 
     public static void setCookie(String cookie) {
         PrimeroConfiguration.cookie = cookie;
+    }
+
+
+    public static String getInternalFilePath() {
+        return internalFilePath;
+    }
+
+    public static void setInternalFilePath(String internalFilePath) {
+        PrimeroConfiguration.internalFilePath = internalFilePath;
     }
 }
