@@ -42,24 +42,33 @@ public class CaseRegisterWrapperFragment extends RecordRegisterWrapperFragment {
         if (validateRequiredField()) {
             List<String> photoPaths = recordPhotoAdapter.getAllItems();
             ItemValues itemValues = new ItemValues(new Gson().fromJson(new Gson().toJson(this.itemValues.getValues()), JsonObject.class));
-            CaseService.getInstance().saveOrUpdate(itemValues, photoPaths);
+            boolean saveStatus = saveAndGetSucceedStatus(itemValues,photoPaths);
+            if ( saveStatus == true ) {
+                Toast.makeText(getActivity(), R.string.save_success,
+                        Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(getActivity(), R.string.save_failed,
+                        Toast.LENGTH_SHORT).show();
+            }
         }
     }
 
     @OnClick(R.id.edit)
     public void onEditClicked() {
-        ((CaseActivity) getActivity()).turnToDetailOrEditPage(CaseFeature.EDIT, recordId);
+        Bundle args = new Bundle();
+        args.putLong(CaseService.CASE_ID, recordId);
+        ((CaseActivity) getActivity()).turnToDetailOrEditPage(CaseFeature.EDIT, args);
     }
 
     @Override
     protected void initItemValues() {
         if (getArguments() != null) {
-            recordId = getArguments().getLong(RecordService.RECORD_ID);
+            recordId = getArguments().getLong(CaseService.CASE_ID);
             Case caseItem = CaseService.getInstance().getById(recordId);
             String caseJson = new String(caseItem.getContent().getBlob());
             try {
                 itemValues = new ItemValuesMap(JsonUtils.toMap(ItemValues.generateItemValues(caseJson).getValues()));
-                itemValues.addStringItem(RecordService.RECORD_ID, caseItem.getUniqueId());
+                itemValues.addStringItem(CaseService.CASE_ID, caseItem.getUniqueId());
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -117,6 +126,16 @@ public class CaseRegisterWrapperFragment extends RecordRegisterWrapperFragment {
                         Toast.LENGTH_LONG).show();
                 return false;
             }
+        }
+        return true;
+    }
+
+    private boolean saveAndGetSucceedStatus(ItemValues itemValues, List<String> photoPaths) {
+        try {
+            CaseService.getInstance().saveOrUpdate(itemValues, photoPaths);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
         }
         return true;
     }

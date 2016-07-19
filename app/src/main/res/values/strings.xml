@@ -54,7 +54,7 @@
         <item>Age</item>
     </string-array>
 
-    <string name="pull_down_load_mini_form">... Pull Down To Show Mini Form ...</string>
+    <string name="pull_down_load_mini_form">... Pull Down To Show Short Form ...</string>
     <string name="pull_up_load_full_form">... Swipe Up To Show More Details ...</string>
     <string name="swipe_up_to_show_more_details">Swipe Up To Show More Details</string>
     <string name="no_photo_promote_info">No photo file exists.</string>
@@ -90,6 +90,8 @@
     <string name="sync_error_message">Sorry, the synchronisation request is not completed for network issue.</string>
     <string name="try_to_sync_message">Are you sure to sync records ?</string>
     <string name="remove_photo_confirmation">Are you sure you want to remove this photo?</string>
+    <string name="save_success">Record saved</string>
+    <string name="save_failed">Record saved failed</string>
     <!--Sync-->
 
     <!--Transparent theme-->

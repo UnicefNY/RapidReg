@@ -67,18 +67,13 @@ public class TracingService extends RecordService {
         return tracingDao.getAllTracingsOrderByDate(false);
     }
 
-
-    public List<Tracing> getSearchResult(String uniqueId, String name, int ageFrom,
-                                         int ageTo, String caregiver, Date date) {
-
-        ConditionGroup searchCondition = getSearchCondition(uniqueId, name, ageFrom, ageTo, caregiver, date);
+    public List<Tracing> getSearchResult(String uniqueId, String name, int ageFrom, int ageTo, Date date) {
+        ConditionGroup searchCondition = getSearchCondition(uniqueId, name, ageFrom, ageTo, date);
 
         return tracingDao.getAllTracingsByConditionGroup(searchCondition);
     }
 
-    private ConditionGroup getSearchCondition(String uniqueId, String name, int ageFrom, int ageTo,
-                                              String caregiver, Date date) {
-
+    private ConditionGroup getSearchCondition(String uniqueId, String name, int ageFrom, int ageTo, Date date) {
         ConditionGroup conditionGroup = ConditionGroup.clause();
         conditionGroup.and(Condition.column(NameAlias.builder(RecordModel.COLUMN_UNIQUE_ID).build())
                 .like(getWrappedCondition(uniqueId)));
@@ -86,14 +81,11 @@ public class TracingService extends RecordService {
                 .like(getWrappedCondition(name)));
         conditionGroup.and(Condition.column(NameAlias.builder(RecordModel.COLUMN_AGE).build())
                 .between(ageFrom).and(ageTo));
-        conditionGroup.and(Condition.column(NameAlias.builder(RecordModel.COLUMN_CAREGIVER).build())
-                .like(getWrappedCondition(caregiver)));
 
         if (date != null) {
             conditionGroup.and(Condition.column(
                     NameAlias.builder(RecordModel.COLUMN_REGISTRATION_DATE).build()).eq(date));
         }
-
         return conditionGroup;
     }
 
@@ -107,14 +99,19 @@ public class TracingService extends RecordService {
         }
     }
 
-    public void save(ItemValues itemValues,
-                     List<String> photoPath) {
+    public void save(ItemValues itemValues, List<String> photoPath) {
+        Calendar cal = Calendar.getInstance();
 
         String username = UserService.getInstance().getCurrentUser().getUsername();
         itemValues.addStringItem(MODULE, "primeromodule-cp");
         itemValues.addStringItem(CASEWORKER_CODE, username);
         itemValues.addStringItem(RECORD_CREATED_BY, username);
         itemValues.addStringItem(PREVIOUS_OWNER, username);
+
+        if (!itemValues.has(INQUIRY_DATE)) {
+            itemValues.addStringItem(INQUIRY_DATE, String.format("%s/%s/%s", cal.get(Calendar.YEAR),
+                    cal.get(Calendar.MONTH) + 1, cal.get(Calendar.DAY_OF_MONTH)));
+        }
 
         Gson gson = new Gson();
         Date date = new Date(Calendar.getInstance().getTimeInMillis());
@@ -128,7 +125,7 @@ public class TracingService extends RecordService {
         tracing.setLastUpdatedDate(date);
         tracing.setContent(tracingBlob);
         tracing.setName(getName(itemValues));
-        int age = itemValues.getAsInt(AGE) != null ? itemValues.getAsInt(AGE) : 0;
+        int age = itemValues.getAsInt(RELATION_AGE) != null ? itemValues.getAsInt(RELATION_AGE) : 0;
         tracing.setAge(age);
         tracing.setCaregiver(getCaregiverName(itemValues));
         tracing.setRegistrationDate(getRegisterDate(itemValues));
@@ -268,15 +265,19 @@ public class TracingService extends RecordService {
     }
 
     private Date getRegisterDate(ItemValues itemValues) {
-        if (itemValues.has(REGISTRATION_DATE)) {
-            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM/dd/yyyy");
-            try {
-                java.util.Date date = simpleDateFormat.parse(itemValues.getAsString(REGISTRATION_DATE));
-                return new Date(date.getTime());
-            } catch (ParseException e) {
-                Log.e(TAG, "date format error");
-            }
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy/MM/dd");
+        try {
+            java.util.Date date = simpleDateFormat.parse(itemValues.getAsString(INQUIRY_DATE));
+            return new Date(date.getTime());
+        } catch (ParseException e) {
+            Log.e(TAG, "date format error");
+            return getCurrentDate();
         }
-        return getCurrentDate();
+    }
+
+    private String getName(ItemValues values) {
+        return values.getAsString(RELATION_NAME) + " "
+                + values.getAsString(RELATION_AGE) + " "
+                + values.getAsString(RELATION_NICKNAME);
     }
 }

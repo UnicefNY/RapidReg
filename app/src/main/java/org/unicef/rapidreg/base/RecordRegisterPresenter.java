@@ -9,9 +9,9 @@ import org.unicef.rapidreg.forms.RecordForm;
 import org.unicef.rapidreg.model.RecordModel;
 import org.unicef.rapidreg.service.CaseFormService;
 import org.unicef.rapidreg.service.TracingFormService;
-import org.unicef.rapidreg.service.cache.ItemValues;
 import org.unicef.rapidreg.service.cache.ItemValuesMap;
 
+import java.util.Iterator;
 import java.util.List;
 
 public class RecordRegisterPresenter extends MvpBasePresenter<RecordRegisterView> {
@@ -33,9 +33,23 @@ public class RecordRegisterPresenter extends MvpBasePresenter<RecordRegisterView
 
             if (form != null) {
                 List<Field> fields = form.getSections().get(position).getFields();
-                RecordRegisterAdapter adapter = new RecordRegisterAdapter(context, fields, new ItemValuesMap(), false);
+                RecordRegisterAdapter adapter = new RecordRegisterAdapter(context, removeSeparatorFields(fields),
+                        new ItemValuesMap(), false);
                 getView().initView(adapter);
             }
         }
+    }
+
+    private List<Field> removeSeparatorFields(List<Field> fields) {
+        Iterator<Field> iterator = fields.iterator();
+
+        while (iterator.hasNext()) {
+            Field field = iterator.next();
+            if (field.isSeparator()) {
+                iterator.remove();
+            }
+        }
+
+        return fields;
     }
 }

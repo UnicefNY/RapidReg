@@ -5,8 +5,6 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.TextView;
 
-import com.google.gson.internal.LazilyParsedNumber;
-
 import org.unicef.rapidreg.forms.Field;
 import org.unicef.rapidreg.service.cache.ItemValuesMap;
 
@@ -21,7 +19,7 @@ public abstract class BaseTextViewHolder extends BaseViewHolder<Field> {
         }
         if (field.isNumericField()) {
             itemValues.addItem(field.getName(), Integer.valueOf(getResult()));
-        }else{
+        } else {
             itemValues.addItem(field.getName(), getResult());
         }
     }
