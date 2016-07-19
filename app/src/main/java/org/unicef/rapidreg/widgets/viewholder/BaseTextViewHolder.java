@@ -5,6 +5,8 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.TextView;
 
+import org.unicef.rapidreg.R;
+import org.unicef.rapidreg.base.RecordActivity;
 import org.unicef.rapidreg.forms.Field;
 import org.unicef.rapidreg.service.cache.ItemValuesMap;
 
@@ -23,6 +25,26 @@ public abstract class BaseTextViewHolder extends BaseViewHolder<Field> {
             itemValues.addItem(field.getName(), getResult());
         }
     }
+
+
+    protected void initValueViewStatus() {
+        if(!((RecordActivity) context).getCurrentFeature().isEditMode()){
+            getValueView().setEnabled(false);
+            getValueView().setTextColor(context.getResources().getColor(R.color.gray));
+        }else{
+            getValueView().setEnabled(true);
+            getValueView().setTextColor(context.getResources().getColor(R.color.black));
+        }
+    }
+
+    protected void initValueViewData(Field field) {
+        if (isSubFormField(field)) {
+            getValueView().setText(getValueForSubForm(field));
+        } else {
+            getValueView().setText(itemValues.getAsString(field.getName()));
+        }
+    }
+
 
     protected abstract String getResult();
 
