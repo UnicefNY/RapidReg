@@ -15,19 +15,25 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
-        <GridView
-            android:id="@+id/photo_grid"
+        <LinearLayout
+            android:id="@+id/photo_grid_layout"
             android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="90dp"
-            android:columnWidth="90dp"
-            android:horizontalSpacing="5dp"
-            android:numColumns="4"
-            android:stretchMode="columnWidth" />
+            android:layout_height="90dp">
+            <GridView
+                android:id="@+id/photo_grid"
+                android:layout_width="wrap_content"
+                android:layout_height="90dp"
+                android:columnWidth="90dp"
+                android:horizontalSpacing="5dp"
+                android:numColumns="1"
+                android:stretchMode="columnWidth" />
+        </LinearLayout>
+
 
         <ImageButton
             android:layout_width="50dp"
             android:layout_height="50dp"
+            android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
             android:layout_marginTop="20dp"
             android:scaleType="fitXY"
