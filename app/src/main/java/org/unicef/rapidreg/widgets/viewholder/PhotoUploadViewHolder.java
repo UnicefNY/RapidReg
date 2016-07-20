@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import org.unicef.rapidreg.R;
@@ -34,6 +35,9 @@ public class PhotoUploadViewHolder extends BaseViewHolder<Field> {
     public static final int REQUEST_CODE_GALLERY = 1;
     public static final int REQUEST_CODE_CAMERA = 2;
 
+    @BindView(R.id.photo_grid_layout)
+    LinearLayout photoGridLayout;
+
     @BindView(R.id.photo_grid)
     GridView photoGrid;
 
@@ -52,10 +56,14 @@ public class PhotoUploadViewHolder extends BaseViewHolder<Field> {
         ButterKnife.bind(this, itemView);
         this.context = context;
         this.adapter = adapter;
+
         photoGrid.setAdapter(adapter);
+        adapter.setBinder(photoGrid);
 
         setViewPhotoListener();
     }
+
+
 
     @Override
     public void setValue(Field field) {

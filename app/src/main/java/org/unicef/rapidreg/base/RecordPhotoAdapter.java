@@ -1,11 +1,14 @@
 package org.unicef.rapidreg.base;
 
 import android.content.Context;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 
 import com.bumptech.glide.Glide;
 
@@ -18,11 +21,23 @@ public abstract class RecordPhotoAdapter extends BaseAdapter {
     private final static int MAX = 4;
     private Context context;
     private List<String> paths;
+    private GridView photoGrid;
+    private LinearLayout photoGridLayout;
 
 
     public RecordPhotoAdapter(Context context, List<String> paths) {
         this.context = context;
         this.paths = paths;
+    }
+
+    public void setBinder(View view) {
+        if (view instanceof GridView) {
+            photoGrid = (GridView) view;
+
+            if (photoGrid.getParent() instanceof LinearLayout) {
+                photoGridLayout = (LinearLayout) photoGrid.getParent();
+            }
+        }
     }
 
     public void addItem(String path) {
@@ -53,6 +68,31 @@ public abstract class RecordPhotoAdapter extends BaseAdapter {
         return 0;
     }
 
+    @Override
+    public void notifyDataSetChanged() {
+        super.notifyDataSetChanged();
+
+        resizePhotoGrid(paths.size());
+
+    }
+
+    private Handler mHandler = new Handler();
+
+    private void resizePhotoGrid(final int count) {
+        Runnable runnable = new Runnable() {
+            public void run() {
+                LinearLayout.LayoutParams lp = (LinearLayout.LayoutParams) photoGridLayout.getLayoutParams();
+                LinearLayout.LayoutParams newlp = new LinearLayout.LayoutParams(lp.height * count,
+                        lp.height);
+
+                photoGrid.setNumColumns(count);
+                photoGridLayout.setLayoutParams(newlp);
+                photoGridLayout.requestLayout();
+            }
+        };
+
+        mHandler.postDelayed(runnable, 1);
+    }
 
     @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
