@@ -14,6 +14,7 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 import org.json.JSONException;
 import org.unicef.rapidreg.R;
+import org.unicef.rapidreg.base.RecordActivity;
 import org.unicef.rapidreg.base.RecordPhotoAdapter;
 import org.unicef.rapidreg.base.RecordRegisterWrapperFragment;
 import org.unicef.rapidreg.event.SaveCaseEvent;
@@ -41,15 +42,20 @@ public class CaseRegisterWrapperFragment extends RecordRegisterWrapperFragment {
     public void saveCase(SaveCaseEvent event) {
         if (validateRequiredField()) {
             List<String> photoPaths = recordPhotoAdapter.getAllItems();
-            ItemValues itemValues = new ItemValues(new Gson().fromJson(new Gson().toJson(this.itemValues.getValues()), JsonObject.class));
+            ItemValues itemValues = new ItemValues(new Gson().fromJson(new Gson().toJson(
+                    this.itemValues.getValues()), JsonObject.class));
 
             if (savedSuccessfully(itemValues, photoPaths)) {
-                Toast.makeText(getActivity(), R.string.save_success,
-                        Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), R.string.save_success, Toast.LENGTH_SHORT).show();
             } else {
-                Toast.makeText(getActivity(), R.string.save_failed,
-                        Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), R.string.save_failed, Toast.LENGTH_SHORT).show();
             }
+
+            Case record = CaseService.getInstance().getByUniqueId(itemValues.getAsString(CaseService.CASE_ID));
+
+            Bundle args = new Bundle();
+            args.putLong(CaseService.CASE_ID, record.getId());
+            ((RecordActivity) getActivity()).turnToFeature(CaseFeature.DETAILS, args);
         }
     }
 

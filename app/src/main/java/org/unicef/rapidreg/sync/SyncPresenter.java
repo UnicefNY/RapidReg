@@ -4,12 +4,9 @@ import android.content.Context;
 import android.text.TextUtils;
 import android.util.Log;
 
-import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.google.gson.reflect.TypeToken;
 import com.hannesdorfmann.mosby.mvp.MvpBasePresenter;
-import com.raizlabs.android.dbflow.annotation.Column;
 import com.raizlabs.android.dbflow.data.Blob;
 
 import org.greenrobot.eventbus.EventBus;
@@ -22,12 +19,9 @@ import org.unicef.rapidreg.network.SyncService;
 import org.unicef.rapidreg.service.CaseService;
 import org.unicef.rapidreg.service.cache.ItemValues;
 
-import java.lang.reflect.Type;
-import java.sql.Date;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
-import java.util.Map;
 
 import retrofit2.Response;
 import rx.Observable;
@@ -134,7 +128,7 @@ public class SyncPresenter extends MvpBasePresenter<SyncView> {
 
                 try {
                     String caseId = jsonObject.get("case_id").getAsString();
-                    Case item = CaseService.getInstance().getCaseByUniqueId(caseId);
+                    Case item = CaseService.getInstance().getByUniqueId(caseId);
                     if (item != null) {
                         item.setInternalId(jsonObject.get("_id").getAsString());
                         item.setInternalRev(jsonObject.get("_rev").getAsString());
@@ -225,7 +219,7 @@ public class SyncPresenter extends MvpBasePresenter<SyncView> {
 
                         try {
                             String caseId = jsonObject.get("case_id").getAsString();
-                            Case item = CaseService.getInstance().getCaseByUniqueId(caseId);
+                            Case item = CaseService.getInstance().getByUniqueId(caseId);
                             if (item != null) {
                                 item.setInternalId(jsonObject.get("_id").getAsString());
                                 item.setInternalRev(jsonObject.get("_rev").getAsString());

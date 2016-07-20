@@ -106,7 +106,6 @@ public class TracingActivity extends RecordActivity {
         clearFocusToMakeLastFieldSaved();
         SaveTracingEvent event = new SaveTracingEvent();
         EventBus.getDefault().postSticky(event);
-        turnToFeature(TracingFeature.LIST, null);
     }
 
     private void clearFocusToMakeLastFieldSaved() {

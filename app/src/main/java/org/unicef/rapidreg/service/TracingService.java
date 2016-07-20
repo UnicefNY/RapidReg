@@ -14,8 +14,8 @@ import com.raizlabs.android.dbflow.sql.language.NameAlias;
 import org.unicef.rapidreg.base.PhotoConfig;
 import org.unicef.rapidreg.db.TracingDao;
 import org.unicef.rapidreg.db.TracingPhotoDao;
-import org.unicef.rapidreg.db.impl.TracingPhotoDaoImpl;
 import org.unicef.rapidreg.db.impl.TracingDaoImpl;
+import org.unicef.rapidreg.db.impl.TracingPhotoDaoImpl;
 import org.unicef.rapidreg.model.RecordModel;
 import org.unicef.rapidreg.model.Tracing;
 import org.unicef.rapidreg.model.TracingPhoto;
@@ -53,6 +53,10 @@ public class TracingService extends RecordService {
 
     public Tracing getById(long caseId) {
         return tracingDao.getTracingById(caseId);
+    }
+
+    public Tracing getByUniqueId(String uniqueId) {
+        return tracingDao.getTracingByUniqueId(uniqueId);
     }
 
     public List<Tracing> getAll() {
@@ -102,6 +106,9 @@ public class TracingService extends RecordService {
     public void save(ItemValues itemValues, List<String> photoPath) {
         Calendar cal = Calendar.getInstance();
 
+        String uniqueId = createUniqueId();
+        itemValues.addStringItem(TRACING_ID, uniqueId);
+
         String username = UserService.getInstance().getCurrentUser().getUsername();
         itemValues.addStringItem(MODULE, "primeromodule-cp");
         itemValues.addStringItem(CASEWORKER_CODE, username);
@@ -120,7 +127,7 @@ public class TracingService extends RecordService {
         audioFileDefault = getAudioBlob(audioFileDefault);
 
         Tracing tracing = new Tracing();
-        tracing.setUniqueId(createUniqueId());
+        tracing.setUniqueId(uniqueId);
         tracing.setCreateDate(date);
         tracing.setLastUpdatedDate(date);
         tracing.setContent(tracingBlob);
