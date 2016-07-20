@@ -7,6 +7,7 @@ import android.widget.ViewSwitcher;
 
 import org.unicef.rapidreg.forms.Field;
 import org.unicef.rapidreg.service.cache.ItemValuesMap;
+import org.unicef.rapidreg.utils.Utils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -26,8 +27,9 @@ public class MultipleSelectDialog extends BaseDialog {
     public void initView() {
         String fieldType = field.getType();
         optionItems = getSelectOptions(fieldType, field);
+        result.addAll(itemValues.getAsList(field.getName()));
 
-        boolean[] selectedValues = getSelectedValues(resultView.getText().toString().trim(), optionItems);
+        boolean[] selectedValues = getSelectedValues(itemValues.getAsList(field.getName()), optionItems);
 
         getBuilder().setMultiChoiceItems(optionItems, selectedValues,
                 new DialogInterface.OnMultiChoiceClickListener() {
@@ -42,15 +44,12 @@ public class MultipleSelectDialog extends BaseDialog {
                 });
     }
 
-    private boolean[] getSelectedValues(String text, String[] optionItems) {
+    private boolean[] getSelectedValues(List<String> items, String[] optionItems) {
         boolean[] selectedValues = new boolean[optionItems.length];
-        if (!"".equals(text)) {
-            result.addAll(Arrays.asList(text.split(",")));
-            for (String item : result) {
-                int selected;
-                if ((selected = Arrays.asList(optionItems).indexOf(item)) != -1) {
-                    selectedValues[selected] = true;
-                }
+        for (String item : items) {
+            int selected;
+            if ((selected = Arrays.asList(optionItems).indexOf(item)) != -1) {
+                selectedValues[selected] = true;
             }
         }
         return selectedValues;
@@ -60,4 +59,11 @@ public class MultipleSelectDialog extends BaseDialog {
     public List<String> getResult() {
         return result;
     }
+
+    @Override
+    protected String getDisplayText() {
+        return result == null ? null : Utils.toStringResult(result);
+    }
+
+
 }

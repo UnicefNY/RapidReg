@@ -28,10 +28,10 @@ public abstract class BaseTextViewHolder extends BaseViewHolder<Field> {
 
 
     protected void initValueViewStatus() {
-        if(!((RecordActivity) context).getCurrentFeature().isEditMode()){
+        if (!((RecordActivity) context).getCurrentFeature().isEditMode()) {
             getValueView().setEnabled(false);
             getValueView().setTextColor(context.getResources().getColor(R.color.gray));
-        }else{
+        } else {
             getValueView().setEnabled(true);
             getValueView().setTextColor(context.getResources().getColor(R.color.black));
         }

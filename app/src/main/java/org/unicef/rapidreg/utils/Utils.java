@@ -1,9 +1,29 @@
 package org.unicef.rapidreg.utils;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
-public class MapUtils {
+`public class Utils {
+    public static String toStringResult(List<String> result) {
+        String res = "";
+
+        if (result == null) {
+            return res;
+        }
+
+        for (int i = 0; i < result.size(); i++) {
+            String item = result.get(i);
+            if (i == 0) {
+                res += item;
+            } else {
+                res += "," + item;
+            }
+        }
+
+        return res;
+    }
+
     public static Map convert(String mapString) {
         Map res = new HashMap<>();
 

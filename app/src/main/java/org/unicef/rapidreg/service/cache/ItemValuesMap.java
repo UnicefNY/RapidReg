@@ -79,6 +79,15 @@ public class ItemValuesMap implements Serializable {
         return Long.valueOf(values.get(key).toString());
     }
 
+    public List<String> getAsList(String key) {
+        Object o = values.get(key);
+        if (o == null) {
+            return new ArrayList<>();
+        }
+
+        return (List<String>) o;
+    }
+
     public Map<String, Object> getValues() {
         return values;
     }

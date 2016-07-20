@@ -45,7 +45,7 @@ public abstract class BaseDialog {
                 } else {
                     BaseDialog.this.viewSwitcher.setDisplayedChild(GenericViewHolder.FORM_NO_ANSWER_STATE);
                 }
-                BaseDialog.this.resultView.setText(getResult() == null ? null : getResult().toString());
+                BaseDialog.this.resultView.setText(getDisplayText());
 
                 itemValues.addItem(field.getName(), getResult());
                 dialog.dismiss();
@@ -90,11 +90,11 @@ public abstract class BaseDialog {
         return context;
     }
 
+    protected String getDisplayText() {
+        return getResult() == null ? null : getResult().toString();
+    }
+
     public abstract void initView();
 
     public abstract Object getResult();
-
-    protected boolean isSubFormField() {
-        return field.getParent() != null;
-    }
 }

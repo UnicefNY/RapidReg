@@ -7,7 +7,9 @@ import android.view.View;
 import org.unicef.rapidreg.R;
 import org.unicef.rapidreg.forms.Field;
 import org.unicef.rapidreg.service.cache.ItemValuesMap;
+import org.unicef.rapidreg.utils.Utils;
 
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
@@ -73,7 +75,8 @@ public abstract class BaseViewHolder<T> extends RecyclerView.ViewHolder {
 
         Map<String, Object> value = itemValues.getValues();
         if (value.containsKey(field.getName())) {
-            return value.get(field.getName()).toString();
+            Object res = value.get(field.getName());
+            return res instanceof List ? Utils.toStringResult((List<String>) res) : res.toString();
         }
         return null;
     }
