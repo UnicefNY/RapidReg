@@ -32,4 +32,10 @@
     </style>
     <!--row in case list end-->
 
+    <style name="normal_edit_view" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="colorControlNormal">@color/font_dark</item>
+        <item name="colorControlActivated">@color/ftn_blue</item>
+        <item name="colorControlHighlight">@color/ftn_blue</item>
+    </style>
+
 </resources>
