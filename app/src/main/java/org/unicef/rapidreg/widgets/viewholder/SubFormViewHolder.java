@@ -17,6 +17,7 @@ import org.unicef.rapidreg.service.cache.ItemValuesMap;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -42,7 +43,7 @@ public class SubFormViewHolder extends BaseViewHolder<Field> {
 
     @Override
     public void setValue(Field field) {
-        fields = field.getSubForm().getFields();
+        fields = removeSeparatorFields(field.getSubForm().getFields());
         fieldParent = field.getDisplayName().get(Locale.getDefault().getLanguage());
 
         attachParentToFields(fields, fieldParent);
@@ -161,5 +162,18 @@ public class SubFormViewHolder extends BaseViewHolder<Field> {
         for (int i = 0; i < childrenArray.size(); i++) {
             addSubForm(i);
         }
+    }
+
+    private List<Field> removeSeparatorFields(List<Field> fields) {
+        Iterator<Field> iterator = fields.iterator();
+
+        while (iterator.hasNext()) {
+            Field field = iterator.next();
+            if (field.isSeparator()) {
+                iterator.remove();
+            }
+        }
+
+        return fields;
     }
 }
