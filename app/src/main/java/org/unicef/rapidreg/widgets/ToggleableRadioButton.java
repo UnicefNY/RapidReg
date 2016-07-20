@@ -1,12 +1,11 @@
 package org.unicef.rapidreg.widgets;
 
 import android.content.Context;
+import android.support.v7.widget.AppCompatRadioButton;
 import android.util.AttributeSet;
-import android.widget.RadioButton;
 import android.widget.RadioGroup;
-import android.widget.ToggleButton;
 
-public class ToggleableRadioButton extends RadioButton {
+public class ToggleableRadioButton extends AppCompatRadioButton {
     public ToggleableRadioButton(Context context) {
         super(context);
     }
@@ -21,13 +20,12 @@ public class ToggleableRadioButton extends RadioButton {
 
     @Override
     public void toggle() {
-        if(isChecked()) {
-            if(getParent() instanceof RadioGroup) {
-                ((RadioGroup)getParent()).clearCheck();
+        if (isChecked()) {
+            if (getParent() instanceof RadioGroup) {
+                ((RadioGroup) getParent()).clearCheck();
             }
         } else {
             setChecked(true);
         }
     }
-
 }
