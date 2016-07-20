@@ -14,7 +14,7 @@
         android:paddingLeft="10dp"
         android:paddingRight="10dp"
         android:singleLine="false"
-        android:textSize="30sp"
+        android:textSize="@dimen/text_size_14"
         tools:text="text" />
 
     <RadioButton
