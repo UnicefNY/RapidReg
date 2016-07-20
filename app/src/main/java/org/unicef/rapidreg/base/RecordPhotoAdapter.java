@@ -37,6 +37,10 @@ public abstract class RecordPhotoAdapter extends BaseAdapter {
             if (photoGrid.getParent() instanceof LinearLayout) {
                 photoGridLayout = (LinearLayout) photoGrid.getParent();
             }
+
+            if (paths!=null) {
+                resizePhotoGrid(paths.size());
+            }
         }
     }
 
@@ -78,6 +82,9 @@ public abstract class RecordPhotoAdapter extends BaseAdapter {
     private Handler mHandler = new Handler();
 
     private void resizePhotoGrid(final int count) {
+        if (photoGrid == null || photoGridLayout == null ){
+            return;
+        }
         Runnable runnable = new Runnable() {
             public void run() {
                 LinearLayout.LayoutParams lp = (LinearLayout.LayoutParams) photoGridLayout.getLayoutParams();
