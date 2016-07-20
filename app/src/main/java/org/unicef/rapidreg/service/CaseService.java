@@ -6,7 +6,6 @@ import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.raizlabs.android.dbflow.data.Blob;
 import com.raizlabs.android.dbflow.sql.language.Condition;
 import com.raizlabs.android.dbflow.sql.language.ConditionGroup;
@@ -26,14 +25,10 @@ import org.unicef.rapidreg.utils.StreamUtil;
 
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.Type;
 import java.sql.Date;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class CaseService extends RecordService {
     public static final String TAG = CaseService.class.getSimpleName();
@@ -114,8 +109,6 @@ public class CaseService extends RecordService {
     }
 
     public void save(ItemValues itemValues, List<String> photoPath) {
-        Calendar cal = Calendar.getInstance();
-
         String username = UserService.getInstance().getCurrentUser().getUsername();
         itemValues.addStringItem(MODULE, "primeromodule-cp");
         itemValues.addStringItem(CASEWORKER_CODE, username);
@@ -123,12 +116,11 @@ public class CaseService extends RecordService {
         itemValues.addStringItem(PREVIOUS_OWNER, username);
 
         if (!itemValues.has(REGISTRATION_DATE)) {
-            itemValues.addStringItem(REGISTRATION_DATE, String.format("%s/%s/%s", cal.get(Calendar.YEAR),
-                    cal.get(Calendar.MONTH) + 1, cal.get(Calendar.DAY_OF_MONTH)));
+            itemValues.addStringItem(REGISTRATION_DATE, getCurrentRegistrationDateAsString());
         }
 
         Gson gson = new Gson();
-        Date date = new Date(cal.getTimeInMillis());
+        Date date = new Date(System.currentTimeMillis());
         Blob blob = new Blob(gson.toJson(itemValues.getValues()).getBytes());
         Blob audioFileDefault = null;
         audioFileDefault = getAudioBlob(audioFileDefault);
@@ -264,7 +256,7 @@ public class CaseService extends RecordService {
     }
 
     private Blob getAudioBlob(Blob blob) {
-         if  (StreamUtil.isFileExists(AUDIO_FILE_PATH)) {
+        if (StreamUtil.isFileExists(AUDIO_FILE_PATH)) {
             try {
                 blob = new Blob(StreamUtil.readFile(AUDIO_FILE_PATH));
             } catch (IOException e) {
@@ -275,13 +267,12 @@ public class CaseService extends RecordService {
     }
 
     private Date getRegisterDate(ItemValues itemValues) {
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy/MM/dd");
         try {
-            java.util.Date date = simpleDateFormat.parse(itemValues.getAsString(REGISTRATION_DATE));
+            java.util.Date date = registrationDateFormat.parse(itemValues.getAsString(REGISTRATION_DATE));
             return new Date(date.getTime());
         } catch (ParseException e) {
             Log.e(TAG, "date format error");
-            return getCurrentDate();
+            return new Date(System.currentTimeMillis());
         }
     }
 
