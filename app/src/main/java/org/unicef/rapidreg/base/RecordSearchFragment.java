@@ -120,7 +120,7 @@ public abstract class RecordSearchFragment extends MvpFragment<RecordListView, R
         datePicker.setCalendarViewShown(false);
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setTitle(getResources().getString(R.string.registration_date));
+        builder.setTitle(getResources().getString(R.string.date));
         builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
