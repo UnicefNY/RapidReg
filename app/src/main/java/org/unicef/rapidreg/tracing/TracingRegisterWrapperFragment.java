@@ -54,6 +54,7 @@ public class TracingRegisterWrapperFragment extends RecordRegisterWrapperFragmen
 
             Bundle args = new Bundle();
             args.putLong(TracingService.TRACING_ID, record.getId());
+            args.putBoolean(SHOULD_SHOW_MINI_FORM, isShowingMiniform());
             ((RecordActivity) getActivity()).turnToFeature(TracingFeature.DETAILS, args);
         }
     }
@@ -62,6 +63,7 @@ public class TracingRegisterWrapperFragment extends RecordRegisterWrapperFragmen
     protected void initItemValues() {
         if (getArguments() != null) {
             recordId = getArguments().getLong(TracingService.TRACING_ID);
+            shouldShowMiniForm = getArguments().getBoolean(SHOULD_SHOW_MINI_FORM, true);
             Tracing tracingItem = TracingService.getInstance().getById(recordId);
             String tracingJson = new String(tracingItem.getContent().getBlob());
             itemValues = ItemValuesMap.fromItemValuesJsonObject(ItemValues.generateItemValues(tracingJson));
