@@ -10,6 +10,7 @@ import android.widget.TextView;
 import org.unicef.rapidreg.R;
 import org.unicef.rapidreg.forms.Field;
 import org.unicef.rapidreg.service.cache.ItemValuesMap;
+import org.unicef.rapidreg.widgets.ToggleableRadioButton;
 
 import java.util.List;
 
@@ -25,10 +26,10 @@ public class SingleLineRadioViewHolder extends BaseViewHolder<Field> {
     RadioGroup optionGroup;
 
     @BindView(R.id.first_option)
-    RadioButton firstOption;
+    ToggleableRadioButton firstOption;
 
     @BindView(R.id.second_option)
-    RadioButton secondOption;
+    ToggleableRadioButton secondOption;
 
     private List<String> options;
 
@@ -72,8 +73,15 @@ public class SingleLineRadioViewHolder extends BaseViewHolder<Field> {
         optionGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
-                result = (checkedId == firstOption.getId() ? options.get(0) : options.get(1));
-                itemValues.addStringItem(field.getName(), getResult());
+                if (firstOption.getId() == checkedId) {
+                    result = options.get(0);
+                    itemValues.addStringItem(field.getName(), getResult());
+                } else if (secondOption.getId() == checkedId) {
+                    result = options.get(1);
+                    itemValues.addStringItem(field.getName(), getResult());
+                } else {
+                    itemValues.addStringItem(field.getName(), null);
+                }
             }
         });
     }
@@ -93,9 +101,12 @@ public class SingleLineRadioViewHolder extends BaseViewHolder<Field> {
         if (selectedRadio.equals(options.get(0))) {
             firstOption.setChecked(true);
             secondOption.setChecked(false);
-        } else {
+        } else if (selectedRadio.equals(options.get(1))) {
             firstOption.setChecked(false);
             secondOption.setChecked(true);
+        } else {
+            firstOption.setChecked(false);
+            secondOption.setChecked(false);
         }
     }
 }
