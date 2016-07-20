@@ -1,7 +1,8 @@
-package org.unicef.rapidreg.db;
+package org.unicef.rapidreg.db.impl;
 
 import com.raizlabs.android.dbflow.sql.language.SQLite;
 
+import org.unicef.rapidreg.db.TracingPhotoDao;
 import org.unicef.rapidreg.model.TracingPhoto;
 import org.unicef.rapidreg.model.TracingPhoto_Table;
 
