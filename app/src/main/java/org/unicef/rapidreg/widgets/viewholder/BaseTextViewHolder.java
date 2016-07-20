@@ -17,6 +17,7 @@ public abstract class BaseTextViewHolder extends BaseViewHolder<Field> {
 
     protected void saveValues(final Field field) {
         if (TextUtils.isEmpty(getValueView().getText())) {
+            itemValues.removeItem(field.getName());
             return;
         }
         if (field.isNumericField()) {

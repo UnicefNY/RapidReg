@@ -45,6 +45,10 @@ public class ItemValuesMap implements Serializable {
         values.put(itemKey, itemValue);
     }
 
+    public void removeItem(String itemKey) {
+        values.remove(itemKey);
+    }
+
     public void addBooleanItem(String itemKey, Boolean value) {
         values.put(itemKey, value);
     }
