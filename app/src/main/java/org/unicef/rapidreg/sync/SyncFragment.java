@@ -71,7 +71,7 @@ public class SyncFragment extends MvpFragment<SyncView, SyncPresenter> implement
                 new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        presenter.doAttemptCancelSync();
+                        presenter.attemptCancelSync();
                     }
                 });
         syncProgressDialog.show();
@@ -96,7 +96,7 @@ public class SyncFragment extends MvpFragment<SyncView, SyncPresenter> implement
                 .setPositiveButton(stopSyncButtonText, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        presenter.doCancelSync();
+                        presenter.cancelSync();
                     }
                 })
                 .show();
@@ -138,7 +138,7 @@ public class SyncFragment extends MvpFragment<SyncView, SyncPresenter> implement
                 .setPositiveButton(confirmButtonText, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        presenter.doSync();
+                        presenter.execSync();
                     }
                 })
                 .show();

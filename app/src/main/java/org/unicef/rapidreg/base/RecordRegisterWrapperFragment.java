@@ -99,6 +99,7 @@ public abstract class RecordRegisterWrapperFragment extends Fragment {
         miniFormAdapter = new RecordRegisterAdapter(getActivity(), miniFields, itemValues, true);
         miniFormAdapter.setPhotoAdapter(initPhotoAdapter());
 
+
         initFullFormContainer();
         initMiniFormContainer();
 

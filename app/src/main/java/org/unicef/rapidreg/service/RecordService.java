@@ -1,5 +1,7 @@
 package org.unicef.rapidreg.service;
 
+import android.util.Log;
+
 import org.unicef.rapidreg.PrimeroConfiguration;
 import org.unicef.rapidreg.forms.Field;
 import org.unicef.rapidreg.service.cache.ItemValues;
@@ -37,6 +39,9 @@ public class RecordService {
     public static final String INQUIRY_DATE = "inquiry_date";
 
     public static final String AUDIO_FILE_PATH = PrimeroConfiguration.getInternalFilePath() + "/audioFile.3gp";
+    private static final String TAG = RecordService.class.getSimpleName();
+
+    protected static SimpleDateFormat registrationDateFormat = new SimpleDateFormat("dd/MM/yyyy");
 
     public static RecordService getInstance() {
         return new RecordService();
@@ -74,13 +79,22 @@ public class RecordService {
         return "%" + queryStr + "%";
     }
 
-    protected Date getCurrentDate() {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
+    /**
+     * Current date with format <bold>dd/MM/yyyy</bold>
+     *
+     * @return Current date string
+     */
+    protected String getCurrentRegistrationDateAsString() {
+        return registrationDateFormat.format(new java.util.Date());
+    }
+
+    public static Date getRegisterDate(String registrationDateString) {
         try {
-            java.util.Date today = dateFormat.parse(dateFormat.format(new java.util.Date()));
-            return new Date(today.getTime());
+            java.util.Date date = registrationDateFormat.parse(registrationDateString);
+            return new Date(date.getTime());
         } catch (ParseException e) {
-            return null;
+            Log.e(TAG, "date format error");
+            return new Date(System.currentTimeMillis());
         }
     }
 }
