@@ -1,18 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical">
 
-    <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
+    <de.hdodenhof.circleimageview.CircleImageView
+        xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/logo"
         android:layout_width="@dimen/login_logo_size"
         android:layout_height="@dimen/login_logo_size"
-        android:src="@drawable/logo"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="@dimen/login_logo_top_margin"
+        android:src="@drawable/logo"
         app:civ_border_color="#00000000"
-        app:civ_border_width="0dp" />
+        app:civ_border_width="0dp"/>
 
     <EditText
         android:id="@+id/username"
@@ -22,10 +23,11 @@
         android:layout_marginRight="@dimen/login_input_margin"
         android:layout_marginTop="@dimen/login_username_top_margin"
         android:hint="@string/username_hint_text"
-        android:singleLine="true"
         android:imeOptions="actionDone"
+        android:singleLine="true"
         android:text="primero"
-        android:textColor="@color/font_dark" />
+        android:textColor="@color/font_dark"
+        android:theme="@style/normal_edit_view"/>
 
     <EditText
         android:id="@+id/password"
@@ -36,7 +38,8 @@
         android:hint="@string/password_hint_text"
         android:inputType="textPassword"
         android:text="qu01n23!"
-        android:textColor="@color/font_dark" />
+        android:textColor="@color/font_dark"
+        android:theme="@style/normal_edit_view"/>
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -50,7 +53,7 @@
             android:layout_height="wrap_content"
             android:hint="@string/url_hint_text"
             android:inputType="textUri"
-            android:text="https://52.24.42.32:8443" />
+            android:text="https://52.24.42.32:8443"/>
 
         <TextView
             android:id="@+id/change_url"
@@ -60,14 +63,14 @@
             android:layout_centerVertical="true"
             android:text="@string/text_view_change_url"
             android:textColor="@color/ftn_blue"
-            android:textSize="@dimen/text_size_14" />
+            android:textSize="@dimen/text_size_14"/>
 
     </RelativeLayout>
 
     <View
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_weight="1" />
+        android:layout_weight="1"/>
 
     <Button
         android:id="@+id/login"
@@ -77,6 +80,6 @@
         android:gravity="center"
         android:text="@string/button_login_text"
         android:textColor="@color/white"
-        android:textSize="@dimen/text_size_20" />
+        android:textSize="@dimen/text_size_20"/>
 
 </LinearLayout>
