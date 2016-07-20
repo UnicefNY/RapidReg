@@ -26,7 +26,6 @@ import org.unicef.rapidreg.utils.StreamUtil;
 import java.io.File;
 import java.io.IOException;
 import java.sql.Date;
-import java.text.ParseException;
 import java.util.Calendar;
 import java.util.List;
 
@@ -134,7 +133,7 @@ public class CaseService extends RecordService {
         int age = itemValues.getAsInt(AGE) != null ? itemValues.getAsInt(AGE) : 0;
         child.setAge(age);
         child.setCaregiver(getCaregiverName(itemValues));
-        child.setRegistrationDate(getRegisterDate(itemValues));
+        child.setRegistrationDate(getRegisterDate(itemValues.getAsString(REGISTRATION_DATE)));
         child.setAudio(audioFileDefault);
         child.setCreatedBy(username);
         child.save();
@@ -166,7 +165,7 @@ public class CaseService extends RecordService {
         int age = itemValues.getAsInt(AGE) != null ? itemValues.getAsInt(AGE) : 0;
         child.setAge(age);
         child.setCaregiver(getCaregiverName(itemValues));
-        child.setRegistrationDate(getRegisterDate(itemValues));
+        child.setRegistrationDate(getRegisterDate(itemValues.getAsString(REGISTRATION_DATE)));
         child.setAudio(audioFileDefault);
         child.update();
         try {
@@ -266,15 +265,6 @@ public class CaseService extends RecordService {
         return blob;
     }
 
-    private Date getRegisterDate(ItemValues itemValues) {
-        try {
-            java.util.Date date = registrationDateFormat.parse(itemValues.getAsString(REGISTRATION_DATE));
-            return new Date(date.getTime());
-        } catch (ParseException e) {
-            Log.e(TAG, "date format error");
-            return new Date(System.currentTimeMillis());
-        }
-    }
 
     private String getName(ItemValues values) {
         return values.getAsString(FULL_NAME) + " "

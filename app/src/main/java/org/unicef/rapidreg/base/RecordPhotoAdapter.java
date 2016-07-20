@@ -24,7 +24,6 @@ public abstract class RecordPhotoAdapter extends BaseAdapter {
     private GridView photoGrid;
     private LinearLayout photoGridLayout;
 
-
     public RecordPhotoAdapter(Context context, List<String> paths) {
         this.context = context;
         this.paths = paths;
