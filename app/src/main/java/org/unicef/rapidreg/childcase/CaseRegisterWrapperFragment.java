@@ -42,8 +42,8 @@ public class CaseRegisterWrapperFragment extends RecordRegisterWrapperFragment {
         if (validateRequiredField()) {
             List<String> photoPaths = recordPhotoAdapter.getAllItems();
             ItemValues itemValues = new ItemValues(new Gson().fromJson(new Gson().toJson(this.itemValues.getValues()), JsonObject.class));
-            boolean saveStatus = saveAndGetSucceedStatus(itemValues,photoPaths);
-            if ( saveStatus == true ) {
+
+            if (savedSuccessfully(itemValues, photoPaths)) {
                 Toast.makeText(getActivity(), R.string.save_success,
                         Toast.LENGTH_SHORT).show();
             } else {
@@ -88,12 +88,13 @@ public class CaseRegisterWrapperFragment extends RecordRegisterWrapperFragment {
 
     @Override
     protected RecordPhotoAdapter initPhotoAdapter() {
-        recordPhotoAdapter = new CasePhotoAdapter(getContext(), new ArrayList<String>());
+        List<String> paths = new ArrayList<>();
 
         List<CasePhoto> cases = CasePhotoService.getInstance().getByCaseId(recordId);
-        for (int i = 0; i < cases.size(); i++) {
-            recordPhotoAdapter.addItem(cases.get(i).getId());
+        for (CasePhoto aCase : cases) {
+            paths.add(String.valueOf(aCase.getId()));
         }
+        recordPhotoAdapter = new CasePhotoAdapter(getContext(), paths);
         return recordPhotoAdapter;
     }
 
@@ -130,13 +131,12 @@ public class CaseRegisterWrapperFragment extends RecordRegisterWrapperFragment {
         return true;
     }
 
-    private boolean saveAndGetSucceedStatus(ItemValues itemValues, List<String> photoPaths) {
+    private boolean savedSuccessfully(ItemValues itemValues, List<String> photoPaths) {
         try {
             CaseService.getInstance().saveOrUpdate(itemValues, photoPaths);
+            return true;
         } catch (Exception e) {
-            e.printStackTrace();
             return false;
         }
-        return true;
     }
 }
