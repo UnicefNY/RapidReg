@@ -162,8 +162,11 @@ public abstract class RecordListFragment extends MvpFragment<RecordListView, Rec
     public enum SpinnerState {
         AGE_ASC(R.drawable.age_up, "Age ascending order", "Age"),
         AGE_DES(R.drawable.age_down, "Age descending order", "Age"),
-        DATE_ASC(R.drawable.date_up, "Registration date ascending order", "Registration date"),
-        DATE_DES(R.drawable.date_down, "Registration date descending order", "Registration date");
+        REG_DATE_ASC(R.drawable.date_up, "Registration date ascending order", "Registration date"),
+        REG_DATE_DES(R.drawable.date_down, "Registration date descending order", "Registration date"),
+        INQUIRY_DATE_ASC(R.drawable.date_up, "Date of inquiry ascending order", "Date of inquiry"),
+        INQUIRY_DATE_DES(R.drawable.date_down, "Date of inquiry descending order", "Date of inquiry");
+
         private int resId;
         private String longName;
 

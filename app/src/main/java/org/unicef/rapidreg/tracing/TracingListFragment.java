@@ -21,11 +21,11 @@ import butterknife.OnClick;
 public class TracingListFragment extends RecordListFragment {
 
     private static final SpinnerState[] SPINNER_STATES = {
-            SpinnerState.DATE_ASC,
-            SpinnerState.DATE_DES};
+            SpinnerState.INQUIRY_DATE_ASC,
+            SpinnerState.INQUIRY_DATE_DES};
 
     private static final int DEFAULT_SPINNER_STATE_POSITION =
-            Arrays.asList(SPINNER_STATES).indexOf(SpinnerState.DATE_DES);
+            Arrays.asList(SPINNER_STATES).indexOf(SpinnerState.INQUIRY_DATE_DES);
 
     @Override
     public RecordListPresenter createPresenter() {
@@ -67,10 +67,10 @@ public class TracingListFragment extends RecordListFragment {
             private void handleItemSelection(int position) {
                 TracingService service = TracingService.getInstance();
                 switch (SPINNER_STATES[position]) {
-                    case DATE_ASC:
+                    case INQUIRY_DATE_ASC:
                         adapter.setRecordList(service.getAllOrderByDateASC());
                         break;
-                    case DATE_DES:
+                    case INQUIRY_DATE_DES:
                         adapter.setRecordList(service.getAllOrderByDateDES());
                         break;
                     default:

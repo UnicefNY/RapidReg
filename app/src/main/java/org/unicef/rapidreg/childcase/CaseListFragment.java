@@ -24,11 +24,11 @@ public class CaseListFragment extends RecordListFragment {
     private static final SpinnerState[] SPINNER_STATES = {
             SpinnerState.AGE_ASC,
             SpinnerState.AGE_DES,
-            SpinnerState.DATE_ASC,
-            SpinnerState.DATE_DES};
+            SpinnerState.REG_DATE_ASC,
+            SpinnerState.REG_DATE_DES};
 
     private static final int DEFAULT_SPINNER_STATE_POSITION =
-            Arrays.asList(SPINNER_STATES).indexOf(SpinnerState.DATE_DES);
+            Arrays.asList(SPINNER_STATES).indexOf(SpinnerState.REG_DATE_DES);
 
     @Override
     public RecordListPresenter createPresenter() {
@@ -76,10 +76,10 @@ public class CaseListFragment extends RecordListFragment {
                     case AGE_DES:
                         adapter.setRecordList(service.getAllOrderByAgeDES());
                         break;
-                    case DATE_ASC:
+                    case REG_DATE_ASC:
                         adapter.setRecordList(service.getAllOrderByDateASC());
                         break;
-                    case DATE_DES:
+                    case REG_DATE_DES:
                         adapter.setRecordList(service.getAllOrderByDateDES());
                         break;
                     default:
