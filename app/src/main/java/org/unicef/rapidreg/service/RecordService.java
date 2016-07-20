@@ -5,8 +5,6 @@ import org.unicef.rapidreg.forms.Field;
 import org.unicef.rapidreg.service.cache.ItemValues;
 
 import java.io.File;
-import java.sql.Date;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -37,6 +35,8 @@ public class RecordService {
     public static final String INQUIRY_DATE = "inquiry_date";
 
     public static final String AUDIO_FILE_PATH = PrimeroConfiguration.getInternalFilePath() + "/audioFile.3gp";
+
+    protected SimpleDateFormat registrationDateFormat = new SimpleDateFormat("dd/MM/yyyy");
 
     public static RecordService getInstance() {
         return new RecordService();
@@ -74,13 +74,12 @@ public class RecordService {
         return "%" + queryStr + "%";
     }
 
-    protected Date getCurrentDate() {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
-        try {
-            java.util.Date today = dateFormat.parse(dateFormat.format(new java.util.Date()));
-            return new Date(today.getTime());
-        } catch (ParseException e) {
-            return null;
-        }
+    /**
+     * Current date with format <bold>dd/MM/yyyy</bold>
+     *
+     * @return Current date string
+     */
+    protected String getCurrentRegistrationDateAsString() {
+        return registrationDateFormat.format(new java.util.Date());
     }
 }

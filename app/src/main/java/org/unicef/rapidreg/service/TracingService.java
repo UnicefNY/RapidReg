@@ -100,8 +100,6 @@ public class TracingService extends RecordService {
     }
 
     public void save(ItemValues itemValues, List<String> photoPath) {
-        Calendar cal = Calendar.getInstance();
-
         String username = UserService.getInstance().getCurrentUser().getUsername();
         itemValues.addStringItem(MODULE, "primeromodule-cp");
         itemValues.addStringItem(CASEWORKER_CODE, username);
@@ -109,8 +107,7 @@ public class TracingService extends RecordService {
         itemValues.addStringItem(PREVIOUS_OWNER, username);
 
         if (!itemValues.has(INQUIRY_DATE)) {
-            itemValues.addStringItem(INQUIRY_DATE, String.format("%s/%s/%s", cal.get(Calendar.YEAR),
-                    cal.get(Calendar.MONTH) + 1, cal.get(Calendar.DAY_OF_MONTH)));
+            itemValues.addStringItem(INQUIRY_DATE, getCurrentRegistrationDateAsString());
         }
 
         Gson gson = new Gson();
@@ -271,7 +268,7 @@ public class TracingService extends RecordService {
             return new Date(date.getTime());
         } catch (ParseException e) {
             Log.e(TAG, "date format error");
-            return getCurrentDate();
+            return new Date(System.currentTimeMillis());
         }
     }
 
