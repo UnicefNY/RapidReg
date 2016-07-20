@@ -1,6 +1,8 @@
 package org.unicef.rapidreg.widgets.viewholder;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -76,18 +78,32 @@ public class SubFormViewHolder extends BaseViewHolder<Field> {
     }
 
     private void initDeleteBtn(ViewGroup container) {
-        Button deleteBtn = (Button) container.findViewById(R.id.delete_subform);
+        final Button deleteBtn = (Button) container.findViewById(R.id.delete_subform);
         deleteBtn.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                clearFocus(v);
-                removeSubForm(parent.indexOfChild((View) v.getParent()));
-                parent.removeView((View) v.getParent());
-                updateIndexForFields();
+            public void onClick(final View v) {
+                new AlertDialog.Builder(activity)
+                        .setTitle(R.string.delete)
+                        .setMessage(R.string.delete_subform)
+                        .setPositiveButton(R.string.delete, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                deleteSubform(v);
+                            }
+                        })
+                        .setNegativeButton(R.string.cancel, null)
+                        .show();
             }
         });
         deleteBtn.setVisibility(activity.getCurrentFeature().isEditMode() ?
                 View.VISIBLE : View.GONE);
+    }
+
+    private void deleteSubform(View v) {
+        clearFocus(v);
+        removeSubForm(parent.indexOfChild((View) v.getParent()));
+        parent.removeView((View) v.getParent());
+        updateIndexForFields();
     }
 
     private void initFieldList(ViewGroup container, int index) {
