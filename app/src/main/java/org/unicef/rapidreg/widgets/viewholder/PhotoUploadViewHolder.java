@@ -63,8 +63,6 @@ public class PhotoUploadViewHolder extends BaseViewHolder<Field> {
         setViewPhotoListener();
     }
 
-
-
     @Override
     public void setValue(Field field) {
         setAddPhotoButtonIcon();
