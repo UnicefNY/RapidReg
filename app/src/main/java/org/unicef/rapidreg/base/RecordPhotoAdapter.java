@@ -73,7 +73,6 @@ public abstract class RecordPhotoAdapter extends BaseAdapter {
         super.notifyDataSetChanged();
 
         resizePhotoGrid(paths.size());
-
     }
 
     private Handler mHandler = new Handler();
