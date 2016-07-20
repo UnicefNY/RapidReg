@@ -1,4 +1,4 @@
-package org.unicef.rapidreg.db;
+package org.unicef.rapidreg.db.impl;
 
 import android.content.Context;
 import android.os.Build;

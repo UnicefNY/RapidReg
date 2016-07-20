@@ -14,7 +14,7 @@ import com.raizlabs.android.dbflow.sql.language.NameAlias;
 import org.unicef.rapidreg.base.PhotoConfig;
 import org.unicef.rapidreg.db.TracingDao;
 import org.unicef.rapidreg.db.TracingPhotoDao;
-import org.unicef.rapidreg.db.TracingPhotoDaoImpl;
+import org.unicef.rapidreg.db.impl.TracingPhotoDaoImpl;
 import org.unicef.rapidreg.db.impl.TracingDaoImpl;
 import org.unicef.rapidreg.model.RecordModel;
 import org.unicef.rapidreg.model.Tracing;
