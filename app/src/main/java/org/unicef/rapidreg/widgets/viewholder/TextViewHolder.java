@@ -92,6 +92,7 @@ public class TextViewHolder extends BaseTextViewHolder {
                     if (!hasFocus) {
                         if (TextUtils.isEmpty(valueView.getText())) {
                             viewSwitcher.setDisplayedChild(GenericViewHolder.FORM_NO_ANSWER_STATE);
+                            saveValues(field);
                         } else {
                             viewSwitcher.setDisplayedChild(GenericViewHolder.FORM_HAS_ANSWER_STATE);
                             saveValues(field);
