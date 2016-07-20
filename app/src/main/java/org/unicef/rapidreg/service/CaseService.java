@@ -264,10 +264,12 @@ public class CaseService extends RecordService {
     }
 
     private Blob getAudioBlob(Blob blob) {
-        try {
-            blob = new Blob(StreamUtil.readFile(AUDIO_FILE_PATH));
-        } catch (IOException e) {
-            e.printStackTrace();
+         if  (StreamUtil.isFileExists(AUDIO_FILE_PATH)) {
+            try {
+                blob = new Blob(StreamUtil.readFile(AUDIO_FILE_PATH));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
         return blob;
     }
