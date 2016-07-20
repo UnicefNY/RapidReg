@@ -11,7 +11,6 @@ import org.unicef.rapidreg.R;
 import org.unicef.rapidreg.base.RecordListAdapter;
 import org.unicef.rapidreg.model.RecordModel;
 import org.unicef.rapidreg.model.RecordPhoto;
-import org.unicef.rapidreg.service.CaseService;
 import org.unicef.rapidreg.service.RecordService;
 import org.unicef.rapidreg.service.TracingPhotoService;
 import org.unicef.rapidreg.service.TracingService;
@@ -61,7 +60,7 @@ public class TracingListAdapter extends RecordListAdapter {
             public void onClick(View v) {
                 Bundle args = new Bundle();
                 args.putLong(TracingService.TRACING_ID, record.getId());
-                activity.turnToDetailOrEditPage(TracingFeature.DETAILS, args);
+                activity.turnToFeature(TracingFeature.DETAILS, args);
                 try {
                     RecordService.clearAudioFile();
                     if (record.getAudio() != null) {

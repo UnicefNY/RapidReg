@@ -57,7 +57,7 @@ public class CaseRegisterWrapperFragment extends RecordRegisterWrapperFragment {
     public void onEditClicked() {
         Bundle args = new Bundle();
         args.putLong(CaseService.CASE_ID, recordId);
-        ((CaseActivity) getActivity()).turnToDetailOrEditPage(CaseFeature.EDIT, args);
+        ((CaseActivity) getActivity()).turnToFeature(CaseFeature.EDIT, args);
     }
 
     @Override
