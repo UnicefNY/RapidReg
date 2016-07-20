@@ -23,14 +23,12 @@ Feature: Case list and sorting
 #    Given I login RapidReg with "primero" account
     Given I press "login" button
     And I press menu tab "Cases"
-    When I create case "Tom"
+    And I create case "Tom"
     And I create case "Lily"
-    Then I should see the first case is a "GIRL"
     When I order by "Age descending age"
     Then I should see the first case is a "BOY"
-    When I order by "Registration date descending order"
-    Then I should see the first case is a "GIRL"
-
+    When I order by "Age descending age"
+    Then I should see the first case is a "BOY"
 
 
 
