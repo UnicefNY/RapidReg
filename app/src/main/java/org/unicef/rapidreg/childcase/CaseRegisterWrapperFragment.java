@@ -55,6 +55,7 @@ public class CaseRegisterWrapperFragment extends RecordRegisterWrapperFragment {
 
             Bundle args = new Bundle();
             args.putLong(CaseService.CASE_ID, record.getId());
+            args.putBoolean(SHOULD_SHOW_MINI_FORM, isShowingMiniform());
             ((RecordActivity) getActivity()).turnToFeature(CaseFeature.DETAILS, args);
         }
     }
@@ -70,6 +71,7 @@ public class CaseRegisterWrapperFragment extends RecordRegisterWrapperFragment {
     protected void initItemValues() {
         if (getArguments() != null) {
             recordId = getArguments().getLong(CaseService.CASE_ID);
+            shouldShowMiniForm = getArguments().getBoolean(SHOULD_SHOW_MINI_FORM, true);
             Case caseItem = CaseService.getInstance().getById(recordId);
             String caseJson = new String(caseItem.getContent().getBlob());
             try {

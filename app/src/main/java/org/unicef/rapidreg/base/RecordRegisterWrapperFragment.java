@@ -39,6 +39,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public abstract class RecordRegisterWrapperFragment extends Fragment {
+    public static final String SHOULD_SHOW_MINI_FORM = "should_show_mini_form";
 
     @BindView(R.id.viewpager)
     ViewPager viewPager;
@@ -63,6 +64,8 @@ public abstract class RecordRegisterWrapperFragment extends Fragment {
 
     @BindView(R.id.edit)
     FloatingActionButton editButton;
+
+    protected boolean shouldShowMiniForm = true;
 
 
     protected ItemValuesMap itemValues;
@@ -172,6 +175,10 @@ public abstract class RecordRegisterWrapperFragment extends Fragment {
         }
     }
 
+    protected boolean isShowingMiniform() {
+        return miniFormLayout.getVisibility() != View.GONE;
+    }
+
     private void initFloatingActionButton() {
         if (((RecordActivity) getActivity()).getCurrentFeature().isDetailMode()) {
             editButton.setVisibility(View.VISIBLE);
@@ -183,7 +190,7 @@ public abstract class RecordRegisterWrapperFragment extends Fragment {
     private void initMiniFormContainer() {
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        if (!miniFields.isEmpty()) {
+        if (!miniFields.isEmpty() && shouldShowMiniForm) {
             miniFormContainer.setLayoutManager(layoutManager);
             miniFormContainer.setAdapter(miniFormAdapter);
             miniFormSwipeLayout.setDragEdge(SwipeChangeLayout.DragEdge.BOTTOM);
