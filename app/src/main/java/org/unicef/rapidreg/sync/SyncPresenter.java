@@ -15,11 +15,14 @@ import org.greenrobot.eventbus.ThreadMode;
 import org.unicef.rapidreg.PrimeroConfiguration;
 import org.unicef.rapidreg.event.PullCasesEvent;
 import org.unicef.rapidreg.model.Case;
+import org.unicef.rapidreg.model.CasePhoto;
 import org.unicef.rapidreg.network.SyncService;
+import org.unicef.rapidreg.service.CasePhotoService;
 import org.unicef.rapidreg.service.CaseService;
+import org.unicef.rapidreg.service.RecordService;
 import org.unicef.rapidreg.service.cache.ItemValues;
 
-import java.text.SimpleDateFormat;
+import java.text.ParseException;
 import java.util.Calendar;
 import java.util.List;
 
@@ -37,16 +40,15 @@ public class SyncPresenter extends MvpBasePresenter<SyncView> {
 
     private SyncService syncService;
     private CaseService caseService;
+    private CasePhotoService casePhotoService;
     private static final String TAG = SyncPresenter.class.getSimpleName();
-
-    public SyncPresenter() {
-    }
 
     public SyncPresenter(Context context) {
         this.context = context;
         try {
             syncService = new SyncService(context);
             caseService = CaseService.getInstance();
+            casePhotoService = CasePhotoService.getInstance();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -70,112 +72,22 @@ public class SyncPresenter extends MvpBasePresenter<SyncView> {
         }
     }
 
-    public void doSync() {
-        if (isViewAttached()) {
-
-//            pullCases();
-
-            try {
-                startUpLoadCases();
-//                startDownLoadCaseForms();
-//                startDownLoadCases();
-//                doSyncSuccessAction();
-            } catch (Exception e) {
-                doSyncFailureAction();
-            }
+    public void execSync() {
+        if (!isViewAttached()) {
+            return;
+        }
+        try {
+            upLoadCases();
+        } catch (Exception e) {
+            syncFail();
         }
     }
 
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void pullCases(PullCasesEvent event) {
-        getView().showSyncProgressDialog();
-        getView().setProgressMax(100);
-        syncService.getAllCasesRx(PrimeroConfiguration.getCookie(), "en", false)
-                .filter(new Func1<Response<List<JsonElement>>, Boolean>() {
-                    @Override
-                    public Boolean call(Response<List<JsonElement>> listResponse) {
-                        if (listResponse.isSuccessful()) {
-                            return true;
-                        }
-
-                        return false;
-                    }
-                })
-                .flatMap(new Func1<Response<List<JsonElement>>, Observable<JsonElement>>() {
-                    @Override
-                    public Observable<JsonElement> call(Response<List<JsonElement>> listResponse) {
-                        return Observable.from(listResponse.body());
-                    }
-                })
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread()).subscribe(new Subscriber<JsonElement>() {
-            @Override
-            public void onCompleted() {
-                getView().hideSyncProgressDialog();
-            }
-
-            @Override
-            public void onError(Throwable e) {
-
-            }
-
-            @Override
-            public void onNext(JsonElement jsonElement) {
-
-                getView().setProgressIncrease();
-
-                JsonObject jsonObject = jsonElement.getAsJsonObject();
-
-                try {
-                    String caseId = jsonObject.get("case_id").getAsString();
-                    Case item = CaseService.getInstance().getByUniqueId(caseId);
-                    if (item != null) {
-                        item.setInternalId(jsonObject.get("_id").getAsString());
-                        item.setInternalRev(jsonObject.get("_rev").getAsString());
-                        item.setSynced(true);
-                        item.setContent(new Blob(jsonObject.toString().getBytes()));
-                        item.save();
-                    } else {
-                        item = new Case();
-                        item.setUniqueId(CaseService.getInstance().createUniqueId());
-                        item.setName(jsonObject.get("name").getAsString());
-                        item.setAge(jsonObject.get("age").getAsInt());
-                        item.setInternalId(jsonObject.get("_id").getAsString());
-                        item.setInternalRev(jsonObject.get("_rev").getAsString());
-                        item.setRegistrationDate(new SimpleDateFormat("yyyy/MM/dd")
-                                .parse((jsonObject.get("registration_date").getAsString())));
-                        item.setCreatedBy(jsonObject.get("created_by").getAsString());
-                        item.setLastSyncedDate(Calendar.getInstance().getTime());
-                        item.setLastUpdatedDate(Calendar.getInstance().getTime());
-                        item.setSynced(true);
-                        item.setContent(new Blob(jsonObject.toString().getBytes()));
-                        item.save();
-
-                    }
-                } catch (Exception e) {
-                    return;
-                }
-
-            }
-        });
-    }
-
-    private void pullCases() {
-
-    }
-
-    public void doAttemptCancelSync() {
-        getView().showSyncCancelConfirmDialog();
-    }
-
-    public void doCancelSync() {
-
-    }
-
-    private void startUpLoadCases() {
+    private void upLoadCases() {
         final List<Case> caseList = CaseService.getInstance().getAll();
-
+        getView().showSyncProgressDialog();
         getView().setProgressMax(caseList.size());
+
         Observable.just(caseList)
                 .flatMap(new Func1<List<Case>, Observable<Case>>() {
                     @Override
@@ -194,8 +106,7 @@ public class SyncPresenter extends MvpBasePresenter<SyncView> {
                     public Observable<Response<JsonElement>> call(Case item) {
                         ItemValues values = ItemValues.fromJson(new String(item.getContent().getBlob()));
                         values.addStringItem("case_id", item.getUniqueId());
-                        values.addStringItem("short_id",
-                                item.getUniqueId().substring(item.getUniqueId().length() - 7, item.getUniqueId().length()));
+                        values.addStringItem("short_id", caseService.getShortUUID(item.getUniqueId()));
 
                         JsonObject jsonObject = new JsonObject();
                         jsonObject.add("child", values.getValues());
@@ -203,7 +114,7 @@ public class SyncPresenter extends MvpBasePresenter<SyncView> {
                         if (!TextUtils.isEmpty(item.getInternalId())) {
                             return syncService.putCase(PrimeroConfiguration.getCookie(), true, jsonObject);
                         } else {
-                            return syncService.postCase(PrimeroConfiguration.getCookie(), true, jsonObject);
+                            return syncService.postCaseExcludeMediaData(PrimeroConfiguration.getCookie(), true, jsonObject);
                         }
                     }
                 })
@@ -215,23 +126,24 @@ public class SyncPresenter extends MvpBasePresenter<SyncView> {
                         Log.i(TAG, response.toString());
                         getView().setProgressIncrease();
 
-                        JsonObject jsonObject = response.body().getAsJsonObject();
+                        JsonObject responseJsonObject = response.body().getAsJsonObject();
 
                         try {
-                            String caseId = jsonObject.get("case_id").getAsString();
+                            String caseId = responseJsonObject.get("case_id").getAsString();
                             Case item = CaseService.getInstance().getByUniqueId(caseId);
                             if (item != null) {
-                                item.setInternalId(jsonObject.get("_id").getAsString());
-                                item.setInternalRev(jsonObject.get("_rev").getAsString());
-                                item.setSynced(true);
-                                item.setContent(new Blob(jsonObject.toString().getBytes()));
-                                item.save();
+                                item.setInternalId(responseJsonObject.get("_id").getAsString());
+                                item.setInternalRev(responseJsonObject.get("_rev").getAsString());
+                                item.setContent(new Blob(responseJsonObject.toString().getBytes()));
+                                item.update();
+
+                                uploadCaseMediaData(item);
+
+                                updateSyncStatus(item, true);
                             }
                         } catch (Exception e) {
                             return;
                         }
-
-
                     }
                 }, new Action1<Throwable>() {
                     @Override
@@ -241,33 +153,118 @@ public class SyncPresenter extends MvpBasePresenter<SyncView> {
                 }, new Action0() {
                     @Override
                     public void call() {
-                        getView().hideSyncProgressDialog();
-                        EventBus.getDefault().post(new PullCasesEvent());
+//                        getView().hideSyncProgressDialog();
+//                        EventBus.getDefault().post(new PullCasesEvent());
                     }
                 });
     }
 
-    private void startDownLoadCaseForms() {
+    private void uploadCaseMediaData(Case aCase) {
+        List<CasePhoto> casePhotos = casePhotoService.getByCaseId(aCase.getId());
+        for (CasePhoto casePhoto : casePhotos) {
 
+        }
+
+//        syncService.postCaseMediaData()
     }
 
-    private void startDownLoadCases() {
-
+    void updateSyncStatus(Case item, boolean isSynced) {
+        item.setSynced(isSynced);
+        item.update();
     }
 
-    private void doSyncSuccessAction() {
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void pullCases(PullCasesEvent event) {
+        getView().showSyncProgressDialog();
+        getView().setProgressMax(100);
+        syncService.getAllCasesRx(PrimeroConfiguration.getCookie(), "en", false)
+                .filter(new Func1<Response<List<JsonElement>>, Boolean>() {
+                    @Override
+                    public Boolean call(Response<List<JsonElement>> listResponse) {
+                        return listResponse.isSuccessful();
+                    }
+                })
+                .flatMap(new Func1<Response<List<JsonElement>>, Observable<JsonElement>>() {
+                    @Override
+                    public Observable<JsonElement> call(Response<List<JsonElement>> listResponse) {
+                        return Observable.from(listResponse.body());
+                    }
+                })
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread()).subscribe(new Subscriber<JsonElement>() {
+            @Override
+            public void onCompleted() {
+                getView().hideSyncProgressDialog();
+                syncSuccessfully();
+            }
+
+            @Override
+            public void onError(Throwable e) {
+
+            }
+
+            @Override
+            public void onNext(JsonElement jsonElement) {
+                getView().setProgressIncrease();
+                JsonObject jsonObject = jsonElement.getAsJsonObject();
+                try {
+                    postPullCases(jsonObject);
+                } catch (Exception e) {
+                    return;
+                }
+            }
+        });
+    }
+
+    private void postPullCases(JsonObject casesJsonObject) throws ParseException {
+        String caseId = casesJsonObject.get("case_id").getAsString();
+        Case item = CaseService.getInstance().getByUniqueId(caseId);
+        if (item != null) {
+            item.setInternalId(casesJsonObject.get("_id").getAsString());
+            item.setInternalRev(casesJsonObject.get("_rev").getAsString());
+            item.setSynced(true);
+            item.setContent(new Blob(casesJsonObject.toString().getBytes()));
+            item.update();
+        } else {
+            item = new Case();
+            item.setUniqueId(CaseService.getInstance().createUniqueId());
+            item.setName(casesJsonObject.get("name").getAsString());
+            item.setAge(casesJsonObject.get("age").getAsInt());
+            item.setInternalId(casesJsonObject.get("_id").getAsString());
+            item.setInternalRev(casesJsonObject.get("_rev").getAsString());
+            item.setRegistrationDate(
+                    RecordService.getRegisterDate(casesJsonObject.get("registration_date").getAsString()));
+            item.setCreatedBy(casesJsonObject.get("created_by").getAsString());
+            item.setLastSyncedDate(Calendar.getInstance().getTime());
+            item.setLastUpdatedDate(Calendar.getInstance().getTime());
+            item.setSynced(true);
+            item.setContent(new Blob(casesJsonObject.toString().getBytes()));
+            item.save();
+        }
+    }
+
+    private void syncSuccessfully() {
         updateDataViews();
         getView().showSyncSuccessMessage();
         getView().hideSyncProgressDialog();
     }
 
-    private void doSyncFailureAction() {
+    private void syncFail() {
         updateDataViews();
         getView().showSyncErrorMessage();
         getView().hideSyncProgressDialog();
     }
 
     private void updateDataViews() {
+
+    }
+
+    public void attemptCancelSync() {
+        getView().showSyncCancelConfirmDialog();
+    }
+
+    public void cancelSync() {
 
     }
 }

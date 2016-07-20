@@ -4,20 +4,21 @@ import com.hannesdorfmann.mosby.mvp.MvpView;
 
 public interface SyncView extends MvpView {
 
-    public void showSyncProgressDialog();
+    void showSyncProgressDialog();
 
-    public void hideSyncProgressDialog();
+    void hideSyncProgressDialog();
 
-    public void showSyncCancelConfirmDialog();
+    void showSyncCancelConfirmDialog();
 
-    public void showSyncErrorMessage();
+    void showSyncErrorMessage();
 
-    public void showSyncSuccessMessage();
+    void showSyncSuccessMessage();
 
-    public void setDataViews(String syncDate, String hasSyncAmount, String notSyncAmount);
+    void setDataViews(String syncDate, String hasSyncAmount, String notSyncAmount);
 
-    public void setProgressMax(int max);
-    public void setProgressIncrease();
+    void setProgressMax(int max);
 
-    public void showAttemptSyncDialog();
+    void setProgressIncrease();
+
+    void showAttemptSyncDialog();
 }

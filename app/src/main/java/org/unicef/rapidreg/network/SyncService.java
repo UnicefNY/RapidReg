@@ -9,6 +9,8 @@ import org.unicef.rapidreg.PrimeroConfiguration;
 
 import java.util.List;
 
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 import retrofit2.Response;
 import rx.Observable;
 
@@ -35,11 +37,19 @@ public class SyncService extends BaseRetrofitService {
         return serviceInterface.getAllCases(cookie, locale);
     }
 
-    public Observable<Response<JsonElement>> postCase(
+    public Observable<Response<JsonElement>> postCaseExcludeMediaData(
             String cookie,
             Boolean isMobile,
             Object requestBody) {
-        return serviceInterface.postCase(cookie, requestBody);
+        return serviceInterface.postCaseExcludeMediaData(cookie, requestBody);
+    }
+
+    public Observable<Response<JsonElement>> postCaseMediaData(
+            String cookie,
+            String id,
+            RequestBody requestBody,
+            MultipartBody.Part file) {
+        return serviceInterface.postCaseMediaData(cookie, id, requestBody, file);
     }
 
     public Observable<Response<JsonElement>> putCase(

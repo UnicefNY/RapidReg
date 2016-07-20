@@ -26,8 +26,6 @@ import org.unicef.rapidreg.utils.StreamUtil;
 import java.io.File;
 import java.io.IOException;
 import java.sql.Date;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
 
@@ -110,8 +108,6 @@ public class CaseService extends RecordService {
     }
 
     public void save(ItemValues itemValues, List<String> photoPath) {
-        Calendar cal = Calendar.getInstance();
-
         String uniqueId = createUniqueId();
         itemValues.addStringItem(CASE_ID, uniqueId);
 
@@ -122,12 +118,11 @@ public class CaseService extends RecordService {
         itemValues.addStringItem(PREVIOUS_OWNER, username);
 
         if (!itemValues.has(REGISTRATION_DATE)) {
-            itemValues.addStringItem(REGISTRATION_DATE, String.format("%s/%s/%s", cal.get(Calendar.YEAR),
-                    cal.get(Calendar.MONTH) + 1, cal.get(Calendar.DAY_OF_MONTH)));
+            itemValues.addStringItem(REGISTRATION_DATE, getCurrentRegistrationDateAsString());
         }
 
         Gson gson = new Gson();
-        Date date = new Date(cal.getTimeInMillis());
+        Date date = new Date(System.currentTimeMillis());
         Blob blob = new Blob(gson.toJson(itemValues.getValues()).getBytes());
         Blob audioFileDefault = null;
         audioFileDefault = getAudioBlob(audioFileDefault);
@@ -141,7 +136,7 @@ public class CaseService extends RecordService {
         int age = itemValues.getAsInt(AGE) != null ? itemValues.getAsInt(AGE) : 0;
         child.setAge(age);
         child.setCaregiver(getCaregiverName(itemValues));
-        child.setRegistrationDate(getRegisterDate(itemValues));
+        child.setRegistrationDate(getRegisterDate(itemValues.getAsString(REGISTRATION_DATE)));
         child.setAudio(audioFileDefault);
         child.setCreatedBy(username);
         child.save();
@@ -173,7 +168,7 @@ public class CaseService extends RecordService {
         int age = itemValues.getAsInt(AGE) != null ? itemValues.getAsInt(AGE) : 0;
         child.setAge(age);
         child.setCaregiver(getCaregiverName(itemValues));
-        child.setRegistrationDate(getRegisterDate(itemValues));
+        child.setRegistrationDate(getRegisterDate(itemValues.getAsString(REGISTRATION_DATE)));
         child.setAudio(audioFileDefault);
         child.update();
         try {
@@ -273,16 +268,6 @@ public class CaseService extends RecordService {
         return blob;
     }
 
-    private Date getRegisterDate(ItemValues itemValues) {
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy/MM/dd");
-        try {
-            java.util.Date date = simpleDateFormat.parse(itemValues.getAsString(REGISTRATION_DATE));
-            return new Date(date.getTime());
-        } catch (ParseException e) {
-            Log.e(TAG, "date format error");
-            return getCurrentDate();
-        }
-    }
 
     private String getName(ItemValues values) {
         return values.getAsString(FULL_NAME) + " "
