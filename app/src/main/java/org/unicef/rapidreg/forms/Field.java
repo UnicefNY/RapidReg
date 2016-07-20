@@ -37,6 +37,11 @@ public class Field {
 
     private static final int INVALID_INDEX = -1;
 
+    public static final String FIELD_NAME_MARK_FOR_MOBILE = "marked_for_mobile";
+    public static final String FIELD_NAME_AGE = "age";
+
+    public static final String FIELD_NAME_DATE_OF_BIRTH ="date_of_birth";
+
 
     @SerializedName("name")
     @Expose
@@ -217,6 +222,20 @@ public class Field {
         return false;
     }
 
+    public boolean isMarkForMobileField() {
+        return TextUtils.equals( this.name ,FIELD_NAME_MARK_FOR_MOBILE);
+    }
+
+    public boolean isAgeField() {
+        return TextUtils.equals(this.name , FIELD_NAME_AGE);
+    }
+
+    public boolean isDateOfBirthField() {
+        return TextUtils.equals(this.name , FIELD_NAME_DATE_OF_BIRTH);
+    }
+
+
+
     public List<String> getSelectOptions() {
         String language = Locale.getDefault().getLanguage();
 
@@ -230,10 +249,6 @@ public class Field {
             items = getOptionStringsText().get(language);
         }
         return items;
-    }
-
-    public boolean isMarkForMobileField() {
-        return TextUtils.equals( this.name ,"marked_for_mobile");
     }
 
     @Override
