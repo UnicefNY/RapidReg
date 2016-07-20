@@ -3,6 +3,7 @@ package org.unicef.rapidreg.tracing;
 import android.text.TextUtils;
 import android.view.View;
 
+import org.unicef.rapidreg.R;
 import org.unicef.rapidreg.base.RecordListAdapter;
 import org.unicef.rapidreg.base.RecordListPresenter;
 import org.unicef.rapidreg.base.RecordSearchFragment;
@@ -24,6 +25,8 @@ public class TracingSearchFragment extends RecordSearchFragment {
         super.initView(adapter);
         caregiver.setVisibility(View.GONE);
         caregiverSeparator.setVisibility(View.GONE);
+
+        registrationDate.setHint(R.string.inquiry_date);
     }
 
     @Override

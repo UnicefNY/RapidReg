@@ -34,6 +34,8 @@
     <string name="age_to">To</string>
     <string name="caregiver">Current Caregiver</string>
     <string name="registration_date">Registration date</string>
+    <string name="inquiry_date">Date of Inquiry</string>
+    <string name="date">Date</string>
 
     <!-- Title -->
     <string name="search">Search</string>

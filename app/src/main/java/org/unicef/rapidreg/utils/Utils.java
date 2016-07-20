@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-`public class Utils {
+public class Utils {
     public static String toStringResult(List<String> result) {
         String res = "";
 
