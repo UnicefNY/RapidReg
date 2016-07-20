@@ -13,6 +13,7 @@ import com.ogaclejapan.smarttablayout.utils.v4.FragmentPagerItems;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 import org.unicef.rapidreg.R;
+import org.unicef.rapidreg.base.RecordActivity;
 import org.unicef.rapidreg.base.RecordPhotoAdapter;
 import org.unicef.rapidreg.base.RecordRegisterWrapperFragment;
 import org.unicef.rapidreg.event.SaveTracingEvent;
@@ -34,6 +35,29 @@ import java.util.List;
 import butterknife.OnClick;
 
 public class TracingRegisterWrapperFragment extends RecordRegisterWrapperFragment {
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void saveTracing(SaveTracingEvent event) {
+        if (validateRequiredField()) {
+            List<String> photoPaths = recordPhotoAdapter.getAllItems();
+            ItemValues itemValues = new ItemValues(new Gson()
+                    .fromJson(new Gson().toJson(this.itemValues.getValues()), JsonObject.class));
+            boolean saveStatus = saveAndGetSucceedStatus(itemValues, photoPaths);
+            if (saveStatus == true) {
+                Toast.makeText(getActivity(), R.string.save_success, Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(getActivity(), R.string.save_failed, Toast.LENGTH_SHORT).show();
+            }
+
+            Tracing record = TracingService.getInstance()
+                    .getByUniqueId(itemValues.getAsString(TracingService.TRACING_ID));
+
+            Bundle args = new Bundle();
+            args.putLong(TracingService.TRACING_ID, record.getId());
+            ((RecordActivity) getActivity()).turnToFeature(TracingFeature.DETAILS, args);
+        }
+    }
+
     @Override
     protected void initItemValues() {
         if (getArguments() != null) {
@@ -79,23 +103,6 @@ public class TracingRegisterWrapperFragment extends RecordRegisterWrapperFragmen
             pages.add(FragmentPagerItem.of(values[0], TracingRegisterFragment.class, bundle));
         }
         return pages;
-    }
-
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void saveTracing(SaveTracingEvent event) {
-        if (validateRequiredField()) {
-            List<String> photoPaths = recordPhotoAdapter.getAllItems();
-            ItemValues itemValues = new ItemValues(new Gson()
-                    .fromJson(new Gson().toJson(this.itemValues.getValues()), JsonObject.class));
-            boolean saveStatus = saveAndGetSucceedStatus(itemValues, photoPaths);
-            if (saveStatus == true) {
-                Toast.makeText(getActivity(), R.string.save_success,
-                        Toast.LENGTH_SHORT).show();
-            } else {
-                Toast.makeText(getActivity(), R.string.save_failed,
-                        Toast.LENGTH_SHORT).show();
-            }
-        }
     }
 
     @OnClick(R.id.edit)

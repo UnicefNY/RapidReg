@@ -106,7 +106,6 @@ public class CaseActivity extends RecordActivity {
         clearFocusToMakeLastFieldSaved();
         SaveCaseEvent event = new SaveCaseEvent();
         EventBus.getDefault().postSticky(event);
-        turnToFeature(CaseFeature.LIST, null);
     }
 
     private void clearFocusToMakeLastFieldSaved() {
