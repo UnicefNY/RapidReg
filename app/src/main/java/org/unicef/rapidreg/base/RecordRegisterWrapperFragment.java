@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
 import com.getbase.floatingactionbutton.FloatingActionButton;
@@ -131,7 +132,7 @@ public abstract class RecordRegisterWrapperFragment extends Fragment {
     @Subscribe(threadMode = ThreadMode.MAIN, sticky = true, priority = 1)
     public void updateImageAdapter(UpdateImageEvent event) {
         recordPhotoAdapter.addItem(event.getImagePath());
-        ImageButton view = (ImageButton) getActivity().findViewById(R.id.add_image_button);
+        ImageView view = (ImageView) getActivity().findViewById(R.id.add_image_button);
 
         if (!recordPhotoAdapter.isEmpty()) {
             view.setImageResource(R.drawable.photo_add);
@@ -142,7 +143,6 @@ public abstract class RecordRegisterWrapperFragment extends Fragment {
 
         recordPhotoAdapter.notifyDataSetChanged();
         EventBus.getDefault().removeStickyEvent(event);
-
     }
 
     public void clearFocus() {
