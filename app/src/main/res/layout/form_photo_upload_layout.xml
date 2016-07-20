@@ -30,13 +30,11 @@
         </LinearLayout>
 
 
-        <ImageButton
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:layout_marginTop="20dp"
-            android:scaleType="fitXY"
+        <ImageView
+            android:layout_width="90dp"
+            android:layout_height="90dp"
+            android:paddingLeft="@dimen/case_register_label_padding_left_right"
+            android:paddingRight="@dimen/case_register_label_padding_left_right"
             android:background="@color/white"
             android:src="@drawable/photo_camera"
             android:id="@+id/add_image_button"/>

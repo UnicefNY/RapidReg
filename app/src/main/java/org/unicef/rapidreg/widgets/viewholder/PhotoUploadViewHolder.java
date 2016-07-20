@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -45,7 +46,7 @@ public class PhotoUploadViewHolder extends BaseViewHolder<Field> {
     TextView noPhotoPromoteView;
 
     @BindView(R.id.add_image_button)
-    ImageButton addImageButton;
+    ImageView addImageButton;
 
     private Context context;
 
@@ -81,6 +82,7 @@ public class PhotoUploadViewHolder extends BaseViewHolder<Field> {
             if (adapter.isEmpty()) {
                 noPhotoPromoteView.setVisibility(View.VISIBLE);
                 photoGrid.setVisibility(View.GONE);
+                photoGridLayout.setVisibility(View.GONE);
             }
             return;
         }
