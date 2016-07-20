@@ -190,11 +190,6 @@ public abstract class RecordActivity extends BaseActivity {
         }
     }
 
-    public void turnToDetailOrEditPage(Feature feature, Bundle args) {
-        currentFeature = feature;
-        turnToFeature(feature, args);
-    }
-
     protected void changeToolbarTitle(int resId) {
         toolbar.setTitle(resId);
     }

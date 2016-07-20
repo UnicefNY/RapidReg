@@ -63,7 +63,7 @@ public class CaseListAdapter extends RecordListAdapter {
             public void onClick(View v) {
                 Bundle args = new Bundle();
                 args.putLong(CaseService.CASE_ID, record.getId());
-                activity.turnToDetailOrEditPage(CaseFeature.DETAILS, args);
+                activity.turnToFeature(CaseFeature.DETAILS, args);
                 try {
                     RecordService.clearAudioFile();
                     if (record.getAudio() != null) {

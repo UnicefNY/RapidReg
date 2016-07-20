@@ -20,7 +20,6 @@ import org.unicef.rapidreg.forms.Section;
 import org.unicef.rapidreg.forms.TracingFormRoot;
 import org.unicef.rapidreg.model.Tracing;
 import org.unicef.rapidreg.model.TracingPhoto;
-import org.unicef.rapidreg.service.CaseService;
 import org.unicef.rapidreg.service.RecordService;
 import org.unicef.rapidreg.service.TracingFormService;
 import org.unicef.rapidreg.service.TracingPhotoService;
@@ -88,8 +87,8 @@ public class TracingRegisterWrapperFragment extends RecordRegisterWrapperFragmen
             List<String> photoPaths = recordPhotoAdapter.getAllItems();
             ItemValues itemValues = new ItemValues(new Gson()
                     .fromJson(new Gson().toJson(this.itemValues.getValues()), JsonObject.class));
-            boolean saveStatus = saveAndGetSucceedStatus(itemValues,photoPaths);
-            if ( saveStatus == true ) {
+            boolean saveStatus = saveAndGetSucceedStatus(itemValues, photoPaths);
+            if (saveStatus == true) {
                 Toast.makeText(getActivity(), R.string.save_success,
                         Toast.LENGTH_SHORT).show();
             } else {
@@ -103,7 +102,7 @@ public class TracingRegisterWrapperFragment extends RecordRegisterWrapperFragmen
     public void onEditClicked() {
         Bundle args = new Bundle();
         args.putLong(TracingService.TRACING_ID, recordId);
-        ((TracingActivity) getActivity()).turnToDetailOrEditPage(TracingFeature.EDIT, args);
+        ((TracingActivity) getActivity()).turnToFeature(TracingFeature.EDIT, args);
     }
 
     private boolean validateRequiredField() {
