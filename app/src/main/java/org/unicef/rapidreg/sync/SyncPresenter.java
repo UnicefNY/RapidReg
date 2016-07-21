@@ -23,8 +23,11 @@ import org.unicef.rapidreg.service.RecordService;
 import org.unicef.rapidreg.service.cache.ItemValues;
 
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import retrofit2.Response;
 import rx.Observable;
@@ -178,6 +181,37 @@ public class SyncPresenter extends MvpBasePresenter<SyncView> {
     public void pullCases(PullCasesEvent event) {
         getView().showSyncProgressDialog();
         getView().setProgressMax(100);
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-mm-dd H:M:S", Locale.US);
+        String time = sdf.format(new Date());
+
+        syncService.getCasesIds(PrimeroConfiguration.getCookie(), time, true)
+                .flatMap(new Func1<Response<JsonElement>, Observable<JsonElement>>() {
+                    @Override
+                    public Observable<JsonElement> call(Response<JsonElement> jsonElementResponse) {
+                        return null
+                    }
+                })
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<JsonElement>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onNext(JsonElement jsonElement) {
+
+                    }
+                });
+
+
         syncService.getAllCasesRx(PrimeroConfiguration.getCookie(), "en", false)
                 .filter(new Func1<Response<List<JsonElement>>, Boolean>() {
                     @Override
