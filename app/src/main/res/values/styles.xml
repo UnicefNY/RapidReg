@@ -6,13 +6,12 @@
         <item name="colorPrimary">@color/tool_bar</item>
         <item name="colorPrimaryDark">@color/tool_bar</item>
         <item name="colorAccent">@color/ftn_blue</item>
-
     </style>
 
     <!--row in case list start-->
     <style name="Avatar">
         <item name="android:layout_width">@dimen/case_avatar_width</item>
-        <item name="android:layout_height">@dimen/case_avatar_hight</item>
+        <item name="android:layout_height">@dimen/case_avatar_height</item>
         <item name="android:layout_marginBottom">@dimen/img_vertical_margin</item>
         <item name="android:layout_marginLeft">@dimen/img_left_margin</item>
         <item name="android:layout_marginTop">@dimen/img_vertical_margin</item>
@@ -33,6 +32,7 @@
     </style>
     <!--row in case list end-->
 
+    <!--primero dialog-->
     <style name="TextAppearance.Sphinx.DialogWindowTitle" parent="@android:style/TextAppearance.Holo.DialogWindowTitle">
         <item name="android:textColor">@color/font_dark</item>
     </style>
@@ -55,24 +55,14 @@
         <item name="android:windowMinWidthMinor">@android:dimen/dialog_min_width_minor</item>
     </style>
 
-    <style name="Widget.Sphinx.ActionBar.Solid" parent="@android:style/Widget.Holo.ActionBar.Solid">
-        <item name="android:background">#FFA500</item>
-    </style>
-
-    <style name="Theme.Sphinx" parent="@android:style/Theme.Holo">
-        <item name="android:actionBarStyle">@style/Widget.Sphinx.ActionBar.Solid</item>
-        <item name="android:alertDialogTheme">@style/Theme_Sphinx_Dialog_Alert</item>
-    </style>
-
     <style name="TextAppearance.Sphinx.Medium" parent="@android:style/TextAppearance.Holo.Medium">
         <item name="android:textSize">14sp</item>
         <item name="android:textColor">@color/font_dark</item>
     </style>
 
-
-    <style name="Theme_Sphinx_Dialog_Alert" parent="@style/Theme_Holo_Dialog_Alert">
+    <style name="primero_dialog" parent="@style/Theme_Holo_Dialog_Alert">
         <item name="android:windowTitleStyle">@style/DialogWindowTitle.Sphinx</item>
         <item name="android:textAppearanceMedium">@style/TextAppearance.Sphinx.Medium</item>
     </style>
-
+    <!--primero dialog-->
 </resources>

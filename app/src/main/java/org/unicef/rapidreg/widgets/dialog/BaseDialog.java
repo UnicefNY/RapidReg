@@ -35,7 +35,7 @@ public abstract class BaseDialog {
         this.context = context;
         this.itemValues = itemValues;
 
-        builder = new AlertDialog.Builder(context, R.style.Theme_Sphinx_Dialog_Alert);
+        builder = new AlertDialog.Builder(context, R.style.primero_dialog);
         builder.setTitle(field.getDisplayName().get(Locale.getDefault().getLanguage()));
 
         builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
