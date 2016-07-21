@@ -6,6 +6,7 @@
         <item name="colorPrimary">@color/tool_bar</item>
         <item name="colorPrimaryDark">@color/tool_bar</item>
         <item name="colorAccent">@color/ftn_blue</item>
+
     </style>
 
     <!--row in case list start-->
@@ -31,4 +32,47 @@
         <item name="android:textColor">@color/font_dark</item>
     </style>
     <!--row in case list end-->
+
+    <style name="TextAppearance.Sphinx.DialogWindowTitle" parent="@android:style/TextAppearance.Holo.DialogWindowTitle">
+        <item name="android:textColor">@color/font_dark</item>
+    </style>
+
+    <style name="DialogWindowTitle.Sphinx" parent="@style/DialogWindowTitle_Holo">
+        <item name="android:textAppearance">@style/TextAppearance.Sphinx.DialogWindowTitle</item>
+    </style>
+
+    <style name="DialogWindowTitle_Holo">
+        <item name="android:maxLines">1</item>
+        <item name="android:scrollHorizontally">true</item>
+        <item name="android:textAppearance">@android:style/TextAppearance.Holo.DialogWindowTitle</item>
+    </style>
+
+    <style name="Theme_Holo_Dialog_Alert" parent="@android:style/Theme.Holo.Light.Dialog">
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowTitleStyle">@style/DialogWindowTitle_Holo</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowMinWidthMajor">@android:dimen/dialog_min_width_major</item>
+        <item name="android:windowMinWidthMinor">@android:dimen/dialog_min_width_minor</item>
+    </style>
+
+    <style name="Widget.Sphinx.ActionBar.Solid" parent="@android:style/Widget.Holo.ActionBar.Solid">
+        <item name="android:background">#FFA500</item>
+    </style>
+
+    <style name="Theme.Sphinx" parent="@android:style/Theme.Holo">
+        <item name="android:actionBarStyle">@style/Widget.Sphinx.ActionBar.Solid</item>
+        <item name="android:alertDialogTheme">@style/Theme_Sphinx_Dialog_Alert</item>
+    </style>
+
+    <style name="TextAppearance.Sphinx.Medium" parent="@android:style/TextAppearance.Holo.Medium">
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/font_dark</item>
+    </style>
+
+
+    <style name="Theme_Sphinx_Dialog_Alert" parent="@style/Theme_Holo_Dialog_Alert">
+        <item name="android:windowTitleStyle">@style/DialogWindowTitle.Sphinx</item>
+        <item name="android:textAppearanceMedium">@style/TextAppearance.Sphinx.Medium</item>
+    </style>
+
 </resources>

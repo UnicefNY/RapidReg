@@ -11,6 +11,7 @@ import org.unicef.rapidreg.R;
 import org.unicef.rapidreg.base.RecordActivity;
 import org.unicef.rapidreg.event.SaveTracingEvent;
 import org.unicef.rapidreg.service.TracingService;
+import org.unicef.rapidreg.utils.Utils;
 
 public class TracingActivity extends RecordActivity {
     public static final String TAG = TracingActivity.class.getSimpleName();
@@ -60,7 +61,7 @@ public class TracingActivity extends RecordActivity {
 
     @Override
     protected void showQuitDialog(final int clickedButton) {
-        new AlertDialog.Builder(this)
+        AlertDialog dialog = new AlertDialog.Builder(this, R.style.Theme_Sphinx_Dialog_Alert)
                 .setTitle(R.string.quit)
                 .setMessage(R.string.quit_without_saving)
                 .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
@@ -84,6 +85,8 @@ public class TracingActivity extends RecordActivity {
                 })
                 .setNegativeButton(R.string.cancel, null)
                 .show();
+
+        Utils.changeDialogDividerColor(this, dialog);
     }
 
     @Override
