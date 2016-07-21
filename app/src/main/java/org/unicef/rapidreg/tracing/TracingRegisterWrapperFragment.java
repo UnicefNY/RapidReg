@@ -110,6 +110,7 @@ public class TracingRegisterWrapperFragment extends RecordRegisterWrapperFragmen
     public void onEditClicked() {
         Bundle args = new Bundle();
         args.putLong(TracingService.TRACING_ID, recordId);
+        args.putBoolean(SHOULD_SHOW_MINI_FORM, isShowingMiniform());
         ((TracingActivity) getActivity()).turnToFeature(TracingFeature.EDIT, args);
     }
 
