@@ -1,5 +1,13 @@
 package org.unicef.rapidreg.utils;
 
+
+import android.app.AlertDialog;
+import android.content.Context;
+import android.support.v4.content.ContextCompat;
+import android.view.View;
+
+import org.unicef.rapidreg.R;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -36,6 +44,14 @@ public class Utils {
             res.put(keyValue[0], keyValue[1]);
         }
         return res;
+    }
+
+    public static void changeDialogDividerColor(Context context, AlertDialog dialog) {
+        int titleDividerId = context.getResources().getIdentifier("titleDivider", "id", "android");
+        View titleDivider = dialog.findViewById(titleDividerId);
+        if (titleDivider != null) {
+            titleDivider.setBackgroundColor(ContextCompat.getColor(context, R.color.ftn_blue));
+        }
     }
 
     private static void checkFormat(int len) {

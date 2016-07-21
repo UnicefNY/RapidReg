@@ -10,6 +10,7 @@ import android.widget.ViewSwitcher;
 import org.unicef.rapidreg.R;
 import org.unicef.rapidreg.forms.Field;
 import org.unicef.rapidreg.service.cache.ItemValuesMap;
+import org.unicef.rapidreg.utils.Utils;
 import org.unicef.rapidreg.widgets.viewholder.GenericViewHolder;
 
 import java.util.ArrayList;
@@ -34,7 +35,7 @@ public abstract class BaseDialog {
         this.context = context;
         this.itemValues = itemValues;
 
-        builder = new AlertDialog.Builder(context);
+        builder = new AlertDialog.Builder(context, R.style.Theme_Sphinx_Dialog_Alert);
         builder.setTitle(field.getDisplayName().get(Locale.getDefault().getLanguage()));
 
         builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
@@ -62,7 +63,9 @@ public abstract class BaseDialog {
 
     public void show() {
         initView();
-        builder.show();
+        AlertDialog dialog = builder.show();
+
+        Utils.changeDialogDividerColor(context, dialog);
     }
 
     public static String[] getSelectOptions(String fieldType, Field field) {
