@@ -42,8 +42,7 @@ public class TracingRegisterWrapperFragment extends RecordRegisterWrapperFragmen
             List<String> photoPaths = recordPhotoAdapter.getAllItems();
             ItemValues itemValues = new ItemValues(new Gson()
                     .fromJson(new Gson().toJson(this.itemValues.getValues()), JsonObject.class));
-            boolean saveStatus = saveAndGetSucceedStatus(itemValues, photoPaths);
-            if (saveStatus == true) {
+            if (saveAndGetSucceedStatus(itemValues, photoPaths)) {
                 Toast.makeText(getActivity(), R.string.save_success, Toast.LENGTH_SHORT).show();
             } else {
                 Toast.makeText(getActivity(), R.string.save_failed, Toast.LENGTH_SHORT).show();
