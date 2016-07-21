@@ -25,6 +25,22 @@ public interface SyncServiceInterface {
             @Header("Cookie") String cookie,
             @Query("locale") String locale);
 
+    @GET("/api/cases/{id}")
+    Observable<Response<JsonElement>> getCase(
+            @Header("Cookie") String cookie,
+            @Path("id") String id,
+            @Query("locale") String locale,
+            @Query("mobile") Boolean isMobile);
+
+    @GET("/api/children-ids?")
+    Observable<Response<JsonElement>> getCasesIds(
+            @Header("Cookie") String cookie,
+            @Query("last_update") String lastUpdate,
+            @Query("mobile") Boolean isMobile);
+
+
+
+
     @POST("/api/cases")
     Observable<Response<JsonElement>> postCaseExcludeMediaData(
             @Header("Cookie") String cookie,
