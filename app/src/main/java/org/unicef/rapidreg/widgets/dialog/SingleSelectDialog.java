@@ -33,16 +33,20 @@ public class SingleSelectDialog extends BaseDialog {
         optionItems = getSelectOptions(fieldType, field);
 
         int selectIndex = Arrays.asList(optionItems).indexOf(result);
-        selectIndex = selectIndex == -1 ? 0 : selectIndex;
-        result = optionItems[selectIndex];
+        if (selectIndex == -1) {
+            result = "";
+        } else {
+            result = optionItems[selectIndex];
+        }
+        //selectIndex = selectIndex == -1 ? 0 : selectIndex;
 
-        dialog = new SearchAbleDialog(context, field.getDisplayName().get(Locale.getDefault().getLanguage()), optionItems);
+
+        dialog = new SearchAbleDialog(context, field.getDisplayName().get(Locale.getDefault().getLanguage()), optionItems, selectIndex);
 
         dialog.setOnClick(new SearchAbleDialog.SearchAbleDialogOnClickListener() {
             @Override
             public void onClick(String result) {
                 SingleSelectDialog.this.result = result;
-                Log.d("asdf", result);
             }
         });
 
