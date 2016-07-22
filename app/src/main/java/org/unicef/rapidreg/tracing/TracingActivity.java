@@ -61,7 +61,7 @@ public class TracingActivity extends RecordActivity {
 
     @Override
     protected void showQuitDialog(final int clickedButton) {
-        AlertDialog dialog = new AlertDialog.Builder(this, R.style.primero_dialog)
+        AlertDialog dialog = new AlertDialog.Builder(this)
                 .setTitle(R.string.quit)
                 .setMessage(R.string.quit_without_saving)
                 .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
