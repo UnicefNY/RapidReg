@@ -16,11 +16,14 @@ import org.unicef.rapidreg.R;
 import org.unicef.rapidreg.base.RecordActivity;
 import org.unicef.rapidreg.base.RecordPhotoAdapter;
 import org.unicef.rapidreg.base.RecordRegisterWrapperFragment;
+import org.unicef.rapidreg.childcase.CasePhotoAdapter;
 import org.unicef.rapidreg.event.SaveTracingEvent;
 import org.unicef.rapidreg.forms.Section;
 import org.unicef.rapidreg.forms.TracingFormRoot;
+import org.unicef.rapidreg.model.CasePhoto;
 import org.unicef.rapidreg.model.Tracing;
 import org.unicef.rapidreg.model.TracingPhoto;
+import org.unicef.rapidreg.service.CasePhotoService;
 import org.unicef.rapidreg.service.RecordService;
 import org.unicef.rapidreg.service.TracingFormService;
 import org.unicef.rapidreg.service.TracingPhotoService;
@@ -83,12 +86,13 @@ public class TracingRegisterWrapperFragment extends RecordRegisterWrapperFragmen
 
     @Override
     protected RecordPhotoAdapter initPhotoAdapter() {
-        recordPhotoAdapter = new TracingPhotoAdapter(getContext(), new ArrayList<String>());
+        List<String> paths = new ArrayList<>();
 
         List<TracingPhoto> tracings = TracingPhotoService.getInstance().getByTracingId(recordId);
-        for (int i = 0; i < tracings.size(); i++) {
-            recordPhotoAdapter.addItem(tracings.get(i).getId());
+        for (TracingPhoto tracing : tracings) {
+            paths.add(String.valueOf(tracing.getId()));
         }
+        recordPhotoAdapter = new TracingPhotoAdapter(getContext(), paths);
         return recordPhotoAdapter;
     }
 
