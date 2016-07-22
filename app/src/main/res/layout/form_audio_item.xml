@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:descendantFocusability="blocksDescendants"
-    android:gravity="center"
-    android:orientation="vertical"
-    tools:ignore="MergeRootFrame">
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:descendantFocusability="blocksDescendants"
+              android:gravity="center"
+              android:orientation="vertical"
+              tools:ignore="MergeRootFrame">
 
     <LinearLayout
         android:id="@+id/audio_container"
@@ -22,7 +22,7 @@
             android:layout_height="90dp"
             android:paddingLeft="@dimen/case_register_label_padding_left_right"
             android:paddingRight="@dimen/case_register_label_padding_left_right"
-            android:src="@drawable/mic_rec_210" />
+            android:src="@drawable/mic_rec_210"/>
 
         <ImageView
             android:id="@+id/play_button"
@@ -31,7 +31,7 @@
             android:paddingLeft="@dimen/case_register_label_padding_left_right"
             android:paddingRight="@dimen/case_register_label_padding_left_right"
             android:src="@drawable/play_210"
-            android:visibility="gone" />
+            android:visibility="gone"/>
 
         <TextView
             android:id="@+id/no_file_text_view"
@@ -43,8 +43,8 @@
             android:paddingLeft="@dimen/case_register_field_padding_left_right"
             android:paddingRight="@dimen/case_register_field_padding_left_right"
             android:text=""
-            android:textColor="@color/font_medium"
-            android:textSize="@dimen/text_size_16" />
+            android:textColor="@color/primero_font_medium"
+            android:textSize="@dimen/text_size_16"/>
 
         <ImageView
             android:id="@+id/delete_button"
@@ -53,13 +53,13 @@
             android:layout_gravity="center_vertical"
             android:layout_marginRight="15dp"
             android:src="@drawable/recycle_bin"
-            android:visibility="gone" />
+            android:visibility="gone"/>
 
     </LinearLayout>
 
     <View
         android:layout_width="match_parent"
         android:layout_height="10dp"
-        android:background="@color/lighter_white" />
+        android:background="@color/primero_lighter_white"/>
 
 </LinearLayout>

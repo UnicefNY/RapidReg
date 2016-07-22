@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/text_area_normal_state"
-    style="@style/TextAreaOfCaseRow">
+                android:id="@+id/text_area_normal_state"
+                style="@style/TextAreaOfCaseRow">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -12,13 +12,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/case_id"
-            android:textColor="@color/font_dark" />
+            android:textColor="@color/primero_font_dark"/>
 
         <TextView
             android:id="@+id/id_normal_state"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/font_dark" />
+            android:textColor="@color/primero_font_dark"/>
 
         <ImageView
             android:id="@+id/connected"
@@ -28,7 +28,7 @@
             android:layout_marginLeft="@dimen/matching_badge_left_margin"
             android:layout_marginStart="@dimen/matching_badge_left_margin"
             android:background="@drawable/connected"
-            android:visibility="invisible" />
+            android:visibility="invisible"/>
     </LinearLayout>
 
     <LinearLayout
@@ -41,14 +41,14 @@
             android:id="@+id/gender_badge"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical" />
+            android:layout_gravity="center_vertical"/>
 
         <TextView
             android:id="@+id/gender_name"
             android:layout_width="@dimen/gender_name_length"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/gender_left_margin"
-            android:layout_marginStart="@dimen/gender_left_margin" />
+            android:layout_marginStart="@dimen/gender_left_margin"/>
 
         <ImageView
             android:layout_width="wrap_content"
@@ -56,7 +56,7 @@
             android:layout_gravity="center_vertical"
             android:layout_marginLeft="@dimen/age_badge_left_margin"
             android:layout_marginStart="@dimen/age_badge_left_margin"
-            android:background="@drawable/age_little" />
+            android:background="@drawable/age_little"/>
 
         <TextView
             android:id="@+id/age"
@@ -64,18 +64,18 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/age_left_margin"
             android:layout_marginStart="@dimen/age_left_margin"
-            android:textColor="@color/font_medium" />
+            android:textColor="@color/primero_font_medium"/>
 
         <View
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:layout_weight="1" />
+            android:layout_weight="1"/>
 
         <TextView
             android:id="@+id/registration_date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/font_light" />
+            android:textColor="@color/primero_font_light"/>
 
     </LinearLayout>
 </RelativeLayout>

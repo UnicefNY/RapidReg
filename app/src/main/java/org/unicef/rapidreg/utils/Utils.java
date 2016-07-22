@@ -50,7 +50,7 @@ public class Utils {
         int titleDividerId = context.getResources().getIdentifier("titleDivider", "id", "android");
         View titleDivider = dialog.findViewById(titleDividerId);
         if (titleDivider != null) {
-            titleDivider.setBackgroundColor(ContextCompat.getColor(context, R.color.ftn_blue));
+            titleDivider.setBackgroundColor(ContextCompat.getColor(context, R.color.primero_blue));
         }
     }
 

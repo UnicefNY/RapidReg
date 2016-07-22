@@ -18,7 +18,7 @@
         android:layout_marginLeft="@dimen/case_spinner_order_left_margin"
         android:layout_marginStart="@dimen/case_spinner_order_left_margin"
         android:text="@string/order_by"
-        android:textColor="@color/font_medium"
+        android:textColor="@color/primero_font_medium"
         android:textSize="@dimen/text_size_16"/>
 
     <TextView
@@ -28,7 +28,7 @@
         android:layout_centerVertical="true"
         android:layout_marginLeft="@dimen/case_spinner_order_name_left_margin"
         android:layout_marginStart="@dimen/case_spinner_order_name_left_margin"
-        android:textColor="@color/ftn_blue"
+        android:textColor="@color/primero_blue"
         android:textSize="@dimen/text_size_16"/>
 
     <ImageView
