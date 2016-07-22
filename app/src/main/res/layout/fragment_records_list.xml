@@ -17,7 +17,7 @@
             android:id="@+id/order_spinner"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/lighter_white"
+            android:background="@color/primero_lighter_white"
             android:drawSelectorOnTop="true"/>
 
         <ViewSwitcher
@@ -35,7 +35,7 @@
                 android:layout_height="match_parent"
                 android:gravity="center"
                 android:text="@string/no_records"
-                android:textColor="@color/font_dark"
+                android:textColor="@color/primero_font_dark"
                 android:textSize="@dimen/text_size_14"/>
         </ViewSwitcher>
     </LinearLayout>
@@ -45,8 +45,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
-        app:fab_addButtonColorNormal="@color/ftn_blue"
-        app:fab_addButtonColorPressed="@color/ftn_blue"
+        app:fab_addButtonColorNormal="@color/primero_blue"
+        app:fab_addButtonColorPressed="@color/primero_blue"
         app:fab_labelStyle="@style/menu_labels_style"
         app:fab_labelsPosition="left">
 
@@ -56,8 +56,8 @@
             android:layout_height="wrap_content"
             android:scrollY="3dp"
             android:src="@drawable/tracing_white"
-            app:fab_colorNormal="@color/ftn_red"
-            app:fab_colorPressed="@color/ftn_red"
+            app:fab_colorNormal="@color/primero_red"
+            app:fab_colorPressed="@color/primero_red"
             app:fab_title="Add Tracing Request"/>
 
         <com.getbase.floatingactionbutton.FloatingActionButton
@@ -66,8 +66,8 @@
             android:layout_height="wrap_content"
             android:scrollY="3dp"
             android:src="@drawable/cases_white"
-            app:fab_colorNormal="@color/ftn_green"
-            app:fab_colorPressed="@color/ftn_green"
+            app:fab_colorNormal="@color/primero_green"
+            app:fab_colorPressed="@color/primero_green"
             app:fab_title="Add Case"/>
     </com.getbase.floatingactionbutton.FloatingActionsMenu>
 

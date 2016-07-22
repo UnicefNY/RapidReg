@@ -26,7 +26,7 @@
         android:imeOptions="actionDone"
         android:singleLine="true"
         android:text="primero"
-        android:textColor="@color/font_dark"/>
+        android:textColor="@color/primero_font_dark"/>
 
     <EditText
         android:id="@+id/password"
@@ -37,7 +37,7 @@
         android:hint="@string/password_hint_text"
         android:inputType="textPassword"
         android:text="qu01n23!"
-        android:textColor="@color/font_dark"/>
+        android:textColor="@color/primero_font_dark"/>
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -60,7 +60,7 @@
             android:layout_centerHorizontal="true"
             android:layout_centerVertical="true"
             android:text="@string/text_view_change_url"
-            android:textColor="@color/ftn_blue"
+            android:textColor="@color/primero_blue"
             android:textSize="@dimen/text_size_14"/>
 
     </RelativeLayout>
@@ -74,7 +74,7 @@
         android:id="@+id/login"
         android:layout_width="match_parent"
         android:layout_height="@dimen/search_button_height"
-        android:background="@color/ftn_blue"
+        android:background="@color/primero_blue"
         android:gravity="center"
         android:text="@string/button_login_text"
         android:textColor="@color/white"

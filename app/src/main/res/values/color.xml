@@ -149,19 +149,13 @@
     <color name="black">#000000</color>
     <color name="semi_dark">#aa000000</color>
 
-    <!--case row start-->
-    <color name="boy_blue">#4e6af9</color>
-    <color name="girl_red">#fb5116</color>
-    <color name="ftn_gray">#bbbbbb</color>
-    <color name="ftn_blue">#4e6af9</color>
-    <color name="ftn_red">#fb5116</color>
-    <color name="ftn_green">#0db14b</color>
-    <!--case row end-->
-
-    <color name="font_dark">#555555</color>
-    <color name="font_medium">#888888</color>
-    <color name="font_light">#aaaaaa</color>
-    <color name="tool_bar">#4e6af9</color>
-    <color name="lighter_white">#f7f7f7</color>
+    <color name="primero_gray">#bbbbbb</color>
+    <color name="primero_blue">#4e6af9</color>
+    <color name="primero_red">#fb5116</color>
+    <color name="primero_green">#0db14b</color>
+    <color name="primero_font_dark">#555555</color>
+    <color name="primero_font_medium">#888888</color>
+    <color name="primero_font_light">#aaaaaa</color>
+    <color name="primero_lighter_white">#f7f7f7</color>
     <color name="transparent">#f7f7f7</color>
 </resources>

@@ -94,7 +94,7 @@
             android:background="@drawable/edit_view_shape"
             android:gravity="center_vertical"
             android:hint="@string/registration_date"
-            android:textColor="@color/font_dark"
+            android:textColor="@color/primero_font_dark"
             android:textCursorDrawable="@null"
             android:textSize="@dimen/text_size_16"/>
 
@@ -124,7 +124,7 @@
         android:id="@+id/done"
         android:layout_width="match_parent"
         android:layout_height="@dimen/search_button_height"
-        android:background="@color/ftn_blue"
+        android:background="@color/primero_blue"
         android:gravity="center"
         android:text="@string/done"
         android:textAllCaps="false"

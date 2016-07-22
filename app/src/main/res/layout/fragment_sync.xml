@@ -7,13 +7,13 @@
               android:paddingRight="@dimen/sync_padding_left_right"
               android:paddingTop="@dimen/sync_padding_top_bottom"
               android:paddingBottom="@dimen/sync_padding_top_bottom"
-              >
+    >
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="@dimen/text_size_16"
-        android:textColor="@color/ftn_gray"
+        android:textColor="@color/primero_gray"
         android:text="@string/last_sync_time"/>
 
     <TextView
@@ -23,14 +23,14 @@
         android:paddingTop="@dimen/sync_padding_top_bottom"
         android:paddingBottom="@dimen/sync_value_padding_top_bottom"
         android:textSize="@dimen/text_size_20"
-        android:textColor="@color/ftn_blue"
+        android:textColor="@color/primero_blue"
         android:text="@string/place_holder_last_sync_time"/>
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="@dimen/text_size_16"
-        android:textColor="@color/ftn_gray"
+        android:textColor="@color/primero_gray"
         android:text="@string/record_count_for_last_sync"/>
 
     <TextView
@@ -40,14 +40,14 @@
         android:paddingTop="@dimen/sync_padding_top_bottom"
         android:paddingBottom="@dimen/sync_value_padding_top_bottom"
         android:textSize="@dimen/text_size_20"
-        android:textColor="@color/ftn_blue"
+        android:textColor="@color/primero_blue"
         android:text="@string/place_holder_record_count_for_last_sync"/>
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="@dimen/text_size_16"
-        android:textColor="@color/ftn_gray"
+        android:textColor="@color/primero_gray"
         android:text="@string/record_count_for_not_sync"/>
 
     <TextView
@@ -57,14 +57,14 @@
         android:paddingTop="@dimen/sync_padding_top_bottom"
         android:paddingBottom="@dimen/sync_value_padding_top_bottom"
         android:textSize="@dimen/text_size_20"
-        android:textColor="@color/ftn_blue"
+        android:textColor="@color/primero_blue"
         android:text="@string/place_holder_record_count_for_not_sync"/>
 
     <Button
         android:id="@+id/button_sync"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/boy_blue"
+        android:background="@color/primero_blue"
         android:textColor="@color/white"
         android:textAllCaps="false"
         android:textSize="@dimen/text_size_20"

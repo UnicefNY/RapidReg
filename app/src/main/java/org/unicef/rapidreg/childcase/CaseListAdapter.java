@@ -77,8 +77,8 @@ public class CaseListAdapter extends RecordListAdapter {
     }
 
     public enum Gender {
-        MALE("BOY", R.drawable.avatar_placeholder, R.drawable.boy, R.color.boy_blue),
-        FEMALE("GIRL", R.drawable.avatar_placeholder, R.drawable.girl, R.color.girl_red),
+        MALE("BOY", R.drawable.avatar_placeholder, R.drawable.boy, R.color.primero_blue),
+        FEMALE("GIRL", R.drawable.avatar_placeholder, R.drawable.girl, R.color.primero_red),
         UNKNOWN(null, R.drawable.avatar_placeholder, R.drawable.gender_default, R.color.transparent);
 
         private String name;
