@@ -5,6 +5,7 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import com.facebook.stetho.server.http.HttpStatus;
+import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.hannesdorfmann.mosby.mvp.MvpBasePresenter;
@@ -27,14 +28,16 @@ import org.unicef.rapidreg.service.cache.ItemValues;
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Locale;
 
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
+import okhttp3.ResponseBody;
 import retrofit2.Response;
 import rx.Observable;
 import rx.Subscriber;
@@ -89,7 +92,8 @@ public class SyncPresenter extends MvpBasePresenter<SyncView> {
             return;
         }
         try {
-            upLoadCases();
+            //upLoadCases();
+            EventBus.getDefault().post(new PullCasesEvent());
         } catch (Exception e) {
             syncFail();
         }
@@ -265,19 +269,113 @@ public class SyncPresenter extends MvpBasePresenter<SyncView> {
         getView().showSyncProgressDialog();
         getView().setProgressMax(100);
 
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-mm-dd H:M:S", Locale.US);
-        String time = sdf.format(new Date());
+        GregorianCalendar cal = new GregorianCalendar(2015, 1, 1);
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.US);
+        final String time = sdf.format(cal.getTime());
 
         syncService.getCasesIds(PrimeroConfiguration.getCookie(), time, true)
-                .flatMap(new Func1<Response<JsonElement>, Observable<JsonElement>>() {
+                .map(new Func1<Response<JsonElement>, List<JsonObject>>() {
                     @Override
-                    public Observable<JsonElement> call(Response<JsonElement> jsonElementResponse) {
-                        return null
+                    public List<JsonObject> call(Response<JsonElement> jsonElementResponse) {
+                        List<JsonObject> objects = new ArrayList<>();
+
+                        if (jsonElementResponse.isSuccessful()) {
+                            JsonElement jsonElement = jsonElementResponse.body();
+                            JsonArray jsonArray = jsonElement.getAsJsonArray();
+
+                            for (JsonElement element : jsonArray) {
+                                JsonObject jsonObject = element.getAsJsonObject();
+                                objects.add(jsonObject);
+                            }
+
+                        }
+                        return objects;
+                    }
+                })
+                .flatMap(new Func1<List<JsonObject>, Observable<JsonObject>>() {
+                    @Override
+                    public Observable<JsonObject> call(List<JsonObject> jsonObjects) {
+                        return Observable.from(jsonObjects);
+                    }
+                })
+                .filter(new Func1<JsonObject, Boolean>() {
+                    @Override
+                    public Boolean call(JsonObject jsonObject) {
+                        return true;
+                    }
+                })
+                .concatMap(new Func1<JsonObject, Observable<Response<JsonElement>>>() {
+                    @Override
+                    public Observable<Response<JsonElement>> call(JsonObject jsonObject) {
+                        return syncService.getCase(PrimeroConfiguration.getCookie(), jsonObject.get("_id").getAsString(), "en", true);
+                    }
+                })
+                .map(new Func1<Response<JsonElement>, List<JsonObject>>() {
+                    @Override
+                    public List<JsonObject> call(Response<JsonElement> jsonElementResponse) {
+                        //parse case json
+                        JsonObject responseJsonObject = jsonElementResponse.body().getAsJsonObject();
+                        List<JsonObject> objects = new ArrayList<>();
+
+                        if (responseJsonObject.has("photo_keys")) {
+                            JsonArray jsonArray = responseJsonObject.get("photo_keys").getAsJsonArray();
+                            for (JsonElement element : jsonArray) {
+                                JsonObject jsonObject = new JsonObject();
+                                jsonObject.addProperty("photo_key", element.getAsString());
+                                jsonObject.addProperty("_id", responseJsonObject.get("_id").getAsString());
+                                objects.add(jsonObject);
+                            }
+                        }
+
+                        if (responseJsonObject.has("audio_key")) {
+                            JsonObject jsonObject = new JsonObject();
+                            jsonObject.addProperty("audio_key", responseJsonObject.get("audio_key").getAsString());
+                            jsonObject.addProperty("_id", responseJsonObject.get("_id").getAsString());
+                            objects.add(jsonObject);
+                        }
+
+                        return objects;
+                    }
+                })
+                .flatMap(new Func1<List<JsonObject>, Observable<JsonObject>>() {
+                    @Override
+                    public Observable<JsonObject> call(List<JsonObject> jsonObjects) {
+                        return Observable.from(jsonObjects);
+                    }
+                })
+                .concatMap(new Func1<JsonObject, Observable<Response<ResponseBody>>>() {
+                    @Override
+                    public Observable<Response<ResponseBody>> call(JsonObject jsonObject) {
+                        String id = jsonObject.get("_id").getAsString();
+                        if (jsonObject.has("photo_key")) {
+                            String photoKey = jsonObject.get("photo_key").getAsString();
+
+                            return syncService.getCasePhoto(PrimeroConfiguration.getCookie(),
+                                    id,
+                                    photoKey,
+                                    "1080");
+                        }
+
+                        return syncService.getCaseAudio(PrimeroConfiguration.getCookie(),
+                                id);
+                    }
+                })
+                .map(new Func1<Response<ResponseBody>, byte[]>() {
+                    @Override
+                    public byte[] call(Response<ResponseBody> responseBodyResponse) {
+                        if (responseBodyResponse.isSuccessful()) {
+                            try {
+                                return responseBodyResponse.body().bytes();
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                        return null;
                     }
                 })
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<JsonElement>() {
+                .subscribe(new Subscriber<byte[]>() {
                     @Override
                     public void onCompleted() {
 
@@ -289,49 +387,11 @@ public class SyncPresenter extends MvpBasePresenter<SyncView> {
                     }
 
                     @Override
-                    public void onNext(JsonElement jsonElement) {
+                    public void onNext(byte[] bytes) {
 
                     }
                 });
 
-
-        syncService.getAllCasesRx(PrimeroConfiguration.getCookie(), "en", false)
-                .filter(new Func1<Response<List<JsonElement>>, Boolean>() {
-                    @Override
-                    public Boolean call(Response<List<JsonElement>> listResponse) {
-                        return listResponse.isSuccessful();
-                    }
-                })
-                .flatMap(new Func1<Response<List<JsonElement>>, Observable<JsonElement>>() {
-                    @Override
-                    public Observable<JsonElement> call(Response<List<JsonElement>> listResponse) {
-                        return Observable.from(listResponse.body());
-                    }
-                })
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread()).subscribe(new Subscriber<JsonElement>() {
-            @Override
-            public void onCompleted() {
-                getView().hideSyncProgressDialog();
-                syncSuccessfully();
-            }
-
-            @Override
-            public void onError(Throwable e) {
-
-            }
-
-            @Override
-            public void onNext(JsonElement jsonElement) {
-                getView().setProgressIncrease();
-                JsonObject jsonObject = jsonElement.getAsJsonObject();
-                try {
-                    postPullCases(jsonObject);
-                } catch (Exception e) {
-                    return;
-                }
-            }
-        });
     }
 
     private void postPullCases(JsonObject casesJsonObject) throws ParseException {
@@ -345,7 +405,7 @@ public class SyncPresenter extends MvpBasePresenter<SyncView> {
             item.setSynced(true);
             item.setContent(new Blob(casesJsonObject.toString().getBytes()));
             item.update();
-            if (!previousRev.equalsIgnoreCase(newRev)){
+            if (!previousRev.equalsIgnoreCase(newRev)) {
                 updateAudio();
                 updateCasePhotos();
             }
@@ -368,7 +428,7 @@ public class SyncPresenter extends MvpBasePresenter<SyncView> {
     }
 
     private void updateCasePhotos() {
-        
+
     }
 
     private void updateAudio() {
