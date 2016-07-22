@@ -28,6 +28,7 @@ import java.io.IOException;
 import java.sql.Date;
 import java.util.Calendar;
 import java.util.List;
+import java.util.UUID;
 
 public class CaseService extends RecordService {
     public static final String TAG = CaseService.class.getSimpleName();
@@ -109,7 +110,7 @@ public class CaseService extends RecordService {
 
     public void save(ItemValues itemValues, List<String> photoPath) {
         String uniqueId = createUniqueId();
-        itemValues.addStringItem(CASE_ID, uniqueId);
+        itemValues.addStringItem(CASE_ID, getShortUUID(uniqueId));
 
         String username = UserService.getInstance().getCurrentUser().getUsername();
         itemValues.addStringItem(MODULE, "primeromodule-cp");
@@ -151,7 +152,9 @@ public class CaseService extends RecordService {
 
     public void savePhoto(Case child, List<String> photoPaths) throws IOException {
         for (int i = 0; i < photoPaths.size(); i++) {
-            generateSavePhoto(child, photoPaths, i).save();
+            CasePhoto casePhoto = generateSavePhoto(child, photoPaths, i);
+            casePhoto.setKey(UUID.randomUUID().toString());
+            casePhoto.save();
         }
     }
 
@@ -184,27 +187,31 @@ public class CaseService extends RecordService {
 
         if (previousCount < photoPaths.size()) {
             for (int i = 0; i < previousCount; i++) {
-                CasePhoto CasePhoto = generateUpdatePhoto(child, photoPaths, i);
-                CasePhoto.update();
+                CasePhoto casePhoto = generateUpdatePhoto(child, photoPaths, i);
+                casePhoto.setKey(UUID.randomUUID().toString());
+                casePhoto.update();
             }
             for (int i = previousCount; i < photoPaths.size(); i++) {
-                CasePhoto CasePhoto = generateSavePhoto(child, photoPaths, i);
-                if (CasePhoto.getId() == 0) {
-                    CasePhoto.save();
+                CasePhoto casePhoto = generateSavePhoto(child, photoPaths, i);
+                if (casePhoto.getId() == 0) {
+                    casePhoto.save();
                 } else {
-                    CasePhoto.update();
+                    casePhoto.setKey(UUID.randomUUID().toString());
+                    casePhoto.update();
                 }
             }
         } else {
             for (int i = 0; i < photoPaths.size(); i++) {
-                CasePhoto CasePhoto = generateUpdatePhoto(child, photoPaths, i);
-                CasePhoto.update();
+                CasePhoto casePhoto = generateUpdatePhoto(child, photoPaths, i);
+                casePhoto.setKey(UUID.randomUUID().toString());
+                casePhoto.update();
             }
             for (int i = photoPaths.size(); i < previousCount; i++) {
-                CasePhoto CasePhoto = casePhotoDao.getByCaseIdAndOrder(child.getId(), i + 1);
-                CasePhoto.setPhoto(null);
-                CasePhoto.setThumbnail(null);
-                CasePhoto.update();
+                CasePhoto casePhoto = casePhotoDao.getByCaseIdAndOrder(child.getId(), i + 1);
+                casePhoto.setPhoto(null);
+                casePhoto.setThumbnail(null);
+                casePhoto.setKey(UUID.randomUUID().toString());
+                casePhoto.update();
             }
         }
     }

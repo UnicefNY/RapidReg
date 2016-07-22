@@ -33,4 +33,8 @@ public class CasePhotoService {
     public List<CasePhoto> getByCaseId(long caseId) {
         return casePhotoDao.getByCaseId(caseId);
     }
+
+    public boolean hasUnSynced(long caseId) {
+        return casePhotoDao.countUnSynced(caseId) > 0;
+    }
 }

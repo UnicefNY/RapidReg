@@ -11,6 +11,7 @@ import retrofit2.Response;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
+import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
 import retrofit2.http.Part;
@@ -46,15 +47,16 @@ public interface SyncServiceInterface {
             @Header("Cookie") String cookie,
             @Body Object requestBody);
 
-    @PUT("/api/cases")
+    @PUT("/api/cases/{id}")
     Observable<Response<JsonElement>> putCase(
             @Header("Cookie") String cookie,
+            @Path("id") String id,
             @Body Object requestBody);
 
-    @POST("/api/cases/{_id}")
+    @Multipart
+    @PUT("/api/cases/{id}")
     Observable<Response<JsonElement>> postCaseMediaData(
             @Header("Cookie") String cookie,
-            @Path("_id") String id,
-            @Part("description") RequestBody description,
+            @Path("id") String id,
             @Part MultipartBody.Part file);
 }
