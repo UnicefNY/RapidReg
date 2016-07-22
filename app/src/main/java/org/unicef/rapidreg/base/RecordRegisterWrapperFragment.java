@@ -138,7 +138,6 @@ public abstract class RecordRegisterWrapperFragment extends Fragment {
         if (recordPhotoAdapter.isFull()) {
             view.setVisibility(View.GONE);
         }
-
         recordPhotoAdapter.notifyDataSetChanged();
         EventBus.getDefault().removeStickyEvent(event);
     }
