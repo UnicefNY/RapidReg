@@ -10,7 +10,7 @@ public class PhotoConfig {
 
     public static final String CONTENT_TYPE_IMAGE = "image/jpeg";
     public static final String CONTENT_TYPE_MULTIPART = "multipart/form-data";
-    public static final String CONTENT_TYPE_AUDIO = "audio/mpeg";
+    public static final String CONTENT_TYPE_AUDIO = "audio/amr";
 
     public static final String MEDIA_PATH_FOR_CAMERA = Environment.getExternalStorageDirectory() +
             "/_media_path_for_camera_image.jpg";
