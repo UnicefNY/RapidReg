@@ -1,10 +1,13 @@
 package org.unicef.rapidreg.sync;
 
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
+import android.support.v4.util.Pair;
 import android.text.TextUtils;
 import android.util.Log;
 
-import com.facebook.stetho.server.http.HttpStatus;
+import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -30,6 +33,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Locale;
@@ -48,15 +52,18 @@ import rx.functions.Func1;
 import rx.schedulers.Schedulers;
 
 public class SyncPresenter extends MvpBasePresenter<SyncView> {
+    private static final String TAG = SyncPresenter.class.getSimpleName();
+
     private static final String FORM_DATA_KEY_AUDIO = "child[audio]";
     private static final String FORM_DATA_KEY_PHOTO = "child[photo][0]";
 
     private Context context;
-
     private SyncService syncService;
     private CaseService caseService;
     private CasePhotoService casePhotoService;
-    private static final String TAG = SyncPresenter.class.getSimpleName();
+
+    private int numberOfSuccessfulUploadedCases = 0;
+    private int totalNumberOfCases = 0;
 
     public SyncPresenter(Context context) {
         this.context = context;
@@ -92,34 +99,29 @@ public class SyncPresenter extends MvpBasePresenter<SyncView> {
             return;
         }
         try {
-            //upLoadCases();
-            EventBus.getDefault().post(new PullCasesEvent());
+            upLoadCases();
         } catch (Exception e) {
             syncFail();
         }
     }
 
+
     private void upLoadCases() {
         final List<Case> caseList = CaseService.getInstance().getAll();
+        totalNumberOfCases = caseList.size();
         getView().showSyncProgressDialog();
-        getView().setProgressMax(caseList.size());
+        getView().setProgressMax(totalNumberOfCases);
 
-        Observable.just(caseList)
-                .flatMap(new Func1<List<Case>, Observable<Case>>() {
-                    @Override
-                    public Observable<Case> call(List<Case> cases) {
-                        return Observable.from(cases);
-                    }
-                })
+        Observable.from(caseList)
                 .filter(new Func1<Case, Boolean>() {
                     @Override
                     public Boolean call(Case item) {
-                        return !item.isSynced();
+                        return true;
                     }
                 })
-                .concatMap(new Func1<Case, Observable<Response<JsonElement>>>() {
+                .map(new Func1<Case, Pair<Case, Response<JsonElement>>>() {
                     @Override
-                    public Observable<Response<JsonElement>> call(Case item) {
+                    public Pair<Case, Response<JsonElement>> call(Case item) {
                         ItemValues values = ItemValues.fromJson(new String(item.getContent().getBlob()));
                         values.addStringItem("case_id", item.getUniqueId());
                         values.addStringItem("short_id", caseService.getShortUUID(item.getUniqueId()));
@@ -127,141 +129,136 @@ public class SyncPresenter extends MvpBasePresenter<SyncView> {
                         JsonObject jsonObject = new JsonObject();
                         jsonObject.add("child", values.getValues());
 
+                        Observable<Response<JsonElement>> responseObservable;
                         if (!TextUtils.isEmpty(item.getInternalId())) {
-                            return syncService.putCase(PrimeroConfiguration.getCookie(), item.getInternalId(), true,
+                            responseObservable = syncService.putCase(PrimeroConfiguration.getCookie(), item
+                                            .getInternalId(), true,
                                     jsonObject);
                         } else {
-                            return syncService.postCaseExcludeMediaData(PrimeroConfiguration.getCookie(), true, jsonObject);
+                            responseObservable = syncService.postCaseExcludeMediaData(PrimeroConfiguration.getCookie(),
+                                    true, jsonObject);
                         }
+                        Response<JsonElement> response = responseObservable.toBlocking().first();
+
+                        verifyResponse(response);
+
+                        JsonObject responseJsonObject = response.body().getAsJsonObject();
+                        String caseId = responseJsonObject.get("case_id").getAsString();
+                        Case item2 = CaseService.getInstance().getByUniqueId(caseId);
+                        if (item2 != null) {
+                            item2.setInternalId(responseJsonObject.get("_id").getAsString());
+                            item2.setInternalRev(responseJsonObject.get("_rev").getAsString());
+                            item2.setContent(new Blob(responseJsonObject.toString().getBytes()));
+                            item2.update();
+                        }
+
+                        return new Pair<>(item, response);
+                    }
+                })
+                .map(new Func1<Pair<Case, Response<JsonElement>>, Pair<Case, Response<JsonElement>>>() {
+                    @Override
+                    public Pair<Case, Response<JsonElement>> call(Pair<Case, Response<JsonElement>> pair) {
+                        Case item = pair.first;
+                        if (item.getAudio() != null) {
+                            RequestBody requestFile = RequestBody.create(MediaType.parse(
+                                    PhotoConfig.CONTENT_TYPE_AUDIO), item.getAudio().getBlob());
+                            MultipartBody.Part body = MultipartBody.Part.createFormData(FORM_DATA_KEY_AUDIO, "audioFile.amr", requestFile);
+                            Observable<Response<JsonElement>> observable = syncService.postCaseMediaData(
+                                    PrimeroConfiguration.getCookie(), item.getInternalId(), body);
+
+                            Response<JsonElement> response = observable.toBlocking().first();
+
+                            verifyResponse(response);
+
+                            item.setAudioSynced(true);
+                            updateCaseRev(item, response.body().getAsJsonObject().get("_rev").getAsString());
+                        }
+                        return pair;
+                    }
+                })
+                .map(new Func1<Pair<Case, Response<JsonElement>>, Pair<Case, Response<JsonElement>>>() {
+                    @Override
+                    public Pair<Case, Response<JsonElement>> call(Pair<Case, Response<JsonElement>> caseResponsePair) {
+                        uploadCasePhotos(caseResponsePair.first);
+                        return caseResponsePair;
                     }
                 })
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Action1<Response<JsonElement>>() {
+                .subscribe(new Action1<Pair<Case, Response<JsonElement>>>() {
                     @Override
-                    public void call(Response<JsonElement> response) {
-                        Log.i(TAG, response.toString());
+                    public void call(Pair<Case, Response<JsonElement>> pair) {
+                        Log.i(TAG, pair.second.toString());
+
                         getView().setProgressIncrease();
-
-                        JsonObject responseJsonObject = response.body().getAsJsonObject();
-
-                        try {
-                            String caseId = responseJsonObject.get("case_id").getAsString();
-                            Case item = CaseService.getInstance().getByUniqueId(caseId);
-                            if (item != null) {
-                                item.setInternalId(responseJsonObject.get("_id").getAsString());
-                                item.setInternalRev(responseJsonObject.get("_rev").getAsString());
-                                item.setContent(new Blob(responseJsonObject.toString().getBytes()));
-                                item.update();
-
-                                uploadCaseMediaData(item);
-                            }
-                        } catch (Exception e) {
-                            return;
-                        }
+                        increaseSyncNumber();
+                        updateCaseSyncStatus(pair.first);
                     }
                 }, new Action1<Throwable>() {
                     @Override
                     public void call(Throwable throwable) {
+                        syncFail();
+                        throwable.printStackTrace();
                         Log.i(TAG, throwable.toString());
                     }
                 }, new Action0() {
                     @Override
                     public void call() {
-                        getView().hideSyncProgressDialog();
-                        EventBus.getDefault().post(new PullCasesEvent());
+                        syncSuccessfully();
                     }
                 });
     }
 
-    private void uploadCaseMediaData(final Case aCase) {
+    void verifyResponse(Response<JsonElement> response) {
+        if (!response.isSuccessful()) {
+            throw new RuntimeException();
+        }
+    }
+
+
+    private void uploadCasePhotos(final Case aCase) {
         List<CasePhoto> casePhotos = casePhotoService.getByCaseId(aCase.getId());
-        if (casePhotos == null) {
-            return;
-        }
-        uploadAudio(aCase);
-        uploadCasePhotos(aCase, casePhotos);
-    }
-
-    private void uploadCasePhotos(Case aCase, List<CasePhoto> casePhotos) {
-        for (CasePhoto casePhoto : casePhotos) {
-            try {
-                if (!casePhoto.isSynced()) {
-                    uploadItem(aCase, casePhoto);
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
-    private void uploadAudio(final Case aCase) {
-        if (aCase.getAudio() == null) {
-            return;
-        }
-        final RequestBody requestFile = RequestBody.create(MediaType.parse(
-                PhotoConfig.CONTENT_TYPE_AUDIO), aCase.getAudio().getBlob());
-        MultipartBody.Part body = MultipartBody.Part.createFormData(FORM_DATA_KEY_AUDIO, "audioFile.amr", requestFile);
-
-        Observable<Response<JsonElement>> observable = syncService.postCaseMediaData(
-                PrimeroConfiguration.getCookie(), aCase.getInternalId(), body);
-        observable.subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Action1<Response<JsonElement>>() {
+        Observable.from(casePhotos)
+                .filter(new Func1<CasePhoto, Boolean>() {
                     @Override
-                    public void call(Response<JsonElement> response) {
-                        if (HttpStatus.HTTP_OK == response.code()) {
-                            aCase.setAudioSynced(true);
-                            updateCaseRev(aCase, response.body().getAsJsonObject().get("_rev").getAsString());
-                            updateCaseSyncStatus(aCase);
-                        }
+                    public Boolean call(CasePhoto casePhoto) {
+                        return !casePhoto.isSynced();
                     }
-                }, new Action1<Throwable>() {
+                })
+                .flatMap(new Func1<CasePhoto, Observable<Pair<CasePhoto, Response<JsonElement>>>>() {
                     @Override
-                    public void call(Throwable throwable) {
-                        Log.i(TAG, throwable.toString());
+                    public Observable<Pair<CasePhoto, Response<JsonElement>>> call(final CasePhoto casePhoto) {
+                        return Observable.create(new Observable.OnSubscribe<Pair<CasePhoto, Response<JsonElement>>>() {
+                            @Override
+                            public void call(Subscriber<? super Pair<CasePhoto, Response<JsonElement>>> subscriber) {
+                                RequestBody requestFile = RequestBody.create(MediaType.parse(PhotoConfig.CONTENT_TYPE_IMAGE),
+                                        casePhoto.getPhoto().getBlob());
+                                MultipartBody.Part body = MultipartBody.Part.createFormData(FORM_DATA_KEY_PHOTO, casePhoto.getKey() + ".jpg",
+                                        requestFile);
+                                Observable<Response<JsonElement>> observable = syncService.postCaseMediaData(PrimeroConfiguration.getCookie(), aCase.getInternalId(), body);
+                                Response<JsonElement> response = observable.toBlocking().first();
+                                verifyResponse(response);
+                                subscriber.onNext(new Pair<>(casePhoto, response));
+                                subscriber.onCompleted();
+                            }
+                        });
                     }
-                });
-    }
-
-    void updateCaseRev(Case aCase, String revId) {
-        aCase.setInternalRev(revId);
-        aCase.update();
-    }
-
-    private void uploadItem(final Case aCase, final CasePhoto casePhoto) throws IOException {
-        RequestBody requestFile = RequestBody.create(MediaType.parse(PhotoConfig.CONTENT_TYPE_IMAGE), casePhoto.getPhoto().getBlob());
-        MultipartBody.Part body = MultipartBody.Part.createFormData(FORM_DATA_KEY_PHOTO, casePhoto.getKey() + ".jpg",
-                requestFile);
-        Observable<Response<JsonElement>> observable = syncService.postCaseMediaData(
-                PrimeroConfiguration.getCookie(), aCase.getInternalId(), body);
-        observable.subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Action1<Response<JsonElement>>() {
+                })
+                .map(new Func1<Pair<CasePhoto, Response<JsonElement>>, Object>() {
                     @Override
-                    public void call(Response<JsonElement> response) {
-                        if (HttpStatus.HTTP_OK == response.code()) {
-                            updateCaseRev(aCase, response.body().getAsJsonObject().get("_rev").getAsString());
-                            updateCasePhotoSyncStatus(casePhoto, true);
-                            updateCaseSyncStatus(aCase);
-                        }
+                    public Object call(Pair<CasePhoto, Response<JsonElement>> casePhotoResponsePair) {
+
+                        Response<JsonElement> response = casePhotoResponsePair.second;
+                        CasePhoto casePhoto = casePhotoResponsePair.first;
+                        updateCaseRev(aCase, response.body().getAsJsonObject().get("_rev").getAsString());
+                        updateCasePhotoSyncStatus(casePhoto, true);
+                        return null;
                     }
-                }, new Action1<Throwable>() {
-                    @Override
-                    public void call(Throwable throwable) {
-                        Log.i(TAG, throwable.toString());
-                    }
-                });
+                }).toList().toBlocking().first();
     }
 
-    private void updateCasePhotoSyncStatus(CasePhoto casePhoto, boolean status) {
-        casePhoto.setSynced(status);
-        casePhoto.update();
-    }
-
-    void updateCaseSyncStatus(Case item) {
-        item.setSynced(item.isAudioSynced() && !CasePhotoService.getInstance().hasUnSynced(item.getId()));
-        item.update();
+    private void increaseSyncNumber() {
+        numberOfSuccessfulUploadedCases += 1;
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -287,7 +284,6 @@ public class SyncPresenter extends MvpBasePresenter<SyncView> {
                                 JsonObject jsonObject = element.getAsJsonObject();
                                 objects.add(jsonObject);
                             }
-
                         }
                         return objects;
                     }
@@ -349,15 +345,9 @@ public class SyncPresenter extends MvpBasePresenter<SyncView> {
                         String id = jsonObject.get("_id").getAsString();
                         if (jsonObject.has("photo_key")) {
                             String photoKey = jsonObject.get("photo_key").getAsString();
-
-                            return syncService.getCasePhoto(PrimeroConfiguration.getCookie(),
-                                    id,
-                                    photoKey,
-                                    "1080");
+                            return syncService.getCasePhoto(PrimeroConfiguration.getCookie(), id, photoKey, "1080");
                         }
-
-                        return syncService.getCaseAudio(PrimeroConfiguration.getCookie(),
-                                id);
+                        return syncService.getCaseAudio(PrimeroConfiguration.getCookie(), id);
                     }
                 })
                 .map(new Func1<Response<ResponseBody>, byte[]>() {
@@ -391,8 +381,8 @@ public class SyncPresenter extends MvpBasePresenter<SyncView> {
 
                     }
                 });
-
     }
+
 
     private void postPullCases(JsonObject casesJsonObject) throws ParseException {
         String caseId = casesJsonObject.get("case_id").getAsString();
@@ -427,6 +417,21 @@ public class SyncPresenter extends MvpBasePresenter<SyncView> {
         }
     }
 
+    private void updateCaseRev(Case aCase, String revId) {
+        aCase.setInternalRev(revId);
+        aCase.update();
+    }
+
+    private void updateCasePhotoSyncStatus(CasePhoto casePhoto, boolean status) {
+        casePhoto.setSynced(status);
+        casePhoto.update();
+    }
+
+    void updateCaseSyncStatus(Case item) {
+        item.setSynced(item.isAudioSynced() && !CasePhotoService.getInstance().hasUnSynced(item.getId()));
+        item.update();
+    }
+
     private void updateCasePhotos() {
 
     }
@@ -448,7 +453,15 @@ public class SyncPresenter extends MvpBasePresenter<SyncView> {
     }
 
     private void updateDataViews() {
+        SimpleDateFormat sdf = new SimpleDateFormat("MM-dd-yyyy HH:mm");
+        String currentDateTime = sdf.format(new Date());
+        int numberOfFailedUploadedCases = totalNumberOfCases - numberOfSuccessfulUploadedCases;
 
+        getView().setDataViews(currentDateTime, String.valueOf(numberOfSuccessfulUploadedCases), String.valueOf
+                (numberOfFailedUploadedCases));
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+        sharedPreferences.edit().putString("syncStatisticData", new Gson().toJson(new SyncStatisticData
+                (currentDateTime, numberOfSuccessfulUploadedCases, numberOfFailedUploadedCases)));
     }
 
     public void attemptCancelSync() {

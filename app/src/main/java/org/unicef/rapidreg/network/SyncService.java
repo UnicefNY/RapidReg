@@ -12,6 +12,7 @@ import java.util.List;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
+import retrofit2.Call;
 import retrofit2.Response;
 import rx.Observable;
 
@@ -44,6 +45,12 @@ public class SyncService extends BaseRetrofitService {
             Object requestBody) {
         return serviceInterface.postCaseExcludeMediaData(cookie, requestBody);
     }
+    public Observable<Response<JsonElement>> syncPostCaseExcludeMediaData(
+            String cookie,
+            Boolean isMobile,
+            Object requestBody) {
+        return serviceInterface.syncPostCaseExcludeMediaData(cookie, requestBody);
+    }
 
     public Observable<Response<JsonElement>> postCaseMediaData(
             String cookie,
@@ -58,6 +65,14 @@ public class SyncService extends BaseRetrofitService {
             Boolean isMobile,
             Object requestBody) {
         return serviceInterface.putCase(cookie, id, requestBody);
+    }
+
+    public Observable<Response<JsonElement>> syncPutCase(
+            String cookie,
+            String id,
+            Boolean isMobile,
+            Object requestBody) {
+        return serviceInterface.syncPutCase(cookie, id, requestBody);
     }
 
     public Observable<Response<ResponseBody>> getCasePhoto(

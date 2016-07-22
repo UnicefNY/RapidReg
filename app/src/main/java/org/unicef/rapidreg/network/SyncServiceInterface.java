@@ -7,6 +7,7 @@ import java.util.List;
 
 import okhttp3.MultipartBody;
 import okhttp3.ResponseBody;
+import retrofit2.Call;
 import retrofit2.Response;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
@@ -73,4 +74,15 @@ public interface SyncServiceInterface {
             @Header("Cookie") String cookie,
             @Path("id") String id,
             @Part MultipartBody.Part file);
+
+    @POST("/api/cases")
+    Observable<Response<JsonElement>> syncPostCaseExcludeMediaData(
+            @Header("Cookie") String cookie,
+            @Body Object requestBody);
+
+    @PUT("/api/cases/{id}")
+    Observable<Response<JsonElement>> syncPutCase(
+            @Header("Cookie") String cookie,
+            @Path("id") String id,
+            @Body Object requestBody);
 }
