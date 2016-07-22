@@ -47,16 +47,16 @@ public class SyncService extends BaseRetrofitService {
     public Observable<Response<JsonElement>> postCaseMediaData(
             String cookie,
             String id,
-            RequestBody requestBody,
             MultipartBody.Part file) {
-        return serviceInterface.postCaseMediaData(cookie, id, requestBody, file);
+        return serviceInterface.postCaseMediaData(cookie, id, file);
     }
 
     public Observable<Response<JsonElement>> putCase(
             String cookie,
+            String id,
             Boolean isMobile,
             Object requestBody) {
-        return serviceInterface.putCase(cookie, requestBody);
+        return serviceInterface.putCase(cookie, id, requestBody);
     }
 
     public Observable<Response<JsonElement>> getCase(

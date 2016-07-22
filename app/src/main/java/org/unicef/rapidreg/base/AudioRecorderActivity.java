@@ -174,9 +174,9 @@ public class AudioRecorderActivity extends AppCompatActivity {
     private void startRecording() {
         mRecorder = new MediaRecorder();
         mRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
-        mRecorder.setOutputFormat(MediaRecorder.OutputFormat.DEFAULT);
+        mRecorder.setOutputFormat(MediaRecorder.OutputFormat.AMR_WB);
         mRecorder.setOutputFile(mFileName);
-        mRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.DEFAULT);
+        mRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_WB);
         mRecorder.setMaxDuration(RECORDER_MAX_DURATION_MS);
 
         try {

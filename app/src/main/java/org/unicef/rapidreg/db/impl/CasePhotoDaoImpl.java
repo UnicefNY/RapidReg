@@ -34,6 +34,16 @@ public class CasePhotoDaoImpl implements CasePhotoDao {
     }
 
     @Override
+    public long countUnSynced(long caseId) {
+        return SQLite.select()
+                .from(CasePhoto.class)
+                .where(CasePhoto_Table.case_id.eq(caseId))
+                .and(CasePhoto_Table.photo.isNotNull())
+                .and(CasePhoto_Table.isSynced.is(false))
+                .count();
+    }
+
+    @Override
     public CasePhoto getByCaseIdAndOrder(long caseId, int order) {
         return SQLite.select()
                 .from(CasePhoto.class)

@@ -16,6 +16,11 @@ public class RecordPhoto extends BaseModel {
     @Column
     int order;
 
+    @Column
+    String key;
+
+    @Column
+    boolean isSynced;
 
     @Column
     Blob thumbnail;
@@ -43,6 +48,14 @@ public class RecordPhoto extends BaseModel {
         return thumbnail;
     }
 
+    public boolean isSynced() {
+        return isSynced;
+    }
+
+    public void setSynced(boolean synced) {
+        isSynced = synced;
+    }
+
     public void setThumbnail(Blob thumbnail) {
         this.thumbnail = thumbnail;
     }
@@ -55,12 +68,22 @@ public class RecordPhoto extends BaseModel {
         this.order = order;
     }
 
+    public String getKey() {
+        return key;
+    }
+
+    public void setKey(String key) {
+        this.key = key;
+    }
+
     @Override
     public String toString() {
         return "RecordPhoto{" +
                 "id=" + id +
                 ", photo=" + photo +
                 ", order=" + order +
+                ", key='" + key + '\'' +
+                ", isSynced=" + isSynced +
                 ", thumbnail=" + thumbnail +
                 '}';
     }

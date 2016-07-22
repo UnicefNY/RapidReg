@@ -12,4 +12,6 @@ public interface CasePhotoDao {
     CasePhoto getByCaseIdAndOrder(long caseId, int order);
 
     CasePhoto getById(long id);
+
+    long countUnSynced(long caseId);
 }
