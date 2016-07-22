@@ -272,7 +272,7 @@ public class SyncPresenter extends MvpBasePresenter<SyncView> {
                 .flatMap(new Func1<Response<JsonElement>, Observable<JsonElement>>() {
                     @Override
                     public Observable<JsonElement> call(Response<JsonElement> jsonElementResponse) {
-                        return null
+                        return null;
                     }
                 })
                 .subscribeOn(Schedulers.io())
