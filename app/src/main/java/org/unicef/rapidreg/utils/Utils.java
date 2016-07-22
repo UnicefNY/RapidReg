@@ -1,7 +1,7 @@
 package org.unicef.rapidreg.utils;
 
 
-import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
 import android.support.v4.content.ContextCompat;
 import android.view.View;
@@ -46,7 +46,7 @@ public class Utils {
         return res;
     }
 
-    public static void changeDialogDividerColor(Context context, AlertDialog dialog) {
+    public static void changeDialogDividerColor(Context context, Dialog dialog) {
         int titleDividerId = context.getResources().getIdentifier("titleDivider", "id", "android");
         View titleDivider = dialog.findViewById(titleDividerId);
         if (titleDivider != null) {
