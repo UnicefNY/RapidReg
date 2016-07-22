@@ -10,19 +10,19 @@ import org.unicef.rapidreg.R;
 
 import java.lang.reflect.Field;
 
-public class DatePickerWithAppColorDivider extends DatePicker {
+public class PrimeroDatePicker extends DatePicker {
 
-    public DatePickerWithAppColorDivider(Context context) {
+    public PrimeroDatePicker(Context context) {
         super(context);
         changeDividerColor();
     }
 
-    public DatePickerWithAppColorDivider(Context context, AttributeSet attrs) {
+    public PrimeroDatePicker(Context context, AttributeSet attrs) {
         super(context, attrs);
         changeDividerColor();
     }
 
-    public DatePickerWithAppColorDivider(Context context, AttributeSet attrs, int defStyleAttr) {
+    public PrimeroDatePicker(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         changeDividerColor();
     }
