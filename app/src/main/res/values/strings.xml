@@ -95,6 +95,7 @@
     <string name="remove_photo_confirmation">Are you sure you want to remove this photo?</string>
     <string name="save_success">Record saved</string>
     <string name="save_failed">Record saved failed</string>
+    <string name="filter">Filter</string>
     <!--Sync-->
 
     <!--Transparent theme-->
