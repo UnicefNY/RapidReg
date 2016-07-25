@@ -19,12 +19,15 @@ import org.unicef.rapidreg.R;
 import org.unicef.rapidreg.base.RecordActivity;
 import org.unicef.rapidreg.base.RecordRegisterAdapter;
 import org.unicef.rapidreg.base.RecordRegisterFragment;
+import org.unicef.rapidreg.childcase.CaseActivity;
+import org.unicef.rapidreg.childcase.CaseFeature;
 import org.unicef.rapidreg.event.SaveTracingEvent;
 import org.unicef.rapidreg.forms.Field;
 import org.unicef.rapidreg.forms.RecordForm;
 import org.unicef.rapidreg.forms.Section;
 import org.unicef.rapidreg.forms.TracingFormRoot;
 import org.unicef.rapidreg.model.Tracing;
+import org.unicef.rapidreg.service.CaseService;
 import org.unicef.rapidreg.service.RecordService;
 import org.unicef.rapidreg.service.TracingFormService;
 import org.unicef.rapidreg.service.TracingService;
@@ -49,7 +52,7 @@ public class TracingMiniFormFragment extends RecordRegisterFragment {
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void saveTracing(SaveTracingEvent event) {
         if (validateRequiredField()) {
-            List<String> photoPaths = photoAdapter.getAllItems();
+            ArrayList<String> photoPaths = (ArrayList<String>) photoAdapter.getAllItems();
             ItemValues itemValues = new ItemValues(new Gson().fromJson(new Gson().toJson(
                     this.itemValues.getValues()), JsonObject.class));
 
@@ -64,7 +67,7 @@ public class TracingMiniFormFragment extends RecordRegisterFragment {
 
             Bundle args = new Bundle();
             args.putLong(TracingService.TRACING_ID, record.getId());
-            args.putStringArrayList(RecordService.RECORD_PHOTOS, (ArrayList<String>) photoAdapter.getAllItems());
+            args.putStringArrayList(RecordService.RECORD_PHOTOS, photoPaths);
             ((RecordActivity) getActivity()).turnToFeature(TracingFeature.DETAILS_MINI, args);
         }
     }
@@ -129,6 +132,14 @@ public class TracingMiniFormFragment extends RecordRegisterFragment {
         ((TracingActivity) getActivity()).turnToFeature(TracingFeature.EDIT, args);
     }
 
+    @OnClick(R.id.form_switcher)
+    public void onSwitcherChecked() {
+        Bundle args = new Bundle();
+        args.putLong(TracingService.TRACING_ID, recordId);
+        args.putStringArrayList(RecordService.RECORD_PHOTOS, (ArrayList<String>) photoAdapter.getAllItems());
+        ((TracingActivity) getActivity()).turnToFeature(TracingFeature.DETAILS_FULL, args);
+    }
+
     protected void initItemValues() {
         if (getArguments() != null) {
             recordId = getArguments().getLong(TracingService.TRACING_ID);
@@ -166,8 +177,7 @@ public class TracingMiniFormFragment extends RecordRegisterFragment {
         }
         for (String field : requiredFieldNames) {
             if (TextUtils.isEmpty((CharSequence) itemValues.getValues().get(field))) {
-                Toast.makeText(getActivity(), R.string.required_field_is_not_filled,
-                        Toast.LENGTH_LONG).show();
+                Toast.makeText(getActivity(), R.string.required_field_is_not_filled, Toast.LENGTH_LONG).show();
                 return false;
             }
         }

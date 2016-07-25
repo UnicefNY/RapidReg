@@ -49,7 +49,7 @@ public class CaseMiniFormFragment extends RecordRegisterFragment {
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void saveCase(SaveCaseEvent event) {
         if (validateRequiredField()) {
-            List<String> photoPaths = photoAdapter.getAllItems();
+            ArrayList<String> photoPaths = (ArrayList<String>) photoAdapter.getAllItems();
             ItemValues itemValues = new ItemValues(new Gson().fromJson(new Gson().toJson(
                     this.itemValues.getValues()), JsonObject.class));
 
@@ -63,7 +63,7 @@ public class CaseMiniFormFragment extends RecordRegisterFragment {
 
             Bundle args = new Bundle();
             args.putLong(CaseService.CASE_ID, record.getId());
-            args.putStringArrayList(RecordService.RECORD_PHOTOS, (ArrayList<String>) photoAdapter.getAllItems());
+            args.putStringArrayList(RecordService.RECORD_PHOTOS, photoPaths);
             ((RecordActivity) getActivity()).turnToFeature(CaseFeature.DETAILS_MINI, args);
         }
     }
@@ -128,6 +128,14 @@ public class CaseMiniFormFragment extends RecordRegisterFragment {
         ((CaseActivity) getActivity()).turnToFeature(CaseFeature.EDIT, args);
     }
 
+    @OnClick(R.id.form_switcher)
+    public void onSwitcherChecked() {
+        Bundle args = new Bundle();
+        args.putLong(CaseService.CASE_ID, recordId);
+        args.putStringArrayList(RecordService.RECORD_PHOTOS, (ArrayList<String>) photoAdapter.getAllItems());
+        ((CaseActivity) getActivity()).turnToFeature(CaseFeature.DETAILS_FULL, args);
+    }
+
     protected void initItemValues() {
         if (getArguments() != null) {
             recordId = getArguments().getLong(CaseService.CASE_ID);
@@ -165,8 +173,7 @@ public class CaseMiniFormFragment extends RecordRegisterFragment {
         }
         for (String field : requiredFieldNames) {
             if (TextUtils.isEmpty((CharSequence) itemValues.getValues().get(field))) {
-                Toast.makeText(getActivity(), R.string.required_field_is_not_filled,
-                        Toast.LENGTH_LONG).show();
+                Toast.makeText(getActivity(), R.string.required_field_is_not_filled, Toast.LENGTH_LONG).show();
                 return false;
             }
         }
