@@ -56,7 +56,7 @@ public class CaseRegisterWrapperFragment extends RecordRegisterWrapperFragment {
             Bundle args = new Bundle();
             args.putLong(CaseService.CASE_ID, record.getId());
             args.putBoolean(SHOULD_SHOW_MINI_FORM, isShowingMiniform());
-            ((RecordActivity) getActivity()).turnToFeature(CaseFeature.DETAILS, args);
+            ((RecordActivity) getActivity()).turnToFeature(CaseFeature.DETAILS_FULL, args);
         }
     }
 

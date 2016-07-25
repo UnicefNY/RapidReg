@@ -8,9 +8,10 @@ import org.unicef.rapidreg.exception.FragmentSwitchException;
 
 public enum TracingFeature implements Feature {
     LIST(R.string.tracing, TracingListFragment.class),
-    ADD(R.string.new_tracing, TracingRegisterWrapperFragment.class),
-    EDIT(R.string.edit, TracingRegisterWrapperFragment.class),
-    DETAILS(R.string.tracing_details, TracingRegisterWrapperFragment.class),
+    ADD(R.string.new_tracing, TracingMiniFormFragment.class),
+    EDIT(R.string.edit, TracingMiniFormFragment.class),
+    DETAILS_MINI(R.string.tracing_details, TracingMiniFormFragment.class),
+    DETAILS_FULL(R.string.tracing_details, TracingRegisterWrapperFragment.class),
     SEARCH(R.string.search, TracingSearchFragment.class);
 
     private int titleId;
@@ -44,6 +45,6 @@ public enum TracingFeature implements Feature {
     }
 
     public boolean isDetailMode() {
-        return this == DETAILS;
+        return this == DETAILS_FULL || this == DETAILS_MINI;
     }
 }

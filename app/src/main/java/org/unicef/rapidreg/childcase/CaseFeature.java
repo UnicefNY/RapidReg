@@ -8,9 +8,10 @@ import org.unicef.rapidreg.exception.FragmentSwitchException;
 
 public enum CaseFeature implements Feature {
     LIST(R.string.cases, CaseListFragment.class),
-    ADD(R.string.new_case, CaseRegisterWrapperFragment.class),
-    EDIT(R.string.edit, CaseRegisterWrapperFragment.class),
-    DETAILS(R.string.case_details, CaseRegisterWrapperFragment.class),
+    ADD(R.string.new_case, CaseMiniFormFragment.class),
+    EDIT(R.string.edit, CaseMiniFormFragment.class),
+    DETAILS_MINI(R.string.case_details, CaseMiniFormFragment.class),
+    DETAILS_FULL(R.string.case_details, CaseRegisterWrapperFragment.class),
     SEARCH(R.string.search, CaseSearchFragment.class);
 
     private int titleId;
@@ -44,6 +45,6 @@ public enum CaseFeature implements Feature {
     }
 
     public boolean isDetailMode() {
-        return this == DETAILS;
+        return this == DETAILS_FULL || this == DETAILS_MINI;
     }
 }

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
                 android:id="@+id/fragment_register_content"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
@@ -8,16 +9,29 @@
         android:id="@+id/register_forms_content"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@+id/to_mini_form"/>
+        android:layout_above="@+id/form_switcher"/>
 
     <Button
-        android:id="@+id/to_mini_form"
+        android:id="@+id/form_switcher"
         android:layout_width="match_parent"
         android:layout_height="40dp"
         android:layout_alignParentBottom="true"
         android:background="@color/primero_blue"
-        android:text="@string/show_short_form"
+        android:text=""
         android:textAllCaps="false"
         android:textColor="@color/primero_lighter_white"/>
+
+    <com.getbase.floatingactionbutton.FloatingActionButton
+        android:id="@+id/edit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:scrollY="3dp"
+        android:src="@drawable/edit_white"
+        android:visibility="gone"
+        app:fab_colorNormal="@color/primero_blue"
+        app:fab_colorPressed="@color/primero_blue"/>
 
 </RelativeLayout>
