@@ -96,6 +96,7 @@
     <string name="save_success">Record saved</string>
     <string name="save_failed">Record saved failed</string>
     <string name="filter">Filter</string>
+    <string name="show_short_form">Show short form</string>
     <!--Sync-->
 
     <!--Transparent theme-->

@@ -1,14 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:id="@+id/fragment_register_content"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:background="@color/primero_lighter_white"
-              android:orientation="vertical">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:id="@+id/fragment_register_content"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/register_forms_content"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="match_parent"
+        android:layout_above="@+id/to_mini_form"/>
 
-</LinearLayout>
+    <Button
+        android:id="@+id/to_mini_form"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_alignParentBottom="true"
+        android:background="@color/primero_blue"
+        android:text="@string/show_short_form"
+        android:textAllCaps="false"
+        android:textColor="@color/primero_lighter_white"/>
+
+</RelativeLayout>
