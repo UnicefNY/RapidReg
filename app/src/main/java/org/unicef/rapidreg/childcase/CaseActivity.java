@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 
 import org.greenrobot.eventbus.EventBus;
 import org.unicef.rapidreg.IntentSender;
@@ -112,11 +113,14 @@ public class CaseActivity extends RecordActivity {
     }
 
     private void clearFocusToMakeLastFieldSaved() {
-        CaseRegisterWrapperFragment fragment = (CaseRegisterWrapperFragment) getSupportFragmentManager()
-                .findFragmentByTag(CaseRegisterWrapperFragment.class.getSimpleName());
+        Fragment fragment = getSupportFragmentManager().getFragments().get(0);
 
-        if (fragment != null) {
-            fragment.clearFocus();
+        if (fragment instanceof CaseRegisterWrapperFragment) {
+            ((CaseRegisterWrapperFragment) fragment).clearFocus();
+        }
+
+        if (fragment instanceof CaseMiniFormFragment) {
+            ((CaseMiniFormFragment) fragment).clearFocus();
         }
     }
 }

@@ -6,10 +6,12 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.Button;
 
+import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.hannesdorfmann.mosby.mvp.MvpFragment;
-import com.ogaclejapan.smarttablayout.utils.v4.FragmentPagerItem;
 
+import org.greenrobot.eventbus.EventBus;
 import org.unicef.rapidreg.R;
 import org.unicef.rapidreg.forms.Field;
 import org.unicef.rapidreg.service.cache.ItemValuesMap;
@@ -27,6 +29,12 @@ public abstract class RecordRegisterFragment extends MvpFragment<RecordRegisterV
     @BindView(R.id.register_forms_content)
     RecyclerView fieldList;
 
+    @BindView(R.id.form_switcher)
+    protected Button formSwitcher;
+
+    @BindView(R.id.edit)
+    protected FloatingActionButton editButton;
+
     protected RecordPhotoAdapter photoAdapter;
     protected ItemValuesMap itemValues;
 
@@ -42,11 +50,6 @@ public abstract class RecordRegisterFragment extends MvpFragment<RecordRegisterV
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         ButterKnife.bind(this, view);
-
-        int position = FragmentPagerItem.getPosition(getArguments());
-        List<Field> fields = getFields(position);
-        presenter.initContext(getActivity(), fields, false);
-
     }
 
     @Override
@@ -58,6 +61,20 @@ public abstract class RecordRegisterFragment extends MvpFragment<RecordRegisterV
         fieldList.setAdapter(recordRegisterAdapter);
         recordRegisterAdapter.setPhotoAdapter(photoAdapter);
         recordRegisterAdapter.setItemValues(itemValues);
+
+        formSwitcher.setText(R.string.show_short_form);
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);
     }
 
     public RecordRegisterAdapter getRegisterAdapter() {
@@ -71,5 +88,17 @@ public abstract class RecordRegisterFragment extends MvpFragment<RecordRegisterV
         }
     }
 
-    protected abstract List<Field> getFields(int position);
+    protected void addProfileFieldForDetailsPage(List<Field> fields) {
+        if (((RecordActivity) getActivity()).getCurrentFeature().isDetailMode()) {
+            Field field = new Field();
+            field.setType(Field.TYPE_MINI_FORM_PROFILE);
+            try {
+                fields.add(1, field);
+            } catch (Exception e) {
+                fields.add(field);
+            }
+        }
+    }
+
+    protected abstract List<Field> getFields();
 }

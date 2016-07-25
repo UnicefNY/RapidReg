@@ -61,5 +61,4 @@ public class CaseFormService {
         caseForm = TextUtils.isEmpty(formJson) ?
                 null : new Gson().fromJson(formJson, CaseFormRoot.class);
     }
-
 }

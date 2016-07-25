@@ -6,6 +6,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.ogaclejapan.smarttablayout.utils.v4.FragmentPagerItem;
+
 import org.unicef.rapidreg.R;
 import org.unicef.rapidreg.base.RecordRegisterFragment;
 import org.unicef.rapidreg.forms.Field;
@@ -32,7 +34,15 @@ public class TracingRegisterFragment extends RecordRegisterFragment {
         return inflater.inflate(R.layout.fragment_register, container, false);
     }
 
-    protected List<Field> getFields(int position) {
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        List<Field> fields = getFields();
+        presenter.initContext(getActivity(), fields, false);
+    }
+
+    protected List<Field> getFields() {
+        int position = FragmentPagerItem.getPosition(getArguments());
         RecordForm form = TracingFormService.getInstance().getCurrentForm();
         if (form != null) {
             return form.getSections().get(position).getFields();
