@@ -1,6 +1,7 @@
 package org.unicef.rapidreg.base;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -10,8 +11,10 @@ import com.hannesdorfmann.mosby.mvp.MvpFragment;
 import com.ogaclejapan.smarttablayout.utils.v4.FragmentPagerItem;
 
 import org.unicef.rapidreg.R;
-import org.unicef.rapidreg.service.cache.ItemValues;
+import org.unicef.rapidreg.forms.Field;
 import org.unicef.rapidreg.service.cache.ItemValuesMap;
+
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -29,13 +32,21 @@ public abstract class RecordRegisterFragment extends MvpFragment<RecordRegisterV
 
     private RecordRegisterAdapter recordRegisterAdapter;
 
+    @NonNull
+    @Override
+    public RecordRegisterPresenter createPresenter() {
+        return new RecordRegisterPresenter();
+    }
+
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         ButterKnife.bind(this, view);
 
         int position = FragmentPagerItem.getPosition(getArguments());
-        presenter.initContext(getActivity(), position);
+        List<Field> fields = getFields(position);
+        presenter.initContext(getActivity(), fields, false);
+
     }
 
     @Override
@@ -59,4 +70,6 @@ public abstract class RecordRegisterFragment extends MvpFragment<RecordRegisterV
             focusedChild.clearFocus();
         }
     }
+
+    protected abstract List<Field> getFields(int position);
 }
