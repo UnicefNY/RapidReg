@@ -7,11 +7,16 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 
 import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.hannesdorfmann.mosby.mvp.MvpFragment;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 import org.unicef.rapidreg.R;
+import org.unicef.rapidreg.event.UpdateImageEvent;
 import org.unicef.rapidreg.forms.Field;
 import org.unicef.rapidreg.service.cache.ItemValuesMap;
 
@@ -66,6 +71,21 @@ public abstract class RecordRegisterFragment extends MvpFragment<RecordRegisterV
         recordRegisterAdapter.setItemValues(itemValues);
 
         formSwitcher.setText(R.string.show_short_form);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN, sticky = true, priority = 1)
+    public void updateImageAdapter(UpdateImageEvent event) {
+        photoAdapter.addItem(event.getImagePath());
+        ImageView view = (ImageView) getActivity().findViewById(R.id.add_image_button);
+
+        if (!photoAdapter.isEmpty()) {
+            view.setImageResource(R.drawable.photo_add);
+        }
+        if (photoAdapter.isFull()) {
+            view.setVisibility(View.GONE);
+        }
+        photoAdapter.notifyDataSetChanged();
+        EventBus.getDefault().removeStickyEvent(event);
     }
 
     public RecordRegisterAdapter getRegisterAdapter() {
