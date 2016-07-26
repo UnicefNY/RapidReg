@@ -25,6 +25,7 @@ public abstract class RecordRegisterFragment extends MvpFragment<RecordRegisterV
 
     public static final String ITEM_VALUES = "item_values";
 
+    protected static final int[] ANIM_IDS = {android.R.anim.slide_in_left, android.R.anim.slide_out_right};
     protected static final int INVALID_RECORD_ID = -100;
 
     @BindView(R.id.register_forms_content)

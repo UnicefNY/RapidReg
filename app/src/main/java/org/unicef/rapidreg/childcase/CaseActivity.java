@@ -25,7 +25,7 @@ public class CaseActivity extends RecordActivity {
         navigationView.setItemTextColor(caseColor);
 
         boolean showAddPage = getIntent().getBooleanExtra(IntentSender.SHOW_ADD_PAGE, false);
-        turnToFeature(showAddPage ? CaseFeature.ADD : CaseFeature.LIST, null);
+        turnToFeature(showAddPage ? CaseFeature.ADD : CaseFeature.LIST, null, null);
     }
 
     @Override
@@ -36,7 +36,7 @@ public class CaseActivity extends RecordActivity {
             showQuitDialog(R.id.nav_cases);
         } else {
             CaseService.clearAudioFile();
-            turnToFeature(CaseFeature.LIST, null);
+            turnToFeature(CaseFeature.LIST, null, null);
         }
     }
 
@@ -46,7 +46,7 @@ public class CaseActivity extends RecordActivity {
             showQuitDialog(R.id.nav_cases);
         } else {
             CaseService.clearAudioFile();
-            turnToFeature(CaseFeature.LIST, null);
+            turnToFeature(CaseFeature.LIST, null, null);
         }
     }
 
@@ -71,7 +71,7 @@ public class CaseActivity extends RecordActivity {
                         CaseService.clearAudioFile();
                         switch (clickedButton) {
                             case R.id.nav_cases:
-                                turnToFeature(CaseFeature.LIST, null);
+                                turnToFeature(CaseFeature.LIST, null, null);
                                 break;
                             case R.id.nav_tracing:
                                 intentSender.showTracingActivity(CaseActivity.this);
@@ -102,7 +102,7 @@ public class CaseActivity extends RecordActivity {
 
     @Override
     protected void search() {
-        turnToFeature(CaseFeature.SEARCH, null);
+        turnToFeature(CaseFeature.SEARCH, null, null);
     }
 
     @Override

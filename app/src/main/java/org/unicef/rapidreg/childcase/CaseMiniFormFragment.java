@@ -67,7 +67,7 @@ public class CaseMiniFormFragment extends RecordRegisterFragment {
 
             Bundle args = new Bundle();
             args.putLong(CaseService.CASE_ID, record.getId());
-            ((RecordActivity) getActivity()).turnToFeature(CaseFeature.DETAILS_MINI, args);
+            ((RecordActivity) getActivity()).turnToFeature(CaseFeature.DETAILS_MINI, args, null);
         }
     }
 
@@ -140,7 +140,7 @@ public class CaseMiniFormFragment extends RecordRegisterFragment {
         Bundle args = new Bundle();
         args.putSerializable(RecordService.ITEM_VALUES, itemValues);
         args.putStringArrayList(RecordService.RECORD_PHOTOS, (ArrayList<String>) photoAdapter.getAllItems());
-        ((CaseActivity) getActivity()).turnToFeature(CaseFeature.EDIT_MINI, args);
+        ((CaseActivity) getActivity()).turnToFeature(CaseFeature.EDIT_MINI, args, null);
     }
 
     @OnClick(R.id.form_switcher)
@@ -150,7 +150,7 @@ public class CaseMiniFormFragment extends RecordRegisterFragment {
         args.putStringArrayList(RecordService.RECORD_PHOTOS, (ArrayList<String>) photoAdapter.getAllItems());
         Feature feature = ((RecordActivity) getActivity()).getCurrentFeature().isDetailMode() ?
                 CaseFeature.DETAILS_FULL : CaseFeature.EDIT_FULL;
-        ((RecordActivity) getActivity()).turnToFeature(feature, args);
+        ((RecordActivity) getActivity()).turnToFeature(feature, args, ANIM_IDS);
     }
 
     protected void initItemValues() {

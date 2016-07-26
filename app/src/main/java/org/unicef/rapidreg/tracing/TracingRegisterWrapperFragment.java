@@ -49,7 +49,7 @@ public class TracingRegisterWrapperFragment extends RecordRegisterWrapperFragmen
             Bundle args = new Bundle();
             args.putSerializable(RecordService.ITEM_VALUES, ItemValuesMap.fromItemValuesJsonObject(itemValues));
             args.putStringArrayList(RecordService.RECORD_PHOTOS, photoPaths);
-            ((RecordActivity) getActivity()).turnToFeature(TracingFeature.DETAILS_FULL, args);
+            ((RecordActivity) getActivity()).turnToFeature(TracingFeature.DETAILS_FULL, args, null);
         }
     }
 
@@ -58,7 +58,7 @@ public class TracingRegisterWrapperFragment extends RecordRegisterWrapperFragmen
         Bundle args = new Bundle();
         args.putSerializable(RecordService.ITEM_VALUES, itemValues);
         args.putStringArrayList(RecordService.RECORD_PHOTOS, (ArrayList<String>) recordPhotoAdapter.getAllItems());
-        ((TracingActivity) getActivity()).turnToFeature(TracingFeature.EDIT_FULL, args);
+        ((TracingActivity) getActivity()).turnToFeature(TracingFeature.EDIT_FULL, args, null);
     }
 
     @Override

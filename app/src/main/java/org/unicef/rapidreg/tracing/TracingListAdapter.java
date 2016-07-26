@@ -60,7 +60,7 @@ public class TracingListAdapter extends RecordListAdapter {
             public void onClick(View v) {
                 Bundle args = new Bundle();
                 args.putLong(TracingService.TRACING_ID, record.getId());
-                activity.turnToFeature(TracingFeature.DETAILS_MINI, args);
+                activity.turnToFeature(TracingFeature.DETAILS_MINI, args, null);
                 try {
                     RecordService.clearAudioFile();
                     if (record.getAudio() != null) {

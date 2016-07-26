@@ -25,7 +25,7 @@ public class TracingActivity extends RecordActivity {
         navigationView.setItemTextColor(tracingColor);
 
         boolean showAddPage = getIntent().getBooleanExtra(IntentSender.SHOW_ADD_PAGE, false);
-        turnToFeature(showAddPage ? TracingFeature.ADD : TracingFeature.LIST, null);
+        turnToFeature(showAddPage ? TracingFeature.ADD : TracingFeature.LIST, null, null);
     }
 
     @Override
@@ -36,7 +36,7 @@ public class TracingActivity extends RecordActivity {
             showQuitDialog(R.id.nav_tracing);
         } else {
             TracingService.clearAudioFile();
-            turnToFeature(TracingFeature.LIST, null);
+            turnToFeature(TracingFeature.LIST, null, null);
         }
     }
 
@@ -56,7 +56,7 @@ public class TracingActivity extends RecordActivity {
             showQuitDialog(R.id.nav_tracing);
         } else {
             TracingService.clearAudioFile();
-            turnToFeature(TracingFeature.LIST, null);
+            turnToFeature(TracingFeature.LIST, null, null);
         }
     }
 
@@ -71,7 +71,7 @@ public class TracingActivity extends RecordActivity {
                         TracingService.clearAudioFile();
                         switch (clickedButton) {
                             case R.id.nav_tracing:
-                                turnToFeature(TracingFeature.LIST, null);
+                                turnToFeature(TracingFeature.LIST, null, null);
                                 break;
                             case R.id.nav_cases:
                                 intentSender.showCasesActivity(TracingActivity.this, false);
@@ -102,7 +102,7 @@ public class TracingActivity extends RecordActivity {
 
     @Override
     protected void search() {
-        turnToFeature(TracingFeature.SEARCH, null);
+        turnToFeature(TracingFeature.SEARCH, null, null);
     }
 
     @Override

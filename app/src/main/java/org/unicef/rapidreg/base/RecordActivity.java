@@ -175,7 +175,7 @@ public abstract class RecordActivity extends BaseActivity {
         return currentFeature;
     }
 
-    public void turnToFeature(Feature feature, Bundle args) {
+    public void turnToFeature(Feature feature, Bundle args, int[] animIds) {
         currentFeature = feature;
         changeToolbarTitle(feature.getTitleId());
         changeToolbarIcon(feature);
@@ -184,7 +184,7 @@ public abstract class RecordActivity extends BaseActivity {
             if (args != null) {
                 fragment.setArguments(args);
             }
-            navToFragment(fragment);
+            navToFragment(fragment, animIds);
         } catch (Exception e) {
             throw new RuntimeException("Fragment navigation error", e);
         }
@@ -260,11 +260,13 @@ public abstract class RecordActivity extends BaseActivity {
         saveMenu.setVisible(false);
     }
 
-    private void navToFragment(Fragment target) {
+    private void navToFragment(Fragment target, int[] animIds) {
         if (target != null) {
             String tag = target.getClass().getSimpleName();
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-            transaction.setCustomAnimations(android.R.anim.slide_out_right, android.R.anim.slide_in_left);
+            if (animIds != null) {
+                transaction.setCustomAnimations(animIds[0], animIds[1]);
+            }
             transaction.replace(R.id.fragment_content, target, tag).commit();
         }
     }

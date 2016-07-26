@@ -49,7 +49,7 @@ public class CaseRegisterWrapperFragment extends RecordRegisterWrapperFragment {
             Bundle args = new Bundle();
             args.putSerializable(RecordService.ITEM_VALUES, ItemValuesMap.fromItemValuesJsonObject(itemValues));
             args.putStringArrayList(RecordService.RECORD_PHOTOS, photoPaths);
-            ((RecordActivity) getActivity()).turnToFeature(CaseFeature.DETAILS_FULL, args);
+            ((RecordActivity) getActivity()).turnToFeature(CaseFeature.DETAILS_FULL, args, null);
         }
     }
 
@@ -58,7 +58,7 @@ public class CaseRegisterWrapperFragment extends RecordRegisterWrapperFragment {
         Bundle args = new Bundle();
         args.putSerializable(RecordService.ITEM_VALUES, itemValues);
         args.putStringArrayList(RecordService.RECORD_PHOTOS, (ArrayList<String>) recordPhotoAdapter.getAllItems());
-        ((CaseActivity) getActivity()).turnToFeature(CaseFeature.EDIT_FULL, args);
+        ((CaseActivity) getActivity()).turnToFeature(CaseFeature.EDIT_FULL, args, null);
     }
 
     @Override
