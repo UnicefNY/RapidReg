@@ -12,11 +12,14 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
+import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 import org.json.JSONException;
 import org.unicef.rapidreg.R;
+import org.unicef.rapidreg.base.Feature;
 import org.unicef.rapidreg.base.RecordActivity;
+import org.unicef.rapidreg.base.RecordPhotoAdapter;
 import org.unicef.rapidreg.base.RecordRegisterAdapter;
 import org.unicef.rapidreg.base.RecordRegisterFragment;
 import org.unicef.rapidreg.event.SaveTracingEvent;
@@ -25,8 +28,10 @@ import org.unicef.rapidreg.forms.RecordForm;
 import org.unicef.rapidreg.forms.Section;
 import org.unicef.rapidreg.forms.TracingFormRoot;
 import org.unicef.rapidreg.model.Tracing;
+import org.unicef.rapidreg.model.TracingPhoto;
 import org.unicef.rapidreg.service.RecordService;
 import org.unicef.rapidreg.service.TracingFormService;
+import org.unicef.rapidreg.service.TracingPhotoService;
 import org.unicef.rapidreg.service.TracingService;
 import org.unicef.rapidreg.service.cache.ItemValues;
 import org.unicef.rapidreg.service.cache.ItemValuesMap;
@@ -43,8 +48,6 @@ import butterknife.OnClick;
 
 public class TracingMiniFormFragment extends RecordRegisterFragment {
     public static final String TAG = TracingMiniFormFragment.class.getSimpleName();
-
-    private long recordId;
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void saveTracing(SaveTracingEvent event) {
@@ -64,7 +67,6 @@ public class TracingMiniFormFragment extends RecordRegisterFragment {
 
             Bundle args = new Bundle();
             args.putLong(TracingService.TRACING_ID, record.getId());
-            args.putStringArrayList(RecordService.RECORD_PHOTOS, photoPaths);
             ((RecordActivity) getActivity()).turnToFeature(TracingFeature.DETAILS_MINI, args);
         }
     }
@@ -77,6 +79,18 @@ public class TracingMiniFormFragment extends RecordRegisterFragment {
         initItemValues();
 
         return inflater.inflate(R.layout.fragment_register, container, false);
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);
     }
 
     @Override
@@ -123,46 +137,62 @@ public class TracingMiniFormFragment extends RecordRegisterFragment {
 
     @OnClick(R.id.edit)
     public void onEditClicked() {
-        switchTo(TracingFeature.EDIT);
+        Bundle args = new Bundle();
+        args.putSerializable(RecordService.ITEM_VALUES, itemValues);
+        args.putStringArrayList(RecordService.RECORD_PHOTOS, (ArrayList<String>) photoAdapter.getAllItems());
+        ((TracingActivity) getActivity()).turnToFeature(TracingFeature.EDIT_MINI, args);
     }
 
     @OnClick(R.id.form_switcher)
     public void onSwitcherChecked() {
-        switchTo(TracingFeature.DETAILS_FULL);
+        Bundle args = new Bundle();
+        args.putSerializable(RecordService.ITEM_VALUES, itemValues);
+        args.putStringArrayList(RecordService.RECORD_PHOTOS, (ArrayList<String>) photoAdapter.getAllItems());
+        Feature feature = ((RecordActivity) getActivity()).getCurrentFeature().isDetailMode() ?
+                TracingFeature.DETAILS_FULL : TracingFeature.EDIT_FULL;
+        ((RecordActivity) getActivity()).turnToFeature(feature, args);
     }
 
     protected void initItemValues() {
         if (getArguments() != null) {
-            recordId = getArguments().getLong(TracingService.TRACING_ID);
-            Tracing item = TracingService.getInstance().getById(recordId);
-            String tracingJson = new String(item.getContent().getBlob());
-            try {
-                itemValues = new ItemValuesMap(JsonUtils.toMap(ItemValues.generateItemValues(tracingJson).getValues()));
-                itemValues.addStringItem(TracingService.TRACING_ID, item.getUniqueId());
-            } catch (JSONException e) {
-                Log.e(TAG, "Json conversion error");
-            }
+            recordId = getArguments().getLong(TracingService.TRACING_ID, INVALID_RECORD_ID);
+            if (recordId != INVALID_RECORD_ID) {
+                Tracing item = TracingService.getInstance().getById(recordId);
+                String tracingJson = new String(item.getContent().getBlob());
+                try {
+                    itemValues = new ItemValuesMap(JsonUtils.toMap(ItemValues.generateItemValues(tracingJson).getValues()));
+                    itemValues.addStringItem(TracingService.TRACING_ID, item.getUniqueId());
+                } catch (JSONException e) {
+                    Log.e(TAG, "Json conversion error");
+                }
 
-            DateFormat dateFormat = SimpleDateFormat.getDateInstance(DateFormat.MEDIUM, Locale.US);
-            String shortUUID = RecordService.getShortUUID(item.getUniqueId());
-            itemValues.addStringItem(ItemValues.RecordProfile.ID_NORMAL_STATE, shortUUID);
-            itemValues.addStringItem(ItemValues.RecordProfile.REGISTRATION_DATE,
-                    dateFormat.format(item.getRegistrationDate()));
-            itemValues.addStringItem(ItemValues.RecordProfile.GENDER_NAME, shortUUID);
-            itemValues.addNumberItem(ItemValues.RecordProfile.ID, item.getId());
-            photoAdapter = new TracingPhotoAdapter(getContext(),
-                    getArguments().getStringArrayList(RecordService.RECORD_PHOTOS));
+                DateFormat dateFormat = SimpleDateFormat.getDateInstance(DateFormat.MEDIUM, Locale.US);
+                String shortUUID = RecordService.getShortUUID(item.getUniqueId());
+                itemValues.addStringItem(ItemValues.RecordProfile.ID_NORMAL_STATE, shortUUID);
+                itemValues.addStringItem(ItemValues.RecordProfile.REGISTRATION_DATE,
+                        dateFormat.format(item.getRegistrationDate()));
+                itemValues.addStringItem(ItemValues.RecordProfile.GENDER_NAME, shortUUID);
+                itemValues.addNumberItem(ItemValues.RecordProfile.ID, item.getId());
+                photoAdapter = initPhotoAdapter(recordId);
+            } else {
+                itemValues = (ItemValuesMap) getArguments().getSerializable(ITEM_VALUES);
+                photoAdapter = new TracingPhotoAdapter(getContext(),
+                        getArguments().getStringArrayList(RecordService.RECORD_PHOTOS));
+            }
         } else {
             itemValues = new ItemValuesMap();
             photoAdapter = new TracingPhotoAdapter(getContext(), new ArrayList<String>());
         }
     }
 
-    private void switchTo(TracingFeature feature) {
-        Bundle args = new Bundle();
-        args.putLong(TracingService.TRACING_ID, recordId);
-        args.putStringArrayList(RecordService.RECORD_PHOTOS, (ArrayList<String>) photoAdapter.getAllItems());
-        ((TracingActivity) getActivity()).turnToFeature(feature, args);
+    private RecordPhotoAdapter initPhotoAdapter(long recordId) {
+        List<String> paths = new ArrayList<>();
+
+        List<TracingPhoto> tracings = TracingPhotoService.getInstance().getByTracingId(recordId);
+        for (TracingPhoto tracing : tracings) {
+            paths.add(String.valueOf(tracing.getId()));
+        }
+        return new TracingPhotoAdapter(getContext(), paths);
     }
 
     private boolean validateRequiredField() {

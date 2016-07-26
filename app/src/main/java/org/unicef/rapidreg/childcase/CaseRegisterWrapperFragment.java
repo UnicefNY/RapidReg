@@ -12,23 +12,17 @@ import com.ogaclejapan.smarttablayout.utils.v4.FragmentPagerItems;
 
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
-import org.json.JSONException;
 import org.unicef.rapidreg.R;
 import org.unicef.rapidreg.base.RecordActivity;
-import org.unicef.rapidreg.base.RecordPhotoAdapter;
 import org.unicef.rapidreg.base.RecordRegisterWrapperFragment;
 import org.unicef.rapidreg.event.SaveCaseEvent;
 import org.unicef.rapidreg.forms.CaseFormRoot;
 import org.unicef.rapidreg.forms.Section;
-import org.unicef.rapidreg.model.Case;
-import org.unicef.rapidreg.model.CasePhoto;
 import org.unicef.rapidreg.service.CaseFormService;
-import org.unicef.rapidreg.service.CasePhotoService;
 import org.unicef.rapidreg.service.CaseService;
 import org.unicef.rapidreg.service.RecordService;
 import org.unicef.rapidreg.service.cache.ItemValues;
 import org.unicef.rapidreg.service.cache.ItemValuesMap;
-import org.unicef.rapidreg.utils.JsonUtils;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -37,11 +31,12 @@ import java.util.List;
 import butterknife.OnClick;
 
 public class CaseRegisterWrapperFragment extends RecordRegisterWrapperFragment {
+    public static final String TAG = CaseRegisterWrapperFragment.class.getSimpleName();
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void saveCase(SaveCaseEvent event) {
         if (validateRequiredField()) {
-            List<String> photoPaths = recordPhotoAdapter.getAllItems();
+            ArrayList<String> photoPaths = (ArrayList<String>) recordPhotoAdapter.getAllItems();
             ItemValues itemValues = new ItemValues(new Gson().fromJson(new Gson().toJson(
                     this.itemValues.getValues()), JsonObject.class));
 
@@ -51,11 +46,9 @@ public class CaseRegisterWrapperFragment extends RecordRegisterWrapperFragment {
                 Toast.makeText(getActivity(), R.string.save_failed, Toast.LENGTH_SHORT).show();
             }
 
-            Case record = CaseService.getInstance().getByUniqueId(itemValues.getAsString(CaseService.CASE_ID));
-
             Bundle args = new Bundle();
-            args.putLong(CaseService.CASE_ID, record.getId());
-            args.putBoolean(SHOULD_SHOW_MINI_FORM, isShowingMiniform());
+            args.putSerializable(RecordService.ITEM_VALUES, ItemValuesMap.fromItemValuesJsonObject(itemValues));
+            args.putStringArrayList(RecordService.RECORD_PHOTOS, photoPaths);
             ((RecordActivity) getActivity()).turnToFeature(CaseFeature.DETAILS_FULL, args);
         }
     }
@@ -63,25 +56,17 @@ public class CaseRegisterWrapperFragment extends RecordRegisterWrapperFragment {
     @OnClick(R.id.edit)
     public void onEditClicked() {
         Bundle args = new Bundle();
-        args.putLong(CaseService.CASE_ID, recordId);
-        args.putBoolean(SHOULD_SHOW_MINI_FORM, isShowingMiniform());
-        ((CaseActivity) getActivity()).turnToFeature(CaseFeature.EDIT, args);
+        args.putSerializable(RecordService.ITEM_VALUES, itemValues);
+        args.putStringArrayList(RecordService.RECORD_PHOTOS, (ArrayList<String>) recordPhotoAdapter.getAllItems());
+        ((CaseActivity) getActivity()).turnToFeature(CaseFeature.EDIT_FULL, args);
     }
 
     @Override
     protected void initItemValues() {
         if (getArguments() != null) {
-            recordId = getArguments().getLong(CaseService.CASE_ID);
-            shouldShowMiniForm = getArguments().getBoolean(SHOULD_SHOW_MINI_FORM, true);
-            Case caseItem = CaseService.getInstance().getById(recordId);
-            String caseJson = new String(caseItem.getContent().getBlob());
-            try {
-                itemValues = new ItemValuesMap(JsonUtils.toMap(ItemValues.generateItemValues(caseJson).getValues()));
-                itemValues.addStringItem(CaseService.CASE_ID, caseItem.getUniqueId());
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-            initProfile(caseItem);
+            itemValues = (ItemValuesMap) getArguments().getSerializable(ITEM_VALUES);
+            recordPhotoAdapter = new CasePhotoAdapter(getContext(),
+                    getArguments().getStringArrayList(RecordService.RECORD_PHOTOS));
         }
     }
 
@@ -89,22 +74,6 @@ public class CaseRegisterWrapperFragment extends RecordRegisterWrapperFragment {
     protected void initFormData() {
         form = CaseFormService.getInstance().getCurrentForm();
         sections = form.getSections();
-        miniFields = new ArrayList<>();
-        if (form != null) {
-            getMiniFields();
-        }
-    }
-
-    @Override
-    protected RecordPhotoAdapter initPhotoAdapter() {
-        List<String> paths = new ArrayList<>();
-
-        List<CasePhoto> cases = CasePhotoService.getInstance().getByCaseId(recordId);
-        for (CasePhoto aCase : cases) {
-            paths.add(String.valueOf(aCase.getId()));
-        }
-        recordPhotoAdapter = new CasePhotoAdapter(getContext(), paths);
-        return recordPhotoAdapter;
     }
 
     @NonNull
@@ -112,12 +81,10 @@ public class CaseRegisterWrapperFragment extends RecordRegisterWrapperFragment {
         FragmentPagerItems pages = new FragmentPagerItems(getActivity());
         for (Section section : sections) {
             String[] values = section.getName().values().toArray(new String[0]);
-            Bundle bundle = new Bundle();
-            bundle.putStringArrayList(RecordService.RECORD_PHOTOS,
-                    (ArrayList<String>) recordPhotoAdapter.getAllItems());
-
-            bundle.putSerializable(RecordService.ITEM_VALUES, itemValues);
-            pages.add(FragmentPagerItem.of(values[0], CaseRegisterFragment.class, bundle));
+            Bundle args = new Bundle();
+            args.putSerializable(RecordService.ITEM_VALUES, itemValues);
+            args.putStringArrayList(RecordService.RECORD_PHOTOS, (ArrayList<String>) recordPhotoAdapter.getAllItems());
+            pages.add(FragmentPagerItem.of(values[0], CaseRegisterFragment.class, args));
         }
         return pages;
     }

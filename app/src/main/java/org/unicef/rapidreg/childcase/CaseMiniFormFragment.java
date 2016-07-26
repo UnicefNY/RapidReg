@@ -12,11 +12,14 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
+import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 import org.json.JSONException;
 import org.unicef.rapidreg.R;
+import org.unicef.rapidreg.base.Feature;
 import org.unicef.rapidreg.base.RecordActivity;
+import org.unicef.rapidreg.base.RecordPhotoAdapter;
 import org.unicef.rapidreg.base.RecordRegisterAdapter;
 import org.unicef.rapidreg.base.RecordRegisterFragment;
 import org.unicef.rapidreg.event.SaveCaseEvent;
@@ -25,7 +28,9 @@ import org.unicef.rapidreg.forms.Field;
 import org.unicef.rapidreg.forms.RecordForm;
 import org.unicef.rapidreg.forms.Section;
 import org.unicef.rapidreg.model.Case;
+import org.unicef.rapidreg.model.CasePhoto;
 import org.unicef.rapidreg.service.CaseFormService;
+import org.unicef.rapidreg.service.CasePhotoService;
 import org.unicef.rapidreg.service.CaseService;
 import org.unicef.rapidreg.service.RecordService;
 import org.unicef.rapidreg.service.cache.ItemValues;
@@ -44,8 +49,6 @@ import butterknife.OnClick;
 public class CaseMiniFormFragment extends RecordRegisterFragment {
     public static final String TAG = CaseMiniFormFragment.class.getSimpleName();
 
-    private long recordId;
-
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void saveCase(SaveCaseEvent event) {
         if (validateRequiredField()) {
@@ -59,11 +62,11 @@ public class CaseMiniFormFragment extends RecordRegisterFragment {
                 Toast.makeText(getActivity(), R.string.save_failed, Toast.LENGTH_SHORT).show();
             }
 
-            Case record = CaseService.getInstance().getByUniqueId(itemValues.getAsString(CaseService.CASE_ID));
+            Case record = CaseService.getInstance()
+                    .getByUniqueId(itemValues.getAsString(CaseService.CASE_ID));
 
             Bundle args = new Bundle();
             args.putLong(CaseService.CASE_ID, record.getId());
-            args.putStringArrayList(RecordService.RECORD_PHOTOS, photoPaths);
             ((RecordActivity) getActivity()).turnToFeature(CaseFeature.DETAILS_MINI, args);
         }
     }
@@ -76,6 +79,18 @@ public class CaseMiniFormFragment extends RecordRegisterFragment {
         initItemValues();
 
         return inflater.inflate(R.layout.fragment_register, container, false);
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);
     }
 
     @Override
@@ -122,46 +137,62 @@ public class CaseMiniFormFragment extends RecordRegisterFragment {
 
     @OnClick(R.id.edit)
     public void onEditClicked() {
-        switchTo(CaseFeature.EDIT);
+        Bundle args = new Bundle();
+        args.putSerializable(RecordService.ITEM_VALUES, itemValues);
+        args.putStringArrayList(RecordService.RECORD_PHOTOS, (ArrayList<String>) photoAdapter.getAllItems());
+        ((CaseActivity) getActivity()).turnToFeature(CaseFeature.EDIT_MINI, args);
     }
 
     @OnClick(R.id.form_switcher)
     public void onSwitcherChecked() {
-        switchTo(CaseFeature.DETAILS_FULL);
+        Bundle args = new Bundle();
+        args.putSerializable(RecordService.ITEM_VALUES, itemValues);
+        args.putStringArrayList(RecordService.RECORD_PHOTOS, (ArrayList<String>) photoAdapter.getAllItems());
+        Feature feature = ((RecordActivity) getActivity()).getCurrentFeature().isDetailMode() ?
+                CaseFeature.DETAILS_FULL : CaseFeature.EDIT_FULL;
+        ((RecordActivity) getActivity()).turnToFeature(feature, args);
     }
 
     protected void initItemValues() {
         if (getArguments() != null) {
-            recordId = getArguments().getLong(CaseService.CASE_ID);
-            Case item = CaseService.getInstance().getById(recordId);
-            String caseJson = new String(item.getContent().getBlob());
-            try {
-                itemValues = new ItemValuesMap(JsonUtils.toMap(ItemValues.generateItemValues(caseJson).getValues()));
-                itemValues.addStringItem(CaseService.CASE_ID, item.getUniqueId());
-            } catch (JSONException e) {
-                Log.e(TAG, "Json conversion error");
-            }
+            recordId = getArguments().getLong(CaseService.CASE_ID, INVALID_RECORD_ID);
+            if (recordId != INVALID_RECORD_ID) {
+                Case item = CaseService.getInstance().getById(recordId);
+                String caseJson = new String(item.getContent().getBlob());
+                try {
+                    itemValues = new ItemValuesMap(JsonUtils.toMap(ItemValues.generateItemValues(caseJson).getValues()));
+                    itemValues.addStringItem(CaseService.CASE_ID, item.getUniqueId());
+                } catch (JSONException e) {
+                    Log.e(TAG, "Json conversion error");
+                }
 
-            DateFormat dateFormat = SimpleDateFormat.getDateInstance(DateFormat.MEDIUM, Locale.US);
-            String shortUUID = RecordService.getShortUUID(item.getUniqueId());
-            itemValues.addStringItem(ItemValues.RecordProfile.ID_NORMAL_STATE, shortUUID);
-            itemValues.addStringItem(ItemValues.RecordProfile.REGISTRATION_DATE,
-                    dateFormat.format(item.getRegistrationDate()));
-            itemValues.addStringItem(ItemValues.RecordProfile.GENDER_NAME, shortUUID);
-            itemValues.addNumberItem(ItemValues.RecordProfile.ID, item.getId());
-            photoAdapter = new CasePhotoAdapter(getContext(),
-                    getArguments().getStringArrayList(RecordService.RECORD_PHOTOS));
+                DateFormat dateFormat = SimpleDateFormat.getDateInstance(DateFormat.MEDIUM, Locale.US);
+                String shortUUID = RecordService.getShortUUID(item.getUniqueId());
+                itemValues.addStringItem(ItemValues.RecordProfile.ID_NORMAL_STATE, shortUUID);
+                itemValues.addStringItem(ItemValues.RecordProfile.REGISTRATION_DATE,
+                        dateFormat.format(item.getRegistrationDate()));
+                itemValues.addStringItem(ItemValues.RecordProfile.GENDER_NAME, shortUUID);
+                itemValues.addNumberItem(ItemValues.RecordProfile.ID, item.getId());
+                photoAdapter = initPhotoAdapter(recordId);
+            } else {
+                itemValues = (ItemValuesMap) getArguments().getSerializable(ITEM_VALUES);
+                photoAdapter = new CasePhotoAdapter(getContext(),
+                        getArguments().getStringArrayList(RecordService.RECORD_PHOTOS));
+            }
         } else {
             itemValues = new ItemValuesMap();
             photoAdapter = new CasePhotoAdapter(getContext(), new ArrayList<String>());
         }
     }
 
-    private void switchTo(CaseFeature feature) {
-        Bundle args = new Bundle();
-        args.putLong(CaseService.CASE_ID, recordId);
-        args.putStringArrayList(RecordService.RECORD_PHOTOS, (ArrayList<String>) photoAdapter.getAllItems());
-        ((CaseActivity) getActivity()).turnToFeature(feature, args);
+    private RecordPhotoAdapter initPhotoAdapter(long recordId) {
+        List<String> paths = new ArrayList<>();
+
+        List<CasePhoto> cases = CasePhotoService.getInstance().getByCaseId(recordId);
+        for (CasePhoto aCase : cases) {
+            paths.add(String.valueOf(aCase.getId()));
+        }
+        return new CasePhotoAdapter(getContext(), paths);
     }
 
     private boolean validateRequiredField() {

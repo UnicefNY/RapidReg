@@ -264,6 +264,7 @@ public abstract class RecordActivity extends BaseActivity {
         if (target != null) {
             String tag = target.getClass().getSimpleName();
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+            transaction.setCustomAnimations(android.R.anim.slide_out_right, android.R.anim.slide_in_left);
             transaction.replace(R.id.fragment_content, target, tag).commit();
         }
     }

@@ -5,102 +5,50 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
-    <RelativeLayout
-        android:id="@+id/full_form_layout"
+    <com.ogaclejapan.smarttablayout.SmartTabLayout
+        android:id="@+id/viewpagertab"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        app:stl_clickable="true"
+        app:stl_defaultTabBackground="?attr/selectableItemBackground"
+        app:stl_defaultTabTextAllCaps="false"
+        app:stl_defaultTabTextColor="@color/primero_font_dark"
+        app:stl_defaultTabTextHorizontalPadding="16dp"
+        app:stl_defaultTabTextMinWidth="0dp"
+        app:stl_defaultTabTextSize="14sp"
+        app:stl_distributeEvenly="false"
+        app:stl_dividerColor="#4D000000"
+        app:stl_dividerThickness="0dp"
+        app:stl_drawDecorationAfterTab="false"
+        app:stl_indicatorAlwaysInCenter="false"
+        app:stl_indicatorColor="@color/primero_blue"
+        app:stl_indicatorCornerRadius="1dp"
+        app:stl_indicatorGravity="bottom"
+        app:stl_indicatorInFront="false"
+        app:stl_indicatorInterpolation="smart"
+        app:stl_indicatorThickness="1dp"
+        app:stl_indicatorWidth="auto"
+        app:stl_indicatorWithoutPadding="false"
+        app:stl_overlineColor="#4D000000"
+        app:stl_overlineThickness="0dp"
+        app:stl_titleOffset="24dp"
+        app:stl_underlineColor="#4D000000"
+        app:stl_underlineThickness="1dp"/>
+
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/viewpager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:visibility="gone">
-
-        <com.ogaclejapan.smarttablayout.SmartTabLayout
-            android:id="@+id/viewpagertab"
-            android:layout_width="match_parent"
-            android:layout_height="48dp"
-            app:stl_clickable="true"
-            app:stl_defaultTabBackground="?attr/selectableItemBackground"
-            app:stl_defaultTabTextAllCaps="false"
-            app:stl_defaultTabTextColor="@color/primero_font_dark"
-            app:stl_defaultTabTextHorizontalPadding="16dp"
-            app:stl_defaultTabTextMinWidth="0dp"
-            app:stl_defaultTabTextSize="14sp"
-            app:stl_distributeEvenly="false"
-            app:stl_dividerColor="#4D000000"
-            app:stl_dividerThickness="0dp"
-            app:stl_drawDecorationAfterTab="false"
-            app:stl_indicatorAlwaysInCenter="false"
-            app:stl_indicatorColor="@color/primero_blue"
-            app:stl_indicatorCornerRadius="1dp"
-            app:stl_indicatorGravity="bottom"
-            app:stl_indicatorInFront="false"
-            app:stl_indicatorInterpolation="smart"
-            app:stl_indicatorThickness="1dp"
-            app:stl_indicatorWidth="auto"
-            app:stl_indicatorWithoutPadding="false"
-            app:stl_overlineColor="#4D000000"
-            app:stl_overlineThickness="0dp"
-            app:stl_titleOffset="24dp"
-            app:stl_underlineColor="#4D000000"
-            app:stl_underlineThickness="1dp"/>
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_below="@id/viewpagertab"
-            android:background="@color/primero_lighter_white"
-            android:gravity="center_horizontal"
-            android:paddingTop="@dimen/pull_back_text_padding"
-            android:text="@string/pull_down_load_mini_form"
-            android:textColor="@color/gray"
-            android:textSize="@dimen/text_size_14"/>
-
-        <org.unicef.rapidreg.base.SwipeChangeLayout
-            android:id="@+id/full_form_swipe_layout"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_below="@id/viewpagertab">
-
-            <android.support.v4.view.ViewPager
-                android:id="@+id/viewpager"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@color/white"/>
-
-        </org.unicef.rapidreg.base.SwipeChangeLayout>
-
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:id="@+id/mini_form_layout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@color/primero_lighter_white"
-            android:gravity="center_horizontal|bottom"
-            android:paddingBottom="@dimen/pull_back_text_padding"
-            android:text="@string/pull_up_load_full_form"
-            android:textColor="@color/gray"
-            android:textSize="@dimen/text_size_16"/>
-
-        <org.unicef.rapidreg.base.SwipeChangeLayout
-            android:id="@+id/mini_form_swipe_layout"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/mini_form_container"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@color/white"/>
-        </org.unicef.rapidreg.base.SwipeChangeLayout>
-    </RelativeLayout>
+        android:layout_below="@id/viewpagertab"
+        android:background="@color/white"/>
 
     <com.getbase.floatingactionbutton.FloatingActionButton
         android:id="@+id/edit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
         android:scrollY="3dp"
         android:src="@drawable/edit_white"

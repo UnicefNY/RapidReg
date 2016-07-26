@@ -11,7 +11,6 @@ import android.widget.Button;
 import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.hannesdorfmann.mosby.mvp.MvpFragment;
 
-import org.greenrobot.eventbus.EventBus;
 import org.unicef.rapidreg.R;
 import org.unicef.rapidreg.forms.Field;
 import org.unicef.rapidreg.service.cache.ItemValuesMap;
@@ -26,6 +25,8 @@ public abstract class RecordRegisterFragment extends MvpFragment<RecordRegisterV
 
     public static final String ITEM_VALUES = "item_values";
 
+    protected static final int INVALID_RECORD_ID = -100;
+
     @BindView(R.id.register_forms_content)
     RecyclerView fieldList;
 
@@ -37,6 +38,7 @@ public abstract class RecordRegisterFragment extends MvpFragment<RecordRegisterV
 
     protected RecordPhotoAdapter photoAdapter;
     protected ItemValuesMap itemValues;
+    protected long recordId;
 
     private RecordRegisterAdapter recordRegisterAdapter;
 
@@ -63,18 +65,6 @@ public abstract class RecordRegisterFragment extends MvpFragment<RecordRegisterV
         recordRegisterAdapter.setItemValues(itemValues);
 
         formSwitcher.setText(R.string.show_short_form);
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        EventBus.getDefault().register(this);
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        EventBus.getDefault().unregister(this);
     }
 
     public RecordRegisterAdapter getRegisterAdapter() {

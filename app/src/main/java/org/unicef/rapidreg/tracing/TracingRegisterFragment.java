@@ -9,6 +9,8 @@ import android.view.ViewGroup;
 import com.ogaclejapan.smarttablayout.utils.v4.FragmentPagerItem;
 
 import org.unicef.rapidreg.R;
+import org.unicef.rapidreg.base.Feature;
+import org.unicef.rapidreg.base.RecordActivity;
 import org.unicef.rapidreg.base.RecordRegisterFragment;
 import org.unicef.rapidreg.forms.Field;
 import org.unicef.rapidreg.forms.RecordForm;
@@ -16,7 +18,10 @@ import org.unicef.rapidreg.service.RecordService;
 import org.unicef.rapidreg.service.TracingFormService;
 import org.unicef.rapidreg.service.cache.ItemValuesMap;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import butterknife.OnClick;
 
 public class TracingRegisterFragment extends RecordRegisterFragment {
 
@@ -39,6 +44,16 @@ public class TracingRegisterFragment extends RecordRegisterFragment {
         super.onViewCreated(view, savedInstanceState);
         List<Field> fields = getFields();
         presenter.initContext(getActivity(), fields, false);
+    }
+
+    @OnClick(R.id.form_switcher)
+    public void onSwitcherChecked() {
+        Bundle args = new Bundle();
+        args.putStringArrayList(RecordService.RECORD_PHOTOS, (ArrayList<String>) photoAdapter.getAllItems());
+        args.putSerializable(RecordService.ITEM_VALUES, itemValues);
+        Feature feature = ((RecordActivity) getActivity()).getCurrentFeature().isDetailMode() ?
+                TracingFeature.DETAILS_MINI : TracingFeature.EDIT_MINI;
+        ((RecordActivity) getActivity()).turnToFeature(feature, args);
     }
 
     protected List<Field> getFields() {
