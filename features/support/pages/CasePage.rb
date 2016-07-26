@@ -28,6 +28,7 @@ module Screen
       end
 
       def getCurrentFormName
+        sleep 3
         return findByXpath("//android.widget.HorizontalScrollView/android.widget.LinearLayout/android.widget.TextView[@selected='true']").text
       end
 
