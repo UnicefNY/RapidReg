@@ -146,7 +146,6 @@ public class CaseService extends RecordService {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        clearAudioFile();
     }
 
     public void savePhoto(Case child, List<String> photoPaths) throws IOException {
@@ -176,7 +175,6 @@ public class CaseService extends RecordService {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        clearAudioFile();
     }
 
     public void updatePhoto(Case child, List<String> photoPaths) throws IOException {

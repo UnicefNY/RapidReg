@@ -141,7 +141,6 @@ public class TracingService extends RecordService {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        clearAudioFile();
     }
 
     public void savePhoto(Tracing parent, List<String> photoPaths) throws IOException {
@@ -173,7 +172,6 @@ public class TracingService extends RecordService {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        clearAudioFile();
     }
 
     public void updatePhoto(Tracing tracing, List<String> photoPaths) throws IOException {
