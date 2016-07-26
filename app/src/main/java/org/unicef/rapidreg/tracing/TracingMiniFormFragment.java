@@ -19,15 +19,12 @@ import org.unicef.rapidreg.R;
 import org.unicef.rapidreg.base.RecordActivity;
 import org.unicef.rapidreg.base.RecordRegisterAdapter;
 import org.unicef.rapidreg.base.RecordRegisterFragment;
-import org.unicef.rapidreg.childcase.CaseActivity;
-import org.unicef.rapidreg.childcase.CaseFeature;
 import org.unicef.rapidreg.event.SaveTracingEvent;
 import org.unicef.rapidreg.forms.Field;
 import org.unicef.rapidreg.forms.RecordForm;
 import org.unicef.rapidreg.forms.Section;
 import org.unicef.rapidreg.forms.TracingFormRoot;
 import org.unicef.rapidreg.model.Tracing;
-import org.unicef.rapidreg.service.CaseService;
 import org.unicef.rapidreg.service.RecordService;
 import org.unicef.rapidreg.service.TracingFormService;
 import org.unicef.rapidreg.service.TracingService;
@@ -126,18 +123,12 @@ public class TracingMiniFormFragment extends RecordRegisterFragment {
 
     @OnClick(R.id.edit)
     public void onEditClicked() {
-        Bundle args = new Bundle();
-        args.putLong(TracingService.TRACING_ID, recordId);
-        args.putStringArrayList(RecordService.RECORD_PHOTOS, (ArrayList<String>) photoAdapter.getAllItems());
-        ((TracingActivity) getActivity()).turnToFeature(TracingFeature.EDIT, args);
+        switchTo(TracingFeature.EDIT);
     }
 
     @OnClick(R.id.form_switcher)
     public void onSwitcherChecked() {
-        Bundle args = new Bundle();
-        args.putLong(TracingService.TRACING_ID, recordId);
-        args.putStringArrayList(RecordService.RECORD_PHOTOS, (ArrayList<String>) photoAdapter.getAllItems());
-        ((TracingActivity) getActivity()).turnToFeature(TracingFeature.DETAILS_FULL, args);
+        switchTo(TracingFeature.DETAILS_FULL);
     }
 
     protected void initItemValues() {
@@ -165,6 +156,13 @@ public class TracingMiniFormFragment extends RecordRegisterFragment {
             itemValues = new ItemValuesMap();
             photoAdapter = new TracingPhotoAdapter(getContext(), new ArrayList<String>());
         }
+    }
+
+    private void switchTo(TracingFeature feature) {
+        Bundle args = new Bundle();
+        args.putLong(TracingService.TRACING_ID, recordId);
+        args.putStringArrayList(RecordService.RECORD_PHOTOS, (ArrayList<String>) photoAdapter.getAllItems());
+        ((TracingActivity) getActivity()).turnToFeature(feature, args);
     }
 
     private boolean validateRequiredField() {
