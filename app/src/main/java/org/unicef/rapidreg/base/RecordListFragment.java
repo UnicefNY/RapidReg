@@ -95,7 +95,7 @@ public abstract class RecordListFragment extends MvpFragment<RecordListView, Rec
         floatingMenu.collapseImmediately();
 
         CaseActivity activity = (CaseActivity) getActivity();
-        activity.turnToFeature(CaseFeature.ADD, null);
+        activity.turnToFeature(CaseFeature.ADD, null, null);
     }
 
     @OnClick(R.id.add_tracing_request)
@@ -108,7 +108,7 @@ public abstract class RecordListFragment extends MvpFragment<RecordListView, Rec
         floatingMenu.collapseImmediately();
 
         TracingActivity activity = (TracingActivity) getActivity();
-        activity.turnToFeature(TracingFeature.ADD, null);
+        activity.turnToFeature(TracingFeature.ADD, null, null);
     }
 
     public void toggleMode(boolean isShow) {

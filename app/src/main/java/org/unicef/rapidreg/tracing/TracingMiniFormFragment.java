@@ -67,7 +67,7 @@ public class TracingMiniFormFragment extends RecordRegisterFragment {
 
             Bundle args = new Bundle();
             args.putLong(TracingService.TRACING_ID, record.getId());
-            ((RecordActivity) getActivity()).turnToFeature(TracingFeature.DETAILS_MINI, args);
+            ((RecordActivity) getActivity()).turnToFeature(TracingFeature.DETAILS_MINI, args, null);
         }
     }
 
@@ -140,7 +140,7 @@ public class TracingMiniFormFragment extends RecordRegisterFragment {
         Bundle args = new Bundle();
         args.putSerializable(RecordService.ITEM_VALUES, itemValues);
         args.putStringArrayList(RecordService.RECORD_PHOTOS, (ArrayList<String>) photoAdapter.getAllItems());
-        ((TracingActivity) getActivity()).turnToFeature(TracingFeature.EDIT_MINI, args);
+        ((TracingActivity) getActivity()).turnToFeature(TracingFeature.EDIT_MINI, args, null);
     }
 
     @OnClick(R.id.form_switcher)
@@ -150,7 +150,7 @@ public class TracingMiniFormFragment extends RecordRegisterFragment {
         args.putStringArrayList(RecordService.RECORD_PHOTOS, (ArrayList<String>) photoAdapter.getAllItems());
         Feature feature = ((RecordActivity) getActivity()).getCurrentFeature().isDetailMode() ?
                 TracingFeature.DETAILS_FULL : TracingFeature.EDIT_FULL;
-        ((RecordActivity) getActivity()).turnToFeature(feature, args);
+        ((RecordActivity) getActivity()).turnToFeature(feature, args, ANIM_IDS);
     }
 
     protected void initItemValues() {
