@@ -122,18 +122,12 @@ public class CaseMiniFormFragment extends RecordRegisterFragment {
 
     @OnClick(R.id.edit)
     public void onEditClicked() {
-        Bundle args = new Bundle();
-        args.putLong(CaseService.CASE_ID, recordId);
-        args.putStringArrayList(RecordService.RECORD_PHOTOS, (ArrayList<String>) photoAdapter.getAllItems());
-        ((CaseActivity) getActivity()).turnToFeature(CaseFeature.EDIT, args);
+        switchTo(CaseFeature.EDIT);
     }
 
     @OnClick(R.id.form_switcher)
     public void onSwitcherChecked() {
-        Bundle args = new Bundle();
-        args.putLong(CaseService.CASE_ID, recordId);
-        args.putStringArrayList(RecordService.RECORD_PHOTOS, (ArrayList<String>) photoAdapter.getAllItems());
-        ((CaseActivity) getActivity()).turnToFeature(CaseFeature.DETAILS_FULL, args);
+        switchTo(CaseFeature.DETAILS_FULL);
     }
 
     protected void initItemValues() {
@@ -161,6 +155,13 @@ public class CaseMiniFormFragment extends RecordRegisterFragment {
             itemValues = new ItemValuesMap();
             photoAdapter = new CasePhotoAdapter(getContext(), new ArrayList<String>());
         }
+    }
+
+    private void switchTo(CaseFeature feature) {
+        Bundle args = new Bundle();
+        args.putLong(CaseService.CASE_ID, recordId);
+        args.putStringArrayList(RecordService.RECORD_PHOTOS, (ArrayList<String>) photoAdapter.getAllItems());
+        ((CaseActivity) getActivity()).turnToFeature(feature, args);
     }
 
     private boolean validateRequiredField() {
