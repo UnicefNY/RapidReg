@@ -53,7 +53,7 @@ public class TracingRegisterFragment extends RecordRegisterFragment {
         args.putSerializable(RecordService.ITEM_VALUES, itemValues);
         Feature feature = ((RecordActivity) getActivity()).getCurrentFeature().isDetailMode() ?
                 TracingFeature.DETAILS_MINI : TracingFeature.EDIT_MINI;
-        ((RecordActivity) getActivity()).turnToFeature(feature, args, ANIM_IDS);
+        ((RecordActivity) getActivity()).turnToFeature(feature, args, ANIM_TO_MINI);
     }
 
     protected List<Field> getFields() {

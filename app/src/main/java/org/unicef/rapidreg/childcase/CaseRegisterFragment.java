@@ -54,7 +54,7 @@ public class CaseRegisterFragment extends RecordRegisterFragment {
 
         Feature feature = ((RecordActivity) getActivity()).getCurrentFeature().isDetailMode() ?
                 CaseFeature.DETAILS_MINI : CaseFeature.EDIT_MINI;
-        ((RecordActivity) getActivity()).turnToFeature(feature, args, ANIM_IDS);
+        ((RecordActivity) getActivity()).turnToFeature(feature, args, ANIM_TO_MINI);
     }
 
     protected List<Field> getFields() {
