@@ -150,7 +150,7 @@ public class CaseMiniFormFragment extends RecordRegisterFragment {
         args.putStringArrayList(RecordService.RECORD_PHOTOS, (ArrayList<String>) photoAdapter.getAllItems());
         Feature feature = ((RecordActivity) getActivity()).getCurrentFeature().isDetailMode() ?
                 CaseFeature.DETAILS_FULL : CaseFeature.EDIT_FULL;
-        ((RecordActivity) getActivity()).turnToFeature(feature, args, ANIM_IDS);
+        ((RecordActivity) getActivity()).turnToFeature(feature, args, ANIM_TO_FULL);
     }
 
     protected void initItemValues() {
