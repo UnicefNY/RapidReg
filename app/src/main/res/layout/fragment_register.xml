@@ -16,7 +16,7 @@
         android:layout_width="match_parent"
         android:layout_height="40dp"
         android:layout_alignParentBottom="true"
-        android:background="@color/primero_lighter_white"
+        android:background="@drawable/switch_button"
         android:text=""
         android:textAllCaps="false"
         android:textColor="@color/primero_blue"/>
