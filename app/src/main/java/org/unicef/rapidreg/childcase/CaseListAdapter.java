@@ -18,6 +18,7 @@ import org.unicef.rapidreg.service.cache.ItemValues;
 import org.unicef.rapidreg.utils.StreamUtil;
 
 import java.io.IOException;
+import java.util.Date;
 
 public class CaseListAdapter extends RecordListAdapter {
 
@@ -56,7 +57,8 @@ public class CaseListAdapter extends RecordListAdapter {
         holder.genderName.setTextColor(ContextCompat.getColor(activity, gender.getColorId()));
         String age = itemValues.getAsString(RecordService.AGE);
         holder.age.setText(isValidAge(age) ? age : "---");
-        holder.registrationDate.setText(dateFormat.format(record.getRegistrationDate()));
+        Date registrationDate = record.getRegistrationDate();
+        holder.registrationDate.setText(dateFormat.format(registrationDate));
 
         holder.view.setOnClickListener(new View.OnClickListener() {
             @Override

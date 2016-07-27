@@ -60,6 +60,7 @@ public class CaseMiniFormFragment extends RecordRegisterFragment {
                 Toast.makeText(getActivity(), R.string.save_success, Toast.LENGTH_SHORT).show();
             } else {
                 Toast.makeText(getActivity(), R.string.save_failed, Toast.LENGTH_SHORT).show();
+                return;
             }
 
             Case record = CaseService.getInstance()

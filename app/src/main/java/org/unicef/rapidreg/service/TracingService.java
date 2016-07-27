@@ -26,8 +26,6 @@ import org.unicef.rapidreg.utils.StreamUtil;
 import java.io.File;
 import java.io.IOException;
 import java.sql.Date;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
 
@@ -131,7 +129,7 @@ public class TracingService extends RecordService {
         int age = itemValues.getAsInt(RELATION_AGE) != null ? itemValues.getAsInt(RELATION_AGE) : 0;
         tracing.setAge(age);
         tracing.setCaregiver(getCaregiverName(itemValues));
-        tracing.setRegistrationDate(getRegisterDate(itemValues));
+        tracing.setRegistrationDate(getRegisterDate(itemValues.getAsString(INQUIRY_DATE)));
         tracing.setAudio(audioFileDefault);
         tracing.setCreatedBy(username);
         tracing.save();
@@ -163,7 +161,7 @@ public class TracingService extends RecordService {
         int age = itemValues.getAsInt(AGE) != null ? itemValues.getAsInt(AGE) : 0;
         tracing.setAge(age);
         tracing.setCaregiver(getCaregiverName(itemValues));
-        tracing.setRegistrationDate(getRegisterDate(itemValues));
+        tracing.setRegistrationDate(getRegisterDate(itemValues.getAsString(INQUIRY_DATE)));
         tracing.setAudio(audioFileDefault);
         tracing.update();
 
@@ -263,17 +261,6 @@ public class TracingService extends RecordService {
             e.printStackTrace();
         }
         return blob;
-    }
-
-    private Date getRegisterDate(ItemValues itemValues) {
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy/MM/dd");
-        try {
-            java.util.Date date = simpleDateFormat.parse(itemValues.getAsString(INQUIRY_DATE));
-            return new Date(date.getTime());
-        } catch (ParseException e) {
-            Log.e(TAG, "date format error");
-            return new Date(System.currentTimeMillis());
-        }
     }
 
     private String getName(ItemValues values) {

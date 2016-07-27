@@ -34,7 +34,6 @@ public class DateDialog extends BaseDialog {
 
     @Override
     public String getResult() {
-        return String.format("%s/%s/%s", datePicker.getYear(), datePicker.getMonth() + 1,
-                datePicker.getDayOfMonth());
+        return String.format("%s/%s/%s", datePicker.getMonth() + 1, datePicker.getDayOfMonth(), datePicker.getYear());
     }
 }
