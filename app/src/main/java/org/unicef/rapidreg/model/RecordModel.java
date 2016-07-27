@@ -30,8 +30,6 @@ public class RecordModel extends BaseModel {
     private String caregiver = "";
     @Column(name = "case_json")
     private Blob content;
-    @Column(name = "photo")
-    private Blob photo;
     @Column(name = "audio")
     private Blob audio;
     @Column(name = "is_synced")
@@ -98,14 +96,6 @@ public class RecordModel extends BaseModel {
 
     public void setContent(Blob content) {
         this.content = content;
-    }
-
-    public Blob getPhoto() {
-        return photo;
-    }
-
-    public void setPhoto(Blob photo) {
-        this.photo = photo;
     }
 
     public Blob getAudio() {
@@ -220,7 +210,6 @@ public class RecordModel extends BaseModel {
                 ", age=" + age +
                 ", caregiver='" + caregiver + '\'' +
                 ", content=" + content +
-                ", photo=" + photo +
                 ", audio=" + audio +
                 ", isSynced=" + isSynced +
                 ", syncLog='" + syncLog + '\'' +

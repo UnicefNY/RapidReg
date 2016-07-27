@@ -12,7 +12,7 @@ public interface SyncView extends MvpView {
 
     void showSyncErrorMessage();
 
-    void showSyncSuccessMessage();
+    void showSyncSuccessMessage(String msg);
 
     void setDataViews(String syncDate, String hasSyncAmount, String notSyncAmount);
 
@@ -21,4 +21,6 @@ public interface SyncView extends MvpView {
     void setProgressIncrease();
 
     void showAttemptSyncDialog();
+
+    void setSyncProgressDialogTitle(String title);
 }

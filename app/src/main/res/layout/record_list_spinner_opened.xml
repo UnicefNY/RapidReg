@@ -24,6 +24,6 @@
         android:layout_centerVertical="true"
         android:layout_marginLeft="@dimen/case_spinner_order_left_margin"
         android:layout_marginStart="@dimen/case_spinner_order_left_margin"
-        android:textColor="@color/font_dark"
+        android:textColor="@color/primero_font_dark"
         android:textSize="@dimen/text_size_16"/>
 </RelativeLayout>

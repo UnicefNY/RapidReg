@@ -18,7 +18,7 @@
             app:stl_clickable="true"
             app:stl_defaultTabBackground="?attr/selectableItemBackground"
             app:stl_defaultTabTextAllCaps="false"
-            app:stl_defaultTabTextColor="@color/font_dark"
+            app:stl_defaultTabTextColor="@color/primero_font_dark"
             app:stl_defaultTabTextHorizontalPadding="16dp"
             app:stl_defaultTabTextMinWidth="0dp"
             app:stl_defaultTabTextSize="14sp"
@@ -27,7 +27,7 @@
             app:stl_dividerThickness="0dp"
             app:stl_drawDecorationAfterTab="false"
             app:stl_indicatorAlwaysInCenter="false"
-            app:stl_indicatorColor="@color/ftn_blue"
+            app:stl_indicatorColor="@color/primero_blue"
             app:stl_indicatorCornerRadius="1dp"
             app:stl_indicatorGravity="bottom"
             app:stl_indicatorInFront="false"
@@ -45,7 +45,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_below="@id/viewpagertab"
-            android:background="@color/lighter_white"
+            android:background="@color/primero_lighter_white"
             android:gravity="center_horizontal"
             android:paddingTop="@dimen/pull_back_text_padding"
             android:text="@string/pull_down_load_mini_form"
@@ -76,7 +76,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/lighter_white"
+            android:background="@color/primero_lighter_white"
             android:gravity="center_horizontal|bottom"
             android:paddingBottom="@dimen/pull_back_text_padding"
             android:text="@string/pull_up_load_full_form"
@@ -104,7 +104,7 @@
         android:layout_alignParentRight="true"
         android:scrollY="3dp"
         android:src="@drawable/edit_white"
-        app:fab_colorNormal="@color/ftn_blue"
-        app:fab_colorPressed="@color/ftn_blue"/>
+        app:fab_colorNormal="@color/primero_blue"
+        app:fab_colorPressed="@color/primero_blue"/>
 
 </RelativeLayout>

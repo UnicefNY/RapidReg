@@ -37,7 +37,6 @@ public interface SyncServiceInterface {
             @Query("mobile") Boolean isMobile);
 
     @GET("/cases/{id}/photo/{photo_key}/resized/{photo_size}")
-    @Streaming
     Observable<Response<ResponseBody>> getCasePhoto(
             @Header("Cookie") String cookie,
             @Path("id") String id,
@@ -45,7 +44,6 @@ public interface SyncServiceInterface {
             @Path("photo_size") String photoSize);
 
     @GET("/cases/{id}/audio")
-    @Streaming
     Observable<Response<ResponseBody>> getCaseAudio(
             @Header("Cookie") String cookie,
             @Path("id") String id);
@@ -82,6 +80,12 @@ public interface SyncServiceInterface {
 
     @PUT("/api/cases/{id}")
     Observable<Response<JsonElement>> syncPutCase(
+            @Header("Cookie") String cookie,
+            @Path("id") String id,
+            @Body Object requestBody);
+
+    @PUT("/api/cases/{id}")
+    Call<Response<JsonElement>> deleteCasePhoto(
             @Header("Cookie") String cookie,
             @Path("id") String id,
             @Body Object requestBody);

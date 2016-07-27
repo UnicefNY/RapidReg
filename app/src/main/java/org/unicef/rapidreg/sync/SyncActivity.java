@@ -39,6 +39,6 @@ public class SyncActivity extends BaseActivity {
 
     @Override
     protected void processBackButton() {
-        finish();
+        logOut(this);
     }
 }

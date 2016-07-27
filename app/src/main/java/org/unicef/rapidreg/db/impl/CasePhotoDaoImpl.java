@@ -10,7 +10,7 @@ import java.util.List;
 
 public class CasePhotoDaoImpl implements CasePhotoDao {
     @Override
-    public CasePhoto getFirstThumbnail(long caseId) {
+    public CasePhoto getFirst(long caseId) {
         return SQLite.select().from(CasePhoto.class)
                 .where(CasePhoto_Table.case_id.eq(caseId))
                 .querySingle();
@@ -41,6 +41,11 @@ public class CasePhotoDaoImpl implements CasePhotoDao {
                 .and(CasePhoto_Table.photo.isNotNull())
                 .and(CasePhoto_Table.isSynced.is(false))
                 .count();
+    }
+
+    @Override
+    public void deleteByCaseId(long caseId) {
+        SQLite.delete().from(CasePhoto.class).where(CasePhoto_Table.case_id.eq(caseId)).execute();
     }
 
     @Override

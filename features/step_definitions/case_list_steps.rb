@@ -4,7 +4,7 @@ Then /^I should see the case's "(.*?)" is "(.*?)"$/ do |case_field, case_value|
     case_value = time.strftime("%b %d, %Y")
   end
   actual_value = base_page.findById(case_field).text
-  raise("NOT find value: #{case_value}") unless actual_value == case_value
+  raise("Expect_value: #{case_value}, but actual_value: #{actual_value}") unless actual_value == case_value
 end
 
 Then /^I should not see "(.*?)"$/ do |text|
