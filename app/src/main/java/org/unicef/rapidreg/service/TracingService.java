@@ -91,17 +91,17 @@ public class TracingService extends RecordService {
         return conditionGroup;
     }
 
-    public void saveOrUpdate(ItemValues itemValues, List<String> photoPaths) {
+    public Tracing saveOrUpdate(ItemValues itemValues, List<String> photoPaths) throws IOException {
 
         if (itemValues.getAsString(TRACING_ID) == null) {
-            save(itemValues, photoPaths);
+            return save(itemValues, photoPaths);
         } else {
             Log.d(TAG, "update the existing tracing request");
-            update(itemValues, photoPaths);
+            return update(itemValues, photoPaths);
         }
     }
 
-    public void save(ItemValues itemValues, List<String> photoPath) {
+    public Tracing save(ItemValues itemValues, List<String> photoPath) throws IOException {
         String uniqueId = createUniqueId();
         itemValues.addStringItem(TRACING_ID, uniqueId);
         String username = UserService.getInstance().getCurrentUser().getUsername();
@@ -134,11 +134,9 @@ public class TracingService extends RecordService {
         tracing.setCreatedBy(username);
         tracing.save();
 
-        try {
-            savePhoto(tracing, photoPath);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        savePhoto(tracing, photoPath);
+
+        return tracing;
     }
 
     public void savePhoto(Tracing parent, List<String> photoPaths) throws IOException {
@@ -147,8 +145,8 @@ public class TracingService extends RecordService {
         }
     }
 
-    public void update(ItemValues itemValues,
-                       List<String> photoBitPaths) {
+    public Tracing update(ItemValues itemValues,
+                       List<String> photoBitPaths) throws IOException {
         Gson gson = new Gson();
         Blob blob = new Blob(gson.toJson(itemValues.getValues()).getBytes());
         Blob audioFileDefault = null;
@@ -164,12 +162,9 @@ public class TracingService extends RecordService {
         tracing.setRegistrationDate(getRegisterDate(itemValues.getAsString(INQUIRY_DATE)));
         tracing.setAudio(audioFileDefault);
         tracing.update();
+        updatePhoto(tracing, photoBitPaths);
 
-        try {
-            updatePhoto(tracing, photoBitPaths);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        return tracing;
     }
 
     public void updatePhoto(Tracing tracing, List<String> photoPaths) throws IOException {

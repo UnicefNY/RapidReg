@@ -37,6 +37,7 @@ import org.unicef.rapidreg.service.cache.ItemValues;
 import org.unicef.rapidreg.service.cache.ItemValuesMap;
 import org.unicef.rapidreg.utils.JsonUtils;
 
+import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -56,19 +57,16 @@ public class TracingMiniFormFragment extends RecordRegisterFragment {
             ItemValues itemValues = new ItemValues(new Gson().fromJson(new Gson().toJson(
                     this.itemValues.getValues()), JsonObject.class));
 
-            if (savedSuccessfully(itemValues, photoPaths)) {
+            try {
+                Tracing record = saveTracing(itemValues, photoPaths);
                 Toast.makeText(getActivity(), R.string.save_success, Toast.LENGTH_SHORT).show();
-            } else {
+
+                Bundle args = new Bundle();
+                args.putLong(TracingService.TRACING_ID, record.getId());
+                ((RecordActivity) getActivity()).turnToFeature(TracingFeature.DETAILS_MINI, args, null);
+            } catch (IOException e) {
                 Toast.makeText(getActivity(), R.string.save_failed, Toast.LENGTH_SHORT).show();
-                return;
             }
-
-            Tracing record = TracingService.getInstance()
-                    .getByUniqueId(itemValues.getAsString(TracingService.TRACING_ID));
-
-            Bundle args = new Bundle();
-            args.putLong(TracingService.TRACING_ID, record.getId());
-            ((RecordActivity) getActivity()).turnToFeature(TracingFeature.DETAILS_MINI, args, null);
         }
     }
 
@@ -213,12 +211,7 @@ public class TracingMiniFormFragment extends RecordRegisterFragment {
         return true;
     }
 
-    private boolean savedSuccessfully(ItemValues itemValues, List<String> photoPaths) {
-        try {
-            TracingService.getInstance().saveOrUpdate(itemValues, photoPaths);
-            return true;
-        } catch (Exception e) {
-            return false;
-        }
+    private Tracing saveTracing(ItemValues itemValues, List<String> photoPaths) throws IOException {
+        return TracingService.getInstance().saveOrUpdate(itemValues, photoPaths);
     }
 }
