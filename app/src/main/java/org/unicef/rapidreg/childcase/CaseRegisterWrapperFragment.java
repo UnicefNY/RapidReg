@@ -18,12 +18,14 @@ import org.unicef.rapidreg.base.RecordRegisterWrapperFragment;
 import org.unicef.rapidreg.event.SaveCaseEvent;
 import org.unicef.rapidreg.forms.CaseFormRoot;
 import org.unicef.rapidreg.forms.Section;
+import org.unicef.rapidreg.model.Case;
 import org.unicef.rapidreg.service.CaseFormService;
 import org.unicef.rapidreg.service.CaseService;
 import org.unicef.rapidreg.service.RecordService;
 import org.unicef.rapidreg.service.cache.ItemValues;
 import org.unicef.rapidreg.service.cache.ItemValuesMap;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -40,16 +42,16 @@ public class CaseRegisterWrapperFragment extends RecordRegisterWrapperFragment {
             ItemValues itemValues = new ItemValues(new Gson().fromJson(new Gson().toJson(
                     this.itemValues.getValues()), JsonObject.class));
 
-            if (savedSuccessfully(itemValues, photoPaths)) {
+            try {
+                saveCase(itemValues, photoPaths);
                 Toast.makeText(getActivity(), R.string.save_success, Toast.LENGTH_SHORT).show();
-            } else {
+                Bundle args = new Bundle();
+                args.putSerializable(RecordService.ITEM_VALUES, ItemValuesMap.fromItemValuesJsonObject(itemValues));
+                args.putStringArrayList(RecordService.RECORD_PHOTOS, photoPaths);
+                ((RecordActivity) getActivity()).turnToFeature(CaseFeature.DETAILS_FULL, args, null);
+            } catch (IOException e) {
                 Toast.makeText(getActivity(), R.string.save_failed, Toast.LENGTH_SHORT).show();
             }
-
-            Bundle args = new Bundle();
-            args.putSerializable(RecordService.ITEM_VALUES, ItemValuesMap.fromItemValuesJsonObject(itemValues));
-            args.putStringArrayList(RecordService.RECORD_PHOTOS, photoPaths);
-            ((RecordActivity) getActivity()).turnToFeature(CaseFeature.DETAILS_FULL, args, null);
         }
     }
 
@@ -107,12 +109,7 @@ public class CaseRegisterWrapperFragment extends RecordRegisterWrapperFragment {
         return true;
     }
 
-    private boolean savedSuccessfully(ItemValues itemValues, List<String> photoPaths) {
-        try {
-            CaseService.getInstance().saveOrUpdate(itemValues, photoPaths);
-            return true;
-        } catch (Exception e) {
-            return false;
-        }
+    private Case saveCase(ItemValues itemValues, List<String> photoPaths) throws IOException {
+        return CaseService.getInstance().saveOrUpdate(itemValues, photoPaths);
     }
 }

@@ -37,6 +37,7 @@ import org.unicef.rapidreg.service.cache.ItemValues;
 import org.unicef.rapidreg.service.cache.ItemValuesMap;
 import org.unicef.rapidreg.utils.JsonUtils;
 
+import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -58,13 +59,16 @@ public class CaseMiniFormFragment extends RecordRegisterFragment {
             ItemValues itemValues = new ItemValues(new Gson().fromJson(new Gson().toJson(
                     this.itemValues.getValues()), JsonObject.class));
 
-            if (savedSuccessfully(itemValues, photoPaths)) {
+            try {
+                Case record = saveCase(itemValues, photoPaths);
                 Toast.makeText(getActivity(), R.string.save_success, Toast.LENGTH_SHORT).show();
-            } else {
-                Toast.makeText(getActivity(), R.string.save_failed, Toast.LENGTH_SHORT).show();
-                return;
-            }
 
+                Bundle args = new Bundle();
+                args.putLong(CaseService.CASE_ID, record.getId());
+                ((RecordActivity) getActivity()).turnToFeature(CaseFeature.DETAILS_MINI, args, null);
+            } catch (IOException e) {
+                Toast.makeText(getActivity(), R.string.save_failed, Toast.LENGTH_SHORT).show();
+            }
             Case record = CaseService.getInstance().getByUniqueId(itemValues.getAsString(CaseService.CASE_ID));
 
             Bundle args = new Bundle();
@@ -214,12 +218,7 @@ public class CaseMiniFormFragment extends RecordRegisterFragment {
         return true;
     }
 
-    private boolean savedSuccessfully(ItemValues itemValues, List<String> photoPaths) {
-        try {
-            CaseService.getInstance().saveOrUpdate(itemValues, photoPaths);
-            return true;
-        } catch (Exception e) {
-            return false;
-        }
+    private Case saveCase(ItemValues itemValues, List<String> photoPaths) throws IOException {
+        return CaseService.getInstance().saveOrUpdate(itemValues, photoPaths);
     }
 }

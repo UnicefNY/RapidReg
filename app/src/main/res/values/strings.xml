@@ -40,6 +40,7 @@
     <!-- Title -->
     <string name="search">Search</string>
     <string name="cases">Cases</string>
+    <string name="child_case">Case</string>
     <string name="edit">Edit</string>
     <string name="case_details">Case details</string>
     <string name="tracing">Tracing request</string>
@@ -56,9 +57,6 @@
         <item>Age</item>
     </string-array>
 
-    <string name="pull_down_load_mini_form">... Pull Down To Show Short Form ...</string>
-    <string name="pull_up_load_full_form">... Swipe Up To Show More Details ...</string>
-    <string name="swipe_up_to_show_more_details">Swipe Up To Show More Details</string>
     <string name="no_photo_promote_info">No photo file exists.</string>
     <string name="delete">Delete</string>
     <string name="add">Add</string>
@@ -99,6 +97,11 @@
     <string name="filter">Filter</string>
     <string name="show_short_form">Show short form</string>
     <string name="show_more_details">Show more details</string>
+    <string name="sync_forms">Sync forms</string>
+    <string name="sync_forms_message">forms were not pulled down successfully, press OK to resync.</string>
+    <string name="sync_case_forms_error">Sync forms error, please try it later</string>
+    <string name="sync_tracing_forms_error">Sync forms error, please try it later</string>
+    <string name="tracing_request">Tracing request</string>
     <!--Sync-->
 
     <!--Transparent theme-->
