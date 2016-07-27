@@ -69,6 +69,11 @@ public class PhotoUploadMiniFormViewHolder extends BaseViewHolder<Field> {
 
         public RecordPhotoViewPagerAdapter() {
             Long id = itemValues.getAsLong(ItemValues.RecordProfile.ID);
+
+            if (id == null) {
+                return;
+            }
+
             flowQueryList = context instanceof CaseActivity ?
                     CasePhotoService.getInstance().getByCaseId(id)
                     : TracingPhotoService.getInstance().getByTracingId(id);
