@@ -18,12 +18,14 @@ import org.unicef.rapidreg.base.RecordRegisterWrapperFragment;
 import org.unicef.rapidreg.event.SaveTracingEvent;
 import org.unicef.rapidreg.forms.Section;
 import org.unicef.rapidreg.forms.TracingFormRoot;
+import org.unicef.rapidreg.model.Tracing;
 import org.unicef.rapidreg.service.RecordService;
 import org.unicef.rapidreg.service.TracingFormService;
 import org.unicef.rapidreg.service.TracingService;
 import org.unicef.rapidreg.service.cache.ItemValues;
 import org.unicef.rapidreg.service.cache.ItemValuesMap;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -40,16 +42,16 @@ public class TracingRegisterWrapperFragment extends RecordRegisterWrapperFragmen
             ItemValues itemValues = new ItemValues(new Gson().fromJson(new Gson().toJson(
                     this.itemValues.getValues()), JsonObject.class));
 
-            if (savedSuccessfully(itemValues, photoPaths)) {
+            try {
+                saveTracing(itemValues, photoPaths);
                 Toast.makeText(getActivity(), R.string.save_success, Toast.LENGTH_SHORT).show();
-            } else {
+                Bundle args = new Bundle();
+                args.putSerializable(RecordService.ITEM_VALUES, ItemValuesMap.fromItemValuesJsonObject(itemValues));
+                args.putStringArrayList(RecordService.RECORD_PHOTOS, photoPaths);
+                ((RecordActivity) getActivity()).turnToFeature(TracingFeature.DETAILS_FULL, args, null);
+            } catch (IOException e) {
                 Toast.makeText(getActivity(), R.string.save_failed, Toast.LENGTH_SHORT).show();
             }
-
-            Bundle args = new Bundle();
-            args.putSerializable(RecordService.ITEM_VALUES, ItemValuesMap.fromItemValuesJsonObject(itemValues));
-            args.putStringArrayList(RecordService.RECORD_PHOTOS, photoPaths);
-            ((RecordActivity) getActivity()).turnToFeature(TracingFeature.DETAILS_FULL, args, null);
         }
     }
 
@@ -107,12 +109,7 @@ public class TracingRegisterWrapperFragment extends RecordRegisterWrapperFragmen
         return true;
     }
 
-    private boolean savedSuccessfully(ItemValues itemValues, List<String> photoPaths) {
-        try {
-            TracingService.getInstance().saveOrUpdate(itemValues, photoPaths);
-            return true;
-        } catch (Exception e) {
-            return false;
-        }
+    private Tracing saveTracing(ItemValues itemValues, List<String> photoPaths) throws IOException {
+        return TracingService.getInstance().saveOrUpdate(itemValues, photoPaths);
     }
 }

@@ -11,6 +11,8 @@ import org.unicef.rapidreg.base.RecordListFragment;
 import org.unicef.rapidreg.base.RecordListPresenter;
 import org.unicef.rapidreg.model.RecordModel;
 import org.unicef.rapidreg.model.Tracing;
+import org.unicef.rapidreg.service.CaseFormService;
+import org.unicef.rapidreg.service.RecordService;
 import org.unicef.rapidreg.service.TracingService;
 
 import java.util.Arrays;
@@ -82,7 +84,14 @@ public class TracingListFragment extends RecordListFragment {
 
     @OnClick(R.id.add_case)
     public void onCaseAddClicked() {
-        TracingService.clearAudioFile();
+        RecordService.clearAudioFile();
+        floatingMenu.collapseImmediately();
+
+        if (!CaseFormService.getInstance().isFormReady()) {
+            showSyncFormDialog(getResources().getString(R.string.child_case));
+            return;
+        }
+
         new IntentSender().showCaseAddPage(getActivity());
     }
 }

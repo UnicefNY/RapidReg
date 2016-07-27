@@ -1,6 +1,8 @@
 package org.unicef.rapidreg.base;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
@@ -13,20 +15,23 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 import android.widget.ViewSwitcher;
 
 import com.getbase.floatingactionbutton.FloatingActionsMenu;
 import com.hannesdorfmann.mosby.mvp.MvpFragment;
 
+import org.greenrobot.eventbus.EventBus;
+import org.unicef.rapidreg.PrimeroConfiguration;
 import org.unicef.rapidreg.R;
 import org.unicef.rapidreg.childcase.CaseActivity;
 import org.unicef.rapidreg.childcase.CaseFeature;
+import org.unicef.rapidreg.event.NeedLoadFormsEvent;
 import org.unicef.rapidreg.service.CaseFormService;
 import org.unicef.rapidreg.service.RecordService;
 import org.unicef.rapidreg.service.TracingFormService;
 import org.unicef.rapidreg.tracing.TracingActivity;
 import org.unicef.rapidreg.tracing.TracingFeature;
+import org.unicef.rapidreg.utils.Utils;
 
 import java.util.List;
 
@@ -88,11 +93,12 @@ public abstract class RecordListFragment extends MvpFragment<RecordListView, Rec
     @OnClick(R.id.add_case)
     public void onCaseAddClicked() {
         RecordService.clearAudioFile();
+        floatingMenu.collapseImmediately();
+
         if (!CaseFormService.getInstance().isFormReady()) {
-            Toast.makeText(getActivity(), R.string.syncing_forms_text, Toast.LENGTH_LONG).show();
+            showSyncFormDialog(getResources().getString(R.string.child_case));
             return;
         }
-        floatingMenu.collapseImmediately();
 
         CaseActivity activity = (CaseActivity) getActivity();
         activity.turnToFeature(CaseFeature.ADD, null, null);
@@ -101,11 +107,12 @@ public abstract class RecordListFragment extends MvpFragment<RecordListView, Rec
     @OnClick(R.id.add_tracing_request)
     public void onTracingAddClicked() {
         RecordService.clearAudioFile();
+        floatingMenu.collapseImmediately();
+
         if (!TracingFormService.getInstance().isFormReady()) {
-            Toast.makeText(getActivity(), R.string.syncing_forms_text, Toast.LENGTH_LONG).show();
+            showSyncFormDialog(getResources().getString(R.string.tracing_request));
             return;
         }
-        floatingMenu.collapseImmediately();
 
         TracingActivity activity = (TracingActivity) getActivity();
         activity.turnToFeature(TracingFeature.ADD, null, null);
@@ -136,6 +143,21 @@ public abstract class RecordListFragment extends MvpFragment<RecordListView, Rec
 
             }
         });
+    }
+
+    protected void showSyncFormDialog(String message) {
+        AlertDialog dialog = new AlertDialog.Builder(getActivity())
+                .setTitle(R.string.sync_forms)
+                .setMessage(String.format("%s %s", message, getResources().getString(R.string.sync_forms_message)))
+                .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        EventBus.getDefault().postSticky(new NeedLoadFormsEvent(PrimeroConfiguration.getCookie()));
+                    }
+                })
+                .setNegativeButton(R.string.cancel, null)
+                .show();
+        Utils.changeDialogDividerColor(getActivity(), dialog);
     }
 
     private void setListAlpha(float value) {
