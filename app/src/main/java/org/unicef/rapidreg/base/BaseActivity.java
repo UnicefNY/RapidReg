@@ -51,9 +51,9 @@ public abstract class BaseActivity extends AppCompatActivity implements Navigati
         ButterKnife.bind(this);
 
         navigationView.setItemIconTintList(null);
-        caseColor = generateColors(R.color.ftn_green);
-        tracingColor = generateColors(R.color.ftn_red);
-        syncColor = generateColors(R.color.ftn_blue);
+        caseColor = generateColors(R.color.primero_green);
+        tracingColor = generateColors(R.color.primero_red);
+        syncColor = generateColors(R.color.primero_blue);
         navigationView.setItemTextColor(caseColor);
 
         View headerView = navigationView.getHeaderView(0);
@@ -152,7 +152,7 @@ public abstract class BaseActivity extends AppCompatActivity implements Navigati
     private ColorStateList generateColors(int resId) {
         int[] color = new int[]{
                 ContextCompat.getColor(this, resId),
-                ContextCompat.getColor(this, R.color.font_medium),
+                ContextCompat.getColor(this, R.color.primero_font_medium),
         };
 
         return new ColorStateList(COLOR_STATES, color);

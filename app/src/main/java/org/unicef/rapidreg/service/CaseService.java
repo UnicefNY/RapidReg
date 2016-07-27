@@ -58,6 +58,8 @@ public class CaseService extends RecordService {
         return caseDao.getCaseById(caseId);
     }
 
+
+
     public List<Case> getAllOrderByDateASC() {
         return caseDao.getAllCasesOrderByDate(true);
     }
@@ -188,7 +190,6 @@ public class CaseService extends RecordService {
         if (previousCount < photoPaths.size()) {
             for (int i = 0; i < previousCount; i++) {
                 CasePhoto casePhoto = generateUpdatePhoto(child, photoPaths, i);
-                casePhoto.setKey(UUID.randomUUID().toString());
                 casePhoto.update();
             }
             for (int i = previousCount; i < photoPaths.size(); i++) {
@@ -196,41 +197,39 @@ public class CaseService extends RecordService {
                 if (casePhoto.getId() == 0) {
                     casePhoto.save();
                 } else {
-                    casePhoto.setKey(UUID.randomUUID().toString());
                     casePhoto.update();
                 }
             }
         } else {
             for (int i = 0; i < photoPaths.size(); i++) {
                 CasePhoto casePhoto = generateUpdatePhoto(child, photoPaths, i);
-                casePhoto.setKey(UUID.randomUUID().toString());
                 casePhoto.update();
             }
             for (int i = photoPaths.size(); i < previousCount; i++) {
                 CasePhoto casePhoto = casePhotoDao.getByCaseIdAndOrder(child.getId(), i + 1);
                 casePhoto.setPhoto(null);
                 casePhoto.setThumbnail(null);
-                casePhoto.setKey(UUID.randomUUID().toString());
                 casePhoto.update();
             }
         }
     }
 
     private CasePhoto generateSavePhoto(Case child, List<String> photoPaths, int index) throws IOException {
-        CasePhoto CasePhoto = casePhotoDao.getByCaseIdAndOrder(child.getId(), index + 1);
-        if (CasePhoto == null) {
-            CasePhoto = new CasePhoto();
+        CasePhoto casePhoto = casePhotoDao.getByCaseIdAndOrder(child.getId(), index + 1);
+        if (casePhoto == null) {
+            casePhoto = new CasePhoto();
         }
         String filePath = photoPaths.get(index);
         Bitmap bitmap = preProcessImage(filePath);
-        CasePhoto.setThumbnail(new Blob(ImageCompressUtil.convertImageToBytes(
+        casePhoto.setThumbnail(new Blob(ImageCompressUtil.convertImageToBytes(
                 ImageCompressUtil.getThumbnail(bitmap, PhotoConfig.THUMBNAIL_SIZE,
                         PhotoConfig.THUMBNAIL_SIZE))));
 
-        CasePhoto.setPhoto(new Blob(ImageCompressUtil.convertImageToBytes(bitmap)));
-        CasePhoto.setCase(child);
-        CasePhoto.setOrder(index + 1);
-        return CasePhoto;
+        casePhoto.setPhoto(new Blob(ImageCompressUtil.convertImageToBytes(bitmap)));
+        casePhoto.setCase(child);
+        casePhoto.setOrder(index + 1);
+        casePhoto.setKey(UUID.randomUUID().toString());
+        return casePhoto;
     }
 
     @NonNull
@@ -253,6 +252,7 @@ public class CaseService extends RecordService {
         }
         casePhoto.setId(casePhotoDao.getByCaseIdAndOrder(child.getId(), index + 1).getId());
         casePhoto.setOrder(index + 1);
+        casePhoto.setKey(UUID.randomUUID().toString());
         return casePhoto;
     }
 
@@ -283,5 +283,9 @@ public class CaseService extends RecordService {
                 + values.getAsString(SURNAME) + " "
                 + values.getAsString(NICKNAME) + " "
                 + values.getAsString(OTHER_NAME);
+    }
+
+    public Case getByInternalId(String id) {
+        return caseDao.getByInternalId(id);
     }
 }

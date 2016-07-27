@@ -6,7 +6,7 @@ module Screen
         if value.include?("<Select>")
           option = value.split('>')[1].strip
           clickByXpath("//android.widget.TextView[@text='#{field}']")
-          clickByXpath("//android.widget.CheckedTextView[@text='#{option}']")
+          clickByXpath("//*[@text='#{option}']//parent::*//*[@resource-id='org.unicef.rapidreg.debug:id/radioButton']")
           clickByXpath("//android.widget.Button[@text='OK']")
         elsif value.include?("<Checkbox>")
           if value.include?("Yes")

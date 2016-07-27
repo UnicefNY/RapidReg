@@ -24,25 +24,42 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class SyncFragment extends MvpFragment<SyncView, SyncPresenter> implements SyncView{
+public class SyncFragment extends MvpFragment<SyncView, SyncPresenter> implements SyncView {
 
-    @BindView(R.id.button_sync) Button syncButton;
-    @BindView(R.id.last_sync_time) TextView lastSyncTime;
-    @BindView(R.id.record_count_for_last_sync) TextView countOfLastSync;
-    @BindView(R.id.record_count_for_not_sync) TextView countOfNotSync;
+    @BindView(R.id.button_sync)
+    Button syncButton;
+    @BindView(R.id.last_sync_time)
+    TextView lastSyncTime;
+    @BindView(R.id.record_count_for_last_sync)
+    TextView countOfLastSync;
+    @BindView(R.id.record_count_for_not_sync)
+    TextView countOfNotSync;
     private ProgressDialog syncProgressDialog;
 
-    @BindString(R.string.start_sync_message) String startSyncMessage;
-    @BindString(R.string.confirm_cancel_sync_message) String confirmCancelSyncMessage;
-    @BindString(R.string.deny_button_text) String denyButtonText;
-    @BindString(R.string.confirm_button_text) String confirmButtonText;
-    @BindString(R.string.cancel_button_text) String cancelButtonText;
-    @BindString(R.string.sync_success_message) String syncSuccessMessage;
-    @BindString(R.string.sync_error_message) String syncErrorMessage;
-    @BindString(R.string.try_to_sync_message) String tryToSyncMessage;
-    @BindString(R.string.not_now_button_text) String notNowButtonText;
-    @BindString(R.string.stop_sync_button_text) String stopSyncButtonText;
-    @BindString(R.string.continue_sync_button_text) String continueSyncButtonText;
+    @BindString(R.string.start_sync_message)
+    String startSyncMessage;
+    @BindString(R.string.confirm_cancel_sync_message)
+    String confirmCancelSyncMessage;
+    @BindString(R.string.deny_button_text)
+    String denyButtonText;
+    @BindString(R.string.confirm_button_text)
+    String confirmButtonText;
+    @BindString(R.string.cancel_button_text)
+    String cancelButtonText;
+    @BindString(R.string.sync_upload_success_message)
+    String syncUploadSuccessMessage;
+    @BindString(R.string.sync_download_success_message)
+    String syncDownloadSuccessMessage;
+    @BindString(R.string.sync_error_message)
+    String syncErrorMessage;
+    @BindString(R.string.try_to_sync_message)
+    String tryToSyncMessage;
+    @BindString(R.string.not_now_button_text)
+    String notNowButtonText;
+    @BindString(R.string.stop_sync_button_text)
+    String stopSyncButtonText;
+    @BindString(R.string.continue_sync_button_text)
+    String continueSyncButtonText;
 
     @Nullable
     @Override
@@ -55,12 +72,17 @@ public class SyncFragment extends MvpFragment<SyncView, SyncPresenter> implement
     }
 
     private void initView() {
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
-        String syncStatisticData = sharedPreferences.getString("syncStatisticData",new Gson().toJson(new SyncStatisticData()));
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        String syncStatisticData = sharedPreferences.getString("syncStatisticData",
+                new Gson().toJson(new SyncStatisticData()));
         SyncStatisticData syncData = new Gson().fromJson(syncStatisticData, SyncStatisticData.class);
-        lastSyncTime.setText(syncData.getLastSyncData());
-        countOfLastSync.setText(syncData.getSyncedNumberAsString());
-        countOfNotSync.setText(syncData.getNotSyncedNumberAsString());
+        setDataViews(syncData.getLastSyncData(), syncData.getSyncedNumberAsString(),
+                syncData.getNotSyncedNumberAsString());
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
     }
 
     @Override
@@ -158,8 +180,13 @@ public class SyncFragment extends MvpFragment<SyncView, SyncPresenter> implement
     }
 
     @Override
-    public void showSyncSuccessMessage() {
-        Toast.makeText(getActivity(), syncSuccessMessage, Toast.LENGTH_SHORT).show();
+    public void setSyncProgressDialogTitle(String title) {
+        syncProgressDialog.setMessage(title);
+    }
+
+    @Override
+    public void showSyncSuccessMessage(String msg) {
+        Toast.makeText(getActivity(), msg, Toast.LENGTH_SHORT).show();
     }
 
     @Override

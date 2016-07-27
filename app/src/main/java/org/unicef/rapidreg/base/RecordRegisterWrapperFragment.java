@@ -9,7 +9,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
@@ -100,7 +99,6 @@ public abstract class RecordRegisterWrapperFragment extends Fragment {
         miniFormAdapter = new RecordRegisterAdapter(getActivity(), miniFields, itemValues, true);
         miniFormAdapter.setPhotoAdapter(initPhotoAdapter());
 
-
         initFullFormContainer();
         initMiniFormContainer();
 
@@ -140,7 +138,6 @@ public abstract class RecordRegisterWrapperFragment extends Fragment {
         if (recordPhotoAdapter.isFull()) {
             view.setVisibility(View.GONE);
         }
-
         recordPhotoAdapter.notifyDataSetChanged();
         EventBus.getDefault().removeStickyEvent(event);
     }
@@ -191,7 +188,7 @@ public abstract class RecordRegisterWrapperFragment extends Fragment {
     private void initMiniFormContainer() {
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        if (!miniFields.isEmpty() && shouldShowMiniForm) {
+        if (!miniFields.isEmpty()) {
             miniFormContainer.setLayoutManager(layoutManager);
             miniFormContainer.setAdapter(miniFormAdapter);
             miniFormSwipeLayout.setDragEdge(SwipeChangeLayout.DragEdge.BOTTOM);
@@ -206,11 +203,10 @@ public abstract class RecordRegisterWrapperFragment extends Fragment {
                     }
                 }
             });
-        } else {
-            miniFormSwipeLayout.setEnableFlingBack(false);
-            miniFormLayout.setVisibility(View.GONE);
-            fullFormLayout.setVisibility(View.VISIBLE);
-            fullFormSwipeLayout.setEnableFlingBack(false);
+        }
+
+        if (miniFields.isEmpty() || !shouldShowMiniForm) {
+            hideMiniForm();
         }
     }
 
@@ -254,6 +250,13 @@ public abstract class RecordRegisterWrapperFragment extends Fragment {
         } else {
             fullFormSwipeLayout.setEnableFlingBack(false);
         }
+    }
+
+    private void hideMiniForm() {
+        miniFormSwipeLayout.setEnableFlingBack(false);
+        miniFormLayout.setVisibility(View.GONE);
+        fullFormLayout.setVisibility(View.VISIBLE);
+        fullFormSwipeLayout.setEnableFlingBack(false);
     }
 
     private void addProfileFieldForDetailsPage() {

@@ -64,6 +64,7 @@ public class CaseRegisterWrapperFragment extends RecordRegisterWrapperFragment {
     public void onEditClicked() {
         Bundle args = new Bundle();
         args.putLong(CaseService.CASE_ID, recordId);
+        args.putBoolean(SHOULD_SHOW_MINI_FORM, isShowingMiniform());
         ((CaseActivity) getActivity()).turnToFeature(CaseFeature.EDIT, args);
     }
 

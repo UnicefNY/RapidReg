@@ -22,8 +22,8 @@ public class CasePhotoService {
         this.casePhotoDao = caseDao;
     }
 
-    public CasePhoto getFirstThumbnail(long caseId) {
-        return casePhotoDao.getFirstThumbnail(caseId);
+    public CasePhoto getFirst(long caseId) {
+        return casePhotoDao.getFirst(caseId);
     }
 
     public CasePhoto getById(long caseId) {
@@ -36,5 +36,9 @@ public class CasePhotoService {
 
     public boolean hasUnSynced(long caseId) {
         return casePhotoDao.countUnSynced(caseId) > 0;
+    }
+
+    public void deleteByCaseId(long caseId) {
+        casePhotoDao.deleteByCaseId(caseId);
     }
 }

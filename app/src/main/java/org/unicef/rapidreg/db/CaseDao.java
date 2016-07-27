@@ -16,4 +16,6 @@ public interface CaseDao {
     List<Case> getCaseListByConditionGroup(ConditionGroup conditionGroup);
 
     Case getCaseById(long caseId);
+
+    Case getByInternalId(String id);
 }

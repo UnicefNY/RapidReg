@@ -9,6 +9,10 @@ import org.unicef.rapidreg.R;
 import org.unicef.rapidreg.base.RecordActivity;
 import org.unicef.rapidreg.forms.Field;
 import org.unicef.rapidreg.service.cache.ItemValuesMap;
+import org.unicef.rapidreg.utils.Utils;
+
+import java.util.List;
+import java.util.Map;
 
 public abstract class BaseTextViewHolder extends BaseViewHolder<Field> {
     public BaseTextViewHolder(Context context, View itemView, ItemValuesMap itemValues) {
@@ -42,10 +46,22 @@ public abstract class BaseTextViewHolder extends BaseViewHolder<Field> {
         if (isSubFormField(field)) {
             getValueView().setText(getValueForSubForm(field));
         } else {
-            getValueView().setText(itemValues.getAsString(field.getName()));
+            getValueView().setText(getValue(field.getName()));
         }
     }
 
+    private String getValue(String name) {
+        if (itemValues == null) {
+            return null;
+        }
+
+        Map<String, Object> value = itemValues.getValues();
+        if (value.containsKey(name)) {
+            Object res = value.get(name);
+            return res instanceof List ? Utils.toStringResult((List<String>) res) : res.toString();
+        }
+        return null;
+    }
 
     protected abstract String getResult();
 

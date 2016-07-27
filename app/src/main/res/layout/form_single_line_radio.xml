@@ -6,7 +6,7 @@
     android:layout_height="wrap_content"
     android:minHeight="@dimen/case_register_mini_heigh">
 
-    <include layout="@layout/form_label" />
+    <include layout="@layout/form_label"/>
 
     <RadioGroup
         android:id="@+id/option_group"
@@ -24,7 +24,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:textSize="@dimen/text_size_16"
-            android:textColor="@color/font_medium"/>
+            android:textColor="@color/primero_font_medium"/>
 
         <org.unicef.rapidreg.widgets.ToggleableRadioButton
             android:id="@+id/second_option"
@@ -32,10 +32,10 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:textSize="@dimen/text_size_16"
-            android:textColor="@color/font_medium"/>
+            android:textColor="@color/primero_font_medium"/>
 
     </RadioGroup>
 
-    <include layout="@layout/list_item_border" />
+    <include layout="@layout/list_item_border"/>
 
 </LinearLayout>

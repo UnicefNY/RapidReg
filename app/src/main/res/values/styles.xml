@@ -3,15 +3,17 @@
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/tool_bar</item>
-        <item name="colorPrimaryDark">@color/tool_bar</item>
-        <item name="colorAccent">@color/ftn_blue</item>
+        <item name="colorPrimary">@color/primero_blue</item>
+        <item name="colorPrimaryDark">@color/primero_blue</item>
+        <item name="colorAccent">@color/primero_blue</item>
+        <item name="android:textColorPrimary">@color/primero_font_dark</item>
+        <item name="android:textColor">@color/primero_font_dark</item>
     </style>
 
     <!--row in case list start-->
     <style name="Avatar">
         <item name="android:layout_width">@dimen/case_avatar_width</item>
-        <item name="android:layout_height">@dimen/case_avatar_hight</item>
+        <item name="android:layout_height">@dimen/case_avatar_height</item>
         <item name="android:layout_marginBottom">@dimen/img_vertical_margin</item>
         <item name="android:layout_marginLeft">@dimen/img_left_margin</item>
         <item name="android:layout_marginTop">@dimen/img_vertical_margin</item>
@@ -28,7 +30,7 @@
 
     <style name="menu_labels_style">
         <item name="android:background">@drawable/fab_label_background</item>
-        <item name="android:textColor">@color/font_dark</item>
+        <item name="android:textColor">@color/primero_font_dark</item>
     </style>
     <!--row in case list end-->
 </resources>

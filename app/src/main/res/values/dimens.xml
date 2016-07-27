@@ -42,7 +42,7 @@
     <dimen name="case_spinner_height_closed">40.7dp</dimen>
     <dimen name="case_spinner_arrow_right_margin">12dp</dimen>
     <dimen name="case_avatar_width">68dp</dimen>
-    <dimen name="case_avatar_hight">68dp</dimen>
+    <dimen name="case_avatar_height">68dp</dimen>
     <!--row in list end-->
 
     <!--search start-->
@@ -70,6 +70,7 @@
     <dimen name="case_register_field_padding_top_bottom">9dp</dimen>
     <dimen name="case_photo_view_pager_height_mini_form">205dp</dimen>
     <dimen name="case_photo_view_dot_margin_mini_form">-10dp</dimen>
+    <dimen name="case_register_photo_grid_spacing">5dp</dimen>
     <!--case register end-->
 
     <!--sync start-->

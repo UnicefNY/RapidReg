@@ -7,6 +7,7 @@ import android.widget.ViewSwitcher;
 
 import org.unicef.rapidreg.forms.Field;
 import org.unicef.rapidreg.service.cache.ItemValuesMap;
+import org.unicef.rapidreg.widgets.PrimeroDatePicker;
 
 public class DateDialog extends BaseDialog {
     private String result;
@@ -19,7 +20,7 @@ public class DateDialog extends BaseDialog {
 
     @Override
     public void initView() {
-        datePicker = new DatePicker(getContext());
+        datePicker = new PrimeroDatePicker(getContext());
         datePicker.setCalendarViewShown(false);
         if (!"".equals(result)) {
             String[] date = result.split("/");

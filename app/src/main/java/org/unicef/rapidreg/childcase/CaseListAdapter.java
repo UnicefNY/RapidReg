@@ -41,8 +41,8 @@ public class CaseListAdapter extends RecordListAdapter {
         }
 
         try {
-            RecordPhoto headerPhoto = CasePhotoService.getInstance().getFirstThumbnail(record.getId());
-            Glide.with(holder.image.getContext()).load((headerPhoto.getThumbnail().getBlob())).into(holder.image);
+            RecordPhoto headerPhoto = CasePhotoService.getInstance().getFirst(record.getId());
+            Glide.with(holder.image.getContext()).load(headerPhoto.getPhoto().getBlob()).into(holder.image);
         } catch (Exception e) {
             holder.image.setImageDrawable(activity.getResources().getDrawable(gender.getAvatarId()));
         }
@@ -77,8 +77,8 @@ public class CaseListAdapter extends RecordListAdapter {
     }
 
     public enum Gender {
-        MALE("BOY", R.drawable.avatar_placeholder, R.drawable.boy, R.color.boy_blue),
-        FEMALE("GIRL", R.drawable.avatar_placeholder, R.drawable.girl, R.color.girl_red),
+        MALE("BOY", R.drawable.avatar_placeholder, R.drawable.boy, R.color.primero_blue),
+        FEMALE("GIRL", R.drawable.avatar_placeholder, R.drawable.girl, R.color.primero_red),
         UNKNOWN(null, R.drawable.avatar_placeholder, R.drawable.gender_default, R.color.transparent);
 
         private String name;

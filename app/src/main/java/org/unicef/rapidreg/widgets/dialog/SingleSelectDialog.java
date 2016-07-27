@@ -2,13 +2,13 @@ package org.unicef.rapidreg.widgets.dialog;
 
 import android.content.Context;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.ViewSwitcher;
 
 import org.unicef.rapidreg.forms.Field;
 import org.unicef.rapidreg.service.cache.ItemValuesMap;
+import org.unicef.rapidreg.utils.Utils;
 import org.unicef.rapidreg.widgets.viewholder.GenericViewHolder;
 
 import java.util.Arrays;
@@ -79,6 +79,7 @@ public class SingleSelectDialog extends BaseDialog {
         initView();
 
         dialog.show();
+        Utils.changeDialogDividerColor(context, dialog);
     }
 
     @Override
