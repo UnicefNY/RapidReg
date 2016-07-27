@@ -15,6 +15,7 @@ import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.raizlabs.android.dbflow.data.Blob;
@@ -124,7 +125,6 @@ public abstract class RecordActivity extends BaseActivity {
                 .subscribe(new Action1<CaseFormRoot>() {
                     @Override
                     public void call(CaseFormRoot caseFormRoot) {
-
                         CaseFormRoot form = caseFormRoot;
                         CaseForm caseForm = new CaseForm(new Blob(gson.toJson(form).getBytes()));
                         CaseFormService.getInstance().saveOrUpdateForm(caseForm);
@@ -135,6 +135,8 @@ public abstract class RecordActivity extends BaseActivity {
                 }, new Action1<Throwable>() {
                     @Override
                     public void call(Throwable throwable) {
+                        Toast.makeText(RecordActivity.this, R.string.sync_case_forms_error, Toast.LENGTH_SHORT)
+                                .show();
                         Log.i(TAG, throwable.getMessage());
                     }
                 }));
@@ -166,6 +168,8 @@ public abstract class RecordActivity extends BaseActivity {
                 }, new Action1<Throwable>() {
                     @Override
                     public void call(Throwable throwable) {
+                        Toast.makeText(RecordActivity.this, R.string.sync_tracing_forms_error, Toast.LENGTH_SHORT)
+                                .show();
                         Log.i(TAG, throwable.getMessage());
                     }
                 }));
