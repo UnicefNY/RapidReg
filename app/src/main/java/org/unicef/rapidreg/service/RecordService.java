@@ -41,7 +41,7 @@ public class RecordService {
     public static final String AUDIO_FILE_PATH = PrimeroConfiguration.getInternalFilePath() + "/audioFile.3gp";
     private static final String TAG = RecordService.class.getSimpleName();
 
-    protected static SimpleDateFormat registrationDateFormat = new SimpleDateFormat("dd/MM/yyyy");
+    protected static SimpleDateFormat registrationDateFormat = new SimpleDateFormat("MM/dd/yyyy");
 
     public static RecordService getInstance() {
         return new RecordService();
@@ -79,11 +79,6 @@ public class RecordService {
         return "%" + queryStr + "%";
     }
 
-    /**
-     * Current date with format <bold>dd/MM/yyyy</bold>
-     *
-     * @return Current date string
-     */
     protected String getCurrentRegistrationDateAsString() {
         return registrationDateFormat.format(new java.util.Date());
     }
