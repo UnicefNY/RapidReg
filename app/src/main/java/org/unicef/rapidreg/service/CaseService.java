@@ -100,17 +100,17 @@ public class CaseService extends RecordService {
         return caseDao.getCaseListByConditionGroup(conditionGroup);
     }
 
-    public void saveOrUpdate(ItemValues itemValues, List<String> photoPaths) {
+    public Case saveOrUpdate(ItemValues itemValues, List<String> photoPaths) throws IOException {
 
         if (itemValues.getAsString(CASE_ID) == null) {
-            save(itemValues, photoPaths);
+            return save(itemValues, photoPaths);
         } else {
             Log.d(TAG, "update the existing case");
-            update(itemValues, photoPaths);
+            return update(itemValues, photoPaths);
         }
     }
 
-    public void save(ItemValues itemValues, List<String> photoPath) {
+    public Case save(ItemValues itemValues, List<String> photoPath) throws IOException {
         String uniqueId = createUniqueId();
         itemValues.addStringItem(CASE_ID, getShortUUID(uniqueId));
 
@@ -144,11 +144,9 @@ public class CaseService extends RecordService {
         child.setCreatedBy(username);
         child.save();
 
-        try {
-            savePhoto(child, photoPath);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        savePhoto(child, photoPath);
+
+        return child;
     }
 
     public void savePhoto(Case child, List<String> photoPaths) throws IOException {
@@ -159,7 +157,7 @@ public class CaseService extends RecordService {
         }
     }
 
-    public void update(ItemValues itemValues, List<String> photoBitPaths) {
+    public Case update(ItemValues itemValues, List<String> photoBitPaths) throws IOException {
         Gson gson = new Gson();
         Blob caseBlob = new Blob(gson.toJson(itemValues.getValues()).getBytes());
         Blob audioFileDefault = null;
@@ -175,11 +173,9 @@ public class CaseService extends RecordService {
         child.setRegistrationDate(getRegisterDate(itemValues.getAsString(REGISTRATION_DATE)));
         child.setAudio(audioFileDefault);
         child.update();
-        try {
-            updatePhoto(child, photoBitPaths);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        updatePhoto(child, photoBitPaths);
+
+        return child;
     }
 
     public void updatePhoto(Case child, List<String> photoPaths) throws IOException {
