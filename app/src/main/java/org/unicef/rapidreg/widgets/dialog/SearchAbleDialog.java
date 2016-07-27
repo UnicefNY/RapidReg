@@ -26,25 +26,36 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+
 public class SearchAbleDialog extends Dialog {
 
-    private ListView list;
-    private EditText filterText = null;
-    private MyAdapter adapter = null;
-    private Button okButton;
-    private Button cancelButton;
     private static final String TAG = "SearchAbleDialog";
 
-    public SearchAbleDialog(Context context, String title, String[] items) {
-        super(context);
+    @BindView(R.id.List)
+    ListView list;
+    @BindView(R.id.EditBox)
+    EditText filterText;
+    @BindView(R.id.okButton)
+    Button okButton;
+    @BindView(R.id.cancelButton)
+    Button cancelButton;
 
+    private MyAdapter adapter = null;
+
+
+    public SearchAbleDialog(Context context, String title, String[] items, int selectIndex) {
+        super(context);
         setContentView(R.layout.form_alert_dialog);
+        ButterKnife.bind(this);
+
         this.setTitle(title);
-        okButton = (Button) findViewById(R.id.okButton);
-        cancelButton = (Button) findViewById(R.id.cancelButton);
-        filterText = (EditText) findViewById(R.id.EditBox);
+
+
         filterText.addTextChangedListener(filterTextWatcher);
-        list = (ListView) findViewById(R.id.List);
+
         adapter = new MyAdapter(context, new ArrayList<>(Arrays.asList(items)));
 
         list.setAdapter(adapter);
@@ -54,6 +65,17 @@ public class SearchAbleDialog extends Dialog {
                 Log.d(TAG, "Selected Item is = " + list.getItemAtPosition(position));
             }
         });
+
+        adapter.index = selectIndex;
+        //adapter.listener.onClick(adapter.arrayList.get(adapter.index));
+        adapter.notifyDataSetChanged();
+    }
+
+    @OnClick(R.id.clearButton)
+    void onClickCleanButton() {
+        adapter.index = -1;
+        adapter.listener.onClick("");
+        adapter.notifyDataSetChanged();
     }
 
     public void setOkButton(final View.OnClickListener listener) {
@@ -131,7 +153,7 @@ public class SearchAbleDialog extends Dialog {
         }
 
         private ViewHolder holder;
-        private int index = -1;
+        int index = -1;
 
         @Override
         public View getView(final int position, View convertView, ViewGroup parent) {

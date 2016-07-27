@@ -30,8 +30,6 @@ public class RecordModel extends BaseModel {
     private String caregiver = "";
     @Column(name = "case_json")
     private Blob content;
-    @Column(name = "photo")
-    private Blob photo;
     @Column(name = "audio")
     private Blob audio;
     @Column(name = "is_synced")
@@ -56,6 +54,9 @@ public class RecordModel extends BaseModel {
     private Date lastSyncedDate;
     @Column(name = "type")
     private int type;
+
+    @Column
+    private boolean isAudioSynced;
 
     public long getId() {
         return id;
@@ -95,14 +96,6 @@ public class RecordModel extends BaseModel {
 
     public void setContent(Blob content) {
         this.content = content;
-    }
-
-    public Blob getPhoto() {
-        return photo;
-    }
-
-    public void setPhoto(Blob photo) {
-        this.photo = photo;
     }
 
     public Blob getAudio() {
@@ -201,26 +194,35 @@ public class RecordModel extends BaseModel {
         this.type = type;
     }
 
+    public boolean isAudioSynced() {
+        return isAudioSynced;
+    }
+
+    public void setAudioSynced(boolean audioSynced) {
+        isAudioSynced = audioSynced;
+    }
+
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder("RecordModel:");
-        sb.append("id").append(id).append("\n");
-        sb.append("name").append(name).append("\n");
-        sb.append("age").append(age).append("\n");
-        sb.append("caregiver").append(caregiver).append("\n");
-        sb.append("content").append(content).append("\n");
-        sb.append("isSynced").append(isSynced).append("\n");
-        sb.append("syncLog").append(syncLog).append("\n");
-        sb.append("internalId").append(internalId).append("\n");
-        sb.append("internalRev").append(internalRev).append("\n");
-        sb.append("uniqueId").append(uniqueId).append("\n");
-        sb.append("registrationDate").append(registrationDate).append("\n");
-        sb.append("createdBy").append(createdBy).append("\n");
-        sb.append("createDate").append(createDate).append("\n");
-        sb.append("lastUpdatedDate").append(lastUpdatedDate).append("\n");
-        sb.append("lastSyncedDate").append(lastSyncedDate).append("\n");
-        sb.append("type").append(type).append("\n");
-
-        return sb.toString();
+        return "RecordModel{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", age=" + age +
+                ", caregiver='" + caregiver + '\'' +
+                ", content=" + content +
+                ", audio=" + audio +
+                ", isSynced=" + isSynced +
+                ", syncLog='" + syncLog + '\'' +
+                ", internalId='" + internalId + '\'' +
+                ", internalRev='" + internalRev + '\'' +
+                ", uniqueId='" + uniqueId + '\'' +
+                ", registrationDate=" + registrationDate +
+                ", createdBy='" + createdBy + '\'' +
+                ", createDate=" + createDate +
+                ", lastUpdatedDate=" + lastUpdatedDate +
+                ", lastSyncedDate=" + lastSyncedDate +
+                ", type=" + type +
+                ", isAudioSynced=" + isAudioSynced +
+                '}';
     }
 }

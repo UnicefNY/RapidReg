@@ -89,8 +89,9 @@
     <string name="confirm_button_text">Yes</string>
     <string name="stop_sync_button_text">Yes, stop now</string>
     <string name="continue_sync_button_text">Continue sync</string>
-    <string name="sync_success_message">Congrats! Your synchronisation request is completed.</string>
-    <string name="sync_error_message">Sorry, the synchronisation request is not completed for network issue.</string>
+    <string name="sync_upload_success_message">Congrats! Your upload request is completed.</string>
+    <string name="sync_download_success_message">Congrats! Your download request is completed.</string>
+    <string name="sync_error_message">Sorry, the synchronisation request is not completed. Please retry later.</string>
     <string name="try_to_sync_message">Are you sure to sync records ?</string>
     <string name="remove_photo_confirmation">Are you sure you want to remove this photo?</string>
     <string name="save_success">Record saved</string>
