@@ -1,36 +1,14 @@
 {
-  "Tom":
-  {
-    "Full Name": "Tom Justin Clinton",
-    "Sex": "<Radio> Male",
-    "Age": "10"
-  },
-
-  "Jim":
-  {
-    "Full Name": "Jim Washington",
-    "Sex": "<Radio> Male",
-    "Age": "8"
-  },
-
-  "Jack":
-  {
-    "Full Name": "Jack Franklin",
-    "Sex": "<Radio> Male",
-    "Age": "6"
-  },
-
-  "Angela":
-  {
-    "Full Name": "Angela Adams",
-    "Sex": "<Radio> Female",
-    "Age": "4"
-  },
-
-  "Lily":
-  {
-    "Full Name": "Lily Jefferson",
-    "Sex": "<Radio> Female",
-    "Age": "2"
+  "child": {
+    "created_by": "primero",
+    "owned_by": "primero",
+    "previously_owned_by": "primero",
+    "sex": "Male",
+    "module_id": "primeromodule-cp",
+    "age": 12,
+    "registration_date": "07/27/2016",
+    "case_id_display": "983365b",
+    "short_id": "983365b",
+    "case_id": "2b6d02d4-7ecc-48cb-bb6d-20d54983365b"
   }
 }

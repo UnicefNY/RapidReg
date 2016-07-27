@@ -4,7 +4,7 @@ import com.hannesdorfmann.mosby.mvp.MvpView;
 
 public interface SyncView extends MvpView {
 
-    void showSyncProgressDialog();
+    void showSyncProgressDialog(String title);
 
     void hideSyncProgressDialog();
 
@@ -12,7 +12,7 @@ public interface SyncView extends MvpView {
 
     void showSyncErrorMessage();
 
-    void showSyncSuccessMessage(String msg);
+    void showSyncDownloadSuccessMessage();
 
     void setDataViews(String syncDate, String hasSyncAmount, String notSyncAmount);
 
@@ -23,4 +23,6 @@ public interface SyncView extends MvpView {
     void showAttemptSyncDialog();
 
     void setSyncProgressDialogTitle(String title);
+
+    void showSyncUploadSuccessMessage();
 }

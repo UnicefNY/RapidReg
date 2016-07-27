@@ -96,10 +96,10 @@ public class SyncFragment extends MvpFragment<SyncView, SyncPresenter> implement
     }
 
     @Override
-    public void showSyncProgressDialog() {
+    public void showSyncProgressDialog(String title) {
         syncProgressDialog = new ProgressDialog(getActivity());
-        syncProgressDialog.setMessage(startSyncMessage);
         syncProgressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+        syncProgressDialog.setMessage(title);
         syncProgressDialog.setCancelable(false);
         syncProgressDialog.setButton(DialogInterface.BUTTON_NEGATIVE,
                 cancelButtonText,
@@ -185,8 +185,13 @@ public class SyncFragment extends MvpFragment<SyncView, SyncPresenter> implement
     }
 
     @Override
-    public void showSyncSuccessMessage(String msg) {
-        Toast.makeText(getActivity(), msg, Toast.LENGTH_SHORT).show();
+    public void showSyncUploadSuccessMessage() {
+        Toast.makeText(getActivity(), syncUploadSuccessMessage, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void showSyncDownloadSuccessMessage() {
+        Toast.makeText(getActivity(), syncDownloadSuccessMessage, Toast.LENGTH_SHORT).show();
     }
 
     @Override

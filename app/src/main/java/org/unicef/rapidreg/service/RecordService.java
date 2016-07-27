@@ -4,6 +4,7 @@ import android.util.Log;
 
 import org.unicef.rapidreg.PrimeroConfiguration;
 import org.unicef.rapidreg.forms.Field;
+import org.unicef.rapidreg.model.RecordModel;
 import org.unicef.rapidreg.service.cache.ItemValues;
 
 import java.io.File;
@@ -41,7 +42,7 @@ public class RecordService {
     public static final String AUDIO_FILE_PATH = PrimeroConfiguration.getInternalFilePath() + "/audioFile.amr";
     private static final String TAG = RecordService.class.getSimpleName();
 
-    protected static SimpleDateFormat registrationDateFormat = new SimpleDateFormat("MM/dd/yyyy");
+    protected static SimpleDateFormat registrationDateFormat = new SimpleDateFormat("yyyy/MM/dd");
 
     public static RecordService getInstance() {
         return new RecordService();
@@ -91,5 +92,9 @@ public class RecordService {
 
     public static String createUniqueId() {
         return UUID.randomUUID().toString();
+    }
+
+    protected void setSyncedStatus(RecordModel record) {
+        record.setSynced(false);
     }
 }

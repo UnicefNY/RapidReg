@@ -52,6 +52,8 @@ public class TracingMiniFormFragment extends RecordRegisterFragment {
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void saveTracing(SaveTracingEvent event) {
         if (validateRequiredField()) {
+            clearProfileItems();
+
             ArrayList<String> photoPaths = (ArrayList<String>) photoAdapter.getAllItems();
             ItemValues itemValues = new ItemValues(new Gson().fromJson(new Gson().toJson(
                     this.itemValues.getValues()), JsonObject.class));
@@ -172,7 +174,6 @@ public class TracingMiniFormFragment extends RecordRegisterFragment {
                 itemValues.addStringItem(ItemValues.RecordProfile.ID_NORMAL_STATE, shortUUID);
                 itemValues.addStringItem(ItemValues.RecordProfile.REGISTRATION_DATE,
                         dateFormat.format(item.getRegistrationDate()));
-                itemValues.addStringItem(ItemValues.RecordProfile.GENDER_NAME, shortUUID);
                 itemValues.addNumberItem(ItemValues.RecordProfile.ID, item.getId());
                 photoAdapter = initPhotoAdapter(recordId);
             } else {

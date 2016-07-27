@@ -52,6 +52,8 @@ public class CaseMiniFormFragment extends RecordRegisterFragment {
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void saveCase(SaveCaseEvent event) {
         if (validateRequiredField()) {
+            clearProfileItems();
+
             ArrayList<String> photoPaths = (ArrayList<String>) photoAdapter.getAllItems();
             ItemValues itemValues = new ItemValues(new Gson().fromJson(new Gson().toJson(
                     this.itemValues.getValues()), JsonObject.class));
@@ -63,8 +65,7 @@ public class CaseMiniFormFragment extends RecordRegisterFragment {
                 return;
             }
 
-            Case record = CaseService.getInstance()
-                    .getByUniqueId(itemValues.getAsString(CaseService.CASE_ID));
+            Case record = CaseService.getInstance().getByUniqueId(itemValues.getAsString(CaseService.CASE_ID));
 
             Bundle args = new Bundle();
             args.putLong(CaseService.CASE_ID, record.getId());
@@ -172,7 +173,6 @@ public class CaseMiniFormFragment extends RecordRegisterFragment {
                 itemValues.addStringItem(ItemValues.RecordProfile.ID_NORMAL_STATE, shortUUID);
                 itemValues.addStringItem(ItemValues.RecordProfile.REGISTRATION_DATE,
                         dateFormat.format(item.getRegistrationDate()));
-                itemValues.addStringItem(ItemValues.RecordProfile.GENDER_NAME, shortUUID);
                 itemValues.addNumberItem(ItemValues.RecordProfile.ID, item.getId());
                 photoAdapter = initPhotoAdapter(recordId);
             } else {
@@ -185,6 +185,7 @@ public class CaseMiniFormFragment extends RecordRegisterFragment {
             photoAdapter = new CasePhotoAdapter(getContext(), new ArrayList<String>());
         }
     }
+
 
     private RecordPhotoAdapter initPhotoAdapter(long recordId) {
         List<String> paths = new ArrayList<>();

@@ -12,7 +12,6 @@ import com.google.gson.JsonObject;
 import com.hannesdorfmann.mosby.mvp.MvpBasePresenter;
 import com.raizlabs.android.dbflow.data.Blob;
 
-import org.unicef.rapidreg.R;
 import org.unicef.rapidreg.model.Case;
 import org.unicef.rapidreg.model.CasePhoto;
 import org.unicef.rapidreg.network.SyncService;
@@ -50,8 +49,10 @@ public class SyncPresenter extends MvpBasePresenter<SyncView> {
     private CaseService caseService;
     private CasePhotoService casePhotoService;
 
-    private int numberOfSuccessfulUploadedCases = 0;
-    private int totalNumberOfCases = 0;
+    private int numberOfSuccessfulUploadedCases;
+    private int totalNumberOfCases;
+
+    private boolean isSyncing;
 
     public SyncPresenter(Context context) {
         this.context = context;
@@ -75,8 +76,9 @@ public class SyncPresenter extends MvpBasePresenter<SyncView> {
             return;
         }
         try {
+            numberOfSuccessfulUploadedCases = 0;
+            totalNumberOfCases = 0;
             upLoadCases();
-            pullCases();
         } catch (Exception e) {
             syncFail();
         }
@@ -84,21 +86,21 @@ public class SyncPresenter extends MvpBasePresenter<SyncView> {
 
 
     private void upLoadCases() {
+        isSyncing = true;
         final List<Case> caseList = CaseService.getInstance().getAll();
         for (Case aCase : caseList) {
-            if(!aCase.isSynced()){
+            if (!aCase.isSynced()) {
                 totalNumberOfCases++;
             }
         }
-        getView().showSyncProgressDialog();
-        getView().setSyncProgressDialogTitle("Uploading...Pls wait a moment.");
+        getView().showSyncProgressDialog("Uploading...Pls wait a moment.");
         getView().setProgressMax(totalNumberOfCases);
 
         Observable.from(caseList)
                 .filter(new Func1<Case, Boolean>() {
                     @Override
                     public Boolean call(Case item) {
-                        return !item.isSynced();
+                        return isSyncing && !item.isSynced();
                     }
                 })
                 .map(new Func1<Case, Pair<Case, Response<JsonElement>>>() {
@@ -122,8 +124,13 @@ public class SyncPresenter extends MvpBasePresenter<SyncView> {
                             JsonArray photoKeys = jsonElementResponse.body().getAsJsonObject().get("photo_keys")
                                     .getAsJsonArray();
                             String id = jsonElementResponse.body().getAsJsonObject().get("_id").getAsString();
-                            Call<Response<JsonElement>> call = syncService.deleteCasePhotos(id, photoKeys);
-                            if (call.execute().raw().isSuccessful()) {
+                            okhttp3.Response response = null;
+                            if (photoKeys.size() != 0) {
+                                Call<Response<JsonElement>> call = syncService.deleteCasePhotos(id, photoKeys);
+                                response = call.execute().raw();
+                            }
+
+                            if (response == null || response.isSuccessful()) {
                                 syncService.uploadCasePhotos(caseResponsePair.first);
                             }
                         } catch (IOException e) {
@@ -150,7 +157,8 @@ public class SyncPresenter extends MvpBasePresenter<SyncView> {
                 }, new Action0() {
                     @Override
                     public void call() {
-                        syncSuccessfully(context.getResources().getString(R.string.sync_upload_success_message));
+                        syncUploadSuccessfully();
+                        pullCases();
                     }
                 });
     }
@@ -161,6 +169,7 @@ public class SyncPresenter extends MvpBasePresenter<SyncView> {
 
 
     public void pullCases() {
+        isSyncing = true;
         GregorianCalendar cal = new GregorianCalendar(2015, 1, 1);
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.US);
         final String time = sdf.format(cal.getTime());
@@ -186,8 +195,7 @@ public class SyncPresenter extends MvpBasePresenter<SyncView> {
                 .subscribe(new Action1<List<JsonObject>>() {
                     @Override
                     public void call(List<JsonObject> jsonObjects) {
-                        getView().showSyncProgressDialog();
-                        getView().setSyncProgressDialogTitle("Downloading...Pls wait a moment.");
+                        getView().showSyncProgressDialog("Downloading...Pls wait a moment.");
                         getView().setProgressMax(jsonObjects.size());
                     }
                 }, new Action1<Throwable>() {
@@ -208,7 +216,7 @@ public class SyncPresenter extends MvpBasePresenter<SyncView> {
                 .filter(new Func1<JsonObject, Boolean>() {
                     @Override
                     public Boolean call(JsonObject jsonObject) {
-                        return true;
+                        return isSyncing;
                     }
                 })
                 .map(new Func1<JsonObject, Response<JsonElement>>() {
@@ -297,7 +305,7 @@ public class SyncPresenter extends MvpBasePresenter<SyncView> {
                 }, new Action0() {
                     @Override
                     public void call() {
-                        syncSuccessfully(context.getResources().getString(R.string.sync_download_success_message));
+                        syncDownloadSuccessfully();
                     }
                 });
     }
@@ -315,7 +323,7 @@ public class SyncPresenter extends MvpBasePresenter<SyncView> {
             casePhotoService.deleteByCaseId(item.getId());
         } else {
             item = new Case();
-            item.setUniqueId(CaseService.getInstance().createUniqueId());
+            item.setUniqueId(casesJsonObject.get("case_id").getAsString());
             item.setInternalId(casesJsonObject.get("_id").getAsString());
             item.setInternalRev(newRev);
             item.setRegistrationDate(
@@ -350,9 +358,15 @@ public class SyncPresenter extends MvpBasePresenter<SyncView> {
         aCase.update();
     }
 
-    private void syncSuccessfully(String msg) {
+    private void syncUploadSuccessfully() {
         updateDataViews();
-        getView().showSyncSuccessMessage(msg);
+        getView().showSyncUploadSuccessMessage();
+        getView().hideSyncProgressDialog();
+    }
+
+    private void syncDownloadSuccessfully() {
+        updateDataViews();
+        getView().showSyncDownloadSuccessMessage();
         getView().hideSyncProgressDialog();
     }
 
@@ -379,6 +393,6 @@ public class SyncPresenter extends MvpBasePresenter<SyncView> {
     }
 
     public void cancelSync() {
-
+        isSyncing = false;
     }
 }
