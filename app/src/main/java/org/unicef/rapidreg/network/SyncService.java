@@ -13,7 +13,6 @@ import com.raizlabs.android.dbflow.data.Blob;
 import org.unicef.rapidreg.PrimeroConfiguration;
 import org.unicef.rapidreg.base.PhotoConfig;
 import org.unicef.rapidreg.db.impl.CasePhotoDaoImpl;
-import org.unicef.rapidreg.model.Case;
 import org.unicef.rapidreg.model.CasePhoto;
 import org.unicef.rapidreg.model.RecordModel;
 import org.unicef.rapidreg.service.CaseService;
@@ -69,6 +68,7 @@ public class SyncService extends BaseRetrofitService {
         values.addStringItem("short_id", shortUUID);
         values.addStringItem(CaseService.CASE_ID, shortUUID);
         values.addStringItem("case_id", item.getUniqueId());
+        values.removeItem("_attachments");
 
         JsonObject jsonObject = new JsonObject();
         jsonObject.add("child", values.getValues());
@@ -87,14 +87,12 @@ public class SyncService extends BaseRetrofitService {
         }
 
         JsonObject responseJsonObject = response.body().getAsJsonObject();
-        String caseId = responseJsonObject.get("case_id").getAsString();
-        Case previousCase = CaseService.getInstance().getByUniqueId(caseId);
-        if (previousCase != null) {
-            previousCase.setInternalId(responseJsonObject.get("_id").getAsString());
-            previousCase.setInternalRev(responseJsonObject.get("_rev").getAsString());
-            previousCase.setContent(new Blob(responseJsonObject.toString().getBytes()));
-            previousCase.update();
-        }
+
+        item.setInternalId(responseJsonObject.get("_id").getAsString());
+        item.setInternalRev(responseJsonObject.get("_rev").getAsString());
+        item.setContent(new Blob(responseJsonObject.toString().getBytes()));
+        item.update();
+
         return response;
     }
 
@@ -174,6 +172,7 @@ public class SyncService extends BaseRetrofitService {
         casePhoto.setSynced(status);
         casePhoto.update();
     }
+
     private static final String FORM_DATA_KEY_AUDIO = "child[audio]";
 
     private static final String FORM_DATA_KEY_PHOTO = "child[photo][0]";

@@ -58,8 +58,6 @@ public class CaseService extends RecordService {
         return caseDao.getCaseById(caseId);
     }
 
-
-
     public List<Case> getAllOrderByDateASC() {
         return caseDao.getAllCasesOrderByDate(true);
     }
@@ -101,7 +99,6 @@ public class CaseService extends RecordService {
     }
 
     public void saveOrUpdate(ItemValues itemValues, List<String> photoPaths) {
-
         if (itemValues.getAsString(CASE_ID) == null) {
             save(itemValues, photoPaths);
         } else {
@@ -169,6 +166,7 @@ public class CaseService extends RecordService {
         child.setLastUpdatedDate(new Date(Calendar.getInstance().getTimeInMillis()));
         child.setContent(caseBlob);
         child.setName(getName(itemValues));
+        setSyncedStatus(child);
         int age = itemValues.getAsInt(AGE) != null ? itemValues.getAsInt(AGE) : 0;
         child.setAge(age);
         child.setCaregiver(getCaregiverName(itemValues));

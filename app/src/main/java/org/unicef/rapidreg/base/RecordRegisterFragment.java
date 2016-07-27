@@ -18,6 +18,7 @@ import org.greenrobot.eventbus.ThreadMode;
 import org.unicef.rapidreg.R;
 import org.unicef.rapidreg.event.UpdateImageEvent;
 import org.unicef.rapidreg.forms.Field;
+import org.unicef.rapidreg.service.cache.ItemValues;
 import org.unicef.rapidreg.service.cache.ItemValuesMap;
 
 import java.util.List;
@@ -110,6 +111,12 @@ public abstract class RecordRegisterFragment extends MvpFragment<RecordRegisterV
                 fields.add(field);
             }
         }
+    }
+
+    protected void clearProfileItems(){
+        itemValues.removeItem(ItemValues.RecordProfile.ID_NORMAL_STATE);
+        itemValues.removeItem(ItemValues.RecordProfile.REGISTRATION_DATE);
+        itemValues.removeItem(ItemValues.RecordProfile.ID);
     }
 
     protected abstract List<Field> getFields();
