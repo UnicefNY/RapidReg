@@ -42,8 +42,8 @@ public class CaseListAdapter extends RecordListAdapter {
         }
 
         try {
-            RecordPhoto headerPhoto = CasePhotoService.getInstance().getFirstThumbnail(record.getId());
-            Glide.with(holder.image.getContext()).load((headerPhoto.getThumbnail().getBlob())).into(holder.image);
+            RecordPhoto headerPhoto = CasePhotoService.getInstance().getFirst(record.getId());
+            Glide.with(holder.image.getContext()).load(headerPhoto.getPhoto().getBlob()).into(holder.image);
         } catch (Exception e) {
             holder.image.setImageDrawable(activity.getResources().getDrawable(gender.getAvatarId()));
         }

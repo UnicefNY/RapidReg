@@ -38,7 +38,7 @@ public class RecordService {
     public static final String SEX = "sex";
     public static final String INQUIRY_DATE = "inquiry_date";
 
-    public static final String AUDIO_FILE_PATH = PrimeroConfiguration.getInternalFilePath() + "/audioFile.3gp";
+    public static final String AUDIO_FILE_PATH = PrimeroConfiguration.getInternalFilePath() + "/audioFile.amr";
     private static final String TAG = RecordService.class.getSimpleName();
 
     protected static SimpleDateFormat registrationDateFormat = new SimpleDateFormat("MM/dd/yyyy");
@@ -67,10 +67,6 @@ public class RecordService {
         return result;
     }
 
-    public String createUniqueId() {
-        return UUID.randomUUID().toString();
-    }
-
     protected String getCaregiverName(ItemValues itemValues) {
         return "" + itemValues.getAsString(CAREGIVER_NAME);
     }
@@ -91,5 +87,9 @@ public class RecordService {
             Log.e(TAG, "date format error");
             return new Date(System.currentTimeMillis());
         }
+    }
+
+    public static String createUniqueId() {
+        return UUID.randomUUID().toString();
     }
 }
