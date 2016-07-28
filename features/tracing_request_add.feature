@@ -4,7 +4,7 @@ Feature: Add tracing request
   Background:
     #    Given I login RapidReg with "primero" account
     Given I press "login" button
-    And I press menu tab "Tracing Request"
+    And I press menu tab "Tracing request"
 
   Scenario: Create tracing request through mini form / full form.
     When I press "fab_expand_menu_button" button
@@ -26,8 +26,8 @@ Feature: Add tracing request
       | Is this a permanent location? | <Checkbox> Yes                  |
 
     When I press menu button
-    And I press menu tab "Tracing Request"
-    Then I should see the tracing request "age" is "10"
+    And I press menu tab "Tracing request"
+    Then I should see the tracing request "age" is "42"
     And I should see the tracing request "registration_date" is "Today's date"
 
     When I press "fab_expand_menu_button" button
@@ -45,17 +45,17 @@ Feature: Add tracing request
       | Sub Ethnicity 1                                      | <Select> Ethnicity1                      |
       | Sub Ethnicity 2                                      | <Select> Ethnicity2                      |
       | Nationality                                          | <Multiple> Nationality1,Nationality2     |
-      | Additional details / comments                        | Miss family very much.                   |
+      | Additional details / comments                        | <Text> Miss family very much.            |
       | Current Address                                      | <Text> 111 Main St, Davidson NC, 28036   |
       | Is this a permanent location?                        | <Checkbox> Yes                           |
       | Telephone                                            | 0535-7768597                             |
-      | What was the main casuse of separation?              | <Select> Conflict                        |
+      | What was the main cause of separation?               | <Select> Conflict                        |
       | Did the separation occur in relation to evacuation?  | <Checkbox> No                            |
       | Circumstances of Separation (please provide details) | <Text> It is ok now.                     |
       | Separation Address (Place)                           | <Text> In the middle part of the contry. |
       | Last Address                                         | <Text> Capital                           |
       | Last Landmark                                        | A huge mountain                          |
-      | Last Telephone                                       | 010-88672342                             |
+#      | Last Telephone                                       | 010-88672342                             |
       | Additional info that could help in tracing?          | <Text> The child is very tall.           |
     And I press "save" button
     And I scroll to "Inquirer" form
@@ -74,23 +74,26 @@ Feature: Add tracing request
       | Current Address                                      | 111 Main St, Davidson NC, 28036   |
       | Is this a permanent location?                        | <Checkbox> Yes                    |
       | Telephone                                            | 0535-7768597                      |
-      | What was the main casuse of separation?              | Conflict                          |
+      | What was the main cause of separation?              | Conflict                          |
       | Circumstances of Separation (please provide details) | It is ok now.                     |
       | Separation Address (Place)                           | In the middle part of the contry. |
       | Last Address                                         | Capital                           |
-      | Last Landmark                                        | A huge mountain                   |
-      | Last Telephone                                       | 010-88672342                      |
+#      | Last Landmark                                        | A huge mountain                   |
+#      | Last Telephone                                       | 010-88672342                      |
       | Additional info that could help in tracing?          | The child is very tall.           |
 
-
-    When I press "search" button
+    When I press menu button
+    And I press menu tab "Tracing request"
+    And I press "search" button
     And I search for:
-      | Nickname of inquirer | Susie |
+      | Name | Susie |
+    And I press "done" button
     Then I should see a tracing request with age "36"
 
-    When I press "search" button
+    When I press "search_bar" button
     And I clear up above "1" search conditions
     And I search for:
       | Age From | 40 |
       | To       | 50 |
+    And I press "done" button
     Then I should see a tracing request with age "42"

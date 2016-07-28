@@ -100,7 +100,7 @@ module GestureModule
       when "left"
         self.swipe(:start_x => 0.9*screen_width, :start_y => 0.5*screen_height, :end_x => 0.1*screen_width, :end_y => 0.5*screen_height, :duration => 2000)
       when "up"
-        self.swipe(:start_x => 0.5*screen_width, :start_y => 0.6*screen_height, :end_x => 0.5*screen_width, :end_y => 0.2*screen_height, :duration => 2000)
+        self.swipe(:start_x => 0.5*screen_width, :start_y => 0.7*screen_height, :end_x => 0.5*screen_width, :end_y => 0.2*screen_height, :duration => 2000)
       when "down"
         self.swipe(:start_x => 0.5*screen_width, :start_y => 0.4*screen_height, :end_x => 0.5*screen_width, :end_y => 0.9*screen_height, :duration => 2000)
       when "little_up"

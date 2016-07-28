@@ -1,9 +1,5 @@
-# TODO
 And /^I switch to full form$/ do
-  case_page.scrollToNextFields
-  case_page.scrollToNextFields
-  case_page.switchToFullForm
-  sleep 5
+  base_page.clickByXpath("//android.widget.Button[@text='Show more details']")
 end
 
 And /^I scroll to "(.*?)" form$/ do |form_name|

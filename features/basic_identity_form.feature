@@ -35,12 +35,16 @@ Feature: Basic Identify Form
       | Other Agency Name                        | Test Agency                                          |
       | List of documents carried by the child   | <Text> Driver's License, Passport, Birth Certificate |
       | Current Civil/Marital Status             | <Select> Single                                      |
-#      | Occupation                               | Farmer                                               |
+      | Occupation                               | Farmer                                               |
       | Current Address                          | <Text> 111 Main St, Davidson NC, 28036               |
       | Landmark                                 | A huge mountain                                      |
       | Is this address permanent?               | <Checkbox> No                                        |
       | Current Telephone                        | 336-555-1313                                         |
-    And I press "save" button
+    And I press "save_case" button
+    Then I should see a case with sex "BOY" and age "10"
+    When I click the case
+    And I switch to full form
+    And I scroll to "Basic Identity" form
     Then I should see following:
       | Case Status                              | Open                                          |
       | Full Name                                | Tom Justin Clinton                            |
@@ -63,7 +67,7 @@ Feature: Basic Identify Form
       | Other Agency Name                        | Test Agency                                   |
       | List of documents carried by the child   | Driver's License, Passport, Birth Certificate |
       | Current Civil/Marital Status             | Single                                        |
-#      | Occupation                               | Farmer                                        |
+      | Occupation                               | Farmer                                        |
       | Current Address                          | 111 Main St, Davidson NC, 28036               |
       | Landmark                                 | A huge mountain                               |
       | Is this address permanent?               | <Checkbox> No                                |
