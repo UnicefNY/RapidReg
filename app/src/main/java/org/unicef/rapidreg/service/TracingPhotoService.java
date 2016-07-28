@@ -22,8 +22,8 @@ public class TracingPhotoService {
         this.tracingPhotoDao = tracingDao;
     }
 
-    public TracingPhoto getFirstThumbnail(long tracingId) {
-        return tracingPhotoDao.getFirstThumbnail(tracingId);
+    public TracingPhoto getFirst(long tracingId) {
+        return tracingPhotoDao.getFirst(tracingId);
     }
 
     public TracingPhoto getById(long tracingId) {

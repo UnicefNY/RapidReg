@@ -22,9 +22,6 @@ public class RecordPhoto extends BaseModel {
     @Column
     boolean isSynced;
 
-    @Column
-    Blob thumbnail;
-
     public RecordPhoto() {
     }
 
@@ -44,20 +41,12 @@ public class RecordPhoto extends BaseModel {
         this.photo = photo;
     }
 
-    public Blob getThumbnail() {
-        return thumbnail;
-    }
-
     public boolean isSynced() {
         return isSynced;
     }
 
     public void setSynced(boolean synced) {
         isSynced = synced;
-    }
-
-    public void setThumbnail(Blob thumbnail) {
-        this.thumbnail = thumbnail;
     }
 
     public int getOrder() {
@@ -84,7 +73,6 @@ public class RecordPhoto extends BaseModel {
                 ", order=" + order +
                 ", key='" + key + '\'' +
                 ", isSynced=" + isSynced +
-                ", thumbnail=" + thumbnail +
                 '}';
     }
 }

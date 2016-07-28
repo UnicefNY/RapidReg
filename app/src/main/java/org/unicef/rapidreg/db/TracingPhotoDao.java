@@ -5,7 +5,7 @@ import org.unicef.rapidreg.model.TracingPhoto;
 import java.util.List;
 
 public interface TracingPhotoDao {
-    TracingPhoto getFirstThumbnail(long tracingId);
+    TracingPhoto getFirst(long tracingId);
 
     List<TracingPhoto> getByTracingId(long tracingId);
 

@@ -9,7 +9,12 @@ import android.media.ExifInterface;
 import android.media.ThumbnailUtils;
 import android.provider.MediaStore;
 
+import com.raizlabs.android.dbflow.data.Blob;
+
+import org.unicef.rapidreg.base.PhotoConfig;
+
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
@@ -119,8 +124,8 @@ public class ImageCompressUtil {
         FileOutputStream fos = new FileOutputStream(saveFilePath);
         image.compress(Bitmap.CompressFormat.PNG, 70, fos);
         fos.close();
+        recycleBitmap(image);
     }
-
 
     public static Bitmap compressImage(String filePath, float maxWidth, float maxHeight) {
         BitmapFactory.Options options = new BitmapFactory.Options();
@@ -179,5 +184,13 @@ public class ImageCompressUtil {
         Matrix matrix = new Matrix();
         matrix.postRotate(rotateDegree);
         return Bitmap.createBitmap(img, 0, 0, img.getWidth(), img.getHeight(), matrix, true);
+    }
+
+    public static Blob readImageFile(String filePath) throws IOException {
+        if (new File(filePath).length() <= 800 * 1024 * 1) {
+            return new Blob(StreamUtil.readFile(filePath));
+        }
+        return new Blob(ImageCompressUtil.convertImageToBytes(
+                ImageCompressUtil.compressImage(filePath, PhotoConfig.MAX_WIDTH, PhotoConfig.MAX_HEIGHT)));
     }
 }

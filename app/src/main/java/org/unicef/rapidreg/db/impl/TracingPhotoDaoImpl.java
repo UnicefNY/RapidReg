@@ -10,7 +10,7 @@ import java.util.List;
 
 public class TracingPhotoDaoImpl implements TracingPhotoDao {
     @Override
-    public TracingPhoto getFirstThumbnail(long tracingId) {
+    public TracingPhoto getFirst(long tracingId) {
         return SQLite.select().from(TracingPhoto.class)
                 .where(TracingPhoto_Table.tracing_id.eq(tracingId))
                 .querySingle();

@@ -35,6 +35,9 @@ public abstract class RecordPhotoAdapter extends BaseAdapter {
 
     @Override
     public int getCount() {
+        if (((RecordActivity) context).getCurrentFeature().isDetailMode()) {
+            return paths.size();
+        }
         if (paths.size() >= MAX){
             return paths.size();
         }

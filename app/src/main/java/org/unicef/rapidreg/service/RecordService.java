@@ -2,12 +2,18 @@ package org.unicef.rapidreg.service;
 
 import android.util.Log;
 
+import com.raizlabs.android.dbflow.data.Blob;
+
 import org.unicef.rapidreg.PrimeroConfiguration;
+import org.unicef.rapidreg.base.PhotoConfig;
 import org.unicef.rapidreg.forms.Field;
 import org.unicef.rapidreg.model.RecordModel;
 import org.unicef.rapidreg.service.cache.ItemValues;
+import org.unicef.rapidreg.utils.ImageCompressUtil;
+import org.unicef.rapidreg.utils.StreamUtil;
 
 import java.io.File;
+import java.io.IOException;
 import java.sql.Date;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -97,4 +103,5 @@ public class RecordService {
     protected void setSyncedStatus(RecordModel record) {
         record.setSynced(false);
     }
+
 }
