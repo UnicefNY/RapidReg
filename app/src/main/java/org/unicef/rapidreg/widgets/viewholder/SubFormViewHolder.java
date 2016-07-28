@@ -71,12 +71,6 @@ public class SubFormViewHolder extends BaseViewHolder<Field> {
 
     }
 
-    private void clearFocus(View v) {
-        View container = (View) v.getParent();
-        View fieldList = container.findViewById(R.id.field_list);
-        fieldList.clearFocus();
-    }
-
     private void initDeleteBtn(ViewGroup container) {
         final Button deleteBtn = (Button) container.findViewById(R.id.delete_subform);
         deleteBtn.setOnClickListener(new View.OnClickListener() {
@@ -100,7 +94,6 @@ public class SubFormViewHolder extends BaseViewHolder<Field> {
     }
 
     private void deleteSubform(View v) {
-        clearFocus(v);
         removeSubForm(parent.indexOfChild((View) v.getParent()));
         parent.removeView((View) v.getParent());
         updateIndexForFields();

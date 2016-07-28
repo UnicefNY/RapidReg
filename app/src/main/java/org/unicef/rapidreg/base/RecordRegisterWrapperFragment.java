@@ -94,15 +94,6 @@ public abstract class RecordRegisterWrapperFragment extends Fragment {
         EventBus.getDefault().removeStickyEvent(event);
     }
 
-    public void clearFocus() {
-        FragmentStatePagerItemAdapter adapter =
-                (FragmentStatePagerItemAdapter) viewPager.getAdapter();
-        RecordRegisterFragment fragment = (RecordRegisterFragment) adapter.getPage(viewPager.getCurrentItem());
-        if (fragment != null) {
-            fragment.clearFocus();
-        }
-    }
-
     private void initFloatingActionButton() {
         if (((RecordActivity) getActivity()).getCurrentFeature().isDetailMode()) {
             editButton.setVisibility(View.VISIBLE);
