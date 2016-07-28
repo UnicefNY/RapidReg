@@ -15,22 +15,14 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
-        <ImageView
-            android:id="@+id/add_image_button"
-            android:layout_width="90dp"
-            android:layout_height="90dp"
-            android:background="@color/white"
-            android:paddingLeft="@dimen/case_register_label_padding_left_right"
-            android:paddingRight="@dimen/case_register_label_padding_left_right"
-            android:src="@drawable/photo_camera"/>
-
-        <GridView
+        <org.unicef.rapidreg.widgets.PhotoGridView
             android:id="@+id/photo_grid"
             android:layout_width="0dp"
+            android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:layout_height="90dp"
             android:columnWidth="90dp"
             android:horizontalSpacing="5dp"
+            android:verticalSpacing="-15dp"
             android:numColumns="4"
             android:stretchMode="columnWidth" />
 

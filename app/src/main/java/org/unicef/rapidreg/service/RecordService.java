@@ -42,7 +42,7 @@ public class RecordService {
     public static final String AUDIO_FILE_PATH = PrimeroConfiguration.getInternalFilePath() + "/audioFile.amr";
     private static final String TAG = RecordService.class.getSimpleName();
 
-    protected static SimpleDateFormat registrationDateFormat = new SimpleDateFormat("yyyy/MM/dd");
+    protected static SimpleDateFormat registrationDateFormat = new SimpleDateFormat("dd/MM/yyyy");
 
     public static RecordService getInstance() {
         return new RecordService();
