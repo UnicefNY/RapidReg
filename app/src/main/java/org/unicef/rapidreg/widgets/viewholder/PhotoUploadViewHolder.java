@@ -9,8 +9,6 @@ import android.provider.MediaStore;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import org.unicef.rapidreg.R;
@@ -28,7 +26,6 @@ import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 
 public class PhotoUploadViewHolder extends BaseViewHolder<Field> {
     public static final String TAG = PhotoUploadViewHolder.class.getSimpleName();
@@ -40,9 +37,6 @@ public class PhotoUploadViewHolder extends BaseViewHolder<Field> {
 
     @BindView(R.id.no_photo_promote_view)
     TextView noPhotoPromoteView;
-
-    @BindView(R.id.add_image_button)
-    ImageView addImageButton;
 
     private Context context;
 
@@ -60,31 +54,31 @@ public class PhotoUploadViewHolder extends BaseViewHolder<Field> {
 
     @Override
     public void setValue(Field field) {
-        setAddPhotoButtonIcon();
+//        setAddPhotoButtonIcon();
     }
 
-    @OnClick(R.id.add_image_button)
-    void onClickAddImageButton() {
-        showAddPhotoOptionDialog();
-    }
 
-    private void setAddPhotoButtonIcon() {
-        if (((RecordActivity) context).getCurrentFeature().isDetailMode()) {
-            addImageButton.setVisibility(View.GONE);
-            if (adapter.isEmpty()) {
-                noPhotoPromoteView.setVisibility(View.VISIBLE);
-                photoGrid.setVisibility(View.GONE);
-            }
-            return;
-        }
-        resetAddPhotoButtonStatus();
-    }
+//    private void setAddPhotoButtonIcon() {
+//        if (((RecordActivity) context).getCurrentFeature().isDetailMode()) {
+//            addImageButton.setVisibility(View.GONE);
+//            if (adapter.isEmpty()) {
+//                noPhotoPromoteView.setVisibility(View.VISIBLE);
+//                photoGrid.setVisibility(View.GONE);
+//            }
+//            return;
+//        }
+//        resetAddPhotoButtonStatus();
+//    }
 
     private void setViewPhotoListener() {
         photoGrid.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
-                showViewPhotoDialog(position);
+                if (adapter.isFull() || position < adapter.getCount() - 1) {
+                    showViewPhotoDialog(position);
+                } else {
+                    showAddPhotoOptionDialog();
+                }
             }
         });
     }
@@ -92,11 +86,12 @@ public class PhotoUploadViewHolder extends BaseViewHolder<Field> {
     @Override
     public void setOnClickListener(Field field) {
         setViewPhotoListener();
-
         photoGrid.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
-                showDeletionConfirmDialog(i);
+                if (adapter.isFull() || i != adapter.getCount() - 1) {
+                    showDeletionConfirmDialog(i);
+                }
                 return true;
             }
         });
@@ -157,7 +152,6 @@ public class PhotoUploadViewHolder extends BaseViewHolder<Field> {
                 casePhotoAdapter.removeItem(position);
                 casePhotoAdapter.notifyDataSetChanged();
 
-                resetAddPhotoButtonStatus();
             }
         }).setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
             @Override
@@ -167,15 +161,15 @@ public class PhotoUploadViewHolder extends BaseViewHolder<Field> {
         });
         builder.create().show();
     }
-
-    private void resetAddPhotoButtonStatus() {
-        if (adapter.isEmpty()) {
-            addImageButton.setImageResource(R.drawable.photo_camera);
-        } else if (adapter.isFull()) {
-            addImageButton.setVisibility(View.GONE);
-        } else {
-            addImageButton.setVisibility(View.VISIBLE);
-            addImageButton.setImageResource(R.drawable.photo_add);
-        }
-    }
+//
+//    private void resetAddPhotoButtonStatus() {
+//        if (adapter.isEmpty()) {
+//            addImageButton.setImageResource(R.drawable.photo_camera);
+//        } else if (adapter.isFull()) {
+//            addImageButton.setVisibility(View.GONE);
+//        } else {
+//            addImageButton.setVisibility(View.VISIBLE);
+//            addImageButton.setImageResource(R.drawable.photo_add);
+//        }
+//    }
 }

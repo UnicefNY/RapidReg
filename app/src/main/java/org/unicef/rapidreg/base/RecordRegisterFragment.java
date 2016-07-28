@@ -78,14 +78,6 @@ public abstract class RecordRegisterFragment extends MvpFragment<RecordRegisterV
     @Subscribe(threadMode = ThreadMode.MAIN, sticky = true, priority = 1)
     public void updateImageAdapter(UpdateImageEvent event) {
         photoAdapter.addItem(event.getImagePath());
-        ImageView view = (ImageView) getActivity().findViewById(R.id.add_image_button);
-
-        if (!photoAdapter.isEmpty()) {
-            view.setImageResource(R.drawable.photo_add);
-        }
-        if (photoAdapter.isFull()) {
-            view.setVisibility(View.GONE);
-        }
         photoAdapter.notifyDataSetChanged();
         EventBus.getDefault().removeStickyEvent(event);
     }
