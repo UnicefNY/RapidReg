@@ -82,14 +82,6 @@ public abstract class RecordRegisterWrapperFragment extends Fragment {
     @Subscribe(threadMode = ThreadMode.MAIN, sticky = true, priority = 1)
     public void updateImageAdapter(UpdateImageEvent event) {
         recordPhotoAdapter.addItem(event.getImagePath());
-        ImageView view = (ImageView) getActivity().findViewById(R.id.add_image_button);
-
-        if (!recordPhotoAdapter.isEmpty()) {
-            view.setImageResource(R.drawable.photo_add);
-        }
-        if (recordPhotoAdapter.isFull()) {
-            view.setVisibility(View.GONE);
-        }
         recordPhotoAdapter.notifyDataSetChanged();
         EventBus.getDefault().removeStickyEvent(event);
     }
