@@ -1,24 +1,22 @@
 package org.unicef.rapidreg.base;
 
 import android.content.Context;
-import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.GridView;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 
 import com.bumptech.glide.Glide;
 
 import org.unicef.rapidreg.R;
 import org.unicef.rapidreg.model.RecordPhoto;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public abstract class RecordPhotoAdapter extends BaseAdapter {
-    private final static int MAX = 4;
+    private final static int MAX = 10;
     private Context context;
     private List<String> paths;
 
@@ -31,18 +29,16 @@ public abstract class RecordPhotoAdapter extends BaseAdapter {
         paths.add(path);
     }
 
-    public void addItem(long photoId) {
-        String dbPath = String.valueOf(photoId);
-        paths.add(dbPath);
-    }
-
     public void removeItem(int position) {
         paths.remove(position);
     }
 
     @Override
     public int getCount() {
-        return paths.size();
+        if (paths.size() >= MAX){
+            return paths.size();
+        }
+        return paths.size() + 1;
     }
 
     @Override
@@ -62,9 +58,17 @@ public abstract class RecordPhotoAdapter extends BaseAdapter {
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View itemView = inflater.inflate(R.layout.form_photo_item, null);
         ImageView imageView = (ImageView) itemView.findViewById(R.id.photo_item);
-        String path = paths.get(i);
-
         int width = 80;
+        if (paths.size() == 0) {
+            Glide.with(context).load(R.drawable.photo_camera).override(width, width).centerCrop().into(imageView);
+            return itemView;
+        }
+        boolean isAddImageButtonIndex = paths.size() < MAX && i == paths.size();
+        if (isAddImageButtonIndex){
+            Glide.with(context).load(R.drawable.photo_add).override(width, width).centerCrop().into(imageView);
+            return itemView;
+        }
+        String path = paths.get(i);
         try {
             long photoId = Long.parseLong(path);
             Glide.with(context).load(getPhotoById(photoId).getPhoto().getBlob())
@@ -76,7 +80,7 @@ public abstract class RecordPhotoAdapter extends BaseAdapter {
     }
 
     public boolean isFull() {
-        return getCount() >= MAX;
+        return paths.size() >= MAX;
     }
 
     public List<String> getAllItems() {
