@@ -33,15 +33,22 @@ Feature: Case search
 
   Scenario: Search
     And I create case "Tom"
+    And I click to open navigation drawer
+    And I press menu tab "Cases"
     And I create case "Jim"
+    And I click to open navigation drawer
+    And I press menu tab "Cases"
     And I create case "Jack"
+    And I click to open navigation drawer
+    And I press menu tab "Cases"
+
     When I press "search" button
     And I search for:
       | Name | Tom |
     And I press "done" button
     Then I should see a case with sex "BOY" and age "10"
 
-    And I press "search_bar" button
+    When I press "search_bar" button
     And I clear up above "1" search conditions
     And I search for:
       | Age From | 7 |
@@ -49,7 +56,7 @@ Feature: Case search
     And I press "done" button
     Then I should see a case with sex "BOY" and age "8"
 
-    And I press "search_bar" button
+    When I press "search_bar" button
     And I clear up above "2" search conditions
     And I press "done" button
     Then I should see a case with sex "BOY" and age "10"

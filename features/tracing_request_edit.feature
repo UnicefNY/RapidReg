@@ -6,9 +6,8 @@ Feature: Edit tracing request
     Given I press "login" button
     And I press menu tab "Tracing request"
 
-  Scenario: Edit tracing request
-    When I press "fab_expand_menu_button" button
-    And I press "add_tracing_request" button
+  Scenario: Edit tracing request through mini form
+    When I press "add" button
     And I fill in the following:
       | Inquiry Status                | <Radio> Open                           |
       | Name of inquirer              | Raymond Messiaen                       |

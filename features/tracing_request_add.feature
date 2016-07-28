@@ -7,8 +7,7 @@ Feature: Add tracing request
     And I press menu tab "Tracing request"
 
   Scenario: Create tracing request through mini form / full form.
-    When I press "fab_expand_menu_button" button
-    And I press "add_tracing_request" button
+    When I press "add" button
     And I fill in the following:
       | Inquiry Status                | <Radio> Open                           |
       | Name of inquirer              | Raymond Messiaen                       |
@@ -30,8 +29,7 @@ Feature: Add tracing request
     Then I should see the tracing request "age" is "42"
     And I should see the tracing request "registration_date" is "Today's date"
 
-    When I press "fab_expand_menu_button" button
-    And I press "add_tracing_request" button
+    When I press "add" button
     And I switch to full form
     And I scroll to "Inquirer" form
     And I fill in the following:
