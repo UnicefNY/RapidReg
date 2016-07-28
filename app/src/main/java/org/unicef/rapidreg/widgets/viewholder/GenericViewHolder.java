@@ -9,7 +9,6 @@ import android.widget.TextView;
 import android.widget.ViewSwitcher;
 
 import org.unicef.rapidreg.R;
-import org.unicef.rapidreg.base.RecordActivity;
 import org.unicef.rapidreg.exception.DialogException;
 import org.unicef.rapidreg.forms.Field;
 import org.unicef.rapidreg.service.cache.ItemValuesMap;
@@ -80,21 +79,7 @@ public class GenericViewHolder extends BaseTextViewHolder {
                 }
             }
         });
-        valueView.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if (v.getId() == valueView.getId()) {
-                    if (!hasFocus) {
-                        if (TextUtils.isEmpty(valueView.getText())) {
-                            viewSwitcher.setDisplayedChild(GenericViewHolder.FORM_NO_ANSWER_STATE);
-                        } else {
-                            viewSwitcher.setDisplayedChild(GenericViewHolder.FORM_HAS_ANSWER_STATE);
-                            saveValues(field);
-                        }
-                    }
-                }
-            }
-        });
+
         valueView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -105,7 +90,6 @@ public class GenericViewHolder extends BaseTextViewHolder {
                 }
             }
         });
-
     }
 
     private void showFieldDialog(Field field, TextView valueView) {

@@ -2,8 +2,10 @@ package org.unicef.rapidreg.widgets.viewholder;
 
 import android.content.Context;
 import android.content.res.Configuration;
+import android.text.Editable;
 import android.text.InputType;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
@@ -92,16 +94,30 @@ public class TextViewHolder extends BaseTextViewHolder {
                     if (!hasFocus) {
                         if (TextUtils.isEmpty(valueView.getText())) {
                             viewSwitcher.setDisplayedChild(GenericViewHolder.FORM_NO_ANSWER_STATE);
-                            saveValues(field);
                         } else {
                             viewSwitcher.setDisplayedChild(GenericViewHolder.FORM_HAS_ANSWER_STATE);
-                            saveValues(field);
                         }
                         itemView.setClickable(true);
                     } else {
                         itemView.setClickable(false);
                     }
                 }
+            }
+        });
+
+        valueView.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                saveValues(field);
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
             }
         });
     }

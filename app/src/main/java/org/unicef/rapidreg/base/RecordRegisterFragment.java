@@ -94,13 +94,6 @@ public abstract class RecordRegisterFragment extends MvpFragment<RecordRegisterV
         return recordRegisterAdapter;
     }
 
-    public void clearFocus() {
-        View focusedChild = fieldList.getFocusedChild();
-        if (focusedChild != null) {
-            focusedChild.clearFocus();
-        }
-    }
-
     protected void addProfileFieldForDetailsPage(List<Field> fields) {
         if (((RecordActivity) getActivity()).getCurrentFeature().isDetailMode()) {
             Field field = new Field();
@@ -113,7 +106,7 @@ public abstract class RecordRegisterFragment extends MvpFragment<RecordRegisterV
         }
     }
 
-    protected void clearProfileItems(){
+    protected void clearProfileItems() {
         itemValues.removeItem(ItemValues.RecordProfile.ID_NORMAL_STATE);
         itemValues.removeItem(ItemValues.RecordProfile.REGISTRATION_DATE);
         itemValues.removeItem(ItemValues.RecordProfile.ID);
