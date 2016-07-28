@@ -4,15 +4,14 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.view.View;
 import android.widget.AdapterView;
 
-import org.unicef.rapidreg.IntentSender;
 import org.unicef.rapidreg.R;
 import org.unicef.rapidreg.base.RecordListAdapter;
 import org.unicef.rapidreg.base.RecordListFragment;
 import org.unicef.rapidreg.base.RecordListPresenter;
 import org.unicef.rapidreg.model.RecordModel;
 import org.unicef.rapidreg.model.Tracing;
-import org.unicef.rapidreg.service.CaseFormService;
 import org.unicef.rapidreg.service.RecordService;
+import org.unicef.rapidreg.service.TracingFormService;
 import org.unicef.rapidreg.service.TracingService;
 
 import java.util.Arrays;
@@ -36,7 +35,6 @@ public class TracingListFragment extends RecordListFragment {
 
     @Override
     protected void initListContainer(final RecordListAdapter adapter) {
-        super.initListContainer(adapter);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         listContainer.setLayoutManager(layoutManager);
@@ -56,7 +54,6 @@ public class TracingListFragment extends RecordListFragment {
         orderSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                floatingMenu.collapse();
                 handleItemSelection(position);
                 adapter.notifyDataSetChanged();
             }
@@ -82,16 +79,16 @@ public class TracingListFragment extends RecordListFragment {
         });
     }
 
-    @OnClick(R.id.add_case)
-    public void onCaseAddClicked() {
+    @OnClick(R.id.add)
+    public void onTracingAddClicked() {
         RecordService.clearAudioFile();
-        floatingMenu.collapseImmediately();
 
-        if (!CaseFormService.getInstance().isFormReady()) {
-            showSyncFormDialog(getResources().getString(R.string.child_case));
+        if (!TracingFormService.getInstance().isFormReady()) {
+            showSyncFormDialog(getResources().getString(R.string.tracing_request));
             return;
         }
 
-        new IntentSender().showCaseAddPage(getActivity());
+        TracingActivity activity = (TracingActivity) getActivity();
+        activity.turnToFeature(TracingFeature.ADD, null, null);
     }
 }

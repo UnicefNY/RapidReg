@@ -40,35 +40,14 @@
         </ViewSwitcher>
     </LinearLayout>
 
-    <com.getbase.floatingactionbutton.FloatingActionsMenu
-        android:id="@+id/floating_menu"
+    <com.getbase.floatingactionbutton.FloatingActionButton
+        android:id="@+id/add"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
-        app:fab_addButtonColorNormal="@color/primero_blue"
-        app:fab_addButtonColorPressed="@color/primero_blue"
-        app:fab_labelStyle="@style/menu_labels_style"
-        app:fab_labelsPosition="left">
-
-        <com.getbase.floatingactionbutton.FloatingActionButton
-            android:id="@+id/add_tracing_request"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:scrollY="3dp"
-            android:src="@drawable/tracing_white"
-            app:fab_colorNormal="@color/primero_red"
-            app:fab_colorPressed="@color/primero_red"
-            app:fab_title="Add Tracing Request"/>
-
-        <com.getbase.floatingactionbutton.FloatingActionButton
-            android:id="@+id/add_case"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:scrollY="3dp"
-            android:src="@drawable/cases_white"
-            app:fab_colorNormal="@color/primero_green"
-            app:fab_colorPressed="@color/primero_green"
-            app:fab_title="Add Case"/>
-    </com.getbase.floatingactionbutton.FloatingActionsMenu>
+        android:scrollY="3dp"
+        android:src="@drawable/add"
+        app:fab_colorNormal="@color/primero_blue"
+        app:fab_colorPressed="@color/primero_blue"/>
 
 </android.support.design.widget.CoordinatorLayout>
