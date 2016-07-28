@@ -5,12 +5,12 @@ Feature: Basic Identify Form
 #    Given I login RapidReg with "primero" account
     Given I press "login" button
     And I press menu tab "Cases"
-    When I press "fab_expand_menu_button" button
-    And I press "add_case" button
-    And I switch to full form
-    And I scroll to "Basic Identity" form
+
 
   Scenario: As a logged in user, I create a case by entering something in every field in the basic identity form
+    When I press "add" button
+    And I switch to full form
+    And I scroll to "Basic Identity" form
     And I fill in the following:
       | Case Status                              | <Select> Open                                        |
       | Full Name                                | Tom Justin Clinton                                   |
@@ -40,10 +40,7 @@ Feature: Basic Identify Form
       | Landmark                                 | A huge mountain                                      |
       | Is this address permanent?               | <Checkbox> No                                        |
       | Current Telephone                        | 336-555-1313                                         |
-    And I press "save_case" button
-    Then I should see a case with sex "BOY" and age "10"
-    When I click the case
-    And I switch to full form
+    And I press "save" button
     And I scroll to "Basic Identity" form
     Then I should see following:
       | Case Status                              | Open                                          |
