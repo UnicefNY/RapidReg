@@ -1,7 +1,5 @@
 package org.unicef.rapidreg.service;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
@@ -11,7 +9,6 @@ import com.raizlabs.android.dbflow.sql.language.Condition;
 import com.raizlabs.android.dbflow.sql.language.ConditionGroup;
 import com.raizlabs.android.dbflow.sql.language.NameAlias;
 
-import org.unicef.rapidreg.base.PhotoConfig;
 import org.unicef.rapidreg.db.CaseDao;
 import org.unicef.rapidreg.db.CasePhotoDao;
 import org.unicef.rapidreg.db.impl.CaseDaoImpl;
@@ -23,7 +20,6 @@ import org.unicef.rapidreg.service.cache.ItemValues;
 import org.unicef.rapidreg.utils.ImageCompressUtil;
 import org.unicef.rapidreg.utils.StreamUtil;
 
-import java.io.File;
 import java.io.IOException;
 import java.sql.Date;
 import java.util.Calendar;
@@ -200,7 +196,6 @@ public class CaseService extends RecordService {
             for (int i = photoPaths.size(); i < previousCount; i++) {
                 CasePhoto casePhoto = casePhotoDao.getByCaseIdAndOrder(child.getId(), i + 1);
                 casePhoto.setPhoto(null);
-                casePhoto.setThumbnail(null);
                 casePhoto.update();
             }
         }
@@ -212,12 +207,8 @@ public class CaseService extends RecordService {
             casePhoto = new CasePhoto();
         }
         String filePath = photoPaths.get(index);
-        Bitmap bitmap = preProcessImage(filePath);
-        casePhoto.setThumbnail(new Blob(ImageCompressUtil.convertImageToBytes(
-                ImageCompressUtil.getThumbnail(bitmap, PhotoConfig.THUMBNAIL_SIZE,
-                        PhotoConfig.THUMBNAIL_SIZE))));
-
-        casePhoto.setPhoto(new Blob(ImageCompressUtil.convertImageToBytes(bitmap)));
+        Blob photo = ImageCompressUtil.readImageFile(filePath);
+        casePhoto.setPhoto(photo);
         casePhoto.setCase(child);
         casePhoto.setOrder(index + 1);
         casePhoto.setKey(UUID.randomUUID().toString());
@@ -228,17 +219,12 @@ public class CaseService extends RecordService {
     private CasePhoto generateUpdatePhoto(Case child, List<String> photoPaths, int index) throws IOException {
         CasePhoto casePhoto;
         String filePath = photoPaths.get(index);
-        Blob photo;
         try {
             long photoId = Long.parseLong(filePath);
             casePhoto = casePhotoDao.getById(photoId);
         } catch (NumberFormatException e) {
-            Bitmap bitmap = preProcessImage(filePath);
-            photo = new Blob(ImageCompressUtil.convertImageToBytes(bitmap));
+            Blob photo = ImageCompressUtil.readImageFile(filePath);
             casePhoto = new CasePhoto();
-            casePhoto.setThumbnail(new Blob(ImageCompressUtil.convertImageToBytes(
-                    ImageCompressUtil.getThumbnail(bitmap, PhotoConfig.THUMBNAIL_SIZE,
-                            PhotoConfig.THUMBNAIL_SIZE))));
             casePhoto.setCase(child);
             casePhoto.setPhoto(photo);
         }
@@ -246,14 +232,6 @@ public class CaseService extends RecordService {
         casePhoto.setOrder(index + 1);
         casePhoto.setKey(UUID.randomUUID().toString());
         return casePhoto;
-    }
-
-    private Bitmap preProcessImage(String filePath) throws IOException {
-        if (new File(filePath).length() <= 1024 * 1024 * 1) {
-            return BitmapFactory.decodeFile(filePath);
-        }
-        return ImageCompressUtil.compressImage(filePath,
-                PhotoConfig.MAX_WIDTH, PhotoConfig.MAX_HEIGHT);
     }
 
     private Blob getAudioBlob(Blob blob) {

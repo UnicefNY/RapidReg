@@ -1,7 +1,5 @@
 package org.unicef.rapidreg.service;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
@@ -11,7 +9,6 @@ import com.raizlabs.android.dbflow.sql.language.Condition;
 import com.raizlabs.android.dbflow.sql.language.ConditionGroup;
 import com.raizlabs.android.dbflow.sql.language.NameAlias;
 
-import org.unicef.rapidreg.base.PhotoConfig;
 import org.unicef.rapidreg.db.TracingDao;
 import org.unicef.rapidreg.db.TracingPhotoDao;
 import org.unicef.rapidreg.db.impl.TracingDaoImpl;
@@ -23,7 +20,6 @@ import org.unicef.rapidreg.service.cache.ItemValues;
 import org.unicef.rapidreg.utils.ImageCompressUtil;
 import org.unicef.rapidreg.utils.StreamUtil;
 
-import java.io.File;
 import java.io.IOException;
 import java.sql.Date;
 import java.util.Calendar;
@@ -192,7 +188,6 @@ public class TracingService extends RecordService {
                 TracingPhoto TracingPhoto =
                         tracingPhotoDao.getByTracingIdAndOrder(tracing.getId(), i + 1);
                 TracingPhoto.setPhoto(null);
-                TracingPhoto.setThumbnail(null);
                 TracingPhoto.update();
             }
         }
@@ -206,12 +201,7 @@ public class TracingService extends RecordService {
             TracingPhoto = new TracingPhoto();
         }
         String filePath = photoPaths.get(index);
-        Bitmap bitmap = preProcessImage(filePath);
-        TracingPhoto.setThumbnail(new Blob(ImageCompressUtil.convertImageToBytes(
-                ImageCompressUtil.getThumbnail(bitmap, PhotoConfig.THUMBNAIL_SIZE,
-                        PhotoConfig.THUMBNAIL_SIZE))));
-
-        TracingPhoto.setPhoto(new Blob(ImageCompressUtil.convertImageToBytes(bitmap)));
+        TracingPhoto.setPhoto(ImageCompressUtil.readImageFile(filePath));
         TracingPhoto.setTracing(parent);
         TracingPhoto.setOrder(index + 1);
         return TracingPhoto;
@@ -221,32 +211,18 @@ public class TracingService extends RecordService {
     private TracingPhoto generateUpdatePhoto(Tracing tracing, List<String> photoPaths, int index) throws IOException {
         TracingPhoto tracingPhoto;
         String filePath = photoPaths.get(index);
-        Blob photo;
         try {
             long photoId = Long.parseLong(filePath);
             tracingPhoto = tracingPhotoDao.getById(photoId);
         } catch (NumberFormatException e) {
-            Bitmap bitmap = preProcessImage(filePath);
-            photo = new Blob(ImageCompressUtil.convertImageToBytes(bitmap));
             tracingPhoto = new TracingPhoto();
-            tracingPhoto.setThumbnail(new Blob(ImageCompressUtil.convertImageToBytes(
-                    ImageCompressUtil.getThumbnail(bitmap, PhotoConfig.THUMBNAIL_SIZE,
-                            PhotoConfig.THUMBNAIL_SIZE))));
             tracingPhoto.setTracing(tracing);
-            tracingPhoto.setPhoto(photo);
+            tracingPhoto.setPhoto(ImageCompressUtil.readImageFile(filePath));
         }
         tracingPhoto.setId(tracingPhotoDao
                 .getByTracingIdAndOrder(tracing.getId(), index + 1).getId());
         tracingPhoto.setOrder(index + 1);
         return tracingPhoto;
-    }
-
-    private Bitmap preProcessImage(String filePath) throws IOException {
-        if (new File(filePath).length() <= 1024 * 1024 * 1) {
-            return BitmapFactory.decodeFile(filePath);
-        }
-        return ImageCompressUtil.compressImage(filePath,
-                PhotoConfig.MAX_WIDTH, PhotoConfig.MAX_HEIGHT);
     }
 
     private Blob getAudioBlob(Blob blob) {

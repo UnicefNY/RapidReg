@@ -54,21 +54,19 @@ public class PhotoUploadViewHolder extends BaseViewHolder<Field> {
 
     @Override
     public void setValue(Field field) {
-//        setAddPhotoButtonIcon();
+        setAddPhotoButtonIcon();
     }
 
 
-//    private void setAddPhotoButtonIcon() {
-//        if (((RecordActivity) context).getCurrentFeature().isDetailMode()) {
-//            addImageButton.setVisibility(View.GONE);
-//            if (adapter.isEmpty()) {
-//                noPhotoPromoteView.setVisibility(View.VISIBLE);
-//                photoGrid.setVisibility(View.GONE);
-//            }
-//            return;
-//        }
-//        resetAddPhotoButtonStatus();
-//    }
+    private void setAddPhotoButtonIcon() {
+        if (((RecordActivity) context).getCurrentFeature().isDetailMode()) {
+            if (adapter.isEmpty()) {
+                noPhotoPromoteView.setVisibility(View.VISIBLE);
+                photoGrid.setVisibility(View.GONE);
+            }
+            return;
+        }
+    }
 
     private void setViewPhotoListener() {
         photoGrid.setOnItemClickListener(new AdapterView.OnItemClickListener() {

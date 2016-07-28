@@ -39,8 +39,8 @@ public class TracingListAdapter extends RecordListAdapter {
         }
 
         try {
-            RecordPhoto headerPhoto = TracingPhotoService.getInstance().getFirstThumbnail(record.getId());
-            Glide.with(holder.image.getContext()).load((headerPhoto.getThumbnail().getBlob())).into(holder.image);
+            RecordPhoto headerPhoto = TracingPhotoService.getInstance().getFirst(record.getId());
+            Glide.with(holder.image.getContext()).load((headerPhoto.getPhoto().getBlob())).into(holder.image);
         } catch (Exception e) {
             holder.image.setImageDrawable(activity.getResources().getDrawable(gender.getAvatarId()));
         }

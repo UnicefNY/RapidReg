@@ -233,10 +233,10 @@ public abstract class RecordActivity extends BaseActivity {
 
     private void onCaptureImageResult() {
         try {
-            Bitmap bitmap = BitmapFactory.decodeFile(PhotoConfig.MEDIA_PATH_FOR_CAMERA);
+            Bitmap compressedImage = ImageCompressUtil.compressImage(PhotoConfig.MEDIA_PATH_FOR_CAMERA, PhotoConfig.MAX_WIDTH, PhotoConfig
+                    .MAX_HEIGHT);
             imagePath = getOutputMediaFilePath();
-            ImageCompressUtil.storeImage(bitmap, imagePath);
-            bitmap.recycle();
+            ImageCompressUtil.storeImage(compressedImage, imagePath);
             postSelectedImagePath();
         } catch (IOException e) {
             e.printStackTrace();
