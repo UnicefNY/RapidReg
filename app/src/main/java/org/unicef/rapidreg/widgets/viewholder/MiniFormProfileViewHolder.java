@@ -54,7 +54,8 @@ public class MiniFormProfileViewHolder extends BaseViewHolder<Field> {
         genderBadge.setImageDrawable(drawable);
         genderName.setText(gender.getName());
         genderName.setTextColor(ContextCompat.getColor(context, gender.getColorId()));
-        age.setText(itemValues.getAsString("age"));
+        String age = itemValues.getAsString("age");
+        this.age.setText(isValidAge(age) ? age : "---");
         registrationDate.setText(itemValues.getAsString(ItemValues.RecordProfile.REGISTRATION_DATE));
     }
 
@@ -66,5 +67,12 @@ public class MiniFormProfileViewHolder extends BaseViewHolder<Field> {
     @Override
     public void setFieldEditable(boolean editable) {
 
+    }
+
+    protected boolean isValidAge(String value) {
+        if (value == null) {
+            return false;
+        }
+        return Integer.valueOf(value) > 0;
     }
 }
