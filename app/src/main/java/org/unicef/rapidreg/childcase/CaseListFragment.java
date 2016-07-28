@@ -4,16 +4,15 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.view.View;
 import android.widget.AdapterView;
 
-import org.unicef.rapidreg.IntentSender;
 import org.unicef.rapidreg.R;
 import org.unicef.rapidreg.base.RecordListAdapter;
 import org.unicef.rapidreg.base.RecordListFragment;
 import org.unicef.rapidreg.base.RecordListPresenter;
 import org.unicef.rapidreg.model.Case;
 import org.unicef.rapidreg.model.RecordModel;
+import org.unicef.rapidreg.service.CaseFormService;
 import org.unicef.rapidreg.service.CaseService;
 import org.unicef.rapidreg.service.RecordService;
-import org.unicef.rapidreg.service.TracingFormService;
 
 import java.util.Arrays;
 import java.util.List;
@@ -39,7 +38,6 @@ public class CaseListFragment extends RecordListFragment {
 
     @Override
     protected void initListContainer(final RecordListAdapter adapter) {
-        super.initListContainer(adapter);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         listContainer.setLayoutManager(layoutManager);
@@ -59,7 +57,6 @@ public class CaseListFragment extends RecordListFragment {
         orderSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                floatingMenu.collapse();
                 handleItemSelection(position);
                 adapter.notifyDataSetChanged();
             }
@@ -91,16 +88,16 @@ public class CaseListFragment extends RecordListFragment {
         });
     }
 
-    @OnClick(R.id.add_tracing_request)
-    public void onTracingAddClicked() {
+    @OnClick(R.id.add)
+    public void onCaseAddClicked() {
         RecordService.clearAudioFile();
-        floatingMenu.collapseImmediately();
 
-        if (!TracingFormService.getInstance().isFormReady()) {
-            showSyncFormDialog(getResources().getString(R.string.tracing_request));
+        if (!CaseFormService.getInstance().isFormReady()) {
+            showSyncFormDialog(getResources().getString(R.string.child_case));
             return;
         }
 
-        new IntentSender().showTracingAddPage(getActivity());
+        CaseActivity activity = (CaseActivity) getActivity();
+        activity.turnToFeature(CaseFeature.ADD, null, null);
     }
 }

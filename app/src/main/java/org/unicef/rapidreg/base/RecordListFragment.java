@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -17,27 +16,19 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.ViewSwitcher;
 
-import com.getbase.floatingactionbutton.FloatingActionsMenu;
+import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.hannesdorfmann.mosby.mvp.MvpFragment;
 
 import org.greenrobot.eventbus.EventBus;
 import org.unicef.rapidreg.PrimeroConfiguration;
 import org.unicef.rapidreg.R;
-import org.unicef.rapidreg.childcase.CaseActivity;
-import org.unicef.rapidreg.childcase.CaseFeature;
 import org.unicef.rapidreg.event.NeedLoadFormsEvent;
-import org.unicef.rapidreg.service.CaseFormService;
-import org.unicef.rapidreg.service.RecordService;
-import org.unicef.rapidreg.service.TracingFormService;
-import org.unicef.rapidreg.tracing.TracingActivity;
-import org.unicef.rapidreg.tracing.TracingFeature;
 import org.unicef.rapidreg.utils.Utils;
 
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 
 public abstract class RecordListFragment extends MvpFragment<RecordListView, RecordListPresenter>
         implements RecordListView {
@@ -51,8 +42,8 @@ public abstract class RecordListFragment extends MvpFragment<RecordListView, Rec
     @BindView(R.id.order_spinner)
     protected Spinner orderSpinner;
 
-    @BindView(R.id.floating_menu)
-    protected FloatingActionsMenu floatingMenu;
+    @BindView(R.id.add)
+    protected FloatingActionButton addButton;
 
     @BindView(R.id.container)
     protected LinearLayout container;
@@ -82,67 +73,10 @@ public abstract class RecordListFragment extends MvpFragment<RecordListView, Rec
 
         initListContainer(adapter);
         initOrderSpinner(adapter);
-        initFloatingMenu();
-    }
-
-    @OnClick(R.id.container)
-    public void onContainerClicked() {
-        floatingMenu.collapse();
-    }
-
-    @OnClick(R.id.add_case)
-    public void onCaseAddClicked() {
-        RecordService.clearAudioFile();
-        floatingMenu.collapseImmediately();
-
-        if (!CaseFormService.getInstance().isFormReady()) {
-            showSyncFormDialog(getResources().getString(R.string.child_case));
-            return;
-        }
-
-        CaseActivity activity = (CaseActivity) getActivity();
-        activity.turnToFeature(CaseFeature.ADD, null, null);
-    }
-
-    @OnClick(R.id.add_tracing_request)
-    public void onTracingAddClicked() {
-        RecordService.clearAudioFile();
-        floatingMenu.collapseImmediately();
-
-        if (!TracingFormService.getInstance().isFormReady()) {
-            showSyncFormDialog(getResources().getString(R.string.tracing_request));
-            return;
-        }
-
-        TracingActivity activity = (TracingActivity) getActivity();
-        activity.turnToFeature(TracingFeature.ADD, null, null);
     }
 
     public void toggleMode(boolean isShow) {
         adapter.toggleViews(isShow);
-    }
-
-    protected void initListContainer(final RecordListAdapter adapter) {
-        listContainer.addOnItemTouchListener(new RecyclerView.OnItemTouchListener() {
-            @Override
-            public boolean onInterceptTouchEvent(RecyclerView rv, MotionEvent e) {
-                if (floatingMenu.isExpanded()) {
-                    floatingMenu.collapse();
-                    return true;
-                }
-                return false;
-            }
-
-            @Override
-            public void onTouchEvent(RecyclerView rv, MotionEvent e) {
-
-            }
-
-            @Override
-            public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
-
-            }
-        });
     }
 
     protected void showSyncFormDialog(String message) {
@@ -160,24 +94,7 @@ public abstract class RecordListFragment extends MvpFragment<RecordListView, Rec
         Utils.changeDialogDividerColor(getActivity(), dialog);
     }
 
-    private void setListAlpha(float value) {
-        container.setAlpha(value);
-    }
-
-    private void initFloatingMenu() {
-        floatingMenu.setOnFloatingActionsMenuUpdateListener(
-                new FloatingActionsMenu.OnFloatingActionsMenuUpdateListener() {
-                    @Override
-                    public void onMenuExpanded() {
-                        setListAlpha(0.5f);
-                    }
-
-                    @Override
-                    public void onMenuCollapsed() {
-                        setListAlpha(1.0f);
-                    }
-                });
-    }
+    protected abstract void initListContainer(final RecordListAdapter adapter);
 
     protected abstract void initOrderSpinner(final RecordListAdapter adapter);
 
