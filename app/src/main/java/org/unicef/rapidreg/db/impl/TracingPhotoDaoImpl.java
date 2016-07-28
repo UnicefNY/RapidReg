@@ -34,6 +34,16 @@ public class TracingPhotoDaoImpl implements TracingPhotoDao {
     }
 
     @Override
+    public long countUnSynced(long tracingId) {
+        return SQLite.select()
+                .from(TracingPhoto.class)
+                .where(TracingPhoto_Table.tracing_id.eq(tracingId))
+                .and(TracingPhoto_Table.photo.isNotNull())
+                .and(TracingPhoto_Table.isSynced.is(false))
+                .count();
+    }
+
+    @Override
     public TracingPhoto getByTracingIdAndOrder(long tracingId, int order) {
         return SQLite.select()
                 .from(TracingPhoto.class)

@@ -12,4 +12,6 @@ public interface TracingPhotoDao {
     TracingPhoto getByTracingIdAndOrder(long tracingId, int order);
 
     TracingPhoto getById(long id);
+
+    long countUnSynced(long tracingId);
 }
