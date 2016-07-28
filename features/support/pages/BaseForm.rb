@@ -4,8 +4,8 @@ module Screen
 
       def fillInForm(field, value)
         if value.include?("<Select>")
-          option = value.split('>')[1].strip
           clickByXpath("//android.widget.TextView[@text='#{field}']")
+          option = value.split('>')[1].strip
           clickByXpath("//*[@text='#{option}']//parent::*//*[@resource-id='org.unicef.rapidreg.debug:id/radioButton']")
           clickByXpath("//android.widget.Button[@text='OK']")
         elsif value.include?("<Checkbox>")
@@ -16,14 +16,21 @@ module Screen
           clickByXpath("//android.widget.TextView[@text='#{field}']")
           clickByXpath("//android.widget.Button[@text='OK']")
         elsif value.include?("<Text>")
-          text = value.split('>')[1].strip
           clickByXpath("//android.widget.TextView[@text='#{field}']")
-          sleep 5
+          text = value.split('>')[1].strip
           findByXpath("//android.widget.EditText").send_keys(text)
           clickByXpath("//android.widget.Button[@text='OK']")
         elsif value.include?("<Radio>")
           option = value.split('>')[1].strip
           clickByXpath("//*[@text='#{field}']//parent::*//*[@resource-id='org.unicef.rapidreg.debug:id/option_group']//*[@text='#{option}']")
+        elsif value.include?("<Multiple>")
+          clickByXpath("//android.widget.TextView[@text='#{field}']")
+          str = value.split('>')[1].strip
+          options = str.split(',')
+          for i in 0...options.length
+            clickByXpath("//android.widget.CheckedTextView[@text='#{options[i]}']")
+          end
+          clickByXpath("//android.widget.Button[@text='OK']")
         else
           clickByXpath("//*[@text='#{field}']")
           sleep 5

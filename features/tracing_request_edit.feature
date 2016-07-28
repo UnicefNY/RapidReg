@@ -4,7 +4,7 @@ Feature: Edit tracing request
   Background:
     #    Given I login RapidReg with "primero" account
     Given I press "login" button
-    And I press menu tab "Tracing Request"
+    And I press menu tab "Tracing request"
 
   Scenario: Edit tracing request
     When I press "fab_expand_menu_button" button
@@ -29,7 +29,7 @@ Feature: Edit tracing request
     And I edit the value of "Inquiry Status" from "<Radio> Open" to "<Radio> Closed"
     And I edit the value of "Name of inquirer" from "Raymond Messiaen" to "Raymond Justin"
     And I edit the value of "Age" from "42" to "38"
-    And I edit the value of "Current Address" from "111 Main St, Davidson NC, 28036" to "<Text> 111 Main St"
+    And I edit the value of "Current Address" from "<Text> 111 Main St, Davidson NC, 28036" to "<Text> 111 Main St"
     And I edit the value of "Is this a permanent location?" from "<Checkbox> Yes" to "<Checkbox> No"
     And I press "save" button
     Then I should see following:
