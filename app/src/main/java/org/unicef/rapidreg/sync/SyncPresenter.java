@@ -14,10 +14,14 @@ import com.raizlabs.android.dbflow.data.Blob;
 
 import org.unicef.rapidreg.model.Case;
 import org.unicef.rapidreg.model.CasePhoto;
+import org.unicef.rapidreg.model.Tracing;
 import org.unicef.rapidreg.network.SyncService;
+import org.unicef.rapidreg.network.SyncTracingService;
 import org.unicef.rapidreg.service.CasePhotoService;
 import org.unicef.rapidreg.service.CaseService;
 import org.unicef.rapidreg.service.RecordService;
+import org.unicef.rapidreg.service.TracingPhotoService;
+import org.unicef.rapidreg.service.TracingService;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -41,16 +45,18 @@ import rx.schedulers.Schedulers;
 public class SyncPresenter extends MvpBasePresenter<SyncView> {
     private static final String TAG = SyncPresenter.class.getSimpleName();
 
-    private static final String FORM_DATA_KEY_AUDIO = "child[audio]";
-    private static final String FORM_DATA_KEY_PHOTO = "child[photo][0]";
-
     private Context context;
     private SyncService syncService;
+    private SyncTracingService syncTracingService;
+    private TracingService tracingService;
     private CaseService caseService;
     private CasePhotoService casePhotoService;
+    private TracingPhotoService tracingPhotoService;
 
     private int numberOfSuccessfulUploadedCases;
     private int totalNumberOfCases;
+    private int numberOfSuccessfulUploadedTracings;
+    private int totalNumberOfTracings;
 
     private boolean isSyncing;
 
@@ -60,6 +66,10 @@ public class SyncPresenter extends MvpBasePresenter<SyncView> {
             syncService = new SyncService(context);
             caseService = CaseService.getInstance();
             casePhotoService = CasePhotoService.getInstance();
+            syncTracingService = new SyncTracingService(context);
+            tracingService = TracingService.getInstance();
+            tracingPhotoService = tracingPhotoService.getInstance();
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -78,7 +88,10 @@ public class SyncPresenter extends MvpBasePresenter<SyncView> {
         try {
             numberOfSuccessfulUploadedCases = 0;
             totalNumberOfCases = 0;
-            upLoadCases();
+            numberOfSuccessfulUploadedTracings =0;
+            totalNumberOfTracings = 0;
+//            upLoadCases();
+            upLoadTracing();
         } catch (Exception e) {
             syncFail();
         }
@@ -159,6 +172,84 @@ public class SyncPresenter extends MvpBasePresenter<SyncView> {
                     public void call() {
                         syncUploadSuccessfully();
                         pullCases();
+                    }
+                });
+    }
+
+    private void upLoadTracing() {
+        isSyncing = true;
+        final List<Tracing> TracingList = TracingService.getInstance().getAll();
+        for (Tracing aTracing : TracingList) {
+            if (!aTracing.isSynced()) {
+                totalNumberOfCases++;
+            }
+        }
+        getView().showSyncProgressDialog("Uploading...Pls wait a moment.");
+        getView().setProgressMax(totalNumberOfCases);
+
+        Observable.from(TracingList)
+                .filter(new Func1<Tracing, Boolean>() {
+                    @Override
+                    public Boolean call(Tracing item) {
+                        return isSyncing && !item.isSynced();
+                    }
+                })
+                .map(new Func1<Tracing, Pair<Tracing, Response<JsonElement>>>() {
+                    @Override
+                    public Pair<Tracing, Response<JsonElement>> call(Tracing item) {
+                        return new Pair<>(item, syncTracingService.uploadJsonProfile(item));
+                    }
+                })
+                .map(new Func1<Pair<Tracing, Response<JsonElement>>, Pair<Tracing, Response<JsonElement>>>() {
+                    @Override
+                    public Pair<Tracing, Response<JsonElement>> call(Pair<Tracing, Response<JsonElement>> pair) {
+                        syncTracingService.uploadAudio(pair.first);
+                        return pair;
+                    }
+                })
+                .map(new Func1<Pair<Tracing, Response<JsonElement>>, Pair<Tracing, Response<JsonElement>>>() {
+                    @Override
+                    public Pair<Tracing, Response<JsonElement>> call(Pair<Tracing, Response<JsonElement>> tracingResponsePair) {
+                        try {
+                            Response<JsonElement> jsonElementResponse = tracingResponsePair.second;
+                            JsonArray photoKeys = jsonElementResponse.body().getAsJsonObject().get("photo_keys")
+                                    .getAsJsonArray();
+                            String id = jsonElementResponse.body().getAsJsonObject().get("_id").getAsString();
+                            okhttp3.Response response = null;
+                            if (photoKeys.size() != 0) {
+                                Call<Response<JsonElement>> call = syncTracingService.deletePhotos(id, photoKeys);
+                                response = call.execute().raw();
+                            }
+
+                            if (response == null || response.isSuccessful()) {
+                                syncTracingService.uploadPhotos(tracingResponsePair.first);
+                            }
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                        return tracingResponsePair;
+                    }
+                })
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Action1<Pair<Tracing, Response<JsonElement>>>() {
+                    @Override
+                    public void call(Pair<Tracing, Response<JsonElement>> pair) {
+                        getView().setProgressIncrease();
+                        increaseSyncNumber();
+                        updateTracingSyncStatus(pair.first);
+                    }
+                }, new Action1<Throwable>() {
+                    @Override
+                    public void call(Throwable throwable) {
+                        syncFail();
+                        throwable.printStackTrace();
+                    }
+                }, new Action0() {
+                    @Override
+                    public void call() {
+                        syncUploadSuccessfully();
+//                        pullTracings();
                     }
                 });
     }
@@ -340,6 +431,11 @@ public class SyncPresenter extends MvpBasePresenter<SyncView> {
 
     void updateCaseSyncStatus(Case item) {
         item.setSynced(item.isAudioSynced() && !CasePhotoService.getInstance().hasUnSynced(item.getId()));
+        item.update();
+    }
+
+    void updateTracingSyncStatus(Tracing item) {
+        item.setSynced(item.isAudioSynced() && !TracingPhotoService.getInstance().hasUnSynced(item.getId()));
         item.update();
     }
 
