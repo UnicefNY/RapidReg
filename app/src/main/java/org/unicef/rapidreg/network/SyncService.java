@@ -102,10 +102,7 @@ public class SyncService extends BaseRetrofitService {
                     PrimeroConfiguration.getCookie(), item.getInternalId(), body);
 
             Response<JsonElement> response = observable.toBlocking().first();
-
             verifyResponse(response);
-
-            item.setAudioSynced(true);
             updateRecordRev(item, response.body().getAsJsonObject().get("_rev").getAsString());
         }
     }
