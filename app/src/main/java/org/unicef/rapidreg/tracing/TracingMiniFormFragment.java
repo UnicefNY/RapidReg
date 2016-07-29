@@ -64,7 +64,7 @@ public class TracingMiniFormFragment extends RecordRegisterFragment {
                 Toast.makeText(getActivity(), R.string.save_success, Toast.LENGTH_SHORT).show();
 
                 Bundle args = new Bundle();
-                args.putLong(TracingService.TRACING_ID, record.getId());
+                args.putLong(TracingService.TRACING_PRIMARY_ID, record.getId());
                 ((RecordActivity) getActivity()).turnToFeature(TracingFeature.DETAILS_MINI, args, null);
             } catch (IOException e) {
                 Toast.makeText(getActivity(), R.string.save_failed, Toast.LENGTH_SHORT).show();
@@ -156,7 +156,7 @@ public class TracingMiniFormFragment extends RecordRegisterFragment {
 
     protected void initItemValues() {
         if (getArguments() != null) {
-            recordId = getArguments().getLong(TracingService.TRACING_ID, INVALID_RECORD_ID);
+            recordId = getArguments().getLong(TracingService.TRACING_PRIMARY_ID, INVALID_RECORD_ID);
             if (recordId != INVALID_RECORD_ID) {
                 Tracing item = TracingService.getInstance().getById(recordId);
                 String tracingJson = new String(item.getContent().getBlob());
