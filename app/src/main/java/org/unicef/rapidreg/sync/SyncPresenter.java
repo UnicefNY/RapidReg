@@ -54,10 +54,11 @@ public class SyncPresenter extends MvpBasePresenter<SyncView> {
     private CasePhotoService casePhotoService;
     private TracingPhotoService tracingPhotoService;
 
-    private int numberOfSuccessfulUploadedCases;
-    private int totalNumberOfCases;
-    private int numberOfSuccessfulUploadedTracings;
-    private int totalNumberOfTracings;
+    final List<Case> caseList = CaseService.getInstance().getAll();
+    final List<Tracing> tracingList = TracingService.getInstance().getAll();
+
+    private int numberOfSuccessfulUploadedRecords;
+    private int totalNumberOfUploadRecords;
 
     private boolean isSyncing;
 
@@ -87,28 +88,43 @@ public class SyncPresenter extends MvpBasePresenter<SyncView> {
             return;
         }
         try {
-            numberOfSuccessfulUploadedCases = 0;
-            totalNumberOfCases = 0;
-            numberOfSuccessfulUploadedTracings =0;
-            totalNumberOfTracings = 0;
-//            upLoadCases();
-            upLoadTracing();
+            initUploadProgressBarUI(caseList, tracingList);
+            upLoadCases(caseList);
         } catch (Exception e) {
             syncFail();
         }
     }
 
+    private void initUploadProgressBarUI(List<Case> caseList, List<Tracing> tracingList) {
+        numberOfSuccessfulUploadedRecords = 0;
+        totalNumberOfUploadRecords = 0;
+        setCasesNumbers(caseList);
+        setTracingsNumbers(tracingList);
+        if(totalNumberOfUploadRecords != 0) {
+            getView().showSyncProgressDialog("Uploading...Pls wait a moment.");
+            getView().setProgressMax(totalNumberOfUploadRecords);
+        }
+    }
 
-    private void upLoadCases() {
-        isSyncing = true;
-        final List<Case> caseList = CaseService.getInstance().getAll();
-        for (Case aCase : caseList) {
-            if (!aCase.isSynced()) {
-                totalNumberOfCases++;
+    private void setTracingsNumbers(List<Tracing> tracingList) {
+        for (Tracing aTracing : tracingList) {
+            if (!aTracing.isSynced()) {
+                totalNumberOfUploadRecords++;
             }
         }
-        getView().showSyncProgressDialog("Uploading...Pls wait a moment.");
-        getView().setProgressMax(totalNumberOfCases);
+    }
+
+    private void setCasesNumbers(List<Case> caseList) {
+        for (Case aCase : caseList) {
+            if (!aCase.isSynced()) {
+                totalNumberOfUploadRecords++;
+            }
+        }
+    }
+
+
+    private void upLoadCases(List<Case> caseList) {
+        isSyncing = true;
 
         Observable.from(caseList)
                 .filter(new Func1<Case, Boolean>() {
@@ -171,24 +187,14 @@ public class SyncPresenter extends MvpBasePresenter<SyncView> {
                 }, new Action0() {
                     @Override
                     public void call() {
-                        syncUploadSuccessfully();
-                        pullCases();
+                        upLoadTracing(tracingList);
                     }
                 });
     }
 
-    private void upLoadTracing() {
+    private void upLoadTracing(List<Tracing> tracingList) {
         isSyncing = true;
-        final List<Tracing> TracingList = TracingService.getInstance().getAll();
-        for (Tracing aTracing : TracingList) {
-            if (!aTracing.isSynced()) {
-                totalNumberOfCases++;
-            }
-        }
-        getView().showSyncProgressDialog("Uploading...Pls wait a moment.");
-        getView().setProgressMax(totalNumberOfCases);
-
-        Observable.from(TracingList)
+        Observable.from(tracingList)
                 .filter(new Func1<Tracing, Boolean>() {
                     @Override
                     public Boolean call(Tracing item) {
@@ -250,13 +256,13 @@ public class SyncPresenter extends MvpBasePresenter<SyncView> {
                     @Override
                     public void call() {
                         syncUploadSuccessfully();
-                        pullTracings();
+                        pullCases();
                     }
                 });
     }
 
     private void increaseSyncNumber() {
-        numberOfSuccessfulUploadedCases += 1;
+        numberOfSuccessfulUploadedRecords += 1;
     }
 
 
@@ -287,8 +293,10 @@ public class SyncPresenter extends MvpBasePresenter<SyncView> {
                 .subscribe(new Action1<List<JsonObject>>() {
                     @Override
                     public void call(List<JsonObject> jsonObjects) {
-                        getView().showSyncProgressDialog("Downloading...Pls wait a moment.");
-                        getView().setProgressMax(jsonObjects.size());
+                        if (jsonObjects.size() != 0) {
+                            getView().showSyncProgressDialog("Downloading Cases...Pls wait a moment.");
+                            getView().setProgressMax(jsonObjects.size());
+                        }
                     }
                 }, new Action1<Throwable>() {
                     @Override
@@ -330,8 +338,10 @@ public class SyncPresenter extends MvpBasePresenter<SyncView> {
                 .subscribe(new Action1<List<JsonObject>>() {
                     @Override
                     public void call(List<JsonObject> jsonObjects) {
-                        getView().showSyncProgressDialog("Downloading...Pls wait a moment.");
-                        getView().setProgressMax(jsonObjects.size());
+                        if (jsonObjects.size() != 0) {
+                            getView().showSyncProgressDialog("Downloading Tracing Request...Pls wait a moment.");
+                            getView().setProgressMax(jsonObjects.size());
+                        }
                     }
                 }, new Action1<Throwable>() {
                     @Override
@@ -440,7 +450,8 @@ public class SyncPresenter extends MvpBasePresenter<SyncView> {
                 }, new Action0() {
                     @Override
                     public void call() {
-                        syncDownloadSuccessfully();
+                        getView().hideSyncProgressDialog();
+                        pullTracings();
                     }
                 });
     }
@@ -662,13 +673,13 @@ public class SyncPresenter extends MvpBasePresenter<SyncView> {
     private void updateDataViews() {
         SimpleDateFormat sdf = new SimpleDateFormat("MM-dd-yyyy HH:mm");
         String currentDateTime = sdf.format(new Date());
-        int numberOfFailedUploadedCases = totalNumberOfCases - numberOfSuccessfulUploadedCases;
+        int numberOfFailedUploadedCases = totalNumberOfUploadRecords - numberOfSuccessfulUploadedRecords;
 
-        getView().setDataViews(currentDateTime, String.valueOf(numberOfSuccessfulUploadedCases), String.valueOf
+        getView().setDataViews(currentDateTime, String.valueOf(numberOfSuccessfulUploadedRecords), String.valueOf
                 (numberOfFailedUploadedCases));
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
         sharedPreferences.edit().putString("syncStatisticData", new Gson().toJson(new SyncStatisticData
-                (currentDateTime, numberOfSuccessfulUploadedCases, numberOfFailedUploadedCases))).apply();
+                (currentDateTime, numberOfSuccessfulUploadedRecords, numberOfFailedUploadedCases))).apply();
     }
 
     public void attemptCancelSync() {
