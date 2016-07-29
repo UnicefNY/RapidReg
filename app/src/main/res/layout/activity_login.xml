@@ -45,13 +45,15 @@
         android:layout_marginLeft="@dimen/login_input_margin"
         android:layout_marginRight="@dimen/login_input_margin">
 
+        <!--http://10.29.2.190:3000-->
+        <!--https://52.24.42.32:8443-->
         <EditText
             android:id="@+id/url"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/url_hint_text"
             android:inputType="textUri"
-            android:text="http://10.29.2.190:3000"/>
+            android:text="https://52.24.42.32:8443"/>
 
         <TextView
             android:id="@+id/change_url"

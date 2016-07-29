@@ -9,7 +9,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import org.unicef.rapidreg.R;
 import org.unicef.rapidreg.base.RecordActivity;
@@ -82,7 +84,7 @@ public class SubFormViewHolder extends BaseViewHolder<Field> {
                         .setPositiveButton(R.string.delete, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
-                                deleteSubform(v);
+                                deleteSubForm(v);
                             }
                         })
                         .setNegativeButton(R.string.cancel, null)
@@ -93,7 +95,7 @@ public class SubFormViewHolder extends BaseViewHolder<Field> {
                 View.VISIBLE : View.GONE);
     }
 
-    private void deleteSubform(View v) {
+    private void deleteSubForm(View v) {
         removeSubForm(parent.indexOfChild((View) v.getParent()));
         parent.removeView((View) v.getParent());
         updateIndexForFields();
@@ -157,10 +159,33 @@ public class SubFormViewHolder extends BaseViewHolder<Field> {
         LayoutInflater inflater = LayoutInflater.from(activity);
         ViewGroup container = (LinearLayout) inflater
                 .inflate(R.layout.form_subform, parent, false);
-
         initDeleteBtn(container);
         initFieldList(container, index);
         parent.addView(container, index);
+        setSubFormTitleClickEvent(container);
+    }
+
+    private void setSubFormTitleClickEvent(ViewGroup container) {
+        TextView subFormTitle = (TextView) container.findViewById(R.id.sub_form_title);
+        subFormTitle.setText(fieldParent);
+        final View fieldList = container.findViewById(R.id.field_list);
+        final Button deleteBtn = (Button) container.findViewById(R.id.delete_subform);
+        final ImageView arrow = (ImageView) container.findViewById(R.id.sub_form_title_arrow);
+
+        subFormTitle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (View.GONE == fieldList.getVisibility()) {
+                    fieldList.setVisibility(View.VISIBLE);
+                    deleteBtn.setVisibility(View.VISIBLE);
+                    arrow.setImageResource(R.drawable.arrow_down_blue);
+                } else {
+                    fieldList.setVisibility(View.GONE);
+                    deleteBtn.setVisibility(View.GONE);
+                    arrow.setImageResource(R.drawable.arrow_up_blue);
+                }
+            }
+        });
     }
 
     private void restoreSubForms() {
