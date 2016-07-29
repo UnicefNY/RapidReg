@@ -61,7 +61,7 @@ public class TracingListAdapter extends RecordListAdapter {
             @Override
             public void onClick(View v) {
                 Bundle args = new Bundle();
-                args.putLong(TracingService.TRACING_ID, record.getId());
+                args.putLong(TracingService.TRACING_PRIMARY_ID, record.getId());
                 activity.turnToFeature(TracingFeature.DETAILS_MINI, args, null);
                 try {
                     RecordService.clearAudioFile();
