@@ -247,4 +247,8 @@ public class TracingService extends RecordService {
                 + values.getAsString(RELATION_AGE) + " "
                 + values.getAsString(RELATION_NICKNAME);
     }
+
+    public Tracing getByInternalId(String id) {
+        return tracingDao.getByInternalId(id);
+    }
 }
