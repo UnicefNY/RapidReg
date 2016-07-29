@@ -176,7 +176,7 @@ public class SyncPresenter extends MvpBasePresenter<SyncView> {
                     public void call(Pair<Case, Response<JsonElement>> pair) {
                         getView().setProgressIncrease();
                         increaseSyncNumber();
-                        updateCaseSyncStatus(pair.first);
+                        updateRecordSynced(pair.first, true);
                     }
                 }, new Action1<Throwable>() {
                     @Override
@@ -610,8 +610,8 @@ public class SyncPresenter extends MvpBasePresenter<SyncView> {
     }
 
 
-    void updateCaseSyncStatus(Case item) {
-        item.setSynced(item.isAudioSynced() && !CasePhotoService.getInstance().hasUnSynced(item.getId()));
+    private void updateRecordSynced(Case item, boolean synced) {
+        item.setSynced(synced);
         item.update();
     }
 
