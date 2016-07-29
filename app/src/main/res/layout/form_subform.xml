@@ -9,6 +9,36 @@
         android:layout_height="10dp"
         android:background="@color/primero_lighter_white"/>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/sub_form_title"
+            android:layout_marginLeft="20dp"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:gravity="left|center"
+            android:text="Sub form"
+            android:layout_weight="1"
+            />
+
+        <ImageView
+            android:id="@+id/sub_form_title_arrow"
+            android:layout_marginRight="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/arrow_down_blue"
+            android:layout_gravity="center_vertical"
+            />
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/primero_lighter_white"/>
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/field_list"
         android:layout_width="match_parent"
