@@ -47,9 +47,9 @@ public interface SyncTracingsServiceInterface {
             @Header("Cookie") String cookie,
             @Path("id") String id);
 
-    @GET("/children-ids?")
+    @GET("/tracing_requests-ids?")
     @Headers("Content-Type: application/json")
-    Observable<Response<JsonElement>> getsIds(
+    Observable<Response<JsonElement>> getIds(
             @Header("Cookie") String cookie,
             @Query("last_update") String lastUpdate,
             @Query("mobile") Boolean isMobile);

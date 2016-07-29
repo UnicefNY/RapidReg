@@ -14,4 +14,6 @@ public interface TracingPhotoDao {
     TracingPhoto getById(long id);
 
     long countUnSynced(long tracingId);
+
+    void deleteByTracingId(long tracingId);
 }

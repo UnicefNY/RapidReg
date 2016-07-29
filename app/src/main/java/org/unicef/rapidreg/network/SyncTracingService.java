@@ -58,8 +58,8 @@ public class SyncTracingService extends BaseRetrofitService {
         return serviceInterface.get(PrimeroConfiguration.getCookie(), id, locale, isMobile);
     }
 
-    public Observable<Response<JsonElement>> getsIds(String lastUpdate, Boolean isMobile) {
-        return serviceInterface.getsIds(PrimeroConfiguration.getCookie(), lastUpdate, isMobile);
+    public Observable<Response<JsonElement>> getIds(String lastUpdate, Boolean isMobile) {
+        return serviceInterface.getIds(PrimeroConfiguration.getCookie(), lastUpdate, isMobile);
     }
 
     public Response<JsonElement> uploadJsonProfile(RecordModel item) {

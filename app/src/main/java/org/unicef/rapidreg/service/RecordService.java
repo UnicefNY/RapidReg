@@ -82,7 +82,7 @@ public class RecordService {
         return "%" + queryStr + "%";
     }
 
-    protected String getCurrentRegistrationDateAsString() {
+    public String getCurrentRegistrationDateAsString() {
         return registrationDateFormat.format(new java.util.Date());
     }
 

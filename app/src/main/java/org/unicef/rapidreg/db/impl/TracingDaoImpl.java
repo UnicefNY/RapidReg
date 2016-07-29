@@ -35,6 +35,11 @@ public class TracingDaoImpl implements TracingDao {
         return SQLite.select().from(Tracing.class).where(Tracing_Table.id.eq(tracingId)).querySingle();
     }
 
+    @Override
+    public Tracing getByInternalId(String id) {
+        return SQLite.select().from(Tracing.class).where(Tracing_Table._id.eq(id)).querySingle();
+    }
+
 
     private List<Tracing> getTracingsByDateASC() {
         return SQLite.select().from(Tracing.class)

@@ -44,6 +44,11 @@ public class TracingPhotoDaoImpl implements TracingPhotoDao {
     }
 
     @Override
+    public void deleteByTracingId(long tracingId) {
+        SQLite.delete().from(TracingPhoto.class).where(TracingPhoto_Table.tracing_id.eq(tracingId)).execute();
+    }
+
+    @Override
     public TracingPhoto getByTracingIdAndOrder(long tracingId, int order) {
         return SQLite.select()
                 .from(TracingPhoto.class)
