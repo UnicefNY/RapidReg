@@ -27,7 +27,9 @@ import java.util.List;
 
 public class TracingService extends RecordService {
     public static final String TAG = TracingService.class.getSimpleName();
-    public static final String TRACING_ID = "tracing_request_id_display";
+    public static final String TRACING_DISPLAY_ID = "tracing_request_id_display";
+    public static final String TRACING_ID = "tracing_request_id";
+    public static final String TRACING_PRIMARY_ID = "tracing_primary_id";
 
     private static final TracingService TRACING_SERVICE = new TracingService();
 
@@ -99,6 +101,7 @@ public class TracingService extends RecordService {
 
     public Tracing save(ItemValues itemValues, List<String> photoPath) throws IOException {
         String uniqueId = createUniqueId();
+        itemValues.addStringItem(TRACING_DISPLAY_ID, getShortUUID(uniqueId));
         itemValues.addStringItem(TRACING_ID, uniqueId);
         String username = UserService.getInstance().getCurrentUser().getUsername();
         itemValues.addStringItem(MODULE, "primeromodule-cp");
