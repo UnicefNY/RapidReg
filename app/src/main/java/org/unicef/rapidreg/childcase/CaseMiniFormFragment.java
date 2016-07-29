@@ -64,7 +64,7 @@ public class CaseMiniFormFragment extends RecordRegisterFragment {
                 Toast.makeText(getActivity(), R.string.save_success, Toast.LENGTH_SHORT).show();
 
                 Bundle args = new Bundle();
-                args.putLong(CaseService.CASE_ID, record.getId());
+                args.putLong(CaseService.CASE_PRIMARY_ID, record.getId());
                 ((RecordActivity) getActivity()).turnToFeature(CaseFeature.DETAILS_MINI, args, null);
             } catch (IOException e) {
                 Toast.makeText(getActivity(), R.string.save_failed, Toast.LENGTH_SHORT).show();
@@ -72,7 +72,7 @@ public class CaseMiniFormFragment extends RecordRegisterFragment {
             Case record = CaseService.getInstance().getByUniqueId(itemValues.getAsString(CaseService.CASE_ID));
 
             Bundle args = new Bundle();
-            args.putLong(CaseService.CASE_ID, record.getId());
+            args.putLong(CaseService.CASE_PRIMARY_ID, record.getId());
             ((RecordActivity) getActivity()).turnToFeature(CaseFeature.DETAILS_MINI, args, null);
         }
     }
@@ -161,7 +161,7 @@ public class CaseMiniFormFragment extends RecordRegisterFragment {
 
     protected void initItemValues() {
         if (getArguments() != null) {
-            recordId = getArguments().getLong(CaseService.CASE_ID, INVALID_RECORD_ID);
+            recordId = getArguments().getLong(CaseService.CASE_PRIMARY_ID, INVALID_RECORD_ID);
             if (recordId != INVALID_RECORD_ID) {
                 Case item = CaseService.getInstance().getById(recordId);
                 String caseJson = new String(item.getContent().getBlob());

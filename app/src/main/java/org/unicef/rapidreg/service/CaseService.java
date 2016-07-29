@@ -28,7 +28,9 @@ import java.util.UUID;
 
 public class CaseService extends RecordService {
     public static final String TAG = CaseService.class.getSimpleName();
-    public static final String CASE_ID = "case_id_display";
+    public static final String CASE_DISPLAY_ID = "case_id_display";
+    public static final String CASE_ID = "case_id";
+    public static final String CASE_PRIMARY_ID = "case_primary_id";
 
     private static final CaseService CASE_SERVICE = new CaseService();
 
@@ -105,9 +107,9 @@ public class CaseService extends RecordService {
 
     public Case save(ItemValues itemValues, List<String> photoPath) throws IOException {
         String uniqueId = createUniqueId();
-        itemValues.addStringItem(CASE_ID, getShortUUID(uniqueId));
-
         String username = UserService.getInstance().getCurrentUser().getUsername();
+        itemValues.addStringItem(CASE_DISPLAY_ID, getShortUUID(uniqueId));
+        itemValues.addStringItem(CASE_ID,uniqueId);
         itemValues.addStringItem(MODULE, "primeromodule-cp");
         itemValues.addStringItem(CASEWORKER_CODE, username);
         itemValues.addStringItem(RECORD_CREATED_BY, username);

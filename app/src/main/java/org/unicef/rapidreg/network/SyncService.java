@@ -33,7 +33,6 @@ import rx.functions.Func1;
 
 
 public class SyncService extends BaseRetrofitService {
-
     private SyncServiceInterface serviceInterface;
 
     @Override
@@ -66,8 +65,6 @@ public class SyncService extends BaseRetrofitService {
         ItemValues values = ItemValues.fromJson(new String(item.getContent().getBlob()));
         String shortUUID = RecordService.getShortUUID(item.getUniqueId());
         values.addStringItem("short_id", shortUUID);
-        values.addStringItem(CaseService.CASE_ID, shortUUID);
-        values.addStringItem("case_id", item.getUniqueId());
         values.removeItem("_attachments");
 
         JsonObject jsonObject = new JsonObject();
