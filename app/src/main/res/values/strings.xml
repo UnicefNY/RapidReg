@@ -78,7 +78,7 @@
     <string name="place_holder_last_sync_time">06-15-2016 16:14</string>
     <string name="place_holder_record_count_for_last_sync">49</string>
     <string name="place_holder_record_count_for_not_sync">146</string>
-    <string name="button_sync_state_of_click_to_sync">Click to Sync</string>
+    <string name="button_sync_state_of_click_to_sync">Sync</string>
     <string name="start_sync_message">Synchronizing, Please wait ...</string>
     <string name="confirm_cancel_sync_message">Are you sure to stop sync ?</string>
     <string name="cancel_button_text">Cancel</string>
