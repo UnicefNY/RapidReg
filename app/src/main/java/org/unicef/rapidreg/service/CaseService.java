@@ -109,7 +109,7 @@ public class CaseService extends RecordService {
         String uniqueId = createUniqueId();
         String username = UserService.getInstance().getCurrentUser().getUsername();
         itemValues.addStringItem(CASE_DISPLAY_ID, getShortUUID(uniqueId));
-        itemValues.addStringItem(CASE_ID,uniqueId);
+        itemValues.addStringItem(CASE_ID, uniqueId);
         itemValues.addStringItem(MODULE, "primeromodule-cp");
         itemValues.addStringItem(CASEWORKER_CODE, username);
         itemValues.addStringItem(RECORD_CREATED_BY, username);
@@ -259,5 +259,9 @@ public class CaseService extends RecordService {
 
     public Case getByInternalId(String id) {
         return caseDao.getByInternalId(id);
+    }
+
+    public boolean hasSameRev(String id, String rev) {
+        return rev.equals(caseDao.getByInternalId(id).getInternalRev());
     }
 }

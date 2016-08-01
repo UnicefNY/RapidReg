@@ -33,4 +33,12 @@ public class TracingPhotoService {
     public List<TracingPhoto> getByTracingId(long tracingId) {
         return tracingPhotoDao.getByTracingId(tracingId);
     }
+
+    public boolean hasUnSynced(long tracingId) {
+        return tracingPhotoDao.countUnSynced(tracingId) > 0;
+    }
+
+    public void deleteByTracingId(long tracingId) {
+        tracingPhotoDao.deleteByTracingId(tracingId);
+    }
 }

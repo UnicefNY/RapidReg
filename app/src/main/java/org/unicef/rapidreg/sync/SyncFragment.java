@@ -114,7 +114,9 @@ public class SyncFragment extends MvpFragment<SyncView, SyncPresenter> implement
 
     @Override
     public void hideSyncProgressDialog() {
-        syncProgressDialog.dismiss();
+        if(syncProgressDialog != null){
+            syncProgressDialog.dismiss();
+        }
     }
 
     @Override
