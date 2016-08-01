@@ -282,7 +282,11 @@ public class SyncPresenter extends MvpBasePresenter<SyncView> {
 
                             for (JsonElement element : jsonArray) {
                                 JsonObject jsonObject = element.getAsJsonObject();
-                                objects.add(jsonObject);
+                                boolean hasSameRev = caseService.hasSameRev(jsonObject.get("_id").getAsString(),
+                                        jsonObject.get("_rev").getAsString());
+                                if (!hasSameRev){
+                                    objects.add(jsonObject);
+                                }
                             }
                         }
                         return objects;
@@ -327,7 +331,11 @@ public class SyncPresenter extends MvpBasePresenter<SyncView> {
 
                             for (JsonElement element : jsonArray) {
                                 JsonObject jsonObject = element.getAsJsonObject();
-                                objects.add(jsonObject);
+                                boolean hasSameRev = tracingService.hasSameRev(jsonObject.get("_id").getAsString(),
+                                        jsonObject.get("_rev").getAsString());
+                                if (!hasSameRev){
+                                    objects.add(jsonObject);
+                                }
                             }
                         }
                         return objects;
@@ -609,7 +617,6 @@ public class SyncPresenter extends MvpBasePresenter<SyncView> {
         }
     }
 
-
     private void updateRecordSynced(Case item, boolean synced) {
         item.setSynced(synced);
         item.update();
@@ -649,8 +656,6 @@ public class SyncPresenter extends MvpBasePresenter<SyncView> {
         aTracing.setAudio(new Blob(audio));
         aTracing.update();
     }
-
-
 
     private void syncUploadSuccessfully() {
         updateDataViews();

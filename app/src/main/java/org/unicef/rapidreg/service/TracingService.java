@@ -251,4 +251,8 @@ public class TracingService extends RecordService {
     public Tracing getByInternalId(String id) {
         return tracingDao.getByInternalId(id);
     }
+
+    public boolean hasSameRev(String id, String rev) {
+        return rev.equals(tracingDao.getByInternalId(id).getInternalRev());
+    }
 }
