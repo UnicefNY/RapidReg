@@ -10,6 +10,7 @@
         android:background="@color/primero_lighter_white"/>
 
     <LinearLayout
+        android:id="@+id/sub_form_title_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">

@@ -23,7 +23,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 
 import butterknife.BindView;
@@ -48,7 +47,7 @@ public class SubFormViewHolder extends BaseViewHolder<Field> {
     @Override
     public void setValue(Field field) {
         fields = removeSeparatorFields(field.getSubForm().getFields());
-        fieldParent = field.getDisplayName().get(Locale.getDefault().getLanguage());
+        fieldParent = field.getName();
 
         attachParentToFields(fields, fieldParent);
         addSubFormBtn.setText(String.format("%s %s", context.getString(R.string.add), fieldParent));
@@ -166,18 +165,21 @@ public class SubFormViewHolder extends BaseViewHolder<Field> {
     }
 
     private void setSubFormTitleClickEvent(ViewGroup container) {
+        LinearLayout subFormTitleLayout = (LinearLayout) container.findViewById(R.id.sub_form_title_layout);
         TextView subFormTitle = (TextView) container.findViewById(R.id.sub_form_title);
         subFormTitle.setText(fieldParent);
         final View fieldList = container.findViewById(R.id.field_list);
         final Button deleteBtn = (Button) container.findViewById(R.id.delete_subform);
         final ImageView arrow = (ImageView) container.findViewById(R.id.sub_form_title_arrow);
 
-        subFormTitle.setOnClickListener(new View.OnClickListener() {
+        subFormTitleLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (View.GONE == fieldList.getVisibility()) {
                     fieldList.setVisibility(View.VISIBLE);
-                    deleteBtn.setVisibility(View.VISIBLE);
+                    if (activity.getCurrentFeature().isEditMode()) {
+                        deleteBtn.setVisibility(View.VISIBLE);
+                    }
                     arrow.setImageResource(R.drawable.arrow_down_blue);
                 } else {
                     fieldList.setVisibility(View.GONE);

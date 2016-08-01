@@ -6,7 +6,6 @@ import android.provider.Settings;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 
-import com.google.gson.Gson;
 import com.hannesdorfmann.mosby.mvp.MvpBasePresenter;
 
 import org.greenrobot.eventbus.EventBus;
@@ -38,13 +37,11 @@ public class LoginPresenter extends MvpBasePresenter<LoginView> {
     private CompositeSubscription subscriptions;
 
     private Context context;
-    private Gson gson;
     private IntentSender intentSender;
 
     public LoginPresenter(Context context) {
         this.context = context;
         intentSender = new IntentSender();
-        gson = new Gson();
         subscriptions = new CompositeSubscription();
     }
 

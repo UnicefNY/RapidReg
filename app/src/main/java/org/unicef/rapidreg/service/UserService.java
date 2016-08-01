@@ -65,19 +65,11 @@ public class UserService {
     }
 
     public boolean isNameValid(String username) {
-        if (TextUtils.isEmpty(username) || username.length() > 254) {
-            return false;
-        }
-
-        Matcher matcher;
-        matcher = Pattern.compile("[^@!#$%\\^?&*()=\\\\/;:'\"\\{\\}\\[\\]\\|<>,.`]{1,254}")
-                .matcher(username);
-
-        return matcher.matches();
+        return username.matches("\\A[^ ]+\\z");
     }
 
     public boolean isPasswordValid(String password) {
-        return !TextUtils.isEmpty(password);
+        return password.matches("\\A(?=.*[a-zA-Z])(?=.*[0-9]).{8,}\\z");
     }
 
     public List<User> getAllUsers() {
