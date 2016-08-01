@@ -14,6 +14,7 @@ import com.raizlabs.android.dbflow.data.Blob;
 
 import org.unicef.rapidreg.model.Case;
 import org.unicef.rapidreg.model.CasePhoto;
+import org.unicef.rapidreg.model.RecordModel;
 import org.unicef.rapidreg.model.Tracing;
 import org.unicef.rapidreg.model.TracingPhoto;
 import org.unicef.rapidreg.network.SyncService;
@@ -244,7 +245,7 @@ public class SyncPresenter extends MvpBasePresenter<SyncView> {
                     public void call(Pair<Tracing, Response<JsonElement>> pair) {
                         getView().setProgressIncrease();
                         increaseSyncNumber();
-                        updateTracingSyncStatus(pair.first);
+                        updateRecordSynced(pair.first, true);
                     }
                 }, new Action1<Throwable>() {
                     @Override
@@ -305,6 +306,7 @@ public class SyncPresenter extends MvpBasePresenter<SyncView> {
                 }, new Action1<Throwable>() {
                     @Override
                     public void call(Throwable throwable) {
+                        throwable.printStackTrace();
                         syncFail();
                     }
                 }, new Action0() {
@@ -617,14 +619,9 @@ public class SyncPresenter extends MvpBasePresenter<SyncView> {
         }
     }
 
-    private void updateRecordSynced(Case item, boolean synced) {
-        item.setSynced(synced);
-        item.update();
-    }
-
-    void updateTracingSyncStatus(Tracing item) {
-        item.setSynced(item.isAudioSynced() && !TracingPhotoService.getInstance().hasUnSynced(item.getId()));
-        item.update();
+    private void updateRecordSynced(RecordModel record, boolean synced) {
+        record.setSynced(synced);
+        record.update();
     }
 
     private void updateCasePhotos(String id, byte[] photoBytes) {

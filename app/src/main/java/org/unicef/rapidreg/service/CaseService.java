@@ -262,6 +262,7 @@ public class CaseService extends RecordService {
     }
 
     public boolean hasSameRev(String id, String rev) {
-        return rev.equals(caseDao.getByInternalId(id).getInternalRev());
+        Case aCase = caseDao.getByInternalId(id);
+        return aCase != null && rev.equals(aCase.getInternalRev());
     }
 }
