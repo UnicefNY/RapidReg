@@ -141,11 +141,11 @@ public class LoginPresenter extends MvpBasePresenter<LoginView> {
 
                                 EventBus.getDefault().postSticky(new NeedLoadFormsEvent(PrimeroConfiguration.getCookie()));
 
-                                showLoginResultMessage(HttpStatusCodeHandler.LOGIN_SUCCESS_MESSAGE);
+                                showLoginResultMessage(context.getResources().getString(R.string.login_success_message));
                                 Log.d(TAG, "login successful");
                             } else {
-                                showLoginResultMessage(HttpStatusCodeHandler
-                                        .getHttpStatusMessage(response.code()));
+                                showLoginResultMessage(context.getResources().getString(HttpStatusCodeHandler
+                                        .getHttpStatusMessage(response.code())));
                                 doLoginOffline(context, username, password);
 
                                 Log.d(TAG, "login failed");
