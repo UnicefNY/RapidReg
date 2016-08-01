@@ -126,6 +126,7 @@ public class RecordRegisterAdapter extends RecyclerView.Adapter<BaseViewHolder> 
     public void onBindViewHolder(BaseViewHolder holder, int position) {
         Field field = fields.get(position);
         holder.setValue(field);
+        holder.setIsRecyclable(false);
 
         if (!activity.getCurrentFeature().isDetailMode()) {
             holder.setOnClickListener(field);
