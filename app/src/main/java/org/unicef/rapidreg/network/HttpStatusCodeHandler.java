@@ -3,7 +3,6 @@ package org.unicef.rapidreg.network;
 import android.util.Log;
 
 public class HttpStatusCodeHandler {
-
     public static final String NOT_FIND_CODE_MESSAGE = "Not find status code!";
     public static final String UNAUTHORIZED_MESSAGE = "Sorry, incorrect username or password.";
     public static final String LOGIN_SUCCESS_MESSAGE = "Login successful";
