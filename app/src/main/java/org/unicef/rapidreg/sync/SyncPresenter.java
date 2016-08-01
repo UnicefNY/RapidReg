@@ -14,10 +14,15 @@ import com.raizlabs.android.dbflow.data.Blob;
 
 import org.unicef.rapidreg.model.Case;
 import org.unicef.rapidreg.model.CasePhoto;
+import org.unicef.rapidreg.model.Tracing;
+import org.unicef.rapidreg.model.TracingPhoto;
 import org.unicef.rapidreg.network.SyncService;
+import org.unicef.rapidreg.network.SyncTracingService;
 import org.unicef.rapidreg.service.CasePhotoService;
 import org.unicef.rapidreg.service.CaseService;
 import org.unicef.rapidreg.service.RecordService;
+import org.unicef.rapidreg.service.TracingPhotoService;
+import org.unicef.rapidreg.service.TracingService;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -41,16 +46,19 @@ import rx.schedulers.Schedulers;
 public class SyncPresenter extends MvpBasePresenter<SyncView> {
     private static final String TAG = SyncPresenter.class.getSimpleName();
 
-    private static final String FORM_DATA_KEY_AUDIO = "child[audio]";
-    private static final String FORM_DATA_KEY_PHOTO = "child[photo][0]";
-
     private Context context;
     private SyncService syncService;
+    private SyncTracingService syncTracingService;
+    private TracingService tracingService;
     private CaseService caseService;
     private CasePhotoService casePhotoService;
+    private TracingPhotoService tracingPhotoService;
 
-    private int numberOfSuccessfulUploadedCases;
-    private int totalNumberOfCases;
+    final List<Case> caseList = CaseService.getInstance().getAll();
+    final List<Tracing> tracingList = TracingService.getInstance().getAll();
+
+    private int numberOfSuccessfulUploadedRecords;
+    private int totalNumberOfUploadRecords;
 
     private boolean isSyncing;
 
@@ -60,6 +68,10 @@ public class SyncPresenter extends MvpBasePresenter<SyncView> {
             syncService = new SyncService(context);
             caseService = CaseService.getInstance();
             casePhotoService = CasePhotoService.getInstance();
+            syncTracingService = new SyncTracingService(context);
+            tracingService = TracingService.getInstance();
+            tracingPhotoService = tracingPhotoService.getInstance();
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -76,25 +88,43 @@ public class SyncPresenter extends MvpBasePresenter<SyncView> {
             return;
         }
         try {
-            numberOfSuccessfulUploadedCases = 0;
-            totalNumberOfCases = 0;
-            upLoadCases();
+            initUploadProgressBarUI(caseList, tracingList);
+            upLoadCases(caseList);
         } catch (Exception e) {
             syncFail();
         }
     }
 
+    private void initUploadProgressBarUI(List<Case> caseList, List<Tracing> tracingList) {
+        numberOfSuccessfulUploadedRecords = 0;
+        totalNumberOfUploadRecords = 0;
+        setCasesNumbers(caseList);
+        setTracingsNumbers(tracingList);
+        if(totalNumberOfUploadRecords != 0) {
+            getView().showSyncProgressDialog("Uploading...Pls wait a moment.");
+            getView().setProgressMax(totalNumberOfUploadRecords);
+        }
+    }
 
-    private void upLoadCases() {
-        isSyncing = true;
-        final List<Case> caseList = CaseService.getInstance().getAll();
-        for (Case aCase : caseList) {
-            if (!aCase.isSynced()) {
-                totalNumberOfCases++;
+    private void setTracingsNumbers(List<Tracing> tracingList) {
+        for (Tracing aTracing : tracingList) {
+            if (!aTracing.isSynced()) {
+                totalNumberOfUploadRecords++;
             }
         }
-        getView().showSyncProgressDialog("Uploading...Pls wait a moment.");
-        getView().setProgressMax(totalNumberOfCases);
+    }
+
+    private void setCasesNumbers(List<Case> caseList) {
+        for (Case aCase : caseList) {
+            if (!aCase.isSynced()) {
+                totalNumberOfUploadRecords++;
+            }
+        }
+    }
+
+
+    private void upLoadCases(List<Case> caseList) {
+        isSyncing = true;
 
         Observable.from(caseList)
                 .filter(new Func1<Case, Boolean>() {
@@ -146,7 +176,75 @@ public class SyncPresenter extends MvpBasePresenter<SyncView> {
                     public void call(Pair<Case, Response<JsonElement>> pair) {
                         getView().setProgressIncrease();
                         increaseSyncNumber();
-                        updateCaseSyncStatus(pair.first);
+                        updateRecordSynced(pair.first, true);
+                    }
+                }, new Action1<Throwable>() {
+                    @Override
+                    public void call(Throwable throwable) {
+                        syncFail();
+                        throwable.printStackTrace();
+                    }
+                }, new Action0() {
+                    @Override
+                    public void call() {
+                        upLoadTracing(tracingList);
+                    }
+                });
+    }
+
+    private void upLoadTracing(List<Tracing> tracingList) {
+        isSyncing = true;
+        Observable.from(tracingList)
+                .filter(new Func1<Tracing, Boolean>() {
+                    @Override
+                    public Boolean call(Tracing item) {
+                        return isSyncing && !item.isSynced();
+                    }
+                })
+                .map(new Func1<Tracing, Pair<Tracing, Response<JsonElement>>>() {
+                    @Override
+                    public Pair<Tracing, Response<JsonElement>> call(Tracing item) {
+                        return new Pair<>(item, syncTracingService.uploadJsonProfile(item));
+                    }
+                })
+                .map(new Func1<Pair<Tracing, Response<JsonElement>>, Pair<Tracing, Response<JsonElement>>>() {
+                    @Override
+                    public Pair<Tracing, Response<JsonElement>> call(Pair<Tracing, Response<JsonElement>> pair) {
+                        syncTracingService.uploadAudio(pair.first);
+                        return pair;
+                    }
+                })
+                .map(new Func1<Pair<Tracing, Response<JsonElement>>, Pair<Tracing, Response<JsonElement>>>() {
+                    @Override
+                    public Pair<Tracing, Response<JsonElement>> call(Pair<Tracing, Response<JsonElement>> tracingResponsePair) {
+                        try {
+                            Response<JsonElement> jsonElementResponse = tracingResponsePair.second;
+                            JsonArray photoKeys = jsonElementResponse.body().getAsJsonObject().get("photo_keys")
+                                    .getAsJsonArray();
+                            String id = jsonElementResponse.body().getAsJsonObject().get("_id").getAsString();
+                            okhttp3.Response response = null;
+                            if (photoKeys.size() != 0) {
+                                Call<Response<JsonElement>> call = syncTracingService.deletePhotos(id, photoKeys);
+                                response = call.execute().raw();
+                            }
+
+                            if (response == null || response.isSuccessful()) {
+                                syncTracingService.uploadPhotos(tracingResponsePair.first);
+                            }
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                        return tracingResponsePair;
+                    }
+                })
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Action1<Pair<Tracing, Response<JsonElement>>>() {
+                    @Override
+                    public void call(Pair<Tracing, Response<JsonElement>> pair) {
+                        getView().setProgressIncrease();
+                        increaseSyncNumber();
+                        updateTracingSyncStatus(pair.first);
                     }
                 }, new Action1<Throwable>() {
                     @Override
@@ -164,7 +262,7 @@ public class SyncPresenter extends MvpBasePresenter<SyncView> {
     }
 
     private void increaseSyncNumber() {
-        numberOfSuccessfulUploadedCases += 1;
+        numberOfSuccessfulUploadedRecords += 1;
     }
 
 
@@ -184,7 +282,11 @@ public class SyncPresenter extends MvpBasePresenter<SyncView> {
 
                             for (JsonElement element : jsonArray) {
                                 JsonObject jsonObject = element.getAsJsonObject();
-                                objects.add(jsonObject);
+                                boolean hasSameRev = caseService.hasSameRev(jsonObject.get("_id").getAsString(),
+                                        jsonObject.get("_rev").getAsString());
+                                if (!hasSameRev){
+                                    objects.add(jsonObject);
+                                }
                             }
                         }
                         return objects;
@@ -195,8 +297,10 @@ public class SyncPresenter extends MvpBasePresenter<SyncView> {
                 .subscribe(new Action1<List<JsonObject>>() {
                     @Override
                     public void call(List<JsonObject> jsonObjects) {
-                        getView().showSyncProgressDialog("Downloading...Pls wait a moment.");
-                        getView().setProgressMax(jsonObjects.size());
+                        if (jsonObjects.size() != 0) {
+                            getView().showSyncProgressDialog("Downloading Cases...Pls wait a moment.");
+                            getView().setProgressMax(jsonObjects.size());
+                        }
                     }
                 }, new Action1<Throwable>() {
                     @Override
@@ -207,6 +311,55 @@ public class SyncPresenter extends MvpBasePresenter<SyncView> {
                     @Override
                     public void call() {
                         downloadCases(objects);
+                    }
+                });
+    }
+
+    public void pullTracings() {
+        isSyncing = true;
+        GregorianCalendar cal = new GregorianCalendar(2015, 1, 1);
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.US);
+        final String time = sdf.format(cal.getTime());
+        final List<JsonObject> objects = new ArrayList<>();
+        syncTracingService.getIds(time, true)
+                .map(new Func1<Response<JsonElement>, List<JsonObject>>() {
+                    @Override
+                    public List<JsonObject> call(Response<JsonElement> jsonElementResponse) {
+                        if (jsonElementResponse.isSuccessful()) {
+                            JsonElement jsonElement = jsonElementResponse.body();
+                            JsonArray jsonArray = jsonElement.getAsJsonArray();
+
+                            for (JsonElement element : jsonArray) {
+                                JsonObject jsonObject = element.getAsJsonObject();
+                                boolean hasSameRev = tracingService.hasSameRev(jsonObject.get("_id").getAsString(),
+                                        jsonObject.get("_rev").getAsString());
+                                if (!hasSameRev){
+                                    objects.add(jsonObject);
+                                }
+                            }
+                        }
+                        return objects;
+                    }
+                })
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Action1<List<JsonObject>>() {
+                    @Override
+                    public void call(List<JsonObject> jsonObjects) {
+                        if (jsonObjects.size() != 0) {
+                            getView().showSyncProgressDialog("Downloading Tracing Request...Pls wait a moment.");
+                            getView().setProgressMax(jsonObjects.size());
+                        }
+                    }
+                }, new Action1<Throwable>() {
+                    @Override
+                    public void call(Throwable throwable) {
+                        syncFail();
+                    }
+                }, new Action0() {
+                    @Override
+                    public void call() {
+                        downloadTracings(objects);
                     }
                 });
     }
@@ -305,6 +458,107 @@ public class SyncPresenter extends MvpBasePresenter<SyncView> {
                 }, new Action0() {
                     @Override
                     public void call() {
+                        getView().hideSyncProgressDialog();
+                        pullTracings();
+                    }
+                });
+    }
+
+
+    private void downloadTracings(List<JsonObject> objects) {
+        Observable.from(objects)
+                .filter(new Func1<JsonObject, Boolean>() {
+                    @Override
+                    public Boolean call(JsonObject jsonObject) {
+                        return isSyncing;
+                    }
+                })
+                .map(new Func1<JsonObject, Response<JsonElement>>() {
+                    @Override
+                    public Response<JsonElement> call(JsonObject jsonObject) {
+
+                        Observable<Response<JsonElement>> responseObservable = syncTracingService.get(jsonObject.get("_id")
+                                .getAsString(), "en", true);
+                        Response<JsonElement> response = responseObservable.toBlocking().first();
+                        if (!response.isSuccessful()) {
+                            throw new RuntimeException();
+                        }
+                        JsonObject responseJsonObject = response.body().getAsJsonObject();
+                        postPullTracings(responseJsonObject);
+                        return response;
+                    }
+                })
+                .map(new Func1<Response<JsonElement>, Response<JsonElement>>() {
+                    @Override
+                    public Response<JsonElement> call(Response<JsonElement> response) {
+                        JsonObject responseJsonObject = response.body().getAsJsonObject();
+                        if (responseJsonObject.has("recorded_audio")) {
+                            String id = responseJsonObject.get("_id").getAsString();
+                            Response<ResponseBody> audioResponse = syncTracingService.getAudio(id).toBlocking().first();
+                            if (!audioResponse.isSuccessful()) {
+                                throw new RuntimeException();
+                            }
+                            try {
+                                updateTracingAudio(id, audioResponse.body().bytes());
+                            } catch (IOException e) {
+                                throw new RuntimeException(e);
+                            }
+                        }
+                        return response;
+                    }
+                })
+                .map(new Func1<Response<JsonElement>, List<JsonObject>>() {
+                    @Override
+                    public List<JsonObject> call(Response<JsonElement> response) {
+                        JsonObject responseJsonObject = response.body().getAsJsonObject();
+                        List<JsonObject> photoKeys = new ArrayList<>();
+                        if (responseJsonObject.has("photo_keys")) {
+                            JsonArray jsonArray = responseJsonObject.get("photo_keys").getAsJsonArray();
+                            for (JsonElement element : jsonArray) {
+                                JsonObject jsonObject = new JsonObject();
+                                jsonObject.addProperty("photo_key", element.getAsString());
+                                jsonObject.addProperty("_id", responseJsonObject.get("_id").getAsString());
+                                photoKeys.add(jsonObject);
+                            }
+                        }
+                        return photoKeys;
+                    }
+                })
+                .flatMap(new Func1<List<JsonObject>, Observable<JsonObject>>() {
+                    @Override
+                    public Observable<JsonObject> call(List<JsonObject> jsonObjects) {
+                        return Observable.from(jsonObjects);
+                    }
+                })
+                .map(new Func1<JsonObject, Object>() {
+                    @Override
+                    public Object call(JsonObject jsonObject) {
+                        String id = jsonObject.get("_id").getAsString();
+                        String photoKey = jsonObject.get("photo_key").getAsString();
+                        Response<ResponseBody> response = syncTracingService.getPhoto(id, photoKey, "1080").toBlocking().first();
+                        try {
+                            updateTracingPhotos(id, response.body().bytes());
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
+                        }
+                        return null;
+                    }
+                })
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Action1<Object>() {
+                    @Override
+                    public void call(Object responseBodyResponse) {
+                        getView().setProgressIncrease();
+                    }
+                }, new Action1<Throwable>() {
+                    @Override
+                    public void call(Throwable throwable) {
+                        syncFail();
+                    }
+                }, new Action0() {
+                    @Override
+                    public void call() {
                         syncDownloadSuccessfully();
                     }
                 });
@@ -337,9 +591,39 @@ public class SyncPresenter extends MvpBasePresenter<SyncView> {
         }
     }
 
+    private void postPullTracings(JsonObject tracingsJsonObject) {
+        String internalId = tracingsJsonObject.get("_id").getAsString();
+        Tracing item = TracingService.getInstance().getByInternalId(internalId);
+        String newRev = tracingsJsonObject.get("_rev").getAsString();
+        String registrationDate = tracingsJsonObject.get("inquiry_date").getAsString();
+        if (item != null) {
+            item.setInternalRev(newRev);
+            item.setSynced(true);
+            item.setContent(new Blob(tracingsJsonObject.toString().getBytes()));
+            item.update();
+            tracingPhotoService.deleteByTracingId(item.getId());
+        } else {
+            item = new Tracing();
+            item.setUniqueId(tracingsJsonObject.get("tracing_request_id").getAsString());
+            item.setInternalId(tracingsJsonObject.get("_id").getAsString());
+            item.setInternalRev(newRev);
+            item.setRegistrationDate(RecordService.getRegisterDate(registrationDate));
+            item.setCreatedBy(tracingsJsonObject.get("created_by").getAsString());
+            item.setLastSyncedDate(Calendar.getInstance().getTime());
+            item.setLastUpdatedDate(Calendar.getInstance().getTime());
+            item.setSynced(true);
+            item.setContent(new Blob(tracingsJsonObject.toString().getBytes()));
+            item.save();
+        }
+    }
 
-    void updateCaseSyncStatus(Case item) {
-        item.setSynced(item.isAudioSynced() && !CasePhotoService.getInstance().hasUnSynced(item.getId()));
+    private void updateRecordSynced(Case item, boolean synced) {
+        item.setSynced(synced);
+        item.update();
+    }
+
+    void updateTracingSyncStatus(Tracing item) {
+        item.setSynced(item.isAudioSynced() && !TracingPhotoService.getInstance().hasUnSynced(item.getId()));
         item.update();
     }
 
@@ -352,10 +636,25 @@ public class SyncPresenter extends MvpBasePresenter<SyncView> {
         casePhoto.save();
     }
 
+    private void updateTracingPhotos(String id, byte[] photoBytes) {
+        Tracing aTracing = tracingService.getByInternalId(id);
+        TracingPhoto TracingPhoto = new TracingPhoto();
+        TracingPhoto.setTracing(aTracing);
+        TracingPhoto.setOrder(tracingPhotoService.getByTracingId(aTracing.getId()).size() + 1);
+        TracingPhoto.setPhoto(new Blob(photoBytes));
+        TracingPhoto.save();
+    }
+
     private void updateAudio(String id, byte[] audio) {
         Case aCase = caseService.getByInternalId(id);
         aCase.setAudio(new Blob(audio));
         aCase.update();
+    }
+
+    private void updateTracingAudio(String id, byte[] audio) {
+        Tracing aTracing = tracingService.getByInternalId(id);
+        aTracing.setAudio(new Blob(audio));
+        aTracing.update();
     }
 
     private void syncUploadSuccessfully() {
@@ -379,13 +678,13 @@ public class SyncPresenter extends MvpBasePresenter<SyncView> {
     private void updateDataViews() {
         SimpleDateFormat sdf = new SimpleDateFormat("MM-dd-yyyy HH:mm");
         String currentDateTime = sdf.format(new Date());
-        int numberOfFailedUploadedCases = totalNumberOfCases - numberOfSuccessfulUploadedCases;
+        int numberOfFailedUploadedCases = totalNumberOfUploadRecords - numberOfSuccessfulUploadedRecords;
 
-        getView().setDataViews(currentDateTime, String.valueOf(numberOfSuccessfulUploadedCases), String.valueOf
+        getView().setDataViews(currentDateTime, String.valueOf(numberOfSuccessfulUploadedRecords), String.valueOf
                 (numberOfFailedUploadedCases));
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
         sharedPreferences.edit().putString("syncStatisticData", new Gson().toJson(new SyncStatisticData
-                (currentDateTime, numberOfSuccessfulUploadedCases, numberOfFailedUploadedCases))).apply();
+                (currentDateTime, numberOfSuccessfulUploadedRecords, numberOfFailedUploadedCases))).apply();
     }
 
     public void attemptCancelSync() {

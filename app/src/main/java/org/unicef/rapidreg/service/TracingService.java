@@ -24,6 +24,7 @@ import java.io.IOException;
 import java.sql.Date;
 import java.util.Calendar;
 import java.util.List;
+import java.util.UUID;
 
 public class TracingService extends RecordService {
     public static final String TAG = TracingService.class.getSimpleName();
@@ -140,7 +141,9 @@ public class TracingService extends RecordService {
 
     public void savePhoto(Tracing parent, List<String> photoPaths) throws IOException {
         for (int i = 0; i < photoPaths.size(); i++) {
-            generateSavePhoto(parent, photoPaths, i).save();
+            TracingPhoto tracingPhoto = generateSavePhoto(parent, photoPaths, i);
+            tracingPhoto.setKey(UUID.randomUUID().toString());
+            tracingPhoto.save();
         }
     }
 
@@ -198,16 +201,17 @@ public class TracingService extends RecordService {
 
     private TracingPhoto generateSavePhoto(Tracing parent, List<String> photoPaths, int index) throws IOException {
 
-        TracingPhoto TracingPhoto
+        TracingPhoto tracingPhoto
                 = tracingPhotoDao.getByTracingIdAndOrder(parent.getId(), index + 1);
-        if (TracingPhoto == null) {
-            TracingPhoto = new TracingPhoto();
+        if (tracingPhoto == null) {
+            tracingPhoto = new TracingPhoto();
         }
         String filePath = photoPaths.get(index);
-        TracingPhoto.setPhoto(ImageCompressUtil.readImageFile(filePath));
-        TracingPhoto.setTracing(parent);
-        TracingPhoto.setOrder(index + 1);
-        return TracingPhoto;
+        tracingPhoto.setPhoto(ImageCompressUtil.readImageFile(filePath));
+        tracingPhoto.setTracing(parent);
+        tracingPhoto.setOrder(index + 1);
+        tracingPhoto.setKey(UUID.randomUUID().toString());
+        return tracingPhoto;
     }
 
     @NonNull
@@ -225,6 +229,7 @@ public class TracingService extends RecordService {
         tracingPhoto.setId(tracingPhotoDao
                 .getByTracingIdAndOrder(tracing.getId(), index + 1).getId());
         tracingPhoto.setOrder(index + 1);
+        tracingPhoto.setKey(UUID.randomUUID().toString());
         return tracingPhoto;
     }
 
@@ -241,5 +246,13 @@ public class TracingService extends RecordService {
         return values.getAsString(RELATION_NAME) + " "
                 + values.getAsString(RELATION_AGE) + " "
                 + values.getAsString(RELATION_NICKNAME);
+    }
+
+    public Tracing getByInternalId(String id) {
+        return tracingDao.getByInternalId(id);
+    }
+
+    public boolean hasSameRev(String id, String rev) {
+        return rev.equals(tracingDao.getByInternalId(id).getInternalRev());
     }
 }

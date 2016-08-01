@@ -22,8 +22,7 @@
         android:layout_height="wrap_content"
         android:paddingTop="@dimen/sync_padding_top_bottom"
         android:paddingBottom="@dimen/sync_value_padding_top_bottom"
-        android:textSize="@dimen/text_size_20"
-        android:textColor="@color/primero_blue"
+        android:textSize="@dimen/text_size_16"
         android:text="@string/place_holder_last_sync_time"/>
 
     <TextView
@@ -39,8 +38,7 @@
         android:layout_height="wrap_content"
         android:paddingTop="@dimen/sync_padding_top_bottom"
         android:paddingBottom="@dimen/sync_value_padding_top_bottom"
-        android:textSize="@dimen/text_size_20"
-        android:textColor="@color/primero_blue"
+        android:textSize="@dimen/text_size_16"
         android:text="@string/place_holder_record_count_for_last_sync"/>
 
     <TextView
@@ -56,17 +54,17 @@
         android:layout_height="wrap_content"
         android:paddingTop="@dimen/sync_padding_top_bottom"
         android:paddingBottom="@dimen/sync_value_padding_top_bottom"
-        android:textSize="@dimen/text_size_20"
-        android:textColor="@color/primero_blue"
+        android:textSize="@dimen/text_size_16"
         android:text="@string/place_holder_record_count_for_not_sync"/>
 
     <Button
         android:id="@+id/button_sync"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@color/primero_blue"
+        android:background="@drawable/sync_add_button"
         android:textColor="@color/white"
         android:textAllCaps="false"
+        android:layout_gravity="center"
         android:textSize="@dimen/text_size_20"
         android:text="@string/button_sync_state_of_click_to_sync"/>
 

@@ -14,4 +14,6 @@ public interface TracingDao {
     List<Tracing> getAllTracingsByConditionGroup(ConditionGroup conditionGroup);
 
     Tracing getTracingById(long tracingId);
+
+    Tracing getByInternalId(String id);
 }
