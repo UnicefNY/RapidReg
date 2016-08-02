@@ -11,6 +11,8 @@ import android.widget.TextView;
 import org.unicef.rapidreg.R;
 import org.unicef.rapidreg.childcase.CaseListAdapter;
 import org.unicef.rapidreg.forms.Field;
+import org.unicef.rapidreg.service.RecordService;
+import org.unicef.rapidreg.service.TracingService;
 import org.unicef.rapidreg.service.cache.ItemValues;
 import org.unicef.rapidreg.service.cache.ItemValuesMap;
 
@@ -45,8 +47,8 @@ public class MiniFormProfileViewHolder extends BaseViewHolder<Field> {
     public void setValue(Field field) {
         idView.setText(itemValues.getAsString(ItemValues.RecordProfile.ID_NORMAL_STATE));
         CaseListAdapter.Gender gender;
-        if (itemValues.getAsString("sex") != null) {
-            gender = CaseListAdapter.Gender.valueOf(itemValues.getAsString("sex").toUpperCase());
+        if (itemValues.getAsString(TracingService.SEX) != null) {
+            gender = CaseListAdapter.Gender.valueOf(itemValues.getAsString(TracingService.SEX).toUpperCase());
         } else {
             gender = CaseListAdapter.Gender.UNKNOWN;
         }
@@ -54,8 +56,13 @@ public class MiniFormProfileViewHolder extends BaseViewHolder<Field> {
         genderBadge.setImageDrawable(drawable);
         genderName.setText(gender.getName());
         genderName.setTextColor(ContextCompat.getColor(context, gender.getColorId()));
-        String age = itemValues.getAsString("age");
-        this.age.setText(isValidAge(age) ? age : "---");
+        String age;
+        if (itemValues.has(RecordService.RELATION_AGE)) {
+            age = itemValues.getAsString(RecordService.RELATION_AGE);
+        } else {
+            age = itemValues.getAsString(RecordService.AGE);
+        }
+        this.age.setText(isValidAge(age) ? age : "");
         registrationDate.setText(itemValues.getAsString(ItemValues.RecordProfile.REGISTRATION_DATE));
     }
 

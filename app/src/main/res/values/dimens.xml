@@ -77,6 +77,7 @@
     <dimen name="sync_padding_left_right">20dp</dimen>
     <dimen name="sync_padding_top_bottom">9dp</dimen>
     <dimen name="sync_value_padding_top_bottom">26dp</dimen>
+    <dimen name="sync_button_padding_top">100dp</dimen>
     <!--sync end-->
 
 

@@ -56,7 +56,7 @@ public class CaseListAdapter extends RecordListAdapter {
         holder.genderName.setText(gender.getName());
         holder.genderName.setTextColor(ContextCompat.getColor(activity, gender.getColorId()));
         String age = itemValues.getAsString(RecordService.AGE);
-        holder.age.setText(isValidAge(age) ? age : "---");
+        holder.age.setText(isValidAge(age) ? age : "");
         Date registrationDate = record.getRegistrationDate();
         holder.registrationDate.setText(dateFormat.format(registrationDate));
 
@@ -81,7 +81,7 @@ public class CaseListAdapter extends RecordListAdapter {
     public enum Gender {
         MALE("BOY", R.drawable.avatar_placeholder, R.drawable.boy, R.color.primero_blue),
         FEMALE("GIRL", R.drawable.avatar_placeholder, R.drawable.girl, R.color.primero_red),
-        UNKNOWN("------", R.drawable.avatar_placeholder, R.drawable.gender_default, R.color.primero_font_light);
+        UNKNOWN("", R.drawable.avatar_placeholder, R.drawable.gender_default, R.color.primero_font_light);
 
         private String name;
         private int avatarId;
