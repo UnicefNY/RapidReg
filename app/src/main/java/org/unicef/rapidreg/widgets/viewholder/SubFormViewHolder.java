@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import butterknife.BindView;
@@ -50,7 +51,8 @@ public class SubFormViewHolder extends BaseViewHolder<Field> {
         fieldParent = field.getName();
 
         attachParentToFields(fields, fieldParent);
-        addSubFormBtn.setText(String.format("%s %s", context.getString(R.string.add), fieldParent));
+        addSubFormBtn.setText(String.format("%s %s", context.getString(R.string.add),
+                field.getDisplayName().get(Locale.getDefault().getLanguage())));
         addSubFormBtn.setVisibility(activity.getCurrentFeature().isEditMode() ?
                 View.VISIBLE : View.GONE);
         restoreSubForms();
