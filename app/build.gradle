@@ -72,6 +72,7 @@ dependencies {
     apt 'com.google.dagger:dagger-compiler:2.4'
     compile 'com.jakewharton:butterknife:8.0.1'
     apt 'com.jakewharton:butterknife-compiler:8.0.1'
+
     compile 'io.reactivex:rxjava:1.1.5'
     compile 'io.reactivex:rxandroid:1.2.0'
 

@@ -101,7 +101,7 @@ public class SyncPresenter extends MvpBasePresenter<SyncView> {
         totalNumberOfUploadRecords = 0;
         setCasesNumbers(caseList);
         setTracingsNumbers(tracingList);
-        if(totalNumberOfUploadRecords != 0) {
+        if (totalNumberOfUploadRecords != 0) {
             getView().showSyncProgressDialog("Uploading...Pls wait a moment.");
             getView().setProgressMax(totalNumberOfUploadRecords);
         }
@@ -285,7 +285,7 @@ public class SyncPresenter extends MvpBasePresenter<SyncView> {
                                 JsonObject jsonObject = element.getAsJsonObject();
                                 boolean hasSameRev = caseService.hasSameRev(jsonObject.get("_id").getAsString(),
                                         jsonObject.get("_rev").getAsString());
-                                if (!hasSameRev){
+                                if (!hasSameRev) {
                                     objects.add(jsonObject);
                                 }
                             }
@@ -335,7 +335,7 @@ public class SyncPresenter extends MvpBasePresenter<SyncView> {
                                 JsonObject jsonObject = element.getAsJsonObject();
                                 boolean hasSameRev = tracingService.hasSameRev(jsonObject.get("_id").getAsString(),
                                         jsonObject.get("_rev").getAsString());
-                                if (!hasSameRev){
+                                if (!hasSameRev) {
                                     objects.add(jsonObject);
                                 }
                             }

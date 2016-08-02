@@ -38,6 +38,8 @@ public class TracingRegisterWrapperFragment extends RecordRegisterWrapperFragmen
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void saveTracing(SaveTracingEvent event) {
         if (validateRequiredField()) {
+            clearProfileItems();
+
             ArrayList<String> photoPaths = (ArrayList<String>) recordPhotoAdapter.getAllItems();
             ItemValues itemValues = new ItemValues(new Gson().fromJson(new Gson().toJson(
                     this.itemValues.getValues()), JsonObject.class));

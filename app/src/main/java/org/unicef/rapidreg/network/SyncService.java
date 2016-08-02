@@ -80,7 +80,7 @@ public class SyncService extends BaseRetrofitService {
         }
         Response<JsonElement> response = responseObservable.toBlocking().first();
         if (!response.isSuccessful()) {
-            throw new RuntimeException();
+            throw new RuntimeException(response.errorBody().toString());
         }
 
         JsonObject responseJsonObject = response.body().getAsJsonObject();

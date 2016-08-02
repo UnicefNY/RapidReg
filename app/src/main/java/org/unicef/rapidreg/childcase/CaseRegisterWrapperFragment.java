@@ -38,6 +38,8 @@ public class CaseRegisterWrapperFragment extends RecordRegisterWrapperFragment {
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void saveCase(SaveCaseEvent event) {
         if (validateRequiredField()) {
+            clearProfileItems();
+
             ArrayList<String> photoPaths = (ArrayList<String>) recordPhotoAdapter.getAllItems();
             ItemValues itemValues = new ItemValues(new Gson().fromJson(new Gson().toJson(
                     this.itemValues.getValues()), JsonObject.class));
