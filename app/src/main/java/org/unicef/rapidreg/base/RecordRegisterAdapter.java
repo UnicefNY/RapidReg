@@ -65,6 +65,10 @@ public class RecordRegisterAdapter extends RecyclerView.Adapter<BaseViewHolder> 
         this.adapter = adapter;
     }
 
+    public RecordPhotoAdapter getPhotoAdapter() {
+        return adapter;
+    }
+
     public void setItemValues(ItemValuesMap itemValues) {
         this.itemValues = itemValues;
     }
