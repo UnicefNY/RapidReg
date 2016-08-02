@@ -1,19 +1,13 @@
 package org.unicef.rapidreg.login;
 
-import android.app.Application;
 import android.os.Build;
-import android.os.Environment;
-import android.security.NetworkSecurityPolicy;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.robolectric.RobolectricGradleTestRunner;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.RuntimeEnvironment;
 import org.robolectric.annotation.Config;
-import org.robolectric.annotation.Implementation;
-import org.robolectric.annotation.Implements;
 import org.unicef.rapidreg.BuildConfig;
 
 import static org.junit.Assert.assertEquals;
@@ -44,14 +38,8 @@ public class LoginPresenterTest {
 
     @Test
     public void should_show_error_when_invalid_user_format() {
-        boolean valid = loginPresenter.validate(RuntimeEnvironment.application, "primer@##/", "password", "http://10.29.3.184:3000");
+        boolean valid = loginPresenter.validate(RuntimeEnvironment.application, "pri mero", "password", "http://10.29.3.184:3000");
         verify(loginView).showUserNameError("Enter a valid username!");
         assertEquals(valid, false);
-    }
-
-    @Test
-    public void should_show_nothing_when_valid_username_and_password() {
-        boolean valid = loginPresenter.validate(RuntimeEnvironment.application, "primero", "password", "http://10.29.3.184:3000");
-        assertEquals(valid, true);
     }
 }
