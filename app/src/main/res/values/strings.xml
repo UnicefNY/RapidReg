@@ -78,7 +78,7 @@
 
     <!--Sync-->
     <string name="last_sync_time">Last synchronization time</string>
-    <string name="record_count_for_last_sync">Record count for last synchronisation</string>
+    <string name="record_count_for_last_sync">Record count for last synchronization</string>
     <string name="record_count_for_not_sync">Record count for not synced data</string>
     <string name="place_holder_last_sync_time">06-15-2016 16:14</string>
     <string name="place_holder_record_count_for_last_sync">49</string>
@@ -94,7 +94,7 @@
     <string name="continue_sync_button_text">Continue sync</string>
     <string name="sync_upload_success_message">Congrats! Your upload request is completed.</string>
     <string name="sync_download_success_message">Congrats! Your download request is completed.</string>
-    <string name="sync_error_message">Sorry, the synchronisation request is not completed. Please retry later.</string>
+    <string name="sync_error_message">Sorry, the synchronization request is not completed. Please retry later.</string>
     <string name="try_to_sync_message">Are you sure to sync records ?</string>
     <string name="remove_photo_confirmation">Are you sure you want to remove this photo?</string>
     <string name="save_success">Record saved</string>
