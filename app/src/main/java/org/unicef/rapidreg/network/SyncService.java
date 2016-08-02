@@ -40,7 +40,7 @@ public class SyncService extends BaseRetrofitService {
         return PrimeroConfiguration.getApiBaseUrl();
     }
 
-    public SyncService(Context context) throws Exception {
+    public SyncService(Context context){
         createRetrofit(context);
         serviceInterface = getRetrofit().create(SyncServiceInterface.class);
     }

@@ -7,9 +7,14 @@ import com.facebook.stetho.okhttp3.StethoInterceptor;
 import org.unicef.rapidreg.BuildConfig;
 import org.unicef.rapidreg.R;
 
+import java.io.IOException;
 import java.io.InputStream;
+import java.security.KeyManagementException;
 import java.security.KeyStore;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
 import java.security.cert.Certificate;
+import java.security.cert.CertificateException;
 import java.security.cert.CertificateFactory;
 import java.util.concurrent.TimeUnit;
 
@@ -29,7 +34,7 @@ public abstract class BaseRetrofitService {
 
     private Retrofit retrofit;
 
-    private OkHttpClient getClient(Context context) throws Exception {
+    private OkHttpClient getClient(Context context){
 
         OkHttpClient.Builder builder = new OkHttpClient.Builder();
         builder.readTimeout(60, TimeUnit.SECONDS);
@@ -50,7 +55,7 @@ public abstract class BaseRetrofitService {
         return builder.build();
     }
 
-    protected void createRetrofit(Context context) throws Exception {
+    protected void createRetrofit(Context context){
 
         retrofit = new Retrofit.Builder()
                 .baseUrl(getBaseUrl())
@@ -65,28 +70,31 @@ public abstract class BaseRetrofitService {
         return retrofit;
     }
 
-    private SSLContext getSSLContext(Context context) throws Exception {
-        CertificateFactory cf = CertificateFactory.getInstance("X.509");
+    private SSLContext getSSLContext(Context context){
+        try {
+            CertificateFactory cf = CertificateFactory.getInstance("X.509");
 
-        InputStream cert = context.getResources().openRawResource(R.raw.primero);
-        Certificate ca = cf.generateCertificate(cert);
+            InputStream cert = context.getResources().openRawResource(R.raw.primero);
+            Certificate ca = cf.generateCertificate(cert);
 
-        String keyStoreType = KeyStore.getDefaultType();
-        KeyStore keyStore = KeyStore.getInstance(keyStoreType);
-        keyStore.load(null, null);
-        keyStore.setCertificateEntry("ca", ca);
+            String keyStoreType = KeyStore.getDefaultType();
+            KeyStore keyStore = KeyStore.getInstance(keyStoreType);
+            keyStore.load(null, null);
+            keyStore.setCertificateEntry("ca", ca);
 
-        String tmfAlgorithm = TrustManagerFactory.getDefaultAlgorithm();
-        TrustManagerFactory tmf = TrustManagerFactory.getInstance(tmfAlgorithm);
-        tmf.init(keyStore);
+            String tmfAlgorithm = TrustManagerFactory.getDefaultAlgorithm();
+            TrustManagerFactory tmf = TrustManagerFactory.getInstance(tmfAlgorithm);
+            tmf.init(keyStore);
 
-        SSLContext sslContext = SSLContext.getInstance("TLS");
-        sslContext.init(null, tmf.getTrustManagers(), null);
+            SSLContext sslContext = SSLContext.getInstance("TLS");
+            sslContext.init(null, tmf.getTrustManagers(), null);
 
-        return sslContext;
+            return sslContext;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
     }
-
-
 }
 
 
