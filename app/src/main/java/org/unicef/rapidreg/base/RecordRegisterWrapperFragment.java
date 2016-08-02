@@ -7,7 +7,6 @@ import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 
 import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.ogaclejapan.smarttablayout.SmartTabLayout;
@@ -32,8 +31,6 @@ import butterknife.ButterKnife;
 public abstract class RecordRegisterWrapperFragment extends Fragment {
     public static final String ITEM_VALUES = "item_values";
 
-    protected static final int INVALID_RECORD_ID = -100;
-
     @BindView(R.id.viewpager)
     ViewPager viewPager;
 
@@ -44,11 +41,9 @@ public abstract class RecordRegisterWrapperFragment extends Fragment {
     FloatingActionButton editButton;
 
     protected ItemValuesMap itemValues;
-    protected long recordId;
     protected RecordForm form;
     protected List<Section> sections;
     protected RecordPhotoAdapter recordPhotoAdapter;
-    protected RecordRegisterAdapter registerAdapter;
 
     @Nullable
     @Override
@@ -110,8 +105,8 @@ public abstract class RecordRegisterWrapperFragment extends Fragment {
             public void onPageSelected(int position) {
                 RecordRegisterFragment currentPage = (RecordRegisterFragment) adapter.getPage(position);
 
-                registerAdapter = currentPage.getRegisterAdapter();
-                registerAdapter.setPhotoAdapter(recordPhotoAdapter);
+                RecordRegisterAdapter registerAdapter = currentPage.getRegisterAdapter();
+                recordPhotoAdapter = registerAdapter.getPhotoAdapter();
             }
 
             @Override
