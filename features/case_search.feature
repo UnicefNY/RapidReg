@@ -7,29 +7,11 @@ Feature: Case search
     Given I press "login" button
     And I press menu tab "Cases"
 
-  Scenario: Search fields
-    When I press "search" button
-    And I search for:
-      | ID                | 1234567 |
-      | Name              | Lee     |
-      | Age From          | 1       |
-      | To                | 2       |
-      | Current Caregiver | Jane    |
-    And I press "done" button
-    And I press "search_bar" button
-    Then I should see "1234567"
-    And I should see "Lee"
-    And I should see "1"
-    And I should see "2"
-    And I should see "Jane"
-
-
   Scenario: No search result
     When I press "search" button
     And I search for:
       | ID | XXXXXXX |
     Then I should see "Sorry, no results found for this search criteria."
-
 
   Scenario: Search
     And I create case "Tom"

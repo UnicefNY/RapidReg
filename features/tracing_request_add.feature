@@ -29,6 +29,10 @@ Feature: Add tracing request
     Then I should see the tracing request "age" is "42"
     And I should see the tracing request "registration_date" is "Today's date"
 
+    When I press "toggle" button
+    Then I should not see "42"
+    And I should not see "Today's date"
+
     When I press "add" button
     And I switch to full form
     And I scroll to "Inquirer" form
@@ -53,7 +57,7 @@ Feature: Add tracing request
       | Separation Address (Place)                           | <Text> In the middle part of the contry. |
       | Last Address                                         | <Text> Capital                           |
       | Last Landmark                                        | A huge mountain                          |
-#      | Last Telephone                                       | 010-88672342                             |
+      | Last Telephone                                       | 010-88672342                             |
       | Additional info that could help in tracing?          | <Text> The child is very tall.           |
     And I press "save" button
     And I scroll to "Inquirer" form
@@ -76,8 +80,8 @@ Feature: Add tracing request
       | Circumstances of Separation (please provide details) | It is ok now.                     |
       | Separation Address (Place)                           | In the middle part of the contry. |
       | Last Address                                         | Capital                           |
-#      | Last Landmark                                        | A huge mountain                   |
-#      | Last Telephone                                       | 010-88672342                      |
+      | Last Landmark                                        | A huge mountain                   |
+      | Last Telephone                                       | 010-88672342                      |
       | Additional info that could help in tracing?          | The child is very tall.           |
 
     When I press menu button

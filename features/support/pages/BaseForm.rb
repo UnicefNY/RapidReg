@@ -58,16 +58,6 @@ module Screen
         end
       end
 
-      def fillInMiniForm(case_instance)
-        p case_instance
-        raise("Case dose not exist...") if case_instance.empty?
-        fullname = case_instance["Full Name"]
-        sex = case_instance["Sex"]
-        age = case_instance["Age"]
-        fillInForm("Full Name", fullname)
-        fillInForm("Sex", sex)
-        fillInForm("Age", age)
-      end
 
       def editForm(field, old_value, new_value)
         if new_value.include?("<Radio>")
@@ -75,6 +65,7 @@ module Screen
           findByXpath("//android.widget.TextView[@text='#{field}']")
           clickByXpath("//android.widget.RadioButton[@text='#{option}']")
         else
+          clickByXpath("//android.widget.EditText[@text='#{old_value}']")
           findByXpath("//android.widget.EditText[@text='#{old_value}']").clear
           findByXpath("//android.widget.EditText[@text='']").send_keys(new_value)
         end

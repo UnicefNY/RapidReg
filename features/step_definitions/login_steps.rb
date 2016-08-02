@@ -16,7 +16,6 @@ When /^I press "(.*?)" button$/ do |button|
   while base_page.ifTextExist("Tracing request forms were not pulled down successfully, press OK to resync.") do
     puts "Syncing forms, please try it later"
     base_page.clickByXpath("//android.widget.Button[@text='OK']")
-    base_page.clickById("fab_expand_menu_button")
     base_page.clickById(button)
   end
 end

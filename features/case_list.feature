@@ -6,12 +6,23 @@ Feature: Case list and sorting
     Given I press "login" button
     And I press menu tab "Cases"
 
-
   Scenario: Show/Hide case details
+    When I press "add" button
+    And I fill in the following:
+      | Full Name             | Tom Justin Clinton |
+      | Sex                   | <Radio> Male       |
+      | Age                   | 10                 |
+      | Is the age estimated? | <Checkbox> Yes     |
+    And I press "save" button
+    And I press menu button
+    And I press menu tab "Cases"
+    Then I should see the case's "gender_name" is "BOY"
+    And I should see the case's "age" is "10"
 
+    When I press "toggle" button
+    Then I should not see "BOY"
+    And I should not see "10"
 
-
-  Scenario: Order by Age/Registration date
 
 
 
