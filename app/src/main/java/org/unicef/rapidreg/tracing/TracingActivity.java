@@ -24,7 +24,7 @@ public class TracingActivity extends RecordActivity {
         navigationView.setItemTextColor(tracingColor);
 
         boolean showAddPage = getIntent().getBooleanExtra(IntentSender.SHOW_ADD_PAGE, false);
-        turnToFeature(showAddPage ? TracingFeature.ADD : TracingFeature.LIST, null, null);
+        turnToFeature(showAddPage ? TracingFeature.ADD_MINI : TracingFeature.LIST, null, null);
     }
 
     @Override

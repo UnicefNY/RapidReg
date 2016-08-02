@@ -89,6 +89,6 @@ public class TracingListFragment extends RecordListFragment {
         }
 
         TracingActivity activity = (TracingActivity) getActivity();
-        activity.turnToFeature(TracingFeature.ADD, null, null);
+        activity.turnToFeature(TracingFeature.ADD_MINI, null, null);
     }
 }

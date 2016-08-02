@@ -98,6 +98,6 @@ public class CaseListFragment extends RecordListFragment {
         }
 
         CaseActivity activity = (CaseActivity) getActivity();
-        activity.turnToFeature(CaseFeature.ADD, null, null);
+        activity.turnToFeature(CaseFeature.ADD_MINI, null, null);
     }
 }

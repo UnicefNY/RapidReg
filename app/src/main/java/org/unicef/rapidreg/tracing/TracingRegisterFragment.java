@@ -52,7 +52,8 @@ public class TracingRegisterFragment extends RecordRegisterFragment {
         args.putStringArrayList(RecordService.RECORD_PHOTOS, (ArrayList<String>) photoAdapter.getAllItems());
         args.putSerializable(RecordService.ITEM_VALUES, itemValues);
         Feature feature = ((RecordActivity) getActivity()).getCurrentFeature().isDetailMode() ?
-                TracingFeature.DETAILS_MINI : TracingFeature.EDIT_MINI;
+                TracingFeature.DETAILS_MINI : ((RecordActivity) getActivity()).getCurrentFeature().isAddMode() ?
+                TracingFeature.ADD_MINI : TracingFeature.EDIT_MINI;
         ((RecordActivity) getActivity()).turnToFeature(feature, args, ANIM_TO_MINI);
     }
 

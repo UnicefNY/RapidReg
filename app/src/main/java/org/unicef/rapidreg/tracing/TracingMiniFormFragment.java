@@ -150,7 +150,8 @@ public class TracingMiniFormFragment extends RecordRegisterFragment {
         args.putSerializable(RecordService.ITEM_VALUES, itemValues);
         args.putStringArrayList(RecordService.RECORD_PHOTOS, (ArrayList<String>) photoAdapter.getAllItems());
         Feature feature = ((RecordActivity) getActivity()).getCurrentFeature().isDetailMode() ?
-                TracingFeature.DETAILS_FULL : TracingFeature.EDIT_FULL;
+                TracingFeature.DETAILS_FULL : ((RecordActivity) getActivity()).getCurrentFeature().isAddMode() ?
+                TracingFeature.ADD_FULL : TracingFeature.EDIT_FULL;
         ((RecordActivity) getActivity()).turnToFeature(feature, args, ANIM_TO_FULL);
     }
 
