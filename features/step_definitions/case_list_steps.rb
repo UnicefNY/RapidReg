@@ -8,6 +8,10 @@ Then /^I should see the case's "(.*?)" is "(.*?)"$/ do |case_field, case_value|
 end
 
 Then /^I should not see "(.*?)"$/ do |text|
+  if value == "Today's date"
+    time = Time.now
+    text = time.strftime("%b %d, %Y")
+  end
   base_page.verifyTextNotExist(text)
 end
 
@@ -30,5 +34,7 @@ And /^I edit the value of "(.*?)" from "(.*?)" to "(.*?)"$/ do |field, old_value
   until base_page.ifTextExist(field) do
     case_page.scrollToNextFields
   end
+  puts field,old_value,new_value
+  case_page.scrollLittleUp
   base_form.editForm(field, old_value, new_value)
 end

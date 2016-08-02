@@ -2,35 +2,35 @@
   "Tom":
   {
     "Full Name": "Tom Justin Clinton",
-    "Sex": "<Select> Male",
+    "Sex": "<Radio> Male",
     "Age": "10"
   },
 
   "Jim":
   {
     "Full Name": "Jim Washington",
-    "Sex": "<Select> Male",
+    "Sex": "<Radio> Male",
     "Age": "8"
   },
 
   "Jack":
   {
     "Full Name": "Jack Franklin",
-    "Sex": "<Select> Male",
+    "Sex": "<Radio> Male",
     "Age": "6"
   },
 
   "Angela":
   {
     "Full Name": "Angela Adams",
-    "Sex": "<Select> Female",
+    "Sex": "<Radio> Female",
     "Age": "4"
   },
 
   "Lily":
   {
     "Full Name": "Lily Jefferson",
-    "Sex": "<Select> Female",
+    "Sex": "<Radio> Female",
     "Age": "2"
   }
 }
