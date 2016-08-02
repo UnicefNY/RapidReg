@@ -41,7 +41,7 @@ public class SyncTracingService extends BaseRetrofitService {
         return PrimeroConfiguration.getApiBaseUrl();
     }
 
-    public SyncTracingService(Context context) throws Exception {
+    public SyncTracingService(Context context){
         createRetrofit(context);
         serviceInterface = getRetrofit().create(SyncTracingsServiceInterface.class);
     }

@@ -55,26 +55,33 @@ public class SyncPresenter extends MvpBasePresenter<SyncView> {
     private CasePhotoService casePhotoService;
     private TracingPhotoService tracingPhotoService;
 
-    final List<Case> caseList = CaseService.getInstance().getAll();
-    final List<Tracing> tracingList = TracingService.getInstance().getAll();
+    private List<Case> caseList;
+    private List<Tracing> tracingList;
 
     private int numberOfSuccessfulUploadedRecords;
     private int totalNumberOfUploadRecords;
 
     private boolean isSyncing;
 
+    @Override
+    public void attachView(SyncView view) {
+        super.attachView(view);
+        if (isViewAttached()) {
+            getView().setNotSyncedRecordNumber(totalNumberOfUploadRecords);
+        }
+    }
+
     public SyncPresenter(Context context) {
         this.context = context;
-        try {
-            syncService = new SyncService(context);
-            caseService = CaseService.getInstance();
-            casePhotoService = CasePhotoService.getInstance();
-            syncTracingService = new SyncTracingService(context);
-            tracingService = TracingService.getInstance();
-            tracingPhotoService = tracingPhotoService.getInstance();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        syncService = new SyncService(context);
+        caseService = CaseService.getInstance();
+        casePhotoService = CasePhotoService.getInstance();
+        syncTracingService = new SyncTracingService(context);
+        tracingService = TracingService.getInstance();
+        tracingPhotoService = tracingPhotoService.getInstance();
+        caseList = CaseService.getInstance().getAll();
+        tracingList = TracingService.getInstance().getAll();
+        initSyncRecordNumber();
     }
 
     public void tryToSync() {
@@ -88,33 +95,21 @@ public class SyncPresenter extends MvpBasePresenter<SyncView> {
             return;
         }
         try {
-            initUploadProgressBarUI(caseList, tracingList);
+            initSyncRecordNumber();
             upLoadCases(caseList);
         } catch (Exception e) {
             syncFail();
         }
     }
 
-    private void initUploadProgressBarUI(List<Case> caseList, List<Tracing> tracingList) {
+    private void initSyncRecordNumber() {
         numberOfSuccessfulUploadedRecords = 0;
         totalNumberOfUploadRecords = 0;
-        setCasesNumbers(caseList);
-        setTracingsNumbers(tracingList);
-        if (totalNumberOfUploadRecords != 0) {
-            getView().showSyncProgressDialog("Uploading...Pls wait a moment.");
-            getView().setProgressMax(totalNumberOfUploadRecords);
-        }
-    }
-
-    private void setTracingsNumbers(List<Tracing> tracingList) {
         for (Tracing aTracing : tracingList) {
             if (!aTracing.isSynced()) {
                 totalNumberOfUploadRecords++;
             }
         }
-    }
-
-    private void setCasesNumbers(List<Case> caseList) {
         for (Case aCase : caseList) {
             if (!aCase.isSynced()) {
                 totalNumberOfUploadRecords++;
@@ -122,10 +117,12 @@ public class SyncPresenter extends MvpBasePresenter<SyncView> {
         }
     }
 
-
     private void upLoadCases(List<Case> caseList) {
+        if (totalNumberOfUploadRecords != 0) {
+            getView().showSyncProgressDialog("Uploading...Please wait a moment.");
+            getView().setProgressMax(totalNumberOfUploadRecords);
+        }
         isSyncing = true;
-
         Observable.from(caseList)
                 .filter(new Func1<Case, Boolean>() {
                     @Override
@@ -298,7 +295,7 @@ public class SyncPresenter extends MvpBasePresenter<SyncView> {
                     @Override
                     public void call(List<JsonObject> jsonObjects) {
                         if (jsonObjects.size() != 0) {
-                            getView().showSyncProgressDialog("Downloading Cases...Pls wait a moment.");
+                            getView().showSyncProgressDialog("Downloading Cases...Please wait a moment.");
                             getView().setProgressMax(jsonObjects.size());
                         }
                     }
@@ -348,7 +345,7 @@ public class SyncPresenter extends MvpBasePresenter<SyncView> {
                     @Override
                     public void call(List<JsonObject> jsonObjects) {
                         if (jsonObjects.size() != 0) {
-                            getView().showSyncProgressDialog("Downloading Tracing Request...Pls wait a moment.");
+                            getView().showSyncProgressDialog("Downloading Tracing Request...Please wait a moment.");
                             getView().setProgressMax(jsonObjects.size());
                         }
                     }

@@ -18,6 +18,8 @@ public interface SyncView extends MvpView {
 
     void setProgressMax(int max);
 
+    void setNotSyncedRecordNumber(int recordNumber);
+
     void setProgressIncrease();
 
     void showAttemptSyncDialog();

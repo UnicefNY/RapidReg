@@ -74,7 +74,7 @@ public class SyncFragment extends MvpFragment<SyncView, SyncPresenter> implement
         ConnectivityManager conMgr = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = conMgr.getActiveNetworkInfo();
 
-        if(networkInfo == null || !networkInfo.isConnectedOrConnecting()){
+        if (networkInfo == null || !networkInfo.isConnectedOrConnecting()) {
             syncButton.setEnabled(false);
             syncButton.setBackgroundResource(R.drawable.sync_add_button_without_network);
         }
@@ -83,9 +83,13 @@ public class SyncFragment extends MvpFragment<SyncView, SyncPresenter> implement
 
     private void initView() {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        String syncStatisticData = sharedPreferences.getString("syncStatisticData",
-                new Gson().toJson(new SyncStatisticData()));
-        SyncStatisticData syncData = new Gson().fromJson(syncStatisticData, SyncStatisticData.class);
+        String syncStatisticData = sharedPreferences.getString("syncStatisticData", null);
+        SyncStatisticData syncData;
+        if (syncStatisticData != null) {
+            syncData = new Gson().fromJson(syncStatisticData, SyncStatisticData.class);
+        } else {
+            syncData = new SyncStatisticData();
+        }
         setDataViews(syncData.getLastSyncData(), syncData.getSyncedNumberAsString(),
                 syncData.getNotSyncedNumberAsString());
     }
@@ -165,6 +169,11 @@ public class SyncFragment extends MvpFragment<SyncView, SyncPresenter> implement
     }
 
     @Override
+    public void setNotSyncedRecordNumber(int recordNumber) {
+        countOfNotSync.setText(String.valueOf(recordNumber));
+    }
+
+    @Override
     public void setProgressIncrease() {
         if (syncProgressDialog.isShowing()) {
             syncProgressDialog.incrementProgressBy(1);
@@ -209,7 +218,6 @@ public class SyncFragment extends MvpFragment<SyncView, SyncPresenter> implement
     @Override
     public void showSyncErrorMessage() {
         Toast.makeText(getActivity(), syncErrorMessage, Toast.LENGTH_SHORT).show();
-
     }
 
 }
