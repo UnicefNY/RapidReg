@@ -2,8 +2,11 @@ package org.unicef.rapidreg.sync;
 
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
@@ -68,6 +71,13 @@ public class SyncFragment extends MvpFragment<SyncView, SyncPresenter> implement
         View view = inflater.inflate(R.layout.fragment_sync, container, false);
         ButterKnife.bind(this, view);
         initView();
+        ConnectivityManager conMgr = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = conMgr.getActiveNetworkInfo();
+
+        if(networkInfo == null || !networkInfo.isConnectedOrConnecting()){
+            syncButton.setEnabled(false);
+            syncButton.setBackgroundResource(R.drawable.sync_add_button_without_network);
+        }
         return view;
     }
 
@@ -114,7 +124,7 @@ public class SyncFragment extends MvpFragment<SyncView, SyncPresenter> implement
 
     @Override
     public void hideSyncProgressDialog() {
-        if(syncProgressDialog != null){
+        if (syncProgressDialog != null) {
             syncProgressDialog.dismiss();
         }
     }
