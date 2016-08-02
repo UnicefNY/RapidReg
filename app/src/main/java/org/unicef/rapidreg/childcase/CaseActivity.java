@@ -24,7 +24,7 @@ public class CaseActivity extends RecordActivity {
         navigationView.setItemTextColor(caseColor);
 
         boolean showAddPage = getIntent().getBooleanExtra(IntentSender.SHOW_ADD_PAGE, false);
-        turnToFeature(showAddPage ? CaseFeature.ADD : CaseFeature.LIST, null, null);
+        turnToFeature(showAddPage ? CaseFeature.ADD_MINI : CaseFeature.LIST, null, null);
     }
 
     @Override

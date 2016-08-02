@@ -53,7 +53,8 @@ public class CaseRegisterFragment extends RecordRegisterFragment {
         args.putSerializable(RecordService.ITEM_VALUES, itemValues);
 
         Feature feature = ((RecordActivity) getActivity()).getCurrentFeature().isDetailMode() ?
-                CaseFeature.DETAILS_MINI : CaseFeature.EDIT_MINI;
+                CaseFeature.DETAILS_MINI : ((RecordActivity) getActivity()).getCurrentFeature().isAddMode() ?
+                CaseFeature.ADD_MINI : CaseFeature.EDIT_MINI;
         ((RecordActivity) getActivity()).turnToFeature(feature, args, ANIM_TO_MINI);
     }
 
