@@ -253,6 +253,7 @@ public class TracingService extends RecordService {
     }
 
     public boolean hasSameRev(String id, String rev) {
-        return rev.equals(tracingDao.getByInternalId(id).getInternalRev());
+        Tracing tracing = tracingDao.getByInternalId(id);
+        return tracing != null && rev.equals(tracing.getInternalRev());
     }
 }

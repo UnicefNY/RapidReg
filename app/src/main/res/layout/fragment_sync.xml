@@ -65,6 +65,7 @@
         android:textColor="@color/white"
         android:textAllCaps="false"
         android:layout_gravity="center"
+        android:layout_marginTop="@dimen/sync_button_padding_top"
         android:textSize="@dimen/text_size_20"
         android:text="@string/button_sync_state_of_click_to_sync"/>
 
