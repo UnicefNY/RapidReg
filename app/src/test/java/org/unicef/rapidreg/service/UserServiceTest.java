@@ -83,42 +83,8 @@ public class UserServiceTest {
     }
 
     @Test
-    public void should_return_false_when_username_is_too_long() {
-        String name = "111111111111111111111111111111111111111111111111111111111111111111111111"
-                + "2222222222222222222222222222222222222222222222222222222222222222222222222222"
-                + "3333333333333333333333333333333333333333333333333333333333333333333333333333"
-                + "4444444444444444444444444444444444444444444444444444444444444444444444444444";
-
-        assertThat(userService.isNameValid(name), is(false));
-
-    }
-
-    @Test
     public void should_return_false_when_username_is_invalid() {
-        assertThat(userService.isNameValid("Ja(ck"), is(false));
-        assertThat(userService.isNameValid("Ja)ck"), is(false));
-        assertThat(userService.isNameValid("Ja*ck"), is(false));
-        assertThat(userService.isNameValid("Ja@ck"), is(false));
-        assertThat(userService.isNameValid("Ja!ck"), is(false));
-        assertThat(userService.isNameValid("Ja#ck"), is(false));
-        assertThat(userService.isNameValid("Ja$ck"), is(false));
-        assertThat(userService.isNameValid("Ja%ck"), is(false));
-        assertThat(userService.isNameValid("Ja?ck"), is(false));
-        assertThat(userService.isNameValid("Ja&ck"), is(false));
-        assertThat(userService.isNameValid("Ja=ck"), is(false));
-        assertThat(userService.isNameValid("Ja;ck"), is(false));
-        assertThat(userService.isNameValid("Ja:ck"), is(false));
-        assertThat(userService.isNameValid("Ja{ck"), is(false));
-        assertThat(userService.isNameValid("Ja}ck"), is(false));
-        assertThat(userService.isNameValid("Ja[ck"), is(false));
-        assertThat(userService.isNameValid("Ja]ck"), is(false));
-        assertThat(userService.isNameValid("Ja|ck"), is(false));
-        assertThat(userService.isNameValid("Ja<ck"), is(false));
-        assertThat(userService.isNameValid("Ja>ck"), is(false));
-        assertThat(userService.isNameValid("Ja,ck"), is(false));
-        assertThat(userService.isNameValid("Ja.ck"), is(false));
-        assertThat(userService.isNameValid("Ja`ck"), is(false));
-        assertThat(userService.isNameValid("Ja\\ck"), is(false));
+        assertThat(userService.isNameValid("Ja ck"), is(false));
     }
 
     @Test

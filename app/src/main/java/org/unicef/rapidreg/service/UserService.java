@@ -11,8 +11,6 @@ import org.unicef.rapidreg.model.User;
 import org.unicef.rapidreg.utils.EncryptHelper;
 
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class UserService {
     public enum VerifiedCode {
@@ -65,11 +63,11 @@ public class UserService {
     }
 
     public boolean isNameValid(String username) {
-        return username.matches("\\A[^ ]+\\z");
+        return username != null && username.matches("\\A[^ ]+\\z");
     }
 
     public boolean isPasswordValid(String password) {
-        return password.matches("\\A(?=.*[a-zA-Z])(?=.*[0-9]).{8,}\\z");
+        return password != null && password.matches("\\A(?=.*[a-zA-Z])(?=.*[0-9]).{8,}\\z");
     }
 
     public List<User> getAllUsers() {
