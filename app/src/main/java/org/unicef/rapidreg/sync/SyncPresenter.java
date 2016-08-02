@@ -72,7 +72,6 @@ public class SyncPresenter extends MvpBasePresenter<SyncView> {
             syncTracingService = new SyncTracingService(context);
             tracingService = TracingService.getInstance();
             tracingPhotoService = tracingPhotoService.getInstance();
-
         } catch (Exception e) {
             e.printStackTrace();
         }
