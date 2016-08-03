@@ -3,7 +3,6 @@ package org.unicef.rapidreg.base;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -40,6 +39,7 @@ import org.unicef.rapidreg.widgets.viewholder.PhotoUploadViewHolder;
 import java.io.File;
 import java.io.IOException;
 import java.util.Locale;
+import java.util.concurrent.TimeUnit;
 
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
@@ -60,6 +60,15 @@ public abstract class RecordActivity extends BaseActivity {
 
     private String imagePath;
     private CompositeSubscription subscriptions;
+    private boolean isFormSyncFail;
+
+    public boolean isFormSyncFail() {
+        return isFormSyncFail;
+    }
+
+    public void setFormSyncFail(boolean formSyncFail) {
+        isFormSyncFail = formSyncFail;
+    }
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -108,7 +117,7 @@ public abstract class RecordActivity extends BaseActivity {
     public void onNeedLoadFormsEvent(final NeedLoadFormsEvent event) {
         EventBus.getDefault().removeStickyEvent(event);
         final Gson gson = new Gson();
-
+        isFormSyncFail = false;
         subscriptions.add(AuthService.getInstance().getCaseFormRx(event.getCookie(),
                 Locale.getDefault().getLanguage(), true, "case")
                 .flatMap(new Func1<CaseFormRoot, Observable<CaseFormRoot>>() {
@@ -121,6 +130,7 @@ public abstract class RecordActivity extends BaseActivity {
                     }
                 })
                 .retry(3)
+                .timeout(60, TimeUnit.SECONDS)
                 .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Action1<CaseFormRoot>() {
                     @Override
@@ -135,9 +145,9 @@ public abstract class RecordActivity extends BaseActivity {
                 }, new Action1<Throwable>() {
                     @Override
                     public void call(Throwable throwable) {
+                        isFormSyncFail = true;
                         Toast.makeText(RecordActivity.this, R.string.sync_case_forms_error, Toast.LENGTH_SHORT)
                                 .show();
-                        Log.i(TAG, throwable.getMessage());
                     }
                 }));
 
@@ -153,6 +163,7 @@ public abstract class RecordActivity extends BaseActivity {
                     }
                 })
                 .retry(3)
+                .timeout(60, TimeUnit.SECONDS)
                 .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Action1<TracingFormRoot>() {
                     @Override
@@ -168,9 +179,9 @@ public abstract class RecordActivity extends BaseActivity {
                 }, new Action1<Throwable>() {
                     @Override
                     public void call(Throwable throwable) {
+                        isFormSyncFail = true;
                         Toast.makeText(RecordActivity.this, R.string.sync_tracing_forms_error, Toast.LENGTH_SHORT)
                                 .show();
-                        Log.i(TAG, throwable.getMessage());
                     }
                 }));
     }
@@ -215,8 +226,7 @@ public abstract class RecordActivity extends BaseActivity {
             Cursor cursor = getContentResolver().query(uri,
                     new String[]{MediaStore.Images.Media.DATA}, null, null, null);
             cursor.moveToFirst();
-            imagePath = cursor.getString(cursor
-                    .getColumnIndex(MediaStore.Images.Media.DATA));
+            imagePath = cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.DATA));
             cursor.close();
             postSelectedImagePath();
         }
@@ -233,8 +243,8 @@ public abstract class RecordActivity extends BaseActivity {
 
     private void onCaptureImageResult() {
         try {
-            Bitmap compressedImage = ImageCompressUtil.compressImage(PhotoConfig.MEDIA_PATH_FOR_CAMERA, PhotoConfig.MAX_WIDTH, PhotoConfig
-                    .MAX_HEIGHT);
+            Bitmap compressedImage = ImageCompressUtil.compressImage(PhotoConfig.MEDIA_PATH_FOR_CAMERA,
+                    PhotoConfig.MAX_WIDTH, PhotoConfig.MAX_HEIGHT);
             imagePath = getOutputMediaFilePath();
             ImageCompressUtil.storeImage(compressedImage, imagePath);
             postSelectedImagePath();

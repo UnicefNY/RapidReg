@@ -3,8 +3,10 @@ package org.unicef.rapidreg.childcase;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Toast;
 
 import org.unicef.rapidreg.R;
+import org.unicef.rapidreg.base.RecordActivity;
 import org.unicef.rapidreg.base.RecordListAdapter;
 import org.unicef.rapidreg.base.RecordListFragment;
 import org.unicef.rapidreg.base.RecordListPresenter;
@@ -46,7 +48,6 @@ public class CaseListFragment extends RecordListFragment {
         List<Case> cases = CaseService.getInstance().getAll();
         int index = cases.isEmpty() ? HAVE_NO_RESULT : HAVE_RESULT_LIST;
         viewSwitcher.setDisplayedChild(index);
-
     }
 
     @Override
@@ -91,13 +92,13 @@ public class CaseListFragment extends RecordListFragment {
     @OnClick(R.id.add)
     public void onCaseAddClicked() {
         RecordService.clearAudioFile();
+        RecordActivity activity = (RecordActivity) getActivity();
 
         if (!CaseFormService.getInstance().isFormReady()) {
             showSyncFormDialog(getResources().getString(R.string.child_case));
             return;
         }
 
-        CaseActivity activity = (CaseActivity) getActivity();
         activity.turnToFeature(CaseFeature.ADD_MINI, null, null);
     }
 }

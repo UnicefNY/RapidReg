@@ -75,10 +75,19 @@ public class SyncFragment extends MvpFragment<SyncView, SyncPresenter> implement
         NetworkInfo networkInfo = conMgr.getActiveNetworkInfo();
 
         if (networkInfo == null || !networkInfo.isConnectedOrConnecting()) {
-            syncButton.setEnabled(false);
-            syncButton.setBackgroundResource(R.drawable.sync_add_button_without_network);
+            disableSyncButton();
         }
         return view;
+    }
+
+    public void disableSyncButton() {
+        syncButton.setEnabled(false);
+        syncButton.setBackgroundResource(R.drawable.sync_add_button_without_network);
+    }
+
+    public void enableSyncButton() {
+        syncButton.setEnabled(true);
+        syncButton.setBackgroundResource(R.drawable.sync_add_button);
     }
 
     private void initView() {
