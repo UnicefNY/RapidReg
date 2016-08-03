@@ -50,7 +50,9 @@ public class MiniFormProfileViewHolder extends BaseViewHolder<Field> {
         if (itemValues.getAsString(TracingService.SEX) != null) {
             gender = CaseListAdapter.Gender.valueOf(itemValues.getAsString(TracingService.SEX).toUpperCase());
         } else {
-            gender = CaseListAdapter.Gender.UNKNOWN;
+            gender = itemValues.has(TracingService.TRACING_ID)
+                    ? CaseListAdapter.Gender.EMPTY
+                    : CaseListAdapter.Gender.PLACEHOLDER;
         }
         Drawable drawable = ResourcesCompat.getDrawable(context.getResources(), gender.getGenderId(), null);
         genderBadge.setImageDrawable(drawable);
