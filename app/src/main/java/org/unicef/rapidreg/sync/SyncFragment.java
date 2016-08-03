@@ -89,6 +89,7 @@ public class SyncFragment extends MvpFragment<SyncView, SyncPresenter> implement
             syncData = new Gson().fromJson(syncStatisticData, SyncStatisticData.class);
         } else {
             syncData = new SyncStatisticData();
+            syncData.setLastSyncData(getResources().getString(R.string.not_sync_promote));
         }
         setDataViews(syncData.getLastSyncData(), syncData.getSyncedNumberAsString(),
                 syncData.getNotSyncedNumberAsString());

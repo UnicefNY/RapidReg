@@ -12,7 +12,6 @@ public class SyncStatisticData {
     }
 
     public SyncStatisticData() {
-        lastSyncData = "Not synced yet!";
     }
 
     public String getLastSyncData() {

@@ -107,6 +107,7 @@
     <string name="sync_case_forms_error">Sync forms error, please try it later</string>
     <string name="sync_tracing_forms_error">Sync forms error, please try it later</string>
     <string name="tracing_request">Tracing request</string>
+    <string name="not_sync_promote">Not synced yet</string>
     <!--Sync-->
 
     <!--Transparent theme-->
