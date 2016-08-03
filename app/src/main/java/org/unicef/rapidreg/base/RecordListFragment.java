@@ -14,6 +14,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.ViewSwitcher;
 
 import com.getbase.floatingactionbutton.FloatingActionButton;
@@ -80,6 +81,12 @@ public abstract class RecordListFragment extends MvpFragment<RecordListView, Rec
     }
 
     protected void showSyncFormDialog(String message) {
+        RecordActivity activity = (RecordActivity) getActivity();
+        if (!activity.isFormSyncFail()) {
+            Toast.makeText(activity, R.string.forms_is_syncing_msg, Toast.LENGTH_SHORT)
+                    .show();
+            return;
+        }
         AlertDialog dialog = new AlertDialog.Builder(getActivity())
                 .setTitle(R.string.sync_forms)
                 .setMessage(String.format("%s %s", message, getResources().getString(R.string.sync_forms_message)))

@@ -1,5 +1,6 @@
 package org.unicef.rapidreg.sync;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentTransaction;
@@ -7,6 +8,7 @@ import android.support.v4.view.GravityCompat;
 
 import org.unicef.rapidreg.R;
 import org.unicef.rapidreg.base.BaseActivity;
+import org.unicef.rapidreg.childcase.CaseFeature;
 
 public class SyncActivity extends BaseActivity {
 
@@ -39,6 +41,6 @@ public class SyncActivity extends BaseActivity {
 
     @Override
     protected void processBackButton() {
-        logOut(this);
+        intentSender.showCasesActivity(this, true);
     }
 }

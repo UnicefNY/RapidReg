@@ -95,6 +95,7 @@ public class SyncPresenter extends MvpBasePresenter<SyncView> {
             return;
         }
         try {
+            getView().disableSyncButton();
             initSyncRecordNumber();
             upLoadCases(caseList);
         } catch (Exception e) {
@@ -660,12 +661,14 @@ public class SyncPresenter extends MvpBasePresenter<SyncView> {
         updateDataViews();
         getView().showSyncDownloadSuccessMessage();
         getView().hideSyncProgressDialog();
+        getView().enableSyncButton();
     }
 
     private void syncFail() {
         updateDataViews();
         getView().showSyncErrorMessage();
         getView().hideSyncProgressDialog();
+        getView().enableSyncButton();
     }
 
     private void updateDataViews() {
