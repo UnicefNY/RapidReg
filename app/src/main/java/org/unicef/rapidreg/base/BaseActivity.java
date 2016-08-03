@@ -139,14 +139,9 @@ public abstract class BaseActivity extends AppCompatActivity implements Navigati
     //TODO: Put logout into basePresenter in future
     private void attemptLogout(BaseActivity currentActivity) {
         if (getContext().getSyncTask() != null) {
-            createAlertDialog(currentActivity);
         } else {
             logOut(currentActivity);
         }
-    }
-
-    private void createAlertDialog(BaseActivity currentActivity) {
-        //TODO: alert box
     }
 
     private ColorStateList generateColors(int resId) {
