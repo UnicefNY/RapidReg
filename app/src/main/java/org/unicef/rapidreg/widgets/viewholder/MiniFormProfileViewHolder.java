@@ -62,7 +62,7 @@ public class MiniFormProfileViewHolder extends BaseViewHolder<Field> {
         } else {
             age = itemValues.getAsString(RecordService.AGE);
         }
-        this.age.setText(isValidAge(age) ? age : "");
+        this.age.setText(isValidAge(age) ? age : "---");
         registrationDate.setText(itemValues.getAsString(ItemValues.RecordProfile.REGISTRATION_DATE));
     }
 
