@@ -56,7 +56,7 @@ public class CaseListAdapter extends RecordListAdapter {
         holder.genderName.setText(gender.getName());
         holder.genderName.setTextColor(ContextCompat.getColor(activity, gender.getColorId()));
         String age = itemValues.getAsString(RecordService.AGE);
-        holder.age.setText(isValidAge(age) ? age : "");
+        holder.age.setText(isValidAge(age) ? age : "---");
         Date registrationDate = record.getRegistrationDate();
         holder.registrationDate.setText(dateFormat.format(registrationDate));
 
