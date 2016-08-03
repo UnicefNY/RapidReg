@@ -31,13 +31,10 @@ public class TracingListAdapter extends RecordListAdapter {
         final String recordJson = new String(record.getContent().getBlob());
         final ItemValues itemValues = ItemValues.generateItemValues(recordJson);
 
-        Gender gender;
-        try {
+        Gender gender = Gender.EMPTY;
+        if (itemValues.has(RecordService.SEX)) {
             gender = Gender.valueOf(itemValues.getAsString(RecordService.SEX).toUpperCase());
-        } catch (Exception e) {
-            gender = Gender.UNKNOWN;
         }
-
         try {
             RecordPhoto headerPhoto = TracingPhotoService.getInstance().getFirst(record.getId());
             Glide.with(holder.image.getContext()).load((headerPhoto.getPhoto().getBlob())).into(holder.image);
@@ -78,7 +75,7 @@ public class TracingListAdapter extends RecordListAdapter {
     public enum Gender {
         MALE("MALE", R.drawable.avatar_placeholder, R.drawable.boy, R.color.primero_blue),
         FEMALE("FEMALE", R.drawable.avatar_placeholder, R.drawable.girl, R.color.primero_red),
-        UNKNOWN("---", R.drawable.avatar_placeholder, R.drawable.gender_default, R.color.primero_font_light);
+        EMPTY("", R.drawable.avatar_placeholder, R.drawable.gender_default, R.color.primero_font_light);
 
         private String name;
         private int avatarId;

@@ -37,6 +37,7 @@ public class SubFormViewHolder extends BaseViewHolder<Field> {
     private ViewGroup parent;
     private List<Field> fields;
     private String fieldParent;
+    private String displayParent;
 
     public SubFormViewHolder(Context context, View itemView, ItemValuesMap itemValues) {
         super(context, itemView, itemValues);
@@ -49,10 +50,10 @@ public class SubFormViewHolder extends BaseViewHolder<Field> {
     public void setValue(Field field) {
         fields = removeSeparatorFields(field.getSubForm().getFields());
         fieldParent = field.getName();
+        displayParent = field.getDisplayName().get(Locale.getDefault().getLanguage());
 
         attachParentToFields(fields, fieldParent);
-        addSubFormBtn.setText(String.format("%s %s", context.getString(R.string.add),
-                field.getDisplayName().get(Locale.getDefault().getLanguage())));
+        addSubFormBtn.setText(String.format("%s %s", context.getString(R.string.add), displayParent));
         addSubFormBtn.setVisibility(activity.getCurrentFeature().isEditMode() ?
                 View.VISIBLE : View.GONE);
         restoreSubForms();
@@ -169,7 +170,7 @@ public class SubFormViewHolder extends BaseViewHolder<Field> {
     private void setSubFormTitleClickEvent(ViewGroup container) {
         LinearLayout subFormTitleLayout = (LinearLayout) container.findViewById(R.id.sub_form_title_layout);
         TextView subFormTitle = (TextView) container.findViewById(R.id.sub_form_title);
-        subFormTitle.setText(fieldParent);
+        subFormTitle.setText(displayParent);
         final View fieldList = container.findViewById(R.id.field_list);
         final Button deleteBtn = (Button) container.findViewById(R.id.delete_subform);
         final ImageView arrow = (ImageView) container.findViewById(R.id.sub_form_title_arrow);

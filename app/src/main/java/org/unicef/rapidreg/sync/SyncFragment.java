@@ -208,17 +208,17 @@ public class SyncFragment extends MvpFragment<SyncView, SyncPresenter> implement
 
     @Override
     public void showSyncUploadSuccessMessage() {
-        Toast.makeText(getActivity(), syncUploadSuccessMessage, Toast.LENGTH_SHORT).show();
+        Toast.makeText(getActivity(), syncUploadSuccessMessage, Toast.LENGTH_LONG).show();
     }
 
     @Override
     public void showSyncDownloadSuccessMessage() {
-        Toast.makeText(getActivity(), syncDownloadSuccessMessage, Toast.LENGTH_SHORT).show();
+        Toast.makeText(getActivity(), syncDownloadSuccessMessage, Toast.LENGTH_LONG).show();
     }
 
     @Override
     public void showSyncErrorMessage() {
-        Toast.makeText(getActivity(), syncErrorMessage, Toast.LENGTH_SHORT).show();
+        Toast.makeText(getActivity(), syncErrorMessage, Toast.LENGTH_LONG).show();
     }
 
 }
