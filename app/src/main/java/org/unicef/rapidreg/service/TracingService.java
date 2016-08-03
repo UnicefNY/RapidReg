@@ -161,6 +161,7 @@ public class TracingService extends RecordService {
         int age = itemValues.getAsInt(AGE) != null ? itemValues.getAsInt(AGE) : 0;
         tracing.setAge(age);
         tracing.setCaregiver(getCaregiverName(itemValues));
+        setSyncedStatus(tracing);
         tracing.setRegistrationDate(getRegisterDate(itemValues.getAsString(INQUIRY_DATE)));
         tracing.setAudio(audioFileDefault);
         tracing.update();
