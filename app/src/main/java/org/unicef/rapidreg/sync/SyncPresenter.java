@@ -24,11 +24,13 @@ import org.unicef.rapidreg.service.CaseService;
 import org.unicef.rapidreg.service.RecordService;
 import org.unicef.rapidreg.service.TracingPhotoService;
 import org.unicef.rapidreg.service.TracingService;
+import org.unicef.rapidreg.service.cache.ItemValues;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
@@ -689,5 +691,36 @@ public class SyncPresenter extends MvpBasePresenter<SyncView> {
 
     public void cancelSync() {
         isSyncing = false;
+    }
+
+    public void produceCases(int number) {
+        try {
+            if(caseService.getAll().size()>500){
+                return;
+            }
+            Case first = caseService.getFirst();
+            if (first == null){
+                return;
+            }
+            List<CasePhoto> casePhotos = casePhotoService.getByCaseId(first.getId());
+            for (int i = 0; i < number; i++) {
+                first.setId(0);
+                first.setUniqueId(null);
+                first.setInternalId(null);
+                first.setInternalRev(null);
+
+                JsonObject content = new Gson().fromJson(new String(first.getContent().getBlob()), JsonObject.class);
+                ItemValues itemValues = new ItemValues(content);
+                itemValues.removeItem(CaseService.CASE_ID);
+                Case savedCase = caseService.save(itemValues, Collections.EMPTY_LIST);
+                for (CasePhoto casePhoto : casePhotos) {
+                    casePhoto.setId(0);
+                    casePhoto.setCase(savedCase);
+                    casePhoto.save();
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

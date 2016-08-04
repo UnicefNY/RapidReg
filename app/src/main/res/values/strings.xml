@@ -109,6 +109,7 @@
     <string name="sync_tracing_forms_error">Sync forms error, please try it later</string>
     <string name="tracing_request">Tracing request</string>
     <string name="not_sync_promote">Not synced yet</string>
+    <string name="produce_cases_successfully_msg">Produce cases complete!</string>
     <!--Sync-->
 
     <!--Transparent theme-->
