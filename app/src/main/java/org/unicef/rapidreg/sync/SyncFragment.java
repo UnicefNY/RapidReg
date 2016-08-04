@@ -5,21 +5,25 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
+import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.hannesdorfmann.mosby.mvp.MvpFragment;
 
+import org.unicef.rapidreg.BuildConfig;
 import org.unicef.rapidreg.R;
 
 import butterknife.BindString;
@@ -28,9 +32,15 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class SyncFragment extends MvpFragment<SyncView, SyncPresenter> implements SyncView {
-
-    @BindView(R.id.button_sync)
+    @BindView(R.id.btn_sync)
     Button syncButton;
+
+    @BindView(R.id.tv_produce_cases)
+    TextView tvProduceCases;
+
+    @BindString(R.string.produce_cases_successfully_msg)
+    String produceCasesSuccessfullyMsg;
+
     @BindView(R.id.last_sync_time)
     TextView lastSyncTime;
     @BindView(R.id.record_count_for_last_sync)
@@ -114,9 +124,32 @@ public class SyncFragment extends MvpFragment<SyncView, SyncPresenter> implement
         return new SyncPresenter(getActivity());
     }
 
-    @OnClick(R.id.button_sync)
+    @OnClick(R.id.btn_sync)
     public void onSyncClick() {
         presenter.tryToSync();
+    }
+
+    @OnClick(R.id.tv_produce_cases)
+    public void onProduceCasesBtnClick() {
+        if (BuildConfig.DEBUG) {
+            final EditText tvNumber = new EditText(getActivity());
+            tvNumber.setInputType(InputType.TYPE_CLASS_NUMBER);
+            tvNumber.setRawInputType(Configuration.KEYBOARD_12KEY);
+            tvNumber.setText("100");
+            new AlertDialog.Builder(getActivity())
+                    .setView(tvNumber)
+                    .setMessage("Please enter the number.")
+                    .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            presenter.produceCases(Integer.valueOf(tvNumber.getText().toString()));
+                        }
+                    })
+                    .setNegativeButton(R.string.cancel, null)
+                    .show();
+        } else {
+            tvProduceCases.setVisibility(View.GONE);
+        }
     }
 
     @Override
@@ -208,11 +241,6 @@ public class SyncFragment extends MvpFragment<SyncView, SyncPresenter> implement
                     }
                 })
                 .show();
-    }
-
-    @Override
-    public void setSyncProgressDialogTitle(String title) {
-        syncProgressDialog.setMessage(title);
     }
 
     @Override

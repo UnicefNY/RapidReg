@@ -52,6 +52,10 @@ public class CaseService extends RecordService {
         return caseDao.getAllCasesOrderByDate(false);
     }
 
+    public Case getFirst(){
+        return caseDao.getFirst();
+    }
+
     public Case getById(long caseId) {
         return caseDao.getCaseById(caseId);
     }

@@ -1,72 +1,84 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:orientation="vertical"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
+              android:orientation="vertical"
+              android:paddingBottom="@dimen/sync_padding_top_bottom"
               android:paddingLeft="@dimen/sync_padding_left_right"
               android:paddingRight="@dimen/sync_padding_left_right"
-              android:paddingTop="@dimen/sync_padding_top_bottom"
-              android:paddingBottom="@dimen/sync_padding_top_bottom"
-    >
+              android:paddingTop="@dimen/sync_padding_top_bottom">
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="@dimen/text_size_16"
+        android:text="@string/last_sync_time"
         android:textColor="@color/primero_gray"
-        android:text="@string/last_sync_time"/>
+        android:textSize="@dimen/text_size_16"/>
 
     <TextView
         android:id="@+id/last_sync_time"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingTop="@dimen/sync_padding_top_bottom"
         android:paddingBottom="@dimen/sync_value_padding_top_bottom"
-        android:textSize="@dimen/text_size_16"
-        android:text="@string/place_holder_last_sync_time"/>
+        android:paddingTop="@dimen/sync_padding_top_bottom"
+        android:text="@string/place_holder_last_sync_time"
+        android:textSize="@dimen/text_size_16"/>
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="@dimen/text_size_16"
+        android:text="@string/record_count_for_last_sync"
         android:textColor="@color/primero_gray"
-        android:text="@string/record_count_for_last_sync"/>
+        android:textSize="@dimen/text_size_16"/>
 
     <TextView
         android:id="@+id/record_count_for_last_sync"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingTop="@dimen/sync_padding_top_bottom"
         android:paddingBottom="@dimen/sync_value_padding_top_bottom"
-        android:textSize="@dimen/text_size_16"
-        android:text="@string/place_holder_record_count_for_last_sync"/>
+        android:paddingTop="@dimen/sync_padding_top_bottom"
+        android:text="@string/place_holder_record_count_for_last_sync"
+        android:textSize="@dimen/text_size_16"/>
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="@dimen/text_size_16"
+        android:text="@string/record_count_for_not_sync"
         android:textColor="@color/primero_gray"
-        android:text="@string/record_count_for_not_sync"/>
+        android:textSize="@dimen/text_size_16"/>
 
     <TextView
         android:id="@+id/record_count_for_not_sync"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingTop="@dimen/sync_padding_top_bottom"
         android:paddingBottom="@dimen/sync_value_padding_top_bottom"
-        android:textSize="@dimen/text_size_16"
-        android:text="@string/place_holder_record_count_for_not_sync"/>
+        android:paddingTop="@dimen/sync_padding_top_bottom"
+        android:text="@string/place_holder_record_count_for_not_sync"
+        android:textSize="@dimen/text_size_16"/>
 
     <Button
-        android:id="@+id/button_sync"
+        android:id="@+id/btn_sync"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="bottom|center"
         android:background="@drawable/sync_add_button"
-        android:textColor="@color/white"
-        android:textAllCaps="false"
-        android:layout_gravity="center"
+        android:text="@string/button_sync_state_of_click_to_sync"
         android:layout_marginTop="@dimen/sync_button_padding_top"
-        android:textSize="@dimen/text_size_20"
-        android:text="@string/button_sync_state_of_click_to_sync"/>
+        android:textAllCaps="false"
+        android:textColor="@color/white"
+        android:textSize="@dimen/text_size_20"/>
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"/>
+
+    <TextView
+        android:id="@+id/tv_produce_cases"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|center"
+        android:text="Produce cases for test"
+        android:textColor="@color/primero_blue"
+        android:textSize="@dimen/text_size_16"/>
 </LinearLayout>

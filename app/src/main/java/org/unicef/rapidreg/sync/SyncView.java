@@ -28,7 +28,5 @@ public interface SyncView extends MvpView {
 
     void showAttemptSyncDialog();
 
-    void setSyncProgressDialogTitle(String title);
-
     void showSyncUploadSuccessMessage();
 }
