@@ -112,6 +112,10 @@ public class SyncFragment extends MvpFragment<SyncView, SyncPresenter> implement
         }
         setDataViews(syncData.getLastSyncData(), syncData.getSyncedNumberAsString(),
                 syncData.getNotSyncedNumberAsString());
+
+        if (!BuildConfig.DEBUG) {
+            tvProduceCases.setVisibility(View.GONE);
+        }
     }
 
     @Override
@@ -131,25 +135,22 @@ public class SyncFragment extends MvpFragment<SyncView, SyncPresenter> implement
 
     @OnClick(R.id.tv_produce_cases)
     public void onProduceCasesBtnClick() {
-        if (BuildConfig.DEBUG) {
-            final EditText tvNumber = new EditText(getActivity());
-            tvNumber.setInputType(InputType.TYPE_CLASS_NUMBER);
-            tvNumber.setRawInputType(Configuration.KEYBOARD_12KEY);
-            tvNumber.setText("100");
-            new AlertDialog.Builder(getActivity())
-                    .setView(tvNumber)
-                    .setMessage("Please enter the number.")
-                    .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            presenter.produceCases(Integer.valueOf(tvNumber.getText().toString()));
-                        }
-                    })
-                    .setNegativeButton(R.string.cancel, null)
-                    .show();
-        } else {
-            tvProduceCases.setVisibility(View.GONE);
-        }
+
+        final EditText tvNumber = new EditText(getActivity());
+        tvNumber.setInputType(InputType.TYPE_CLASS_NUMBER);
+        tvNumber.setRawInputType(Configuration.KEYBOARD_12KEY);
+        tvNumber.setText("100");
+        new AlertDialog.Builder(getActivity())
+                .setView(tvNumber)
+                .setMessage("Please enter the number.")
+                .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        presenter.produceCases(Integer.valueOf(tvNumber.getText().toString()));
+                    }
+                })
+                .setNegativeButton(R.string.cancel, null)
+                .show();
     }
 
     @Override
