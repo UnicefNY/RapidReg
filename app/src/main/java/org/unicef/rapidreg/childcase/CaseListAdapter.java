@@ -20,6 +20,12 @@ import org.unicef.rapidreg.utils.StreamUtil;
 import java.io.IOException;
 import java.util.Date;
 
+import rx.Observable;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action1;
+import rx.functions.Func1;
+import rx.schedulers.Schedulers;
+
 public class CaseListAdapter extends RecordListAdapter {
 
     public CaseListAdapter(Context context) {
@@ -27,7 +33,7 @@ public class CaseListAdapter extends RecordListAdapter {
     }
 
     @Override
-    public void onBindViewHolder(RecordListHolder holder, int position) {
+    public void onBindViewHolder(final RecordListHolder holder, int position) {
         final RecordModel record = recordList.get(position);
 
         final String recordJson = new String(record.getContent().getBlob());
@@ -41,12 +47,28 @@ public class CaseListAdapter extends RecordListAdapter {
             gender = Gender.PLACEHOLDER;
         }
 
-        try {
-            RecordPhoto headerPhoto = CasePhotoService.getInstance().getFirst(record.getId());
-            Glide.with(holder.image.getContext()).load(headerPhoto.getPhoto().getBlob()).into(holder.image);
-        } catch (Exception e) {
-            holder.image.setImageDrawable(activity.getResources().getDrawable(gender.getAvatarId()));
-        }
+        final Gender finalGender = gender;
+        Observable.just("")
+                .map(new Func1<String, RecordPhoto>() {
+                    @Override
+                    public RecordPhoto call(String s) {
+                        return CasePhotoService.getInstance().getFirst(record.getId());
+                    }
+                })
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Action1<RecordPhoto>() {
+                    @Override
+                    public void call(RecordPhoto recordPhoto) {
+                        Glide.with(holder.image.getContext()).load(recordPhoto.getPhoto().getBlob()).into(holder.image);
+                    }
+                }, new Action1<Throwable>() {
+                    @Override
+                    public void call(Throwable throwable) {
+                        holder.image.setImageDrawable(activity.getResources().getDrawable(finalGender.getAvatarId()));
+                    }
+                });
+
 
         final String shortUUID = RecordService.getShortUUID(record.getUniqueId());
 
