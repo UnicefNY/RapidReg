@@ -33,7 +33,8 @@ public class TracingListAdapter extends RecordListAdapter {
 
     @Override
     public void onBindViewHolder(final RecordListHolder holder, int position) {
-        final RecordModel record = recordList.get(position);
+        final long recordId = recordList.get(position);
+        final RecordModel record = TracingService.getInstance().getById(recordId);
         final String recordJson = new String(record.getContent().getBlob());
         final ItemValues itemValues = ItemValues.generateItemValues(recordJson);
 

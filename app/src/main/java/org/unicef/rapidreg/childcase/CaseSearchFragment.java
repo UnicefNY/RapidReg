@@ -18,7 +18,7 @@ public class CaseSearchFragment extends RecordSearchFragment {
     }
 
     @Override
-    protected List<Case> getSearchResult(Map<String, String> filters) {
+    protected List<Long> getSearchResult(Map<String, String> filters) {
         String id = filters.get(ID);
         String name = filters.get(NAME);
         String from = filters.get(AGE_FROM);

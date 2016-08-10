@@ -16,4 +16,6 @@ public interface TracingDao {
     Tracing getTracingById(long tracingId);
 
     Tracing getByInternalId(String id);
+
+    List<Long> getAllIds();
 }

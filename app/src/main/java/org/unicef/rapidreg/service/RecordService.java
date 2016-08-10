@@ -103,5 +103,4 @@ public class RecordService {
     protected void setSyncedStatus(RecordModel record) {
         record.setSynced(false);
     }
-
 }

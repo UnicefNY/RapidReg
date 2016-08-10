@@ -29,14 +29,14 @@ public abstract class RecordListAdapter extends RecyclerView.Adapter<RecordListA
 
     protected RecordActivity activity;
     protected DateFormat dateFormat = SimpleDateFormat.getDateInstance(DateFormat.MEDIUM, Locale.US);
-    protected List<? extends RecordModel> recordList = new ArrayList<>();
+    protected List<Long>  recordList = new ArrayList<>();
     protected boolean isDetailShow = true;
 
     public RecordListAdapter(Context context) {
         this.activity = (RecordActivity) context;
     }
 
-    public void setRecordList(List<? extends RecordModel> recordList) {
+    public void setRecordList(List<Long>  recordList) {
         this.recordList = recordList;
     }
 

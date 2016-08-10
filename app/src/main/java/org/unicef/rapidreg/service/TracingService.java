@@ -13,6 +13,7 @@ import org.unicef.rapidreg.db.TracingDao;
 import org.unicef.rapidreg.db.TracingPhotoDao;
 import org.unicef.rapidreg.db.impl.TracingDaoImpl;
 import org.unicef.rapidreg.db.impl.TracingPhotoDaoImpl;
+import org.unicef.rapidreg.model.Case;
 import org.unicef.rapidreg.model.RecordModel;
 import org.unicef.rapidreg.model.Tracing;
 import org.unicef.rapidreg.model.TracingPhoto;
@@ -22,6 +23,7 @@ import org.unicef.rapidreg.utils.StreamUtil;
 
 import java.io.IOException;
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.UUID;
@@ -60,18 +62,29 @@ public class TracingService extends RecordService {
         return tracingDao.getAllTracingsOrderByDate(false);
     }
 
-    public List<Tracing> getAllOrderByDateASC() {
-        return tracingDao.getAllTracingsOrderByDate(true);
+    public List<Long> getAllIds(){
+        return tracingDao.getAllIds();
     }
 
-    public List<Tracing> getAllOrderByDateDES() {
-        return tracingDao.getAllTracingsOrderByDate(false);
+    public List<Long> getAllOrderByDateASC() {
+        return extractIds(tracingDao.getAllTracingsOrderByDate(true));
     }
 
-    public List<Tracing> getSearchResult(String uniqueId, String name, int ageFrom, int ageTo, Date date) {
+    public List<Long> getAllOrderByDateDES() {
+        return extractIds(tracingDao.getAllTracingsOrderByDate(false));
+    }
+
+    public List<Long> getSearchResult(String uniqueId, String name, int ageFrom, int ageTo, Date date) {
         ConditionGroup searchCondition = getSearchCondition(uniqueId, name, ageFrom, ageTo, date);
+        return extractIds(tracingDao.getAllTracingsByConditionGroup(searchCondition));
+    }
 
-        return tracingDao.getAllTracingsByConditionGroup(searchCondition);
+    private List<Long> extractIds(List<Tracing> tracings){
+        List<Long> result = new ArrayList<>();
+        for (Tracing tracing : tracings) {
+            result.add(tracing.getId());
+        }
+        return result;
     }
 
     private ConditionGroup getSearchCondition(String uniqueId, String name, int ageFrom, int ageTo, Date date) {
