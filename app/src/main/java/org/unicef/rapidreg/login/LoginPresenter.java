@@ -61,7 +61,7 @@ public class LoginPresenter extends MvpBasePresenter<LoginView> {
             return;
         }
 
-        PrimeroConfiguration.setApiBaseUrl(url);
+        PrimeroConfiguration.setApiBaseUrl(url.endsWith("/") ? url : String.format("%s/", url));
         try {
             AuthService.getInstance().init(context);
         } catch (Exception e) {
