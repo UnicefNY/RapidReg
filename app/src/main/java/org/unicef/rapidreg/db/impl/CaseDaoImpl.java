@@ -1,12 +1,15 @@
 package org.unicef.rapidreg.db.impl;
 
+import com.raizlabs.android.dbflow.list.FlowQueryList;
 import com.raizlabs.android.dbflow.sql.language.ConditionGroup;
+import com.raizlabs.android.dbflow.sql.language.CursorResult;
 import com.raizlabs.android.dbflow.sql.language.SQLite;
 
 import org.unicef.rapidreg.db.CaseDao;
 import org.unicef.rapidreg.model.Case;
 import org.unicef.rapidreg.model.Case_Table;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class CaseDaoImpl implements CaseDao {
@@ -50,6 +53,16 @@ public class CaseDaoImpl implements CaseDao {
         return SQLite.select().from(Case.class).querySingle();
     }
 
+    @Override
+    public List<Long> getAllIds() {
+        List<Long> result = new ArrayList<>();
+        FlowQueryList<Case> cases = SQLite.select().from(Case.class).flowQueryList();
+        for (Case aCase : cases) {
+            result.add(aCase.getId());
+        }
+        return result;
+    }
+
     private List<Case> getCasesByAgeASC() {
         return SQLite.select().from(Case.class).orderBy(Case_Table.age, true).queryList();
     }
@@ -64,7 +77,6 @@ public class CaseDaoImpl implements CaseDao {
     }
 
     private List<Case> getCasesByDateDES() {
-        return SQLite.select().from(Case.class)
-                .orderBy(Case_Table.registration_date, false).queryList();
+        return SQLite.select().from(Case.class).orderBy(Case_Table.registration_date, false).queryList();
     }
 }

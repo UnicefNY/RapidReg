@@ -34,7 +34,8 @@ public class CaseListAdapter extends RecordListAdapter {
 
     @Override
     public void onBindViewHolder(final RecordListHolder holder, int position) {
-        final RecordModel record = recordList.get(position);
+        final long recordId = recordList.get(position);
+        final RecordModel record = CaseService.getInstance().getById(recordId);
 
         final String recordJson = new String(record.getContent().getBlob());
 
@@ -69,7 +70,6 @@ public class CaseListAdapter extends RecordListAdapter {
                     }
                 });
 
-
         final String shortUUID = RecordService.getShortUUID(record.getUniqueId());
 
         holder.idNormalState.setText(shortUUID);
@@ -86,7 +86,7 @@ public class CaseListAdapter extends RecordListAdapter {
             @Override
             public void onClick(View v) {
                 Bundle args = new Bundle();
-                args.putLong(CaseService.CASE_PRIMARY_ID, record.getId());
+                args.putLong(CaseService.CASE_PRIMARY_ID, recordId);
                 activity.turnToFeature(CaseFeature.DETAILS_MINI, args, null);
                 try {
                     RecordService.clearAudioFile();

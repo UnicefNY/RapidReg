@@ -12,7 +12,6 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-
         <Spinner
             android:id="@+id/order_spinner"
             android:layout_width="match_parent"

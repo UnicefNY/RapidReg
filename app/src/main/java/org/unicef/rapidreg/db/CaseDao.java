@@ -20,4 +20,6 @@ public interface CaseDao {
     Case getByInternalId(String id);
 
     Case getFirst();
+
+    List<Long> getAllIds();
 }

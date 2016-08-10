@@ -155,7 +155,7 @@ public abstract class RecordSearchFragment extends MvpFragment<RecordListView, R
         Map<String, String> values = getFilterValues();
         searchBarTitle.setText(getFirstValidValue(values));
 
-        List<? extends RecordModel> searchResult = getSearchResult(values);
+        List<Long> searchResult = getSearchResult(values);
 
         int resultIndex = searchResult.isEmpty() ? HAVE_NO_RESULT : HAVE_RESULT_LIST;
         searchResultSwitcher.setDisplayedChild(resultIndex);
@@ -198,7 +198,7 @@ public abstract class RecordSearchFragment extends MvpFragment<RecordListView, R
         return getResources().getString(R.string.click_to_search);
     }
 
-    protected abstract List<? extends RecordModel> getSearchResult(Map<String, String> filters);
+    protected abstract List<Long> getSearchResult(Map<String, String> filters);
 }
 
 

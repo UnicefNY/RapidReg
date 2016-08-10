@@ -1,12 +1,15 @@
 package org.unicef.rapidreg.db.impl;
 
+import com.raizlabs.android.dbflow.list.FlowQueryList;
 import com.raizlabs.android.dbflow.sql.language.ConditionGroup;
 import com.raizlabs.android.dbflow.sql.language.SQLite;
 
 import org.unicef.rapidreg.db.TracingDao;
+import org.unicef.rapidreg.model.Case;
 import org.unicef.rapidreg.model.Tracing;
 import org.unicef.rapidreg.model.Tracing_Table;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class TracingDaoImpl implements TracingDao {
@@ -38,6 +41,16 @@ public class TracingDaoImpl implements TracingDao {
     @Override
     public Tracing getByInternalId(String id) {
         return SQLite.select().from(Tracing.class).where(Tracing_Table._id.eq(id)).querySingle();
+    }
+
+    @Override
+    public List<Long> getAllIds() {
+        List<Long> result = new ArrayList<>();
+        FlowQueryList<Tracing> cases = SQLite.select().from(Tracing.class).flowQueryList();
+        for (Tracing tracing : cases) {
+            result.add(tracing.getId());
+        }
+        return result;
     }
 
 

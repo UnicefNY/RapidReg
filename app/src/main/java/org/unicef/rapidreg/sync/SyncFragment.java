@@ -21,9 +21,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
+import com.hannesdorfmann.mosby.mvp.BuildConfig;
 import com.hannesdorfmann.mosby.mvp.MvpFragment;
 
-import org.unicef.rapidreg.BuildConfig;
 import org.unicef.rapidreg.R;
 
 import butterknife.BindString;
@@ -32,6 +32,8 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class SyncFragment extends MvpFragment<SyncView, SyncPresenter> implements SyncView {
+    private ProgressDialog syncProgressDialog;
+
     @BindView(R.id.btn_sync)
     Button syncButton;
 
@@ -43,11 +45,12 @@ public class SyncFragment extends MvpFragment<SyncView, SyncPresenter> implement
 
     @BindView(R.id.last_sync_time)
     TextView lastSyncTime;
+
     @BindView(R.id.record_count_for_last_sync)
     TextView countOfLastSync;
+
     @BindView(R.id.record_count_for_not_sync)
     TextView countOfNotSync;
-    private ProgressDialog syncProgressDialog;
 
     @BindString(R.string.start_sync_message)
     String startSyncMessage;
@@ -135,7 +138,6 @@ public class SyncFragment extends MvpFragment<SyncView, SyncPresenter> implement
 
     @OnClick(R.id.tv_produce_cases)
     public void onProduceCasesBtnClick() {
-
         final EditText tvNumber = new EditText(getActivity());
         tvNumber.setInputType(InputType.TYPE_CLASS_NUMBER);
         tvNumber.setRawInputType(Configuration.KEYBOARD_12KEY);

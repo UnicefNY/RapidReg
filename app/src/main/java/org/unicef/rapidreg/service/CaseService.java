@@ -22,6 +22,7 @@ import org.unicef.rapidreg.utils.StreamUtil;
 
 import java.io.IOException;
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.UUID;
@@ -52,7 +53,7 @@ public class CaseService extends RecordService {
         return caseDao.getAllCasesOrderByDate(false);
     }
 
-    public Case getFirst(){
+    public Case getFirst() {
         return caseDao.getFirst();
     }
 
@@ -60,27 +61,35 @@ public class CaseService extends RecordService {
         return caseDao.getCaseById(caseId);
     }
 
-    public List<Case> getAllOrderByDateASC() {
-        return caseDao.getAllCasesOrderByDate(true);
+    public List<Long> getAllOrderByDateASC() {
+        return extractIds(caseDao.getAllCasesOrderByDate(true));
     }
 
-    public List<Case> getAllOrderByDateDES() {
-        return caseDao.getAllCasesOrderByDate(false);
+    public List<Long> getAllOrderByDateDES() {
+        return extractIds(caseDao.getAllCasesOrderByDate(false));
     }
 
-    public List<Case> getAllOrderByAgeASC() {
-        return caseDao.getAllCasesOrderByAge(true);
+    public List<Long> getAllOrderByAgeASC() {
+        return extractIds(caseDao.getAllCasesOrderByAge(true));
     }
 
-    public List<Case> getAllOrderByAgeDES() {
-        return caseDao.getAllCasesOrderByAge(false);
+    public List<Long> getAllOrderByAgeDES() {
+        return extractIds(caseDao.getAllCasesOrderByAge(false));
+    }
+
+    public List<Long> extractIds(List<Case> cases){
+        List<Long> result = new ArrayList<>();
+        for (Case aCase : cases) {
+            result.add(aCase.getId());
+        }
+        return result;
     }
 
     public Case getByUniqueId(String uniqueId) {
         return caseDao.getCaseByUniqueId(uniqueId);
     }
 
-    public List<Case> getSearchResult(String uniqueId, String name, int ageFrom, int ageTo,
+    public List<Long> getSearchResult(String uniqueId, String name, int ageFrom, int ageTo,
                                       String caregiver, Date date) {
         ConditionGroup conditionGroup = ConditionGroup.clause();
         conditionGroup.and(Condition.column(NameAlias.builder(RecordModel.COLUMN_UNIQUE_ID).build())
@@ -97,7 +106,7 @@ public class CaseService extends RecordService {
                     .build()).eq(date));
         }
 
-        return caseDao.getCaseListByConditionGroup(conditionGroup);
+        return extractIds(caseDao.getCaseListByConditionGroup(conditionGroup));
     }
 
     public Case saveOrUpdate(ItemValues itemValues, List<String> photoPaths) throws IOException {
@@ -107,6 +116,10 @@ public class CaseService extends RecordService {
             Log.d(TAG, "update the existing case");
             return update(itemValues, photoPaths);
         }
+    }
+
+    public List<Long> getAllIds() {
+        return caseDao.getAllIds();
     }
 
     public Case save(ItemValues itemValues, List<String> photoPath) throws IOException {
