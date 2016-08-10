@@ -20,7 +20,6 @@
         <activity
             android:name=".login.LoginActivity"
             android:configChanges="orientation|keyboardHidden"
-            android:launchMode="singleInstance"
             android:noHistory="true"
             android:screenOrientation="portrait">
             <intent-filter>
