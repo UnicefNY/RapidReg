@@ -58,6 +58,13 @@ public class RecordModel extends BaseModel {
     @Column
     private boolean isAudioSynced;
 
+    public RecordModel(long id) {
+        this.id = id;
+    }
+
+    public RecordModel() {
+    }
+
     public long getId() {
         return id;
     }

@@ -28,7 +28,6 @@ import org.unicef.rapidreg.forms.RecordForm;
 import org.unicef.rapidreg.forms.Section;
 import org.unicef.rapidreg.forms.TracingFormRoot;
 import org.unicef.rapidreg.model.Tracing;
-import org.unicef.rapidreg.model.TracingPhoto;
 import org.unicef.rapidreg.service.RecordService;
 import org.unicef.rapidreg.service.TracingFormService;
 import org.unicef.rapidreg.service.TracingPhotoService;
@@ -188,10 +187,9 @@ public class TracingMiniFormFragment extends RecordRegisterFragment {
 
     private RecordPhotoAdapter initPhotoAdapter(long recordId) {
         List<String> paths = new ArrayList<>();
-
-        List<TracingPhoto> tracings = TracingPhotoService.getInstance().getByTracingId(recordId);
-        for (TracingPhoto tracing : tracings) {
-            paths.add(String.valueOf(tracing.getId()));
+        List<Long> tracings = TracingPhotoService.getInstance().getIdsByTracingId(recordId);
+        for (Long tracingId : tracings) {
+            paths.add(String.valueOf(tracingId));
         }
         return new TracingPhotoAdapter(getContext(), paths);
     }

@@ -6,12 +6,12 @@ import android.support.v4.content.ContextCompat;
 import android.view.View;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 
 import org.unicef.rapidreg.R;
 import org.unicef.rapidreg.base.RecordListAdapter;
+import org.unicef.rapidreg.model.Case;
 import org.unicef.rapidreg.model.RecordModel;
-import org.unicef.rapidreg.model.RecordPhoto;
-import org.unicef.rapidreg.service.CasePhotoService;
 import org.unicef.rapidreg.service.CaseService;
 import org.unicef.rapidreg.service.RecordService;
 import org.unicef.rapidreg.service.cache.ItemValues;
@@ -19,12 +19,6 @@ import org.unicef.rapidreg.utils.StreamUtil;
 
 import java.io.IOException;
 import java.util.Date;
-
-import rx.Observable;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Action1;
-import rx.functions.Func1;
-import rx.schedulers.Schedulers;
 
 public class CaseListAdapter extends RecordListAdapter {
 
@@ -48,27 +42,9 @@ public class CaseListAdapter extends RecordListAdapter {
             gender = Gender.PLACEHOLDER;
         }
 
-        final Gender finalGender = gender;
-        Observable.just("")
-                .map(new Func1<String, RecordPhoto>() {
-                    @Override
-                    public RecordPhoto call(String s) {
-                        return CasePhotoService.getInstance().getFirst(record.getId());
-                    }
-                })
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Action1<RecordPhoto>() {
-                    @Override
-                    public void call(RecordPhoto recordPhoto) {
-                        Glide.with(holder.image.getContext()).load(recordPhoto.getPhoto().getBlob()).into(holder.image);
-                    }
-                }, new Action1<Throwable>() {
-                    @Override
-                    public void call(Throwable throwable) {
-                        holder.image.setImageDrawable(activity.getResources().getDrawable(finalGender.getAvatarId()));
-                    }
-                });
+        Glide.with(holder.image.getContext()).load(new Case(recordId))
+                .diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true)
+                .error(activity.getResources().getDrawable(gender.getAvatarId())).into(holder.image);
 
         final String shortUUID = RecordService.getShortUUID(record.getUniqueId());
 

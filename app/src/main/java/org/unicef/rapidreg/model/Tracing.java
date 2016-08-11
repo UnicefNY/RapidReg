@@ -6,4 +6,10 @@ import org.unicef.rapidreg.db.PrimeroDB;
 
 @Table(database = PrimeroDB.class)
 public class Tracing extends RecordModel {
+    public Tracing() {
+    }
+
+    public Tracing(long id) {
+        super(id);
+    }
 }

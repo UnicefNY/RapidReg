@@ -6,23 +6,32 @@ import org.unicef.rapidreg.db.TracingPhotoDao;
 import org.unicef.rapidreg.model.TracingPhoto;
 import org.unicef.rapidreg.model.TracingPhoto_Table;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class TracingPhotoDaoImpl implements TracingPhotoDao {
     @Override
     public TracingPhoto getFirst(long tracingId) {
         return SQLite.select().from(TracingPhoto.class)
-                .where(TracingPhoto_Table.tracing_id.eq(tracingId))
+                .where(TracingPhoto_Table.tracingId.eq(tracingId))
                 .querySingle();
     }
 
     @Override
-    public List<TracingPhoto> getByTracingId(long tracingId) {
-        return SQLite.select()
+    public List<Long> getIdsByTracingId(long tracingId) {
+        TracingPhoto_Table.index_indexTracingId.createIfNotExists();
+
+        List<Long> result = new ArrayList<>();
+        List<TracingPhoto> tracingPhotos = SQLite.select(TracingPhoto_Table.id)
                 .from(TracingPhoto.class)
-                .where(TracingPhoto_Table.tracing_id.eq(tracingId))
+                .indexedBy(TracingPhoto_Table.index_indexTracingId)
+                .where(TracingPhoto_Table.tracingId.eq(tracingId))
                 .and(TracingPhoto_Table.photo.isNotNull())
                 .queryList();
+        for (TracingPhoto tracingPhoto : tracingPhotos) {
+            result.add(tracingPhoto.getId());
+        }
+        return result;
     }
 
     @Override
@@ -37,7 +46,7 @@ public class TracingPhotoDaoImpl implements TracingPhotoDao {
     public long countUnSynced(long tracingId) {
         return SQLite.select()
                 .from(TracingPhoto.class)
-                .where(TracingPhoto_Table.tracing_id.eq(tracingId))
+                .where(TracingPhoto_Table.tracingId.eq(tracingId))
                 .and(TracingPhoto_Table.photo.isNotNull())
                 .and(TracingPhoto_Table.isSynced.is(false))
                 .count();
@@ -45,14 +54,14 @@ public class TracingPhotoDaoImpl implements TracingPhotoDao {
 
     @Override
     public void deleteByTracingId(long tracingId) {
-        SQLite.delete().from(TracingPhoto.class).where(TracingPhoto_Table.tracing_id.eq(tracingId)).execute();
+        SQLite.delete().from(TracingPhoto.class).where(TracingPhoto_Table.tracingId.eq(tracingId)).execute();
     }
 
     @Override
     public TracingPhoto getByTracingIdAndOrder(long tracingId, int order) {
         return SQLite.select()
                 .from(TracingPhoto.class)
-                .where(TracingPhoto_Table.tracing_id.eq(tracingId))
+                .where(TracingPhoto_Table.tracingId.eq(tracingId))
                 .and(TracingPhoto_Table.order.eq(order))
                 .querySingle();
     }

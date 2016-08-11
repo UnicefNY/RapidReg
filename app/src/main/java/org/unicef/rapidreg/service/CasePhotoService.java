@@ -26,12 +26,12 @@ public class CasePhotoService {
         return casePhotoDao.getFirst(caseId);
     }
 
-    public CasePhoto getById(long caseId) {
-        return casePhotoDao.getById(caseId);
+    public CasePhoto getById(long id) {
+        return casePhotoDao.getById(id);
     }
 
-    public List<CasePhoto> getByCaseId(long caseId) {
-        return casePhotoDao.getByCaseId(caseId);
+    public List<Long> getIdsByCaseId(long caseId) {
+        return casePhotoDao.getIdsByCaseId(caseId);
     }
 
     public boolean hasUnSynced(long caseId) {

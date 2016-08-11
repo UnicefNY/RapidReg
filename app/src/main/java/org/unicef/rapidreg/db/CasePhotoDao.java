@@ -7,7 +7,7 @@ import java.util.List;
 public interface CasePhotoDao {
     CasePhoto getFirst(long caseId);
 
-    List<CasePhoto> getByCaseId(long caseId);
+    List<Long> getIdsByCaseId(long caseId);
 
     CasePhoto getByCaseIdAndOrder(long caseId, int order);
 
