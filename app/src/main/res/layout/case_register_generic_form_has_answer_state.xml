@@ -14,6 +14,7 @@
         android:paddingLeft="@dimen/case_register_label_padding_left_right"
         android:paddingRight="@dimen/case_register_label_padding_left_right"
         android:paddingBottom="@dimen/case_register_field_padding_top_bottom"
+        android:singleLine="false"
         android:textColor="@color/black"
         android:textSize="@dimen/text_size_16"/>
 
