@@ -272,6 +272,8 @@ public class SyncPresenter extends MvpBasePresenter<SyncView> {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.US);
         final String time = sdf.format(cal.getTime());
         final List<JsonObject> objects = new ArrayList<>();
+        getView().showSyncProgressDialog("Downloading Cases...Please wait a moment.");
+        getView().setProgressMax(0);
         syncService.getCasesIds(time, true)
                 .map(new Func1<Response<JsonElement>, List<JsonObject>>() {
                     @Override
@@ -298,8 +300,7 @@ public class SyncPresenter extends MvpBasePresenter<SyncView> {
                     @Override
                     public void call(List<JsonObject> jsonObjects) {
                         if (jsonObjects.size() != 0) {
-                            getView().showSyncProgressDialog("Downloading Cases...Please wait a moment.");
-                            getView().setProgressMax(jsonObjects.size());
+                           getView().setProgressMax(jsonObjects.size());
                         }
                     }
                 }, new Action1<Throwable>() {
