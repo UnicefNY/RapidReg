@@ -1,35 +1,38 @@
 package org.unicef.rapidreg.model;
 
-import com.raizlabs.android.dbflow.annotation.ForeignKey;
-import com.raizlabs.android.dbflow.annotation.ForeignKeyReference;
+import com.raizlabs.android.dbflow.annotation.Column;
+import com.raizlabs.android.dbflow.annotation.Index;
+import com.raizlabs.android.dbflow.annotation.IndexGroup;
 import com.raizlabs.android.dbflow.annotation.ModelContainer;
 import com.raizlabs.android.dbflow.annotation.Table;
 
 import org.unicef.rapidreg.db.PrimeroDB;
 
-@Table(database = PrimeroDB.class)
+@Table(database = PrimeroDB.class, indexGroups = {
+        @IndexGroup(number = 1, name = "indexCaseId")
+})
 @ModelContainer
 public class CasePhoto extends RecordPhoto {
 
-    @ForeignKey(references = {@ForeignKeyReference(
-            columnName = "case_id",
-            columnType = long.class,
-            foreignKeyColumnName = "id"
-    )})
-    Case childCase;
+    @Index(indexGroups = 1)
+    @Column
+    long caseId;
 
-    public Case getCase() {
-        return childCase;
+    public CasePhoto() {
+    }
+
+    public CasePhoto(long id) {
+        super(id);
     }
 
     public void setCase(Case childCase) {
-        this.childCase = childCase;
+        this.caseId = childCase.id;
     }
 
     @Override
     public String toString() {
         return "CasePhoto{" +
-                "childCase=" + childCase +
+                "childCase=" + caseId +
                 "} " + super.toString();
     }
 }

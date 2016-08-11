@@ -26,12 +26,12 @@ public class TracingPhotoService {
         return tracingPhotoDao.getFirst(tracingId);
     }
 
-    public TracingPhoto getById(long tracingId) {
-        return tracingPhotoDao.getById(tracingId);
+    public TracingPhoto getById(long id) {
+        return tracingPhotoDao.getById(id);
     }
 
-    public List<TracingPhoto> getByTracingId(long tracingId) {
-        return tracingPhotoDao.getByTracingId(tracingId);
+    public List<Long> getIdsByTracingId(long tracingId) {
+        return tracingPhotoDao.getIdsByTracingId(tracingId);
     }
 
     public boolean hasUnSynced(long tracingId) {

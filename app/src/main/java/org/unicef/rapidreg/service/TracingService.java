@@ -13,7 +13,6 @@ import org.unicef.rapidreg.db.TracingDao;
 import org.unicef.rapidreg.db.TracingPhotoDao;
 import org.unicef.rapidreg.db.impl.TracingDaoImpl;
 import org.unicef.rapidreg.db.impl.TracingPhotoDaoImpl;
-import org.unicef.rapidreg.model.Case;
 import org.unicef.rapidreg.model.RecordModel;
 import org.unicef.rapidreg.model.Tracing;
 import org.unicef.rapidreg.model.TracingPhoto;
@@ -184,7 +183,7 @@ public class TracingService extends RecordService {
     }
 
     public void updatePhoto(Tracing tracing, List<String> photoPaths) throws IOException {
-        int previousCount = tracingPhotoDao.getByTracingId(tracing.getId()).size();
+        int previousCount = tracingPhotoDao.getIdsByTracingId(tracing.getId()).size();
 
         if (previousCount < photoPaths.size()) {
             for (int i = 0; i < previousCount; i++) {
@@ -222,7 +221,7 @@ public class TracingService extends RecordService {
         }
         String filePath = photoPaths.get(index);
         tracingPhoto.setPhoto(ImageCompressUtil.readImageFile(filePath));
-        tracingPhoto.setTracing(parent);
+        tracingPhoto.setTracingId(parent);
         tracingPhoto.setOrder(index + 1);
         tracingPhoto.setKey(UUID.randomUUID().toString());
         return tracingPhoto;
@@ -237,7 +236,7 @@ public class TracingService extends RecordService {
             tracingPhoto = tracingPhotoDao.getById(photoId);
         } catch (NumberFormatException e) {
             tracingPhoto = new TracingPhoto();
-            tracingPhoto.setTracing(tracing);
+            tracingPhoto.setTracingId(tracing);
             tracingPhoto.setPhoto(ImageCompressUtil.readImageFile(filePath));
         }
         tracingPhoto.setId(tracingPhotoDao

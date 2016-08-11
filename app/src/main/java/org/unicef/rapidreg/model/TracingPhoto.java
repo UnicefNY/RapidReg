@@ -1,35 +1,38 @@
 package org.unicef.rapidreg.model;
 
-import com.raizlabs.android.dbflow.annotation.ForeignKey;
-import com.raizlabs.android.dbflow.annotation.ForeignKeyReference;
+import com.raizlabs.android.dbflow.annotation.Column;
+import com.raizlabs.android.dbflow.annotation.Index;
+import com.raizlabs.android.dbflow.annotation.IndexGroup;
 import com.raizlabs.android.dbflow.annotation.ModelContainer;
 import com.raizlabs.android.dbflow.annotation.Table;
 
 import org.unicef.rapidreg.db.PrimeroDB;
 
-@Table(database = PrimeroDB.class)
+@Table(database = PrimeroDB.class, indexGroups = {
+        @IndexGroup(number = 1, name = "indexTracingId")
+})
 @ModelContainer
 public class TracingPhoto extends RecordPhoto {
 
-    @ForeignKey(references = {@ForeignKeyReference(
-            columnName = "tracing_id",
-            columnType = long.class,
-            foreignKeyColumnName = "id"
-    )})
-    Tracing tracing;
+    @Index(indexGroups = 1)
+    @Column
+    long tracingId;
 
-    public Tracing getTracing() {
-        return tracing;
+    public TracingPhoto() {
     }
 
-    public void setTracing(Tracing tracing) {
-        this.tracing = tracing;
+    public TracingPhoto(long id) {
+        super(id);
+    }
+
+    public void setTracingId(Tracing tracing) {
+        this.tracingId = tracing.getId();
     }
 
     @Override
     public String toString() {
         return "TracingPhoto{" +
-                "tracing=" + tracing +
+                "tracingId=" + tracingId +
                 "} " + super.toString();
     }
 }

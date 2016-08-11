@@ -192,7 +192,7 @@ public class CaseService extends RecordService {
     }
 
     public void updatePhoto(Case child, List<String> photoPaths) throws IOException {
-        int previousCount = casePhotoDao.getByCaseId(child.getId()).size();
+        int previousCount = casePhotoDao.getIdsByCaseId(child.getId()).size();
 
         if (previousCount < photoPaths.size()) {
             for (int i = 0; i < previousCount; i++) {

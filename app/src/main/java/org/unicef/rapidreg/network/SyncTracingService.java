@@ -16,6 +16,7 @@ import org.unicef.rapidreg.db.impl.TracingPhotoDaoImpl;
 import org.unicef.rapidreg.model.RecordModel;
 import org.unicef.rapidreg.model.TracingPhoto;
 import org.unicef.rapidreg.service.RecordService;
+import org.unicef.rapidreg.service.TracingPhotoService;
 import org.unicef.rapidreg.service.TracingService;
 import org.unicef.rapidreg.service.cache.ItemValues;
 
@@ -124,20 +125,22 @@ public class SyncTracingService extends BaseRetrofitService {
     }
 
     public void uploadPhotos(final RecordModel record) {
-        List<TracingPhoto> tracingPhotos = new TracingPhotoDaoImpl().getByTracingId(record.getId());
+        List<Long> tracingPhotos = new TracingPhotoDaoImpl().getIdsByTracingId(record.getId());
         Observable.from(tracingPhotos)
-                .filter(new Func1<TracingPhoto, Boolean>() {
+                .filter(new Func1<Long, Boolean>() {
                     @Override
-                    public Boolean call(TracingPhoto tracingPhoto) {
+                    public Boolean call(Long tracingPhotoId) {
                         return true;
                     }
                 })
-                .flatMap(new Func1<TracingPhoto, Observable<Pair<TracingPhoto, Response<JsonElement>>>>() {
+                .flatMap(new Func1<Long, Observable<Pair<TracingPhoto, Response<JsonElement>>>>() {
                     @Override
-                    public Observable<Pair<TracingPhoto, Response<JsonElement>>> call(final TracingPhoto tracingPhoto) {
+                    public Observable<Pair<TracingPhoto, Response<JsonElement>>> call(final Long tracingPhotoId) {
                         return Observable.create(new Observable.OnSubscribe<Pair<TracingPhoto, Response<JsonElement>>>() {
                             @Override
                             public void call(Subscriber<? super Pair<TracingPhoto, Response<JsonElement>>> subscriber) {
+                                TracingPhoto tracingPhoto = TracingPhotoService.getInstance().getById(tracingPhotoId);
+                                
                                 RequestBody requestFile = RequestBody.create(MediaType.parse(PhotoConfig.CONTENT_TYPE_IMAGE),
                                         tracingPhoto.getPhoto().getBlob());
                                 MultipartBody.Part body = MultipartBody.Part.createFormData(FORM_DATA_KEY_PHOTO, tracingPhoto.getKey() + ".jpg",

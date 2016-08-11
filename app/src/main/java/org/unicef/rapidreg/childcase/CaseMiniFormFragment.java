@@ -195,9 +195,10 @@ public class CaseMiniFormFragment extends RecordRegisterFragment {
     private RecordPhotoAdapter initPhotoAdapter(long recordId) {
         List<String> paths = new ArrayList<>();
 
-        List<CasePhoto> cases = CasePhotoService.getInstance().getByCaseId(recordId);
-        for (CasePhoto aCase : cases) {
-            paths.add(String.valueOf(aCase.getId()));
+        List<Long> casePhotoIds = CasePhotoService.getInstance().getIdsByCaseId(recordId);
+
+        for (Long casePhotoId : casePhotoIds) {
+            paths.add(String.valueOf(casePhotoId));
         }
         return new CasePhotoAdapter(getContext(), paths);
     }

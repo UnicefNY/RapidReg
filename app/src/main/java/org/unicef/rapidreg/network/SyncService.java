@@ -15,7 +15,7 @@ import org.unicef.rapidreg.base.PhotoConfig;
 import org.unicef.rapidreg.db.impl.CasePhotoDaoImpl;
 import org.unicef.rapidreg.model.CasePhoto;
 import org.unicef.rapidreg.model.RecordModel;
-import org.unicef.rapidreg.service.CaseService;
+import org.unicef.rapidreg.service.CasePhotoService;
 import org.unicef.rapidreg.service.RecordService;
 import org.unicef.rapidreg.service.cache.ItemValues;
 
@@ -40,7 +40,7 @@ public class SyncService extends BaseRetrofitService {
         return PrimeroConfiguration.getApiBaseUrl();
     }
 
-    public SyncService(Context context){
+    public SyncService(Context context) {
         createRetrofit(context);
         serviceInterface = getRetrofit().create(SyncServiceInterface.class);
     }
@@ -118,20 +118,22 @@ public class SyncService extends BaseRetrofitService {
     }
 
     public void uploadCasePhotos(final RecordModel record) {
-        List<CasePhoto> casePhotos = new CasePhotoDaoImpl().getByCaseId(record.getId());
-        Observable.from(casePhotos)
-                .filter(new Func1<CasePhoto, Boolean>() {
+        List<Long> casePhotosIds = new CasePhotoDaoImpl().getIdsByCaseId(record.getId());
+        Observable.from(casePhotosIds)
+                .filter(new Func1<Long, Boolean>() {
                     @Override
-                    public Boolean call(CasePhoto casePhoto) {
+                    public Boolean call(Long casePhotoId) {
                         return true;
                     }
                 })
-                .flatMap(new Func1<CasePhoto, Observable<Pair<CasePhoto, Response<JsonElement>>>>() {
+                .flatMap(new Func1<Long, Observable<Pair<CasePhoto, Response<JsonElement>>>>() {
                     @Override
-                    public Observable<Pair<CasePhoto, Response<JsonElement>>> call(final CasePhoto casePhoto) {
+                    public Observable<Pair<CasePhoto, Response<JsonElement>>> call(final Long casePhotoId) {
                         return Observable.create(new Observable.OnSubscribe<Pair<CasePhoto, Response<JsonElement>>>() {
                             @Override
                             public void call(Subscriber<? super Pair<CasePhoto, Response<JsonElement>>> subscriber) {
+                                CasePhoto casePhoto = CasePhotoService.getInstance().getById(casePhotoId);
+
                                 RequestBody requestFile = RequestBody.create(MediaType.parse(PhotoConfig.CONTENT_TYPE_IMAGE),
                                         casePhoto.getPhoto().getBlob());
                                 MultipartBody.Part body = MultipartBody.Part.createFormData(FORM_DATA_KEY_PHOTO, casePhoto.getKey() + ".jpg",

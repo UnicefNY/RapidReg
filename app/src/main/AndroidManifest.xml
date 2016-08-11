@@ -17,6 +17,9 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <meta-data
+            android:name="org.unicef.rapidreg.PrimeroGlideModule"
+            android:value="GlideModule" />
         <activity
             android:name=".login.LoginActivity"
             android:configChanges="orientation|keyboardHidden"

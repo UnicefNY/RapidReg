@@ -32,6 +32,7 @@ public class PrimeroApplication extends Application {
 
         PrimeroConfiguration.setInternalFilePath(context.getFilesDir().getPath() );
         initDB();
+        ;
     }
 
     // TODO: need to realise get in progress Sychronization tasks

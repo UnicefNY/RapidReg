@@ -627,7 +627,7 @@ public class SyncPresenter extends MvpBasePresenter<SyncView> {
         Case aCase = caseService.getByInternalId(id);
         CasePhoto casePhoto = new CasePhoto();
         casePhoto.setCase(aCase);
-        casePhoto.setOrder(casePhotoService.getByCaseId(aCase.getId()).size() + 1);
+        casePhoto.setOrder(casePhotoService.getIdsByCaseId(aCase.getId()).size() + 1);
         casePhoto.setPhoto(new Blob(photoBytes));
         casePhoto.save();
     }
@@ -635,8 +635,8 @@ public class SyncPresenter extends MvpBasePresenter<SyncView> {
     private void updateTracingPhotos(String id, byte[] photoBytes) {
         Tracing aTracing = tracingService.getByInternalId(id);
         TracingPhoto TracingPhoto = new TracingPhoto();
-        TracingPhoto.setTracing(aTracing);
-        TracingPhoto.setOrder(tracingPhotoService.getByTracingId(aTracing.getId()).size() + 1);
+        TracingPhoto.setTracingId(aTracing);
+        TracingPhoto.setOrder(tracingPhotoService.getIdsByTracingId(aTracing.getId()).size() + 1);
         TracingPhoto.setPhoto(new Blob(photoBytes));
         TracingPhoto.save();
     }
@@ -695,14 +695,14 @@ public class SyncPresenter extends MvpBasePresenter<SyncView> {
 
     public void produceCases(int number) {
         try {
-            if(caseService.getAll().size()>500){
+            if (caseService.getAll().size() > 500) {
                 return;
             }
             Case first = caseService.getFirst();
-            if (first == null){
+            if (first == null) {
                 return;
             }
-            List<CasePhoto> casePhotos = casePhotoService.getByCaseId(first.getId());
+            List<Long> casePhotos = casePhotoService.getIdsByCaseId(first.getId());
             for (int i = 0; i < number; i++) {
                 first.setId(0);
                 first.setUniqueId(null);
@@ -713,7 +713,8 @@ public class SyncPresenter extends MvpBasePresenter<SyncView> {
                 ItemValues itemValues = new ItemValues(content);
                 itemValues.removeItem(CaseService.CASE_ID);
                 Case savedCase = caseService.save(itemValues, Collections.EMPTY_LIST);
-                for (CasePhoto casePhoto : casePhotos) {
+                for (Long casePhotoId : casePhotos) {
+                    CasePhoto casePhoto = casePhotoService.getById(casePhotoId);
                     casePhoto.setId(0);
                     casePhoto.setCase(savedCase);
                     casePhoto.save();

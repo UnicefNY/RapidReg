@@ -117,7 +117,7 @@ public class SyncFragment extends MvpFragment<SyncView, SyncPresenter> implement
                 syncData.getNotSyncedNumberAsString());
 
         if (!BuildConfig.DEBUG) {
-            tvProduceCases.setVisibility(View.GONE);
+//            tvProduceCases.setVisibility(View.GONE);
         }
     }
 
