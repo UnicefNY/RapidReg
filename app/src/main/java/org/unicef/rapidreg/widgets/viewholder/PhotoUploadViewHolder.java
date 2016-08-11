@@ -159,15 +159,4 @@ public class PhotoUploadViewHolder extends BaseViewHolder<Field> {
         });
         builder.create().show();
     }
-//
-//    private void resetAddPhotoButtonStatus() {
-//        if (adapter.isEmpty()) {
-//            addImageButton.setImageResource(R.drawable.photo_camera);
-//        } else if (adapter.isFull()) {
-//            addImageButton.setVisibility(View.GONE);
-//        } else {
-//            addImageButton.setVisibility(View.VISIBLE);
-//            addImageButton.setImageResource(R.drawable.photo_add);
-//        }
-//    }
 }

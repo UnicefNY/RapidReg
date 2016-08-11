@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.text.TextUtils;
+import android.util.Log;
 import android.widget.TextView;
 import android.widget.ViewSwitcher;
 
@@ -46,10 +47,9 @@ public abstract class BaseDialog {
                 } else {
                     BaseDialog.this.viewSwitcher.setDisplayedChild(GenericViewHolder.FORM_NO_ANSWER_STATE);
                 }
-                BaseDialog.this.resultView.setText(getDisplayText());
-
-                itemValues.addItem(field.getName(), getResult());
                 dialog.dismiss();
+                itemValues.addItem(field.getName(), getResult());
+                resultView.setText(getDisplayText());
             }
         });
 
