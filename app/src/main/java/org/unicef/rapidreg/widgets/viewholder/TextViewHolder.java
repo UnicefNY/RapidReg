@@ -59,11 +59,14 @@ public class TextViewHolder extends BaseTextViewHolder {
         disableUneditableField(isEditable(field), valueView);
         setEditableBackgroundStyle(isEditable(field));
 
-        if (field.isNumericField()) {
+        valueView.setSingleLine(true);
+        valueView.setInputType(InputType.TYPE_CLASS_TEXT);
+        if (field.isTextArea()) {
+            valueView.setSingleLine(false);
+            valueView.setScrollContainer(false);
+        } else if (field.isNumericField()) {
             valueView.setInputType(InputType.TYPE_CLASS_NUMBER);
             valueView.setRawInputType(Configuration.KEYBOARD_12KEY);
-        } else {
-            valueView.setInputType(InputType.TYPE_CLASS_TEXT);
         }
 
         if (TextUtils.isEmpty(valueView.getText())) {
