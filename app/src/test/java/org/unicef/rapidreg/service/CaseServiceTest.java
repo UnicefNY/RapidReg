@@ -44,7 +44,6 @@ public class CaseServiceTest {
         assertThat(requiredFiledNames, hasSize(0));
     }
 
-
     private Field makeCaseField(String name, boolean required) {
         Field field = new Field();
         field.setRequired(required);

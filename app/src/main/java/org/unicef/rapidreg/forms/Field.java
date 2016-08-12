@@ -25,10 +25,10 @@ public class Field {
     public static final String TYPE_MULTI_SELECT_BOX = "multi_select_box";
     public static final String TYPE_SUBFORM_FIELD = "subform_container";
     public static final String TYPE_TICK_BOX = "tick_box";
+    public static final String TYPE_TEXT_AREA= "textarea";
     public static final String TYPE_TEXT_FIELD = "text_field";
     public static final String TYPE_PHOTO_UPLOAD_LAYOUT = "photo_upload_layout";
     public static final String TYPE_AUDIO_UPLOAD_LAYOUT = "audio_item";
-    public static final String TYPE_GENERIC_LAYOUT = "generic_field";
     public static final String TYPE_RADIO_BUTTON = "radio_button";
     public static final String TYPE_NUMERIC_FIELD = "numeric_field";
     public static final String TYPE_PHOTO_VIEW_SLIDER = "record_photo_view_slider";
@@ -40,7 +40,7 @@ public class Field {
     public static final String FIELD_NAME_MARK_FOR_MOBILE = "marked_for_mobile";
     public static final String FIELD_NAME_AGE = "age";
 
-    public static final String FIELD_NAME_DATE_OF_BIRTH ="date_of_birth";
+    public static final String FIELD_NAME_DATE_OF_BIRTH = "date_of_birth";
 
 
     @SerializedName("name")
@@ -211,6 +211,10 @@ public class Field {
         return type.equals(TYPE_NUMERIC_FIELD);
     }
 
+    public boolean isTextArea() {
+        return type.equals(TYPE_TEXT_AREA);
+    }
+
     public boolean isMiniFormProfile() {
         return TYPE_MINI_FORM_PROFILE.equals(type);
     }
@@ -223,17 +227,16 @@ public class Field {
     }
 
     public boolean isMarkForMobileField() {
-        return TextUtils.equals( this.name ,FIELD_NAME_MARK_FOR_MOBILE);
+        return TextUtils.equals(this.name, FIELD_NAME_MARK_FOR_MOBILE);
     }
 
     public boolean isAgeField() {
-        return TextUtils.equals(this.name , FIELD_NAME_AGE);
+        return TextUtils.equals(this.name, FIELD_NAME_AGE);
     }
 
     public boolean isDateOfBirthField() {
-        return TextUtils.equals(this.name , FIELD_NAME_DATE_OF_BIRTH);
+        return TextUtils.equals(this.name, FIELD_NAME_DATE_OF_BIRTH);
     }
-
 
 
     public List<String> getSelectOptions() {

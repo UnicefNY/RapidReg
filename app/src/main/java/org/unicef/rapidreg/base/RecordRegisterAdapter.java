@@ -3,6 +3,7 @@ package org.unicef.rapidreg.base;
 import android.content.Context;
 import android.content.res.Resources;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,12 +29,12 @@ public class RecordRegisterAdapter extends RecyclerView.Adapter<BaseViewHolder> 
     private static final String LAYOUT = "layout";
     private static final String PREFIX = "form_";
     private static final int VIEW_HOLDER_GENERIC = 0;
-    private static final int VIEW_HOLDER_SEPARATOR = 1;
-    private static final int VIEW_HOLDER_TICK_BOX = 2;
-    private static final int VIEW_HOLDER_PHOTO_UPLOAD_BOX = 3;
-    private static final int VIEW_HOLDER_AUDIO_UPLOAD_BOX = 4;
-    private static final int VIEW_HOLDER_SUBFORM = 5;
-    private static final int VIEW_HOLDER_TEXT = 6;
+    private static final int VIEW_HOLDER_TICK_BOX = 1;
+    private static final int VIEW_HOLDER_PHOTO_UPLOAD_BOX = 2;
+    private static final int VIEW_HOLDER_AUDIO_UPLOAD_BOX = 3;
+    private static final int VIEW_HOLDER_SUBFORM = 4;
+    private static final int VIEW_HOLDER_TEXT = 5;
+    private static final int VIEW_HOLDER_TEXT_AREA = 6;
     private static final int VIEW_HOLDER_SELECT_SINGLE_LINE = 7;
     private static final int VIEW_HOLDER_RADIO_SINGLE_LINE = 8;
     private static final int VIEW_HOLDER_PHOTO_UPLOAD_BOX_MINI_FORM = 9;
@@ -77,6 +78,7 @@ public class RecordRegisterAdapter extends RecyclerView.Adapter<BaseViewHolder> 
     public BaseViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         switch (viewType) {
             case VIEW_HOLDER_TEXT:
+            case VIEW_HOLDER_TEXT_AREA:
                 return new TextViewHolder(activity, inflater.inflate(resources
                         .getIdentifier(PREFIX + Field.TYPE_TEXT_FIELD,
                                 LAYOUT, packageName), parent, false), itemValues);
@@ -144,6 +146,9 @@ public class RecordRegisterAdapter extends RecyclerView.Adapter<BaseViewHolder> 
         Field field = fields.get(position);
         if (field.isTextField() || field.isNumericField()) {
             return VIEW_HOLDER_TEXT;
+        }
+        if (field.isTextArea()){
+            return VIEW_HOLDER_TEXT_AREA;
         }
         if (field.isSelectField()) {
             if (!field.isManyOptions()) {
