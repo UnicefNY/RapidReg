@@ -39,7 +39,6 @@ import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
@@ -50,29 +49,32 @@ public class CaseMiniFormFragment extends RecordRegisterFragment {
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void saveCase(SaveCaseEvent event) {
-        if (validateRequiredField()) {
-            clearProfileItems();
+        if (!validateRequiredField()) {
+            Toast.makeText(getActivity(), R.string.required_field_is_not_filled, Toast.LENGTH_LONG).show();
+            return;
+        }
 
-            ArrayList<String> photoPaths = (ArrayList<String>) photoAdapter.getAllItems();
-            ItemValues itemValues = new ItemValues(new Gson().fromJson(new Gson().toJson(
-                    this.itemValues.getValues()), JsonObject.class));
+        clearProfileItems();
 
-            try {
-                Case record = saveCase(itemValues, photoPaths);
-                Toast.makeText(getActivity(), R.string.save_success, Toast.LENGTH_SHORT).show();
+        ArrayList<String> photoPaths = (ArrayList<String>) photoAdapter.getAllItems();
+        ItemValues itemValues = new ItemValues(new Gson().fromJson(new Gson().toJson(
+                this.itemValues.getValues()), JsonObject.class));
 
-                Bundle args = new Bundle();
-                args.putLong(CaseService.CASE_PRIMARY_ID, record.getId());
-                ((RecordActivity) getActivity()).turnToFeature(CaseFeature.DETAILS_MINI, args, null);
-            } catch (IOException e) {
-                Toast.makeText(getActivity(), R.string.save_failed, Toast.LENGTH_SHORT).show();
-            }
-            Case record = CaseService.getInstance().getByUniqueId(itemValues.getAsString(CaseService.CASE_ID));
+        try {
+            Case record = saveCase(itemValues, photoPaths);
+            Toast.makeText(getActivity(), R.string.save_success, Toast.LENGTH_SHORT).show();
 
             Bundle args = new Bundle();
             args.putLong(CaseService.CASE_PRIMARY_ID, record.getId());
             ((RecordActivity) getActivity()).turnToFeature(CaseFeature.DETAILS_MINI, args, null);
+        } catch (IOException e) {
+            Toast.makeText(getActivity(), R.string.save_failed, Toast.LENGTH_SHORT).show();
         }
+        Case record = CaseService.getInstance().getByUniqueId(itemValues.getAsString(CaseService.CASE_ID));
+
+        Bundle args = new Bundle();
+        args.putLong(CaseService.CASE_PRIMARY_ID, record.getId());
+        ((RecordActivity) getActivity()).turnToFeature(CaseFeature.DETAILS_MINI, args, null);
     }
 
     @Nullable
@@ -203,20 +205,7 @@ public class CaseMiniFormFragment extends RecordRegisterFragment {
 
     private boolean validateRequiredField() {
         CaseFormRoot caseForm = CaseFormService.getInstance().getCurrentForm();
-        List<String> requiredFieldNames = new ArrayList<>();
-
-        for (Section section : caseForm.getSections()) {
-            Collections.addAll(requiredFieldNames, RecordService
-                    .fetchRequiredFiledNames(section.getFields()).toArray(new String[0]));
-        }
-        for (String field : requiredFieldNames) {
-            Object fieldValue = itemValues.getValues().get(field);
-            if (fieldValue == null || fieldValue.toString().trim().isEmpty()) {
-                Toast.makeText(getActivity(), R.string.required_field_is_not_filled, Toast.LENGTH_LONG).show();
-                return false;
-            }
-        }
-        return true;
+        return RecordService.validateRequiredFields(caseForm, itemValues);
     }
 
     private Case saveCase(ItemValues itemValues, List<String> photoPaths) throws IOException {

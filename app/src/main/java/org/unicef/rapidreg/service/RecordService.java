@@ -7,8 +7,11 @@ import com.raizlabs.android.dbflow.data.Blob;
 import org.unicef.rapidreg.PrimeroConfiguration;
 import org.unicef.rapidreg.base.PhotoConfig;
 import org.unicef.rapidreg.forms.Field;
+import org.unicef.rapidreg.forms.RecordForm;
+import org.unicef.rapidreg.forms.Section;
 import org.unicef.rapidreg.model.RecordModel;
 import org.unicef.rapidreg.service.cache.ItemValues;
+import org.unicef.rapidreg.service.cache.ItemValuesMap;
 import org.unicef.rapidreg.utils.ImageCompressUtil;
 import org.unicef.rapidreg.utils.StreamUtil;
 
@@ -18,6 +21,7 @@ import java.sql.Date;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 import java.util.UUID;
@@ -99,6 +103,22 @@ public class RecordService {
     public static String createUniqueId() {
         return UUID.randomUUID().toString();
     }
+
+    public static boolean validateRequiredFields(RecordForm recordForm, ItemValuesMap itemValues) {
+        List<String> requiredFieldNames = new ArrayList<>();
+        for (Section section : recordForm.getSections()) {
+            Collections.addAll(requiredFieldNames, RecordService
+                    .fetchRequiredFiledNames(section.getFields()).toArray(new String[0]));
+        }
+        for (String field : requiredFieldNames) {
+            Object fieldValue = itemValues.getValues().get(field);
+            if (fieldValue == null || fieldValue.toString().trim().isEmpty()) {
+                return false;
+            }
+        }
+        return true;
+    }
+
 
     protected void setSyncedStatus(RecordModel record) {
         record.setSynced(false);
