@@ -124,7 +124,6 @@ public class ImageCompressUtil {
         FileOutputStream fos = new FileOutputStream(saveFilePath);
         image.compress(Bitmap.CompressFormat.PNG, 70, fos);
         fos.close();
-        recycleBitmap(image);
     }
 
     public static Bitmap compressImage(String filePath, float maxWidth, float maxHeight) {
@@ -158,7 +157,6 @@ public class ImageCompressUtil {
 
         Bitmap resizedImage = BitmapFactory.decodeFile(filePath, options);
         Bitmap scaledBitmap = Bitmap.createScaledBitmap(resizedImage, imageWidth, imageHeight, true);
-        recycleBitmap(resizedImage);
         return rotateBitmapByExif(filePath, scaledBitmap);
     }
 

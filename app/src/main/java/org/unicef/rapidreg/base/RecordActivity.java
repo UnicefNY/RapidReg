@@ -247,6 +247,7 @@ public abstract class RecordActivity extends BaseActivity {
                     PhotoConfig.MAX_WIDTH, PhotoConfig.MAX_HEIGHT);
             imagePath = getOutputMediaFilePath();
             ImageCompressUtil.storeImage(compressedImage, imagePath);
+            compressedImage.recycle();
             postSelectedImagePath();
         } catch (IOException e) {
             e.printStackTrace();
