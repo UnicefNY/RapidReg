@@ -2,7 +2,6 @@ package org.unicef.rapidreg.tracing;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -40,7 +39,6 @@ import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
@@ -51,23 +49,25 @@ public class TracingMiniFormFragment extends RecordRegisterFragment {
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void saveTracing(SaveTracingEvent event) {
-        if (validateRequiredField()) {
-            clearProfileItems();
+        if (!validateRequiredField()) {
+            Toast.makeText(getActivity(), R.string.required_field_is_not_filled, Toast.LENGTH_LONG).show();
+            return;
+        }
 
-            ArrayList<String> photoPaths = (ArrayList<String>) photoAdapter.getAllItems();
-            ItemValues itemValues = new ItemValues(new Gson().fromJson(new Gson().toJson(
-                    this.itemValues.getValues()), JsonObject.class));
+        clearProfileItems();
+        ArrayList<String> photoPaths = (ArrayList<String>) photoAdapter.getAllItems();
+        ItemValues itemValues = new ItemValues(new Gson().fromJson(new Gson().toJson(
+                this.itemValues.getValues()), JsonObject.class));
 
-            try {
-                Tracing record = saveTracing(itemValues, photoPaths);
-                Toast.makeText(getActivity(), R.string.save_success, Toast.LENGTH_SHORT).show();
+        try {
+            Tracing record = saveTracing(itemValues, photoPaths);
+            Toast.makeText(getActivity(), R.string.save_success, Toast.LENGTH_SHORT).show();
 
-                Bundle args = new Bundle();
-                args.putLong(TracingService.TRACING_PRIMARY_ID, record.getId());
-                ((RecordActivity) getActivity()).turnToFeature(TracingFeature.DETAILS_MINI, args, null);
-            } catch (IOException e) {
-                Toast.makeText(getActivity(), R.string.save_failed, Toast.LENGTH_SHORT).show();
-            }
+            Bundle args = new Bundle();
+            args.putLong(TracingService.TRACING_PRIMARY_ID, record.getId());
+            ((RecordActivity) getActivity()).turnToFeature(TracingFeature.DETAILS_MINI, args, null);
+        } catch (IOException e) {
+            Toast.makeText(getActivity(), R.string.save_failed, Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -195,21 +195,10 @@ public class TracingMiniFormFragment extends RecordRegisterFragment {
     }
 
     private boolean validateRequiredField() {
-        TracingFormRoot tracingForm = TracingFormService.getInstance().getCurrentForm();
-        List<String> requiredFieldNames = new ArrayList<>();
-
-        for (Section section : tracingForm.getSections()) {
-            Collections.addAll(requiredFieldNames, RecordService
-                    .fetchRequiredFiledNames(section.getFields()).toArray(new String[0]));
-        }
-        for (String field : requiredFieldNames) {
-            if (TextUtils.isEmpty((CharSequence) itemValues.getValues().get(field))) {
-                Toast.makeText(getActivity(), R.string.required_field_is_not_filled, Toast.LENGTH_LONG).show();
-                return false;
-            }
-        }
-        return true;
+        TracingFormRoot recordForm = TracingFormService.getInstance().getCurrentForm();
+        return RecordService.validateRequiredFields(recordForm, itemValues);
     }
+
 
     private Tracing saveTracing(ItemValues itemValues, List<String> photoPaths) throws IOException {
         return TracingService.getInstance().saveOrUpdate(itemValues, photoPaths);

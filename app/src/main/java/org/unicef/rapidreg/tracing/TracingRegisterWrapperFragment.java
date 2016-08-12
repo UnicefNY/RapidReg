@@ -2,7 +2,6 @@ package org.unicef.rapidreg.tracing;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.text.TextUtils;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
@@ -27,7 +26,6 @@ import org.unicef.rapidreg.service.cache.ItemValuesMap;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import butterknife.OnClick;
@@ -37,23 +35,26 @@ public class TracingRegisterWrapperFragment extends RecordRegisterWrapperFragmen
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void saveTracing(SaveTracingEvent event) {
-        if (validateRequiredField()) {
-            clearProfileItems();
+        if (!validateRequiredField()) {
+            Toast.makeText(getActivity(), R.string.required_field_is_not_filled, Toast.LENGTH_LONG).show();
+            return;
+        }
 
-            ArrayList<String> photoPaths = (ArrayList<String>) recordPhotoAdapter.getAllItems();
-            ItemValues itemValues = new ItemValues(new Gson().fromJson(new Gson().toJson(
-                    this.itemValues.getValues()), JsonObject.class));
+        clearProfileItems();
 
-            try {
-                saveTracing(itemValues, photoPaths);
-                Toast.makeText(getActivity(), R.string.save_success, Toast.LENGTH_SHORT).show();
-                Bundle args = new Bundle();
-                args.putSerializable(RecordService.ITEM_VALUES, ItemValuesMap.fromItemValuesJsonObject(itemValues));
-                args.putStringArrayList(RecordService.RECORD_PHOTOS, photoPaths);
-                ((RecordActivity) getActivity()).turnToFeature(TracingFeature.DETAILS_FULL, args, null);
-            } catch (IOException e) {
-                Toast.makeText(getActivity(), R.string.save_failed, Toast.LENGTH_SHORT).show();
-            }
+        ArrayList<String> photoPaths = (ArrayList<String>) recordPhotoAdapter.getAllItems();
+        ItemValues itemValues = new ItemValues(new Gson().fromJson(new Gson().toJson(
+                this.itemValues.getValues()), JsonObject.class));
+
+        try {
+            saveTracing(itemValues, photoPaths);
+            Toast.makeText(getActivity(), R.string.save_success, Toast.LENGTH_SHORT).show();
+            Bundle args = new Bundle();
+            args.putSerializable(RecordService.ITEM_VALUES, ItemValuesMap.fromItemValuesJsonObject(itemValues));
+            args.putStringArrayList(RecordService.RECORD_PHOTOS, photoPaths);
+            ((RecordActivity) getActivity()).turnToFeature(TracingFeature.DETAILS_FULL, args, null);
+        } catch (IOException e) {
+            Toast.makeText(getActivity(), R.string.save_failed, Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -95,20 +96,7 @@ public class TracingRegisterWrapperFragment extends RecordRegisterWrapperFragmen
 
     private boolean validateRequiredField() {
         TracingFormRoot tracingForm = TracingFormService.getInstance().getCurrentForm();
-        List<String> requiredFieldNames = new ArrayList<>();
-
-        for (Section section : tracingForm.getSections()) {
-            Collections.addAll(requiredFieldNames, RecordService
-                    .fetchRequiredFiledNames(section.getFields()).toArray(new String[0]));
-        }
-        for (String field : requiredFieldNames) {
-            if (TextUtils.isEmpty((CharSequence) itemValues.getValues().get(field))) {
-                Toast.makeText(getActivity(), R.string.required_field_is_not_filled,
-                        Toast.LENGTH_LONG).show();
-                return false;
-            }
-        }
-        return true;
+        return RecordService.validateRequiredFields(tracingForm, itemValues);
     }
 
     private Tracing saveTracing(ItemValues itemValues, List<String> photoPaths) throws IOException {
