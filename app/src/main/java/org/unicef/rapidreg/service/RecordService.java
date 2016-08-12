@@ -68,7 +68,7 @@ public class RecordService {
         List<String> result = new ArrayList<>();
         for (Field field : fields) {
             if (field.isRequired()) {
-                result.add(field.getDisplayName().get(Locale.getDefault().getLanguage()));
+                result.add(field.getName());
             }
         }
         return result;
