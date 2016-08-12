@@ -48,10 +48,7 @@ public class CaseServiceTest {
     private Field makeCaseField(String name, boolean required) {
         Field field = new Field();
         field.setRequired(required);
-        HashMap<String, String> displayNames = new HashMap<>();
-        displayNames.put("en", name);
-
-        field.setDisplayName(displayNames);
+        field.setName(name);
         return field;
     }
 }
