@@ -2,7 +2,6 @@ package org.unicef.rapidreg.childcase;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,7 +27,6 @@ import org.unicef.rapidreg.forms.Field;
 import org.unicef.rapidreg.forms.RecordForm;
 import org.unicef.rapidreg.forms.Section;
 import org.unicef.rapidreg.model.Case;
-import org.unicef.rapidreg.model.CasePhoto;
 import org.unicef.rapidreg.service.CaseFormService;
 import org.unicef.rapidreg.service.CasePhotoService;
 import org.unicef.rapidreg.service.CaseService;
@@ -212,7 +210,8 @@ public class CaseMiniFormFragment extends RecordRegisterFragment {
                     .fetchRequiredFiledNames(section.getFields()).toArray(new String[0]));
         }
         for (String field : requiredFieldNames) {
-            if (TextUtils.isEmpty((CharSequence) itemValues.getValues().get(field))) {
+            Object fieldValue = itemValues.getValues().get(field);
+            if (fieldValue == null || fieldValue.toString().trim().isEmpty()) {
                 Toast.makeText(getActivity(), R.string.required_field_is_not_filled, Toast.LENGTH_LONG).show();
                 return false;
             }
