@@ -23,13 +23,13 @@ end
 def addCaseThroughMiniForm(case_instance)
   p case_instance
   raise("Case dose not exist...") if case_instance.empty?
-  fullname = case_instance["Full Name"]
-  sex = case_instance["Sex"]
-  age = case_instance["Age"]
+  fullname = case_instance["Full Name (Required)"]
+  sex = case_instance["Sex (Required)"]
+  age = case_instance["Age (Required)"]
 
-  fillInMiniForm("Full Name", fullname)
-  fillInMiniForm("Sex", sex)
-  fillInMiniForm("Age", age)
+  fillInMiniForm("Full Name (Required)", fullname)
+  fillInMiniForm("Sex (Required)", sex)
+  fillInMiniForm("Age (Required)", age)
 end
 
 def fillInMiniForm(field,value)

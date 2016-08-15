@@ -19,8 +19,7 @@ module Screen
       end
 
       def getPageTitle
-        return findByXpath("//android.widget.LinearLayout/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/
-android.support.v4.widget.DrawerLayout/android.widget.LinearLayout/android.view.View/android.widget.TextView").text
+        return findByXpath("//*[@resource-id='org.unicef.rapidreg.debug:id/toolbar']/android.widget.TextView").text
       end
     end
   end

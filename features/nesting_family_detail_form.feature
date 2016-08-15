@@ -2,8 +2,8 @@ Feature: Nested Family Details Form
   As a logged in user, I want to be able to add nested form.
 
   Background:
-#    Given I login RapidReg with "primero" account
-    Given I press "login" button
+    Given I login RapidReg with "primero" account
+#    Given I press "login" button
     And I press menu tab "Cases"
 
 
@@ -24,7 +24,7 @@ Feature: Nested Family Details Form
       | List any agency identifiers as a comma separated list  | Red Cross, Chain |
       | Nickname                                               | Jpa              |
       | Is this family member alive?                           | <Select> Unknown |
-      | If dead, please provide details                        | <Text> Not sure  |
+      | If dead, please provide details                        | Not sure  |
       | Age                                                    | 39               |
     And I press "save" button
     And I scroll to "Family Details" form

@@ -8,7 +8,7 @@ Then /^I should see the case's "(.*?)" is "(.*?)"$/ do |case_field, case_value|
 end
 
 Then /^I should not see "(.*?)"$/ do |text|
-  if value == "Today's date"
+  if text == "Today's date"
     time = Time.now
     text = time.strftime("%b %d, %Y")
   end

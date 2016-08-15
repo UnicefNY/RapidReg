@@ -1,36 +1,36 @@
 {
   "Tom":
   {
-    "Full Name": "Tom Justin Clinton",
-    "Sex": "<Radio> Male",
-    "Age": "10"
+    "Full Name (Required)": "Tom Justin Clinton",
+    "Sex (Required)": "<Radio> Male",
+    "Age (Required)": "10"
   },
 
   "Jim":
   {
-    "Full Name": "Jim Washington",
-    "Sex": "<Radio> Male",
-    "Age": "8"
+    "Full Name (Required)": "Jim Washington",
+    "Sex (Required)": "<Radio> Male",
+    "Age (Required)": "8"
   },
 
   "Jack":
   {
-    "Full Name": "Jack Franklin",
-    "Sex": "<Radio> Male",
-    "Age": "6"
+    "Full Name (Required)": "Jack Franklin",
+    "Sex (Required)": "<Radio> Male",
+    "Age (Required)": "6"
   },
 
   "Angela":
   {
-    "Full Name": "Angela Adams",
-    "Sex": "<Radio> Female",
-    "Age": "4"
+    "Full Name (Required)": "Angela Adams",
+    "Sex (Required)": "<Radio> Female",
+    "Age (Required)": "4"
   },
 
   "Lily":
   {
-    "Full Name": "Lily Jefferson",
-    "Sex": "<Radio> Female",
-    "Age": "2"
+    "Full Name (Required)": "Lily Jefferson",
+    "Sex (Required)": "<Radio> Female",
+    "Age (Required)": "2"
   }
 }

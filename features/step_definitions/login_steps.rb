@@ -12,11 +12,13 @@ end
 
 When /^I press "(.*?)" button$/ do |button|
   base_page.clickById(button)
-  sleep 5       #must
-  while base_page.ifTextExist("Tracing request forms were not pulled down successfully, press OK to resync.") do
-    puts "Syncing forms, please try it later"
-    base_page.clickByXpath("//android.widget.Button[@text='OK']")
-    base_page.clickById(button)
+  if button == "add"
+    page_title = main_menu.getPageTitle
+    until page_title.include?("New") do
+      puts "Syncing forms, please wait..."
+      sleep 20
+      base_page.clickById(button)
+    end
   end
 end
 
@@ -29,7 +31,7 @@ When /^I logout$/ do
 end
 
 And /^I should see current user is "(.*?)"$/ do |username|
-  sleep 10   # must
+  sleep 20 #must
   actual_user = login_page.getCurrentUser
   raise ("NOT right #{username} for #{actual_user}") unless username == actual_user
 end

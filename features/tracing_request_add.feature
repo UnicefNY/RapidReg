@@ -2,8 +2,8 @@ Feature: Add tracing request
   As a logged in user, I want to be able to add/view/edit/search tracing requests.
 
   Background:
-    #    Given I login RapidReg with "primero" account
-    Given I press "login" button
+    Given I login RapidReg with "primero" account
+#    Given I press "login" button
     And I press menu tab "Tracing request"
 
   Scenario: Create tracing request through mini form / full form.
@@ -13,7 +13,7 @@ Feature: Add tracing request
       | Name of inquirer              | Raymond Messiaen                       |
       | Age                           | 42                                     |
       | Nationality                   | <Multiple> Nationality1,Nationality2   |
-      | Current Address               | <Text> 111 Main St, Davidson NC, 28036 |
+      | Current Address               | 111 Main St, Davidson NC, 28036 |
       | Is this a permanent location? | <Checkbox> Yes                         |
     And I press "save" button
     Then I should see following:
@@ -27,7 +27,7 @@ Feature: Add tracing request
     When I press menu button
     And I press menu tab "Tracing request"
     Then I should see the tracing request "age" is "42"
-    And I should see the tracing request "registration_date" is "Today's date"
+#    And I should see the tracing request "registration_date" is "Today's date"
 
     When I press "toggle" button
     Then I should not see "42"
@@ -47,18 +47,18 @@ Feature: Add tracing request
       | Sub Ethnicity 1                                      | <Select> Ethnicity1                      |
       | Sub Ethnicity 2                                      | <Select> Ethnicity2                      |
       | Nationality                                          | <Multiple> Nationality1,Nationality2     |
-      | Additional details / comments                        | <Text> Miss family very much.            |
-      | Current Address                                      | <Text> 111 Main St, Davidson NC, 28036   |
+      | Additional details / comments                        | Miss family very much.            |
+      | Current Address                                      | 111 Main St, Davidson NC, 28036   |
       | Is this a permanent location?                        | <Checkbox> Yes                           |
       | Telephone                                            | 0535-7768597                             |
       | What was the main cause of separation?               | <Select> Conflict                        |
       | Did the separation occur in relation to evacuation?  | <Checkbox> No                            |
-      | Circumstances of Separation (please provide details) | <Text> It is ok now.                     |
-      | Separation Address (Place)                           | <Text> In the middle part of the contry. |
-      | Last Address                                         | <Text> Capital                           |
+      | Circumstances of Separation (please provide details) | It is ok now.                     |
+      | Separation Address (Place)                           | In the middle part of the contry. |
+      | Last Address                                         | Capital                           |
       | Last Landmark                                        | A huge mountain                          |
       | Last Telephone                                       | 010-88672342                             |
-      | Additional info that could help in tracing?          | <Text> The child is very tall.           |
+      | Additional info that could help in tracing?          | The child is very tall.           |
     And I press "save" button
     And I scroll to "Inquirer" form
     Then I should see following:

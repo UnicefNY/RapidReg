@@ -64,6 +64,14 @@ module Screen
           option = new_value.split('>')[1].strip
           findByXpath("//android.widget.TextView[@text='#{field}']")
           clickByXpath("//android.widget.RadioButton[@text='#{option}']")
+        elsif new_value.include?("<Checkbox>")
+          clickByXpath("//*[@text='#{field}']//parent::*//*[@resource-id='org.unicef.rapidreg.debug:id/value']")
+        elsif new_value.include?("<Text>")
+          clickByXpath("//*[@text='#{field}']//parent::*//*[@resource-id='org.unicef.rapidreg.debug:id/value']")
+          findByXpath("//android.widget.EditText[@text='#{old_value}']").clear
+          text = new_value.split('>')[1].strip
+          findByXpath("//android.widget.EditText[@text='']").send_keys(text)
+          clickByXpath("//android.widget.Button[@text='OK']")
         else
           clickByXpath("//android.widget.EditText[@text='#{old_value}']")
           findByXpath("//android.widget.EditText[@text='#{old_value}']").clear

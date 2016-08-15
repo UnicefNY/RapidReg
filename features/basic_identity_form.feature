@@ -2,8 +2,8 @@ Feature: Basic Identify Form
   As a logged in user, I want to be able to create new cases. So that I should fill in Basic Identify Form.
 
   Background:
-#    Given I login RapidReg with "primero" account
-    Given I press "login" button
+    Given I login RapidReg with "primero" account
+#    Given I press "login" button
     And I press menu tab "Cases"
 
 
@@ -25,7 +25,7 @@ Feature: Basic Identify Form
       | Age                                      | 10                                                   |
       | Date of Birth                            | <Date> Today's date                                  |
       | Is the age estimated?                    | <Checkbox> Yes                                       |
-      | Distinguishing Physical Characteristics  | <Text> Really tall, dark hair, brown eyes            |
+      | Distinguishing Physical Characteristics  | Really tall, dark hair, brown eyes            |
       | Ration Card Number                       | 121121                                               |
       | ICRC Ref No.                             | 131313                                               |
       | RC ID No.                                | 141414                                               |
@@ -33,12 +33,12 @@ Feature: Basic Identify Form
       | UN Number                                | EEE444                                               |
       | Other Agency ID                          | ABC12345                                             |
       | Other Agency Name                        | Test Agency                                          |
-      | List of documents carried by the child   | <Text> Driver's License, Passport, Birth Certificate |
+      | List of documents carried by the child   | Driver's License, Passport, Birth Certificate |
       | Current Civil/Marital Status             | <Select> Single                                      |
       | Occupation                               | Farmer                                               |
-      | Current Address                          | <Text> 111 Main St, Davidson NC, 28036               |
+      | Current Address                          | 111 Main St, Davidson NC, 28036               |
       | Landmark                                 | A huge mountain                                      |
-      | Is this address permanent?               | <Checkbox> No                                        |
+      | Is this address permanent?               | <Checkbox> Yes                                       |
       | Current Telephone                        | 336-555-1313                                         |
     And I press "save" button
     And I scroll to "Basic Identity" form
@@ -67,5 +67,5 @@ Feature: Basic Identify Form
       | Occupation                               | Farmer                                        |
       | Current Address                          | 111 Main St, Davidson NC, 28036               |
       | Landmark                                 | A huge mountain                               |
-      | Is this address permanent?               | <Checkbox> No                                |
+      | Is this address permanent?               | <Checkbox> Yes                                |
       | Current Telephone                        | 336-555-1313                                  |
