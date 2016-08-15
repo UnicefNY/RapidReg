@@ -25,7 +25,6 @@
         android:hint="@string/username_hint_text"
         android:imeOptions="actionDone"
         android:singleLine="true"
-        android:text="primero"
         android:textColor="@color/primero_font_dark"/>
 
     <EditText
@@ -36,7 +35,6 @@
         android:layout_marginRight="@dimen/login_input_margin"
         android:hint="@string/password_hint_text"
         android:inputType="textPassword"
-        android:text="qu01n23!"
         android:textColor="@color/primero_font_dark"/>
 
     <RelativeLayout
@@ -53,8 +51,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/url_hint_text"
-            android:inputType="textUri"
-            android:text="https://52.34.194.254:8443"/>
+            android:inputType="textUri"/>
 
         <TextView
             android:id="@+id/change_url"

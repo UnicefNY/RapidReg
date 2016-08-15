@@ -15,7 +15,7 @@ When /^I press menu button$/ do
 end
 
 Then /^I should see page title is "(.*?)"$/ do |title|
-  main_menu.getPageTitle.equal?("#{title}")
+  main_menu.getPageTitle == title
 end
 
 When /^I click to open navigation drawer$/ do

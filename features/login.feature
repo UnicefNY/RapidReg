@@ -15,7 +15,7 @@ Feature: Login test
 
   Scenario: Login with correct credential and network connected
     When I login RapidReg for the first time with "primero" and "qu01n23!" and "https://52.24.42.32:8443"
-    Then I should see "Login success!"
+    Then I should see "Login successful"
     And I should see current user is "primero"
     And the organization is "agency-unicef"
 
@@ -30,7 +30,7 @@ Feature: Login test
     Given I login RapidReg for the first time with "primero" and "qu01n23!" and "https://52.24.42.32:8443"
     And I logout
     When I re-login RapidReg with "primero" and "qu01n23!"
-    Then I should see "Login success!"
+    Then I should see "Login successful"
     And I should see current user is "primero"
     And the organization is "agency-unicef"
 
