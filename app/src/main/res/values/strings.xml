@@ -85,7 +85,7 @@
     <string name="place_holder_record_count_for_not_sync">146</string>
     <string name="button_sync_state_of_click_to_sync">Sync</string>
     <string name="start_sync_message">Synchronizing, Please wait ...</string>
-    <string name="confirm_cancel_sync_message">Are you sure to stop sync ?</string>
+    <string name="confirm_cancel_sync_message">Are you sure you want to stop sync ?</string>
     <string name="cancel_button_text">Cancel</string>
     <string name="deny_button_text">No</string>
     <string name="not_now_button_text">Not Now</string>
@@ -94,8 +94,10 @@
     <string name="continue_sync_button_text">Continue sync</string>
     <string name="sync_upload_success_message">Congrats! Your upload request is completed.</string>
     <string name="sync_download_success_message">Congrats! Your download request is completed.</string>
-    <string name="sync_error_message">Sorry, the synchronization request is not completed. Please retry later.</string>
-    <string name="try_to_sync_message">Are you sure to sync records ?</string>
+    <string name="sync_error_message">Sorry, the synchronization request is not completed. Please contact admin.</string>
+    <string name="sync_request_time_out_error_message">The request timed out.</string>
+    <string name="sync_server_not_reachable_error_message">Failure to connect to Web server.</string>
+    <string name="try_to_sync_message">Are you sure you want to sync records?</string>
     <string name="remove_photo_confirmation">Are you sure you want to remove this photo?</string>
     <string name="save_success">Record saved</string>
     <string name="save_failed">Record saved failed</string>

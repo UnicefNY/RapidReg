@@ -10,7 +10,7 @@ public interface SyncView extends MvpView {
 
     void showSyncCancelConfirmDialog();
 
-    void showSyncErrorMessage();
+    void showSyncErrorMessage(int errorMsgId);
 
     void showSyncDownloadSuccessMessage();
 

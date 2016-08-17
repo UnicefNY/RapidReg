@@ -35,7 +35,6 @@ public abstract class BaseRetrofitService {
     private Retrofit retrofit;
 
     private OkHttpClient getClient(Context context){
-
         OkHttpClient.Builder builder = new OkHttpClient.Builder();
         builder.readTimeout(60, TimeUnit.SECONDS);
         builder.writeTimeout(60, TimeUnit.SECONDS);
@@ -47,16 +46,13 @@ public abstract class BaseRetrofitService {
             }
         });
 
-
         if (BuildConfig.DEBUG) {
             builder.addNetworkInterceptor(new StethoInterceptor());
         }
-
         return builder.build();
     }
 
     protected void createRetrofit(Context context){
-
         retrofit = new Retrofit.Builder()
                 .baseUrl(getBaseUrl())
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
