@@ -315,6 +315,7 @@ public class SyncPresenter extends MvpBasePresenter<SyncView> {
                     @Override
                     public void call(Throwable throwable) {
                         throwable.printStackTrace();
+                        loadingDialog.dismiss();
                         syncFail(throwable);
                     }
                 }, new Action0() {
@@ -467,6 +468,7 @@ public class SyncPresenter extends MvpBasePresenter<SyncView> {
                 }, new Action1<Throwable>() {
                     @Override
                     public void call(Throwable throwable) {
+                        loadingDialog.dismiss();
                         syncFail(throwable);
                     }
                 }, new Action0() {
@@ -680,9 +682,9 @@ public class SyncPresenter extends MvpBasePresenter<SyncView> {
 
     private void syncFail(Throwable throwable) {
         Throwable cause = throwable.getCause();
-        if (cause instanceof SocketTimeoutException) {
+        if (throwable instanceof  SocketTimeoutException || cause instanceof SocketTimeoutException) {
             getView().showSyncErrorMessage(R.string.sync_request_time_out_error_message);
-        } else if (cause instanceof ConnectException) {
+        } else if (throwable instanceof  ConnectException || cause instanceof ConnectException) {
             getView().showSyncErrorMessage(R.string.sync_server_not_reachable_error_message);
         } else {
             getView().showSyncErrorMessage(R.string.sync_error_message);
