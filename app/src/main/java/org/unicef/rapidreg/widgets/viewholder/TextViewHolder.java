@@ -39,8 +39,7 @@ public class TextViewHolder extends BaseTextViewHolder {
     public TextViewHolder(Context context, View itemView, ItemValuesMap itemValues) {
         super(context, itemView, itemValues);
         ButterKnife.bind(this, itemView);
-        inputMethodManager = (InputMethodManager)
-                context.getSystemService(Context.INPUT_METHOD_SERVICE);
+        inputMethodManager = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
     }
 
     @Override
