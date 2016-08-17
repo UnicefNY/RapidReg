@@ -66,12 +66,6 @@ public class SyncFragment extends MvpFragment<SyncView, SyncPresenter> implement
     String syncUploadSuccessMessage;
     @BindString(R.string.sync_download_success_message)
     String syncDownloadSuccessMessage;
-    @BindString(R.string.sync_error_message)
-    String syncErrorMessage;
-    @BindString(R.string.sync_server_not_reachable_error_message)
-    String syncRequestTimeoutErrorMessage;
-    @BindString(R.string.sync_server_not_reachable_error_message)
-    String syncServerNotReachableErrorMessage;
     @BindString(R.string.try_to_sync_message)
     String tryToSyncMessage;
     @BindString(R.string.not_now_button_text)
@@ -262,7 +256,7 @@ public class SyncFragment extends MvpFragment<SyncView, SyncPresenter> implement
 
     @Override
     public void showSyncErrorMessage(int errorMsgId) {
-        Toast.makeText(getActivity(), syncErrorMessage, Toast.LENGTH_LONG).show();
+        Toast.makeText(getActivity(), getResources().getString(errorMsgId), Toast.LENGTH_LONG).show();
     }
 
 }
