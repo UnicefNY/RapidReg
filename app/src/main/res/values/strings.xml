@@ -94,9 +94,9 @@
     <string name="continue_sync_button_text">Continue sync</string>
     <string name="sync_upload_success_message">Congrats! Your upload request is completed.</string>
     <string name="sync_download_success_message">Congrats! Your download request is completed.</string>
-    <string name="sync_error_message">Sorry, the synchronization request is not completed. Please contact admin.</string>
-    <string name="sync_request_time_out_error_message">The request timed out.</string>
-    <string name="sync_server_not_reachable_error_message">Failure to connect to Web server.</string>
+    <string name="sync_error_message">Sorry, the synchronization request can not be proceeded, please contact support team.</string>
+    <string name="sync_request_time_out_error_message">The network is not stable, please check your internet connection and try again.</string>
+    <string name="sync_server_not_reachable_error_message">Web server is not available, please contact your admin.</string>
     <string name="try_to_sync_message">Are you sure you want to sync records?</string>
     <string name="remove_photo_confirmation">Are you sure you want to remove this photo?</string>
     <string name="save_success">Record saved</string>
