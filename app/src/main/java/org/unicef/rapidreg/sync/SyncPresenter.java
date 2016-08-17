@@ -1,5 +1,6 @@
 package org.unicef.rapidreg.sync;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
@@ -277,8 +278,8 @@ public class SyncPresenter extends MvpBasePresenter<SyncView> {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.US);
         final String time = sdf.format(cal.getTime());
         final List<JsonObject> objects = new ArrayList<>();
-        getView().showSyncProgressDialog("Downloading Cases...Please wait a moment.");
-        getView().setProgressMax(0);
+        final ProgressDialog loadingDialog = ProgressDialog.show(context, "", "Fetching case amount from web " +
+                "server...", true);
         syncService.getCasesIds(time, true)
                 .map(new Func1<Response<JsonElement>, List<JsonObject>>() {
                     @Override
@@ -304,7 +305,9 @@ public class SyncPresenter extends MvpBasePresenter<SyncView> {
                 .subscribe(new Action1<List<JsonObject>>() {
                     @Override
                     public void call(List<JsonObject> jsonObjects) {
+                        loadingDialog.dismiss();
                         if (jsonObjects.size() != 0) {
+                            getView().showSyncProgressDialog("Downloading Cases...Please wait a moment.");
                             getView().setProgressMax(jsonObjects.size());
                         }
                     }
@@ -318,55 +321,6 @@ public class SyncPresenter extends MvpBasePresenter<SyncView> {
                     @Override
                     public void call() {
                         downloadCases(objects);
-                    }
-                });
-    }
-
-    public void pullTracings() {
-        isSyncing = true;
-        GregorianCalendar cal = new GregorianCalendar(2015, 1, 1);
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.US);
-        final String time = sdf.format(cal.getTime());
-        final List<JsonObject> objects = new ArrayList<>();
-        syncTracingService.getIds(time, true)
-                .map(new Func1<Response<JsonElement>, List<JsonObject>>() {
-                    @Override
-                    public List<JsonObject> call(Response<JsonElement> jsonElementResponse) {
-                        if (jsonElementResponse.isSuccessful()) {
-                            JsonElement jsonElement = jsonElementResponse.body();
-                            JsonArray jsonArray = jsonElement.getAsJsonArray();
-
-                            for (JsonElement element : jsonArray) {
-                                JsonObject jsonObject = element.getAsJsonObject();
-                                boolean hasSameRev = tracingService.hasSameRev(jsonObject.get("_id").getAsString(),
-                                        jsonObject.get("_rev").getAsString());
-                                if (!hasSameRev) {
-                                    objects.add(jsonObject);
-                                }
-                            }
-                        }
-                        return objects;
-                    }
-                })
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Action1<List<JsonObject>>() {
-                    @Override
-                    public void call(List<JsonObject> jsonObjects) {
-                        if (jsonObjects.size() != 0) {
-                            getView().showSyncProgressDialog("Downloading Tracing Request...Please wait a moment.");
-                            getView().setProgressMax(jsonObjects.size());
-                        }
-                    }
-                }, new Action1<Throwable>() {
-                    @Override
-                    public void call(Throwable throwable) {
-                        syncFail(throwable);
-                    }
-                }, new Action0() {
-                    @Override
-                    public void call() {
-                        downloadTracings(objects);
                     }
                 });
     }
@@ -467,6 +421,58 @@ public class SyncPresenter extends MvpBasePresenter<SyncView> {
                     public void call() {
                         getView().hideSyncProgressDialog();
                         pullTracings();
+                    }
+                });
+    }
+
+    public void pullTracings() {
+        isSyncing = true;
+        GregorianCalendar cal = new GregorianCalendar(2015, 1, 1);
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.US);
+        final String time = sdf.format(cal.getTime());
+        final List<JsonObject> objects = new ArrayList<>();
+        final ProgressDialog loadingDialog = ProgressDialog.show(context, "", "Fetching tracing amount from web " +
+                "server...", true);
+        syncTracingService.getIds(time, true)
+                .map(new Func1<Response<JsonElement>, List<JsonObject>>() {
+                    @Override
+                    public List<JsonObject> call(Response<JsonElement> jsonElementResponse) {
+                        if (jsonElementResponse.isSuccessful()) {
+                            JsonElement jsonElement = jsonElementResponse.body();
+                            JsonArray jsonArray = jsonElement.getAsJsonArray();
+
+                            for (JsonElement element : jsonArray) {
+                                JsonObject jsonObject = element.getAsJsonObject();
+                                boolean hasSameRev = tracingService.hasSameRev(jsonObject.get("_id").getAsString(),
+                                        jsonObject.get("_rev").getAsString());
+                                if (!hasSameRev) {
+                                    objects.add(jsonObject);
+                                }
+                            }
+                        }
+                        return objects;
+                    }
+                })
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Action1<List<JsonObject>>() {
+                    @Override
+                    public void call(List<JsonObject> jsonObjects) {
+                        loadingDialog.dismiss();
+                        if (jsonObjects.size() != 0) {
+                            getView().showSyncProgressDialog("Downloading Tracing Request...Please wait a moment.");
+                            getView().setProgressMax(jsonObjects.size());
+                        }
+                    }
+                }, new Action1<Throwable>() {
+                    @Override
+                    public void call(Throwable throwable) {
+                        syncFail(throwable);
+                    }
+                }, new Action0() {
+                    @Override
+                    public void call() {
+                        downloadTracings(objects);
                     }
                 });
     }
