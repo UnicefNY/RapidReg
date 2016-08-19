@@ -72,7 +72,8 @@ public class PhotoUploadViewHolder extends BaseViewHolder<Field> {
         photoGrid.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
-                if (adapter.isFull() || position < adapter.getCount() - 1) {
+                if (((RecordActivity) context).getCurrentFeature().isDetailMode()
+                        || adapter.isFull() || position < adapter.getCount() - 1) {
                     showViewPhotoDialog(position);
                 } else {
                     showAddPhotoOptionDialog();
