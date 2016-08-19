@@ -8,6 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.hannesdorfmann.mosby.mvp.MvpFragment;
@@ -39,7 +40,7 @@ public abstract class RecordRegisterFragment extends MvpFragment<RecordRegisterV
     RecyclerView fieldList;
 
     @BindView(R.id.form_switcher)
-    protected Button formSwitcher;
+    protected TextView formSwitcher;
 
     @BindView(R.id.edit)
     protected FloatingActionButton editButton;
