@@ -11,14 +11,16 @@
         android:layout_height="match_parent"
         android:layout_above="@+id/form_switcher"/>
 
-    <Button
+    <TextView
         android:id="@+id/form_switcher"
         android:layout_width="match_parent"
         android:layout_height="40dp"
         android:layout_alignParentBottom="true"
+        android:gravity="center"
         android:background="@drawable/switch_button"
         android:text=""
         android:textAllCaps="false"
+        android:clickable="true"
         android:textColor="@color/primero_blue"/>
 
     <com.getbase.floatingactionbutton.FloatingActionButton
@@ -30,8 +32,6 @@
         android:layout_alignParentEnd="true"
         android:scrollY="3dp"
         android:src="@drawable/edit_white"
-        android:visibility="gone"
         app:fab_colorNormal="@color/primero_blue"
         app:fab_colorPressed="@color/primero_blue"/>
-
 </RelativeLayout>
