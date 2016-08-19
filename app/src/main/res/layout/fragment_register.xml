@@ -30,6 +30,7 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
+        android:visibility="gone"
         android:scrollY="3dp"
         android:src="@drawable/edit_white"
         app:fab_colorNormal="@color/primero_blue"
