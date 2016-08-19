@@ -21,7 +21,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
-import com.hannesdorfmann.mosby.mvp.BuildConfig;
 import com.hannesdorfmann.mosby.mvp.MvpFragment;
 
 import org.unicef.rapidreg.R;
@@ -114,9 +113,7 @@ public class SyncFragment extends MvpFragment<SyncView, SyncPresenter> implement
         setDataViews(syncData.getLastSyncData(), syncData.getSyncedNumberAsString(),
                 syncData.getNotSyncedNumberAsString());
 
-        if (!BuildConfig.DEBUG) {
-            tvProduceCases.setVisibility(View.GONE);
-        }
+        tvProduceCases.setVisibility(View.GONE);
     }
 
     @Override
