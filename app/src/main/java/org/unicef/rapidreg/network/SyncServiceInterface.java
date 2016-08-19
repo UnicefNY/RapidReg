@@ -41,7 +41,7 @@ public interface SyncServiceInterface {
             @Header("Cookie") String cookie,
             @Path("id") String id,
             @Path("photo_key") String photoKey,
-            @Path("photo_size") String photoSize);
+            @Path("photo_size") int photoSize);
 
     @GET("/cases/{id}/audio")
     Observable<Response<ResponseBody>> getCaseAudio(

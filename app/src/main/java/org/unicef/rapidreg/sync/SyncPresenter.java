@@ -14,6 +14,7 @@ import com.hannesdorfmann.mosby.mvp.MvpBasePresenter;
 import com.raizlabs.android.dbflow.data.Blob;
 
 import org.unicef.rapidreg.R;
+import org.unicef.rapidreg.base.PhotoConfig;
 import org.unicef.rapidreg.model.Case;
 import org.unicef.rapidreg.model.CasePhoto;
 import org.unicef.rapidreg.model.RecordModel;
@@ -396,7 +397,9 @@ public class SyncPresenter extends MvpBasePresenter<SyncView> {
                     public Object call(JsonObject jsonObject) {
                         String id = jsonObject.get("_id").getAsString();
                         String photoKey = jsonObject.get("photo_key").getAsString();
-                        Response<ResponseBody> response = syncService.getCasePhoto(id, photoKey, "1080").toBlocking().first();
+                        Response<ResponseBody> response = syncService.getCasePhoto(id, photoKey, PhotoConfig.RESIZE_FOR_WEB)
+                                .toBlocking()
+                                .first();
                         try {
                             updateCasePhotos(id, response.body().bytes());
                         } catch (IOException e) {
@@ -682,9 +685,9 @@ public class SyncPresenter extends MvpBasePresenter<SyncView> {
 
     private void syncFail(Throwable throwable) {
         Throwable cause = throwable.getCause();
-        if (throwable instanceof  SocketTimeoutException || cause instanceof SocketTimeoutException) {
+        if (throwable instanceof SocketTimeoutException || cause instanceof SocketTimeoutException) {
             getView().showSyncErrorMessage(R.string.sync_request_time_out_error_message);
-        } else if (throwable instanceof  ConnectException || cause instanceof ConnectException) {
+        } else if (throwable instanceof ConnectException || cause instanceof ConnectException) {
             getView().showSyncErrorMessage(R.string.sync_server_not_reachable_error_message);
         } else {
             getView().showSyncErrorMessage(R.string.sync_error_message);
