@@ -162,7 +162,6 @@ public class LoginPresenter extends MvpBasePresenter<LoginView> {
                         }
                     }
                 }));
-
     }
 
     private void doLoginOffline(Context context, String username, String password) {

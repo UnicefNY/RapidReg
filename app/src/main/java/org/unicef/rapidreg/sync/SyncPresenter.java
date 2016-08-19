@@ -689,7 +689,7 @@ public class SyncPresenter extends MvpBasePresenter<SyncView> {
         if (throwable instanceof SocketTimeoutException || cause instanceof SocketTimeoutException) {
             getView().showSyncErrorMessage(R.string.sync_request_time_out_error_message);
         } else if (throwable instanceof ConnectException || cause instanceof ConnectException
-                || throwable instanceof EOFException || cause instanceof EOFException) {
+                || throwable instanceof IOException || cause instanceof IOException) {
             getView().showSyncErrorMessage(R.string.sync_server_not_reachable_error_message);
         } else {
             getView().showSyncErrorMessage(R.string.sync_error_message);
