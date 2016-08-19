@@ -45,7 +45,7 @@ public class SyncService extends BaseRetrofitService {
         serviceInterface = getRetrofit().create(SyncServiceInterface.class);
     }
 
-    public Observable<Response<ResponseBody>> getCasePhoto(String id, String photoKey, String photoSize) {
+    public Observable<Response<ResponseBody>> getCasePhoto(String id, String photoKey, int photoSize) {
         return serviceInterface.getCasePhoto(PrimeroConfiguration.getCookie(), id, photoKey, photoSize);
     }
 

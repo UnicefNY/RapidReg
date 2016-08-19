@@ -148,7 +148,6 @@ public class ImageCompressUtil {
             } else {
                 imageHeight = (int) maxHeight;
                 imageWidth = (int) maxWidth;
-
             }
         }
         options.inSampleSize = calculateInSampleSize(options, imageWidth, imageHeight);

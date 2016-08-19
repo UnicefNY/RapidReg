@@ -7,6 +7,7 @@ public class PhotoConfig {
     public static final float MAX_HEIGHT = 1920;
     public static final int MAX_SIZE_KB = 1000;
     public static final int THUMBNAIL_SIZE = 210;
+    public static final int RESIZE_FOR_WEB = 640;
 
     public static final String CONTENT_TYPE_IMAGE = "image/jpeg";
     public static final String CONTENT_TYPE_MULTIPART = "multipart/form-data";
