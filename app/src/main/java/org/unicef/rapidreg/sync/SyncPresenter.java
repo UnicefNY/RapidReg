@@ -29,6 +29,7 @@ import org.unicef.rapidreg.service.TracingPhotoService;
 import org.unicef.rapidreg.service.TracingService;
 import org.unicef.rapidreg.service.cache.ItemValues;
 
+import java.io.EOFException;
 import java.io.IOException;
 import java.net.ConnectException;
 import java.net.SocketTimeoutException;
@@ -687,7 +688,8 @@ public class SyncPresenter extends MvpBasePresenter<SyncView> {
         Throwable cause = throwable.getCause();
         if (throwable instanceof SocketTimeoutException || cause instanceof SocketTimeoutException) {
             getView().showSyncErrorMessage(R.string.sync_request_time_out_error_message);
-        } else if (throwable instanceof ConnectException || cause instanceof ConnectException) {
+        } else if (throwable instanceof ConnectException || cause instanceof ConnectException
+                || throwable instanceof EOFException || cause instanceof EOFException) {
             getView().showSyncErrorMessage(R.string.sync_server_not_reachable_error_message);
         } else {
             getView().showSyncErrorMessage(R.string.sync_error_message);
