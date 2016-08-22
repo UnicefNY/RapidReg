@@ -36,8 +36,8 @@ public abstract class BaseRetrofitService {
 
     private OkHttpClient getClient(Context context){
         OkHttpClient.Builder builder = new OkHttpClient.Builder();
-        builder.readTimeout(20, TimeUnit.SECONDS);
-        builder.writeTimeout(20, TimeUnit.SECONDS);
+        builder.readTimeout(60, TimeUnit.SECONDS);
+        builder.writeTimeout(60, TimeUnit.SECONDS);
         builder.sslSocketFactory(getSSLContext(context).getSocketFactory());
         builder.hostnameVerifier(new HostnameVerifier() {
             @Override
