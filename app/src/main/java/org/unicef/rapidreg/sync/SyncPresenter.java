@@ -29,7 +29,6 @@ import org.unicef.rapidreg.service.TracingPhotoService;
 import org.unicef.rapidreg.service.TracingService;
 import org.unicef.rapidreg.service.cache.ItemValues;
 
-import java.io.EOFException;
 import java.io.IOException;
 import java.net.ConnectException;
 import java.net.SocketTimeoutException;
@@ -181,9 +180,11 @@ public class SyncPresenter extends MvpBasePresenter<SyncView> {
                 .subscribe(new Action1<Pair<Case, Response<JsonElement>>>() {
                     @Override
                     public void call(Pair<Case, Response<JsonElement>> pair) {
-                        getView().setProgressIncrease();
-                        increaseSyncNumber();
-                        updateRecordSynced(pair.first, true);
+                        if (getView() != null) {
+                            getView().setProgressIncrease();
+                            increaseSyncNumber();
+                            updateRecordSynced(pair.first, true);
+                        }
                     }
                 }, new Action1<Throwable>() {
                     @Override
@@ -250,9 +251,11 @@ public class SyncPresenter extends MvpBasePresenter<SyncView> {
                 .subscribe(new Action1<Pair<Tracing, Response<JsonElement>>>() {
                     @Override
                     public void call(Pair<Tracing, Response<JsonElement>> pair) {
-                        getView().setProgressIncrease();
-                        increaseSyncNumber();
-                        updateRecordSynced(pair.first, true);
+                        if (getView() != null) {
+                            getView().setProgressIncrease();
+                            increaseSyncNumber();
+                            updateRecordSynced(pair.first, true);
+                        }
                     }
                 }, new Action1<Throwable>() {
                     @Override
@@ -414,7 +417,7 @@ public class SyncPresenter extends MvpBasePresenter<SyncView> {
                 .subscribe(new Action1<Object>() {
                     @Override
                     public void call(Object responseBodyResponse) {
-                        getView().setProgressIncrease();
+                        setProgressIncrease();
                     }
                 }, new Action1<Throwable>() {
                     @Override
@@ -568,7 +571,7 @@ public class SyncPresenter extends MvpBasePresenter<SyncView> {
                 .subscribe(new Action1<Object>() {
                     @Override
                     public void call(Object responseBodyResponse) {
-                        getView().setProgressIncrease();
+                        setProgressIncrease();
                     }
                 }, new Action1<Throwable>() {
                     @Override
@@ -581,6 +584,12 @@ public class SyncPresenter extends MvpBasePresenter<SyncView> {
                         syncDownloadSuccessfully();
                     }
                 });
+    }
+
+    private void setProgressIncrease() {
+        if (getView() != null) {
+            getView().setProgressIncrease();
+        }
     }
 
 

@@ -7,7 +7,6 @@ import org.unicef.rapidreg.db.CaseFormDao;
 import org.unicef.rapidreg.model.CaseForm;
 
 public class CaseFormDaoImpl implements CaseFormDao {
-
     @Override
     public CaseForm getCaseForm() {
         return SQLite.select().from(CaseForm.class).querySingle();
