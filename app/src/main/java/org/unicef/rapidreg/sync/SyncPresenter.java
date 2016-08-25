@@ -189,8 +189,12 @@ public class SyncPresenter extends MvpBasePresenter<SyncView> {
                 }, new Action1<Throwable>() {
                     @Override
                     public void call(Throwable throwable) {
-                        syncFail(throwable);
-                        throwable.printStackTrace();
+                        try {
+                            throwable.printStackTrace();
+                            syncFail(throwable);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
                     }
                 }, new Action0() {
                     @Override
@@ -260,14 +264,20 @@ public class SyncPresenter extends MvpBasePresenter<SyncView> {
                 }, new Action1<Throwable>() {
                     @Override
                     public void call(Throwable throwable) {
-                        syncFail(throwable);
-                        throwable.printStackTrace();
+                        try {
+                            throwable.printStackTrace();
+                            syncFail(throwable);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
                     }
                 }, new Action0() {
                     @Override
                     public void call() {
-                        syncUploadSuccessfully();
-                        pullCases();
+                        if (getView() != null) {
+                            syncUploadSuccessfully();
+                            pullCases();
+                        }
                     }
                 });
     }
@@ -311,7 +321,7 @@ public class SyncPresenter extends MvpBasePresenter<SyncView> {
                     @Override
                     public void call(List<JsonObject> jsonObjects) {
                         loadingDialog.dismiss();
-                        if (jsonObjects.size() != 0) {
+                        if (jsonObjects.size() != 0 && getView() != null) {
                             getView().showSyncProgressDialog("Downloading Cases...Please wait a moment.");
                             getView().setProgressMax(jsonObjects.size());
                         }
@@ -320,8 +330,12 @@ public class SyncPresenter extends MvpBasePresenter<SyncView> {
                     @Override
                     public void call(Throwable throwable) {
                         throwable.printStackTrace();
-                        loadingDialog.dismiss();
-                        syncFail(throwable);
+                        try {
+                            loadingDialog.dismiss();
+                            syncFail(throwable);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
                     }
                 }, new Action0() {
                     @Override
@@ -342,7 +356,6 @@ public class SyncPresenter extends MvpBasePresenter<SyncView> {
                 .map(new Func1<JsonObject, Response<JsonElement>>() {
                     @Override
                     public Response<JsonElement> call(JsonObject jsonObject) {
-
                         Observable<Response<JsonElement>> responseObservable = syncService.getCase(jsonObject.get("_id")
                                 .getAsString(), "en", true);
                         Response<JsonElement> response = responseObservable.toBlocking().first();
@@ -422,13 +435,19 @@ public class SyncPresenter extends MvpBasePresenter<SyncView> {
                 }, new Action1<Throwable>() {
                     @Override
                     public void call(Throwable throwable) {
-                        syncFail(throwable);
+                        try {
+                            syncFail(throwable);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
                     }
                 }, new Action0() {
                     @Override
                     public void call() {
-                        getView().hideSyncProgressDialog();
-                        pullTracings();
+                        if (getView() != null) {
+                            getView().hideSyncProgressDialog();
+                            pullTracings();
+                        }
                     }
                 });
     }
@@ -467,7 +486,7 @@ public class SyncPresenter extends MvpBasePresenter<SyncView> {
                     @Override
                     public void call(List<JsonObject> jsonObjects) {
                         loadingDialog.dismiss();
-                        if (jsonObjects.size() != 0) {
+                        if (jsonObjects.size() != 0 && getView() != null) {
                             getView().showSyncProgressDialog("Downloading Tracing Request...Please wait a moment.");
                             getView().setProgressMax(jsonObjects.size());
                         }
@@ -475,8 +494,13 @@ public class SyncPresenter extends MvpBasePresenter<SyncView> {
                 }, new Action1<Throwable>() {
                     @Override
                     public void call(Throwable throwable) {
-                        loadingDialog.dismiss();
-                        syncFail(throwable);
+                        try {
+                            throwable.printStackTrace();
+                            loadingDialog.dismiss();
+                            syncFail(throwable);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
                     }
                 }, new Action0() {
                     @Override
@@ -576,7 +600,12 @@ public class SyncPresenter extends MvpBasePresenter<SyncView> {
                 }, new Action1<Throwable>() {
                     @Override
                     public void call(Throwable throwable) {
-                        syncFail(throwable);
+                        try {
+                            throwable.printStackTrace();
+                            syncFail(throwable);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
                     }
                 }, new Action0() {
                     @Override
@@ -681,19 +710,26 @@ public class SyncPresenter extends MvpBasePresenter<SyncView> {
     }
 
     private void syncUploadSuccessfully() {
-        updateDataViews();
-        getView().showSyncUploadSuccessMessage();
-        getView().hideSyncProgressDialog();
+        if (getView() != null) {
+            updateDataViews();
+            getView().showSyncUploadSuccessMessage();
+            getView().hideSyncProgressDialog();
+        }
     }
 
     private void syncDownloadSuccessfully() {
-        updateDataViews();
-        getView().showSyncDownloadSuccessMessage();
-        getView().hideSyncProgressDialog();
-        getView().enableSyncButton();
+        if (getView() != null) {
+            updateDataViews();
+            getView().showSyncDownloadSuccessMessage();
+            getView().hideSyncProgressDialog();
+            getView().enableSyncButton();
+        }
     }
 
     private void syncFail(Throwable throwable) {
+        if (getView() == null) {
+            return;
+        }
         Throwable cause = throwable.getCause();
         if (throwable instanceof SocketTimeoutException || cause instanceof SocketTimeoutException) {
             getView().showSyncErrorMessage(R.string.sync_request_time_out_error_message);
