@@ -641,6 +641,7 @@ public class SyncPresenter extends MvpBasePresenter<SyncView> {
         } else {
             item = new Case();
             item.setUniqueId(casesJsonObject.get("case_id").getAsString());
+            item.setShortId(casesJsonObject.get("short_id").getAsString());
             item.setInternalId(casesJsonObject.get("_id").getAsString());
             item.setInternalRev(newRev);
             item.setRegistrationDate(
