@@ -632,6 +632,10 @@ public class SyncPresenter extends MvpBasePresenter<SyncView> {
             item.setContent(new Blob(casesJsonObject.toString().getBytes()));
             item.setName(casesJsonObject.get("name").getAsString());
             item.setAge(casesJsonObject.get("age").getAsInt());
+            //TODO set caregiver
+            if (casesJsonObject.get("caregiver") != null) {
+                item.setCaregiver(casesJsonObject.get("caregiver").getAsString());
+            }
             item.update();
             casePhotoService.deleteByCaseId(item.getId());
         } else {
@@ -648,6 +652,10 @@ public class SyncPresenter extends MvpBasePresenter<SyncView> {
             item.setContent(new Blob(casesJsonObject.toString().getBytes()));
             item.setName(casesJsonObject.get("name").getAsString());
             item.setAge(casesJsonObject.get("age").getAsInt());
+            //TODO set caregiver
+            if (casesJsonObject.get("caregiver") != null) {
+                item.setCaregiver(casesJsonObject.get("caregiver").getAsString());
+            }
             item.save();
         }
     }
