@@ -15,6 +15,7 @@ public class RecordModel extends BaseModel {
     public static final int MIN_AGE = 0;
     public static final int MAX_AGE = 100;
     public static final String COLUMN_UNIQUE_ID = "unique_id";
+    public static final String COLUMN_SHORT_ID = "short_id";
     public static final String COLUMN_NAME = "name";
     public static final String COLUMN_AGE = "age";
     public static final String COLUMN_CAREGIVER = "caregiver";
@@ -42,6 +43,8 @@ public class RecordModel extends BaseModel {
     private String internalRev;
     @Column(name = "unique_id")
     private String uniqueId;
+    @Column(name = "short_id")
+    private String shortId;
     @Column(name = "registration_date")
     private Date registrationDate;
     @Column(name = "created_by")
@@ -209,6 +212,14 @@ public class RecordModel extends BaseModel {
         isAudioSynced = audioSynced;
     }
 
+    public String getShortId() {
+        return shortId;
+    }
+
+    public void setShortId(String shortId) {
+        this.shortId = shortId;
+    }
+
     @Override
     public String toString() {
         return "RecordModel{" +
@@ -223,6 +234,7 @@ public class RecordModel extends BaseModel {
                 ", internalId='" + internalId + '\'' +
                 ", internalRev='" + internalRev + '\'' +
                 ", uniqueId='" + uniqueId + '\'' +
+                ", shortId='" + shortId + '\'' +
                 ", registrationDate=" + registrationDate +
                 ", createdBy='" + createdBy + '\'' +
                 ", createDate=" + createDate +

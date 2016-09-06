@@ -89,11 +89,11 @@ public class CaseService extends RecordService {
         return caseDao.getCaseByUniqueId(uniqueId);
     }
 
-    public List<Long> getSearchResult(String uniqueId, String name, int ageFrom, int ageTo,
+    public List<Long> getSearchResult(String shortId, String name, int ageFrom, int ageTo,
                                       String caregiver, Date date) {
         ConditionGroup conditionGroup = ConditionGroup.clause();
-        conditionGroup.and(Condition.column(NameAlias.builder(RecordModel.COLUMN_UNIQUE_ID).build())
-                .like(getWrappedCondition(uniqueId)));
+        conditionGroup.and(Condition.column(NameAlias.builder(RecordModel.COLUMN_SHORT_ID).build())
+                .like(getWrappedCondition(shortId)));
         conditionGroup.and(Condition.column(NameAlias.builder(RecordModel.COLUMN_NAME).build())
                 .like(getWrappedCondition(name)));
         conditionGroup.and(Condition.column(NameAlias.builder(RecordModel.COLUMN_AGE).build())
@@ -144,6 +144,9 @@ public class CaseService extends RecordService {
 
         Case child = new Case();
         child.setUniqueId(uniqueId);
+        // Now, short_id is generate by last 7 charactors of case_id as server. If server change the
+        // short_id generation rule, there should be changed.
+        child.setShortId(getShortUUID(uniqueId));
         child.setCreateDate(date);
         child.setLastUpdatedDate(date);
         child.setContent(blob);

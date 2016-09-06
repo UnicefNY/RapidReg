@@ -4,7 +4,6 @@ import android.text.TextUtils;
 
 import org.unicef.rapidreg.base.RecordListPresenter;
 import org.unicef.rapidreg.base.RecordSearchFragment;
-import org.unicef.rapidreg.model.Case;
 import org.unicef.rapidreg.model.RecordModel;
 import org.unicef.rapidreg.service.CaseService;
 
@@ -19,7 +18,7 @@ public class CaseSearchFragment extends RecordSearchFragment {
 
     @Override
     protected List<Long> getSearchResult(Map<String, String> filters) {
-        String id = filters.get(ID);
+        String shortId = filters.get(ID);
         String name = filters.get(NAME);
         String from = filters.get(AGE_FROM);
         int ageFrom = TextUtils.isEmpty(from) ? RecordModel.MIN_AGE : Integer.valueOf(from);
@@ -28,7 +27,7 @@ public class CaseSearchFragment extends RecordSearchFragment {
         String caregiver = filters.get(CAREGIVER);
         String registrationDate = filters.get(REGISTRATION_DATE);
 
-        return CaseService.getInstance().getSearchResult(id, name, ageFrom, ageTo,
+        return CaseService.getInstance().getSearchResult(shortId, name, ageFrom, ageTo,
                 caregiver, getDate(registrationDate));
     }
 }
