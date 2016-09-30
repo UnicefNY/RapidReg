@@ -44,6 +44,7 @@ public class LoginActivity extends MvpActivity<LoginView, LoginPresenter> implem
 
         hideUrlInputIfUserEverLoginSuccessfully();
         loginProgressDialog = new ProgressDialog(this);
+
         usernameEditView.requestFocus();
     }
 
