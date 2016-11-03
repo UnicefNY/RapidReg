@@ -72,9 +72,7 @@ public class SyncService extends BaseRetrofitService {
 
         Observable<Response<JsonElement>> responseObservable;
         if (!TextUtils.isEmpty(item.getInternalId())) {
-            responseObservable = serviceInterface.putCase(PrimeroConfiguration.getCookie(), item
-                            .getInternalId(),
-                    jsonObject);
+            responseObservable = serviceInterface.putCase(PrimeroConfiguration.getCookie(), item.getInternalId(), jsonObject);
         } else {
             responseObservable = serviceInterface.postCaseExcludeMediaData(PrimeroConfiguration.getCookie(), jsonObject);
         }
