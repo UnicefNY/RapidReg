@@ -15,9 +15,9 @@ android {
     signingConfigs {
         release {
             storeFile file("../rapidreg.jks")
-            storePassword System.getenv("STORE_PASSWORD")
-            keyAlias System.getenv("KEY_ALIAS")
-            keyPassword System.getenv("KEY_PASSWORD")
+            storePassword System.getProperty("STORE_PASSWORD")
+            keyAlias System.getProperty("KEY_ALIAS")
+            keyPassword System.getProperty("KEY_PASSWORD")
         }
     }
     buildTypes {
