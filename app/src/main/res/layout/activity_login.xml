@@ -25,7 +25,6 @@
         android:hint="@string/username_hint_text"
         android:imeOptions="actionDone"
         android:singleLine="true"
-        android:text="primero"
         android:textColor="@color/primero_font_dark"/>
 
     <EditText
@@ -36,7 +35,6 @@
         android:layout_marginRight="@dimen/login_input_margin"
         android:hint="@string/password_hint_text"
         android:inputType="textPassword"
-        android:text="qu01n23!"
         android:textColor="@color/primero_font_dark"/>
 
     <RelativeLayout
