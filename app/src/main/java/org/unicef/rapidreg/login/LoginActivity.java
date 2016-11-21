@@ -3,6 +3,7 @@ package org.unicef.rapidreg.login;
 import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -11,9 +12,15 @@ import android.widget.Toast;
 
 import com.hannesdorfmann.mosby.mvp.MvpActivity;
 
+import org.unicef.rapidreg.PrimeroApplication;
 import org.unicef.rapidreg.R;
+import org.unicef.rapidreg.injection.component.ActivityComponent;
+import org.unicef.rapidreg.injection.component.DaggerActivityComponent;
+import org.unicef.rapidreg.injection.module.ActivityModule;
 import org.unicef.rapidreg.model.LoginResponse;
 import org.unicef.rapidreg.network.NetworkStatusManager;
+
+import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -21,23 +28,40 @@ import butterknife.OnClick;
 import retrofit2.Call;
 
 public class LoginActivity extends MvpActivity<LoginView, LoginPresenter> implements LoginView {
+
     public static final String TAG = LoginActivity.class.getSimpleName();
+
     @BindView(R.id.login)
     Button loginButton;
+
     @BindView(R.id.username)
     EditText usernameEditView;
+
     @BindView(R.id.password)
     EditText passwordEditView;
+
     @BindView(R.id.url)
     EditText urlEditView;
+
     @BindView(R.id.change_url)
     TextView changeUrlTextView;
 
+    @Inject
+    LoginPresenter loginPresenter;
 
     private ProgressDialog loginProgressDialog;
 
+    ActivityComponent activityComponent;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        activityComponent = DaggerActivityComponent.builder()
+                .applicationComponent(PrimeroApplication.get(this).getComponent())
+                .activityModule(new ActivityModule(this))
+                .build();
+
+        activityComponent.inject(this);
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
@@ -45,7 +69,9 @@ public class LoginActivity extends MvpActivity<LoginView, LoginPresenter> implem
         hideUrlInputIfUserEverLoginSuccessfully();
         loginProgressDialog = new ProgressDialog(this);
 
+
         usernameEditView.requestFocus();
+
     }
 
     @OnClick(R.id.login)
@@ -97,7 +123,7 @@ public class LoginActivity extends MvpActivity<LoginView, LoginPresenter> implem
     @NonNull
     @Override
     public LoginPresenter createPresenter() {
-        return new LoginPresenter(this);
+        return loginPresenter;
     }
 
     @Override
