@@ -13,6 +13,7 @@ import org.unicef.rapidreg.IntentSender;
 import org.unicef.rapidreg.PrimeroConfiguration;
 import org.unicef.rapidreg.R;
 import org.unicef.rapidreg.event.NeedLoadFormsEvent;
+import org.unicef.rapidreg.injection.ActivityContext;
 import org.unicef.rapidreg.model.LoginRequestBody;
 import org.unicef.rapidreg.model.LoginResponse;
 import org.unicef.rapidreg.model.User;
@@ -23,6 +24,8 @@ import org.unicef.rapidreg.service.UserService;
 import org.unicef.rapidreg.utils.EncryptHelper;
 
 import java.util.List;
+
+import javax.inject.Inject;
 
 import okhttp3.Headers;
 import retrofit2.Response;
@@ -36,10 +39,14 @@ public class LoginPresenter extends MvpBasePresenter<LoginView> {
 
     private CompositeSubscription subscriptions;
 
-    private Context context;
+    Context context;
     private IntentSender intentSender;
 
-    public LoginPresenter(Context context) {
+    @Inject
+    UserService userService;
+
+    @Inject
+    public LoginPresenter(@ActivityContext Context context) {
         this.context = context;
         intentSender = new IntentSender();
         subscriptions = new CompositeSubscription();
@@ -48,7 +55,7 @@ public class LoginPresenter extends MvpBasePresenter<LoginView> {
 
     public String fetchURL() {
         try {
-            User user = UserService.getInstance().getAllUsers().get(0);
+            User user = userService.getAllUsers().get(0);
             return user.getServerUrl();
         } catch (Exception e) {
             Log.w("user login", "No user ever log in successfully, so url doesn't exist!");
@@ -78,7 +85,6 @@ public class LoginPresenter extends MvpBasePresenter<LoginView> {
     }
 
     public boolean validate(Context context, String username, String password, String url) {
-        UserService userService = UserService.getInstance();
         boolean nameValid = userService.isNameValid(username);
         boolean passwordValid = userService.isPasswordValid(password);
         boolean urlValid = userService.isUrlValid(url);
@@ -133,9 +139,8 @@ public class LoginPresenter extends MvpBasePresenter<LoginView> {
                                 user.setLanguage(loginResponse.getLanguage());
                                 user.setVerified(loginResponse.getVerified());
 
-                                UserService service = UserService.getInstance();
-                                service.setCurrentUser(user);
-                                service.saveOrUpdateUser(user);
+                                userService.setCurrentUser(user);
+                                userService.saveOrUpdateUser(user);
 
                                 goToLoginSuccessScreen();
 
@@ -165,14 +170,13 @@ public class LoginPresenter extends MvpBasePresenter<LoginView> {
     }
 
     private void doLoginOffline(Context context, String username, String password) {
-        UserService service = UserService.getInstance();
-        UserService.VerifiedCode verifiedCode = service.verify(username, password);
+        UserService.VerifiedCode verifiedCode = userService.verify(username, password);
 
         showLoadingIndicator(false);
         showLoginResultMessage(context.getResources().getString(verifiedCode.getResId()));
 
         if (verifiedCode == UserService.VerifiedCode.OK) {
-            service.setCurrentUser(service.getUser(username));
+            userService.setCurrentUser(userService.getUser(username));
             goToLoginSuccessScreen();
         }
     }
