@@ -118,7 +118,10 @@ dependencies {
     androidTestCompile 'junit:junit:4.12',
             'org.robolectric:robolectric:3.1.1',
             "org.powermock:powermock-module-junit4:${powerMockVersion}",
-            "org.powermock:powermock-api-mockito:${powerMockVersion}"
+            "org.powermock:powermock-api-mockito:${powerMockVersion}",
+            'com.google.dagger:dagger:2.4'
+
+    androidTestApt 'com.google.dagger:dagger-compiler:2.4'
 
     compile 'de.hdodenhof:circleimageview:2.0.0'
     compile 'org.robolectric:robolectric-annotations:3.1.1'
