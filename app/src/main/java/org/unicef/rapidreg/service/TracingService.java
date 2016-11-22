@@ -27,6 +27,8 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.UUID;
 
+import javax.inject.Inject;
+
 public class TracingService extends RecordService {
     public static final String TAG = TracingService.class.getSimpleName();
     public static final String TRACING_DISPLAY_ID = "tracing_request_id_display";
@@ -37,6 +39,9 @@ public class TracingService extends RecordService {
 
     private TracingDao tracingDao = new TracingDaoImpl();
     private TracingPhotoDao tracingPhotoDao = new TracingPhotoDaoImpl();
+
+    @Inject
+    UserService userService;
 
     public static TracingService getInstance() {
         return TRACING_SERVICE;
@@ -116,7 +121,7 @@ public class TracingService extends RecordService {
         String uniqueId = createUniqueId();
         itemValues.addStringItem(TRACING_DISPLAY_ID, getShortUUID(uniqueId));
         itemValues.addStringItem(TRACING_ID, uniqueId);
-        String username = UserService.getInstance().getCurrentUser().getUsername();
+        String username = userService.getCurrentUser().getUsername();
         itemValues.addStringItem(MODULE, "primeromodule-cp");
         itemValues.addStringItem(CASEWORKER_CODE, username);
         itemValues.addStringItem(RECORD_CREATED_BY, username);
