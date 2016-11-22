@@ -18,9 +18,14 @@ import android.widget.Toast;
 import org.unicef.rapidreg.IntentSender;
 import org.unicef.rapidreg.PrimeroApplication;
 import org.unicef.rapidreg.R;
+import org.unicef.rapidreg.injection.component.ActivityComponent;
+import org.unicef.rapidreg.injection.component.DaggerActivityComponent;
+import org.unicef.rapidreg.injection.module.ActivityModule;
 import org.unicef.rapidreg.model.User;
 import org.unicef.rapidreg.service.UserService;
 import org.unicef.rapidreg.service.cache.PageModeCached;
+
+import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -44,8 +49,14 @@ public abstract class BaseActivity extends AppCompatActivity implements Navigati
     protected ColorStateList tracingColor;
     protected ColorStateList syncColor;
 
+    @Inject
+    UserService userService;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
+
+        setupDependencyInjection();
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
@@ -59,7 +70,7 @@ public abstract class BaseActivity extends AppCompatActivity implements Navigati
         View headerView = navigationView.getHeaderView(0);
         TextView textViewLoginUserLabel = (TextView) headerView.findViewById(R.id.login_user_label);
         TextView organizationView = (TextView) headerView.findViewById(R.id.organization);
-        User currentUser = UserService.getInstance().getCurrentUser();
+        User currentUser = userService.getCurrentUser();
         if (currentUser != null) {
             String username = currentUser.getUsername();
             textViewLoginUserLabel.setText(username == null ? "" : username);
@@ -87,6 +98,15 @@ public abstract class BaseActivity extends AppCompatActivity implements Navigati
         } else {
             drawer.closeDrawer(GravityCompat.START);
         }
+    }
+
+    private void setupDependencyInjection() {
+        ActivityComponent activityComponent = DaggerActivityComponent.builder()
+                .activityModule(new ActivityModule(this))
+                .applicationComponent(PrimeroApplication.get(this).getComponent())
+                .build();
+
+        activityComponent.inject(this);
     }
 
     @Override
@@ -131,7 +151,7 @@ public abstract class BaseActivity extends AppCompatActivity implements Navigati
     protected void logOut(BaseActivity currentActivity) {
         PrimeroApplication context = currentActivity.getContext();
         String message = context.getResources().getString(R.string.login_out_successful_text);
-        UserService.getInstance().setCurrentUser(null);
+        userService.setCurrentUser(null);
         Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
         intentSender.showLoginActivity(currentActivity);
     }

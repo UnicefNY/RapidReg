@@ -12,6 +12,8 @@ import org.unicef.rapidreg.utils.EncryptHelper;
 
 import java.util.List;
 
+import javax.inject.Inject;
+
 public class UserService {
     public enum VerifiedCode {
         USER_DOES_NOT_EXIST(R.string.login_offline_no_user_text),
@@ -31,17 +33,11 @@ public class UserService {
 
     public static final String TAG = UserService.class.getSimpleName();
 
-    private static final UserService USER_SERVICE = new UserService(new UserDaoImpl());
-
     private UserDao userDao;
     private User currentUser;
 
     public UserService(UserDao userDao) {
         this.userDao = userDao;
-    }
-
-    public static UserService getInstance() {
-        return USER_SERVICE;
     }
 
     public boolean isUserEverLoginSuccessfully() {
