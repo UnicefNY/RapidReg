@@ -45,7 +45,7 @@ public class CaseListFragment extends RecordListFragment {
         listContainer.setLayoutManager(layoutManager);
         listContainer.setAdapter(adapter);
 
-        List<Case> cases = CaseService.getInstance().getAll();
+        List<Case> cases = presenter.getCases();
         int index = cases.isEmpty() ? HAVE_NO_RESULT : HAVE_RESULT_LIST;
         viewSwitcher.setDisplayedChild(index);
     }
@@ -58,7 +58,11 @@ public class CaseListFragment extends RecordListFragment {
         orderSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                handleItemSelection(position);
+                List<Long> filterCases = presenter.getCasesByFilter(SPINNER_STATES[position]);
+                if (filterCases == null || filterCases.isEmpty()) {
+                    return;
+                }
+                adapter.setRecordList(filterCases);
                 adapter.notifyDataSetChanged();
             }
 
@@ -66,39 +70,20 @@ public class CaseListFragment extends RecordListFragment {
             public void onNothingSelected(AdapterView<?> parent) {
 
             }
-
-            private void handleItemSelection(int position) {
-                CaseService service = CaseService.getInstance();
-                switch (SPINNER_STATES[position]) {
-                    case AGE_ASC:
-                        adapter.setRecordList(service.getAllOrderByAgeASC());
-                        break;
-                    case AGE_DES:
-                        adapter.setRecordList(service.getAllOrderByAgeDES());
-                        break;
-                    case REG_DATE_ASC:
-                        adapter.setRecordList(service.getAllOrderByDateASC());
-                        break;
-                    case REG_DATE_DES:
-                        adapter.setRecordList(service.getAllOrderByDateDES());
-                        break;
-                    default:
-                        break;
-                }
-            }
         });
     }
 
     @OnClick(R.id.add)
     public void onCaseAddClicked() {
-        RecordService.clearAudioFile();
+        presenter.clearAudioFile();
         RecordActivity activity = (RecordActivity) getActivity();
 
-        if (!CaseFormService.getInstance().isFormReady()) {
+        if (!presenter.isFormReady()) {
             showSyncFormDialog(getResources().getString(R.string.child_case));
             return;
         }
 
         activity.turnToFeature(CaseFeature.ADD_MINI, null, null);
     }
+
 }
