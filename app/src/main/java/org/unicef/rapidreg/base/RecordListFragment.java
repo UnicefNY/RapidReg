@@ -21,9 +21,13 @@ import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.hannesdorfmann.mosby.mvp.MvpFragment;
 
 import org.greenrobot.eventbus.EventBus;
+import org.unicef.rapidreg.PrimeroApplication;
 import org.unicef.rapidreg.PrimeroConfiguration;
 import org.unicef.rapidreg.R;
 import org.unicef.rapidreg.event.NeedLoadFormsEvent;
+import org.unicef.rapidreg.injection.component.DaggerFragmentComponent;
+import org.unicef.rapidreg.injection.component.FragmentComponent;
+import org.unicef.rapidreg.injection.module.FragmentModule;
 import org.unicef.rapidreg.utils.Utils;
 
 import java.util.List;
@@ -78,6 +82,13 @@ public abstract class RecordListFragment extends MvpFragment<RecordListView, Rec
 
     public void toggleMode(boolean isShow) {
         adapter.toggleViews(isShow);
+    }
+
+    protected FragmentComponent getComponent() {
+        return DaggerFragmentComponent.builder()
+                .applicationComponent(PrimeroApplication.get(getContext()).getComponent())
+                .fragmentModule(new FragmentModule(this))
+                .build();
     }
 
     protected void showSyncFormDialog(String message) {

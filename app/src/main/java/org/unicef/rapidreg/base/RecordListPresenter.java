@@ -3,7 +3,6 @@ package org.unicef.rapidreg.base;
 import android.content.Context;
 
 import com.hannesdorfmann.mosby.mvp.MvpBasePresenter;
-
 import org.unicef.rapidreg.base.RecordListFragment.SpinnerState;
 import org.unicef.rapidreg.childcase.CaseListAdapter;
 import org.unicef.rapidreg.model.Case;
@@ -16,15 +15,27 @@ import org.unicef.rapidreg.tracing.TracingListAdapter;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Inject;
+
 public class RecordListPresenter extends MvpBasePresenter<RecordListView> {
 
-    CaseService caseService = CaseService.getInstance();
+    @Inject
+    CaseService caseService;
 
+    @Inject
     CaseFormService caseFormService;
 
+    @Inject
     RecordService recordService;
 
     private int type;
+
+    @Inject
+    public RecordListPresenter(CaseService caseService, CaseFormService caseFormService, RecordService recordService) {
+        this.caseService = caseService;
+        this.caseFormService = caseFormService;
+        this.recordService = recordService;
+    }
 
     public RecordListPresenter(int type) {
         this.type = type;
@@ -39,6 +50,7 @@ public class RecordListPresenter extends MvpBasePresenter<RecordListView> {
             }
         }
     }
+
 
     public List<Case> getCases() {
         return caseService.getAll();
@@ -60,10 +72,10 @@ public class RecordListPresenter extends MvpBasePresenter<RecordListView> {
     }
 
     public void clearAudioFile() {
-        RecordService.clearAudioFile();
+        recordService.clearAudioFile();
     }
 
     public boolean isFormReady() {
-        return CaseFormService.getInstance().isFormReady();
+        return caseFormService.isFormReady();
     }
 }
