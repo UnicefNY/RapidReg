@@ -5,6 +5,9 @@ import android.content.Context;
 
 import org.unicef.rapidreg.injection.ApplicationContext;
 import org.unicef.rapidreg.injection.module.ApplicationModule;
+import org.unicef.rapidreg.service.CaseFormService;
+import org.unicef.rapidreg.service.CaseService;
+import org.unicef.rapidreg.service.RecordService;
 import org.unicef.rapidreg.service.UserService;
 
 import javax.inject.Singleton;
@@ -21,4 +24,10 @@ public interface ApplicationComponent {
     Application application();
 
     UserService userService();
+
+    CaseFormService caseFormService();
+
+    RecordService recordService();
+
+    CaseService caseService();
 }
