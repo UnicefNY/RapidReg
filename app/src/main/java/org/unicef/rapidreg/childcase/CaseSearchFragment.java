@@ -2,6 +2,7 @@ package org.unicef.rapidreg.childcase;
 
 import android.text.TextUtils;
 
+import org.unicef.rapidreg.base.CaseListPresenter;
 import org.unicef.rapidreg.base.RecordListPresenter;
 import org.unicef.rapidreg.base.RecordSearchFragment;
 import org.unicef.rapidreg.model.RecordModel;
@@ -10,10 +11,17 @@ import org.unicef.rapidreg.service.CaseService;
 import java.util.List;
 import java.util.Map;
 
+import javax.inject.Inject;
+
 public class CaseSearchFragment extends RecordSearchFragment {
+
+    @Inject
+    CaseListPresenter caseListPresenter;
+
     @Override
     public RecordListPresenter createPresenter() {
-        return new RecordListPresenter(RecordModel.CASE);
+        getComponent().inject(this);
+        return caseListPresenter;
     }
 
     @Override

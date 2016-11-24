@@ -47,8 +47,7 @@ public class CaseService extends RecordService {
         return CASE_SERVICE;
     }
 
-    private CaseService() {
-    }
+    public CaseService() {}
 
     public CaseService(CaseDao caseDao) {
         this.caseDao = caseDao;

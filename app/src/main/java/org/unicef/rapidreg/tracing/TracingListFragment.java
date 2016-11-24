@@ -8,7 +8,7 @@ import org.unicef.rapidreg.R;
 import org.unicef.rapidreg.base.RecordListAdapter;
 import org.unicef.rapidreg.base.RecordListFragment;
 import org.unicef.rapidreg.base.RecordListPresenter;
-import org.unicef.rapidreg.model.RecordModel;
+import org.unicef.rapidreg.base.TracingListPresenter;
 import org.unicef.rapidreg.model.Tracing;
 import org.unicef.rapidreg.service.RecordService;
 import org.unicef.rapidreg.service.TracingFormService;
@@ -16,6 +16,8 @@ import org.unicef.rapidreg.service.TracingService;
 
 import java.util.Arrays;
 import java.util.List;
+
+import javax.inject.Inject;
 
 import butterknife.OnClick;
 
@@ -28,9 +30,13 @@ public class TracingListFragment extends RecordListFragment {
     private static final int DEFAULT_SPINNER_STATE_POSITION =
             Arrays.asList(SPINNER_STATES).indexOf(SpinnerState.INQUIRY_DATE_DES);
 
+    @Inject
+    TracingListPresenter tracingListPresenter;
+
     @Override
     public RecordListPresenter createPresenter() {
-        return new RecordListPresenter(RecordModel.TRACING);
+        getComponent().inject(this);
+        return tracingListPresenter;
     }
 
     @Override

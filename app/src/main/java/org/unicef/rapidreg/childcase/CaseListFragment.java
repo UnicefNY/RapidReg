@@ -3,21 +3,19 @@ package org.unicef.rapidreg.childcase;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.Toast;
 
 import org.unicef.rapidreg.R;
+import org.unicef.rapidreg.base.CaseListPresenter;
 import org.unicef.rapidreg.base.RecordActivity;
 import org.unicef.rapidreg.base.RecordListAdapter;
 import org.unicef.rapidreg.base.RecordListFragment;
 import org.unicef.rapidreg.base.RecordListPresenter;
 import org.unicef.rapidreg.model.Case;
-import org.unicef.rapidreg.model.RecordModel;
-import org.unicef.rapidreg.service.CaseFormService;
-import org.unicef.rapidreg.service.CaseService;
-import org.unicef.rapidreg.service.RecordService;
 
 import java.util.Arrays;
 import java.util.List;
+
+import javax.inject.Inject;
 
 import butterknife.OnClick;
 
@@ -33,9 +31,13 @@ public class CaseListFragment extends RecordListFragment {
     private static final int DEFAULT_SPINNER_STATE_POSITION =
             Arrays.asList(SPINNER_STATES).indexOf(SpinnerState.REG_DATE_DES);
 
+    @Inject
+    CaseListPresenter caseListPresenter;
+
     @Override
     public RecordListPresenter createPresenter() {
-        return new RecordListPresenter(RecordModel.CASE);
+        getComponent().inject(this);
+        return caseListPresenter;
     }
 
     @Override

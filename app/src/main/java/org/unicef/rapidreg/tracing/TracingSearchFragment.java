@@ -1,5 +1,6 @@
 package org.unicef.rapidreg.tracing;
 
+import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.view.View;
 
@@ -7,17 +8,25 @@ import org.unicef.rapidreg.R;
 import org.unicef.rapidreg.base.RecordListAdapter;
 import org.unicef.rapidreg.base.RecordListPresenter;
 import org.unicef.rapidreg.base.RecordSearchFragment;
+import org.unicef.rapidreg.base.TracingListPresenter;
 import org.unicef.rapidreg.model.RecordModel;
-import org.unicef.rapidreg.model.Tracing;
 import org.unicef.rapidreg.service.TracingService;
 
 import java.util.List;
 import java.util.Map;
 
+import javax.inject.Inject;
+
 public class TracingSearchFragment extends RecordSearchFragment {
+
+    @Inject
+    TracingListPresenter tracingListPresenter;
+
     @Override
+    @NonNull
     public RecordListPresenter createPresenter() {
-        return new RecordListPresenter(RecordModel.TRACING);
+        getComponent().inject(this);
+        return tracingListPresenter;
     }
 
     @Override
