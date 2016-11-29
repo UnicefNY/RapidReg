@@ -10,6 +10,7 @@ import org.unicef.rapidreg.forms.Field;
 import org.unicef.rapidreg.forms.RecordForm;
 import org.unicef.rapidreg.forms.Section;
 import org.unicef.rapidreg.model.RecordModel;
+import org.unicef.rapidreg.model.Tracing;
 import org.unicef.rapidreg.service.cache.ItemValues;
 import org.unicef.rapidreg.service.cache.ItemValuesMap;
 import org.unicef.rapidreg.utils.ImageCompressUtil;
@@ -123,4 +124,5 @@ public class RecordService {
     protected void setSyncedStatus(RecordModel record) {
         record.setSynced(false);
     }
+
 }

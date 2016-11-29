@@ -1,6 +1,7 @@
 package org.unicef.rapidreg.childcase;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -15,17 +16,21 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 import org.json.JSONException;
+import org.unicef.rapidreg.PrimeroApplication;
 import org.unicef.rapidreg.R;
 import org.unicef.rapidreg.base.Feature;
 import org.unicef.rapidreg.base.RecordActivity;
 import org.unicef.rapidreg.base.RecordPhotoAdapter;
 import org.unicef.rapidreg.base.RecordRegisterAdapter;
 import org.unicef.rapidreg.base.RecordRegisterFragment;
+import org.unicef.rapidreg.base.RecordRegisterPresenter;
 import org.unicef.rapidreg.event.SaveCaseEvent;
 import org.unicef.rapidreg.forms.CaseFormRoot;
 import org.unicef.rapidreg.forms.Field;
 import org.unicef.rapidreg.forms.RecordForm;
 import org.unicef.rapidreg.forms.Section;
+import org.unicef.rapidreg.injection.component.DaggerFragmentComponent;
+import org.unicef.rapidreg.injection.module.FragmentModule;
 import org.unicef.rapidreg.model.Case;
 import org.unicef.rapidreg.service.CaseFormService;
 import org.unicef.rapidreg.service.CasePhotoService;
@@ -42,10 +47,21 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+import javax.inject.Inject;
+
 import butterknife.OnClick;
 
 public class CaseMiniFormFragment extends RecordRegisterFragment {
     public static final String TAG = CaseMiniFormFragment.class.getSimpleName();
+
+    @Inject
+    CaseRegisterPresenter caseRegisterPresenter;
+
+    @NonNull
+    @Override
+    public RecordRegisterPresenter createPresenter() {
+        return caseRegisterPresenter;
+    }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void saveCase(SaveCaseEvent event) {
@@ -61,7 +77,7 @@ public class CaseMiniFormFragment extends RecordRegisterFragment {
                 this.itemValues.getValues()), JsonObject.class));
 
         try {
-            Case record = saveCase(itemValues, photoPaths);
+            Case record = caseRegisterPresenter.saveCase(itemValues, photoPaths);
             Toast.makeText(getActivity(), R.string.save_success, Toast.LENGTH_SHORT).show();
 
             Bundle args = new Bundle();
@@ -81,11 +97,13 @@ public class CaseMiniFormFragment extends RecordRegisterFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
+        getComponent().inject(this);
         super.onCreateView(inflater, container, savedInstanceState);
         initItemValues();
 
         return inflater.inflate(R.layout.fragment_register, container, false);
     }
+
 
     @Override
     public void onStart() {
@@ -206,9 +224,5 @@ public class CaseMiniFormFragment extends RecordRegisterFragment {
     private boolean validateRequiredField() {
         CaseFormRoot caseForm = CaseFormService.getInstance().getCurrentForm();
         return RecordService.validateRequiredFields(caseForm, itemValues);
-    }
-
-    private Case saveCase(ItemValues itemValues, List<String> photoPaths) throws IOException {
-        return CaseService.getInstance().saveOrUpdate(itemValues, photoPaths);
     }
 }

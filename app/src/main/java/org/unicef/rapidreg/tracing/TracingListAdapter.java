@@ -10,6 +10,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 
 import org.unicef.rapidreg.R;
 import org.unicef.rapidreg.base.RecordListAdapter;
+import org.unicef.rapidreg.injection.ActivityContext;
 import org.unicef.rapidreg.model.Case;
 import org.unicef.rapidreg.model.RecordModel;
 import org.unicef.rapidreg.model.RecordPhoto;
@@ -23,6 +24,8 @@ import org.unicef.rapidreg.utils.StreamUtil;
 import java.io.IOException;
 import java.util.Date;
 
+import javax.inject.Inject;
+
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
@@ -30,14 +33,18 @@ import rx.functions.Func1;
 import rx.schedulers.Schedulers;
 
 public class TracingListAdapter extends RecordListAdapter {
-    public TracingListAdapter(Context context) {
+
+    private final TracingService tracingService;
+
+    public TracingListAdapter(Context context, TracingService tracingService) {
         super(context);
+        this.tracingService = tracingService;
     }
 
     @Override
     public void onBindViewHolder(final RecordListHolder holder, int position) {
         final long recordId = recordList.get(position);
-        final RecordModel record = TracingService.getInstance().getById(recordId);
+        final RecordModel record = tracingService.getById(recordId);
         final String recordJson = new String(record.getContent().getBlob());
         final ItemValues itemValues = ItemValues.generateItemValues(recordJson);
 

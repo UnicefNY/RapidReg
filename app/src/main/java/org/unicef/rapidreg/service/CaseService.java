@@ -28,6 +28,7 @@ import java.util.List;
 import java.util.UUID;
 
 import javax.inject.Inject;
+import javax.inject.Singleton;
 
 public class CaseService extends RecordService {
     public static final String TAG = CaseService.class.getSimpleName();
@@ -37,8 +38,7 @@ public class CaseService extends RecordService {
 
     private static final CaseService CASE_SERVICE = new CaseService();
 
-    @Inject
-    UserService userService;
+    private UserService userService;
 
     private CaseDao caseDao = new CaseDaoImpl();
     private CasePhotoDao casePhotoDao = new CasePhotoDaoImpl();
@@ -49,7 +49,8 @@ public class CaseService extends RecordService {
 
     public CaseService() {}
 
-    public CaseService(CaseDao caseDao) {
+    public CaseService(UserService userService, CaseDao caseDao) {
+        this.userService = userService;
         this.caseDao = caseDao;
     }
 

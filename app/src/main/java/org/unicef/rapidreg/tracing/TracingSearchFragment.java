@@ -1,14 +1,18 @@
 package org.unicef.rapidreg.tracing;
 
+import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.text.TextUtils;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 
 import org.unicef.rapidreg.R;
 import org.unicef.rapidreg.base.RecordListAdapter;
-import org.unicef.rapidreg.base.RecordListPresenter;
 import org.unicef.rapidreg.base.RecordSearchFragment;
-import org.unicef.rapidreg.base.TracingListPresenter;
+import org.unicef.rapidreg.base.RecordSearchPresenter;
+import org.unicef.rapidreg.base.TracingSearchPresenter;
 import org.unicef.rapidreg.model.RecordModel;
 import org.unicef.rapidreg.service.TracingService;
 
@@ -20,13 +24,19 @@ import javax.inject.Inject;
 public class TracingSearchFragment extends RecordSearchFragment {
 
     @Inject
-    TracingListPresenter tracingListPresenter;
+    TracingSearchPresenter tracingSearchPresenter;
 
     @Override
     @NonNull
-    public RecordListPresenter createPresenter() {
+    public RecordSearchPresenter createPresenter() {
+        return tracingSearchPresenter;
+    }
+
+    @Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         getComponent().inject(this);
-        return tracingListPresenter;
+        return super.onCreateView(inflater, container, savedInstanceState);
     }
 
     @Override
@@ -48,6 +58,6 @@ public class TracingSearchFragment extends RecordSearchFragment {
         int ageTo = TextUtils.isEmpty(to) ? RecordModel.MAX_AGE : Integer.valueOf(to);
         String registrationDate = filters.get(REGISTRATION_DATE);
 
-        return TracingService.getInstance().getSearchResult(id, name, ageFrom, ageTo, getDate(registrationDate));
+        return tracingSearchPresenter.getSearchResult(id, name, ageFrom, ageTo, registrationDate);
     }
 }

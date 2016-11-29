@@ -23,7 +23,14 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 import com.hannesdorfmann.mosby.mvp.MvpFragment;
 
+import org.unicef.rapidreg.PrimeroApplication;
 import org.unicef.rapidreg.R;
+import org.unicef.rapidreg.injection.component.ActivityComponent;
+import org.unicef.rapidreg.injection.component.DaggerFragmentComponent;
+import org.unicef.rapidreg.injection.component.FragmentComponent;
+import org.unicef.rapidreg.injection.module.FragmentModule;
+
+import javax.inject.Inject;
 
 import butterknife.BindString;
 import butterknife.BindView;
@@ -74,10 +81,15 @@ public class SyncFragment extends MvpFragment<SyncView, SyncPresenter> implement
     @BindString(R.string.continue_sync_button_text)
     String continueSyncButtonText;
 
+    @Inject
+    SyncPresenter syncPresenter;
+    private FragmentComponent component;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
+        getComponent().inject(this);
         View view = inflater.inflate(R.layout.fragment_sync, container, false);
         ButterKnife.bind(this, view);
         initView();
@@ -123,7 +135,7 @@ public class SyncFragment extends MvpFragment<SyncView, SyncPresenter> implement
 
     @Override
     public SyncPresenter createPresenter() {
-        return new SyncPresenter(getActivity());
+        return syncPresenter;
     }
 
     @OnClick(R.id.btn_sync)
@@ -256,4 +268,10 @@ public class SyncFragment extends MvpFragment<SyncView, SyncPresenter> implement
         Toast.makeText(getActivity(), getResources().getString(errorMsgId), Toast.LENGTH_LONG).show();
     }
 
+    public FragmentComponent getComponent() {
+        return DaggerFragmentComponent.builder()
+                .applicationComponent(PrimeroApplication.get(getActivity()).getComponent())
+                .fragmentModule(new FragmentModule(this))
+                .build();
+    }
 }

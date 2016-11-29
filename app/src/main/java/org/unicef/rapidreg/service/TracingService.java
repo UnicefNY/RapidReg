@@ -35,19 +35,13 @@ public class TracingService extends RecordService {
     public static final String TRACING_ID = "tracing_request_id";
     public static final String TRACING_PRIMARY_ID = "tracing_primary_id";
 
-    private static final TracingService TRACING_SERVICE = new TracingService();
-
     private TracingDao tracingDao = new TracingDaoImpl();
     private TracingPhotoDao tracingPhotoDao = new TracingPhotoDaoImpl();
 
-    @Inject
     UserService userService;
 
-    public static TracingService getInstance() {
-        return TRACING_SERVICE;
-    }
-
-    private TracingService() {
+    public TracingService(UserService userService) {
+        this.userService = userService;
     }
 
     public TracingService(TracingDao tracingDao) {
@@ -57,7 +51,6 @@ public class TracingService extends RecordService {
     public Tracing getById(long caseId) {
         return tracingDao.getTracingById(caseId);
     }
-
     public Tracing getByUniqueId(String uniqueId) {
         return tracingDao.getTracingByUniqueId(uniqueId);
     }
@@ -252,10 +245,12 @@ public class TracingService extends RecordService {
     }
 
     private Blob getAudioBlob(Blob blob) {
-        try {
-            blob = new Blob(StreamUtil.readFile(AUDIO_FILE_PATH));
-        } catch (IOException e) {
-            e.printStackTrace();
+        if (StreamUtil.isFileExists(AUDIO_FILE_PATH)) {
+            try {
+                blob = new Blob(StreamUtil.readFile(AUDIO_FILE_PATH));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
         return blob;
     }

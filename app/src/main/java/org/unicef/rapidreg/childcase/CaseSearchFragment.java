@@ -1,10 +1,14 @@
 package org.unicef.rapidreg.childcase;
 
+import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.text.TextUtils;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
-import org.unicef.rapidreg.base.CaseListPresenter;
-import org.unicef.rapidreg.base.RecordListPresenter;
 import org.unicef.rapidreg.base.RecordSearchFragment;
+import org.unicef.rapidreg.base.RecordSearchPresenter;
 import org.unicef.rapidreg.model.RecordModel;
 import org.unicef.rapidreg.service.CaseService;
 
@@ -16,12 +20,18 @@ import javax.inject.Inject;
 public class CaseSearchFragment extends RecordSearchFragment {
 
     @Inject
-    CaseListPresenter caseListPresenter;
+    CaseSearchPresenter caseSearchPresenter;
 
     @Override
-    public RecordListPresenter createPresenter() {
+    public RecordSearchPresenter createPresenter() {
+        return caseSearchPresenter;
+    }
+
+    @Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         getComponent().inject(this);
-        return caseListPresenter;
+        return super.onCreateView(inflater, container, savedInstanceState);
     }
 
     @Override
@@ -35,8 +45,7 @@ public class CaseSearchFragment extends RecordSearchFragment {
         String caregiver = filters.get(CAREGIVER);
         String registrationDate = filters.get(REGISTRATION_DATE);
 
-        return CaseService.getInstance().getSearchResult(shortId, name, ageFrom, ageTo,
-                caregiver, getDate(registrationDate));
+        return caseSearchPresenter.getSearchResult(shortId, name, ageFrom, ageTo, caregiver, registrationDate);
     }
 }
 
