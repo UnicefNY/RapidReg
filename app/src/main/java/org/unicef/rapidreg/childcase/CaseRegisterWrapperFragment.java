@@ -18,6 +18,7 @@ import org.greenrobot.eventbus.ThreadMode;
 import org.unicef.rapidreg.PrimeroApplication;
 import org.unicef.rapidreg.R;
 import org.unicef.rapidreg.base.RecordActivity;
+import org.unicef.rapidreg.base.RecordRegisterPresenter;
 import org.unicef.rapidreg.base.RecordRegisterWrapperFragment;
 import org.unicef.rapidreg.event.SaveCaseEvent;
 import org.unicef.rapidreg.forms.CaseFormRoot;
@@ -43,7 +44,12 @@ public class CaseRegisterWrapperFragment extends RecordRegisterWrapperFragment {
     public static final String TAG = CaseRegisterWrapperFragment.class.getSimpleName();
 
     @Inject
-    CaseFormService caseFormService;
+    CaseRegisterPresenter caseRegisterPresenter;
+
+    @Override
+    public CaseRegisterPresenter createPresenter() {
+        return caseRegisterPresenter;
+    }
 
     @Nullable
     @Override
@@ -96,7 +102,7 @@ public class CaseRegisterWrapperFragment extends RecordRegisterWrapperFragment {
 
     @Override
     protected void initFormData() {
-        form = caseFormService.getCurrentForm();
+        form = caseRegisterPresenter.getCurrentForm();
         sections = form.getSections();
     }
 
@@ -114,7 +120,7 @@ public class CaseRegisterWrapperFragment extends RecordRegisterWrapperFragment {
     }
 
     private boolean validateRequiredField() {
-        CaseFormRoot caseForm = caseFormService.getCurrentForm();
+        CaseFormRoot caseForm = caseRegisterPresenter.getCurrentForm();
         return RecordService.validateRequiredFields(caseForm, itemValues);
     }
 

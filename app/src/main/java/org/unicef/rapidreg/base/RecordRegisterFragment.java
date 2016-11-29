@@ -58,15 +58,6 @@ public abstract class RecordRegisterFragment extends MvpFragment<RecordRegisterV
 
     private RecordRegisterAdapter recordRegisterAdapter;
 
-    @Inject
-    RecordRegisterPresenter recordRegisterPresenter;
-
-    @NonNull
-    @Override
-    public RecordRegisterPresenter createPresenter() {
-        return recordRegisterPresenter;
-    }
-
     public FragmentComponent getComponent() {
         return DaggerFragmentComponent.builder()
                 .applicationComponent(PrimeroApplication.get(getActivity()).getComponent())
