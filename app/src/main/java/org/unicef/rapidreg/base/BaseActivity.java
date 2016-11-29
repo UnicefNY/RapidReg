@@ -73,10 +73,10 @@ public abstract class BaseActivity extends AppCompatActivity implements Navigati
         User currentUser = userService.getCurrentUser();
         if (currentUser != null) {
             String username = currentUser.getUsername();
-            textViewLoginUserLabel.setText(username == null ? "" : username);
+            textViewLoginUserLabel.setText(username);
 
             String organisation = currentUser.getOrganisation();
-            organizationView.setText(organisation == null ? "" : organisation);
+            organizationView.setText(organisation);
         }
         TextView textViewLogoutLabel = (TextView) headerView.findViewById(R.id.logout_label);
 

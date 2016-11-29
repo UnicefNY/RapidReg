@@ -41,6 +41,8 @@ import java.io.IOException;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
+import javax.inject.Inject;
+
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
@@ -61,6 +63,9 @@ public abstract class RecordActivity extends BaseActivity {
     private String imagePath;
     private CompositeSubscription subscriptions;
     private boolean isFormSyncFail;
+
+    @Inject
+    CaseFormService caseFormService;
 
     public boolean isFormSyncFail() {
         return isFormSyncFail;
@@ -137,7 +142,7 @@ public abstract class RecordActivity extends BaseActivity {
                     public void call(CaseFormRoot caseFormRoot) {
                         CaseFormRoot form = caseFormRoot;
                         CaseForm caseForm = new CaseForm(new Blob(gson.toJson(form).getBytes()));
-                        CaseFormService.getInstance().saveOrUpdateForm(caseForm);
+                        caseFormService.saveOrUpdateForm(caseForm);
 
                         Log.i(TAG, "load form successfully");
 
