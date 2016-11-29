@@ -21,16 +21,13 @@ import org.unicef.rapidreg.base.RecordRegisterWrapperFragment;
 import org.unicef.rapidreg.event.SaveTracingEvent;
 import org.unicef.rapidreg.forms.Section;
 import org.unicef.rapidreg.forms.TracingFormRoot;
-import org.unicef.rapidreg.model.Tracing;
 import org.unicef.rapidreg.service.RecordService;
 import org.unicef.rapidreg.service.TracingFormService;
-import org.unicef.rapidreg.service.TracingService;
 import org.unicef.rapidreg.service.cache.ItemValues;
 import org.unicef.rapidreg.service.cache.ItemValuesMap;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
 
 import javax.inject.Inject;
 
@@ -40,7 +37,7 @@ public class TracingRegisterWrapperFragment extends RecordRegisterWrapperFragmen
     public static final String TAG = TracingRegisterWrapperFragment.class.getSimpleName();
 
     @Inject
-    TracingService tracingService;
+    TracingRegisterPresenter tracingRegisterPresenter;
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void saveTracing(SaveTracingEvent event) {
@@ -56,7 +53,7 @@ public class TracingRegisterWrapperFragment extends RecordRegisterWrapperFragmen
                 this.itemValues.getValues()), JsonObject.class));
 
         try {
-            saveTracing(itemValues, photoPaths);
+            tracingRegisterPresenter.saveTracing(itemValues, photoPaths);
             Toast.makeText(getActivity(), R.string.save_success, Toast.LENGTH_SHORT).show();
             Bundle args = new Bundle();
             args.putSerializable(RecordService.ITEM_VALUES, ItemValuesMap.fromItemValuesJsonObject(itemValues));
@@ -93,7 +90,7 @@ public class TracingRegisterWrapperFragment extends RecordRegisterWrapperFragmen
 
     @Override
     protected void initFormData() {
-        form = TracingFormService.getInstance().getCurrentForm();
+        form = tracingRegisterPresenter.getCurrentForm();
         sections = form.getSections();
     }
 
@@ -115,7 +112,8 @@ public class TracingRegisterWrapperFragment extends RecordRegisterWrapperFragmen
         return RecordService.validateRequiredFields(tracingForm, itemValues);
     }
 
-    private Tracing saveTracing(ItemValues itemValues, List<String> photoPaths) throws IOException {
-        return tracingService.saveOrUpdate(itemValues, photoPaths);
+    @Override
+    public TracingRegisterPresenter createPresenter() {
+        return tracingRegisterPresenter;
     }
 }

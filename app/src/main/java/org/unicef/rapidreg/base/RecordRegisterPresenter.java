@@ -9,6 +9,8 @@ import org.unicef.rapidreg.forms.Field;
 import org.unicef.rapidreg.forms.RecordForm;
 import org.unicef.rapidreg.model.CaseForm;
 import org.unicef.rapidreg.service.CaseFormService;
+import org.unicef.rapidreg.service.TracingFormService;
+import org.unicef.rapidreg.service.UserService;
 import org.unicef.rapidreg.service.cache.ItemValuesMap;
 
 import java.util.Iterator;
@@ -16,14 +18,9 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-public class RecordRegisterPresenter extends MvpBasePresenter<RecordRegisterView> {
+public abstract class RecordRegisterPresenter extends MvpBasePresenter<RecordRegisterView> {
 
-    private CaseFormService caseFormService;
 
-    @Inject
-    public RecordRegisterPresenter(CaseFormService caseFormService) {
-        this.caseFormService = caseFormService;
-    }
 
     public void initContext(Context context, List<Field> fields, boolean isMiniForm) {
         if (isViewAttached()) {
@@ -46,7 +43,5 @@ public class RecordRegisterPresenter extends MvpBasePresenter<RecordRegisterView
         return fields;
     }
 
-    public CaseFormRoot getCurrentForm() {
-        return caseFormService.getCurrentForm();
-    }
+    public abstract RecordForm getCurrentForm();
 }

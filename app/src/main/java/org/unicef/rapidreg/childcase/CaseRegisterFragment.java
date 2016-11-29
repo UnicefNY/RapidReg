@@ -22,14 +22,20 @@ import org.unicef.rapidreg.service.cache.ItemValuesMap;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import butterknife.OnClick;
 
 public class CaseRegisterFragment extends RecordRegisterFragment {
+
+    @Inject
+    CaseRegisterPresenter caseRegisterPresenter;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
+        getComponent().inject(this);
         super.onCreateView(inflater, container, savedInstanceState);
 
         if (getArguments() != null) {
@@ -38,6 +44,11 @@ public class CaseRegisterFragment extends RecordRegisterFragment {
             itemValues = (ItemValuesMap) getArguments().getSerializable(ITEM_VALUES);
         }
         return inflater.inflate(R.layout.fragment_register, container, false);
+    }
+
+    @Override
+    public CaseRegisterPresenter createPresenter() {
+        return caseRegisterPresenter;
     }
 
     @Override

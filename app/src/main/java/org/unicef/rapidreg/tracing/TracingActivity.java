@@ -30,7 +30,7 @@ public class TracingActivity extends RecordActivity {
     @Override
     protected void processBackButton() {
         if (currentFeature.isListMode()) {
-            logOut(this);
+            logOut();
         } else if (currentFeature.isEditMode()) {
             showQuitDialog(R.id.nav_tracing);
         } else {

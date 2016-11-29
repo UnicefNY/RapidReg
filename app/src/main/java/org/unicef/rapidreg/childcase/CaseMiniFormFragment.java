@@ -59,7 +59,7 @@ public class CaseMiniFormFragment extends RecordRegisterFragment {
 
     @NonNull
     @Override
-    public RecordRegisterPresenter createPresenter() {
+    public CaseRegisterPresenter createPresenter() {
         return caseRegisterPresenter;
     }
 

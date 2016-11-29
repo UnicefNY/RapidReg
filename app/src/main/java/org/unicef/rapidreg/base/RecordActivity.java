@@ -30,9 +30,7 @@ import org.unicef.rapidreg.forms.TracingFormRoot;
 import org.unicef.rapidreg.model.CaseForm;
 import org.unicef.rapidreg.model.TracingForm;
 import org.unicef.rapidreg.network.AuthService;
-import org.unicef.rapidreg.service.CaseFormService;
 import org.unicef.rapidreg.service.RecordService;
-import org.unicef.rapidreg.service.TracingFormService;
 import org.unicef.rapidreg.utils.ImageCompressUtil;
 import org.unicef.rapidreg.widgets.viewholder.PhotoUploadViewHolder;
 
@@ -40,8 +38,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
-
-import javax.inject.Inject;
 
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
@@ -63,9 +59,6 @@ public abstract class RecordActivity extends BaseActivity {
     private String imagePath;
     private CompositeSubscription subscriptions;
     private boolean isFormSyncFail;
-
-    @Inject
-    CaseFormService caseFormService;
 
     public boolean isFormSyncFail() {
         return isFormSyncFail;
@@ -142,7 +135,7 @@ public abstract class RecordActivity extends BaseActivity {
                     public void call(CaseFormRoot caseFormRoot) {
                         CaseFormRoot form = caseFormRoot;
                         CaseForm caseForm = new CaseForm(new Blob(gson.toJson(form).getBytes()));
-                        caseFormService.saveOrUpdateForm(caseForm);
+                        basePresenter.saveCaseForm(caseForm);
 
                         Log.i(TAG, "load form successfully");
 
@@ -176,7 +169,7 @@ public abstract class RecordActivity extends BaseActivity {
                         TracingFormRoot form = tracingFormRoot;
 
                         TracingForm tracingForm = new TracingForm(new Blob(gson.toJson(form).getBytes()));
-                        TracingFormService.getInstance().saveOrUpdateForm(tracingForm);
+                        basePresenter.saveTracingForm(tracingForm);
 
                         Log.i(TAG, "load form successfully");
 

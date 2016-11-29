@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.getbase.floatingactionbutton.FloatingActionButton;
+import com.hannesdorfmann.mosby.mvp.MvpFragment;
 import com.ogaclejapan.smarttablayout.SmartTabLayout;
 import com.ogaclejapan.smarttablayout.utils.v4.FragmentPagerItems;
 import com.ogaclejapan.smarttablayout.utils.v4.FragmentStatePagerItemAdapter;
@@ -32,7 +33,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public abstract class RecordRegisterWrapperFragment extends Fragment {
+public abstract class RecordRegisterWrapperFragment extends MvpFragment<RecordRegisterView, RecordRegisterPresenter> {
     public static final String ITEM_VALUES = "item_values";
 
     @BindView(R.id.viewpager)

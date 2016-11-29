@@ -2,18 +2,20 @@ package org.unicef.rapidreg.base;
 
 import android.content.res.ColorStateList;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.hannesdorfmann.mosby.mvp.MvpActivity;
 
 import org.unicef.rapidreg.IntentSender;
 import org.unicef.rapidreg.PrimeroApplication;
@@ -22,7 +24,6 @@ import org.unicef.rapidreg.injection.component.ActivityComponent;
 import org.unicef.rapidreg.injection.component.DaggerActivityComponent;
 import org.unicef.rapidreg.injection.module.ActivityModule;
 import org.unicef.rapidreg.model.User;
-import org.unicef.rapidreg.service.UserService;
 import org.unicef.rapidreg.service.cache.PageModeCached;
 
 import javax.inject.Inject;
@@ -30,8 +31,7 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public abstract class BaseActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
-
+public abstract class BaseActivity extends MvpActivity<BaseView, BasePresenter> implements NavigationView.OnNavigationItemSelectedListener, BaseView {
     private static final int[][] COLOR_STATES = new int[][]{
             new int[]{android.R.attr.state_checked},
             new int[]{-android.R.attr.state_checked},};
@@ -50,11 +50,16 @@ public abstract class BaseActivity extends AppCompatActivity implements Navigati
     protected ColorStateList syncColor;
 
     @Inject
-    UserService userService;
+    BasePresenter basePresenter;
+
+    @NonNull
+    @Override
+    public BasePresenter createPresenter() {
+        return basePresenter;
+    }
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
-
         setupDependencyInjection();
 
         super.onCreate(savedInstanceState);
@@ -70,7 +75,7 @@ public abstract class BaseActivity extends AppCompatActivity implements Navigati
         View headerView = navigationView.getHeaderView(0);
         TextView textViewLoginUserLabel = (TextView) headerView.findViewById(R.id.login_user_label);
         TextView organizationView = (TextView) headerView.findViewById(R.id.organization);
-        User currentUser = userService.getCurrentUser();
+        User currentUser = basePresenter.getCurrentUser();
         if (currentUser != null) {
             String username = currentUser.getUsername();
             textViewLoginUserLabel.setText(username);
@@ -79,12 +84,12 @@ public abstract class BaseActivity extends AppCompatActivity implements Navigati
             organizationView.setText(organisation);
         }
         TextView textViewLogoutLabel = (TextView) headerView.findViewById(R.id.logout_label);
-
-        final BaseActivity baseActivity = this;
         textViewLogoutLabel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                attemptLogout(baseActivity);
+                if (getContext().getSyncTask() == null) {
+                    logOut();
+                }
             }
         });
 
@@ -107,6 +112,13 @@ public abstract class BaseActivity extends AppCompatActivity implements Navigati
                 .build();
 
         activityComponent.inject(this);
+    }
+
+    public ActivityComponent getComponent() {
+        return DaggerActivityComponent.builder()
+                .activityModule(new ActivityModule(this))
+                .applicationComponent(PrimeroApplication.get(this).getComponent())
+                .build();
     }
 
     @Override
@@ -148,20 +160,11 @@ public abstract class BaseActivity extends AppCompatActivity implements Navigati
         return (PrimeroApplication) getApplication();
     }
 
-    protected void logOut(BaseActivity currentActivity) {
-        PrimeroApplication context = currentActivity.getContext();
-        String message = context.getResources().getString(R.string.login_out_successful_text);
-        userService.setCurrentUser(null);
-        Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
-        intentSender.showLoginActivity(currentActivity);
-    }
-
-    //TODO: Put logout into basePresenter in future
-    private void attemptLogout(BaseActivity currentActivity) {
-        if (getContext().getSyncTask() != null) {
-        } else {
-            logOut(currentActivity);
-        }
+    protected void logOut() {
+        basePresenter.setCurrentUser(null);
+        String message = getContext().getResources().getString(R.string.login_out_successful_text);
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+        intentSender.showLoginActivity(this);
     }
 
     private ColorStateList generateColors(int resId) {

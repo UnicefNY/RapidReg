@@ -1,5 +1,0 @@
-:Monkey: seed=1480438444805 count=500
-:AllowPackage: org.unicef.rapidreg
-:IncludeCategory: android.intent.category.LAUNCHER
-:IncludeCategory: android.intent.category.MONKEY
-** No activities found to run, monkey aborted.

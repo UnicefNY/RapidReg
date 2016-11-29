@@ -12,6 +12,7 @@ import org.unicef.rapidreg.R;
 import org.unicef.rapidreg.base.Feature;
 import org.unicef.rapidreg.base.RecordActivity;
 import org.unicef.rapidreg.base.RecordRegisterFragment;
+import org.unicef.rapidreg.base.RecordRegisterPresenter;
 import org.unicef.rapidreg.forms.Field;
 import org.unicef.rapidreg.forms.RecordForm;
 import org.unicef.rapidreg.service.RecordService;
@@ -21,14 +22,20 @@ import org.unicef.rapidreg.service.cache.ItemValuesMap;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import butterknife.OnClick;
 
 public class TracingRegisterFragment extends RecordRegisterFragment {
+
+    @Inject
+    TracingRegisterPresenter tracingRegisterPresenter;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
+        getComponent().inject(this);
         super.onCreateView(inflater, container, savedInstanceState);
 
         if (getArguments() != null) {
@@ -37,6 +44,11 @@ public class TracingRegisterFragment extends RecordRegisterFragment {
             itemValues = (ItemValuesMap) getArguments().getSerializable(ITEM_VALUES);
         }
         return inflater.inflate(R.layout.fragment_register, container, false);
+    }
+
+    @Override
+    public TracingRegisterPresenter createPresenter() {
+        return tracingRegisterPresenter;
     }
 
     @Override
