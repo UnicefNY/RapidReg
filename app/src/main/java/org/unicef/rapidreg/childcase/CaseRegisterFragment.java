@@ -61,7 +61,7 @@ public class CaseRegisterFragment extends RecordRegisterFragment {
 
     protected List<Field> getFields() {
         int position = FragmentPagerItem.getPosition(getArguments());
-        RecordForm form = CaseFormService.getInstance().getCurrentForm();
+        RecordForm form = presenter.getCurrentForm();
         if (form != null) {
             return form.getSections().get(position).getFields();
         }

@@ -5,9 +5,9 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.Button;
-import android.widget.ImageView;
+import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.getbase.floatingactionbutton.FloatingActionButton;
@@ -27,6 +27,8 @@ import org.unicef.rapidreg.service.cache.ItemValues;
 import org.unicef.rapidreg.service.cache.ItemValuesMap;
 
 import java.util.List;
+
+import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -56,10 +58,13 @@ public abstract class RecordRegisterFragment extends MvpFragment<RecordRegisterV
 
     private RecordRegisterAdapter recordRegisterAdapter;
 
+    @Inject
+    RecordRegisterPresenter recordRegisterPresenter;
+
     @NonNull
     @Override
     public RecordRegisterPresenter createPresenter() {
-        return new RecordRegisterPresenter();
+        return recordRegisterPresenter;
     }
 
     public FragmentComponent getComponent() {
@@ -67,6 +72,13 @@ public abstract class RecordRegisterFragment extends MvpFragment<RecordRegisterV
                 .applicationComponent(PrimeroApplication.get(getActivity()).getComponent())
                 .fragmentModule(new FragmentModule(this))
                 .build();
+    }
+
+    @Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        getComponent().inject(this);
+        return super.onCreateView(inflater, container, savedInstanceState);
     }
 
     @Override

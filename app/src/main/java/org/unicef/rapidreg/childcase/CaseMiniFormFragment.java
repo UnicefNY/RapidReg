@@ -128,7 +128,8 @@ public class CaseMiniFormFragment extends RecordRegisterFragment {
     protected List<Field> getFields() {
         List<Field> fields = new ArrayList<>();
 
-        RecordForm form = CaseFormService.getInstance().getCurrentForm();
+        RecordForm form = caseRegisterPresenter.getCurrentForm();
+
         List<Section> sections = form.getSections();
 
         for (Section section : sections) {
@@ -222,7 +223,7 @@ public class CaseMiniFormFragment extends RecordRegisterFragment {
     }
 
     private boolean validateRequiredField() {
-        CaseFormRoot caseForm = CaseFormService.getInstance().getCurrentForm();
+        CaseFormRoot caseForm = caseRegisterPresenter.getCurrentForm();
         return RecordService.validateRequiredFields(caseForm, itemValues);
     }
 }

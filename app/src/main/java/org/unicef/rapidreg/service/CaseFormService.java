@@ -13,14 +13,8 @@ import org.unicef.rapidreg.model.CaseForm;
 
 public class CaseFormService {
     public static final String TAG = CaseFormService.class.getSimpleName();
-    private static final CaseFormService CASE_FORM_SERVICE
-            = new CaseFormService(new CaseFormDaoImpl());
     private static CaseFormRoot caseForm;
     private CaseFormDao caseFormDao;
-
-    public static CaseFormService getInstance() {
-        return CASE_FORM_SERVICE;
-    }
 
     public CaseFormService(CaseFormDao caseFormDao) {
         this.caseFormDao = caseFormDao;
