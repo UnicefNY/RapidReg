@@ -1,6 +1,7 @@
 package org.unicef.rapidreg.tracing;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -21,6 +22,8 @@ import org.unicef.rapidreg.base.RecordActivity;
 import org.unicef.rapidreg.base.RecordPhotoAdapter;
 import org.unicef.rapidreg.base.RecordRegisterAdapter;
 import org.unicef.rapidreg.base.RecordRegisterFragment;
+import org.unicef.rapidreg.base.RecordRegisterPresenter;
+import org.unicef.rapidreg.base.TracingSearchPresenter;
 import org.unicef.rapidreg.event.SaveTracingEvent;
 import org.unicef.rapidreg.forms.Field;
 import org.unicef.rapidreg.forms.RecordForm;
@@ -42,10 +45,16 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+import javax.inject.Inject;
+
 import butterknife.OnClick;
 
 public class TracingMiniFormFragment extends RecordRegisterFragment {
+
     public static final String TAG = TracingMiniFormFragment.class.getSimpleName();
+
+    @Inject
+    TracingRegisterPresenter tracingRegisterPresenter;
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void saveTracing(SaveTracingEvent event) {
@@ -60,7 +69,7 @@ public class TracingMiniFormFragment extends RecordRegisterFragment {
                 this.itemValues.getValues()), JsonObject.class));
 
         try {
-            Tracing record = saveTracing(itemValues, photoPaths);
+            Tracing record = tracingRegisterPresenter.saveTracing(itemValues, photoPaths);
             Toast.makeText(getActivity(), R.string.save_success, Toast.LENGTH_SHORT).show();
 
             Bundle args = new Bundle();
@@ -71,10 +80,17 @@ public class TracingMiniFormFragment extends RecordRegisterFragment {
         }
     }
 
+    @NonNull
+    @Override
+    public TracingRegisterPresenter createPresenter() {
+        return tracingRegisterPresenter;
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
+        getComponent().inject(this);
         super.onCreateView(inflater, container, savedInstanceState);
         initItemValues();
 
@@ -158,7 +174,7 @@ public class TracingMiniFormFragment extends RecordRegisterFragment {
         if (getArguments() != null) {
             recordId = getArguments().getLong(TracingService.TRACING_PRIMARY_ID, INVALID_RECORD_ID);
             if (recordId != INVALID_RECORD_ID) {
-                Tracing item = TracingService.getInstance().getById(recordId);
+                Tracing item = tracingRegisterPresenter.getById(recordId);
                 String tracingJson = new String(item.getContent().getBlob());
                 try {
                     itemValues = new ItemValuesMap(JsonUtils.toMap(ItemValues.generateItemValues(tracingJson).getValues()));
@@ -197,10 +213,5 @@ public class TracingMiniFormFragment extends RecordRegisterFragment {
     private boolean validateRequiredField() {
         TracingFormRoot recordForm = TracingFormService.getInstance().getCurrentForm();
         return RecordService.validateRequiredFields(recordForm, itemValues);
-    }
-
-
-    private Tracing saveTracing(ItemValues itemValues, List<String> photoPaths) throws IOException {
-        return TracingService.getInstance().saveOrUpdate(itemValues, photoPaths);
     }
 }

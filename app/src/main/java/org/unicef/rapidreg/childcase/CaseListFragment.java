@@ -1,7 +1,11 @@
 package org.unicef.rapidreg.childcase;
 
+import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 
 import org.unicef.rapidreg.R;
@@ -36,8 +40,14 @@ public class CaseListFragment extends RecordListFragment {
 
     @Override
     public RecordListPresenter createPresenter() {
-        getComponent().inject(this);
         return caseListPresenter;
+    }
+
+    @Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        getComponent().inject(this);
+        return super.onCreateView(inflater, container, savedInstanceState);
     }
 
     @Override
@@ -47,7 +57,7 @@ public class CaseListFragment extends RecordListFragment {
         listContainer.setLayoutManager(layoutManager);
         listContainer.setAdapter(adapter);
 
-        List<Case> cases = presenter.getCases();
+        List<Case> cases = caseListPresenter.getCases();
         int index = cases.isEmpty() ? HAVE_NO_RESULT : HAVE_RESULT_LIST;
         viewSwitcher.setDisplayedChild(index);
     }
@@ -60,7 +70,7 @@ public class CaseListFragment extends RecordListFragment {
         orderSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                List<Long> filterCases = presenter.getCasesByFilter(SPINNER_STATES[position]);
+                List<Long> filterCases = caseListPresenter.getCasesByFilter(SPINNER_STATES[position]);
                 if (filterCases == null || filterCases.isEmpty()) {
                     return;
                 }
@@ -80,7 +90,7 @@ public class CaseListFragment extends RecordListFragment {
         presenter.clearAudioFile();
         RecordActivity activity = (RecordActivity) getActivity();
 
-        if (!presenter.isFormReady()) {
+        if (!caseListPresenter.isFormReady()) {
             showSyncFormDialog(getResources().getString(R.string.child_case));
             return;
         }

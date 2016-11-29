@@ -15,6 +15,7 @@ import com.raizlabs.android.dbflow.data.Blob;
 
 import org.unicef.rapidreg.R;
 import org.unicef.rapidreg.base.PhotoConfig;
+import org.unicef.rapidreg.injection.ActivityContext;
 import org.unicef.rapidreg.model.Case;
 import org.unicef.rapidreg.model.CasePhoto;
 import org.unicef.rapidreg.model.RecordModel;
@@ -40,6 +41,8 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Locale;
+
+import javax.inject.Inject;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -78,16 +81,20 @@ public class SyncPresenter extends MvpBasePresenter<SyncView> {
         }
     }
 
-    public SyncPresenter(Context context) {
+    @Inject
+    public SyncPresenter(@ActivityContext Context context,CaseService caseService,CasePhotoService casePhotoService,TracingPhotoService tracingPhotoService,TracingService tracingService) {
         this.context = context;
+
         syncService = new SyncService(context);
-        caseService = CaseService.getInstance();
-        casePhotoService = CasePhotoService.getInstance();
+        this.casePhotoService = casePhotoService;
+        this.caseService = caseService;
+        this.tracingService = tracingService;
+        this.tracingPhotoService = tracingPhotoService;
+
         syncTracingService = new SyncTracingService(context);
-        tracingService = TracingService.getInstance();
-        tracingPhotoService = tracingPhotoService.getInstance();
-        caseList = CaseService.getInstance().getAll();
-        tracingList = TracingService.getInstance().getAll();
+
+        caseList = caseService.getAll();
+        tracingList = tracingService.getAll();
         initSyncRecordNumber();
     }
 
@@ -663,7 +670,7 @@ public class SyncPresenter extends MvpBasePresenter<SyncView> {
 
     private void postPullTracings(JsonObject tracingsJsonObject) {
         String internalId = tracingsJsonObject.get("_id").getAsString();
-        Tracing item = TracingService.getInstance().getByInternalId(internalId);
+        Tracing item = tracingService.getByInternalId(internalId);
         String newRev = tracingsJsonObject.get("_rev").getAsString();
         String registrationDate = tracingsJsonObject.get("inquiry_date").getAsString();
         if (item != null) {

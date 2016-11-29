@@ -2,6 +2,10 @@ package org.unicef.rapidreg.tracing;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
@@ -28,10 +32,15 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import butterknife.OnClick;
 
 public class TracingRegisterWrapperFragment extends RecordRegisterWrapperFragment {
     public static final String TAG = TracingRegisterWrapperFragment.class.getSimpleName();
+
+    @Inject
+    TracingService tracingService;
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void saveTracing(SaveTracingEvent event) {
@@ -56,6 +65,13 @@ public class TracingRegisterWrapperFragment extends RecordRegisterWrapperFragmen
         } catch (IOException e) {
             Toast.makeText(getActivity(), R.string.save_failed, Toast.LENGTH_SHORT).show();
         }
+    }
+
+    @Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        getComponent().inject(this);
+        return super.onCreateView(inflater, container, savedInstanceState);
     }
 
     @OnClick(R.id.edit)
@@ -100,6 +116,6 @@ public class TracingRegisterWrapperFragment extends RecordRegisterWrapperFragmen
     }
 
     private Tracing saveTracing(ItemValues itemValues, List<String> photoPaths) throws IOException {
-        return TracingService.getInstance().saveOrUpdate(itemValues, photoPaths);
+        return tracingService.saveOrUpdate(itemValues, photoPaths);
     }
 }

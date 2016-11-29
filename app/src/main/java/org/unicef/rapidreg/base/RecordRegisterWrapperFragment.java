@@ -16,10 +16,14 @@ import com.ogaclejapan.smarttablayout.utils.v4.FragmentStatePagerItemAdapter;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
+import org.unicef.rapidreg.PrimeroApplication;
 import org.unicef.rapidreg.R;
 import org.unicef.rapidreg.event.UpdateImageEvent;
 import org.unicef.rapidreg.forms.RecordForm;
 import org.unicef.rapidreg.forms.Section;
+import org.unicef.rapidreg.injection.component.DaggerFragmentComponent;
+import org.unicef.rapidreg.injection.component.FragmentComponent;
+import org.unicef.rapidreg.injection.module.FragmentModule;
 import org.unicef.rapidreg.service.cache.ItemValues;
 import org.unicef.rapidreg.service.cache.ItemValuesMap;
 
@@ -61,6 +65,13 @@ public abstract class RecordRegisterWrapperFragment extends Fragment {
         initRegisterContainer();
 
         return view;
+    }
+
+    public FragmentComponent getComponent() {
+        return DaggerFragmentComponent.builder()
+                .applicationComponent(PrimeroApplication.get(getContext()).getComponent())
+                .fragmentModule(new FragmentModule(this))
+                .build();
     }
 
     @Override

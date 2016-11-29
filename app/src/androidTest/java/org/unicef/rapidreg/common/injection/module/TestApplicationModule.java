@@ -3,11 +3,20 @@ package org.unicef.rapidreg.common.injection.module;
 import android.app.Application;
 import android.content.Context;
 
+import org.unicef.rapidreg.db.impl.CaseDaoImpl;
 import org.unicef.rapidreg.db.impl.CaseFormDaoImpl;
+import org.unicef.rapidreg.db.impl.CasePhotoDaoImpl;
+import org.unicef.rapidreg.db.impl.TracingFormDaoImpl;
+import org.unicef.rapidreg.db.impl.TracingPhotoDaoImpl;
+import org.unicef.rapidreg.db.impl.UserDaoImpl;
 import org.unicef.rapidreg.injection.ApplicationContext;
 import org.unicef.rapidreg.service.CaseFormService;
+import org.unicef.rapidreg.service.CasePhotoService;
 import org.unicef.rapidreg.service.CaseService;
 import org.unicef.rapidreg.service.RecordService;
+import org.unicef.rapidreg.service.TracingFormService;
+import org.unicef.rapidreg.service.TracingPhotoService;
+import org.unicef.rapidreg.service.TracingService;
 import org.unicef.rapidreg.service.UserService;
 
 import javax.inject.Singleton;
@@ -57,7 +66,31 @@ public class TestApplicationModule {
 
     @Provides
     @Singleton
-    public CaseService provideCaseService() {
+    public CaseService provideCaseService(UserService userService) {
         return mock(CaseService.class);
+    }
+
+    @Provides
+    @Singleton
+    public CasePhotoService provideCasePhotoService() {
+        return mock(CasePhotoService.class);
+    }
+
+    @Provides
+    @Singleton
+    public TracingService provideTracingService(UserService userService) {
+        return mock(TracingService.class);
+    }
+
+    @Provides
+    @Singleton
+    public TracingFormService provideTracingFormService() {
+        return mock(TracingFormService.class);
+    }
+
+    @Provides
+    @Singleton
+    public TracingPhotoService provideTracingPhotoService() {
+        return mock(TracingPhotoService.class);
     }
 }

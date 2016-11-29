@@ -16,9 +16,13 @@ import com.hannesdorfmann.mosby.mvp.MvpFragment;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
+import org.unicef.rapidreg.PrimeroApplication;
 import org.unicef.rapidreg.R;
 import org.unicef.rapidreg.event.UpdateImageEvent;
 import org.unicef.rapidreg.forms.Field;
+import org.unicef.rapidreg.injection.component.DaggerFragmentComponent;
+import org.unicef.rapidreg.injection.component.FragmentComponent;
+import org.unicef.rapidreg.injection.module.FragmentModule;
 import org.unicef.rapidreg.service.cache.ItemValues;
 import org.unicef.rapidreg.service.cache.ItemValuesMap;
 
@@ -29,6 +33,7 @@ import butterknife.ButterKnife;
 
 public abstract class RecordRegisterFragment extends MvpFragment<RecordRegisterView, RecordRegisterPresenter>
         implements RecordRegisterView {
+
 
     public static final String ITEM_VALUES = "item_values";
 
@@ -55,6 +60,13 @@ public abstract class RecordRegisterFragment extends MvpFragment<RecordRegisterV
     @Override
     public RecordRegisterPresenter createPresenter() {
         return new RecordRegisterPresenter();
+    }
+
+    public FragmentComponent getComponent() {
+        return DaggerFragmentComponent.builder()
+                .applicationComponent(PrimeroApplication.get(getActivity()).getComponent())
+                .fragmentModule(new FragmentModule(this))
+                .build();
     }
 
     @Override

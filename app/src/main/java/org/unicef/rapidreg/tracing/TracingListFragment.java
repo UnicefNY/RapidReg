@@ -1,7 +1,11 @@
 package org.unicef.rapidreg.tracing;
 
+import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 
 import org.unicef.rapidreg.R;
@@ -23,11 +27,11 @@ import butterknife.OnClick;
 
 public class TracingListFragment extends RecordListFragment {
 
-    private static final SpinnerState[] SPINNER_STATES = {
+    public static final SpinnerState[] SPINNER_STATES = {
             SpinnerState.INQUIRY_DATE_ASC,
             SpinnerState.INQUIRY_DATE_DES};
 
-    private static final int DEFAULT_SPINNER_STATE_POSITION =
+    public static final int DEFAULT_SPINNER_STATE_POSITION =
             Arrays.asList(SPINNER_STATES).indexOf(SpinnerState.INQUIRY_DATE_DES);
 
     @Inject
@@ -35,8 +39,14 @@ public class TracingListFragment extends RecordListFragment {
 
     @Override
     public RecordListPresenter createPresenter() {
-        getComponent().inject(this);
         return tracingListPresenter;
+    }
+
+    @Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        getComponent().inject(this);
+        return super.onCreateView(inflater, container, savedInstanceState);
     }
 
     @Override
@@ -45,11 +55,7 @@ public class TracingListFragment extends RecordListFragment {
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         listContainer.setLayoutManager(layoutManager);
         listContainer.setAdapter(adapter);
-
-        List<Tracing> tracings = TracingService.getInstance().getAll();
-        int index = tracings.isEmpty() ? HAVE_NO_RESULT : HAVE_RESULT_LIST;
-        viewSwitcher.setDisplayedChild(index);
-
+        viewSwitcher.setDisplayedChild(tracingListPresenter.calculateDisplayedIndex());
     }
 
     @Override
@@ -70,16 +76,9 @@ public class TracingListFragment extends RecordListFragment {
             }
 
             private void handleItemSelection(int position) {
-                TracingService service = TracingService.getInstance();
-                switch (SPINNER_STATES[position]) {
-                    case INQUIRY_DATE_ASC:
-                        adapter.setRecordList(service.getAllOrderByDateASC());
-                        break;
-                    case INQUIRY_DATE_DES:
-                        adapter.setRecordList(service.getAllOrderByDateDES());
-                        break;
-                    default:
-                        break;
+                List<Long> recordOrders = tracingListPresenter.getRecordOrders(position);
+                if (recordOrders != null) {
+                    adapter.setRecordList(recordOrders);
                 }
             }
         });

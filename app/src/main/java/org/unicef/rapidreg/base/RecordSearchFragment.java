@@ -35,7 +35,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.OnTextChanged;
 
-public abstract class RecordSearchFragment extends MvpFragment<RecordListView, RecordListPresenter>
+public abstract class RecordSearchFragment extends MvpFragment<RecordListView, RecordSearchPresenter>
         implements RecordListView {
     public static final String TAG = RecordSearchFragment.class.getSimpleName();
 
@@ -171,17 +171,6 @@ public abstract class RecordSearchFragment extends MvpFragment<RecordListView, R
                 .applicationComponent(PrimeroApplication.get(getContext()).getComponent())
                 .fragmentModule(new FragmentModule(this))
                 .build();
-    }
-
-    protected Date getDate(String value) {
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM/dd/yyyy");
-        try {
-            java.util.Date date = simpleDateFormat.parse(value);
-            return new Date(date.getTime());
-        } catch (ParseException e) {
-        }
-
-        return null;
     }
 
     private Map<String, String> getFilterValues() {

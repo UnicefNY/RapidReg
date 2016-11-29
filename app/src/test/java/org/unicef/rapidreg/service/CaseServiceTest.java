@@ -8,7 +8,6 @@ import org.unicef.rapidreg.db.impl.CaseDaoImpl;
 import org.unicef.rapidreg.forms.Field;
 import org.unicef.rapidreg.forms.Section;
 
-import java.util.HashMap;
 import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -19,7 +18,8 @@ import static org.mockito.Mockito.mock;
 @RunWith(RobolectricTestRunner.class)
 public class CaseServiceTest {
     private CaseDao caseDao = mock(CaseDaoImpl.class);
-    private CaseService caseService = new CaseService(caseDao);
+    private UserService userService = mock(UserService.class);
+    private CaseService caseService = new CaseService(userService, caseDao);
 
     @Test
     public void should_get_required_filed_list_when_exist_in_case_fields() {
