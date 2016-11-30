@@ -1,4 +1,4 @@
-package org.unicef.rapidreg.childcase;
+package org.unicef.rapidreg.childcase.caseregister;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -15,18 +15,16 @@ import com.ogaclejapan.smarttablayout.utils.v4.FragmentPagerItems;
 
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
-import org.unicef.rapidreg.PrimeroApplication;
 import org.unicef.rapidreg.R;
-import org.unicef.rapidreg.base.RecordActivity;
-import org.unicef.rapidreg.base.RecordRegisterPresenter;
-import org.unicef.rapidreg.base.RecordRegisterWrapperFragment;
+import org.unicef.rapidreg.base.record.RecordActivity;
+import org.unicef.rapidreg.base.record.recordregister.RecordRegisterWrapperFragment;
+import org.unicef.rapidreg.childcase.CaseActivity;
+import org.unicef.rapidreg.childcase.CaseFeature;
+import org.unicef.rapidreg.childcase.casephoto.CasePhotoAdapter;
 import org.unicef.rapidreg.event.SaveCaseEvent;
 import org.unicef.rapidreg.forms.CaseFormRoot;
 import org.unicef.rapidreg.forms.Section;
-import org.unicef.rapidreg.injection.component.DaggerFragmentComponent;
-import org.unicef.rapidreg.injection.module.FragmentModule;
 import org.unicef.rapidreg.model.Case;
-import org.unicef.rapidreg.service.CaseFormService;
 import org.unicef.rapidreg.service.CaseService;
 import org.unicef.rapidreg.service.RecordService;
 import org.unicef.rapidreg.service.cache.ItemValues;
