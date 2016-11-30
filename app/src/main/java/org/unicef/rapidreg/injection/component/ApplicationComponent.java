@@ -5,6 +5,7 @@ import android.content.Context;
 
 import org.unicef.rapidreg.injection.ApplicationContext;
 import org.unicef.rapidreg.injection.module.ApplicationModule;
+import org.unicef.rapidreg.network.AuthService;
 import org.unicef.rapidreg.service.CaseFormService;
 import org.unicef.rapidreg.service.CasePhotoService;
 import org.unicef.rapidreg.service.CaseService;
@@ -43,5 +44,5 @@ public interface ApplicationComponent {
 
     TracingService tracingService();
 
-
+    AuthService authService();
 }

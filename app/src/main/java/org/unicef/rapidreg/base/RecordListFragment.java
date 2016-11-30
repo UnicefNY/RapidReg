@@ -24,7 +24,8 @@ import org.greenrobot.eventbus.EventBus;
 import org.unicef.rapidreg.PrimeroApplication;
 import org.unicef.rapidreg.PrimeroConfiguration;
 import org.unicef.rapidreg.R;
-import org.unicef.rapidreg.event.NeedLoadFormsEvent;
+import org.unicef.rapidreg.event.LoadCaseFormEvent;
+import org.unicef.rapidreg.event.LoadTracingFormEvent;
 import org.unicef.rapidreg.injection.component.DaggerFragmentComponent;
 import org.unicef.rapidreg.injection.component.FragmentComponent;
 import org.unicef.rapidreg.injection.module.FragmentModule;
@@ -104,7 +105,8 @@ public abstract class RecordListFragment extends MvpFragment<RecordListView, Rec
                 .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        EventBus.getDefault().postSticky(new NeedLoadFormsEvent(PrimeroConfiguration.getCookie()));
+                        EventBus.getDefault().postSticky(new LoadCaseFormEvent(PrimeroConfiguration.getCookie()));
+                        EventBus.getDefault().postSticky(new LoadTracingFormEvent(PrimeroConfiguration.getCookie()));
                     }
                 })
                 .setNegativeButton(R.string.cancel, null)

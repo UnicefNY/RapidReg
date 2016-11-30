@@ -13,6 +13,7 @@ import org.unicef.rapidreg.injection.ApplicationContext;
 import org.unicef.rapidreg.model.CasePhoto;
 import org.unicef.rapidreg.model.Tracing;
 import org.unicef.rapidreg.model.TracingForm;
+import org.unicef.rapidreg.network.AuthService;
 import org.unicef.rapidreg.service.CaseFormService;
 import org.unicef.rapidreg.service.CasePhotoService;
 import org.unicef.rapidreg.service.CaseService;
@@ -93,5 +94,11 @@ public class ApplicationModule {
     @Singleton
     public TracingPhotoService provideTracingPhotoService() {
         return new TracingPhotoService(new TracingPhotoDaoImpl());
+    }
+
+    @Provides
+    @Singleton
+    public AuthService provideAuthService() {
+        return new AuthService();
     }
 }

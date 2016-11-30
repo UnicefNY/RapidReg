@@ -12,7 +12,8 @@ import org.greenrobot.eventbus.EventBus;
 import org.unicef.rapidreg.IntentSender;
 import org.unicef.rapidreg.PrimeroConfiguration;
 import org.unicef.rapidreg.R;
-import org.unicef.rapidreg.event.NeedLoadFormsEvent;
+import org.unicef.rapidreg.event.LoadCaseFormEvent;
+import org.unicef.rapidreg.event.LoadTracingFormEvent;
 import org.unicef.rapidreg.injection.ActivityContext;
 import org.unicef.rapidreg.model.LoginRequestBody;
 import org.unicef.rapidreg.model.LoginResponse;
@@ -37,17 +38,19 @@ import rx.subscriptions.CompositeSubscription;
 public class LoginPresenter extends MvpBasePresenter<LoginView> {
     public static final String TAG = LoginPresenter.class.getSimpleName();
 
+    private UserService userService;
+    private AuthService authService;
+
     private CompositeSubscription subscriptions;
 
     Context context;
     private IntentSender intentSender;
 
     @Inject
-    UserService userService;
-
-    @Inject
-    public LoginPresenter(@ActivityContext Context context) {
+    public LoginPresenter(@ActivityContext Context context, UserService userService, AuthService authService) {
         this.context = context;
+        this.userService = userService;
+        this.authService = authService;
         intentSender = new IntentSender();
         subscriptions = new CompositeSubscription();
     }
@@ -70,7 +73,7 @@ public class LoginPresenter extends MvpBasePresenter<LoginView> {
 
         PrimeroConfiguration.setApiBaseUrl(url.endsWith("/") ? url : String.format("%s/", url));
         try {
-            AuthService.getInstance().init(context);
+            authService.init(context);
         } catch (Exception e) {
             showLoginResultMessage(e.getMessage());
         }
@@ -118,7 +121,7 @@ public class LoginPresenter extends MvpBasePresenter<LoginView> {
         String androidId = Settings.Secure.getString(context.getContentResolver(),
                 Settings.Secure.ANDROID_ID);
 
-        subscriptions.add(AuthService.getInstance().loginRx(new LoginRequestBody(
+        subscriptions.add(authService.loginRx(new LoginRequestBody(
                 username,
                 password,
                 tm.getLine1Number(),
@@ -144,7 +147,8 @@ public class LoginPresenter extends MvpBasePresenter<LoginView> {
 
                                 goToLoginSuccessScreen();
 
-                                EventBus.getDefault().postSticky(new NeedLoadFormsEvent(PrimeroConfiguration.getCookie()));
+                                EventBus.getDefault().postSticky(new LoadCaseFormEvent(PrimeroConfiguration.getCookie()));
+                                EventBus.getDefault().postSticky(new LoadTracingFormEvent(PrimeroConfiguration.getCookie()));
 
                                 showLoginResultMessage(context.getResources().getString(R.string.login_success_message));
                                 Log.d(TAG, "login successful");

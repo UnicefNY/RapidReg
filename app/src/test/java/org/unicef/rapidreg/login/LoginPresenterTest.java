@@ -10,6 +10,8 @@ import org.robolectric.RuntimeEnvironment;
 import org.robolectric.annotation.Config;
 import org.unicef.rapidreg.BuildConfig;
 
+import javax.inject.Inject;
+
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
@@ -17,13 +19,13 @@ import static org.mockito.Mockito.verify;
 @RunWith(RobolectricTestRunner.class)
 @Config(constants = BuildConfig.class, sdk = Build.VERSION_CODES.JELLY_BEAN)
 public class LoginPresenterTest {
+    @Inject
     LoginPresenter loginPresenter;
     private LoginView loginView;
 
-
     @Before
     public void setUp() throws Exception {
-        loginPresenter = new LoginPresenter(RuntimeEnvironment.application);
+
         loginView = mock(LoginView.class);
         loginPresenter.attachView(loginView);
     }

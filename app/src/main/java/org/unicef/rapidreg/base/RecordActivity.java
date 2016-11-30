@@ -7,43 +7,26 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.MenuItem;
-import android.widget.Toast;
-
-import com.google.gson.Gson;
-import com.raizlabs.android.dbflow.data.Blob;
 
 import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
 import org.unicef.rapidreg.R;
-import org.unicef.rapidreg.event.NeedLoadFormsEvent;
 import org.unicef.rapidreg.event.UpdateImageEvent;
-import org.unicef.rapidreg.forms.CaseFormRoot;
-import org.unicef.rapidreg.forms.TracingFormRoot;
-import org.unicef.rapidreg.model.CaseForm;
-import org.unicef.rapidreg.model.TracingForm;
-import org.unicef.rapidreg.network.AuthService;
 import org.unicef.rapidreg.service.RecordService;
 import org.unicef.rapidreg.utils.ImageCompressUtil;
 import org.unicef.rapidreg.widgets.viewholder.PhotoUploadViewHolder;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Locale;
-import java.util.concurrent.TimeUnit;
 
-import rx.Observable;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Action1;
-import rx.functions.Func1;
-import rx.schedulers.Schedulers;
+import javax.inject.Inject;
+
 import rx.subscriptions.CompositeSubscription;
 
 public abstract class RecordActivity extends BaseActivity {
@@ -58,18 +41,33 @@ public abstract class RecordActivity extends BaseActivity {
 
     private String imagePath;
     private CompositeSubscription subscriptions;
-    private boolean isFormSyncFail;
+    private volatile boolean isTracingFormSyncFail;
+    private volatile boolean isCaseFormSyncFail;
 
-    public boolean isFormSyncFail() {
-        return isFormSyncFail;
+    @Inject
+    RecordPresenter recordPresenter;
+
+    @NonNull
+    @Override
+    public RecordPresenter createPresenter() {
+        return recordPresenter;
     }
 
-    public void setFormSyncFail(boolean formSyncFail) {
-        isFormSyncFail = formSyncFail;
+    public boolean isFormSyncFail() {
+        return isTracingFormSyncFail || isCaseFormSyncFail;
+    }
+
+    public void setTracingFormSyncFail(boolean tracingFormSyncFail) {
+        isTracingFormSyncFail = tracingFormSyncFail;
+    }
+
+    public void setCaseFormSyncFail(boolean caseFormSyncFail) {
+        isCaseFormSyncFail = caseFormSyncFail;
     }
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
+        getComponent().inject(this);
         super.onCreate(savedInstanceState);
         subscriptions = new CompositeSubscription();
 
@@ -109,79 +107,6 @@ public abstract class RecordActivity extends BaseActivity {
             RecordService.clearAudioFile();
             intentSender.showSyncActivity(this);
         }
-    }
-
-    @Subscribe(threadMode = ThreadMode.MAIN, sticky = true, priority = 1)
-    public void onNeedLoadFormsEvent(final NeedLoadFormsEvent event) {
-        EventBus.getDefault().removeStickyEvent(event);
-        final Gson gson = new Gson();
-        isFormSyncFail = false;
-        subscriptions.add(AuthService.getInstance().getCaseFormRx(event.getCookie(),
-                Locale.getDefault().getLanguage(), true, "case")
-                .flatMap(new Func1<CaseFormRoot, Observable<CaseFormRoot>>() {
-                    @Override
-                    public Observable<CaseFormRoot> call(CaseFormRoot caseFormRoot) {
-                        if (caseFormRoot == null) {
-                            return Observable.error(new Exception());
-                        }
-                        return Observable.just(caseFormRoot);
-                    }
-                })
-                .retry(3)
-                .timeout(60, TimeUnit.SECONDS)
-                .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Action1<CaseFormRoot>() {
-                    @Override
-                    public void call(CaseFormRoot caseFormRoot) {
-                        CaseFormRoot form = caseFormRoot;
-                        CaseForm caseForm = new CaseForm(new Blob(gson.toJson(form).getBytes()));
-                        basePresenter.saveCaseForm(caseForm);
-
-                        Log.i(TAG, "load form successfully");
-
-                    }
-                }, new Action1<Throwable>() {
-                    @Override
-                    public void call(Throwable throwable) {
-                        isFormSyncFail = true;
-                        Toast.makeText(RecordActivity.this, R.string.sync_case_forms_error, Toast.LENGTH_SHORT)
-                                .show();
-                    }
-                }));
-
-        subscriptions.add(AuthService.getInstance().getTracingFormRx(event.getCookie(),
-                Locale.getDefault().getLanguage(), true, "tracing_request")
-                .flatMap(new Func1<TracingFormRoot, Observable<TracingFormRoot>>() {
-                    @Override
-                    public Observable<TracingFormRoot> call(TracingFormRoot tracingFormRoot) {
-                        if (tracingFormRoot == null) {
-                            return Observable.error(new Exception());
-                        }
-                        return Observable.just(tracingFormRoot);
-                    }
-                })
-                .retry(3)
-                .timeout(60, TimeUnit.SECONDS)
-                .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Action1<TracingFormRoot>() {
-                    @Override
-                    public void call(TracingFormRoot tracingFormRoot) {
-                        TracingFormRoot form = tracingFormRoot;
-
-                        TracingForm tracingForm = new TracingForm(new Blob(gson.toJson(form).getBytes()));
-                        basePresenter.saveTracingForm(tracingForm);
-
-                        Log.i(TAG, "load form successfully");
-
-                    }
-                }, new Action1<Throwable>() {
-                    @Override
-                    public void call(Throwable throwable) {
-                        isFormSyncFail = true;
-                        Toast.makeText(RecordActivity.this, R.string.sync_tracing_forms_error, Toast.LENGTH_SHORT)
-                                .show();
-                    }
-                }));
     }
 
     public Feature getCurrentFeature() {

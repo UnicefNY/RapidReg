@@ -10,6 +10,7 @@ import org.unicef.rapidreg.db.impl.TracingFormDaoImpl;
 import org.unicef.rapidreg.db.impl.TracingPhotoDaoImpl;
 import org.unicef.rapidreg.db.impl.UserDaoImpl;
 import org.unicef.rapidreg.injection.ApplicationContext;
+import org.unicef.rapidreg.network.AuthService;
 import org.unicef.rapidreg.service.CaseFormService;
 import org.unicef.rapidreg.service.CasePhotoService;
 import org.unicef.rapidreg.service.CaseService;
@@ -92,5 +93,11 @@ public class TestApplicationModule {
     @Singleton
     public TracingPhotoService provideTracingPhotoService() {
         return mock(TracingPhotoService.class);
+    }
+
+    @Provides
+    @Singleton
+    public AuthService provideAuthService() {
+        return mock(AuthService.class);
     }
 }
