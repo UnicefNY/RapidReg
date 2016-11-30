@@ -1,4 +1,4 @@
-package org.unicef.rapidreg.base;
+package org.unicef.rapidreg.base.record.recordlist;
 
 import com.hannesdorfmann.mosby.mvp.MvpView;
 

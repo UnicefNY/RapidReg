@@ -1,4 +1,4 @@
-package org.unicef.rapidreg.base;
+package org.unicef.rapidreg.base.record.recordlist;
 
 import android.app.AlertDialog;
 import android.content.Context;
@@ -24,6 +24,7 @@ import org.greenrobot.eventbus.EventBus;
 import org.unicef.rapidreg.PrimeroApplication;
 import org.unicef.rapidreg.PrimeroConfiguration;
 import org.unicef.rapidreg.R;
+import org.unicef.rapidreg.base.record.RecordActivity;
 import org.unicef.rapidreg.event.LoadCaseFormEvent;
 import org.unicef.rapidreg.event.LoadTracingFormEvent;
 import org.unicef.rapidreg.injection.component.DaggerFragmentComponent;
