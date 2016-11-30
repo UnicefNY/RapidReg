@@ -1,4 +1,4 @@
-package org.unicef.rapidreg.base;
+package org.unicef.rapidreg.base.record.recordphoto;
 
 import android.content.Context;
 import android.support.v4.view.PagerAdapter;

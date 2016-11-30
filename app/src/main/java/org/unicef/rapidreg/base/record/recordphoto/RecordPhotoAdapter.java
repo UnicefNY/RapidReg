@@ -1,4 +1,4 @@
-package org.unicef.rapidreg.base;
+package org.unicef.rapidreg.base.record.recordphoto;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -10,9 +10,9 @@ import android.widget.ImageView;
 import com.bumptech.glide.Glide;
 
 import org.unicef.rapidreg.R;
+import org.unicef.rapidreg.base.record.RecordActivity;
 import org.unicef.rapidreg.model.RecordPhoto;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public abstract class RecordPhotoAdapter extends BaseAdapter {
