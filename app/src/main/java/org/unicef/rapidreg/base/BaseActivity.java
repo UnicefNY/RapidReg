@@ -60,7 +60,7 @@ public abstract class BaseActivity extends MvpActivity<BaseView, BasePresenter> 
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
-        setupDependencyInjection();
+        getComponent().inject(this);
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
@@ -103,15 +103,6 @@ public abstract class BaseActivity extends MvpActivity<BaseView, BasePresenter> 
         } else {
             drawer.closeDrawer(GravityCompat.START);
         }
-    }
-
-    private void setupDependencyInjection() {
-        ActivityComponent activityComponent = DaggerActivityComponent.builder()
-                .activityModule(new ActivityModule(this))
-                .applicationComponent(PrimeroApplication.get(this).getComponent())
-                .build();
-
-        activityComponent.inject(this);
     }
 
     public ActivityComponent getComponent() {

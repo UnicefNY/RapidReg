@@ -3,21 +3,42 @@ package org.unicef.rapidreg.tracing;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.util.Log;
+import android.widget.Toast;
 
 import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 import org.unicef.rapidreg.IntentSender;
 import org.unicef.rapidreg.R;
 import org.unicef.rapidreg.base.RecordActivity;
+import org.unicef.rapidreg.event.LoadTracingFormEvent;
 import org.unicef.rapidreg.event.SaveTracingEvent;
+import org.unicef.rapidreg.forms.TracingFormRoot;
 import org.unicef.rapidreg.service.TracingService;
 import org.unicef.rapidreg.utils.Utils;
+
+import javax.inject.Inject;
+
+import rx.functions.Action1;
 
 public class TracingActivity extends RecordActivity {
     public static final String TAG = TracingActivity.class.getSimpleName();
 
+    @Inject
+    TracingPresenter tracingPresenter;
+
+    @NonNull
+    @Override
+    public TracingPresenter createPresenter() {
+        return tracingPresenter;
+    }
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
+        getComponent().inject(this);
         super.onCreate(savedInstanceState);
 
         navigationView.setCheckedItem(R.id.nav_tracing);
@@ -108,5 +129,28 @@ public class TracingActivity extends RecordActivity {
     protected void save() {
         SaveTracingEvent event = new SaveTracingEvent();
         EventBus.getDefault().postSticky(event);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN, sticky = true, priority = 1)
+    public void onNeedLoadFormsEvent(final LoadTracingFormEvent event) {
+        EventBus.getDefault().removeStickyEvent(event);
+
+        tracingPresenter.loadTracingForm(event.getCookie())
+                .subscribe(new Action1<TracingFormRoot>() {
+                    @Override
+                    public void call(TracingFormRoot tracingFormRoot) {
+                        tracingPresenter.saveForm(tracingFormRoot);
+                        setTracingFormSyncFail(false);
+                        Log.i(TAG, "load tracing form successfully");
+
+                    }
+                }, new Action1<Throwable>() {
+                    @Override
+                    public void call(Throwable throwable) {
+                        setTracingFormSyncFail(true);
+                        Toast.makeText(TracingActivity.this, R.string.sync_tracing_forms_error, Toast.LENGTH_SHORT)
+                                .show();
+                    }
+                });
     }
 }

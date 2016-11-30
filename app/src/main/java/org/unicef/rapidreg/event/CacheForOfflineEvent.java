@@ -2,10 +2,10 @@ package org.unicef.rapidreg.event;
 
 import org.unicef.rapidreg.model.User;
 
-public class NeedCacheForOfflineEvent {
+public class CacheForOfflineEvent {
     private User user;
 
-    public NeedCacheForOfflineEvent(User user) {
+    public CacheForOfflineEvent(User user) {
         this.user = user;
     }
 

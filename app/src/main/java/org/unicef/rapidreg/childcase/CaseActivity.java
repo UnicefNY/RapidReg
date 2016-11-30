@@ -3,21 +3,42 @@ package org.unicef.rapidreg.childcase;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.util.Log;
+import android.widget.Toast;
 
 import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 import org.unicef.rapidreg.IntentSender;
 import org.unicef.rapidreg.R;
 import org.unicef.rapidreg.base.RecordActivity;
+import org.unicef.rapidreg.event.LoadCaseFormEvent;
 import org.unicef.rapidreg.event.SaveCaseEvent;
+import org.unicef.rapidreg.forms.CaseFormRoot;
 import org.unicef.rapidreg.service.CaseService;
 import org.unicef.rapidreg.utils.Utils;
+
+import javax.inject.Inject;
+
+import rx.functions.Action1;
 
 public class CaseActivity extends RecordActivity {
     public static final String TAG = CaseActivity.class.getSimpleName();
 
+    @Inject
+    CasePresenter casePresenter;
+
+    @NonNull
+    @Override
+    public CasePresenter createPresenter() {
+        return casePresenter;
+    }
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
+        getComponent().inject(this);
         super.onCreate(savedInstanceState);
 
         navigationView.setCheckedItem(R.id.nav_cases);
@@ -108,5 +129,33 @@ public class CaseActivity extends RecordActivity {
     protected void save() {
         SaveCaseEvent event = new SaveCaseEvent();
         EventBus.getDefault().postSticky(event);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN, sticky = true, priority = 1)
+    public void onNeedLoadFormsEvent(final LoadCaseFormEvent event) {
+        EventBus.getDefault().removeStickyEvent(event);
+
+        casePresenter.loadCaseForm(event.getCookie())
+                .subscribe(new Action1<CaseFormRoot>() {
+                    @Override
+                    public void call(CaseFormRoot caseFormRoot) {
+                        casePresenter.saveForm(caseFormRoot);
+                        setCaseFormSyncFail(false);
+                        Log.i(TAG, "load case form successfully");
+
+                    }
+                }, new Action1<Throwable>() {
+                    @Override
+                    public void call(Throwable throwable) {
+                        setCaseFormSyncFail(true);
+                        Toast.makeText(CaseActivity.this, R.string.sync_case_forms_error, Toast.LENGTH_SHORT)
+                                .show();
+                    }
+                });
     }
 }

@@ -1,9 +1,9 @@
 package org.unicef.rapidreg.event;
 
-public class NeedGoToLoginSuccessScreenEvent {
+public class LoginSuccessEvent {
     private String userName;
 
-    public NeedGoToLoginSuccessScreenEvent(String userName) {
+    public LoginSuccessEvent(String userName) {
         this.userName = userName;
     }
 
