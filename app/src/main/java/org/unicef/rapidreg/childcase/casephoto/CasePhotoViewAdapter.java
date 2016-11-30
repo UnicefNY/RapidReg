@@ -1,4 +1,4 @@
-package org.unicef.rapidreg.childcase;
+package org.unicef.rapidreg.childcase.casephoto;
 
 import android.content.Context;
 import android.graphics.Point;
@@ -10,7 +10,7 @@ import android.widget.ImageView;
 import com.bumptech.glide.Glide;
 
 import org.unicef.rapidreg.R;
-import org.unicef.rapidreg.base.RecordPhotoViewAdapter;
+import org.unicef.rapidreg.base.record.recordphoto.RecordPhotoViewAdapter;
 import org.unicef.rapidreg.service.CasePhotoService;
 
 import java.util.List;

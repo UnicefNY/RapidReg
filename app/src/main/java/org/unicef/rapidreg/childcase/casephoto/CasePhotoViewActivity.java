@@ -1,4 +1,4 @@
-package org.unicef.rapidreg.childcase;
+package org.unicef.rapidreg.childcase.casephoto;
 
 import android.graphics.Point;
 import android.os.Bundle;

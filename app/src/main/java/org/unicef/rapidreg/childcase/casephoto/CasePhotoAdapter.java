@@ -1,8 +1,8 @@
-package org.unicef.rapidreg.childcase;
+package org.unicef.rapidreg.childcase.casephoto;
 
 import android.content.Context;
 
-import org.unicef.rapidreg.base.RecordPhotoAdapter;
+import org.unicef.rapidreg.base.record.recordphoto.RecordPhotoAdapter;
 import org.unicef.rapidreg.model.RecordPhoto;
 import org.unicef.rapidreg.service.CasePhotoService;
 
