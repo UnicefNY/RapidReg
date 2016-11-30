@@ -3,7 +3,7 @@ package org.unicef.rapidreg.childcase;
 import com.google.gson.Gson;
 import com.raizlabs.android.dbflow.data.Blob;
 
-import org.unicef.rapidreg.base.RecordPresenter;
+import org.unicef.rapidreg.base.record.RecordPresenter;
 import org.unicef.rapidreg.forms.CaseFormRoot;
 import org.unicef.rapidreg.forms.RecordForm;
 import org.unicef.rapidreg.model.CaseForm;

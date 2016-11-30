@@ -54,7 +54,7 @@
             android:windowSoftInputMode="adjustResize"/>
 
         <activity
-            android:name=".childcase.CasePhotoViewActivity"
+            android:name=".childcase.casephoto.CasePhotoViewActivity"
             android:launchMode="singleInstance"
             android:theme="@style/Transparent"/>
 

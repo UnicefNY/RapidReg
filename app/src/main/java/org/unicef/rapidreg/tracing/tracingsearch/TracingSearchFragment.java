@@ -9,9 +9,9 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import org.unicef.rapidreg.R;
-import org.unicef.rapidreg.base.RecordListAdapter;
-import org.unicef.rapidreg.base.RecordSearchFragment;
-import org.unicef.rapidreg.base.RecordSearchPresenter;
+import org.unicef.rapidreg.base.record.recordlist.RecordListAdapter;
+import org.unicef.rapidreg.base.record.recordsearch.RecordSearchFragment;
+import org.unicef.rapidreg.base.record.recordsearch.RecordSearchPresenter;
 import org.unicef.rapidreg.model.RecordModel;
 
 import java.util.List;

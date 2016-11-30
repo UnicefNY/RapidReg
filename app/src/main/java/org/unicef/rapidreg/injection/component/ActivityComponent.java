@@ -2,9 +2,9 @@ package org.unicef.rapidreg.injection.component;
 
 import org.unicef.rapidreg.base.AudioRecorderActivity;
 import org.unicef.rapidreg.base.BaseActivity;
-import org.unicef.rapidreg.base.RecordActivity;
+import org.unicef.rapidreg.base.record.RecordActivity;
 import org.unicef.rapidreg.childcase.CaseActivity;
-import org.unicef.rapidreg.childcase.CasePhotoViewActivity;
+import org.unicef.rapidreg.childcase.casephoto.CasePhotoViewActivity;
 import org.unicef.rapidreg.injection.PerActivity;
 import org.unicef.rapidreg.injection.module.ActivityModule;
 import org.unicef.rapidreg.login.LoginActivity;

@@ -10,8 +10,8 @@ import com.ogaclejapan.smarttablayout.utils.v4.FragmentPagerItem;
 
 import org.unicef.rapidreg.R;
 import org.unicef.rapidreg.base.Feature;
-import org.unicef.rapidreg.base.RecordActivity;
-import org.unicef.rapidreg.base.RecordRegisterFragment;
+import org.unicef.rapidreg.base.record.RecordActivity;
+import org.unicef.rapidreg.base.record.recordregister.RecordRegisterFragment;
 import org.unicef.rapidreg.forms.Field;
 import org.unicef.rapidreg.forms.RecordForm;
 import org.unicef.rapidreg.service.RecordService;

@@ -10,7 +10,7 @@ import android.widget.ImageView;
 import com.bumptech.glide.Glide;
 
 import org.unicef.rapidreg.R;
-import org.unicef.rapidreg.base.RecordPhotoViewAdapter;
+import org.unicef.rapidreg.base.record.recordphoto.RecordPhotoViewAdapter;
 import org.unicef.rapidreg.service.TracingPhotoService;
 
 import java.util.List;
