@@ -1,4 +1,4 @@
-package org.unicef.rapidreg.childcase;
+package org.unicef.rapidreg.childcase.casesearch;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -7,10 +7,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import org.unicef.rapidreg.base.RecordSearchFragment;
-import org.unicef.rapidreg.base.RecordSearchPresenter;
+import org.unicef.rapidreg.base.record.recordsearch.RecordSearchFragment;
+import org.unicef.rapidreg.base.record.recordsearch.RecordSearchPresenter;
 import org.unicef.rapidreg.model.RecordModel;
-import org.unicef.rapidreg.service.CaseService;
 
 import java.util.List;
 import java.util.Map;
