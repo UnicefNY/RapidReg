@@ -1,7 +1,9 @@
-package org.unicef.rapidreg.base;
+package org.unicef.rapidreg.base.record.recordsearch;
 
 import android.content.Context;
 import com.hannesdorfmann.mosby.mvp.MvpBasePresenter;
+
+import org.unicef.rapidreg.base.record.recordlist.RecordListView;
 
 import java.sql.Date;
 import java.text.ParseException;
