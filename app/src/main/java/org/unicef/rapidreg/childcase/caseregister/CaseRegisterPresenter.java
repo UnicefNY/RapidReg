@@ -1,6 +1,6 @@
-package org.unicef.rapidreg.childcase;
+package org.unicef.rapidreg.childcase.caseregister;
 
-import org.unicef.rapidreg.base.RecordRegisterPresenter;
+import org.unicef.rapidreg.base.record.recordregister.RecordRegisterPresenter;
 import org.unicef.rapidreg.forms.CaseFormRoot;
 import org.unicef.rapidreg.model.Case;
 import org.unicef.rapidreg.service.CaseFormService;
