@@ -47,10 +47,6 @@ public class RecordService {
 
     protected static SimpleDateFormat registrationDateFormat = new SimpleDateFormat("dd/MM/yyyy");
 
-    public static RecordService getInstance() {
-        return new RecordService();
-    }
-
     public static void clearAudioFile() {
         File file = new File(AUDIO_FILE_PATH);
         file.delete();

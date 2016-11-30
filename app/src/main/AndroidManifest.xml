@@ -64,7 +64,7 @@
             android:theme="@style/Transparent"/>
 
         <activity
-            android:name=".base.AudioRecorderActivity"
+            android:name=".base.record.AudioRecorderActivity"
             android:launchMode="singleInstance"
             android:theme="@style/Transparent"/>
 

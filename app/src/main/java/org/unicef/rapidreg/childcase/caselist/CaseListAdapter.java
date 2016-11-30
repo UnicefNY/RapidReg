@@ -21,16 +21,21 @@ import org.unicef.rapidreg.utils.StreamUtil;
 import java.io.IOException;
 import java.util.Date;
 
+import javax.inject.Inject;
+
 public class CaseListAdapter extends RecordListAdapter {
 
-    public CaseListAdapter(Context context) {
+    private CaseService caseService;
+
+    public CaseListAdapter(Context context, CaseService caseService) {
         super(context);
+        this.caseService = caseService;
     }
 
     @Override
     public void onBindViewHolder(final RecordListHolder holder, int position) {
         final long recordId = recordList.get(position);
-        final RecordModel record = CaseService.getInstance().getById(recordId);
+        final RecordModel record = caseService.getById(recordId);
 
         final String recordJson = new String(record.getContent().getBlob());
 

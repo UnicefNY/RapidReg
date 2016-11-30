@@ -17,6 +17,7 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 import org.unicef.rapidreg.R;
 import org.unicef.rapidreg.base.record.RecordActivity;
+import org.unicef.rapidreg.base.record.recordregister.RecordRegisterAdapter;
 import org.unicef.rapidreg.base.record.recordregister.RecordRegisterWrapperFragment;
 import org.unicef.rapidreg.childcase.CaseActivity;
 import org.unicef.rapidreg.childcase.CaseFeature;
@@ -58,27 +59,7 @@ public class CaseRegisterWrapperFragment extends RecordRegisterWrapperFragment {
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void saveCase(SaveCaseEvent event) {
-        if (!validateRequiredField()) {
-            Toast.makeText(getActivity(), R.string.required_field_is_not_filled, Toast.LENGTH_LONG).show();
-            return;
-        }
-
-        clearProfileItems();
-
-        ArrayList<String> photoPaths = (ArrayList<String>) recordPhotoAdapter.getAllItems();
-        ItemValues itemValues = new ItemValues(new Gson().fromJson(new Gson().toJson(
-                this.itemValues.getValues()), JsonObject.class));
-
-        try {
-            saveCase(itemValues, photoPaths);
-            Toast.makeText(getActivity(), R.string.save_success, Toast.LENGTH_SHORT).show();
-            Bundle args = new Bundle();
-            args.putSerializable(RecordService.ITEM_VALUES, ItemValuesMap.fromItemValuesJsonObject(itemValues));
-            args.putStringArrayList(RecordService.RECORD_PHOTOS, photoPaths);
-            ((RecordActivity) getActivity()).turnToFeature(CaseFeature.DETAILS_FULL, args, null);
-        } catch (IOException e) {
-            Toast.makeText(getActivity(), R.string.save_failed, Toast.LENGTH_SHORT).show();
-        }
+       caseRegisterPresenter.saveRecord(itemValues);
     }
 
     @OnClick(R.id.edit)
@@ -122,7 +103,16 @@ public class CaseRegisterWrapperFragment extends RecordRegisterWrapperFragment {
         return RecordService.validateRequiredFields(caseForm, itemValues);
     }
 
-    private Case saveCase(ItemValues itemValues, List<String> photoPaths) throws IOException {
-        return CaseService.getInstance().saveOrUpdate(itemValues, photoPaths);
+    @Override
+    public void initView(RecordRegisterAdapter adapter) {
+
+    }
+
+    @Override
+    public void saveSuccessfully(long recordId) {
+        Bundle args = new Bundle();
+        args.putSerializable(RecordService.ITEM_VALUES, itemValues);
+        args.putStringArrayList(RecordService.RECORD_PHOTOS, (ArrayList<String>) getPhotos());
+        ((RecordActivity) getActivity()).turnToFeature(CaseFeature.DETAILS_FULL, args, null);
     }
 }

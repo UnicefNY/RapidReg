@@ -6,6 +6,7 @@ import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.hannesdorfmann.mosby.mvp.MvpFragment;
@@ -34,7 +35,8 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public abstract class RecordRegisterWrapperFragment extends MvpFragment<RecordRegisterView, RecordRegisterPresenter> {
+public abstract class RecordRegisterWrapperFragment extends MvpFragment<RecordRegisterView, RecordRegisterPresenter>
+        implements RecordRegisterView {
     public static final String ITEM_VALUES = "item_values";
 
     @BindView(R.id.viewpager)
@@ -67,6 +69,22 @@ public abstract class RecordRegisterWrapperFragment extends MvpFragment<RecordRe
         initRegisterContainer();
 
         return view;
+    }
+
+
+    @Override
+    public void promoteRequiredFieldNotFilled() {
+        Toast.makeText(getActivity(), R.string.required_field_is_not_filled, Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void promoteSaveFail() {
+        Toast.makeText(getActivity(), R.string.save_failed, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public List<String> getPhotos() {
+        return recordPhotoAdapter.getAllItems();
     }
 
     public FragmentComponent getComponent() {
@@ -117,9 +135,7 @@ public abstract class RecordRegisterWrapperFragment extends MvpFragment<RecordRe
             @Override
             public void onPageSelected(int position) {
                 RecordRegisterFragment currentPage = (RecordRegisterFragment) adapter.getPage(position);
-
-                RecordRegisterAdapter registerAdapter = currentPage.getRegisterAdapter();
-                recordPhotoAdapter = registerAdapter.getPhotoAdapter();
+                recordPhotoAdapter = currentPage.getPhotoAdapter();
             }
 
             @Override
@@ -127,12 +143,6 @@ public abstract class RecordRegisterWrapperFragment extends MvpFragment<RecordRe
 
             }
         });
-    }
-
-    protected void clearProfileItems() {
-        itemValues.removeItem(ItemValues.RecordProfile.ID_NORMAL_STATE);
-        itemValues.removeItem(ItemValues.RecordProfile.REGISTRATION_DATE);
-        itemValues.removeItem(ItemValues.RecordProfile.ID);
     }
 
     protected abstract void initItemValues();

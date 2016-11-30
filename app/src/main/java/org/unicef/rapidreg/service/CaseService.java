@@ -36,16 +36,10 @@ public class CaseService extends RecordService {
     public static final String CASE_ID = "case_id";
     public static final String CASE_PRIMARY_ID = "case_primary_id";
 
-    private static final CaseService CASE_SERVICE = new CaseService();
-
     private UserService userService;
 
     private CaseDao caseDao = new CaseDaoImpl();
     private CasePhotoDao casePhotoDao = new CasePhotoDaoImpl();
-
-    public static CaseService getInstance() {
-        return CASE_SERVICE;
-    }
 
     public CaseService() {}
 
