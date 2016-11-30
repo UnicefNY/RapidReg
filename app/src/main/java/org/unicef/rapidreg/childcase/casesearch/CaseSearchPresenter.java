@@ -1,6 +1,6 @@
-package org.unicef.rapidreg.childcase;
+package org.unicef.rapidreg.childcase.casesearch;
 
-import org.unicef.rapidreg.base.RecordSearchPresenter;
+import org.unicef.rapidreg.base.record.recordsearch.RecordSearchPresenter;
 import org.unicef.rapidreg.service.CaseService;
 
 import java.util.List;
