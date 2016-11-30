@@ -1,7 +1,5 @@
 package org.unicef.rapidreg.injection.component;
 
-import android.app.Activity;
-
 import org.unicef.rapidreg.base.AudioRecorderActivity;
 import org.unicef.rapidreg.base.BaseActivity;
 import org.unicef.rapidreg.base.RecordActivity;
@@ -11,7 +9,7 @@ import org.unicef.rapidreg.injection.PerActivity;
 import org.unicef.rapidreg.injection.module.ActivityModule;
 import org.unicef.rapidreg.login.LoginActivity;
 import org.unicef.rapidreg.tracing.TracingActivity;
-import org.unicef.rapidreg.tracing.TracingPhotoViewActivity;
+import org.unicef.rapidreg.tracing.tracingphoto.TracingPhotoViewActivity;
 
 import dagger.Component;
 

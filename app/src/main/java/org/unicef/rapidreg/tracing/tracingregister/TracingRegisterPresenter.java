@@ -1,4 +1,4 @@
-package org.unicef.rapidreg.tracing;
+package org.unicef.rapidreg.tracing.tracingregister;
 
 import org.unicef.rapidreg.base.RecordRegisterPresenter;
 import org.unicef.rapidreg.forms.RecordForm;

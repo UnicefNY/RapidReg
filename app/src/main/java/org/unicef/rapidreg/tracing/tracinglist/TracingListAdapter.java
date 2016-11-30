@@ -1,4 +1,4 @@
-package org.unicef.rapidreg.tracing;
+package org.unicef.rapidreg.tracing.tracinglist;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -19,6 +19,7 @@ import org.unicef.rapidreg.service.RecordService;
 import org.unicef.rapidreg.service.TracingPhotoService;
 import org.unicef.rapidreg.service.TracingService;
 import org.unicef.rapidreg.service.cache.ItemValues;
+import org.unicef.rapidreg.tracing.TracingFeature;
 import org.unicef.rapidreg.utils.StreamUtil;
 
 import java.io.IOException;
