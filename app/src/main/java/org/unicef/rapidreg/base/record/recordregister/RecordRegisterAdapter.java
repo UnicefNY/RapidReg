@@ -189,4 +189,8 @@ public class RecordRegisterAdapter extends RecyclerView.Adapter<BaseViewHolder> 
     public List<Field> getFields() {
         return fields;
     }
+
+    public ItemValuesMap getItemValues() {
+        return itemValues;
+    }
 }

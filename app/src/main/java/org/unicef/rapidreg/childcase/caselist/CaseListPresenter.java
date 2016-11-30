@@ -29,7 +29,7 @@ public class CaseListPresenter extends RecordListPresenter {
     @Override
     public void initView(Context context) {
         if (isViewAttached()) {
-            getView().initView(new CaseListAdapter(context));
+            getView().initView(new CaseListAdapter(context, caseService));
         }
     }
 

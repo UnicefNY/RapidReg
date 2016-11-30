@@ -17,6 +17,7 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 import org.unicef.rapidreg.R;
 import org.unicef.rapidreg.base.record.RecordActivity;
+import org.unicef.rapidreg.base.record.recordregister.RecordRegisterAdapter;
 import org.unicef.rapidreg.base.record.recordregister.RecordRegisterWrapperFragment;
 import org.unicef.rapidreg.event.SaveTracingEvent;
 import org.unicef.rapidreg.forms.Section;
@@ -31,6 +32,7 @@ import org.unicef.rapidreg.tracing.tracingphoto.TracingPhotoAdapter;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -44,27 +46,7 @@ public class TracingRegisterWrapperFragment extends RecordRegisterWrapperFragmen
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void saveTracing(SaveTracingEvent event) {
-        if (!validateRequiredField()) {
-            Toast.makeText(getActivity(), R.string.required_field_is_not_filled, Toast.LENGTH_LONG).show();
-            return;
-        }
-
-        clearProfileItems();
-
-        ArrayList<String> photoPaths = (ArrayList<String>) recordPhotoAdapter.getAllItems();
-        ItemValues itemValues = new ItemValues(new Gson().fromJson(new Gson().toJson(
-                this.itemValues.getValues()), JsonObject.class));
-
-        try {
-            tracingRegisterPresenter.saveTracing(itemValues, photoPaths);
-            Toast.makeText(getActivity(), R.string.save_success, Toast.LENGTH_SHORT).show();
-            Bundle args = new Bundle();
-            args.putSerializable(RecordService.ITEM_VALUES, ItemValuesMap.fromItemValuesJsonObject(itemValues));
-            args.putStringArrayList(RecordService.RECORD_PHOTOS, photoPaths);
-            ((RecordActivity) getActivity()).turnToFeature(TracingFeature.DETAILS_FULL, args, null);
-        } catch (IOException e) {
-            Toast.makeText(getActivity(), R.string.save_failed, Toast.LENGTH_SHORT).show();
-        }
+        tracingRegisterPresenter.saveRecord(itemValues);
     }
 
     @Nullable
@@ -119,4 +101,18 @@ public class TracingRegisterWrapperFragment extends RecordRegisterWrapperFragmen
     public TracingRegisterPresenter createPresenter() {
         return tracingRegisterPresenter;
     }
+
+    @Override
+    public void initView(RecordRegisterAdapter adapter) {
+
+    }
+
+    @Override
+    public void saveSuccessfully(long recordId) {
+        Bundle args = new Bundle();
+        args.putSerializable(RecordService.ITEM_VALUES, itemValues);
+        args.putStringArrayList(RecordService.RECORD_PHOTOS, (ArrayList<String>) getPhotos());
+        ((RecordActivity) getActivity()).turnToFeature(TracingFeature.DETAILS_FULL, args, null);
+    }
+
 }

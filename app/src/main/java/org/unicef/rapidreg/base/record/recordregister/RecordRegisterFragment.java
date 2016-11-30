@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.hannesdorfmann.mosby.mvp.MvpFragment;
@@ -40,7 +41,7 @@ public abstract class RecordRegisterFragment extends MvpFragment<RecordRegisterV
 
     protected static final int[] ANIM_TO_FULL = {R.anim.slide_in_right, R.anim.slide_out_left};
     protected static final int[] ANIM_TO_MINI = {android.R.anim.slide_in_left, android.R.anim.slide_out_right};
-    protected static final int INVALID_RECORD_ID = -100;
+    public static final int INVALID_RECORD_ID = -100;
 
     @BindView(R.id.register_forms_content)
     RecyclerView fieldList;
@@ -57,11 +58,37 @@ public abstract class RecordRegisterFragment extends MvpFragment<RecordRegisterV
 
     private RecordRegisterAdapter recordRegisterAdapter;
 
+    @Override
+    public void promoteRequiredFieldNotFilled() {
+        Toast.makeText(getActivity(), R.string.required_field_is_not_filled, Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void promoteSaveFail() {
+        Toast.makeText(getActivity(), R.string.save_failed, Toast.LENGTH_SHORT).show();
+    }
+
     public FragmentComponent getComponent() {
         return DaggerFragmentComponent.builder()
                 .applicationComponent(PrimeroApplication.get(getActivity()).getComponent())
                 .fragmentModule(new FragmentModule(this))
                 .build();
+    }
+
+    public RecordPhotoAdapter getPhotoAdapter() {
+        return recordRegisterAdapter.getPhotoAdapter();
+    }
+
+    public void setPhotoAdapter(RecordPhotoAdapter photoAdapter) {
+        recordRegisterAdapter.setPhotoAdapter(photoAdapter);
+    }
+
+    public ItemValuesMap getItemValues() {
+        return recordRegisterAdapter.getItemValues();
+    }
+
+    public void setItemValues(ItemValuesMap itemValues) {
+        recordRegisterAdapter.setItemValues(itemValues);
     }
 
     @Nullable
@@ -83,10 +110,10 @@ public abstract class RecordRegisterFragment extends MvpFragment<RecordRegisterV
         RecyclerView.LayoutManager layout = new LinearLayoutManager(getContext());
         layout.setAutoMeasureEnabled(true);
         fieldList.setLayoutManager(layout);
-        fieldList.setAdapter(recordRegisterAdapter);
         recordRegisterAdapter.setPhotoAdapter(photoAdapter);
         recordRegisterAdapter.setItemValues(itemValues);
 
+        fieldList.setAdapter(recordRegisterAdapter);
         formSwitcher.setText(R.string.show_short_form);
     }
 
@@ -113,10 +140,9 @@ public abstract class RecordRegisterFragment extends MvpFragment<RecordRegisterV
         }
     }
 
-    protected void clearProfileItems() {
-        itemValues.removeItem(ItemValues.RecordProfile.ID_NORMAL_STATE);
-        itemValues.removeItem(ItemValues.RecordProfile.REGISTRATION_DATE);
-        itemValues.removeItem(ItemValues.RecordProfile.ID);
+    @Override
+    public List<String> getPhotos() {
+        return getRegisterAdapter().getPhotoAdapter().getAllItems();
     }
 
     protected abstract List<Field> getFields();

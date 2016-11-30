@@ -5,6 +5,7 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.ogaclejapan.smarttablayout.utils.v4.FragmentPagerItem;
 
@@ -16,6 +17,7 @@ import org.unicef.rapidreg.childcase.CaseFeature;
 import org.unicef.rapidreg.childcase.casephoto.CasePhotoAdapter;
 import org.unicef.rapidreg.forms.Field;
 import org.unicef.rapidreg.forms.RecordForm;
+import org.unicef.rapidreg.service.CaseService;
 import org.unicef.rapidreg.service.RecordService;
 import org.unicef.rapidreg.service.cache.ItemValuesMap;
 
@@ -78,4 +80,7 @@ public class CaseRegisterFragment extends RecordRegisterFragment {
         }
         return null;
     }
+
+    @Override
+    public void saveSuccessfully(long recordId) {}
 }

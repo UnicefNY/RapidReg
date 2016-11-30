@@ -635,7 +635,7 @@ public class SyncPresenter extends MvpBasePresenter<SyncView> {
 
     private void postPullCases(JsonObject casesJsonObject) {
         String internalId = casesJsonObject.get("_id").getAsString();
-        Case item = CaseService.getInstance().getByInternalId(internalId);
+        Case item = caseService.getByInternalId(internalId);
         String newRev = casesJsonObject.get("_rev").getAsString();
         if (item != null) {
             item.setInternalRev(newRev);

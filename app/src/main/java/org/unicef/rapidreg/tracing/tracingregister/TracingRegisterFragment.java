@@ -78,4 +78,9 @@ public class TracingRegisterFragment extends RecordRegisterFragment {
         }
         return null;
     }
+
+    @Override
+    public void saveSuccessfully(long recordId) {
+
+    }
 }

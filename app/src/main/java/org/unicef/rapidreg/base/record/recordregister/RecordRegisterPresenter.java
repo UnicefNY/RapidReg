@@ -6,14 +6,13 @@ import com.hannesdorfmann.mosby.mvp.MvpBasePresenter;
 
 import org.unicef.rapidreg.forms.Field;
 import org.unicef.rapidreg.forms.RecordForm;
+import org.unicef.rapidreg.service.cache.ItemValues;
 import org.unicef.rapidreg.service.cache.ItemValuesMap;
 
 import java.util.Iterator;
 import java.util.List;
 
 public abstract class RecordRegisterPresenter extends MvpBasePresenter<RecordRegisterView> {
-
-
 
     public void initContext(Context context, List<Field> fields, boolean isMiniForm) {
         if (isViewAttached()) {
@@ -36,5 +35,13 @@ public abstract class RecordRegisterPresenter extends MvpBasePresenter<RecordReg
         return fields;
     }
 
+    public void clearProfileItems(ItemValuesMap itemValues) {
+        itemValues.removeItem(ItemValues.RecordProfile.ID_NORMAL_STATE);
+        itemValues.removeItem(ItemValues.RecordProfile.REGISTRATION_DATE);
+        itemValues.removeItem(ItemValues.RecordProfile.ID);
+    }
+
     public abstract RecordForm getCurrentForm();
+
+    public abstract void saveRecord(ItemValuesMap itemValuesMap);
 }

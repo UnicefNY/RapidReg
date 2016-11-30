@@ -9,9 +9,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonObject;
-
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
@@ -26,7 +23,6 @@ import org.unicef.rapidreg.event.SaveTracingEvent;
 import org.unicef.rapidreg.forms.Field;
 import org.unicef.rapidreg.forms.RecordForm;
 import org.unicef.rapidreg.forms.Section;
-import org.unicef.rapidreg.forms.TracingFormRoot;
 import org.unicef.rapidreg.model.Tracing;
 import org.unicef.rapidreg.service.RecordService;
 import org.unicef.rapidreg.service.TracingFormService;
@@ -39,7 +35,6 @@ import org.unicef.rapidreg.tracing.TracingFeature;
 import org.unicef.rapidreg.tracing.tracingphoto.TracingPhotoAdapter;
 import org.unicef.rapidreg.utils.JsonUtils;
 
-import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -59,26 +54,7 @@ public class TracingMiniFormFragment extends RecordRegisterFragment {
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void saveTracing(SaveTracingEvent event) {
-        if (!validateRequiredField()) {
-            Toast.makeText(getActivity(), R.string.required_field_is_not_filled, Toast.LENGTH_LONG).show();
-            return;
-        }
-
-        clearProfileItems();
-        ArrayList<String> photoPaths = (ArrayList<String>) photoAdapter.getAllItems();
-        ItemValues itemValues = new ItemValues(new Gson().fromJson(new Gson().toJson(
-                this.itemValues.getValues()), JsonObject.class));
-
-        try {
-            Tracing record = tracingRegisterPresenter.saveTracing(itemValues, photoPaths);
-            Toast.makeText(getActivity(), R.string.save_success, Toast.LENGTH_SHORT).show();
-
-            Bundle args = new Bundle();
-            args.putLong(TracingService.TRACING_PRIMARY_ID, record.getId());
-            ((RecordActivity) getActivity()).turnToFeature(TracingFeature.DETAILS_MINI, args, null);
-        } catch (IOException e) {
-            Toast.makeText(getActivity(), R.string.save_failed, Toast.LENGTH_SHORT).show();
-        }
+       tracingRegisterPresenter.saveRecord(itemValues);
     }
 
     @NonNull
@@ -93,9 +69,15 @@ public class TracingMiniFormFragment extends RecordRegisterFragment {
                              @Nullable Bundle savedInstanceState) {
         getComponent().inject(this);
         super.onCreateView(inflater, container, savedInstanceState);
-        initItemValues();
-
         return inflater.inflate(R.layout.fragment_register, container, false);
+    }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        List<Field> fields = getFields();
+        presenter.initContext(getActivity(), fields, true);
+        initItemValues();
     }
 
     @Override
@@ -108,13 +90,6 @@ public class TracingMiniFormFragment extends RecordRegisterFragment {
     public void onStop() {
         super.onStop();
         EventBus.getDefault().unregister(this);
-    }
-
-    @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        List<Field> fields = getFields();
-        presenter.initContext(getActivity(), fields, true);
     }
 
     @Override
@@ -150,6 +125,14 @@ public class TracingMiniFormFragment extends RecordRegisterFragment {
         if (((RecordActivity) getActivity()).getCurrentFeature().isDetailMode()) {
             editButton.setVisibility(View.VISIBLE);
         }
+    }
+
+    @Override
+    public void saveSuccessfully(long recordId) {
+        Bundle args = new Bundle();
+        args.putLong(TracingService.TRACING_PRIMARY_ID, recordId);
+        Toast.makeText(getActivity(), R.string.save_success, Toast.LENGTH_SHORT).show();
+        ((RecordActivity) getActivity()).turnToFeature(TracingFeature.DETAILS_MINI, args, null);
     }
 
     @OnClick(R.id.edit)
@@ -209,10 +192,5 @@ public class TracingMiniFormFragment extends RecordRegisterFragment {
             paths.add(String.valueOf(tracingId));
         }
         return new TracingPhotoAdapter(getContext(), paths);
-    }
-
-    private boolean validateRequiredField() {
-        TracingFormRoot recordForm = TracingFormService.getInstance().getCurrentForm();
-        return RecordService.validateRequiredFields(recordForm, itemValues);
     }
 }
