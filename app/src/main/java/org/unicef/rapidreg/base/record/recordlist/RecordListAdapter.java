@@ -1,4 +1,4 @@
-package org.unicef.rapidreg.base;
+package org.unicef.rapidreg.base.record.recordlist;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
@@ -12,7 +12,7 @@ import android.widget.TextView;
 import android.widget.ViewSwitcher;
 
 import org.unicef.rapidreg.R;
-import org.unicef.rapidreg.model.RecordModel;
+import org.unicef.rapidreg.base.record.RecordActivity;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
