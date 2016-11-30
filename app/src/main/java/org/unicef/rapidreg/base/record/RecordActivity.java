@@ -1,4 +1,4 @@
-package org.unicef.rapidreg.base;
+package org.unicef.rapidreg.base.record;
 
 import android.content.Intent;
 import android.database.Cursor;
@@ -17,6 +17,9 @@ import android.view.MenuItem;
 
 import org.greenrobot.eventbus.EventBus;
 import org.unicef.rapidreg.R;
+import org.unicef.rapidreg.base.BaseActivity;
+import org.unicef.rapidreg.base.Feature;
+import org.unicef.rapidreg.base.record.recordphoto.PhotoConfig;
 import org.unicef.rapidreg.event.UpdateImageEvent;
 import org.unicef.rapidreg.service.RecordService;
 import org.unicef.rapidreg.utils.ImageCompressUtil;
