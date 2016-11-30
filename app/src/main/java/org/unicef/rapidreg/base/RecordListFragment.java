@@ -39,8 +39,8 @@ import butterknife.ButterKnife;
 public abstract class RecordListFragment extends MvpFragment<RecordListView, RecordListPresenter>
         implements RecordListView {
 
-    protected static final int HAVE_RESULT_LIST = 0;
-    protected static final int HAVE_NO_RESULT = 1;
+    public static final int HAVE_RESULT_LIST = 0;
+    public static final int HAVE_NO_RESULT = 1;
 
     @BindView(R.id.list_container)
     protected RecyclerView listContainer;

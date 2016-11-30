@@ -1,8 +1,10 @@
-package org.unicef.rapidreg.base;
+package org.unicef.rapidreg.tracing.tracingsearch;
 
 import android.content.Context;
+
+import org.unicef.rapidreg.base.RecordSearchPresenter;
 import org.unicef.rapidreg.service.TracingService;
-import org.unicef.rapidreg.tracing.TracingListAdapter;
+import org.unicef.rapidreg.tracing.tracinglist.TracingListAdapter;
 
 import java.util.List;
 import javax.inject.Inject;

@@ -1,4 +1,4 @@
-package org.unicef.rapidreg.tracing;
+package org.unicef.rapidreg.tracing.tracingsearch;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -12,9 +12,7 @@ import org.unicef.rapidreg.R;
 import org.unicef.rapidreg.base.RecordListAdapter;
 import org.unicef.rapidreg.base.RecordSearchFragment;
 import org.unicef.rapidreg.base.RecordSearchPresenter;
-import org.unicef.rapidreg.base.TracingSearchPresenter;
 import org.unicef.rapidreg.model.RecordModel;
-import org.unicef.rapidreg.service.TracingService;
 
 import java.util.List;
 import java.util.Map;

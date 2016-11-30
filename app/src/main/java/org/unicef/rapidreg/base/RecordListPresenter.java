@@ -3,18 +3,8 @@ package org.unicef.rapidreg.base;
 import android.content.Context;
 
 import com.hannesdorfmann.mosby.mvp.MvpBasePresenter;
-import org.unicef.rapidreg.base.RecordListFragment.SpinnerState;
-import org.unicef.rapidreg.childcase.CaseListAdapter;
-import org.unicef.rapidreg.model.Case;
-import org.unicef.rapidreg.model.RecordModel;
-import org.unicef.rapidreg.service.CaseFormService;
-import org.unicef.rapidreg.service.CaseService;
-import org.unicef.rapidreg.service.RecordService;
-import org.unicef.rapidreg.service.TracingService;
-import org.unicef.rapidreg.tracing.TracingListAdapter;
 
-import java.util.ArrayList;
-import java.util.List;
+import org.unicef.rapidreg.service.RecordService;
 
 import javax.inject.Inject;
 

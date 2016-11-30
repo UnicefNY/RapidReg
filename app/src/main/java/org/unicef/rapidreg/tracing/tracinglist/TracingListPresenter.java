@@ -1,16 +1,12 @@
-package org.unicef.rapidreg.base;
+package org.unicef.rapidreg.tracing.tracinglist;
 
 import android.content.Context;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.widget.LinearLayoutManager;
 
+import org.unicef.rapidreg.base.RecordListFragment;
+import org.unicef.rapidreg.base.RecordListPresenter;
 import org.unicef.rapidreg.model.Tracing;
-import org.unicef.rapidreg.service.CaseFormService;
-import org.unicef.rapidreg.service.CaseService;
 import org.unicef.rapidreg.service.RecordService;
 import org.unicef.rapidreg.service.TracingService;
-import org.unicef.rapidreg.tracing.TracingListAdapter;
-import org.unicef.rapidreg.tracing.TracingListFragment;
 
 import java.util.List;
 

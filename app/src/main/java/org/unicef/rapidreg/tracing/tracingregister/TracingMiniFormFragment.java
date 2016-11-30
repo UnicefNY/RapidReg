@@ -1,4 +1,4 @@
-package org.unicef.rapidreg.tracing;
+package org.unicef.rapidreg.tracing.tracingregister;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -22,8 +22,6 @@ import org.unicef.rapidreg.base.RecordActivity;
 import org.unicef.rapidreg.base.RecordPhotoAdapter;
 import org.unicef.rapidreg.base.RecordRegisterAdapter;
 import org.unicef.rapidreg.base.RecordRegisterFragment;
-import org.unicef.rapidreg.base.RecordRegisterPresenter;
-import org.unicef.rapidreg.base.TracingSearchPresenter;
 import org.unicef.rapidreg.event.SaveTracingEvent;
 import org.unicef.rapidreg.forms.Field;
 import org.unicef.rapidreg.forms.RecordForm;
@@ -36,6 +34,9 @@ import org.unicef.rapidreg.service.TracingPhotoService;
 import org.unicef.rapidreg.service.TracingService;
 import org.unicef.rapidreg.service.cache.ItemValues;
 import org.unicef.rapidreg.service.cache.ItemValuesMap;
+import org.unicef.rapidreg.tracing.TracingActivity;
+import org.unicef.rapidreg.tracing.TracingFeature;
+import org.unicef.rapidreg.tracing.tracingphoto.TracingPhotoAdapter;
 import org.unicef.rapidreg.utils.JsonUtils;
 
 import java.io.IOException;

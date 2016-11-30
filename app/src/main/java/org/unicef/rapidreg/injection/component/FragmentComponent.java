@@ -11,11 +11,11 @@ import org.unicef.rapidreg.childcase.CaseSearchFragment;
 import org.unicef.rapidreg.injection.PerFragment;
 import org.unicef.rapidreg.injection.module.FragmentModule;
 import org.unicef.rapidreg.sync.SyncFragment;
-import org.unicef.rapidreg.tracing.TracingListFragment;
-import org.unicef.rapidreg.tracing.TracingMiniFormFragment;
-import org.unicef.rapidreg.tracing.TracingRegisterFragment;
-import org.unicef.rapidreg.tracing.TracingRegisterWrapperFragment;
-import org.unicef.rapidreg.tracing.TracingSearchFragment;
+import org.unicef.rapidreg.tracing.tracinglist.TracingListFragment;
+import org.unicef.rapidreg.tracing.tracingregister.TracingMiniFormFragment;
+import org.unicef.rapidreg.tracing.tracingregister.TracingRegisterFragment;
+import org.unicef.rapidreg.tracing.tracingregister.TracingRegisterWrapperFragment;
+import org.unicef.rapidreg.tracing.tracingsearch.TracingSearchFragment;
 
 import dagger.Component;
 

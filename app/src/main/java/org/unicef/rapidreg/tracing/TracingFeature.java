@@ -5,6 +5,10 @@ import android.support.v4.app.Fragment;
 import org.unicef.rapidreg.R;
 import org.unicef.rapidreg.base.Feature;
 import org.unicef.rapidreg.exception.FragmentSwitchException;
+import org.unicef.rapidreg.tracing.tracinglist.TracingListFragment;
+import org.unicef.rapidreg.tracing.tracingregister.TracingMiniFormFragment;
+import org.unicef.rapidreg.tracing.tracingregister.TracingRegisterWrapperFragment;
+import org.unicef.rapidreg.tracing.tracingsearch.TracingSearchFragment;
 
 public enum TracingFeature implements Feature {
     LIST(R.string.tracing, TracingListFragment.class),

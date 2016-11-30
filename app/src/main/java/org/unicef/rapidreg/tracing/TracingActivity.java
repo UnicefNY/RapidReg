@@ -18,6 +18,7 @@ import org.unicef.rapidreg.event.LoadTracingFormEvent;
 import org.unicef.rapidreg.event.SaveTracingEvent;
 import org.unicef.rapidreg.forms.TracingFormRoot;
 import org.unicef.rapidreg.service.TracingService;
+import org.unicef.rapidreg.tracing.tracinglist.TracingListFragment;
 import org.unicef.rapidreg.utils.Utils;
 
 import javax.inject.Inject;

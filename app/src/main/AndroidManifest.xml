@@ -59,7 +59,7 @@
             android:theme="@style/Transparent"/>
 
         <activity
-            android:name=".tracing.TracingPhotoViewActivity"
+            android:name=".tracing.tracingphoto.TracingPhotoViewActivity"
             android:launchMode="singleInstance"
             android:theme="@style/Transparent"/>
 

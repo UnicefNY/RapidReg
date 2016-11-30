@@ -19,7 +19,7 @@ import org.unicef.rapidreg.childcase.CaseActivity;
 import org.unicef.rapidreg.childcase.CasePhotoViewActivity;
 import org.unicef.rapidreg.forms.Field;
 import org.unicef.rapidreg.service.cache.ItemValuesMap;
-import org.unicef.rapidreg.tracing.TracingPhotoViewActivity;
+import org.unicef.rapidreg.tracing.tracingphoto.TracingPhotoViewActivity;
 
 import java.io.File;
 import java.util.ArrayList;

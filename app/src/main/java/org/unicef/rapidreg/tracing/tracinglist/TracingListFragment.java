@@ -1,4 +1,4 @@
-package org.unicef.rapidreg.tracing;
+package org.unicef.rapidreg.tracing.tracinglist;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -12,11 +12,10 @@ import org.unicef.rapidreg.R;
 import org.unicef.rapidreg.base.RecordListAdapter;
 import org.unicef.rapidreg.base.RecordListFragment;
 import org.unicef.rapidreg.base.RecordListPresenter;
-import org.unicef.rapidreg.base.TracingListPresenter;
-import org.unicef.rapidreg.model.Tracing;
 import org.unicef.rapidreg.service.RecordService;
 import org.unicef.rapidreg.service.TracingFormService;
-import org.unicef.rapidreg.service.TracingService;
+import org.unicef.rapidreg.tracing.TracingActivity;
+import org.unicef.rapidreg.tracing.TracingFeature;
 
 import java.util.Arrays;
 import java.util.List;

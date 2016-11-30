@@ -9,7 +9,6 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 
 import org.unicef.rapidreg.R;
-import org.unicef.rapidreg.base.CaseListPresenter;
 import org.unicef.rapidreg.base.RecordActivity;
 import org.unicef.rapidreg.base.RecordListAdapter;
 import org.unicef.rapidreg.base.RecordListFragment;

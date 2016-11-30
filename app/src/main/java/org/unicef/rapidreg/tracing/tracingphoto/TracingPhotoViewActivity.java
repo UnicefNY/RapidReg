@@ -1,4 +1,4 @@
-package org.unicef.rapidreg.tracing;
+package org.unicef.rapidreg.tracing.tracingphoto;
 
 import android.graphics.Point;
 import android.os.Bundle;
