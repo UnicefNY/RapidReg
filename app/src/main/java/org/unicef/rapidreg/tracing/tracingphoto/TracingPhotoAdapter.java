@@ -2,7 +2,7 @@ package org.unicef.rapidreg.tracing.tracingphoto;
 
 import android.content.Context;
 
-import org.unicef.rapidreg.base.RecordPhotoAdapter;
+import org.unicef.rapidreg.base.record.recordphoto.RecordPhotoAdapter;
 import org.unicef.rapidreg.model.RecordPhoto;
 import org.unicef.rapidreg.service.TracingPhotoService;
 

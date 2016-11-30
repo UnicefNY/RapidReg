@@ -8,8 +8,7 @@ import android.widget.TextView;
 
 import org.unicef.rapidreg.R;
 import org.unicef.rapidreg.base.AudioRecorderActivity;
-import org.unicef.rapidreg.base.RecordActivity;
-import org.unicef.rapidreg.childcase.CaseActivity;
+import org.unicef.rapidreg.base.record.RecordActivity;
 import org.unicef.rapidreg.service.CaseService;
 import org.unicef.rapidreg.service.cache.ItemValuesMap;
 import org.unicef.rapidreg.utils.StreamUtil;

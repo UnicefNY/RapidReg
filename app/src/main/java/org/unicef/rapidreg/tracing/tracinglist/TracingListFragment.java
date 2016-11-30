@@ -9,9 +9,9 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 
 import org.unicef.rapidreg.R;
-import org.unicef.rapidreg.base.RecordListAdapter;
-import org.unicef.rapidreg.base.RecordListFragment;
-import org.unicef.rapidreg.base.RecordListPresenter;
+import org.unicef.rapidreg.base.record.recordlist.RecordListAdapter;
+import org.unicef.rapidreg.base.record.recordlist.RecordListFragment;
+import org.unicef.rapidreg.base.record.recordlist.RecordListPresenter;
 import org.unicef.rapidreg.service.RecordService;
 import org.unicef.rapidreg.service.TracingFormService;
 import org.unicef.rapidreg.tracing.TracingActivity;

@@ -2,7 +2,7 @@ package org.unicef.rapidreg.tracing;
 
 import com.raizlabs.android.dbflow.data.Blob;
 
-import org.unicef.rapidreg.base.RecordPresenter;
+import org.unicef.rapidreg.base.record.RecordPresenter;
 import org.unicef.rapidreg.forms.RecordForm;
 import org.unicef.rapidreg.forms.TracingFormRoot;
 import org.unicef.rapidreg.model.TracingForm;

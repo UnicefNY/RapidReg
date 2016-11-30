@@ -2,29 +2,21 @@ package org.unicef.rapidreg.service;
 
 import android.util.Log;
 
-import com.raizlabs.android.dbflow.data.Blob;
-
 import org.unicef.rapidreg.PrimeroConfiguration;
-import org.unicef.rapidreg.base.PhotoConfig;
 import org.unicef.rapidreg.forms.Field;
 import org.unicef.rapidreg.forms.RecordForm;
 import org.unicef.rapidreg.forms.Section;
 import org.unicef.rapidreg.model.RecordModel;
-import org.unicef.rapidreg.model.Tracing;
 import org.unicef.rapidreg.service.cache.ItemValues;
 import org.unicef.rapidreg.service.cache.ItemValuesMap;
-import org.unicef.rapidreg.utils.ImageCompressUtil;
-import org.unicef.rapidreg.utils.StreamUtil;
 
 import java.io.File;
-import java.io.IOException;
 import java.sql.Date;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Locale;
 import java.util.UUID;
 
 public class RecordService {

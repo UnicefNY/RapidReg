@@ -14,7 +14,7 @@ import com.hannesdorfmann.mosby.mvp.MvpBasePresenter;
 import com.raizlabs.android.dbflow.data.Blob;
 
 import org.unicef.rapidreg.R;
-import org.unicef.rapidreg.base.PhotoConfig;
+import org.unicef.rapidreg.base.record.recordphoto.PhotoConfig;
 import org.unicef.rapidreg.injection.ActivityContext;
 import org.unicef.rapidreg.model.Case;
 import org.unicef.rapidreg.model.CasePhoto;

@@ -9,7 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import org.unicef.rapidreg.R;
-import org.unicef.rapidreg.childcase.CaseListAdapter;
+import org.unicef.rapidreg.childcase.caselist.CaseListAdapter;
 import org.unicef.rapidreg.forms.Field;
 import org.unicef.rapidreg.service.RecordService;
 import org.unicef.rapidreg.service.TracingService;

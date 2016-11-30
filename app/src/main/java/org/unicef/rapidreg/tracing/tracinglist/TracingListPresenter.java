@@ -2,8 +2,8 @@ package org.unicef.rapidreg.tracing.tracinglist;
 
 import android.content.Context;
 
-import org.unicef.rapidreg.base.RecordListFragment;
-import org.unicef.rapidreg.base.RecordListPresenter;
+import org.unicef.rapidreg.base.record.recordlist.RecordListFragment;
+import org.unicef.rapidreg.base.record.recordlist.RecordListPresenter;
 import org.unicef.rapidreg.model.Tracing;
 import org.unicef.rapidreg.service.RecordService;
 import org.unicef.rapidreg.service.TracingService;

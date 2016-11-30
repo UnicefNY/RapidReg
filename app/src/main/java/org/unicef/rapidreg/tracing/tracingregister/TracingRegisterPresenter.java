@@ -1,10 +1,8 @@
 package org.unicef.rapidreg.tracing.tracingregister;
 
-import org.unicef.rapidreg.base.RecordRegisterPresenter;
-import org.unicef.rapidreg.forms.RecordForm;
+import org.unicef.rapidreg.base.record.recordregister.RecordRegisterPresenter;
 import org.unicef.rapidreg.forms.TracingFormRoot;
 import org.unicef.rapidreg.model.Tracing;
-import org.unicef.rapidreg.service.CaseFormService;
 import org.unicef.rapidreg.service.TracingFormService;
 import org.unicef.rapidreg.service.TracingService;
 import org.unicef.rapidreg.service.cache.ItemValues;

@@ -12,11 +12,11 @@ import android.widget.GridView;
 import android.widget.TextView;
 
 import org.unicef.rapidreg.R;
-import org.unicef.rapidreg.base.PhotoConfig;
-import org.unicef.rapidreg.base.RecordActivity;
-import org.unicef.rapidreg.base.RecordPhotoAdapter;
+import org.unicef.rapidreg.base.record.recordphoto.PhotoConfig;
+import org.unicef.rapidreg.base.record.RecordActivity;
+import org.unicef.rapidreg.base.record.recordphoto.RecordPhotoAdapter;
 import org.unicef.rapidreg.childcase.CaseActivity;
-import org.unicef.rapidreg.childcase.CasePhotoViewActivity;
+import org.unicef.rapidreg.childcase.casephoto.CasePhotoViewActivity;
 import org.unicef.rapidreg.forms.Field;
 import org.unicef.rapidreg.service.cache.ItemValuesMap;
 import org.unicef.rapidreg.tracing.tracingphoto.TracingPhotoViewActivity;

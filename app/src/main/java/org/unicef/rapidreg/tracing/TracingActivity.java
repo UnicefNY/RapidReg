@@ -13,7 +13,7 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 import org.unicef.rapidreg.IntentSender;
 import org.unicef.rapidreg.R;
-import org.unicef.rapidreg.base.RecordActivity;
+import org.unicef.rapidreg.base.record.RecordActivity;
 import org.unicef.rapidreg.event.LoadTracingFormEvent;
 import org.unicef.rapidreg.event.SaveTracingEvent;
 import org.unicef.rapidreg.forms.TracingFormRoot;

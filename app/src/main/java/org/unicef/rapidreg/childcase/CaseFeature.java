@@ -4,6 +4,10 @@ import android.support.v4.app.Fragment;
 
 import org.unicef.rapidreg.R;
 import org.unicef.rapidreg.base.Feature;
+import org.unicef.rapidreg.childcase.caselist.CaseListFragment;
+import org.unicef.rapidreg.childcase.caseregister.CaseMiniFormFragment;
+import org.unicef.rapidreg.childcase.caseregister.CaseRegisterWrapperFragment;
+import org.unicef.rapidreg.childcase.casesearch.CaseSearchFragment;
 import org.unicef.rapidreg.exception.FragmentSwitchException;
 
 public enum CaseFeature implements Feature {
