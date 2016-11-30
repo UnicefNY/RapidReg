@@ -1,10 +1,9 @@
-package org.unicef.rapidreg.childcase;
+package org.unicef.rapidreg.childcase.caselist;
 
 import android.content.Context;
 
-import org.unicef.rapidreg.base.RecordListFragment;
-import org.unicef.rapidreg.base.RecordListPresenter;
-import org.unicef.rapidreg.childcase.CaseListAdapter;
+import org.unicef.rapidreg.base.record.recordlist.RecordListFragment;
+import org.unicef.rapidreg.base.record.recordlist.RecordListPresenter;
 import org.unicef.rapidreg.model.Case;
 import org.unicef.rapidreg.service.CaseFormService;
 import org.unicef.rapidreg.service.CaseService;
