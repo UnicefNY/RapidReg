@@ -1,11 +1,6 @@
 package org.unicef.rapidreg.base.record.recordregister;
 
-
-import android.support.annotation.NonNull;
-
 import com.hannesdorfmann.mosby.mvp.MvpView;
-
-import org.unicef.rapidreg.forms.Field;
 import org.unicef.rapidreg.service.cache.ItemValuesMap;
 
 import java.util.List;
