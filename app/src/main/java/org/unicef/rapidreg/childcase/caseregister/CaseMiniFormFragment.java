@@ -14,26 +14,24 @@ import org.greenrobot.eventbus.ThreadMode;
 import org.unicef.rapidreg.R;
 import org.unicef.rapidreg.base.Feature;
 import org.unicef.rapidreg.base.record.RecordActivity;
+import org.unicef.rapidreg.base.record.recordphoto.RecordPhotoAdapter;
 import org.unicef.rapidreg.base.record.recordregister.RecordRegisterAdapter;
 import org.unicef.rapidreg.base.record.recordregister.RecordRegisterFragment;
 import org.unicef.rapidreg.childcase.CaseActivity;
 import org.unicef.rapidreg.childcase.CaseFeature;
+import org.unicef.rapidreg.childcase.casephoto.CasePhotoAdapter;
 import org.unicef.rapidreg.event.SaveCaseEvent;
-import org.unicef.rapidreg.forms.Field;
-import org.unicef.rapidreg.forms.RecordForm;
-import org.unicef.rapidreg.forms.Section;
-import org.unicef.rapidreg.model.Case;
 import org.unicef.rapidreg.service.CaseService;
 import org.unicef.rapidreg.service.RecordService;
+import org.unicef.rapidreg.service.cache.ItemValuesMap;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import javax.inject.Inject;
 
 import butterknife.OnClick;
 
-public class CaseMiniFormFragment extends RecordRegisterFragment{
+public class CaseMiniFormFragment extends RecordRegisterFragment {
     public static final String TAG = CaseMiniFormFragment.class.getSimpleName();
 
     @Inject
@@ -45,20 +43,6 @@ public class CaseMiniFormFragment extends RecordRegisterFragment{
         return caseRegisterPresenter;
     }
 
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void saveCase(SaveCaseEvent event) {
-        caseRegisterPresenter.saveRecord(getRegisterAdapter().getItemValues());
-    }
-
-    @Override
-    public void saveSuccessfully(long recordId) {
-        Toast.makeText(getActivity(), R.string.save_success, Toast.LENGTH_SHORT).show();
-        Bundle args = new Bundle();
-        args.putLong(CaseService.CASE_PRIMARY_ID, recordId);
-        ((RecordActivity)getActivity()).turnToFeature(CaseFeature.DETAILS_MINI, args, null);
-    }
-
-
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
@@ -69,11 +53,13 @@ public class CaseMiniFormFragment extends RecordRegisterFragment{
     }
 
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        List<Field> fields = getFields();
-        presenter.initContext(getActivity(), fields, true);
-        initItemValues();
+    public void onInitViewContent() {
+        super.onInitViewContent();
+        addProfileFieldForDetailsPage(caseRegisterPresenter.getFields());
+        formSwitcher.setText(R.string.show_more_details);
+        if (((RecordActivity) getActivity()).getCurrentFeature().isDetailMode()) {
+            editButton.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override
@@ -89,62 +75,46 @@ public class CaseMiniFormFragment extends RecordRegisterFragment{
     }
 
     @Override
-    protected List<Field> getFields() {
-        List<Field> fields = new ArrayList<>();
+    protected RecordRegisterAdapter createRecordRegisterAdapter() {
+        RecordRegisterAdapter recordRegisterAdapter = new RecordRegisterAdapter(getActivity(), caseRegisterPresenter.getValidFields(),
+                new ItemValuesMap(), true);
+        recordRegisterAdapter.setItemValues(caseRegisterPresenter.getDefaultItemValues());
 
-        RecordForm form = caseRegisterPresenter.getCurrentForm();
+        RecordPhotoAdapter recordPhotoAdapter = new CasePhotoAdapter(getActivity(), caseRegisterPresenter.getDefaultPhotoPaths());
+        recordRegisterAdapter.setPhotoAdapter(recordPhotoAdapter);
 
-        List<Section> sections = form.getSections();
+        return recordRegisterAdapter;
+    }
 
-        for (Section section : sections) {
-            for (Field field : section.getFields()) {
-                if (field.isShowOnMiniForm()) {
-                    if (field.isPhotoUploadBox()) {
-                        fields.add(0, field);
-                    } else {
-                        fields.add(field);
-                    }
-                }
-            }
-        }
-        if (!fields.isEmpty()) {
-            addProfileFieldForDetailsPage(fields);
-        }
-
-        return fields;
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void saveCase(SaveCaseEvent event) {
+        caseRegisterPresenter.saveRecord(this);
     }
 
     @Override
-    public void initView(RecordRegisterAdapter adapter) {
-        super.initView(adapter);
-        formSwitcher.setText(R.string.show_more_details);
-
-        if (((RecordActivity) getActivity()).getCurrentFeature().isDetailMode()) {
-            editButton.setVisibility(View.VISIBLE);
-        }
+    public void saveSuccessfully(long recordId) {
+        Toast.makeText(getActivity(), R.string.save_success, Toast.LENGTH_SHORT).show();
+        Bundle args = new Bundle();
+        args.putLong(CaseService.CASE_PRIMARY_ID, recordId);
+        ((RecordActivity)getActivity()).turnToFeature(CaseFeature.DETAILS_MINI, args, null);
     }
-
 
     @OnClick(R.id.edit)
     public void onEditClicked() {
         Bundle args = new Bundle();
-        args.putSerializable(RecordService.ITEM_VALUES, getItemValues());
-        args.putStringArrayList(RecordService.RECORD_PHOTOS, (ArrayList<String>) getPhotos());
+        args.putSerializable(RecordService.ITEM_VALUES, getRecordRegisterData());
+        args.putStringArrayList(RecordService.RECORD_PHOTOS, (ArrayList<String>) getPhotoPathsData());
         ((CaseActivity) getActivity()).turnToFeature(CaseFeature.EDIT_MINI, args, null);
     }
 
     @OnClick(R.id.form_switcher)
     public void onSwitcherChecked() {
         Bundle args = new Bundle();
-        args.putSerializable(RecordService.ITEM_VALUES, getItemValues());
-        args.putStringArrayList(RecordService.RECORD_PHOTOS, (ArrayList<String>) getPhotos());
+        args.putSerializable(RecordService.ITEM_VALUES, getRecordRegisterData());
+        args.putStringArrayList(RecordService.RECORD_PHOTOS, (ArrayList<String>) getPhotoPathsData());
         Feature feature = ((RecordActivity) getActivity()).getCurrentFeature().isDetailMode() ?
                 CaseFeature.DETAILS_FULL : ((RecordActivity) getActivity()).getCurrentFeature().isAddMode() ?
                 CaseFeature.ADD_FULL : CaseFeature.EDIT_FULL;
         ((RecordActivity) getActivity()).turnToFeature(feature, args, ANIM_TO_FULL);
-    }
-
-    protected void initItemValues() {
-        caseRegisterPresenter.initItemValues();
     }
 }

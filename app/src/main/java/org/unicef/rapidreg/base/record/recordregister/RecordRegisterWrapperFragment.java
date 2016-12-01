@@ -27,7 +27,6 @@ import org.unicef.rapidreg.forms.Section;
 import org.unicef.rapidreg.injection.component.DaggerFragmentComponent;
 import org.unicef.rapidreg.injection.component.FragmentComponent;
 import org.unicef.rapidreg.injection.module.FragmentModule;
-import org.unicef.rapidreg.service.cache.ItemValues;
 import org.unicef.rapidreg.service.cache.ItemValuesMap;
 
 import java.util.List;
@@ -36,7 +35,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public abstract class RecordRegisterWrapperFragment extends MvpFragment<RecordRegisterView, RecordRegisterPresenter>
-        implements RecordRegisterView {
+        implements RecordRegisterView, RecordRegisterView.OnSaveRecordCallback {
     public static final String ITEM_VALUES = "item_values";
 
     @BindView(R.id.viewpager)
@@ -53,22 +52,57 @@ public abstract class RecordRegisterWrapperFragment extends MvpFragment<RecordRe
     protected List<Section> sections;
     protected RecordPhotoAdapter recordPhotoAdapter;
 
+    public FragmentComponent getComponent() {
+        return DaggerFragmentComponent.builder()
+                .applicationComponent(PrimeroApplication.get(getContext()).getComponent())
+                .fragmentModule(new FragmentModule(this))
+                .build();
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater,
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
-
         View view = inflater.inflate(R.layout.fragment_register_wrapper, container, false);
         ButterKnife.bind(this, view);
+        return view;
+    }
 
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        onInitViewContent();
         initItemValues();
         initFormData();
         initFloatingActionButton();
         initRegisterContainer();
+    }
 
-        return view;
+    @Override
+    public void onInitViewContent() {
+        recordPhotoAdapter = createRecordPhotoAdapter();
+    }
+
+    @Override
+    public void setRecordRegisterData(ItemValuesMap itemValues) {
+        this.itemValues = itemValues;
+    }
+
+    @Override
+    public void setPhotoPathsData(List<String> photoPaths) {
+        recordPhotoAdapter.setItems(photoPaths);
+    }
+
+    @Override
+    public List<String> getPhotoPathsData() {
+        return recordPhotoAdapter.getAllItems();
+    }
+
+    @Override
+    public ItemValuesMap getRecordRegisterData() {
+        return itemValues;
     }
 
 
@@ -78,20 +112,8 @@ public abstract class RecordRegisterWrapperFragment extends MvpFragment<RecordRe
     }
 
     @Override
-    public void promoteSaveFail() {
+    public void promoteSaveFailed() {
         Toast.makeText(getActivity(), R.string.save_failed, Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
-    public List<String> getPhotos() {
-        return recordPhotoAdapter.getAllItems();
-    }
-
-    public FragmentComponent getComponent() {
-        return DaggerFragmentComponent.builder()
-                .applicationComponent(PrimeroApplication.get(getContext()).getComponent())
-                .fragmentModule(new FragmentModule(this))
-                .build();
     }
 
     @Override
@@ -145,8 +167,12 @@ public abstract class RecordRegisterWrapperFragment extends MvpFragment<RecordRe
         });
     }
 
+    protected abstract RecordPhotoAdapter createRecordPhotoAdapter();
+
+    @Deprecated
     protected abstract void initItemValues();
 
+    @Deprecated
     protected abstract void initFormData();
 
     protected abstract FragmentPagerItems getPages();
