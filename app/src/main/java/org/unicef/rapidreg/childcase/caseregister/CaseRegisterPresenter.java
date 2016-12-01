@@ -1,7 +1,6 @@
 package org.unicef.rapidreg.childcase.caseregister;
 
 import android.os.Bundle;
-import android.util.Log;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
@@ -9,9 +8,7 @@ import com.google.gson.JsonObject;
 import org.json.JSONException;
 import org.unicef.rapidreg.base.record.recordregister.RecordRegisterFragment;
 import org.unicef.rapidreg.base.record.recordregister.RecordRegisterPresenter;
-import org.unicef.rapidreg.base.record.recordregister.RecordRegisterView;
 import org.unicef.rapidreg.base.record.recordregister.RecordRegisterView.OnSaveRecordCallback;
-import org.unicef.rapidreg.childcase.casephoto.CasePhotoAdapter;
 import org.unicef.rapidreg.forms.CaseFormRoot;
 import org.unicef.rapidreg.forms.Field;
 import org.unicef.rapidreg.forms.RecordForm;
@@ -33,6 +30,7 @@ import java.util.List;
 import java.util.Locale;
 
 import javax.inject.Inject;
+
 
 public class CaseRegisterPresenter extends RecordRegisterPresenter {
 

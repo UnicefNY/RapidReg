@@ -66,10 +66,12 @@ public abstract class RecordRegisterFragment extends MvpFragment<RecordRegisterV
     @Override
     public void onInitViewContent() {
         recordRegisterAdapter = createRecordRegisterAdapter();
-        RecyclerView.LayoutManager layout = new LinearLayoutManager(getContext());
-        layout.setAutoMeasureEnabled(true);
-        fieldList.setLayoutManager(layout);
-        recordRegisterAdapter.setItemValues(new ItemValuesMap());
+
+        RecyclerView.LayoutManager manager = new LinearLayoutManager(getContext());
+        manager.setAutoMeasureEnabled(true);
+
+        fieldList.setLayoutManager(manager);
+
         fieldList.setAdapter(recordRegisterAdapter);
         formSwitcher.setText(R.string.show_short_form);
     }

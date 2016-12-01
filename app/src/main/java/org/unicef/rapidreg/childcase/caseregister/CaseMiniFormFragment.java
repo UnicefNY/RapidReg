@@ -76,10 +76,10 @@ public class CaseMiniFormFragment extends RecordRegisterFragment {
 
     @Override
     protected RecordRegisterAdapter createRecordRegisterAdapter() {
-        RecordRegisterAdapter recordRegisterAdapter = new RecordRegisterAdapter(getActivity(), caseRegisterPresenter.getValidFields(),
-                new ItemValuesMap(), true);
-        recordRegisterAdapter.setItemValues(caseRegisterPresenter.getDefaultItemValues());
-
+        RecordRegisterAdapter recordRegisterAdapter = new RecordRegisterAdapter(getActivity(),
+                caseRegisterPresenter.getValidFields(),
+                caseRegisterPresenter.getDefaultItemValues(),
+                true);
         RecordPhotoAdapter recordPhotoAdapter = new CasePhotoAdapter(getActivity(), caseRegisterPresenter.getDefaultPhotoPaths());
         recordRegisterAdapter.setPhotoAdapter(recordPhotoAdapter);
 

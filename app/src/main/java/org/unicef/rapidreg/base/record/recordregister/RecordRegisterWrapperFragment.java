@@ -47,10 +47,11 @@ public abstract class RecordRegisterWrapperFragment extends MvpFragment<RecordRe
     @BindView(R.id.edit)
     FloatingActionButton editButton;
 
-    protected ItemValuesMap itemValues;
     protected RecordForm form;
     protected List<Section> sections;
+
     protected RecordPhotoAdapter recordPhotoAdapter;
+    protected ItemValuesMap itemValues;
 
     public FragmentComponent getComponent() {
         return DaggerFragmentComponent.builder()
@@ -169,10 +170,8 @@ public abstract class RecordRegisterWrapperFragment extends MvpFragment<RecordRe
 
     protected abstract RecordPhotoAdapter createRecordPhotoAdapter();
 
-    @Deprecated
     protected abstract void initItemValues();
 
-    @Deprecated
     protected abstract void initFormData();
 
     protected abstract FragmentPagerItems getPages();
