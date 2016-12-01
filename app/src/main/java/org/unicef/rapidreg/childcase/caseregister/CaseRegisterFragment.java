@@ -12,6 +12,7 @@ import com.ogaclejapan.smarttablayout.utils.v4.FragmentPagerItem;
 import org.unicef.rapidreg.R;
 import org.unicef.rapidreg.base.Feature;
 import org.unicef.rapidreg.base.record.RecordActivity;
+import org.unicef.rapidreg.base.record.recordregister.RecordRegisterAdapter;
 import org.unicef.rapidreg.base.record.recordregister.RecordRegisterFragment;
 import org.unicef.rapidreg.childcase.CaseFeature;
 import org.unicef.rapidreg.childcase.casephoto.CasePhotoAdapter;
@@ -39,12 +40,6 @@ public class CaseRegisterFragment extends RecordRegisterFragment {
                              @Nullable Bundle savedInstanceState) {
         getComponent().inject(this);
         super.onCreateView(inflater, container, savedInstanceState);
-
-        if (getArguments() != null) {
-            photoAdapter = new CasePhotoAdapter(getContext(),
-                    getArguments().getStringArrayList(RecordService.RECORD_PHOTOS));
-            itemValues = (ItemValuesMap) getArguments().getSerializable(ITEM_VALUES);
-        }
         return inflater.inflate(R.layout.fragment_register, container, false);
     }
 
@@ -57,14 +52,19 @@ public class CaseRegisterFragment extends RecordRegisterFragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         List<Field> fields = getFields();
-        presenter.initContext(getActivity(), fields, false);
+        caseRegisterPresenter.initContext(getActivity(), fields, false);
+        if (getArguments() != null) {
+            setPhotoAdapter(new CasePhotoAdapter(getContext(),
+                    getArguments().getStringArrayList(RecordService.RECORD_PHOTOS)));
+            setItemValues((ItemValuesMap) getArguments().getSerializable(ITEM_VALUES));
+        }
     }
 
     @OnClick(R.id.form_switcher)
     public void onSwitcherChecked() {
         Bundle args = new Bundle();
-        args.putStringArrayList(RecordService.RECORD_PHOTOS, (ArrayList<String>) photoAdapter.getAllItems());
-        args.putSerializable(RecordService.ITEM_VALUES, itemValues);
+        args.putStringArrayList(RecordService.RECORD_PHOTOS, (ArrayList<String>) getPhotos());
+        args.putSerializable(RecordService.ITEM_VALUES, getItemValues());
 
         Feature feature = ((RecordActivity) getActivity()).getCurrentFeature().isDetailMode() ?
                 CaseFeature.DETAILS_MINI : ((RecordActivity) getActivity()).getCurrentFeature().isAddMode() ?
@@ -74,7 +74,7 @@ public class CaseRegisterFragment extends RecordRegisterFragment {
 
     protected List<Field> getFields() {
         int position = FragmentPagerItem.getPosition(getArguments());
-        RecordForm form = presenter.getCurrentForm();
+        RecordForm form = caseRegisterPresenter.getCurrentForm();
         if (form != null) {
             return form.getSections().get(position).getFields();
         }
@@ -83,4 +83,9 @@ public class CaseRegisterFragment extends RecordRegisterFragment {
 
     @Override
     public void saveSuccessfully(long recordId) {}
+
+    @Override
+    public void initView(RecordRegisterAdapter adapter) {
+        super.initView(adapter);
+    }
 }

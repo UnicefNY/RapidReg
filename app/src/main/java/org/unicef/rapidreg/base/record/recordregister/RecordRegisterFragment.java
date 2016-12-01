@@ -52,8 +52,6 @@ public abstract class RecordRegisterFragment extends MvpFragment<RecordRegisterV
     @BindView(R.id.edit)
     protected FloatingActionButton editButton;
 
-    protected RecordPhotoAdapter photoAdapter;
-    protected ItemValuesMap itemValues;
     protected long recordId;
 
     private RecordRegisterAdapter recordRegisterAdapter;
@@ -110,8 +108,7 @@ public abstract class RecordRegisterFragment extends MvpFragment<RecordRegisterV
         RecyclerView.LayoutManager layout = new LinearLayoutManager(getContext());
         layout.setAutoMeasureEnabled(true);
         fieldList.setLayoutManager(layout);
-        recordRegisterAdapter.setPhotoAdapter(photoAdapter);
-        recordRegisterAdapter.setItemValues(itemValues);
+        recordRegisterAdapter.setItemValues(new ItemValuesMap());
 
         fieldList.setAdapter(recordRegisterAdapter);
         formSwitcher.setText(R.string.show_short_form);
@@ -119,8 +116,8 @@ public abstract class RecordRegisterFragment extends MvpFragment<RecordRegisterV
 
     @Subscribe(threadMode = ThreadMode.MAIN, sticky = true, priority = 1)
     public void updateImageAdapter(UpdateImageEvent event) {
-        photoAdapter.addItem(event.getImagePath());
-        photoAdapter.notifyDataSetChanged();
+        getPhotoAdapter().addItem(event.getImagePath());
+        getPhotoAdapter().notifyDataSetChanged();
         EventBus.getDefault().removeStickyEvent(event);
     }
 
