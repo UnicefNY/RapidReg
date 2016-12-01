@@ -12,13 +12,13 @@ import com.ogaclejapan.smarttablayout.utils.v4.FragmentPagerItem;
 import org.unicef.rapidreg.R;
 import org.unicef.rapidreg.base.Feature;
 import org.unicef.rapidreg.base.record.RecordActivity;
+import org.unicef.rapidreg.base.record.recordphoto.RecordPhotoAdapter;
 import org.unicef.rapidreg.base.record.recordregister.RecordRegisterAdapter;
 import org.unicef.rapidreg.base.record.recordregister.RecordRegisterFragment;
 import org.unicef.rapidreg.childcase.CaseFeature;
 import org.unicef.rapidreg.childcase.casephoto.CasePhotoAdapter;
 import org.unicef.rapidreg.forms.Field;
 import org.unicef.rapidreg.forms.RecordForm;
-import org.unicef.rapidreg.service.CaseService;
 import org.unicef.rapidreg.service.RecordService;
 import org.unicef.rapidreg.service.cache.ItemValuesMap;
 
@@ -44,27 +44,35 @@ public class CaseRegisterFragment extends RecordRegisterFragment {
     }
 
     @Override
-    public CaseRegisterPresenter createPresenter() {
-        return caseRegisterPresenter;
+    public void onInitViewContent() {
+        super.onInitViewContent();
+        int position = FragmentPagerItem.getPosition(getArguments());
+        addProfileFieldForDetailsPage(caseRegisterPresenter.getFields(position));
     }
 
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        List<Field> fields = getFields();
-        caseRegisterPresenter.initContext(getActivity(), fields, false);
-        if (getArguments() != null) {
-            setPhotoAdapter(new CasePhotoAdapter(getContext(),
-                    getArguments().getStringArrayList(RecordService.RECORD_PHOTOS)));
-            setItemValues((ItemValuesMap) getArguments().getSerializable(ITEM_VALUES));
-        }
+    protected RecordRegisterAdapter createRecordRegisterAdapter() {
+        RecordRegisterAdapter recordRegisterAdapter = new RecordRegisterAdapter(getActivity(),
+                caseRegisterPresenter.getValidFields(FragmentPagerItem.getPosition(getArguments())),
+                new ItemValuesMap(), false);
+        recordRegisterAdapter.setItemValues(caseRegisterPresenter.getDefaultItemValues());
+
+        RecordPhotoAdapter recordPhotoAdapter = new CasePhotoAdapter(getActivity(), caseRegisterPresenter.getDefaultPhotoPaths());
+        recordRegisterAdapter.setPhotoAdapter(recordPhotoAdapter);
+
+        return recordRegisterAdapter;
+    }
+
+    @Override
+    public CaseRegisterPresenter createPresenter() {
+        return caseRegisterPresenter;
     }
 
     @OnClick(R.id.form_switcher)
     public void onSwitcherChecked() {
         Bundle args = new Bundle();
-        args.putStringArrayList(RecordService.RECORD_PHOTOS, (ArrayList<String>) getPhotos());
-        args.putSerializable(RecordService.ITEM_VALUES, getItemValues());
+        args.putStringArrayList(RecordService.RECORD_PHOTOS, (ArrayList<String>) getPhotoPathsData());
+        args.putSerializable(RecordService.ITEM_VALUES, getRecordRegisterData());
 
         Feature feature = ((RecordActivity) getActivity()).getCurrentFeature().isDetailMode() ?
                 CaseFeature.DETAILS_MINI : ((RecordActivity) getActivity()).getCurrentFeature().isAddMode() ?
@@ -72,20 +80,8 @@ public class CaseRegisterFragment extends RecordRegisterFragment {
         ((RecordActivity) getActivity()).turnToFeature(feature, args, ANIM_TO_MINI);
     }
 
-    protected List<Field> getFields() {
-        int position = FragmentPagerItem.getPosition(getArguments());
-        RecordForm form = caseRegisterPresenter.getCurrentForm();
-        if (form != null) {
-            return form.getSections().get(position).getFields();
-        }
-        return null;
-    }
-
     @Override
-    public void saveSuccessfully(long recordId) {}
-
-    @Override
-    public void initView(RecordRegisterAdapter adapter) {
-        super.initView(adapter);
+    public void saveSuccessfully(long recordId) {
+        Toast.makeText(getActivity(), "CaseRgisterFragment save successfully", Toast.LENGTH_SHORT).show();
     }
 }

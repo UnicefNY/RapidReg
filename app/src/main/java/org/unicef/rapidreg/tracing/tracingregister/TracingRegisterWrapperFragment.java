@@ -17,9 +17,11 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 import org.unicef.rapidreg.R;
 import org.unicef.rapidreg.base.record.RecordActivity;
+import org.unicef.rapidreg.base.record.recordphoto.RecordPhotoAdapter;
 import org.unicef.rapidreg.base.record.recordregister.RecordRegisterAdapter;
 import org.unicef.rapidreg.base.record.recordregister.RecordRegisterWrapperFragment;
 import org.unicef.rapidreg.event.SaveTracingEvent;
+import org.unicef.rapidreg.forms.Field;
 import org.unicef.rapidreg.forms.Section;
 import org.unicef.rapidreg.forms.TracingFormRoot;
 import org.unicef.rapidreg.service.RecordService;
@@ -46,7 +48,7 @@ public class TracingRegisterWrapperFragment extends RecordRegisterWrapperFragmen
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void saveTracing(SaveTracingEvent event) {
-        tracingRegisterPresenter.saveRecord(itemValues);
+        tracingRegisterPresenter.saveRecord(itemValues, this);
     }
 
     @Nullable
@@ -54,6 +56,12 @@ public class TracingRegisterWrapperFragment extends RecordRegisterWrapperFragmen
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         getComponent().inject(this);
         return super.onCreateView(inflater, container, savedInstanceState);
+    }
+
+    @Override
+    protected RecordPhotoAdapter createRecordPhotoAdapter() {
+        return new TracingPhotoAdapter(getContext(),
+                getArguments().getStringArrayList(RecordService.RECORD_PHOTOS));
     }
 
     @OnClick(R.id.edit)
@@ -68,8 +76,6 @@ public class TracingRegisterWrapperFragment extends RecordRegisterWrapperFragmen
     protected void initItemValues() {
         if (getArguments() != null) {
             itemValues = (ItemValuesMap) getArguments().getSerializable(ITEM_VALUES);
-            recordPhotoAdapter = new TracingPhotoAdapter(getContext(),
-                    getArguments().getStringArrayList(RecordService.RECORD_PHOTOS));
         }
     }
 
@@ -92,27 +98,16 @@ public class TracingRegisterWrapperFragment extends RecordRegisterWrapperFragmen
         return pages;
     }
 
-    private boolean validateRequiredField() {
-        TracingFormRoot tracingForm = TracingFormService.getInstance().getCurrentForm();
-        return RecordService.validateRequiredFields(tracingForm, itemValues);
-    }
-
     @Override
     public TracingRegisterPresenter createPresenter() {
         return tracingRegisterPresenter;
     }
 
     @Override
-    public void initView(RecordRegisterAdapter adapter) {
-
-    }
-
-    @Override
     public void saveSuccessfully(long recordId) {
         Bundle args = new Bundle();
         args.putSerializable(RecordService.ITEM_VALUES, itemValues);
-        args.putStringArrayList(RecordService.RECORD_PHOTOS, (ArrayList<String>) getPhotos());
+        args.putStringArrayList(RecordService.RECORD_PHOTOS, (ArrayList<String>) getPhotoPathsData());
         ((RecordActivity) getActivity()).turnToFeature(TracingFeature.DETAILS_FULL, args, null);
     }
-
 }

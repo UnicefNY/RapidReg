@@ -5,12 +5,14 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.ogaclejapan.smarttablayout.utils.v4.FragmentPagerItem;
 
 import org.unicef.rapidreg.R;
 import org.unicef.rapidreg.base.Feature;
 import org.unicef.rapidreg.base.record.RecordActivity;
+import org.unicef.rapidreg.base.record.recordregister.RecordRegisterAdapter;
 import org.unicef.rapidreg.base.record.recordregister.RecordRegisterFragment;
 import org.unicef.rapidreg.forms.Field;
 import org.unicef.rapidreg.forms.RecordForm;
@@ -38,13 +40,27 @@ public class TracingRegisterFragment extends RecordRegisterFragment {
                              @Nullable Bundle savedInstanceState) {
         getComponent().inject(this);
         super.onCreateView(inflater, container, savedInstanceState);
-
-        if (getArguments() != null) {
-            setPhotoAdapter(new TracingPhotoAdapter(getContext(),
-                    getArguments().getStringArrayList(RecordService.RECORD_PHOTOS)));
-            setItemValues((ItemValuesMap)getArguments().getSerializable(ITEM_VALUES));
-        }
         return inflater.inflate(R.layout.fragment_register, container, false);
+    }
+
+    @Override
+    public void onInitViewContent() {
+        super.onInitViewContent();
+        int position = FragmentPagerItem.getPosition(getArguments());
+        addProfileFieldForDetailsPage(tracingRegisterPresenter.getFields(position));
+    }
+
+    @Override
+    protected RecordRegisterAdapter createRecordRegisterAdapter() {
+        RecordRegisterAdapter recordRegisterAdapter = new RecordRegisterAdapter(getActivity(),
+                tracingRegisterPresenter.getValidFields(FragmentPagerItem.getPosition(getArguments())),
+                tracingRegisterPresenter.getDefaultItemValues(),
+                true);
+
+        TracingPhotoAdapter tracingPhotoAdapter = new TracingPhotoAdapter(getActivity(), tracingRegisterPresenter.getDefaultPhotoPaths());
+        recordRegisterAdapter.setPhotoAdapter(tracingPhotoAdapter);
+
+        return recordRegisterAdapter;
     }
 
     @Override
@@ -52,35 +68,19 @@ public class TracingRegisterFragment extends RecordRegisterFragment {
         return tracingRegisterPresenter;
     }
 
-    @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        List<Field> fields = getFields();
-        presenter.initContext(getActivity(), fields, false);
-    }
-
     @OnClick(R.id.form_switcher)
     public void onSwitcherChecked() {
         Bundle args = new Bundle();
-        args.putStringArrayList(RecordService.RECORD_PHOTOS, (ArrayList<String>) getPhotos());
-        args.putSerializable(RecordService.ITEM_VALUES, getItemValues());
+        args.putStringArrayList(RecordService.RECORD_PHOTOS, (ArrayList<String>) getPhotoPathsData());
+        args.putSerializable(RecordService.ITEM_VALUES, getRecordRegisterData());
         Feature feature = ((RecordActivity) getActivity()).getCurrentFeature().isDetailMode() ?
                 TracingFeature.DETAILS_MINI : ((RecordActivity) getActivity()).getCurrentFeature().isAddMode() ?
                 TracingFeature.ADD_MINI : TracingFeature.EDIT_MINI;
         ((RecordActivity) getActivity()).turnToFeature(feature, args, ANIM_TO_MINI);
     }
 
-    protected List<Field> getFields() {
-        int position = FragmentPagerItem.getPosition(getArguments());
-        RecordForm form = TracingFormService.getInstance().getCurrentForm();
-        if (form != null) {
-            return form.getSections().get(position).getFields();
-        }
-        return null;
-    }
-
     @Override
     public void saveSuccessfully(long recordId) {
-
+        Toast.makeText(getActivity(), "TracingRegisterFragment save successfully", Toast.LENGTH_SHORT).show();
     }
 }

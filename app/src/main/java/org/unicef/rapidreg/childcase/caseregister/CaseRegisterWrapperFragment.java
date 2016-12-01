@@ -17,21 +17,16 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 import org.unicef.rapidreg.R;
 import org.unicef.rapidreg.base.record.RecordActivity;
-import org.unicef.rapidreg.base.record.recordregister.RecordRegisterAdapter;
+import org.unicef.rapidreg.base.record.recordphoto.RecordPhotoAdapter;
 import org.unicef.rapidreg.base.record.recordregister.RecordRegisterWrapperFragment;
 import org.unicef.rapidreg.childcase.CaseActivity;
 import org.unicef.rapidreg.childcase.CaseFeature;
 import org.unicef.rapidreg.childcase.casephoto.CasePhotoAdapter;
 import org.unicef.rapidreg.event.SaveCaseEvent;
-import org.unicef.rapidreg.forms.CaseFormRoot;
+import org.unicef.rapidreg.forms.Field;
 import org.unicef.rapidreg.forms.Section;
-import org.unicef.rapidreg.model.Case;
-import org.unicef.rapidreg.service.CaseService;
 import org.unicef.rapidreg.service.RecordService;
-import org.unicef.rapidreg.service.cache.ItemValues;
 import org.unicef.rapidreg.service.cache.ItemValuesMap;
-
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -57,9 +52,15 @@ public class CaseRegisterWrapperFragment extends RecordRegisterWrapperFragment {
         return super.onCreateView(inflater, container, savedInstanceState);
     }
 
+    @Override
+    protected RecordPhotoAdapter createRecordPhotoAdapter() {
+        return new CasePhotoAdapter(getContext(),
+                getArguments().getStringArrayList(RecordService.RECORD_PHOTOS));
+    }
+
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void saveCase(SaveCaseEvent event) {
-       caseRegisterPresenter.saveRecord(itemValues);
+       caseRegisterPresenter.saveRecord(itemValues, this);
     }
 
     @OnClick(R.id.edit)
@@ -74,8 +75,6 @@ public class CaseRegisterWrapperFragment extends RecordRegisterWrapperFragment {
     protected void initItemValues() {
         if (getArguments() != null) {
             itemValues = (ItemValuesMap) getArguments().getSerializable(ITEM_VALUES);
-            recordPhotoAdapter = new CasePhotoAdapter(getContext(),
-                    getArguments().getStringArrayList(RecordService.RECORD_PHOTOS));
         }
     }
 
@@ -98,21 +97,11 @@ public class CaseRegisterWrapperFragment extends RecordRegisterWrapperFragment {
         return pages;
     }
 
-    private boolean validateRequiredField() {
-        CaseFormRoot caseForm = caseRegisterPresenter.getCurrentForm();
-        return RecordService.validateRequiredFields(caseForm, itemValues);
-    }
-
-    @Override
-    public void initView(RecordRegisterAdapter adapter) {
-
-    }
-
     @Override
     public void saveSuccessfully(long recordId) {
         Bundle args = new Bundle();
         args.putSerializable(RecordService.ITEM_VALUES, itemValues);
-        args.putStringArrayList(RecordService.RECORD_PHOTOS, (ArrayList<String>) getPhotos());
+        args.putStringArrayList(RecordService.RECORD_PHOTOS, (ArrayList<String>) getPhotoPathsData());
         ((RecordActivity) getActivity()).turnToFeature(CaseFeature.DETAILS_FULL, args, null);
     }
 }
