@@ -40,9 +40,9 @@ public class TracingRegisterFragment extends RecordRegisterFragment {
         super.onCreateView(inflater, container, savedInstanceState);
 
         if (getArguments() != null) {
-            photoAdapter = new TracingPhotoAdapter(getContext(),
-                    getArguments().getStringArrayList(RecordService.RECORD_PHOTOS));
-            itemValues = (ItemValuesMap) getArguments().getSerializable(ITEM_VALUES);
+            setPhotoAdapter(new TracingPhotoAdapter(getContext(),
+                    getArguments().getStringArrayList(RecordService.RECORD_PHOTOS)));
+            setItemValues((ItemValuesMap)getArguments().getSerializable(ITEM_VALUES));
         }
         return inflater.inflate(R.layout.fragment_register, container, false);
     }
@@ -62,8 +62,8 @@ public class TracingRegisterFragment extends RecordRegisterFragment {
     @OnClick(R.id.form_switcher)
     public void onSwitcherChecked() {
         Bundle args = new Bundle();
-        args.putStringArrayList(RecordService.RECORD_PHOTOS, (ArrayList<String>) photoAdapter.getAllItems());
-        args.putSerializable(RecordService.ITEM_VALUES, itemValues);
+        args.putStringArrayList(RecordService.RECORD_PHOTOS, (ArrayList<String>) getPhotos());
+        args.putSerializable(RecordService.ITEM_VALUES, getItemValues());
         Feature feature = ((RecordActivity) getActivity()).getCurrentFeature().isDetailMode() ?
                 TracingFeature.DETAILS_MINI : ((RecordActivity) getActivity()).getCurrentFeature().isAddMode() ?
                 TracingFeature.ADD_MINI : TracingFeature.EDIT_MINI;

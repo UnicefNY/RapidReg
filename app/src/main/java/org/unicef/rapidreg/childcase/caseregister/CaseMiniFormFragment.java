@@ -68,8 +68,6 @@ public class CaseMiniFormFragment extends RecordRegisterFragment{
         return inflater.inflate(R.layout.fragment_register, container, false);
     }
 
-
-
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -130,15 +128,15 @@ public class CaseMiniFormFragment extends RecordRegisterFragment{
     @OnClick(R.id.edit)
     public void onEditClicked() {
         Bundle args = new Bundle();
-        args.putSerializable(RecordService.ITEM_VALUES, getRegisterAdapter().getItemValues());
-        args.putStringArrayList(RecordService.RECORD_PHOTOS, (ArrayList<String>) getRegisterAdapter().getPhotoAdapter().getAllItems());
+        args.putSerializable(RecordService.ITEM_VALUES, getItemValues());
+        args.putStringArrayList(RecordService.RECORD_PHOTOS, (ArrayList<String>) getPhotos());
         ((CaseActivity) getActivity()).turnToFeature(CaseFeature.EDIT_MINI, args, null);
     }
 
     @OnClick(R.id.form_switcher)
     public void onSwitcherChecked() {
         Bundle args = new Bundle();
-        args.putSerializable(RecordService.ITEM_VALUES, itemValues);
+        args.putSerializable(RecordService.ITEM_VALUES, getItemValues());
         args.putStringArrayList(RecordService.RECORD_PHOTOS, (ArrayList<String>) getPhotos());
         Feature feature = ((RecordActivity) getActivity()).getCurrentFeature().isDetailMode() ?
                 CaseFeature.DETAILS_FULL : ((RecordActivity) getActivity()).getCurrentFeature().isAddMode() ?

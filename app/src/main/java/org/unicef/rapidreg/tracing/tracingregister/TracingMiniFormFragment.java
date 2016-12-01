@@ -54,7 +54,7 @@ public class TracingMiniFormFragment extends RecordRegisterFragment {
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void saveTracing(SaveTracingEvent event) {
-       tracingRegisterPresenter.saveRecord(itemValues);
+       tracingRegisterPresenter.saveRecord(getItemValues());
     }
 
     @NonNull
@@ -138,16 +138,16 @@ public class TracingMiniFormFragment extends RecordRegisterFragment {
     @OnClick(R.id.edit)
     public void onEditClicked() {
         Bundle args = new Bundle();
-        args.putSerializable(RecordService.ITEM_VALUES, itemValues);
-        args.putStringArrayList(RecordService.RECORD_PHOTOS, (ArrayList<String>) photoAdapter.getAllItems());
+        args.putSerializable(RecordService.ITEM_VALUES, getItemValues());
+        args.putStringArrayList(RecordService.RECORD_PHOTOS, (ArrayList<String>) getPhotos());
         ((TracingActivity) getActivity()).turnToFeature(TracingFeature.EDIT_MINI, args, null);
     }
 
     @OnClick(R.id.form_switcher)
     public void onSwitcherChecked() {
         Bundle args = new Bundle();
-        args.putSerializable(RecordService.ITEM_VALUES, itemValues);
-        args.putStringArrayList(RecordService.RECORD_PHOTOS, (ArrayList<String>) photoAdapter.getAllItems());
+        args.putSerializable(RecordService.ITEM_VALUES, getItemValues());
+        args.putStringArrayList(RecordService.RECORD_PHOTOS, (ArrayList<String>) getPhotos());
         Feature feature = ((RecordActivity) getActivity()).getCurrentFeature().isDetailMode() ?
                 TracingFeature.DETAILS_FULL : ((RecordActivity) getActivity()).getCurrentFeature().isAddMode() ?
                 TracingFeature.ADD_FULL : TracingFeature.EDIT_FULL;
@@ -161,27 +161,29 @@ public class TracingMiniFormFragment extends RecordRegisterFragment {
                 Tracing item = tracingRegisterPresenter.getById(recordId);
                 String tracingJson = new String(item.getContent().getBlob());
                 try {
-                    itemValues = new ItemValuesMap(JsonUtils.toMap(ItemValues.generateItemValues(tracingJson).getValues()));
+                    ItemValuesMap itemValues = new ItemValuesMap(JsonUtils.toMap(ItemValues.generateItemValues(tracingJson).getValues()));
                     itemValues.addStringItem(TracingService.TRACING_ID, item.getUniqueId());
+                    setItemValues(itemValues);
                 } catch (JSONException e) {
                     Log.e(TAG, "Json conversion error");
                 }
 
                 DateFormat dateFormat = SimpleDateFormat.getDateInstance(DateFormat.MEDIUM, Locale.US);
                 String shortUUID = RecordService.getShortUUID(item.getUniqueId());
-                itemValues.addStringItem(ItemValues.RecordProfile.ID_NORMAL_STATE, shortUUID);
-                itemValues.addStringItem(ItemValues.RecordProfile.REGISTRATION_DATE,
+                getItemValues().addStringItem(ItemValues.RecordProfile.ID_NORMAL_STATE, shortUUID);
+                getItemValues().addStringItem(ItemValues.RecordProfile.REGISTRATION_DATE,
                         dateFormat.format(item.getRegistrationDate()));
-                itemValues.addNumberItem(ItemValues.RecordProfile.ID, item.getId());
-                photoAdapter = initPhotoAdapter(recordId);
+                getItemValues().addNumberItem(ItemValues.RecordProfile.ID, item.getId());
+                setPhotoAdapter(initPhotoAdapter(recordId));
             } else {
-                itemValues = (ItemValuesMap) getArguments().getSerializable(ITEM_VALUES);
-                photoAdapter = new TracingPhotoAdapter(getContext(),
-                        getArguments().getStringArrayList(RecordService.RECORD_PHOTOS));
+                ItemValuesMap itemValues = (ItemValuesMap) getArguments().getSerializable(ITEM_VALUES);
+                setPhotoAdapter(new TracingPhotoAdapter(getContext(),
+                        getArguments().getStringArrayList(RecordService.RECORD_PHOTOS)));
+                setItemValues(itemValues);
             }
         } else {
-            itemValues = new ItemValuesMap();
-            photoAdapter = new TracingPhotoAdapter(getContext(), new ArrayList<String>());
+            setItemValues(new ItemValuesMap());
+            setPhotoAdapter(new TracingPhotoAdapter(getContext(), new ArrayList<String>()));
         }
     }
 
