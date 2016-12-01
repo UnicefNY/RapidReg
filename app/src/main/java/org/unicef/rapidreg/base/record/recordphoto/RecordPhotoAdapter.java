@@ -91,4 +91,9 @@ public abstract class RecordPhotoAdapter extends BaseAdapter {
     }
 
     protected abstract RecordPhoto getPhotoById(long id);
+
+    public void setItems(List<String> paths) {
+        this.paths = paths;
+        notifyDataSetChanged();
+    }
 }
