@@ -47,15 +47,15 @@ public class CaseRegisterFragment extends RecordRegisterFragment {
     public void onInitViewContent() {
         super.onInitViewContent();
         int position = FragmentPagerItem.getPosition(getArguments());
-        addProfileFieldForDetailsPage(caseRegisterPresenter.getFields(position));
+//        addProfileFieldForDetailsPage(caseRegisterPresenter.getFields(position));
     }
 
     @Override
     protected RecordRegisterAdapter createRecordRegisterAdapter() {
         RecordRegisterAdapter recordRegisterAdapter = new RecordRegisterAdapter(getActivity(),
                 caseRegisterPresenter.getValidFields(FragmentPagerItem.getPosition(getArguments())),
-                new ItemValuesMap(), false);
-        recordRegisterAdapter.setItemValues(caseRegisterPresenter.getDefaultItemValues());
+                caseRegisterPresenter.getDefaultItemValues(),
+                false);
 
         RecordPhotoAdapter recordPhotoAdapter = new CasePhotoAdapter(getActivity(), caseRegisterPresenter.getDefaultPhotoPaths());
         recordRegisterAdapter.setPhotoAdapter(recordPhotoAdapter);
