@@ -1,9 +1,8 @@
 package org.unicef.rapidreg.base.record.recordregister;
+
 import android.os.Bundle;
 import android.util.Log;
-
 import com.hannesdorfmann.mosby.mvp.MvpBasePresenter;
-
 import org.json.JSONException;
 import org.unicef.rapidreg.base.record.recordregister.RecordRegisterView.OnSaveRecordCallback;
 import org.unicef.rapidreg.forms.Field;
@@ -11,7 +10,6 @@ import org.unicef.rapidreg.forms.RecordForm;
 import org.unicef.rapidreg.service.RecordService;
 import org.unicef.rapidreg.service.cache.ItemValues;
 import org.unicef.rapidreg.service.cache.ItemValuesMap;
-
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -66,13 +64,8 @@ public abstract class RecordRegisterPresenter extends MvpBasePresenter<RecordReg
             return new ItemValuesMap();
         }
 
-        ItemValuesMap itemValuesMap = (ItemValuesMap) bundle.getSerializable(ITEM_VALUES);
-        if (itemValuesMap != null) {
-            return (ItemValuesMap) bundle.getSerializable(ITEM_VALUES);
-        }
-
         if (getRecordId(bundle) == INVALID_RECORD_ID) {
-            return new ItemValuesMap();
+            return (ItemValuesMap) bundle.getSerializable(ITEM_VALUES);
         }
 
         try {
@@ -109,15 +102,16 @@ public abstract class RecordRegisterPresenter extends MvpBasePresenter<RecordReg
 
     public abstract void saveRecord(ItemValuesMap itemValues, OnSaveRecordCallback callback);
 
+    public abstract RecordForm getCurrentForm();
+
     protected abstract ItemValuesMap getItemValuesByRecordId(Long recordId) throws JSONException;
 
     protected abstract List<String> getPhotoPathsByRecordId(Long recordId);
-
-    public abstract RecordForm getCurrentForm();
 
     protected abstract Long getRecordId(Bundle bundle);
 
     protected abstract List<Field> getFields();
 
     public abstract List<Field> getFields(int position);
+
 }
