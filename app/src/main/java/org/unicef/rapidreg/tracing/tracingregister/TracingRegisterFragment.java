@@ -44,13 +44,6 @@ public class TracingRegisterFragment extends RecordRegisterFragment {
     }
 
     @Override
-    public void onInitViewContent() {
-        super.onInitViewContent();
-        int position = FragmentPagerItem.getPosition(getArguments());
-        addProfileFieldForDetailsPage(tracingRegisterPresenter.getFields(position));
-    }
-
-    @Override
     protected RecordRegisterAdapter createRecordRegisterAdapter() {
         RecordRegisterAdapter recordRegisterAdapter = new RecordRegisterAdapter(getActivity(),
                 tracingRegisterPresenter.getValidFields(FragmentPagerItem.getPosition(getArguments())),
