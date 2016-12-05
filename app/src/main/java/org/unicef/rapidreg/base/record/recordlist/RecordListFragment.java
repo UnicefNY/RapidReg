@@ -71,12 +71,12 @@ public abstract class RecordListFragment extends MvpFragment<RecordListView, Rec
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         ButterKnife.bind(this, view);
-        presenter.initView(getActivity());
+        onInitViewContent();
     }
 
     @Override
-    public void initView(final RecordListAdapter adapter) {
-        this.adapter = adapter;
+    public void onInitViewContent() {
+        adapter = createRecordListAdapter();
 
         initListContainer(adapter);
         initOrderSpinner(adapter);
@@ -185,5 +185,8 @@ public abstract class RecordListFragment extends MvpFragment<RecordListView, Rec
 
             return view;
         }
+
     }
+
+    protected abstract RecordListAdapter createRecordListAdapter();
 }

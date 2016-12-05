@@ -19,13 +19,6 @@ public class CaseSearchPresenter extends RecordSearchPresenter {
         this.caseService = caseService;
     }
 
-    @Override
-    public void initView(Context context) {
-        if (isViewAttached()) {
-            getView().initView(new CaseListAdapter(context, caseService));
-        }
-    }
-
     public List<Long> getSearchResult(String shortId, String name, int ageFrom, int ageTo, String caregiver, String registrationDate) {
         return caseService.getSearchResult(shortId, name, ageFrom, ageTo, caregiver, getDate(registrationDate));
     }

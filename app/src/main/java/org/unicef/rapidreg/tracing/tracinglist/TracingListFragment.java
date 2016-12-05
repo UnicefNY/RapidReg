@@ -36,6 +36,9 @@ public class TracingListFragment extends RecordListFragment {
     @Inject
     TracingListPresenter tracingListPresenter;
 
+    @Inject
+    TracingListAdapter tracingListAdapter;
+
     @Override
     public RecordListPresenter createPresenter() {
         return tracingListPresenter;
@@ -81,6 +84,11 @@ public class TracingListFragment extends RecordListFragment {
                 }
             }
         });
+    }
+
+    @Override
+    protected RecordListAdapter createRecordListAdapter() {
+        return tracingListAdapter;
     }
 
     @OnClick(R.id.add)

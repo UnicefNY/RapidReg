@@ -11,6 +11,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import org.unicef.rapidreg.R;
 import org.unicef.rapidreg.base.record.recordlist.RecordListAdapter;
 import org.unicef.rapidreg.childcase.CaseFeature;
+import org.unicef.rapidreg.injection.ActivityContext;
 import org.unicef.rapidreg.model.Case;
 import org.unicef.rapidreg.model.RecordModel;
 import org.unicef.rapidreg.service.CaseService;
@@ -25,11 +26,12 @@ import javax.inject.Inject;
 
 public class CaseListAdapter extends RecordListAdapter {
 
-    private CaseService caseService;
+    @Inject
+    CaseService caseService;
 
-    public CaseListAdapter(Context context, CaseService caseService) {
+    @Inject
+    public CaseListAdapter(@ActivityContext Context context) {
         super(context);
-        this.caseService = caseService;
     }
 
     @Override

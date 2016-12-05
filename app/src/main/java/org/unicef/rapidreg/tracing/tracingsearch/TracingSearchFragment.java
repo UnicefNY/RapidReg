@@ -13,6 +13,7 @@ import org.unicef.rapidreg.base.record.recordlist.RecordListAdapter;
 import org.unicef.rapidreg.base.record.recordsearch.RecordSearchFragment;
 import org.unicef.rapidreg.base.record.recordsearch.RecordSearchPresenter;
 import org.unicef.rapidreg.model.RecordModel;
+import org.unicef.rapidreg.tracing.tracinglist.TracingListAdapter;
 
 import java.util.List;
 import java.util.Map;
@@ -23,6 +24,9 @@ public class TracingSearchFragment extends RecordSearchFragment {
 
     @Inject
     TracingSearchPresenter tracingSearchPresenter;
+
+    @Inject
+    TracingListAdapter tracingListAdapter;
 
     @Override
     @NonNull
@@ -38,12 +42,17 @@ public class TracingSearchFragment extends RecordSearchFragment {
     }
 
     @Override
-    public void initView(final RecordListAdapter adapter) {
-        super.initView(adapter);
+    public void onInitViewContent() {
+        super.onInitViewContent();
         caregiver.setVisibility(View.GONE);
         caregiverSeparator.setVisibility(View.GONE);
 
         registrationDate.setHint(R.string.inquiry_date);
+    }
+
+    @Override
+    protected RecordListAdapter createRecordListAdapter() {
+        return tracingListAdapter;
     }
 
     @Override

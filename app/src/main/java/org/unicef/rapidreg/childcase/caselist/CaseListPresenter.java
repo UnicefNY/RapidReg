@@ -25,14 +25,6 @@ public class CaseListPresenter extends RecordListPresenter {
         this.caseFormService = caseFormService;
     }
 
-
-    @Override
-    public void initView(Context context) {
-        if (isViewAttached()) {
-            getView().initView(new CaseListAdapter(context, caseService));
-        }
-    }
-
     public boolean isFormReady() {
         return caseFormService.isFormReady();
     }

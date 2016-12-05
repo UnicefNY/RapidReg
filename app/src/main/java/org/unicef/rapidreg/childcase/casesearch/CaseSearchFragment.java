@@ -7,8 +7,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import org.unicef.rapidreg.base.record.recordlist.RecordListAdapter;
 import org.unicef.rapidreg.base.record.recordsearch.RecordSearchFragment;
 import org.unicef.rapidreg.base.record.recordsearch.RecordSearchPresenter;
+import org.unicef.rapidreg.childcase.caselist.CaseListAdapter;
 import org.unicef.rapidreg.model.RecordModel;
 
 import java.util.List;
@@ -21,6 +23,9 @@ public class CaseSearchFragment extends RecordSearchFragment {
     @Inject
     CaseSearchPresenter caseSearchPresenter;
 
+    @Inject
+    CaseListAdapter caseListAdapter;
+
     @Override
     public RecordSearchPresenter createPresenter() {
         return caseSearchPresenter;
@@ -31,6 +36,11 @@ public class CaseSearchFragment extends RecordSearchFragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         getComponent().inject(this);
         return super.onCreateView(inflater, container, savedInstanceState);
+    }
+
+    @Override
+    protected RecordListAdapter createRecordListAdapter() {
+        return caseListAdapter;
     }
 
     @Override
