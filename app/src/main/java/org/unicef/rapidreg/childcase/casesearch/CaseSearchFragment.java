@@ -42,20 +42,6 @@ public class CaseSearchFragment extends RecordSearchFragment {
     protected RecordListAdapter createRecordListAdapter() {
         return caseListAdapter;
     }
-
-    @Override
-    protected List<Long> getSearchResult(Map<String, String> filters) {
-        String shortId = filters.get(ID);
-        String name = filters.get(NAME);
-        String from = filters.get(AGE_FROM);
-        int ageFrom = TextUtils.isEmpty(from) ? RecordModel.MIN_AGE : Integer.valueOf(from);
-        String to = filters.get(AGE_TO);
-        int ageTo = TextUtils.isEmpty(to) ? RecordModel.MAX_AGE : Integer.valueOf(to);
-        String caregiver = filters.get(CAREGIVER);
-        String registrationDate = filters.get(REGISTRATION_DATE);
-
-        return caseSearchPresenter.getSearchResult(shortId, name, ageFrom, ageTo, caregiver, registrationDate);
-    }
 }
 
 

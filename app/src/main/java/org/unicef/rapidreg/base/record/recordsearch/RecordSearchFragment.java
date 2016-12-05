@@ -24,6 +24,7 @@ import org.unicef.rapidreg.base.record.recordlist.RecordListView;
 import org.unicef.rapidreg.injection.component.DaggerFragmentComponent;
 import org.unicef.rapidreg.injection.component.FragmentComponent;
 import org.unicef.rapidreg.injection.module.FragmentModule;
+import org.unicef.rapidreg.model.RecordModel;
 import org.unicef.rapidreg.widgets.ClearableEditText;
 
 import java.util.LinkedHashMap;
@@ -157,7 +158,15 @@ public abstract class RecordSearchFragment extends MvpFragment<RecordListView, R
         Map<String, String> values = getFilterValues();
         searchBarTitle.setText(getFirstValidValue(values));
 
-        List<Long> searchResult = getSearchResult(values);
+        String from = ageFrom.getText();
+        String to = ageTo.getText();
+
+        List<Long> searchResult = presenter.getSearchResult(id.getText(),
+                name.getText(),
+                TextUtils.isEmpty(from) ? RecordModel.MIN_AGE : Integer.valueOf(from),
+                TextUtils.isEmpty(to) ? RecordModel.MAX_AGE : Integer.valueOf(to),
+                caregiver.getText(),
+                registrationDate.getText().toString());
 
         int resultIndex = searchResult.isEmpty() ? HAVE_NO_RESULT : HAVE_RESULT_LIST;
         searchResultSwitcher.setDisplayedChild(resultIndex);
@@ -197,8 +206,6 @@ public abstract class RecordSearchFragment extends MvpFragment<RecordListView, R
     }
 
     protected abstract RecordListAdapter createRecordListAdapter();
-
-    protected abstract List<Long> getSearchResult(Map<String, String> filters);
 }
 
 

@@ -17,7 +17,8 @@ public class TracingSearchPresenter extends RecordSearchPresenter {
         this.tracingService = tracingService;
     }
 
-    public List<Long> getSearchResult(String id, String name, int ageFrom, int ageTo, String registrationDate) {
-        return tracingService.getSearchResult(id, name, ageFrom, ageTo, getDate(registrationDate));
+    @Override
+    protected List<Long> getSearchResult(String shortId, String name, int ageFrom, int ageTo, String caregiver, String registrationDate) {
+        return tracingService.getSearchResult(shortId, name, ageFrom, ageTo, getDate(registrationDate));
     }
 }
