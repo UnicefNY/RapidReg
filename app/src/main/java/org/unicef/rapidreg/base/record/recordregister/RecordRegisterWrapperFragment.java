@@ -159,12 +159,11 @@ public abstract class RecordRegisterWrapperFragment extends MvpFragment<RecordRe
             public void onPageSelected(int position) {
                 RecordRegisterFragment currentPage = (RecordRegisterFragment) adapter.getPage(position);
                 recordPhotoAdapter = currentPage.getPhotoAdapter();
+                recordPhotoAdapter.setItems(currentPage.getPhotoPathsData());
             }
 
             @Override
-            public void onPageScrollStateChanged(int state) {
-
-            }
+            public void onPageScrollStateChanged(int state) {}
         });
     }
 
