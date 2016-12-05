@@ -37,11 +37,13 @@ public class TracingRegisterPresenter extends RecordRegisterPresenter {
 
     private TracingService tracingService;
     private TracingFormService tracingFormService;
+    private TracingPhotoService tracingPhotoService;
 
     @Inject
-    public TracingRegisterPresenter(TracingService tracingService, TracingFormService tracingFormService) {
+    public TracingRegisterPresenter(TracingService tracingService, TracingFormService tracingFormService, TracingPhotoService tracingPhotoService) {
         this.tracingService = tracingService;
         this.tracingFormService = tracingFormService;
+        this.tracingPhotoService = tracingPhotoService;
     }
 
     @Override
@@ -75,7 +77,7 @@ public class TracingRegisterPresenter extends RecordRegisterPresenter {
     @Override
     protected List<String> getPhotoPathsByRecordId(Long recordId) {
         List<String> paths = new ArrayList<>();
-        List<Long> tracings = TracingPhotoService.getInstance().getIdsByTracingId(recordId);
+        List<Long> tracings = tracingPhotoService.getIdsByTracingId(recordId);
         for (Long tracingId : tracings) {
             paths.add(String.valueOf(tracingId));
         }
