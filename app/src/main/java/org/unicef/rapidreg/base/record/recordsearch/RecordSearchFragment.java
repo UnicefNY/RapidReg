@@ -98,12 +98,12 @@ public abstract class RecordSearchFragment extends MvpFragment<RecordListView, R
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         ButterKnife.bind(this, view);
-        presenter.initView(getActivity());
+        onInitViewContent();
     }
 
     @Override
-    public void initView(final RecordListAdapter adapter) {
-        this.adapter = adapter;
+    public void onInitViewContent() {
+        adapter = createRecordListAdapter();
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
@@ -195,6 +195,8 @@ public abstract class RecordSearchFragment extends MvpFragment<RecordListView, R
 
         return getResources().getString(R.string.click_to_search);
     }
+
+    protected abstract RecordListAdapter createRecordListAdapter();
 
     protected abstract List<Long> getSearchResult(Map<String, String> filters);
 }

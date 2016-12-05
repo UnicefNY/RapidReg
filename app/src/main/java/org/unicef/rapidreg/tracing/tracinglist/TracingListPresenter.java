@@ -23,14 +23,6 @@ public class TracingListPresenter extends RecordListPresenter {
         this.tracingService = tracingService;
     }
 
-    @Override
-    public void initView(Context context) {
-        if (isViewAttached()) {
-            getView().initView(new TracingListAdapter(context, tracingService));
-        }
-    }
-
-
     public int calculateDisplayedIndex() {
         List<Tracing> tracings = tracingService.getAll();
         int index = tracings.isEmpty() ? RecordListFragment.HAVE_NO_RESULT : RecordListFragment.HAVE_RESULT_LIST;

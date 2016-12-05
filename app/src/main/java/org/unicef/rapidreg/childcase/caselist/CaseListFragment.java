@@ -38,6 +38,9 @@ public class CaseListFragment extends RecordListFragment {
     @Inject
     CaseListPresenter caseListPresenter;
 
+    @Inject
+    CaseListAdapter caseListAdapter;
+
     @Override
     public RecordListPresenter createPresenter() {
         return caseListPresenter;
@@ -83,6 +86,11 @@ public class CaseListFragment extends RecordListFragment {
 
             }
         });
+    }
+
+    @Override
+    protected RecordListAdapter createRecordListAdapter() {
+        return caseListAdapter;
     }
 
     @OnClick(R.id.add)

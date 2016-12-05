@@ -17,13 +17,6 @@ public class TracingSearchPresenter extends RecordSearchPresenter {
         this.tracingService = tracingService;
     }
 
-    @Override
-    public void initView(Context context) {
-        if (isViewAttached()) {
-            getView().initView(new TracingListAdapter(context, tracingService));
-        }
-    }
-
     public List<Long> getSearchResult(String id, String name, int ageFrom, int ageTo, String registrationDate) {
         return tracingService.getSearchResult(id, name, ageFrom, ageTo, getDate(registrationDate));
     }

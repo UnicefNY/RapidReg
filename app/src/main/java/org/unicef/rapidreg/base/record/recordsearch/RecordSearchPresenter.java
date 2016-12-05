@@ -16,15 +16,12 @@ public class RecordSearchPresenter extends MvpBasePresenter<RecordListView> {
     @Inject
     public RecordSearchPresenter() {}
 
-    public void initView(Context context) {}
-
     protected Date getDate(String value) {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM/dd/yyyy");
         try {
             java.util.Date date = simpleDateFormat.parse(value);
             return new Date(date.getTime());
-        } catch (ParseException e) {
-        }
+        } catch (ParseException e) {}
 
         return null;
     }

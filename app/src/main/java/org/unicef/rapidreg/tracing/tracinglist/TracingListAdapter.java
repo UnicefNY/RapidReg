@@ -10,6 +10,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 
 import org.unicef.rapidreg.R;
 import org.unicef.rapidreg.base.record.recordlist.RecordListAdapter;
+import org.unicef.rapidreg.injection.ActivityContext;
 import org.unicef.rapidreg.model.RecordModel;
 import org.unicef.rapidreg.model.Tracing;
 import org.unicef.rapidreg.service.RecordService;
@@ -21,13 +22,16 @@ import org.unicef.rapidreg.utils.StreamUtil;
 import java.io.IOException;
 import java.util.Date;
 
+import javax.inject.Inject;
+
 public class TracingListAdapter extends RecordListAdapter {
 
-    private final TracingService tracingService;
+    @Inject
+    TracingService tracingService;
 
-    public TracingListAdapter(Context context, TracingService tracingService) {
+    @Inject
+    public TracingListAdapter(@ActivityContext Context context) {
         super(context);
-        this.tracingService = tracingService;
     }
 
     @Override
