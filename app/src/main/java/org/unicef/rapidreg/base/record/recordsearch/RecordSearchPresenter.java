@@ -11,6 +11,13 @@ import java.util.List;
 
 public abstract class RecordSearchPresenter extends MvpBasePresenter<RecordListView> {
 
+    protected static final String ID = "id";
+    protected static final String NAME = "name";
+    protected static final String AGE_FROM = "age_from";
+    protected static final String AGE_TO = "age_to";
+    protected static final String CAREGIVER = "caregiver";
+    protected static final String REGISTRATION_DATE = "registration_date";
+
     protected Date getDate(String value) {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM/dd/yyyy");
         try {

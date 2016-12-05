@@ -36,16 +36,11 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.OnTextChanged;
 
+import static org.unicef.rapidreg.base.record.recordsearch.RecordSearchPresenter.*;
+
 public abstract class RecordSearchFragment extends MvpFragment<RecordListView, RecordSearchPresenter>
         implements RecordListView {
     public static final String TAG = RecordSearchFragment.class.getSimpleName();
-
-    protected static final String ID = "id";
-    protected static final String NAME = "name";
-    protected static final String AGE_FROM = "age_from";
-    protected static final String AGE_TO = "age_to";
-    protected static final String CAREGIVER = "caregiver";
-    protected static final String REGISTRATION_DATE = "registration_date";
 
     private static final int HAVE_RESULT_LIST = 0;
     private static final int HAVE_NO_RESULT = 1;

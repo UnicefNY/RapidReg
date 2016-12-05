@@ -13,6 +13,8 @@ import org.unicef.rapidreg.base.record.RecordActivity;
 import org.unicef.rapidreg.base.record.recordlist.RecordListAdapter;
 import org.unicef.rapidreg.base.record.recordlist.RecordListFragment;
 import org.unicef.rapidreg.base.record.recordlist.RecordListPresenter;
+import org.unicef.rapidreg.base.record.recordlist.spinner.SpinnerAdapter;
+import org.unicef.rapidreg.base.record.recordlist.spinner.SpinnerState;
 import org.unicef.rapidreg.childcase.CaseFeature;
 import org.unicef.rapidreg.model.Case;
 
