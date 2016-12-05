@@ -54,17 +54,4 @@ public class TracingSearchFragment extends RecordSearchFragment {
     protected RecordListAdapter createRecordListAdapter() {
         return tracingListAdapter;
     }
-
-    @Override
-    protected List<Long> getSearchResult(Map<String, String> filters) {
-        String id = filters.get(ID);
-        String name = filters.get(NAME);
-        String from = filters.get(AGE_FROM);
-        int ageFrom = TextUtils.isEmpty(from) ? RecordModel.MIN_AGE : Integer.valueOf(from);
-        String to = filters.get(AGE_TO);
-        int ageTo = TextUtils.isEmpty(to) ? RecordModel.MAX_AGE : Integer.valueOf(to);
-        String registrationDate = filters.get(REGISTRATION_DATE);
-
-        return tracingSearchPresenter.getSearchResult(id, name, ageFrom, ageTo, registrationDate);
-    }
 }

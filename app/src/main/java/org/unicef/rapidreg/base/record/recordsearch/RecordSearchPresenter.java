@@ -1,6 +1,5 @@
 package org.unicef.rapidreg.base.record.recordsearch;
 
-import android.content.Context;
 import com.hannesdorfmann.mosby.mvp.MvpBasePresenter;
 
 import org.unicef.rapidreg.base.record.recordlist.RecordListView;
@@ -8,13 +7,9 @@ import org.unicef.rapidreg.base.record.recordlist.RecordListView;
 import java.sql.Date;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.List;
 
-import javax.inject.Inject;
-
-public class RecordSearchPresenter extends MvpBasePresenter<RecordListView> {
-
-    @Inject
-    public RecordSearchPresenter() {}
+public abstract class RecordSearchPresenter extends MvpBasePresenter<RecordListView> {
 
     protected Date getDate(String value) {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM/dd/yyyy");
@@ -25,4 +20,11 @@ public class RecordSearchPresenter extends MvpBasePresenter<RecordListView> {
 
         return null;
     }
+
+    protected abstract List<Long> getSearchResult(String shortId,
+                                                  String name,
+                                                  int ageFrom,
+                                                  int ageTo,
+                                                  String caregiver,
+                                                  String registrationDate);
 }
