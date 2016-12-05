@@ -74,7 +74,7 @@ public class CaseRegisterFragment extends RecordRegisterFragment {
     }
 
     @Override
-    public void saveSuccessfully(long recordId) {
+    public void onSaveSuccessful(long recordId) {
         Toast.makeText(getActivity(), "CaseRgisterFragment save successfully", Toast.LENGTH_SHORT).show();
     }
 }

@@ -1,32 +1,25 @@
 package org.unicef.rapidreg.tracing.tracingregister;
 
 import android.os.Bundle;
-import android.util.Log;
-import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
 import org.json.JSONException;
-import org.unicef.rapidreg.R;
-import org.unicef.rapidreg.base.record.recordphoto.RecordPhotoAdapter;
 import org.unicef.rapidreg.base.record.recordregister.RecordRegisterFragment;
 import org.unicef.rapidreg.base.record.recordregister.RecordRegisterPresenter;
-import org.unicef.rapidreg.base.record.recordregister.RecordRegisterView;
-import org.unicef.rapidreg.base.record.recordregister.RecordRegisterView.OnSaveRecordCallback;
+import org.unicef.rapidreg.base.record.recordregister.RecordRegisterView.SaveRecordCallback;
 import org.unicef.rapidreg.forms.Field;
 import org.unicef.rapidreg.forms.RecordForm;
 import org.unicef.rapidreg.forms.Section;
 import org.unicef.rapidreg.forms.TracingFormRoot;
 import org.unicef.rapidreg.model.Tracing;
-import org.unicef.rapidreg.service.CaseService;
 import org.unicef.rapidreg.service.RecordService;
 import org.unicef.rapidreg.service.TracingFormService;
 import org.unicef.rapidreg.service.TracingPhotoService;
 import org.unicef.rapidreg.service.TracingService;
 import org.unicef.rapidreg.service.cache.ItemValues;
 import org.unicef.rapidreg.service.cache.ItemValuesMap;
-import org.unicef.rapidreg.tracing.tracingphoto.TracingPhotoAdapter;
 import org.unicef.rapidreg.utils.JsonUtils;
 
 import java.io.IOException;
@@ -121,16 +114,16 @@ public class TracingRegisterPresenter extends RecordRegisterPresenter {
     }
 
     @Override
-    public void saveRecord(OnSaveRecordCallback callback) {
+    public void saveRecord(SaveRecordCallback callback) {
         ItemValuesMap itemValuesMap = getView().getRecordRegisterData();
         saveRecord(itemValuesMap, callback);
 
     }
 
     @Override
-    public void saveRecord(ItemValuesMap itemValuesMap, OnSaveRecordCallback callback) {
+    public void saveRecord(ItemValuesMap itemValuesMap, SaveRecordCallback callback) {
         if (!validateRequiredField(itemValuesMap)) {
-            callback.promoteRequiredFieldNotFilled();
+            callback.onRequiredFieldNotFilled();
             return;
         }
         if (!isViewAttached()) {
@@ -143,9 +136,9 @@ public class TracingRegisterPresenter extends RecordRegisterPresenter {
 
         try {
             Tracing record = tracingService.saveOrUpdate(itemValues, photoPaths);
-            callback.saveSuccessfully(record.getId());
+            callback.onSaveSuccessful(record.getId());
         } catch (IOException e) {
-            callback.promoteSaveFailed();
+            callback.onSavedFail();
         }
     }
 

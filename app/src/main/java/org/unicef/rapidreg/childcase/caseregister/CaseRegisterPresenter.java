@@ -8,7 +8,7 @@ import com.google.gson.JsonObject;
 import org.json.JSONException;
 import org.unicef.rapidreg.base.record.recordregister.RecordRegisterFragment;
 import org.unicef.rapidreg.base.record.recordregister.RecordRegisterPresenter;
-import org.unicef.rapidreg.base.record.recordregister.RecordRegisterView.OnSaveRecordCallback;
+import org.unicef.rapidreg.base.record.recordregister.RecordRegisterView.SaveRecordCallback;
 import org.unicef.rapidreg.forms.CaseFormRoot;
 import org.unicef.rapidreg.forms.Field;
 import org.unicef.rapidreg.forms.RecordForm;
@@ -35,6 +35,7 @@ import javax.inject.Inject;
 public class CaseRegisterPresenter extends RecordRegisterPresenter {
 
     private static final String TAG = CaseRegisterPresenter.class.getSimpleName();
+
     private CaseService caseService;
     private CaseFormService caseFormService;
     private CasePhotoService casePhotoService;
@@ -114,15 +115,15 @@ public class CaseRegisterPresenter extends RecordRegisterPresenter {
     }
 
     @Override
-    public void saveRecord(OnSaveRecordCallback callback) {
+    public void saveRecord(SaveRecordCallback callback) {
         ItemValuesMap itemValues = getView().getRecordRegisterData();
         saveRecord(itemValues, callback);
     }
 
     @Override
-    public void saveRecord(ItemValuesMap itemValues, OnSaveRecordCallback callback) {
+    public void saveRecord(ItemValuesMap itemValues, SaveRecordCallback callback) {
         if (!validateRequiredField(itemValues)) {
-            callback.promoteRequiredFieldNotFilled();
+            callback.onRequiredFieldNotFilled();
             return;
         }
         if (!isViewAttached()){
@@ -134,9 +135,9 @@ public class CaseRegisterPresenter extends RecordRegisterPresenter {
                 getView().getRecordRegisterData().getValues()), JsonObject.class));
         try {
             Case record = caseService.saveOrUpdate(newItemValues, photoPaths);
-            callback.saveSuccessfully(record.getId());
+            callback.onSaveSuccessful(record.getId());
         } catch (IOException e) {
-            callback.promoteSaveFailed();
+            callback.onSavedFail();
         }
     }
 

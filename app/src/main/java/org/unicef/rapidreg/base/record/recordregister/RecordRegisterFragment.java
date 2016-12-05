@@ -28,7 +28,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public abstract class RecordRegisterFragment extends MvpFragment<RecordRegisterView, RecordRegisterPresenter>
-        implements RecordRegisterView, RecordRegisterView.OnSaveRecordCallback {
+        implements RecordRegisterView, RecordRegisterView.SaveRecordCallback {
 
     public static final String ITEM_VALUES = "item_values";
 
@@ -120,12 +120,12 @@ public abstract class RecordRegisterFragment extends MvpFragment<RecordRegisterV
     }
 
     @Override
-    public void promoteRequiredFieldNotFilled() {
+    public void onRequiredFieldNotFilled() {
         Toast.makeText(getActivity(), R.string.required_field_is_not_filled, Toast.LENGTH_LONG).show();
     }
 
     @Override
-    public void promoteSaveFailed() {
+    public void onSavedFail() {
         Toast.makeText(getActivity(), R.string.save_failed, Toast.LENGTH_SHORT).show();
     }
 

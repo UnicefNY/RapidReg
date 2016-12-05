@@ -83,7 +83,6 @@ public class SyncFragment extends MvpFragment<SyncView, SyncPresenter> implement
 
     @Inject
     SyncPresenter syncPresenter;
-    private FragmentComponent component;
 
     @Nullable
     @Override

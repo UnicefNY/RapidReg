@@ -73,7 +73,7 @@ public class TracingRegisterFragment extends RecordRegisterFragment {
     }
 
     @Override
-    public void saveSuccessfully(long recordId) {
+    public void onSaveSuccessful(long recordId) {
         Toast.makeText(getActivity(), "TracingRegisterFragment save successfully", Toast.LENGTH_SHORT).show();
     }
 }

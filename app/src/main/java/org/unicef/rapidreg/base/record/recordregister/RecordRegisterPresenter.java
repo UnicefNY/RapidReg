@@ -4,7 +4,7 @@ import android.os.Bundle;
 import android.util.Log;
 import com.hannesdorfmann.mosby.mvp.MvpBasePresenter;
 import org.json.JSONException;
-import org.unicef.rapidreg.base.record.recordregister.RecordRegisterView.OnSaveRecordCallback;
+import org.unicef.rapidreg.base.record.recordregister.RecordRegisterView.SaveRecordCallback;
 import org.unicef.rapidreg.forms.Field;
 import org.unicef.rapidreg.forms.RecordForm;
 import org.unicef.rapidreg.service.RecordService;
@@ -98,12 +98,12 @@ public abstract class RecordRegisterPresenter extends MvpBasePresenter<RecordReg
         return getPhotoPathsByRecordId(getRecordId(bundle));
     }
 
-    public abstract void saveRecord(OnSaveRecordCallback callback);
+    public abstract void saveRecord(SaveRecordCallback callback);
 
-    public abstract void saveRecord(ItemValuesMap itemValues, OnSaveRecordCallback callback);
+    public abstract void saveRecord(ItemValuesMap itemValues, SaveRecordCallback callback);
 
     public abstract RecordForm getCurrentForm();
-
+    
     protected abstract ItemValuesMap getItemValuesByRecordId(Long recordId) throws JSONException;
 
     protected abstract List<String> getPhotoPathsByRecordId(Long recordId);
