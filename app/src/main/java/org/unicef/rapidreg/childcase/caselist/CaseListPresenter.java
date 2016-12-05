@@ -1,9 +1,7 @@
 package org.unicef.rapidreg.childcase.caselist;
 
-import android.content.Context;
-
-import org.unicef.rapidreg.base.record.recordlist.RecordListFragment;
 import org.unicef.rapidreg.base.record.recordlist.RecordListPresenter;
+import org.unicef.rapidreg.base.record.recordlist.spinner.SpinnerState;
 import org.unicef.rapidreg.model.Case;
 import org.unicef.rapidreg.service.CaseFormService;
 import org.unicef.rapidreg.service.CaseService;
@@ -33,7 +31,7 @@ public class CaseListPresenter extends RecordListPresenter {
         return caseService.getAll();
     }
 
-    public List<Long> getCasesByFilter(RecordListFragment.SpinnerState spinnerState) {
+    public List<Long> getCasesByFilter(SpinnerState spinnerState) {
         switch (spinnerState) {
             case AGE_ASC:
                 return caseService.getAllOrderByAgeASC();
