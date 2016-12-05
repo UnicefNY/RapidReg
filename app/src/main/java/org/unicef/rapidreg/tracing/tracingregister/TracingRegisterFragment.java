@@ -48,7 +48,7 @@ public class TracingRegisterFragment extends RecordRegisterFragment {
         RecordRegisterAdapter recordRegisterAdapter = new RecordRegisterAdapter(getActivity(),
                 tracingRegisterPresenter.getValidFields(FragmentPagerItem.getPosition(getArguments())),
                 tracingRegisterPresenter.getDefaultItemValues(),
-                true);
+                false);
 
         TracingPhotoAdapter tracingPhotoAdapter = new TracingPhotoAdapter(getActivity(), tracingRegisterPresenter.getDefaultPhotoPaths());
         recordRegisterAdapter.setPhotoAdapter(tracingPhotoAdapter);
