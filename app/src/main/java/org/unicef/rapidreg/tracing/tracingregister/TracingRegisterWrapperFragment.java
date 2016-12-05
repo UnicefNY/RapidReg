@@ -46,9 +46,9 @@ public class TracingRegisterWrapperFragment extends RecordRegisterWrapperFragmen
     @Inject
     TracingRegisterPresenter tracingRegisterPresenter;
 
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void saveTracing(SaveTracingEvent event) {
-        tracingRegisterPresenter.saveRecord(itemValues, this);
+    @Override
+    public TracingRegisterPresenter createPresenter() {
+        return tracingRegisterPresenter;
     }
 
     @Nullable
@@ -62,6 +62,11 @@ public class TracingRegisterWrapperFragment extends RecordRegisterWrapperFragmen
     protected RecordPhotoAdapter createRecordPhotoAdapter() {
         return new TracingPhotoAdapter(getContext(),
                 getArguments().getStringArrayList(RecordService.RECORD_PHOTOS));
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void saveTracing(SaveTracingEvent event) {
+        tracingRegisterPresenter.saveRecord(itemValues, this);
     }
 
     @OnClick(R.id.edit)
@@ -99,12 +104,7 @@ public class TracingRegisterWrapperFragment extends RecordRegisterWrapperFragmen
     }
 
     @Override
-    public TracingRegisterPresenter createPresenter() {
-        return tracingRegisterPresenter;
-    }
-
-    @Override
-    public void saveSuccessfully(long recordId) {
+    public void onSaveSuccessful(long recordId) {
         Bundle args = new Bundle();
         args.putSerializable(RecordService.ITEM_VALUES, itemValues);
         args.putStringArrayList(RecordService.RECORD_PHOTOS, (ArrayList<String>) getPhotoPathsData());

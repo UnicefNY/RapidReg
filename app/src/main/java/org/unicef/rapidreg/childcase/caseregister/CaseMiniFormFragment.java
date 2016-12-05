@@ -92,7 +92,7 @@ public class CaseMiniFormFragment extends RecordRegisterFragment {
     }
 
     @Override
-    public void saveSuccessfully(long recordId) {
+    public void onSaveSuccessful(long recordId) {
         Toast.makeText(getActivity(), R.string.save_success, Toast.LENGTH_SHORT).show();
         Bundle args = new Bundle();
         args.putLong(CaseService.CASE_PRIMARY_ID, recordId);

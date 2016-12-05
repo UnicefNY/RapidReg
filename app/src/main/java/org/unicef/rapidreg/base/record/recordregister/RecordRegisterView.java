@@ -13,9 +13,9 @@ public interface RecordRegisterView extends MvpView {
     List<String> getPhotoPathsData();
     ItemValuesMap getRecordRegisterData();
 
-    interface OnSaveRecordCallback {
-        void saveSuccessfully(long recordId);
-        void promoteRequiredFieldNotFilled();
-        void promoteSaveFailed();
+    interface SaveRecordCallback {
+        void onSaveSuccessful(long recordId);
+        void onSavedFail();
+        void onRequiredFieldNotFilled();
     }
 }

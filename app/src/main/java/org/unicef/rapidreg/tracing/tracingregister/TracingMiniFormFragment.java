@@ -93,7 +93,7 @@ public class TracingMiniFormFragment extends RecordRegisterFragment {
     }
 
     @Override
-    public void saveSuccessfully(long recordId) {
+    public void onSaveSuccessful(long recordId) {
         Bundle args = new Bundle();
         args.putLong(TracingService.TRACING_PRIMARY_ID, recordId);
         Toast.makeText(getActivity(), R.string.save_success, Toast.LENGTH_SHORT).show();
