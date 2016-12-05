@@ -5,10 +5,12 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -22,12 +24,18 @@ import org.unicef.rapidreg.PrimeroApplication;
 import org.unicef.rapidreg.PrimeroConfiguration;
 import org.unicef.rapidreg.R;
 import org.unicef.rapidreg.base.record.RecordActivity;
+import org.unicef.rapidreg.base.record.recordlist.spinner.SpinnerAdapter;
+import org.unicef.rapidreg.base.record.recordlist.spinner.SpinnerState;
 import org.unicef.rapidreg.event.LoadCaseFormEvent;
 import org.unicef.rapidreg.event.LoadTracingFormEvent;
 import org.unicef.rapidreg.injection.component.DaggerFragmentComponent;
 import org.unicef.rapidreg.injection.component.FragmentComponent;
 import org.unicef.rapidreg.injection.module.FragmentModule;
 import org.unicef.rapidreg.utils.Utils;
+
+import java.util.Arrays;
+import java.util.List;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -111,7 +119,39 @@ public abstract class RecordListFragment extends MvpFragment<RecordListView, Rec
 
     protected abstract RecordListAdapter createRecordListAdapter();
 
-    protected abstract void initListContainer(final RecordListAdapter adapter);
+    private void initListContainer(final RecordListAdapter adapter) {
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
+        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        listContainer.setLayoutManager(layoutManager);
+        listContainer.setAdapter(adapter);
+        viewSwitcher.setDisplayedChild(presenter.calculateDisplayedIndex());
+    }
 
-    protected abstract void initOrderSpinner(final RecordListAdapter adapter);
+    private void initOrderSpinner(final RecordListAdapter adapter) {
+        final SpinnerState[] spinnerStates = getDefaultSpinnerStates();
+        int defaultSpinnerStatePosition = getDefaultSpinnerStatePosition();
+        orderSpinner.setAdapter(new SpinnerAdapter(getActivity(),
+                R.layout.record_list_spinner_opened, Arrays.asList(spinnerStates)));
+        orderSpinner.setSelection(defaultSpinnerStatePosition);
+        orderSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                List<Long> filterRecords = presenter.getRecordsByFilter(spinnerStates[position]);
+                if (filterRecords == null || filterRecords.isEmpty()) {
+                    return;
+                }
+                adapter.setRecordList(filterRecords);
+                adapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+    }
+
+    protected abstract int getDefaultSpinnerStatePosition();
+
+    protected abstract SpinnerState[] getDefaultSpinnerStates();
 }

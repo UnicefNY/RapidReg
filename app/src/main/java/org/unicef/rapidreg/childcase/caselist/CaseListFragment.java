@@ -16,8 +16,6 @@ import org.unicef.rapidreg.base.record.recordlist.RecordListPresenter;
 import org.unicef.rapidreg.base.record.recordlist.spinner.SpinnerAdapter;
 import org.unicef.rapidreg.base.record.recordlist.spinner.SpinnerState;
 import org.unicef.rapidreg.childcase.CaseFeature;
-import org.unicef.rapidreg.model.Case;
-
 import java.util.Arrays;
 import java.util.List;
 
@@ -33,9 +31,6 @@ public class CaseListFragment extends RecordListFragment {
             SpinnerState.AGE_DES,
             SpinnerState.REG_DATE_ASC,
             SpinnerState.REG_DATE_DES};
-
-    private static final int DEFAULT_SPINNER_STATE_POSITION =
-            Arrays.asList(SPINNER_STATES).indexOf(SpinnerState.REG_DATE_DES);
 
     @Inject
     CaseListPresenter caseListPresenter;
@@ -56,38 +51,13 @@ public class CaseListFragment extends RecordListFragment {
     }
 
     @Override
-    protected void initListContainer(final RecordListAdapter adapter) {
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
-        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        listContainer.setLayoutManager(layoutManager);
-        listContainer.setAdapter(adapter);
-
-        List<Case> cases = caseListPresenter.getCases();
-        int index = cases.isEmpty() ? HAVE_NO_RESULT : HAVE_RESULT_LIST;
-        viewSwitcher.setDisplayedChild(index);
+    protected int getDefaultSpinnerStatePosition() {
+        return Arrays.asList(SPINNER_STATES).indexOf(SpinnerState.REG_DATE_DES);
     }
 
     @Override
-    protected void initOrderSpinner(final RecordListAdapter adapter) {
-        orderSpinner.setAdapter(new SpinnerAdapter(getActivity(),
-                R.layout.record_list_spinner_opened, Arrays.asList(SPINNER_STATES)));
-        orderSpinner.setSelection(DEFAULT_SPINNER_STATE_POSITION);
-        orderSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                List<Long> filterCases = caseListPresenter.getCasesByFilter(SPINNER_STATES[position]);
-                if (filterCases == null || filterCases.isEmpty()) {
-                    return;
-                }
-                adapter.setRecordList(filterCases);
-                adapter.notifyDataSetChanged();
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
+    protected SpinnerState[] getDefaultSpinnerStates() {
+        return SPINNER_STATES;
     }
 
     @Override
@@ -97,14 +67,14 @@ public class CaseListFragment extends RecordListFragment {
 
     @OnClick(R.id.add)
     public void onCaseAddClicked() {
-        presenter.clearAudioFile();
-        RecordActivity activity = (RecordActivity) getActivity();
+        caseListPresenter.clearAudioFile();
 
         if (!caseListPresenter.isFormReady()) {
             showSyncFormDialog(getResources().getString(R.string.child_case));
             return;
         }
 
+        RecordActivity activity = (RecordActivity) getActivity();
         activity.turnToFeature(CaseFeature.ADD_MINI, null, null);
     }
 
