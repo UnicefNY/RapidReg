@@ -12,26 +12,27 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import static org.unicef.rapidreg.base.record.recordlist.RecordListFragment.*;
+
 public class CaseListPresenter extends RecordListPresenter {
+
     private CaseService caseService;
     private CaseFormService caseFormService;
 
     @Inject
     public CaseListPresenter(CaseService caseService, CaseFormService caseFormService, RecordService recordService) {
-        super( recordService);
+        super(recordService);
         this.caseService = caseService;
         this.caseFormService = caseFormService;
     }
 
+    @Override
     public boolean isFormReady() {
         return caseFormService.isFormReady();
     }
 
-    public List<Case> getCases() {
-        return caseService.getAll();
-    }
-
-    public List<Long> getCasesByFilter(SpinnerState spinnerState) {
+    @Override
+    public List<Long> getRecordsByFilter(SpinnerState spinnerState) {
         switch (spinnerState) {
             case AGE_ASC:
                 return caseService.getAllOrderByAgeASC();
@@ -44,5 +45,11 @@ public class CaseListPresenter extends RecordListPresenter {
             default:
                 return new ArrayList<>();
         }
+    }
+
+    @Override
+    public int calculateDisplayedIndex() {
+        List<Case> cases = caseService.getAll();;
+        return cases.isEmpty() ? HAVE_NO_RESULT : HAVE_RESULT_LIST;
     }
 }
