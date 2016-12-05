@@ -1,6 +1,9 @@
 package org.unicef.rapidreg.childcase.casesearch;
 
+import android.content.Context;
+
 import org.unicef.rapidreg.base.record.recordsearch.RecordSearchPresenter;
+import org.unicef.rapidreg.childcase.caselist.CaseListAdapter;
 import org.unicef.rapidreg.service.CaseService;
 
 import java.util.List;
@@ -14,6 +17,13 @@ public class CaseSearchPresenter extends RecordSearchPresenter {
     @Inject
     public CaseSearchPresenter(CaseService caseService) {
         this.caseService = caseService;
+    }
+
+    @Override
+    public void initView(Context context) {
+        if (isViewAttached()) {
+            getView().initView(new CaseListAdapter(context, caseService));
+        }
     }
 
     public List<Long> getSearchResult(String shortId, String name, int ageFrom, int ageTo, String caregiver, String registrationDate) {
