@@ -9,11 +9,14 @@ import org.unicef.rapidreg.db.impl.CasePhotoDaoImpl;
 import org.unicef.rapidreg.db.impl.TracingFormDaoImpl;
 import org.unicef.rapidreg.db.impl.TracingPhotoDaoImpl;
 import org.unicef.rapidreg.db.impl.UserDaoImpl;
+import org.unicef.rapidreg.injection.ActivityContext;
 import org.unicef.rapidreg.injection.ApplicationContext;
 import org.unicef.rapidreg.model.CasePhoto;
 import org.unicef.rapidreg.model.Tracing;
 import org.unicef.rapidreg.model.TracingForm;
 import org.unicef.rapidreg.network.AuthService;
+import org.unicef.rapidreg.network.SyncService;
+import org.unicef.rapidreg.network.SyncTracingService;
 import org.unicef.rapidreg.service.CaseFormService;
 import org.unicef.rapidreg.service.CasePhotoService;
 import org.unicef.rapidreg.service.CaseService;
@@ -100,5 +103,15 @@ public class ApplicationModule {
     @Singleton
     public AuthService provideAuthService() {
         return new AuthService();
+    }
+
+    @Provides
+    public SyncService provideSyncService(@ApplicationContext Context context, CasePhotoService casePhotoService) {
+        return new SyncService(context, casePhotoService);
+    }
+
+    @Provides
+    public SyncTracingService provideSyncTracingService(@ApplicationContext Context context, TracingPhotoService tracingPhotoService) {
+        return new SyncTracingService(context, tracingPhotoService);
     }
 }
