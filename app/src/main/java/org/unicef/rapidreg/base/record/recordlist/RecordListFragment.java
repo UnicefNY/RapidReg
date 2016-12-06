@@ -1,7 +1,6 @@
 package org.unicef.rapidreg.base.record.recordlist;
 
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -60,7 +59,7 @@ public abstract class RecordListFragment extends MvpFragment<RecordListView, Rec
     @BindView(R.id.list_result)
     protected ViewSwitcher viewSwitcher;
 
-    protected RecordListAdapter adapter;
+    protected RecordListAdapter recordListAdapter;
 
     @Nullable
     @Override
@@ -78,14 +77,10 @@ public abstract class RecordListFragment extends MvpFragment<RecordListView, Rec
 
     @Override
     public void onInitViewContent() {
-        adapter = createRecordListAdapter();
+        recordListAdapter = createRecordListAdapter();
 
-        initListContainer(adapter);
-        initOrderSpinner(adapter);
-    }
-
-    public void toggleMode(boolean isShow) {
-        adapter.toggleViews(isShow);
+        initListContainer(recordListAdapter);
+        initOrderSpinner(recordListAdapter);
     }
 
     protected FragmentComponent getComponent() {
@@ -93,6 +88,10 @@ public abstract class RecordListFragment extends MvpFragment<RecordListView, Rec
                 .applicationComponent(PrimeroApplication.get(getContext()).getComponent())
                 .fragmentModule(new FragmentModule(this))
                 .build();
+    }
+
+    public void toggleMode(boolean isShow) {
+        recordListAdapter.toggleViews(isShow);
     }
 
     protected void showSyncFormDialog(String message) {
@@ -116,8 +115,6 @@ public abstract class RecordListFragment extends MvpFragment<RecordListView, Rec
                 .show();
         Utils.changeDialogDividerColor(getActivity(), dialog);
     }
-
-    protected abstract RecordListAdapter createRecordListAdapter();
 
     private void initListContainer(final RecordListAdapter adapter) {
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
@@ -150,6 +147,8 @@ public abstract class RecordListFragment extends MvpFragment<RecordListView, Rec
             }
         });
     }
+
+    protected abstract RecordListAdapter createRecordListAdapter();
 
     protected abstract int getDefaultSpinnerStatePosition();
 
