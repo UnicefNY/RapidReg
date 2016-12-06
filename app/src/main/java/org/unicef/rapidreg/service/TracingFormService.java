@@ -13,14 +13,8 @@ import org.unicef.rapidreg.model.TracingForm;
 
 public class TracingFormService {
     public static final String TAG = TracingFormService.class.getSimpleName();
-    private static final TracingFormService TRACING_FORM_SERVICE
-            = new TracingFormService(new TracingFormDaoImpl());
     private static TracingFormRoot tracingForm;
     private TracingFormDao tracingFormDao;
-
-    public static TracingFormService getInstance() {
-        return TRACING_FORM_SERVICE;
-    }
 
     public TracingFormService(TracingFormDao tracingFormDao) {
         this.tracingFormDao = tracingFormDao;
