@@ -11,14 +11,21 @@ import com.bumptech.glide.Glide;
 
 import org.unicef.rapidreg.R;
 import org.unicef.rapidreg.base.record.recordphoto.RecordPhotoViewAdapter;
+import org.unicef.rapidreg.injection.ActivityContext;
 import org.unicef.rapidreg.service.TracingPhotoService;
 
 import java.util.List;
 
+import javax.inject.Inject;
+
 public class TracingPhotoViewAdapter extends RecordPhotoViewAdapter {
 
-    public TracingPhotoViewAdapter(Context context, List<String> photos) {
-        super(context, photos);
+    @Inject
+    TracingPhotoService tracingPhotoService;
+
+    @Inject
+    public TracingPhotoViewAdapter(@ActivityContext Context context) {
+        super(context);
     }
 
     @Override
@@ -34,7 +41,7 @@ public class TracingPhotoViewAdapter extends RecordPhotoViewAdapter {
         String path = paths.get(position);
         try {
             long recordId = Long.parseLong(path);
-            Glide.with(context).load(TracingPhotoService.getInstance().getById(recordId)
+            Glide.with(context).load(tracingPhotoService.getById(recordId)
                     .getPhoto().getBlob()).into(imageView);
         } catch (NumberFormatException e) {
             Glide.with(context).load(path).into(imageView);
