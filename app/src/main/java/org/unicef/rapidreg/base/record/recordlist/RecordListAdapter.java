@@ -2,6 +2,7 @@ package org.unicef.rapidreg.base.record.recordlist;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -11,29 +12,39 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.ViewSwitcher;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+
 import org.unicef.rapidreg.R;
-import org.unicef.rapidreg.base.record.RecordActivity;
+import org.unicef.rapidreg.model.Gender;
+import org.unicef.rapidreg.model.RecordModel;
+import org.unicef.rapidreg.model.Tracing;
+import org.unicef.rapidreg.service.RecordService;
+import org.unicef.rapidreg.service.cache.ItemValues;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-import de.hdodenhof.circleimageview.CircleImageView;
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
-public abstract class RecordListAdapter extends RecyclerView.Adapter<RecordListAdapter.RecordListHolder> {
+public abstract class RecordListAdapter extends RecyclerView.Adapter<RecordListAdapter.RecordListViewHolder> {
     public static final String TAG = RecordListAdapter.class.getSimpleName();
     private static final int TEXT_AREA_SHOWED_STATE = 0;
     private static final int TEXT_AREA_HIDDEN_STATE = 1;
 
-    protected RecordActivity activity;
+
+    protected Context context;
     protected DateFormat dateFormat = SimpleDateFormat.getDateInstance(DateFormat.MEDIUM, Locale.US);
     protected List<Long>  recordList = new ArrayList<>();
     protected boolean isDetailShow = true;
 
     public RecordListAdapter(Context context) {
-        this.activity = (RecordActivity) context;
+        this.context = context;
     }
 
     public void setRecordList(List<Long>  recordList) {
@@ -41,11 +52,11 @@ public abstract class RecordListAdapter extends RecyclerView.Adapter<RecordListA
     }
 
     @Override
-    public RecordListHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public RecordListViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         ViewGroup itemView = (ViewGroup) LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.record_list, parent, false);
 
-        return new RecordListHolder(itemView);
+        return new RecordListViewHolder(itemView);
     }
 
     @Override
@@ -55,10 +66,10 @@ public abstract class RecordListAdapter extends RecyclerView.Adapter<RecordListA
 
     public void toggleViews(boolean isDetailShow) {
         this.isDetailShow = isDetailShow;
-        this.notifyDataSetChanged();
+        notifyDataSetChanged();
     }
 
-    protected void toggleTextArea(RecordListHolder holder) {
+    protected void toggleTextArea(RecordListViewHolder holder) {
         if (isDetailShow) {
             holder.viewSwitcher.setDisplayedChild(TEXT_AREA_SHOWED_STATE);
         } else {
@@ -67,7 +78,7 @@ public abstract class RecordListAdapter extends RecyclerView.Adapter<RecordListA
     }
 
     protected Drawable getDefaultGenderBadge(int genderId) {
-        return ResourcesCompat.getDrawable(activity.getResources(), genderId, null);
+        return ResourcesCompat.getDrawable(context.getResources(), genderId, null);
     }
 
     protected boolean isValidAge(String value) {
@@ -77,28 +88,64 @@ public abstract class RecordListAdapter extends RecyclerView.Adapter<RecordListA
         return Integer.valueOf(value) > 0;
     }
 
-    public class RecordListHolder extends RecyclerView.ViewHolder {
+    public class RecordListViewHolder extends RecyclerView.ViewHolder {
+
+        @BindView(R.id.id_normal_state)
         public TextView idNormalState;
+
+        @BindView(R.id.id_on_hidden_state)
         public TextView idHiddenState;
+
+        @BindView(R.id.gender_badge)
         public ImageView genderBadge;
+
+        @BindView(R.id.gender_name)
         public TextView genderName;
+
+        @BindView(R.id.age)
         public TextView age;
+
+        @BindView(R.id.registration_date)
         public TextView registrationDate;
+
+        @BindView(R.id.record_image)
         public ImageView image;
-        public View view;
+
+        @BindView(R.id.view_switcher)
         public ViewSwitcher viewSwitcher;
 
-        public RecordListHolder(View itemView) {
+        public RecordListViewHolder(View itemView) {
             super(itemView);
-            view = itemView;
-            idNormalState = (TextView) itemView.findViewById(R.id.id_normal_state);
-            idHiddenState = (TextView) itemView.findViewById(R.id.id_on_hidden_state);
-            genderBadge = (ImageView) itemView.findViewById(R.id.gender_badge);
-            genderName = (TextView) itemView.findViewById(R.id.gender_name);
-            age = (TextView) itemView.findViewById(R.id.age);
-            registrationDate = (TextView) itemView.findViewById(R.id.registration_date);
-            image = (CircleImageView) itemView.findViewById(R.id.record_image);
-            viewSwitcher = (ViewSwitcher) itemView.findViewById(R.id.view_switcher);
+            ButterKnife.bind(this, itemView);
         }
+
+        public void setValues(long recordId,
+                              Gender gender,
+                              String shortUUID,
+                              String ageContent,
+                              RecordModel record) {
+            Glide
+                    .with(image.getContext())
+                    .load(new Tracing(recordId))
+                    .diskCacheStrategy(DiskCacheStrategy.NONE)
+                    .skipMemoryCache(true)
+                    .error(context.getResources().getDrawable(gender.getAvatarId()))
+                    .into(image);
+
+            idNormalState.setText(shortUUID);
+            idHiddenState.setText(shortUUID);
+            genderBadge.setImageDrawable(getDefaultGenderBadge(gender.getGenderId()));
+            genderName.setText(gender.getName());
+            genderName.setTextColor(ContextCompat.getColor(context, gender.getColorId()));
+            age.setText(isValidAge(ageContent) ? ageContent : "---");
+
+            Date registrationDateText = record.getRegistrationDate();
+            registrationDate.setText(dateFormat.format(registrationDateText));
+        }
+
+        public void setViewOnClickListener(View.OnClickListener listener) {
+            itemView.setOnClickListener(listener);
+        }
+
     }
 }
