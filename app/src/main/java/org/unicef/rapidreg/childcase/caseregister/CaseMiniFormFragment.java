@@ -37,6 +37,9 @@ public class CaseMiniFormFragment extends RecordRegisterFragment {
     @Inject
     CaseRegisterPresenter caseRegisterPresenter;
 
+    @Inject
+    CasePhotoAdapter casePhotoAdapter;
+
     @NonNull
     @Override
     public CaseRegisterPresenter createPresenter() {
@@ -80,8 +83,9 @@ public class CaseMiniFormFragment extends RecordRegisterFragment {
                 caseRegisterPresenter.getValidFields(),
                 caseRegisterPresenter.getDefaultItemValues(),
                 true);
-        RecordPhotoAdapter recordPhotoAdapter = new CasePhotoAdapter(getActivity(), caseRegisterPresenter.getDefaultPhotoPaths());
-        recordRegisterAdapter.setPhotoAdapter(recordPhotoAdapter);
+
+        casePhotoAdapter.setItems(caseRegisterPresenter.getDefaultPhotoPaths());
+        recordRegisterAdapter.setPhotoAdapter(casePhotoAdapter);
 
         return recordRegisterAdapter;
     }

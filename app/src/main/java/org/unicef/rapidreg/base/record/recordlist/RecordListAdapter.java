@@ -37,7 +37,6 @@ public abstract class RecordListAdapter extends RecyclerView.Adapter<RecordListA
     private static final int TEXT_AREA_SHOWED_STATE = 0;
     private static final int TEXT_AREA_HIDDEN_STATE = 1;
 
-
     protected Context context;
     protected DateFormat dateFormat = SimpleDateFormat.getDateInstance(DateFormat.MEDIUM, Locale.US);
     protected List<Long>  recordList = new ArrayList<>();
@@ -119,14 +118,13 @@ public abstract class RecordListAdapter extends RecyclerView.Adapter<RecordListA
             ButterKnife.bind(this, itemView);
         }
 
-        public void setValues(long recordId,
-                              Gender gender,
+        public void setValues(Gender gender,
                               String shortUUID,
                               String ageContent,
                               RecordModel record) {
             Glide
                     .with(image.getContext())
-                    .load(new Tracing(recordId))
+                    .load(record)
                     .diskCacheStrategy(DiskCacheStrategy.NONE)
                     .skipMemoryCache(true)
                     .error(context.getResources().getDrawable(gender.getAvatarId()))

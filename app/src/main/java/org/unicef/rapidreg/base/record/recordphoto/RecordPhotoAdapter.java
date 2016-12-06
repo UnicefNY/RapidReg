@@ -20,9 +20,13 @@ public abstract class RecordPhotoAdapter extends BaseAdapter {
     private Context context;
     private List<String> paths;
 
-    public RecordPhotoAdapter(Context context, List<String> paths) {
+    public RecordPhotoAdapter(Context context) {
         this.context = context;
+    }
+
+    public void setItems(List<String> paths) {
         this.paths = paths;
+        notifyDataSetChanged();
     }
 
     public void addItem(String path) {
@@ -91,9 +95,4 @@ public abstract class RecordPhotoAdapter extends BaseAdapter {
     }
 
     protected abstract RecordPhoto getPhotoById(long id);
-
-    public void setItems(List<String> paths) {
-        this.paths = paths;
-        notifyDataSetChanged();
-    }
 }

@@ -6,10 +6,7 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonObject;
 import com.ogaclejapan.smarttablayout.utils.v4.FragmentPagerItem;
 import com.ogaclejapan.smarttablayout.utils.v4.FragmentPagerItems;
 
@@ -18,23 +15,16 @@ import org.greenrobot.eventbus.ThreadMode;
 import org.unicef.rapidreg.R;
 import org.unicef.rapidreg.base.record.RecordActivity;
 import org.unicef.rapidreg.base.record.recordphoto.RecordPhotoAdapter;
-import org.unicef.rapidreg.base.record.recordregister.RecordRegisterAdapter;
 import org.unicef.rapidreg.base.record.recordregister.RecordRegisterWrapperFragment;
 import org.unicef.rapidreg.event.SaveTracingEvent;
-import org.unicef.rapidreg.forms.Field;
 import org.unicef.rapidreg.forms.Section;
-import org.unicef.rapidreg.forms.TracingFormRoot;
 import org.unicef.rapidreg.service.RecordService;
-import org.unicef.rapidreg.service.TracingFormService;
-import org.unicef.rapidreg.service.cache.ItemValues;
 import org.unicef.rapidreg.service.cache.ItemValuesMap;
 import org.unicef.rapidreg.tracing.TracingActivity;
 import org.unicef.rapidreg.tracing.TracingFeature;
 import org.unicef.rapidreg.tracing.tracingphoto.TracingPhotoAdapter;
 
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
 
 import javax.inject.Inject;
 
@@ -45,6 +35,9 @@ public class TracingRegisterWrapperFragment extends RecordRegisterWrapperFragmen
 
     @Inject
     TracingRegisterPresenter tracingRegisterPresenter;
+
+    @Inject
+    TracingPhotoAdapter tracingPhotoAdapter;
 
     @Override
     public TracingRegisterPresenter createPresenter() {
@@ -60,8 +53,8 @@ public class TracingRegisterWrapperFragment extends RecordRegisterWrapperFragmen
 
     @Override
     protected RecordPhotoAdapter createRecordPhotoAdapter() {
-        return new TracingPhotoAdapter(getContext(),
-                getArguments().getStringArrayList(RecordService.RECORD_PHOTOS));
+        tracingPhotoAdapter.setItems(getArguments().getStringArrayList(RecordService.RECORD_PHOTOS));
+        return tracingPhotoAdapter;
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
