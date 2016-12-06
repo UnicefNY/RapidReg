@@ -141,14 +141,14 @@ public class TracingActivity extends RecordActivity {
                     @Override
                     public void call(TracingFormRoot tracingFormRoot) {
                         tracingPresenter.saveForm(tracingFormRoot);
-                        setTracingFormSyncFail(false);
+                        setFormSyncFail(false);
                         Log.i(TAG, "load tracing form successfully");
 
                     }
                 }, new Action1<Throwable>() {
                     @Override
                     public void call(Throwable throwable) {
-                        setTracingFormSyncFail(true);
+                        setFormSyncFail(true);
                         Toast.makeText(TracingActivity.this, R.string.sync_tracing_forms_error, Toast.LENGTH_SHORT)
                                 .show();
                     }

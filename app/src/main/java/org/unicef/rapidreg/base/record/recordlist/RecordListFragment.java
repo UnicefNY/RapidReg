@@ -96,7 +96,7 @@ public abstract class RecordListFragment extends MvpFragment<RecordListView, Rec
 
     protected void showSyncFormDialog(String message) {
         RecordActivity activity = (RecordActivity) getActivity();
-        if (!activity.isFormSyncFail()) {
+        if (activity.isFormSyncFail()) {
             Toast.makeText(activity, R.string.forms_is_syncing_msg, Toast.LENGTH_SHORT)
                     .show();
             return;
@@ -107,8 +107,7 @@ public abstract class RecordListFragment extends MvpFragment<RecordListView, Rec
                 .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        EventBus.getDefault().postSticky(new LoadCaseFormEvent(PrimeroConfiguration.getCookie()));
-                        EventBus.getDefault().postSticky(new LoadTracingFormEvent(PrimeroConfiguration.getCookie()));
+                        sendSyncFormEvent();
                     }
                 })
                 .setNegativeButton(R.string.cancel, null)
@@ -153,4 +152,6 @@ public abstract class RecordListFragment extends MvpFragment<RecordListView, Rec
     protected abstract int getDefaultSpinnerStatePosition();
 
     protected abstract SpinnerState[] getDefaultSpinnerStates();
+
+    protected abstract void sendSyncFormEvent();
 }

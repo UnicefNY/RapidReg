@@ -2,20 +2,23 @@ package org.unicef.rapidreg.tracing.tracinglist;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import org.greenrobot.eventbus.EventBus;
+import org.unicef.rapidreg.PrimeroConfiguration;
 import org.unicef.rapidreg.R;
 import org.unicef.rapidreg.base.record.recordlist.RecordListAdapter;
 import org.unicef.rapidreg.base.record.recordlist.RecordListFragment;
 import org.unicef.rapidreg.base.record.recordlist.RecordListPresenter;
 import org.unicef.rapidreg.base.record.recordlist.spinner.SpinnerState;
-import org.unicef.rapidreg.service.TracingFormService;
+import org.unicef.rapidreg.event.LoadTracingFormEvent;
 import org.unicef.rapidreg.tracing.TracingActivity;
 import org.unicef.rapidreg.tracing.TracingFeature;
 
 import java.util.Arrays;
+
 import javax.inject.Inject;
 
 import butterknife.OnClick;
@@ -59,11 +62,16 @@ public class TracingListFragment extends RecordListFragment {
         return SPINNER_STATES;
     }
 
+    @Override
+    protected void sendSyncFormEvent() {
+        EventBus.getDefault().postSticky(new LoadTracingFormEvent(PrimeroConfiguration.getCookie()));
+    }
+
     @OnClick(R.id.add)
     public void onTracingAddClicked() {
         tracingListPresenter.clearAudioFile();
 
-        if (tracingListPresenter.isFormReady()) {
+        if (!tracingListPresenter.isFormReady()) {
             showSyncFormDialog(getResources().getString(R.string.tracing_request));
             return;
         }
