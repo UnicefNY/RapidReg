@@ -36,6 +36,9 @@ public class TracingMiniFormFragment extends RecordRegisterFragment {
     @Inject
     TracingRegisterPresenter tracingRegisterPresenter;
 
+    @Inject
+    TracingPhotoAdapter tracingPhotoAdapter;
+
     @NonNull
     @Override
     public TracingRegisterPresenter createPresenter() {
@@ -58,7 +61,7 @@ public class TracingMiniFormFragment extends RecordRegisterFragment {
                 tracingRegisterPresenter.getDefaultItemValues(),
                 true);
 
-        TracingPhotoAdapter tracingPhotoAdapter = new TracingPhotoAdapter(getActivity(), tracingRegisterPresenter.getDefaultPhotoPaths());
+        tracingPhotoAdapter.setItems(tracingRegisterPresenter.getDefaultPhotoPaths());
         recordRegisterAdapter.setPhotoAdapter(tracingPhotoAdapter);
 
         return recordRegisterAdapter;

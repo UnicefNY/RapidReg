@@ -40,6 +40,9 @@ public class CaseRegisterWrapperFragment extends RecordRegisterWrapperFragment {
     @Inject
     CaseRegisterPresenter caseRegisterPresenter;
 
+    @Inject
+    CasePhotoAdapter casePhotoAdapter;
+
     @Override
     public CaseRegisterPresenter createPresenter() {
         return caseRegisterPresenter;
@@ -54,8 +57,8 @@ public class CaseRegisterWrapperFragment extends RecordRegisterWrapperFragment {
 
     @Override
     protected RecordPhotoAdapter createRecordPhotoAdapter() {
-        return new CasePhotoAdapter(getContext(),
-                getArguments().getStringArrayList(RecordService.RECORD_PHOTOS));
+        casePhotoAdapter.setItems(getArguments().getStringArrayList(RecordService.RECORD_PHOTOS));
+        return casePhotoAdapter;
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)

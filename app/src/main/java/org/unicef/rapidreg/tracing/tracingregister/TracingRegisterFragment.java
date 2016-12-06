@@ -34,6 +34,9 @@ public class TracingRegisterFragment extends RecordRegisterFragment {
     @Inject
     TracingRegisterPresenter tracingRegisterPresenter;
 
+    @Inject
+    TracingPhotoAdapter tracingPhotoAdapter;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
@@ -50,7 +53,7 @@ public class TracingRegisterFragment extends RecordRegisterFragment {
                 tracingRegisterPresenter.getDefaultItemValues(),
                 false);
 
-        TracingPhotoAdapter tracingPhotoAdapter = new TracingPhotoAdapter(getActivity(), tracingRegisterPresenter.getDefaultPhotoPaths());
+        tracingPhotoAdapter.setItems(tracingRegisterPresenter.getDefaultPhotoPaths());
         recordRegisterAdapter.setPhotoAdapter(tracingPhotoAdapter);
 
         return recordRegisterAdapter;

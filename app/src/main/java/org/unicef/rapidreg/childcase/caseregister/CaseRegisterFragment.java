@@ -34,6 +34,9 @@ public class CaseRegisterFragment extends RecordRegisterFragment {
     @Inject
     CaseRegisterPresenter caseRegisterPresenter;
 
+    @Inject
+    CasePhotoAdapter casePhotoAdapter;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
@@ -50,8 +53,8 @@ public class CaseRegisterFragment extends RecordRegisterFragment {
                 caseRegisterPresenter.getDefaultItemValues(),
                 false);
 
-        RecordPhotoAdapter recordPhotoAdapter = new CasePhotoAdapter(getActivity(), caseRegisterPresenter.getDefaultPhotoPaths());
-        recordRegisterAdapter.setPhotoAdapter(recordPhotoAdapter);
+        casePhotoAdapter.setItems(caseRegisterPresenter.getDefaultPhotoPaths());
+        recordRegisterAdapter.setPhotoAdapter(casePhotoAdapter);
 
         return recordRegisterAdapter;
     }

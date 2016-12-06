@@ -25,6 +25,7 @@ import java.io.IOException;
 import java.util.Date;
 
 import javax.inject.Inject;
+import javax.inject.Singleton;
 
 public class CaseListAdapter extends RecordListAdapter {
 
@@ -53,7 +54,7 @@ public class CaseListAdapter extends RecordListAdapter {
         }
         final String shortUUID = RecordService.getShortUUID(record.getUniqueId());
         String age = itemValues.getAsString(RecordService.AGE);
-        holder.setValues(recordId, gender, shortUUID, age, record);
+        holder.setValues(gender, shortUUID, age, record);
         holder.setViewOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
