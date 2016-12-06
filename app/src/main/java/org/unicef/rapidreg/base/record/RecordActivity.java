@@ -44,8 +44,7 @@ public abstract class RecordActivity extends BaseActivity {
 
     private String imagePath;
     private CompositeSubscription subscriptions;
-    private volatile boolean isTracingFormSyncFail;
-    private volatile boolean isCaseFormSyncFail;
+    private volatile boolean isFormSyncFail;
 
     @Inject
     RecordPresenter recordPresenter;
@@ -57,15 +56,11 @@ public abstract class RecordActivity extends BaseActivity {
     }
 
     public boolean isFormSyncFail() {
-        return isTracingFormSyncFail || isCaseFormSyncFail;
+        return isFormSyncFail;
     }
 
-    public void setTracingFormSyncFail(boolean tracingFormSyncFail) {
-        isTracingFormSyncFail = tracingFormSyncFail;
-    }
-
-    public void setCaseFormSyncFail(boolean caseFormSyncFail) {
-        isCaseFormSyncFail = caseFormSyncFail;
+    public void setFormSyncFail(boolean formSyncFail) {
+        isFormSyncFail = formSyncFail;
     }
 
     @Override

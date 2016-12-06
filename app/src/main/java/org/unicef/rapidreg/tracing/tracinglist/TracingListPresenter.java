@@ -47,11 +47,7 @@ public class TracingListPresenter extends RecordListPresenter {
             case INQUIRY_DATE_DES:
                 return tracingService.getAllOrderByDateDES();
             default:
-                return new ArrayList<>();
+                return null;
         }
-    }
-
-    public void clearAudioFile() {
-
     }
 }

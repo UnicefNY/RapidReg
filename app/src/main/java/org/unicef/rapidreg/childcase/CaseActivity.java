@@ -146,14 +146,14 @@ public class CaseActivity extends RecordActivity {
                     @Override
                     public void call(CaseFormRoot caseFormRoot) {
                         casePresenter.saveForm(caseFormRoot);
-                        setCaseFormSyncFail(false);
+                        setFormSyncFail(false);
                         Log.i(TAG, "load case form successfully");
 
                     }
                 }, new Action1<Throwable>() {
                     @Override
                     public void call(Throwable throwable) {
-                        setCaseFormSyncFail(true);
+                        setFormSyncFail(true);
                         Toast.makeText(CaseActivity.this, R.string.sync_case_forms_error, Toast.LENGTH_SHORT)
                                 .show();
                     }
