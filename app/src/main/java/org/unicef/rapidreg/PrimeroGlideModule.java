@@ -23,14 +23,24 @@ import org.unicef.rapidreg.service.TracingPhotoService;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 
-public class PrimeroGlideModule implements GlideModule {
-    @Override
-    public void applyOptions(Context context, GlideBuilder builder) {
+import javax.inject.Inject;
 
-    }
+public class PrimeroGlideModule implements GlideModule {
+
+    @Inject
+    CasePhotoService casePhotoService;
+
+    @Inject
+    TracingPhotoService tracingPhotoService;
+
+    @Override
+    public void applyOptions(Context context, GlideBuilder builder) {}
 
     @Override
     public void registerComponents(Context context, Glide glide) {
+
+        PrimeroApplication.get(context).getComponent().inject(this);
+
         glide.register(RecordPhoto.class, InputStream.class, new ModelLoaderFactory<RecordPhoto, InputStream>() {
             @Override
             public ModelLoader<RecordPhoto, InputStream> build(Context context, GenericLoaderFactory factories) {
@@ -42,9 +52,9 @@ public class PrimeroGlideModule implements GlideModule {
                             public InputStream loadData(Priority priority) throws Exception {
                                 byte[] blob = null;
                                 if (model instanceof CasePhoto) {
-                                    blob = CasePhotoService.getInstance().getById(model.getId()).getPhoto().getBlob();
+                                    blob = casePhotoService.getById(model.getId()).getPhoto().getBlob();
                                 } else if (model instanceof TracingPhoto) {
-                                    blob = TracingPhotoService.getInstance().getById(model.getId()).getPhoto().getBlob();
+                                    blob = tracingPhotoService.getById(model.getId()).getPhoto().getBlob();
                                 }
                                 return new ByteArrayInputStream(blob);
                             }
@@ -85,9 +95,9 @@ public class PrimeroGlideModule implements GlideModule {
                             public InputStream loadData(Priority priority) throws Exception {
                                 byte[] blob = null;
                                 if (model instanceof Case){
-                                    blob = CasePhotoService.getInstance().getFirst(model.getId()).getPhoto().getBlob();
+                                    blob = casePhotoService.getFirst(model.getId()).getPhoto().getBlob();
                                 }else if (model instanceof Tracing){
-                                    blob = TracingPhotoService.getInstance().getFirst(model.getId()).getPhoto().getBlob();
+                                    blob = tracingPhotoService.getFirst(model.getId()).getPhoto().getBlob();
                                 }
                                 return new ByteArrayInputStream(blob);
                             }

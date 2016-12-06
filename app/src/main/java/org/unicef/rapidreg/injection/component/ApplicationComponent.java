@@ -3,6 +3,7 @@ package org.unicef.rapidreg.injection.component;
 import android.app.Application;
 import android.content.Context;
 
+import org.unicef.rapidreg.PrimeroGlideModule;
 import org.unicef.rapidreg.injection.ApplicationContext;
 import org.unicef.rapidreg.injection.module.ApplicationModule;
 import org.unicef.rapidreg.network.AuthService;
@@ -22,6 +23,8 @@ import dagger.Component;
 @Singleton
 @Component(modules = ApplicationModule.class)
 public interface ApplicationComponent {
+
+    void inject(PrimeroGlideModule primeroGlideModule);
 
     @ApplicationContext
     Context context();
