@@ -9,8 +9,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import org.unicef.rapidreg.R;
-import org.unicef.rapidreg.childcase.caselist.CaseListAdapter;
 import org.unicef.rapidreg.forms.Field;
+import org.unicef.rapidreg.model.Gender;
 import org.unicef.rapidreg.service.RecordService;
 import org.unicef.rapidreg.service.TracingService;
 import org.unicef.rapidreg.service.cache.ItemValues;
@@ -46,13 +46,13 @@ public class MiniFormProfileViewHolder extends BaseViewHolder<Field> {
     @Override
     public void setValue(Field field) {
         idView.setText(itemValues.getAsString(ItemValues.RecordProfile.ID_NORMAL_STATE));
-        CaseListAdapter.Gender gender;
+        Gender gender;
         if (itemValues.getAsString(TracingService.SEX) != null) {
-            gender = CaseListAdapter.Gender.valueOf(itemValues.getAsString(TracingService.SEX).toUpperCase());
+            gender = Gender.valueOf(itemValues.getAsString(TracingService.SEX).toUpperCase());
         } else {
             gender = itemValues.has(TracingService.TRACING_ID)
-                    ? CaseListAdapter.Gender.EMPTY
-                    : CaseListAdapter.Gender.PLACEHOLDER;
+                    ? Gender.EMPTY
+                    : Gender.PLACEHOLDER;
         }
         Drawable drawable = ResourcesCompat.getDrawable(context.getResources(), gender.getGenderId(), null);
         genderBadge.setImageDrawable(drawable);
