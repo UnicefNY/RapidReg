@@ -83,19 +83,19 @@ public class SyncPresenter extends MvpBasePresenter<SyncView> {
 
     @Inject
     public SyncPresenter(@ActivityContext Context context,
+                         SyncService syncService,
+                         SyncTracingService syncTracingService,
                          CaseService caseService,
                          CasePhotoService casePhotoService,
                          TracingPhotoService tracingPhotoService,
                          TracingService tracingService) {
         this.context = context;
-
-        syncService = new SyncService(context);
+        this.syncService = syncService;
         this.casePhotoService = casePhotoService;
         this.caseService = caseService;
         this.tracingService = tracingService;
         this.tracingPhotoService = tracingPhotoService;
-
-        syncTracingService = new SyncTracingService(context);
+        this.syncTracingService = syncTracingService;
 
         caseList = caseService.getAll();
         tracingList = tracingService.getAll();

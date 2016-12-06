@@ -21,6 +21,8 @@ import org.unicef.rapidreg.service.cache.ItemValues;
 
 import java.util.List;
 
+import javax.inject.Inject;
+
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
@@ -35,13 +37,15 @@ import rx.functions.Func1;
 public class SyncService extends BaseRetrofitService {
     private SyncServiceInterface serviceInterface;
 
+    private CasePhotoService casePhotoService;
     @Override
     String getBaseUrl() {
         return PrimeroConfiguration.getApiBaseUrl();
     }
 
-    public SyncService(Context context) {
+    public SyncService(Context context, CasePhotoService casePhotoService) {
         createRetrofit(context);
+        this.casePhotoService = casePhotoService;
         serviceInterface = getRetrofit().create(SyncServiceInterface.class);
     }
 
@@ -130,7 +134,7 @@ public class SyncService extends BaseRetrofitService {
                         return Observable.create(new Observable.OnSubscribe<Pair<CasePhoto, Response<JsonElement>>>() {
                             @Override
                             public void call(Subscriber<? super Pair<CasePhoto, Response<JsonElement>>> subscriber) {
-                                CasePhoto casePhoto = CasePhotoService.getInstance().getById(casePhotoId);
+                                CasePhoto casePhoto = casePhotoService.getById(casePhotoId);
 
                                 RequestBody requestFile = RequestBody.create(MediaType.parse(PhotoConfig.CONTENT_TYPE_IMAGE),
                                         casePhoto.getPhoto().getBlob());

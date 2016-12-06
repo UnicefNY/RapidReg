@@ -11,6 +11,8 @@ import org.unicef.rapidreg.db.impl.TracingPhotoDaoImpl;
 import org.unicef.rapidreg.db.impl.UserDaoImpl;
 import org.unicef.rapidreg.injection.ApplicationContext;
 import org.unicef.rapidreg.network.AuthService;
+import org.unicef.rapidreg.network.SyncService;
+import org.unicef.rapidreg.network.SyncTracingService;
 import org.unicef.rapidreg.service.CaseFormService;
 import org.unicef.rapidreg.service.CasePhotoService;
 import org.unicef.rapidreg.service.CaseService;
@@ -99,5 +101,15 @@ public class TestApplicationModule {
     @Singleton
     public AuthService provideAuthService() {
         return mock(AuthService.class);
+    }
+
+    @Provides
+    public SyncService provideSyncService() {
+        return mock(SyncService.class);
+    }
+
+    @Provides
+    public SyncTracingService provideSyncTracingService() {
+        return mock(SyncTracingService.class);
     }
 }

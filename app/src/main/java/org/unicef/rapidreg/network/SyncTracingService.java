@@ -37,13 +37,16 @@ public class SyncTracingService extends BaseRetrofitService {
 
     private SyncTracingsServiceInterface serviceInterface;
 
+    private TracingPhotoService tracingPhotoService;
+
     @Override
     String getBaseUrl() {
         return PrimeroConfiguration.getApiBaseUrl();
     }
 
-    public SyncTracingService(Context context){
+    public SyncTracingService(Context context, TracingPhotoService tracingPhotoService){
         createRetrofit(context);
+        this.tracingPhotoService = tracingPhotoService;
         serviceInterface = getRetrofit().create(SyncTracingsServiceInterface.class);
     }
 
@@ -139,7 +142,7 @@ public class SyncTracingService extends BaseRetrofitService {
                         return Observable.create(new Observable.OnSubscribe<Pair<TracingPhoto, Response<JsonElement>>>() {
                             @Override
                             public void call(Subscriber<? super Pair<TracingPhoto, Response<JsonElement>>> subscriber) {
-                                TracingPhoto tracingPhoto = TracingPhotoService.getInstance().getById(tracingPhotoId);
+                                TracingPhoto tracingPhoto = tracingPhotoService.getById(tracingPhotoId);
                                 
                                 RequestBody requestFile = RequestBody.create(MediaType.parse(PhotoConfig.CONTENT_TYPE_IMAGE),
                                         tracingPhoto.getPhoto().getBlob());
