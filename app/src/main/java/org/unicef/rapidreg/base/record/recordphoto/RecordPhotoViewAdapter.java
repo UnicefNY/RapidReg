@@ -5,15 +5,20 @@ import android.support.v4.view.PagerAdapter;
 import android.view.View;
 import android.view.ViewGroup;
 
+import org.unicef.rapidreg.injection.ActivityContext;
+
 import java.util.List;
 
 public abstract class RecordPhotoViewAdapter extends PagerAdapter {
     protected Context context;
     protected List<String> paths;
 
-    public RecordPhotoViewAdapter(Context context, List<String> photos) {
+    public RecordPhotoViewAdapter(Context context) {
         this.context = context;
-        this.paths = photos;
+    }
+
+    public void setPaths(List<String> paths) {
+        this.paths = paths;
     }
 
     @Override

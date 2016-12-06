@@ -11,14 +11,21 @@ import com.bumptech.glide.Glide;
 
 import org.unicef.rapidreg.R;
 import org.unicef.rapidreg.base.record.recordphoto.RecordPhotoViewAdapter;
+import org.unicef.rapidreg.injection.ActivityContext;
 import org.unicef.rapidreg.service.CasePhotoService;
 
 import java.util.List;
 
+import javax.inject.Inject;
+
 public class CasePhotoViewAdapter extends RecordPhotoViewAdapter {
 
-    public CasePhotoViewAdapter(Context context, List<String> photos) {
-        super(context, photos);
+    @Inject
+    CasePhotoService casePhotoService;
+
+    @Inject
+    public CasePhotoViewAdapter(@ActivityContext Context context) {
+        super(context);
     }
 
     @Override
@@ -34,7 +41,7 @@ public class CasePhotoViewAdapter extends RecordPhotoViewAdapter {
         String path = paths.get(position);
         try {
             long recordId = Long.parseLong(path);
-            Glide.with(context).load(CasePhotoService.getInstance().getById(recordId)
+            Glide.with(context).load(casePhotoService.getById(recordId)
                     .getPhoto().getBlob()).into(imageView);
         } catch (NumberFormatException e) {
             Glide.with(context).load(path).into(imageView);

@@ -7,7 +7,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 
+import org.unicef.rapidreg.PrimeroApplication;
 import org.unicef.rapidreg.R;
+import org.unicef.rapidreg.injection.component.ActivityComponent;
+import org.unicef.rapidreg.injection.component.DaggerActivityComponent;
+import org.unicef.rapidreg.injection.module.ActivityModule;
+
+import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -16,10 +22,14 @@ public class CasePhotoViewActivity extends AppCompatActivity {
     @BindView(R.id.record_photo_view_slider)
     ViewPager viewPager;
 
+    @Inject
+    CasePhotoViewAdapter casePhotoViewAdapter;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.record_photo_view_slider);
+        getComponent().inject(this);
         ButterKnife.bind(this);
 
         Point size = new Point();
@@ -27,8 +37,15 @@ public class CasePhotoViewActivity extends AppCompatActivity {
         viewPager.setLayoutParams(new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT));
 
-        viewPager.setAdapter(new CasePhotoViewAdapter(this,
-                getIntent().getStringArrayListExtra("photos")));
+        casePhotoViewAdapter.setPaths(getIntent().getStringArrayListExtra("photos"));
+        viewPager.setAdapter(casePhotoViewAdapter);
         viewPager.setCurrentItem(getIntent().getIntExtra("position", 0));
+    }
+
+    protected ActivityComponent getComponent() {
+        return DaggerActivityComponent.builder()
+                .applicationComponent(PrimeroApplication.get(getApplicationContext()).getComponent())
+                .activityModule(new ActivityModule(this))
+                .build();
     }
 }
