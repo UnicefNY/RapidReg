@@ -118,12 +118,6 @@ public class TracingRegisterPresenter extends RecordRegisterPresenter {
     @Override
     public void saveRecord(SaveRecordCallback callback) {
         ItemValuesMap itemValuesMap = getView().getRecordRegisterData();
-        saveRecord(itemValuesMap, callback);
-
-    }
-
-    @Override
-    public void saveRecord(ItemValuesMap itemValuesMap, SaveRecordCallback callback) {
         if (!validateRequiredField(itemValuesMap)) {
             callback.onRequiredFieldNotFilled();
             return;
@@ -131,13 +125,13 @@ public class TracingRegisterPresenter extends RecordRegisterPresenter {
         if (!isViewAttached()) {
             return;
         }
-        clearProfileItems(itemValuesMap);
         List<String> photoPaths = getView().getPhotoPathsData();
-        ItemValues itemValues = new ItemValues(new Gson().fromJson(new Gson().toJson(
+        ItemValues newItemValues = new ItemValues(new Gson().fromJson(new Gson().toJson(
                 itemValuesMap.getValues()), JsonObject.class));
+        clearProfileItems(newItemValues);
 
         try {
-            Tracing record = tracingService.saveOrUpdate(itemValues, photoPaths);
+            Tracing record = tracingService.saveOrUpdate(newItemValues, photoPaths);
             callback.onSaveSuccessful(record.getId());
         } catch (IOException e) {
             callback.onSavedFail();

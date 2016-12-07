@@ -117,22 +117,17 @@ public class CaseRegisterPresenter extends RecordRegisterPresenter {
     @Override
     public void saveRecord(SaveRecordCallback callback) {
         ItemValuesMap itemValues = getView().getRecordRegisterData();
-        saveRecord(itemValues, callback);
-    }
-
-    @Override
-    public void saveRecord(ItemValuesMap itemValues, SaveRecordCallback callback) {
         if (!validateRequiredField(itemValues)) {
             callback.onRequiredFieldNotFilled();
             return;
         }
-        if (!isViewAttached()){
+        if (!isViewAttached()) {
             return;
         }
-        clearProfileItems(itemValues);
-        List<String> photoPaths =  getView().getPhotoPathsData();
+        List<String> photoPaths = getView().getPhotoPathsData();
         ItemValues newItemValues = new ItemValues(new Gson().fromJson(new Gson().toJson(
-                getView().getRecordRegisterData().getValues()), JsonObject.class));
+                itemValues.getValues()), JsonObject.class));
+        clearProfileItems(newItemValues);
         try {
             Case record = caseService.saveOrUpdate(newItemValues, photoPaths);
             callback.onSaveSuccessful(record.getId());
@@ -140,7 +135,6 @@ public class CaseRegisterPresenter extends RecordRegisterPresenter {
             callback.onSavedFail();
         }
     }
-
     private boolean validateRequiredField(ItemValuesMap itemValuesMap) {
         CaseFormRoot caseForm = getCurrentForm();
         return RecordService.validateRequiredFields(caseForm, itemValuesMap);

@@ -63,13 +63,13 @@ public class CaseRegisterWrapperFragment extends RecordRegisterWrapperFragment {
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void saveCase(SaveCaseEvent event) {
-       caseRegisterPresenter.saveRecord(itemValues, this);
+       caseRegisterPresenter.saveRecord(this);
     }
 
     @OnClick(R.id.edit)
     public void onEditClicked() {
         Bundle args = new Bundle();
-        args.putSerializable(RecordService.ITEM_VALUES, itemValues);
+        args.putSerializable(RecordService.ITEM_VALUES, getRecordRegisterData());
         args.putStringArrayList(RecordService.RECORD_PHOTOS, (ArrayList<String>) recordPhotoAdapter.getAllItems());
         ((CaseActivity) getActivity()).turnToFeature(CaseFeature.EDIT_FULL, args, null);
     }
@@ -77,7 +77,7 @@ public class CaseRegisterWrapperFragment extends RecordRegisterWrapperFragment {
     @Override
     protected void initItemValues() {
         if (getArguments() != null) {
-            itemValues = (ItemValuesMap) getArguments().getSerializable(ITEM_VALUES);
+            setRecordRegisterData((ItemValuesMap) getArguments().getSerializable(ITEM_VALUES));
         }
     }
 
@@ -93,7 +93,7 @@ public class CaseRegisterWrapperFragment extends RecordRegisterWrapperFragment {
         for (Section section : sections) {
             String[] values = section.getName().values().toArray(new String[0]);
             Bundle args = new Bundle();
-            args.putSerializable(RecordService.ITEM_VALUES, itemValues);
+            args.putSerializable(RecordService.ITEM_VALUES, getRecordRegisterData());
             args.putStringArrayList(RecordService.RECORD_PHOTOS, (ArrayList<String>) recordPhotoAdapter.getAllItems());
             pages.add(FragmentPagerItem.of(values[0], CaseRegisterFragment.class, args));
         }
@@ -103,7 +103,7 @@ public class CaseRegisterWrapperFragment extends RecordRegisterWrapperFragment {
     @Override
     public void onSaveSuccessful(long recordId) {
         Bundle args = new Bundle();
-        args.putSerializable(RecordService.ITEM_VALUES, itemValues);
+        args.putSerializable(RecordService.ITEM_VALUES, getRecordRegisterData());
         args.putStringArrayList(RecordService.RECORD_PHOTOS, (ArrayList<String>) getPhotoPathsData());
         ((RecordActivity) getActivity()).turnToFeature(CaseFeature.DETAILS_FULL, args, null);
     }

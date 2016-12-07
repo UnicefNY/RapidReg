@@ -59,13 +59,13 @@ public class TracingRegisterWrapperFragment extends RecordRegisterWrapperFragmen
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void saveTracing(SaveTracingEvent event) {
-        tracingRegisterPresenter.saveRecord(itemValues, this);
+        tracingRegisterPresenter.saveRecord(this);
     }
 
     @OnClick(R.id.edit)
     public void onEditClicked() {
         Bundle args = new Bundle();
-        args.putSerializable(RecordService.ITEM_VALUES, itemValues);
+        args.putSerializable(RecordService.ITEM_VALUES, getRecordRegisterData());
         args.putStringArrayList(RecordService.RECORD_PHOTOS, (ArrayList<String>) recordPhotoAdapter.getAllItems());
         ((TracingActivity) getActivity()).turnToFeature(TracingFeature.EDIT_FULL, args, null);
     }
@@ -73,7 +73,7 @@ public class TracingRegisterWrapperFragment extends RecordRegisterWrapperFragmen
     @Override
     protected void initItemValues() {
         if (getArguments() != null) {
-            itemValues = (ItemValuesMap) getArguments().getSerializable(ITEM_VALUES);
+            setRecordRegisterData((ItemValuesMap) getArguments().getSerializable(ITEM_VALUES));
         }
     }
 
@@ -89,7 +89,7 @@ public class TracingRegisterWrapperFragment extends RecordRegisterWrapperFragmen
         for (Section section : sections) {
             String[] values = section.getName().values().toArray(new String[0]);
             Bundle args = new Bundle();
-            args.putSerializable(RecordService.ITEM_VALUES, itemValues);
+            args.putSerializable(RecordService.ITEM_VALUES, getRecordRegisterData());
             args.putStringArrayList(RecordService.RECORD_PHOTOS, (ArrayList<String>) recordPhotoAdapter.getAllItems());
             pages.add(FragmentPagerItem.of(values[0], TracingRegisterFragment.class, args));
         }
@@ -99,7 +99,7 @@ public class TracingRegisterWrapperFragment extends RecordRegisterWrapperFragmen
     @Override
     public void onSaveSuccessful(long recordId) {
         Bundle args = new Bundle();
-        args.putSerializable(RecordService.ITEM_VALUES, itemValues);
+        args.putSerializable(RecordService.ITEM_VALUES, getRecordRegisterData());
         args.putStringArrayList(RecordService.RECORD_PHOTOS, (ArrayList<String>) getPhotoPathsData());
         ((RecordActivity) getActivity()).turnToFeature(TracingFeature.DETAILS_FULL, args, null);
     }
