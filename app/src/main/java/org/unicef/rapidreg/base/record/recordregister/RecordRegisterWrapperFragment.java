@@ -51,7 +51,8 @@ public abstract class RecordRegisterWrapperFragment extends MvpFragment<RecordRe
     protected List<Section> sections;
 
     protected RecordPhotoAdapter recordPhotoAdapter;
-    protected ItemValuesMap itemValues;
+
+    private ItemValuesMap itemValues;
 
     public FragmentComponent getComponent() {
         return DaggerFragmentComponent.builder()

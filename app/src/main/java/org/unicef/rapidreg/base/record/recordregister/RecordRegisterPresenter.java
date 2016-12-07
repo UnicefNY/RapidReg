@@ -48,7 +48,7 @@ public abstract class RecordRegisterPresenter extends MvpBasePresenter<RecordReg
         return fields;
     }
 
-    public void clearProfileItems(ItemValuesMap itemValues) {
+    public void clearProfileItems(ItemValues itemValues) {
         itemValues.removeItem(ItemValues.RecordProfile.ID_NORMAL_STATE);
         itemValues.removeItem(ItemValues.RecordProfile.REGISTRATION_DATE);
         itemValues.removeItem(ItemValues.RecordProfile.ID);
@@ -99,8 +99,6 @@ public abstract class RecordRegisterPresenter extends MvpBasePresenter<RecordReg
     }
 
     public abstract void saveRecord(SaveRecordCallback callback);
-
-    public abstract void saveRecord(ItemValuesMap itemValues, SaveRecordCallback callback);
 
     public abstract RecordForm getCurrentForm();
     
