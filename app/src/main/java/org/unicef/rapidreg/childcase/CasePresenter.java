@@ -1,12 +1,10 @@
 package org.unicef.rapidreg.childcase;
 
-import com.google.gson.Gson;
 import com.raizlabs.android.dbflow.data.Blob;
 
 import org.unicef.rapidreg.base.record.RecordPresenter;
-import org.unicef.rapidreg.forms.CaseFormRoot;
+import org.unicef.rapidreg.forms.CaseTemplateForm;
 import org.unicef.rapidreg.forms.RecordForm;
-import org.unicef.rapidreg.model.CaseForm;
 import org.unicef.rapidreg.network.AuthService;
 import org.unicef.rapidreg.service.CaseFormService;
 import org.unicef.rapidreg.service.UserService;
@@ -34,22 +32,23 @@ public class CasePresenter extends RecordPresenter {
     }
 
     @Override
-    public void saveForm(RecordForm recordForm) {
+    public void saveForm(RecordForm recordForm, String moduleId) {
         Blob caseFormBlob = new Blob(gson.toJson(recordForm).getBytes());
-        CaseForm caseForm = new CaseForm(caseFormBlob);
-        caseFormService.saveOrUpdateForm(caseForm);
+        org.unicef.rapidreg.model.CaseForm caseForm = new org.unicef.rapidreg.model.CaseForm(caseFormBlob);
+        caseForm.setModuleId(moduleId);
+        caseFormService.saveOrUpdate(caseForm);
     }
 
-    public Observable<CaseFormRoot> loadCaseForm(String cookie) {
-        return authService.getCaseFormRx(cookie,
-                Locale.getDefault().getLanguage(), true, "case")
-                .flatMap(new Func1<CaseFormRoot, Observable<CaseFormRoot>>() {
+    public Observable<CaseTemplateForm> loadCaseForm(String cookie, String moduleId) {
+        return authService.getCaseForm(cookie,
+                Locale.getDefault().getLanguage(), true, "case",moduleId)
+                .flatMap(new Func1<CaseTemplateForm, Observable<CaseTemplateForm>>() {
                     @Override
-                    public Observable<CaseFormRoot> call(CaseFormRoot caseFormRoot) {
-                        if (caseFormRoot == null) {
+                    public Observable<CaseTemplateForm> call(CaseTemplateForm caseForm) {
+                        if (caseForm == null) {
                             return Observable.error(new Exception());
                         }
-                        return Observable.just(caseFormRoot);
+                        return Observable.just(caseForm);
                     }
                 })
                 .retry(3)

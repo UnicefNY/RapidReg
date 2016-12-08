@@ -79,7 +79,7 @@ public class TracingRegisterWrapperFragment extends RecordRegisterWrapperFragmen
 
     @Override
     protected void initFormData() {
-        form = tracingRegisterPresenter.getCurrentForm();
+        form = tracingRegisterPresenter.getCPTemplate();
         sections = form.getSections();
     }
 

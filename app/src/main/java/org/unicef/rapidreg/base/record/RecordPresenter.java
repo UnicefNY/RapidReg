@@ -17,5 +17,5 @@ public class RecordPresenter extends BasePresenter {
         super(userService);
     }
 
-    public void saveForm(RecordForm recordForm) {}
+    public void saveForm(RecordForm recordForm, String moduleId) {}
 }

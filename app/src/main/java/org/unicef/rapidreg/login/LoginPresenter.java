@@ -12,7 +12,8 @@ import org.greenrobot.eventbus.EventBus;
 import org.unicef.rapidreg.IntentSender;
 import org.unicef.rapidreg.PrimeroConfiguration;
 import org.unicef.rapidreg.R;
-import org.unicef.rapidreg.event.LoadCaseFormEvent;
+import org.unicef.rapidreg.event.LoadCPCaseFormEvent;
+import org.unicef.rapidreg.event.LoadGBVCaseFormEvent;
 import org.unicef.rapidreg.event.LoadTracingFormEvent;
 import org.unicef.rapidreg.injection.ActivityContext;
 import org.unicef.rapidreg.model.LoginRequestBody;
@@ -147,10 +148,15 @@ public class LoginPresenter extends MvpBasePresenter<LoginView> {
 
                                 goToLoginSuccessScreen();
 
-                                EventBus.getDefault().postSticky(new LoadCaseFormEvent(PrimeroConfiguration.getCookie()));
-                                EventBus.getDefault().postSticky(new LoadTracingFormEvent(PrimeroConfiguration.getCookie()));
+                                EventBus.getDefault().postSticky(new LoadGBVCaseFormEvent(PrimeroConfiguration
+                                        .getCookie()));
+                                EventBus.getDefault().postSticky(new LoadCPCaseFormEvent(PrimeroConfiguration
+                                        .getCookie()));
+                                EventBus.getDefault().postSticky(new LoadTracingFormEvent(PrimeroConfiguration
+                                        .getCookie()));
 
-                                showLoginResultMessage(context.getResources().getString(R.string.login_success_message));
+                                showLoginResultMessage(context.getResources().getString(R.string
+                                        .login_success_message));
                                 Log.d(TAG, "login successful");
                             } else {
                                 showLoginResultMessage(context.getResources().getString(HttpStatusCodeHandler

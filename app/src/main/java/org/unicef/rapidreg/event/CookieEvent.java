@@ -1,9 +1,9 @@
 package org.unicef.rapidreg.event;
 
-public class LoadCaseFormEvent {
+public class CookieEvent {
     private String cookie;
 
-    public LoadCaseFormEvent(String cookie) {
+    public CookieEvent(String cookie) {
         this.cookie = cookie;
     }
 

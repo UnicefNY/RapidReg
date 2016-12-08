@@ -18,15 +18,11 @@ import android.widget.ViewSwitcher;
 import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.hannesdorfmann.mosby.mvp.MvpFragment;
 
-import org.greenrobot.eventbus.EventBus;
 import org.unicef.rapidreg.PrimeroApplication;
-import org.unicef.rapidreg.PrimeroConfiguration;
 import org.unicef.rapidreg.R;
 import org.unicef.rapidreg.base.record.RecordActivity;
 import org.unicef.rapidreg.base.record.recordlist.spinner.SpinnerAdapter;
 import org.unicef.rapidreg.base.record.recordlist.spinner.SpinnerState;
-import org.unicef.rapidreg.event.LoadCaseFormEvent;
-import org.unicef.rapidreg.event.LoadTracingFormEvent;
 import org.unicef.rapidreg.injection.component.DaggerFragmentComponent;
 import org.unicef.rapidreg.injection.component.FragmentComponent;
 import org.unicef.rapidreg.injection.module.FragmentModule;

@@ -9,11 +9,7 @@ import org.unicef.rapidreg.db.impl.CasePhotoDaoImpl;
 import org.unicef.rapidreg.db.impl.TracingFormDaoImpl;
 import org.unicef.rapidreg.db.impl.TracingPhotoDaoImpl;
 import org.unicef.rapidreg.db.impl.UserDaoImpl;
-import org.unicef.rapidreg.injection.ActivityContext;
 import org.unicef.rapidreg.injection.ApplicationContext;
-import org.unicef.rapidreg.model.CasePhoto;
-import org.unicef.rapidreg.model.Tracing;
-import org.unicef.rapidreg.model.TracingForm;
 import org.unicef.rapidreg.network.AuthService;
 import org.unicef.rapidreg.network.SyncService;
 import org.unicef.rapidreg.network.SyncTracingService;
@@ -25,6 +21,8 @@ import org.unicef.rapidreg.service.TracingFormService;
 import org.unicef.rapidreg.service.TracingPhotoService;
 import org.unicef.rapidreg.service.TracingService;
 import org.unicef.rapidreg.service.UserService;
+import org.unicef.rapidreg.service.impl.CaseFormServiceImpl;
+import org.unicef.rapidreg.service.impl.TracingFormServiceImpl;
 
 import javax.inject.Singleton;
 
@@ -66,7 +64,7 @@ public class ApplicationModule {
     @Provides
     @Singleton
     public CaseFormService provideCaseFormService() {
-        return new CaseFormService(new CaseFormDaoImpl());
+        return new CaseFormServiceImpl(new CaseFormDaoImpl());
     }
 
     @Provides
@@ -90,7 +88,7 @@ public class ApplicationModule {
     @Provides
     @Singleton
     public TracingFormService provideTracingFormService() {
-        return new TracingFormService(new TracingFormDaoImpl());
+        return new TracingFormServiceImpl(new TracingFormDaoImpl());
     }
 
     @Provides
@@ -111,7 +109,8 @@ public class ApplicationModule {
     }
 
     @Provides
-    public SyncTracingService provideSyncTracingService(@ApplicationContext Context context, TracingPhotoService tracingPhotoService) {
+    public SyncTracingService provideSyncTracingService(@ApplicationContext Context context, TracingPhotoService
+            tracingPhotoService) {
         return new SyncTracingService(context, tracingPhotoService);
     }
 }

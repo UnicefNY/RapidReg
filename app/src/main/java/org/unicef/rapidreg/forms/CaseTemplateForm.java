@@ -6,7 +6,7 @@ import com.google.gson.annotations.SerializedName;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CaseFormRoot implements RecordForm {
+public class CaseTemplateForm implements RecordForm {
     @SerializedName("Children")
     @Expose
     private List<Section> sections = new ArrayList<>();

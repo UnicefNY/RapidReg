@@ -4,7 +4,7 @@ import com.raizlabs.android.dbflow.data.Blob;
 
 import org.unicef.rapidreg.base.record.RecordPresenter;
 import org.unicef.rapidreg.forms.RecordForm;
-import org.unicef.rapidreg.forms.TracingFormRoot;
+import org.unicef.rapidreg.forms.TracingTemplateForm;
 import org.unicef.rapidreg.model.TracingForm;
 import org.unicef.rapidreg.network.AuthService;
 import org.unicef.rapidreg.service.TracingFormService;
@@ -33,22 +33,22 @@ public class TracingPresenter extends RecordPresenter {
     }
 
     @Override
-    public void saveForm(RecordForm recordForm) {
+    public void saveForm(RecordForm recordForm, String moduleId) {
         Blob tracingFormBlob = new Blob(gson.toJson(recordForm).getBytes());
         TracingForm tracingForm = new TracingForm(tracingFormBlob);
         tracingFormService.saveOrUpdateForm(tracingForm);
     }
 
-    public Observable<TracingFormRoot> loadTracingForm(String cookie) {
-        return authService.getTracingFormRx(cookie,
-                Locale.getDefault().getLanguage(), true, "tracing_request")
-                .flatMap(new Func1<TracingFormRoot, Observable<TracingFormRoot>>() {
+    public Observable<TracingTemplateForm> loadTracingForm(String cookie) {
+        return authService.getTracingForm(cookie,
+                Locale.getDefault().getLanguage(), true, "tracing_request", "primeromodule-cp")
+                .flatMap(new Func1<TracingTemplateForm, Observable<TracingTemplateForm>>() {
                     @Override
-                    public Observable<TracingFormRoot> call(TracingFormRoot tracingFormRoot) {
-                        if (tracingFormRoot == null) {
+                    public Observable<TracingTemplateForm> call(TracingTemplateForm tracingTemplateForm) {
+                        if (tracingTemplateForm == null) {
                             return Observable.error(new Exception());
                         }
-                        return Observable.just(tracingFormRoot);
+                        return Observable.just(tracingTemplateForm);
                     }
                 })
                 .retry(3)

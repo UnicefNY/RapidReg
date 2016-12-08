@@ -12,7 +12,7 @@ import org.unicef.rapidreg.base.record.recordregister.RecordRegisterView.SaveRec
 import org.unicef.rapidreg.forms.Field;
 import org.unicef.rapidreg.forms.RecordForm;
 import org.unicef.rapidreg.forms.Section;
-import org.unicef.rapidreg.forms.TracingFormRoot;
+import org.unicef.rapidreg.forms.TracingTemplateForm;
 import org.unicef.rapidreg.model.Tracing;
 import org.unicef.rapidreg.service.RecordService;
 import org.unicef.rapidreg.service.TracingFormService;
@@ -44,11 +44,6 @@ public class TracingRegisterPresenter extends RecordRegisterPresenter {
         this.tracingService = tracingService;
         this.tracingFormService = tracingFormService;
         this.tracingPhotoService = tracingPhotoService;
-    }
-
-    @Override
-    public TracingFormRoot getCurrentForm() {
-        return tracingFormService.getCurrentForm();
     }
 
     @Override
@@ -88,7 +83,7 @@ public class TracingRegisterPresenter extends RecordRegisterPresenter {
     protected List<Field> getFields() {
         List<Field> fields = new ArrayList<>();
 
-        RecordForm form = tracingFormService.getCurrentForm();
+        RecordForm form = tracingFormService.getCPTemplate();
         List<Section> sections = form.getSections();
 
         for (Section section : sections) {
@@ -108,11 +103,16 @@ public class TracingRegisterPresenter extends RecordRegisterPresenter {
 
     @Override
     public List<Field> getFields(int position) {
-        RecordForm form = getCurrentForm();
+        RecordForm form = tracingFormService.getCPTemplate();
         if (form != null) {
             return form.getSections().get(position).getFields();
         }
         return null;
+    }
+
+    @Override
+    public RecordForm getCPTemplate() {
+        return tracingFormService.getCPTemplate();
     }
 
     @Override
@@ -139,7 +139,7 @@ public class TracingRegisterPresenter extends RecordRegisterPresenter {
     }
 
     private boolean validateRequiredField(ItemValuesMap itemValuesMap) {
-        TracingFormRoot recordForm = getCurrentForm();
+        TracingTemplateForm recordForm = tracingFormService.getCPTemplate();
         return RecordService.validateRequiredFields(recordForm, itemValuesMap);
     }
 }

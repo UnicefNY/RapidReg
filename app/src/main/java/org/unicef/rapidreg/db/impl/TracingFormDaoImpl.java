@@ -11,11 +11,4 @@ public class TracingFormDaoImpl implements TracingFormDao {
     public TracingForm getTracingForm() {
         return SQLite.select().from(TracingForm.class).querySingle();
     }
-
-    @Override
-    public Blob getTracingFormContent() {
-        TracingForm tracingForm = SQLite.select().from(TracingForm.class).querySingle();
-
-        return tracingForm == null ? null : tracingForm.getForm();
-    }
 }
