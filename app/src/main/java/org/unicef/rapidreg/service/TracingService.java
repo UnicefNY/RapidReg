@@ -36,10 +36,13 @@ public class TracingService extends RecordService {
     public static final String TRACING_ID = "tracing_request_id";
     public static final String TRACING_PRIMARY_ID = "tracing_primary_id";
 
-    private TracingDao tracingDao = new TracingDaoImpl();
-    private TracingPhotoDao tracingPhotoDao = new TracingPhotoDaoImpl();
+    private final TracingDao tracingDao;
+    private final TracingPhotoDao tracingPhotoDao;
 
-    public TracingService() {}
+    public TracingService(TracingDao tracingDao, TracingPhotoDao tracingPhotoDao) {
+        this.tracingDao = tracingDao;
+        this.tracingPhotoDao = tracingPhotoDao;
+    }
 
     public Tracing getById(long tracingId) {
         return tracingDao.getTracingById(tracingId);
@@ -120,8 +123,7 @@ public class TracingService extends RecordService {
         Gson gson = new Gson();
         Date date = new Date(Calendar.getInstance().getTimeInMillis());
         Blob tracingBlob = new Blob(gson.toJson(itemValues.getValues()).getBytes());
-        Blob audioFileDefault = null;
-        audioFileDefault = getAudioBlob(audioFileDefault);
+        Blob audioFileDefault = getAudioBlob();
 
         Tracing tracing = new Tracing();
         tracing.setUniqueId(uniqueId);
@@ -142,20 +144,11 @@ public class TracingService extends RecordService {
         return tracing;
     }
 
-    public void savePhoto(Tracing parent, List<String> photoPaths) throws IOException {
-        for (int i = 0; i < photoPaths.size(); i++) {
-            TracingPhoto tracingPhoto = generateSavePhoto(parent, photoPaths, i);
-            tracingPhoto.setKey(UUID.randomUUID().toString());
-            tracingPhoto.save();
-        }
-    }
-
     public Tracing update(ItemValues itemValues,
                        List<String> photoBitPaths) throws IOException {
         Gson gson = new Gson();
         Blob blob = new Blob(gson.toJson(itemValues.getValues()).getBytes());
-        Blob audioFileDefault = null;
-        audioFileDefault = getAudioBlob(audioFileDefault);
+        Blob audioFileDefault = getAudioBlob();
 
         Tracing tracing = tracingDao.getTracingByUniqueId(itemValues.getAsString(TRACING_ID));
         tracing.setLastUpdatedDate(new Date(Calendar.getInstance().getTimeInMillis()));
@@ -173,32 +166,40 @@ public class TracingService extends RecordService {
         return tracing;
     }
 
+    public void savePhoto(Tracing parent, List<String> photoPaths) throws IOException {
+        for (int i = 0; i < photoPaths.size(); i++) {
+            TracingPhoto tracingPhoto = generateSavePhoto(parent, photoPaths, i);
+            tracingPhoto.setKey(UUID.randomUUID().toString());
+            tracingPhoto.save();
+        }
+    }
+
     public void updatePhoto(Tracing tracing, List<String> photoPaths) throws IOException {
         int previousCount = tracingPhotoDao.getIdsByTracingId(tracing.getId()).size();
 
         if (previousCount < photoPaths.size()) {
             for (int i = 0; i < previousCount; i++) {
-                TracingPhoto TracingPhoto = generateUpdatePhoto(tracing, photoPaths, i);
-                TracingPhoto.update();
+                TracingPhoto tracingPhoto = generateUpdatePhoto(tracing, photoPaths, i);
+                tracingPhoto.update();
             }
             for (int i = previousCount; i < photoPaths.size(); i++) {
-                TracingPhoto TracingPhoto = generateSavePhoto(tracing, photoPaths, i);
-                if (TracingPhoto.getId() == 0) {
-                    TracingPhoto.save();
+                TracingPhoto tracingPhoto = generateSavePhoto(tracing, photoPaths, i);
+                if (tracingPhoto.getId() == 0) {
+                    tracingPhoto.save();
                 } else {
-                    TracingPhoto.update();
+                    tracingPhoto.update();
                 }
             }
         } else {
             for (int i = 0; i < photoPaths.size(); i++) {
-                TracingPhoto TracingPhoto = generateUpdatePhoto(tracing, photoPaths, i);
-                TracingPhoto.update();
+                TracingPhoto tracingPhoto = generateUpdatePhoto(tracing, photoPaths, i);
+                tracingPhoto.update();
             }
             for (int i = photoPaths.size(); i < previousCount; i++) {
-                TracingPhoto TracingPhoto =
+                TracingPhoto tracingPhoto =
                         tracingPhotoDao.getByTracingIdAndOrder(tracing.getId(), i + 1);
-                TracingPhoto.setPhoto(null);
-                TracingPhoto.update();
+                tracingPhoto.setPhoto(null);
+                tracingPhoto.update();
             }
         }
     }
@@ -237,15 +238,15 @@ public class TracingService extends RecordService {
         return tracingPhoto;
     }
 
-    private Blob getAudioBlob(Blob blob) {
+    private Blob getAudioBlob() {
         if (StreamUtil.isFileExists(AUDIO_FILE_PATH)) {
             try {
-                blob = new Blob(StreamUtil.readFile(AUDIO_FILE_PATH));
+                return new Blob(StreamUtil.readFile(AUDIO_FILE_PATH));
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
-        return blob;
+        return null;
     }
 
     private String getName(ItemValues values) {

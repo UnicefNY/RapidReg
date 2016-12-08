@@ -139,8 +139,7 @@ public class CaseService extends RecordService {
         Gson gson = new Gson();
         Date date = new Date(System.currentTimeMillis());
         Blob blob = new Blob(gson.toJson(itemValues.getValues()).getBytes());
-        Blob audioFileDefault = null;
-        audioFileDefault = getAudioBlob(audioFileDefault);
+        Blob audioFileDefault = getAudioBlob();
 
         Case child = new Case();
         child.setUniqueId(uniqueId);
@@ -175,8 +174,7 @@ public class CaseService extends RecordService {
     public Case update(ItemValues itemValues, List<String> photoBitPaths) throws IOException {
         Gson gson = new Gson();
         Blob caseBlob = new Blob(gson.toJson(itemValues.getValues()).getBytes());
-        Blob audioFileDefault = null;
-        audioFileDefault = getAudioBlob(audioFileDefault);
+        Blob audioFileDefault = getAudioBlob();
 
         Case child = caseDao.getCaseByUniqueId(itemValues.getAsString(CASE_ID));
         child.setLastUpdatedDate(new Date(Calendar.getInstance().getTimeInMillis()));
@@ -256,15 +254,15 @@ public class CaseService extends RecordService {
         return casePhoto;
     }
 
-    private Blob getAudioBlob(Blob blob) {
+    private Blob getAudioBlob() {
         if (StreamUtil.isFileExists(AUDIO_FILE_PATH)) {
             try {
-                blob = new Blob(StreamUtil.readFile(AUDIO_FILE_PATH));
+                return new Blob(StreamUtil.readFile(AUDIO_FILE_PATH));
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
-        return blob;
+        return null;
     }
 
 

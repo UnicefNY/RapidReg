@@ -89,7 +89,7 @@ public class RecordService {
         }
     }
 
-    public static String createUniqueId() {
+    public  String createUniqueId() {
         return UUID.randomUUID().toString();
     }
 
