@@ -86,16 +86,7 @@ public class UserService {
             existingUser.update();
         }
     }
-
     public User getUser(String username) {
         return userDao.getUser(username);
-    }
-
-    public User getCurrentUser() {
-        return currentUser;
-    }
-
-    public void setCurrentUser(User user) {
-        this.currentUser = user;
     }
 }

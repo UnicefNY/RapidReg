@@ -25,8 +25,7 @@ public class CasePresenter extends RecordPresenter {
     private AuthService authService;
 
     @Inject
-    public CasePresenter(UserService userService, AuthService authService, CaseFormService caseFormService) {
-        super(userService);
+    public CasePresenter(AuthService authService, CaseFormService caseFormService) {
         this.caseFormService = caseFormService;
         this.authService = authService;
     }
