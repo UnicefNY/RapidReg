@@ -77,10 +77,12 @@ public class PhotoUploadMiniFormViewHolder extends BaseViewHolder<Field> {
             }
 
             if (context instanceof CaseActivity) {
+                //TODO inject CasePhotoService
                 for (Long id : CasePhotoService.getInstance().getIdsByCaseId(recordId)) {
                     photos.add(new CasePhoto(id));
                 }
             } else {
+                //TODO inject TracingPhotoService
                 for (Long id : TracingPhotoService.getInstance().getIdsByTracingId(recordId)) {
                     photos.add(new TracingPhoto(id));
                 }
