@@ -112,8 +112,11 @@ dependencies {
 
     testCompile 'junit:junit:4.12',
             'org.robolectric:robolectric:3.1.1',
+            'org.easymock:easymock:3.4',
+            "org.powermock:powermock:${powerMockVersion}",
             "org.powermock:powermock-module-junit4:${powerMockVersion}",
-            "org.powermock:powermock-api-mockito:${powerMockVersion}"
+            "org.powermock:powermock-api-mockito:${powerMockVersion}",
+            "org.powermock:powermock-api-easymock:${powerMockVersion}"
 
     androidTestCompile 'junit:junit:4.12',
             'org.robolectric:robolectric:3.1.1',
