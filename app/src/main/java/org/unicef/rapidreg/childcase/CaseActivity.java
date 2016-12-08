@@ -27,7 +27,7 @@ import javax.inject.Inject;
 
 import rx.functions.Action1;
 
-public class CaseActivity extends RecordActivity {
+public class CaseActivity extends RecordActivity implements CaseView{
     public static final String TAG = CaseActivity.class.getSimpleName();
 
     @Inject
@@ -134,17 +134,12 @@ public class CaseActivity extends RecordActivity {
         EventBus.getDefault().postSticky(event);
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-    }
-
     @Subscribe(threadMode = ThreadMode.MAIN, sticky = true, priority = 1)
     public void onNeedLoadGBVCaseFormsEvent(final LoadGBVCaseFormEvent event) {
         EventBus.getDefault().removeStickyEvent(event);
         String moduleId = RecordConfiguration.MODULE_ID_GBV;
         String cookie = event.getCookie();
-        loadCaseFormByModuleId(moduleId, cookie);
+        casePresenter.loadCaseForm(cookie, moduleId);
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN, sticky = true, priority = 1)
@@ -153,26 +148,11 @@ public class CaseActivity extends RecordActivity {
 
         String moduleId = RecordConfiguration.MODULE_ID_CP;
         String cookie = event.getCookie();
-        loadCaseFormByModuleId(moduleId, cookie);
+        casePresenter.loadCaseForm(cookie, moduleId);
     }
 
-    private void loadCaseFormByModuleId(final String moduleId, String cookie) {
-        casePresenter.loadCaseForm(cookie, moduleId)
-                .subscribe(new Action1<CaseTemplateForm>() {
-                    @Override
-                    public void call(CaseTemplateForm caseForm) {
-                        casePresenter.saveForm(caseForm, moduleId);
-                        setFormSyncFail(false);
-                        Log.i(TAG, "load case form successfully");
-
-                    }
-                }, new Action1<Throwable>() {
-                    @Override
-                    public void call(Throwable throwable) {
-                        setFormSyncFail(true);
-                        Toast.makeText(CaseActivity.this, R.string.sync_case_forms_error, Toast.LENGTH_SHORT)
-                                .show();
-                    }
-                });
+    @Override
+    public void promoteSyncCaseFail() {
+        Toast.makeText(CaseActivity.this, R.string.sync_case_forms_error, Toast.LENGTH_SHORT).show();
     }
 }

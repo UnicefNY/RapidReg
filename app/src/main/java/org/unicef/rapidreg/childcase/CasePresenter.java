@@ -16,6 +16,7 @@ import javax.inject.Inject;
 
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action1;
 import rx.functions.Func1;
 import rx.schedulers.Schedulers;
 
@@ -38,9 +39,9 @@ public class CasePresenter extends RecordPresenter {
         caseFormService.saveOrUpdate(caseForm);
     }
 
-    public Observable<CaseTemplateForm> loadCaseForm(String cookie, String moduleId) {
-        return authService.getCaseForm(cookie,
-                Locale.getDefault().getLanguage(), true, "case",moduleId)
+    public void loadCaseForm(String cookie, final String moduleId) {
+        authService.getCaseForm(cookie,
+                Locale.getDefault().getLanguage(), true, "case", moduleId)
                 .flatMap(new Func1<CaseTemplateForm, Observable<CaseTemplateForm>>() {
                     @Override
                     public Observable<CaseTemplateForm> call(CaseTemplateForm caseForm) {
@@ -52,6 +53,22 @@ public class CasePresenter extends RecordPresenter {
                 })
                 .retry(3)
                 .timeout(60, TimeUnit.SECONDS)
-                .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
+                .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Action1<CaseTemplateForm>() {
+                    @Override
+                    public void call(CaseTemplateForm caseForm) {
+                        saveForm(caseForm, moduleId);
+                        ((CaseActivity) getView()).setFormSyncFail(false);
+                    }
+                }, new Action1<Throwable>() {
+                    @Override
+                    public void call(Throwable throwable) {
+                        ((CaseActivity) getView()).setFormSyncFail(true);
+                        if (isViewAttached()) {
+                            ((CaseView) getView()).promoteSyncCaseFail();
+                        }
+                    }
+                });
+
     }
 }
