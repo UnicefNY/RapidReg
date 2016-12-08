@@ -45,16 +45,16 @@ public class TracingServiceTest {
     @Mock
     private TracingPhotoDaoImpl tracingPhotoDao;
 
-    @InjectMocks
-    TracingService tracingService;
+    private TracingService tracingService;
 
     @Before
     public void setUp() throws Exception {
         initMocks(this);
         mockStatic(UUID.class);
+
+        tracingService = new TracingService(tracingDao, tracingPhotoDao);
     }
 
-    @Ignore
     @Test
     public void should_return_all_order_ids_sorted_by_ascending() throws Exception {
         Tracing[] orders = new Tracing[]{new Tracing(1), new Tracing(2), new Tracing(3)};
@@ -63,7 +63,6 @@ public class TracingServiceTest {
         assertThat("When call getAllOrderByDateASC() should return orders sorted by date.", tracingService.getAllOrderByDateASC(), is(Arrays.asList(new Long[]{1L, 2L, 3L})));
     }
 
-    @Ignore
     @Test
     public void should_return_all_order_ids_sorted_by_descending() throws Exception {
         Tracing[] orders = new Tracing[]{new Tracing(3), new Tracing(2), new Tracing(1)};
@@ -72,7 +71,6 @@ public class TracingServiceTest {
         assertThat("When call getAllOrderByDateDES() should return orders sorted by date.", tracingService.getAllOrderByDateDES(), is(Arrays.asList(new Long[]{3L, 2L, 1L})));
     }
 
-    @Ignore
     @Test
     public void should_return_search_result_when_give_search_conditions() throws Exception {
         String uniqueId = "uniqueId";
