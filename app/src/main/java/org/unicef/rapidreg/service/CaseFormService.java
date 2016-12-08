@@ -1,6 +1,7 @@
 package org.unicef.rapidreg.service;
 
 import org.unicef.rapidreg.forms.CaseTemplateForm;
+import org.unicef.rapidreg.model.CaseForm;
 
 public interface CaseFormService {
     boolean isReady();
@@ -9,5 +10,5 @@ public interface CaseFormService {
 
     CaseTemplateForm getGBVTemplate();
 
-    void saveOrUpdate(org.unicef.rapidreg.model.CaseForm caseForm);
+    void saveOrUpdate(CaseForm caseForm);
 }

@@ -28,8 +28,8 @@ public class PrimeroConfiguration {
         return currentUser;
     }
 
-    public static void setCurrentUser(User currentUser) {
-        PrimeroConfiguration.currentUser = currentUser;
+    public static void setCurrentUser(User user) {
+        currentUser = user;
     }
 
     public static void setCookie(String cookie) {

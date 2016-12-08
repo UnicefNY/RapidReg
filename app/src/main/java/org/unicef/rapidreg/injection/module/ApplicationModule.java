@@ -6,6 +6,7 @@ import android.content.Context;
 import org.unicef.rapidreg.db.impl.CaseDaoImpl;
 import org.unicef.rapidreg.db.impl.CaseFormDaoImpl;
 import org.unicef.rapidreg.db.impl.CasePhotoDaoImpl;
+import org.unicef.rapidreg.db.impl.TracingDaoImpl;
 import org.unicef.rapidreg.db.impl.TracingFormDaoImpl;
 import org.unicef.rapidreg.db.impl.TracingPhotoDaoImpl;
 import org.unicef.rapidreg.db.impl.UserDaoImpl;
@@ -82,7 +83,7 @@ public class ApplicationModule {
     @Provides
     @Singleton
     public TracingService provideTracingService() {
-        return new TracingService();
+        return new TracingService(new TracingDaoImpl(), new TracingPhotoDaoImpl());
     }
 
     @Provides
