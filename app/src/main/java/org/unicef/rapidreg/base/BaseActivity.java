@@ -31,7 +31,7 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public abstract class BaseActivity extends MvpActivity<BaseView, BasePresenter> implements NavigationView.OnNavigationItemSelectedListener, BaseView {
+public abstract class BaseActivity extends MvpActivity<BaseView, BasePresenter> implements NavigationView.OnNavigationItemSelectedListener {
     private static final int[][] COLOR_STATES = new int[][]{
             new int[]{android.R.attr.state_checked},
             new int[]{-android.R.attr.state_checked},};

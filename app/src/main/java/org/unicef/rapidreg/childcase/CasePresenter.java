@@ -65,7 +65,7 @@ public class CasePresenter extends RecordPresenter {
                     public void call(Throwable throwable) {
                         ((CaseActivity) getView()).setFormSyncFail(true);
                         if (isViewAttached()) {
-                            ((CaseView) getView()).promoteSyncCaseFail();
+                            getView().promoteSyncFormsError();
                         }
                     }
                 });

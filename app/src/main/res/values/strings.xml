@@ -107,7 +107,7 @@
     <string name="sync_forms">Sync forms</string>
     <string name="forms_is_syncing_msg">Syncing forms, please wait a moment</string>
     <string name="sync_forms_message">forms were not pulled down successfully, press OK to resync.</string>
-    <string name="sync_case_forms_error">Sync forms error, please try it later</string>
+    <string name="sync_forms_error">Sync forms error, please try it later</string>
     <string name="sync_tracing_forms_error">Sync forms error, please try it later</string>
     <string name="tracing_request">Tracing request</string>
     <string name="not_sync_promote">Not synced yet</string>

@@ -2,6 +2,7 @@ package org.unicef.rapidreg.tracing;
 
 import com.raizlabs.android.dbflow.data.Blob;
 
+import org.unicef.rapidreg.base.RecordConfiguration;
 import org.unicef.rapidreg.base.record.RecordPresenter;
 import org.unicef.rapidreg.forms.RecordForm;
 import org.unicef.rapidreg.forms.TracingTemplateForm;
@@ -17,6 +18,7 @@ import javax.inject.Inject;
 
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action1;
 import rx.functions.Func1;
 import rx.schedulers.Schedulers;
 
@@ -38,8 +40,8 @@ public class TracingPresenter extends RecordPresenter {
         tracingFormService.saveOrUpdateForm(tracingForm);
     }
 
-    public Observable<TracingTemplateForm> loadTracingForm(String cookie) {
-        return authService.getTracingForm(cookie,
+    public void loadTracingForm(String cookie) {
+        authService.getTracingForm(cookie,
                 Locale.getDefault().getLanguage(), true, "tracing_request", "primeromodule-cp")
                 .flatMap(new Func1<TracingTemplateForm, Observable<TracingTemplateForm>>() {
                     @Override
@@ -52,6 +54,19 @@ public class TracingPresenter extends RecordPresenter {
                 })
                 .retry(3)
                 .timeout(60, TimeUnit.SECONDS)
-                .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
+                .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Action1<TracingTemplateForm>() {
+                    @Override
+                    public void call(TracingTemplateForm tracingTemplateForm) {
+                        saveForm(tracingTemplateForm, RecordConfiguration.MODULE_ID_CP);
+                        ((TracingActivity) getView()).setFormSyncFail(false);
+                    }
+                }, new Action1<Throwable>() {
+                    @Override
+                    public void call(Throwable throwable) {
+                        ((TracingActivity) getView()).setFormSyncFail(true);
+                        getView().promoteSyncFormsError();
+                    }
+                });
     }
 }

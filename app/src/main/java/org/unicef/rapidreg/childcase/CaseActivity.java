@@ -5,7 +5,6 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.util.Log;
 import android.widget.Toast;
 
 import org.greenrobot.eventbus.EventBus;
@@ -13,21 +12,19 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 import org.unicef.rapidreg.IntentSender;
 import org.unicef.rapidreg.R;
+import org.unicef.rapidreg.base.BaseView;
 import org.unicef.rapidreg.base.RecordConfiguration;
 import org.unicef.rapidreg.base.record.RecordActivity;
 import org.unicef.rapidreg.childcase.caselist.CaseListFragment;
 import org.unicef.rapidreg.event.LoadCPCaseFormEvent;
 import org.unicef.rapidreg.event.LoadGBVCaseFormEvent;
 import org.unicef.rapidreg.event.SaveCaseEvent;
-import org.unicef.rapidreg.forms.CaseTemplateForm;
 import org.unicef.rapidreg.service.CaseService;
 import org.unicef.rapidreg.utils.Utils;
 
 import javax.inject.Inject;
 
-import rx.functions.Action1;
-
-public class CaseActivity extends RecordActivity implements CaseView{
+public class CaseActivity extends RecordActivity implements BaseView {
     public static final String TAG = CaseActivity.class.getSimpleName();
 
     @Inject
@@ -145,14 +142,13 @@ public class CaseActivity extends RecordActivity implements CaseView{
     @Subscribe(threadMode = ThreadMode.MAIN, sticky = true, priority = 1)
     public void onNeedLoadCPCaseFormsEvent(final LoadCPCaseFormEvent event) {
         EventBus.getDefault().removeStickyEvent(event);
-
         String moduleId = RecordConfiguration.MODULE_ID_CP;
         String cookie = event.getCookie();
         casePresenter.loadCaseForm(cookie, moduleId);
     }
 
     @Override
-    public void promoteSyncCaseFail() {
-        Toast.makeText(CaseActivity.this, R.string.sync_case_forms_error, Toast.LENGTH_SHORT).show();
+    public void promoteSyncFormsError() {
+        Toast.makeText(CaseActivity.this, R.string.sync_forms_error, Toast.LENGTH_SHORT).show();
     }
 }
