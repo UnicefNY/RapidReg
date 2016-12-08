@@ -24,7 +24,7 @@
         android:layout_marginTop="@dimen/login_username_top_margin"
         android:hint="@string/username_hint_text"
         android:imeOptions="actionDone"
-        android:singleLine="true"
+        android:text="primero"
         android:textColor="@color/primero_font_dark"/>
 
     <EditText
@@ -33,6 +33,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/login_input_margin"
         android:layout_marginRight="@dimen/login_input_margin"
+        android:text="qu01n23!"
         android:hint="@string/password_hint_text"
         android:inputType="textPassword"
         android:textColor="@color/primero_font_dark"/>
@@ -48,13 +49,14 @@
         <!--https://52.24.42.32:8443-->
         <!--https://52.34.194.254:8443-->
         <!--https://35.161.56.113:8443-->
+        <!--http://10.29.4.91:12306-->
         <EditText
             android:id="@+id/url"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/url_hint_text"
             android:inputType="textUri"
-            android:text="https://35.161.56.113:8443"/>
+            android:text="http://10.29.4.91:12306"/>
 
         <TextView
             android:id="@+id/change_url"

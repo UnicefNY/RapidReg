@@ -12,6 +12,18 @@ public class BaseForm extends BaseModel {
     @Column(name = "form_json")
     private Blob form;
 
+    @Column(name = "module_id")
+    private String moduleId;
+
+    public String getModuleId() {
+        return moduleId;
+    }
+
+    public void setModuleId(String moduleId) {
+        this.moduleId = moduleId;
+    }
+
+
     public BaseForm() {
     }
 

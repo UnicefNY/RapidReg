@@ -13,11 +13,13 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 import org.unicef.rapidreg.IntentSender;
 import org.unicef.rapidreg.R;
+import org.unicef.rapidreg.base.RecordConfiguration;
 import org.unicef.rapidreg.base.record.RecordActivity;
 import org.unicef.rapidreg.childcase.caselist.CaseListFragment;
-import org.unicef.rapidreg.event.LoadCaseFormEvent;
+import org.unicef.rapidreg.event.LoadCPCaseFormEvent;
+import org.unicef.rapidreg.event.LoadGBVCaseFormEvent;
 import org.unicef.rapidreg.event.SaveCaseEvent;
-import org.unicef.rapidreg.forms.CaseFormRoot;
+import org.unicef.rapidreg.forms.CaseTemplateForm;
 import org.unicef.rapidreg.service.CaseService;
 import org.unicef.rapidreg.utils.Utils;
 
@@ -138,14 +140,28 @@ public class CaseActivity extends RecordActivity {
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN, sticky = true, priority = 1)
-    public void onNeedLoadFormsEvent(final LoadCaseFormEvent event) {
+    public void onNeedLoadGBVCaseFormsEvent(final LoadGBVCaseFormEvent event) {
+        EventBus.getDefault().removeStickyEvent(event);
+        String moduleId = RecordConfiguration.MODULE_ID_GBV;
+        String cookie = event.getCookie();
+        loadCaseFormByModuleId(moduleId, cookie);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN, sticky = true, priority = 1)
+    public void onNeedLoadCPCaseFormsEvent(final LoadCPCaseFormEvent event) {
         EventBus.getDefault().removeStickyEvent(event);
 
-        casePresenter.loadCaseForm(event.getCookie())
-                .subscribe(new Action1<CaseFormRoot>() {
+        String moduleId = RecordConfiguration.MODULE_ID_CP;
+        String cookie = event.getCookie();
+        loadCaseFormByModuleId(moduleId, cookie);
+    }
+
+    private void loadCaseFormByModuleId(final String moduleId, String cookie) {
+        casePresenter.loadCaseForm(cookie, moduleId)
+                .subscribe(new Action1<CaseTemplateForm>() {
                     @Override
-                    public void call(CaseFormRoot caseFormRoot) {
-                        casePresenter.saveForm(caseFormRoot);
+                    public void call(CaseTemplateForm caseForm) {
+                        casePresenter.saveForm(caseForm, moduleId);
                         setFormSyncFail(false);
                         Log.i(TAG, "load case form successfully");
 

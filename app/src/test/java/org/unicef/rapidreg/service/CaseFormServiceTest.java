@@ -9,15 +9,18 @@ import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
 import org.unicef.rapidreg.db.CaseFormDao;
 import org.unicef.rapidreg.db.impl.CaseFormDaoImpl;
-import org.unicef.rapidreg.forms.CaseFormRoot;
+import org.unicef.rapidreg.forms.CaseTemplateForm;
 import org.unicef.rapidreg.forms.Field;
 import org.unicef.rapidreg.forms.Section;
+import org.unicef.rapidreg.model.CaseForm;
+import org.unicef.rapidreg.service.impl.CaseFormServiceImpl;
 
 import java.io.IOException;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
+import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -63,7 +66,7 @@ public class CaseFormServiceTest {
     @BeforeClass
     public static void setup() {
         caseFormDao = mock(CaseFormDaoImpl.class);
-        caseFormService = new CaseFormService(caseFormDao);
+        caseFormService = new CaseFormServiceImpl(caseFormDao);
     }
 
     @Before
@@ -72,8 +75,10 @@ public class CaseFormServiceTest {
 
     @Test
     public void should_get_case_form() throws IOException {
-        when(caseFormDao.getCaseFormContent()).thenReturn(new Blob(formForm.getBytes()));
-        CaseFormRoot form = caseFormService.getCurrentForm();
+        CaseForm caseForm = new CaseForm();
+        caseForm.setForm(new Blob(formForm.getBytes()));
+        when(caseFormDao.getCaseForm(anyString())).thenReturn(caseForm);
+        CaseTemplateForm form = caseFormService.getCPTemplate();
 
         assertThat(form.getSections().size(), is(1));
 

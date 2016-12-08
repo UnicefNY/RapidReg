@@ -100,8 +100,6 @@ public abstract class RecordRegisterPresenter extends MvpBasePresenter<RecordReg
 
     public abstract void saveRecord(SaveRecordCallback callback);
 
-    public abstract RecordForm getCurrentForm();
-    
     protected abstract ItemValuesMap getItemValuesByRecordId(Long recordId) throws JSONException;
 
     protected abstract List<String> getPhotoPathsByRecordId(Long recordId);
@@ -112,4 +110,5 @@ public abstract class RecordRegisterPresenter extends MvpBasePresenter<RecordReg
 
     public abstract List<Field> getFields(int position);
 
+    public abstract RecordForm getCPTemplate();
 }

@@ -28,7 +28,7 @@ public class CaseListPresenter extends RecordListPresenter {
 
     @Override
     public boolean isFormReady() {
-        return caseFormService.isFormReady();
+        return caseFormService.isReady();
     }
 
     @Override

@@ -9,7 +9,7 @@ import org.json.JSONException;
 import org.unicef.rapidreg.base.record.recordregister.RecordRegisterFragment;
 import org.unicef.rapidreg.base.record.recordregister.RecordRegisterPresenter;
 import org.unicef.rapidreg.base.record.recordregister.RecordRegisterView.SaveRecordCallback;
-import org.unicef.rapidreg.forms.CaseFormRoot;
+import org.unicef.rapidreg.forms.CaseTemplateForm;
 import org.unicef.rapidreg.forms.Field;
 import org.unicef.rapidreg.forms.RecordForm;
 import org.unicef.rapidreg.forms.Section;
@@ -33,7 +33,6 @@ import javax.inject.Inject;
 
 
 public class CaseRegisterPresenter extends RecordRegisterPresenter {
-
     private static final String TAG = CaseRegisterPresenter.class.getSimpleName();
 
     private CaseService caseService;
@@ -41,15 +40,11 @@ public class CaseRegisterPresenter extends RecordRegisterPresenter {
     private CasePhotoService casePhotoService;
 
     @Inject
-    public CaseRegisterPresenter(CaseService caseService, CaseFormService caseFormService, CasePhotoService casePhotoService) {
+    public CaseRegisterPresenter(CaseService caseService, CaseFormService caseFormService, CasePhotoService
+            casePhotoService) {
         this.caseService = caseService;
         this.caseFormService = caseFormService;
         this.casePhotoService = casePhotoService;
-    }
-
-    @Override
-    public CaseFormRoot getCurrentForm() {
-        return caseFormService.getCurrentForm();
     }
 
     @Override
@@ -61,7 +56,8 @@ public class CaseRegisterPresenter extends RecordRegisterPresenter {
     protected ItemValuesMap getItemValuesByRecordId(Long recordId) throws JSONException {
         Case caseItem = caseService.getById(recordId);
         String caseJson = new String(caseItem.getContent().getBlob());
-        ItemValuesMap itemValues = new ItemValuesMap(JsonUtils.toMap(ItemValues.generateItemValues(caseJson).getValues()));
+        ItemValuesMap itemValues = new ItemValuesMap(JsonUtils.toMap(ItemValues.generateItemValues(caseJson)
+                .getValues()));
         itemValues.addStringItem(CaseService.CASE_ID, caseItem.getUniqueId());
 
         DateFormat dateFormat = SimpleDateFormat.getDateInstance(DateFormat.MEDIUM, Locale.US);
@@ -87,7 +83,7 @@ public class CaseRegisterPresenter extends RecordRegisterPresenter {
     protected List<Field> getFields() {
         List<Field> fields = new ArrayList<>();
 
-        RecordForm form = getCurrentForm();
+        RecordForm form = caseFormService.getCPTemplate();
 
         List<Section> sections = form.getSections();
 
@@ -107,11 +103,16 @@ public class CaseRegisterPresenter extends RecordRegisterPresenter {
 
     @Override
     public List<Field> getFields(int position) {
-        RecordForm form = getCurrentForm();
+        RecordForm form = caseFormService.getCPTemplate();
         if (form != null) {
             return form.getSections().get(position).getFields();
         }
         return null;
+    }
+
+    @Override
+    public RecordForm getCPTemplate() {
+        return caseFormService.getCPTemplate();
     }
 
     @Override
@@ -135,8 +136,9 @@ public class CaseRegisterPresenter extends RecordRegisterPresenter {
             callback.onSavedFail();
         }
     }
+
     private boolean validateRequiredField(ItemValuesMap itemValuesMap) {
-        CaseFormRoot caseForm = getCurrentForm();
+        CaseTemplateForm caseForm = caseFormService.getCPTemplate();
         return RecordService.validateRequiredFields(caseForm, itemValuesMap);
     }
 }

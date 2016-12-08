@@ -8,7 +8,6 @@ import org.unicef.rapidreg.service.RecordService;
 import org.unicef.rapidreg.service.TracingFormService;
 import org.unicef.rapidreg.service.TracingService;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -30,7 +29,7 @@ public class TracingListPresenter extends RecordListPresenter {
 
     @Override
     public boolean isFormReady() {
-        return tracingFormService.isFormReady();
+        return tracingFormService.isReady();
     }
 
     @Override

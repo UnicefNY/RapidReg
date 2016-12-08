@@ -13,10 +13,11 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 import org.unicef.rapidreg.IntentSender;
 import org.unicef.rapidreg.R;
+import org.unicef.rapidreg.base.RecordConfiguration;
 import org.unicef.rapidreg.base.record.RecordActivity;
 import org.unicef.rapidreg.event.LoadTracingFormEvent;
 import org.unicef.rapidreg.event.SaveTracingEvent;
-import org.unicef.rapidreg.forms.TracingFormRoot;
+import org.unicef.rapidreg.forms.TracingTemplateForm;
 import org.unicef.rapidreg.service.TracingService;
 import org.unicef.rapidreg.tracing.tracinglist.TracingListFragment;
 import org.unicef.rapidreg.utils.Utils;
@@ -137,10 +138,10 @@ public class TracingActivity extends RecordActivity {
         EventBus.getDefault().removeStickyEvent(event);
 
         tracingPresenter.loadTracingForm(event.getCookie())
-                .subscribe(new Action1<TracingFormRoot>() {
+                .subscribe(new Action1<TracingTemplateForm>() {
                     @Override
-                    public void call(TracingFormRoot tracingFormRoot) {
-                        tracingPresenter.saveForm(tracingFormRoot);
+                    public void call(TracingTemplateForm tracingTemplateForm) {
+                        tracingPresenter.saveForm(tracingTemplateForm, RecordConfiguration.MODULE_ID_CP);
                         setFormSyncFail(false);
                         Log.i(TAG, "load tracing form successfully");
 
