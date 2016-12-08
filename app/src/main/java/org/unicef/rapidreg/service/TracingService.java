@@ -9,6 +9,7 @@ import com.raizlabs.android.dbflow.sql.language.Condition;
 import com.raizlabs.android.dbflow.sql.language.ConditionGroup;
 import com.raizlabs.android.dbflow.sql.language.NameAlias;
 
+import org.unicef.rapidreg.PrimeroConfiguration;
 import org.unicef.rapidreg.db.TracingDao;
 import org.unicef.rapidreg.db.TracingPhotoDao;
 import org.unicef.rapidreg.db.impl.TracingDaoImpl;
@@ -38,18 +39,10 @@ public class TracingService extends RecordService {
     private TracingDao tracingDao = new TracingDaoImpl();
     private TracingPhotoDao tracingPhotoDao = new TracingPhotoDaoImpl();
 
-    UserService userService;
+    public TracingService() {}
 
-    public TracingService(UserService userService) {
-        this.userService = userService;
-    }
-
-    public TracingService(TracingDao tracingDao) {
-        this.tracingDao = tracingDao;
-    }
-
-    public Tracing getById(long caseId) {
-        return tracingDao.getTracingById(caseId);
+    public Tracing getById(long tracingId) {
+        return tracingDao.getTracingById(tracingId);
     }
     public Tracing getByUniqueId(String uniqueId) {
         return tracingDao.getTracingByUniqueId(uniqueId);
@@ -114,7 +107,7 @@ public class TracingService extends RecordService {
         String uniqueId = createUniqueId();
         itemValues.addStringItem(TRACING_DISPLAY_ID, getShortUUID(uniqueId));
         itemValues.addStringItem(TRACING_ID, uniqueId);
-        String username = userService.getCurrentUser().getUsername();
+        String username = PrimeroConfiguration.getCurrentUser().getUsername();
         itemValues.addStringItem(MODULE, "primeromodule-cp");
         itemValues.addStringItem(CASEWORKER_CODE, username);
         itemValues.addStringItem(RECORD_CREATED_BY, username);

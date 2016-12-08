@@ -9,6 +9,7 @@ import com.raizlabs.android.dbflow.sql.language.Condition;
 import com.raizlabs.android.dbflow.sql.language.ConditionGroup;
 import com.raizlabs.android.dbflow.sql.language.NameAlias;
 
+import org.unicef.rapidreg.PrimeroConfiguration;
 import org.unicef.rapidreg.db.CaseDao;
 import org.unicef.rapidreg.db.CasePhotoDao;
 import org.unicef.rapidreg.db.impl.CaseDaoImpl;
@@ -123,7 +124,7 @@ public class CaseService extends RecordService {
 
     public Case save(ItemValues itemValues, List<String> photoPath) throws IOException {
         String uniqueId = createUniqueId();
-        String username = userService.getCurrentUser().getUsername();
+        String username = PrimeroConfiguration.getCurrentUser().getUsername();
         itemValues.addStringItem(CASE_DISPLAY_ID, getShortUUID(uniqueId));
         itemValues.addStringItem(CASE_ID, uniqueId);
         itemValues.addStringItem(MODULE, "primeromodule-cp");

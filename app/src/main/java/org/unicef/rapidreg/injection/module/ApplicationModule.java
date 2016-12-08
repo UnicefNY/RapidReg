@@ -81,8 +81,8 @@ public class ApplicationModule {
 
     @Provides
     @Singleton
-    public TracingService provideTracingService(UserService userService) {
-        return new TracingService(userService);
+    public TracingService provideTracingService() {
+        return new TracingService();
     }
 
     @Provides

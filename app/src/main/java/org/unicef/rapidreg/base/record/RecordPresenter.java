@@ -13,9 +13,7 @@ public class RecordPresenter extends BasePresenter {
     protected final Gson gson = new Gson();
 
     @Inject
-    public RecordPresenter(UserService userService) {
-        super(userService);
-    }
+    public RecordPresenter() {}
 
     public void saveForm(RecordForm recordForm, String moduleId) {}
 }

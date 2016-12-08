@@ -26,8 +26,7 @@ public class TracingPresenter extends RecordPresenter {
     private AuthService authService;
 
     @Inject
-    public TracingPresenter(UserService userService, AuthService authService, TracingFormService tracingFormService) {
-        super(userService);
+    public TracingPresenter(AuthService authService, TracingFormService tracingFormService) {
         this.authService = authService;
         this.tracingFormService = tracingFormService;
     }

@@ -143,7 +143,7 @@ public class LoginPresenter extends MvpBasePresenter<LoginView> {
                                 user.setLanguage(loginResponse.getLanguage());
                                 user.setVerified(loginResponse.getVerified());
 
-                                userService.setCurrentUser(user);
+                                PrimeroConfiguration.setCurrentUser(user);
                                 userService.saveOrUpdateUser(user);
 
                                 goToLoginSuccessScreen();
@@ -186,7 +186,7 @@ public class LoginPresenter extends MvpBasePresenter<LoginView> {
         showLoginResultMessage(context.getResources().getString(verifiedCode.getResId()));
 
         if (verifiedCode == UserService.VerifiedCode.OK) {
-            userService.setCurrentUser(userService.getUser(username));
+            PrimeroConfiguration.setCurrentUser(userService.getUser(username));
             goToLoginSuccessScreen();
         }
     }

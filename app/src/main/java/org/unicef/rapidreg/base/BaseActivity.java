@@ -152,7 +152,7 @@ public abstract class BaseActivity extends MvpActivity<BaseView, BasePresenter> 
     }
 
     protected void logOut() {
-        basePresenter.setCurrentUser(null);
+        basePresenter.logOut();
         String message = getContext().getResources().getString(R.string.login_out_successful_text);
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
         intentSender.showLoginActivity(this);
