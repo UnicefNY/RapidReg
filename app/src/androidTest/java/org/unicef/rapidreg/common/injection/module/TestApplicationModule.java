@@ -69,7 +69,7 @@ public class TestApplicationModule {
 
     @Provides
     @Singleton
-    public CaseService provideCaseService(UserService userService) {
+    public CaseService provideCaseService() {
         return mock(CaseService.class);
     }
 
@@ -81,7 +81,7 @@ public class TestApplicationModule {
 
     @Provides
     @Singleton
-    public TracingService provideTracingService(UserService userService) {
+    public TracingService provideTracingService() {
         return mock(TracingService.class);
     }
 
