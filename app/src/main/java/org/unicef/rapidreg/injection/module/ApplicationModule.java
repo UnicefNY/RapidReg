@@ -58,8 +58,8 @@ public class ApplicationModule {
 
     @Provides
     @Singleton
-    public CaseService provideCaseService(UserService userService) {
-        return new CaseService(userService, new CaseDaoImpl());
+    public CaseService provideCaseService() {
+        return new CaseService(new CaseDaoImpl());
     }
 
     @Provides
@@ -110,8 +110,8 @@ public class ApplicationModule {
     }
 
     @Provides
-    public SyncTracingService provideSyncTracingService(@ApplicationContext Context context, TracingPhotoService
-            tracingPhotoService) {
+    public SyncTracingService provideSyncTracingService(@ApplicationContext Context context,
+                                                        TracingPhotoService tracingPhotoService) {
         return new SyncTracingService(context, tracingPhotoService);
     }
 }
