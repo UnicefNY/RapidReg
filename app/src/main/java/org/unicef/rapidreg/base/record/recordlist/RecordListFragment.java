@@ -8,6 +8,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.LinearLayout;
@@ -16,6 +17,7 @@ import android.widget.Toast;
 import android.widget.ViewSwitcher;
 
 import com.getbase.floatingactionbutton.FloatingActionButton;
+import com.getbase.floatingactionbutton.FloatingActionsMenu;
 import com.hannesdorfmann.mosby.mvp.MvpFragment;
 
 import org.unicef.rapidreg.PrimeroApplication;
@@ -29,10 +31,15 @@ import org.unicef.rapidreg.injection.module.FragmentModule;
 import org.unicef.rapidreg.utils.Utils;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map.Entry;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+
+import static android.view.View.*;
+import static android.view.View.INVISIBLE;
 
 public abstract class RecordListFragment extends MvpFragment<RecordListView, RecordListPresenter>
         implements RecordListView {
@@ -48,6 +55,9 @@ public abstract class RecordListFragment extends MvpFragment<RecordListView, Rec
 
     @BindView(R.id.add)
     protected FloatingActionButton addButton;
+
+    @BindView(R.id.add_menu)
+    protected FloatingActionsMenu addMenu;
 
     @BindView(R.id.container)
     protected LinearLayout container;
@@ -77,6 +87,45 @@ public abstract class RecordListFragment extends MvpFragment<RecordListView, Rec
 
         initListContainer(recordListAdapter);
         initOrderSpinner(recordListAdapter);
+
+        initCreateEventView(getCreateEvents());
+    }
+
+    private void initCreateEventView(HashMap<String, OnClickListener> events) {
+        if (events.isEmpty()) {
+            initFloatingActionButton();
+        }
+
+        if (events.size() == 1) {
+            initFloatingActionButton();
+        } else {
+            initFloatingActionMenu(events);
+        }
+    }
+
+    private void initFloatingActionMenu(HashMap<String, OnClickListener> events) {
+        addMenu.setVisibility(VISIBLE);
+        addButton.setVisibility(INVISIBLE);
+
+        for(Entry<String, OnClickListener> entry : events.entrySet()) {
+            addMenu.addButton(createFloatingActionButton(entry.getKey(), entry.getValue()));
+        }
+    }
+
+    private void initFloatingActionButton() {
+        addButton.setVisibility(VISIBLE);
+        addMenu.setVisibility(INVISIBLE);
+    }
+
+    private FloatingActionButton createFloatingActionButton(String title, OnClickListener listener) {
+        FloatingActionButton button = new FloatingActionButton(getActivity());
+        button.setTitle(title);
+        button.setColorNormalResId(R.color.primero_lighter_white);
+        button.setColorPressedResId(R.color.primero_lighter_white);
+        button.setIcon(R.drawable.add_blue);
+        button.setOnClickListener(listener);
+
+        return button;
     }
 
     protected FragmentComponent getComponent() {
@@ -148,6 +197,8 @@ public abstract class RecordListFragment extends MvpFragment<RecordListView, Rec
     protected abstract int getDefaultSpinnerStatePosition();
 
     protected abstract SpinnerState[] getDefaultSpinnerStates();
+
+    protected abstract HashMap<String,OnClickListener> getCreateEvents();
 
     protected abstract void sendSyncFormEvent();
 }
