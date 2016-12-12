@@ -38,6 +38,7 @@ public class SyncService extends BaseRetrofitService {
     private SyncServiceInterface serviceInterface;
 
     private CasePhotoService casePhotoService;
+
     @Override
     String getBaseUrl() {
         return PrimeroConfiguration.getApiBaseUrl();

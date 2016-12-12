@@ -19,7 +19,6 @@ import org.unicef.rapidreg.service.UserService;
 import javax.inject.Inject;
 
 import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
@@ -28,7 +27,8 @@ import static org.mockito.MockitoAnnotations.initMocks;
 @Config(constants = BuildConfig.class, sdk = Build.VERSION_CODES.JELLY_BEAN)
 public class LoginPresenterTest {
 
-    private LoginPresenter loginPresenter;
+    @Inject
+    LoginPresenter loginPresenter;
 
     @Mock
     private Context context;
@@ -52,7 +52,6 @@ public class LoginPresenterTest {
 
     @Test
     public void should_show_error_when_validate_empty_password_and_passord() {
-
         when(userService.isNameValid("")).thenReturn(false);
         when(userService.isPasswordValid("")).thenReturn(false);
         when(userService.isUrlValid("http://10.29.3.184:3000")).thenReturn(true);
@@ -63,10 +62,8 @@ public class LoginPresenterTest {
         assertEquals(valid, false);
     }
 
-
     @Test
     public void should_show_error_when_invalid_user_format() {
-
         when(userService.isNameValid("pri mero")).thenReturn(false);
         when(userService.isPasswordValid("password")).thenReturn(true);
         when(userService.isUrlValid("http://10.29.3.184:3000")).thenReturn(true);

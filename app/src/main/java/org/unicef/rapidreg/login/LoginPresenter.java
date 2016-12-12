@@ -85,7 +85,6 @@ public class LoginPresenter extends MvpBasePresenter<LoginView> {
         } else {
             doLoginOffline(context, username, password);
         }
-
     }
 
     public boolean validate(Context context, String username, String password, String url) {

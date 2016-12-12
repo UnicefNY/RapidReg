@@ -1,42 +1,29 @@
 package org.unicef.rapidreg.service;
 
 import com.raizlabs.android.dbflow.sql.language.ConditionGroup;
-
 import org.easymock.EasyMock;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.powermock.api.easymock.PowerMock;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 import org.unicef.rapidreg.PrimeroConfiguration;
 import org.unicef.rapidreg.db.impl.TracingDaoImpl;
 import org.unicef.rapidreg.db.impl.TracingPhotoDaoImpl;
 import org.unicef.rapidreg.model.Tracing;
-import org.unicef.rapidreg.model.User;
 import org.unicef.rapidreg.service.cache.ItemValues;
-
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-
 import edu.emory.mathcs.backport.java.util.Arrays;
-
-import static org.easymock.EasyMock.expect;
-import static org.easymock.EasyMock.verify;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
-import static org.powermock.api.easymock.PowerMock.*;
 
 @RunWith(PowerMockRunner.class)
 @PrepareForTest( {UUID.class, PrimeroConfiguration.class, TracingService.class} )
