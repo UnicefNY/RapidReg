@@ -5,6 +5,7 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import org.greenrobot.eventbus.EventBus;
 import org.unicef.rapidreg.PrimeroConfiguration;
@@ -18,6 +19,7 @@ import org.unicef.rapidreg.tracing.TracingActivity;
 import org.unicef.rapidreg.tracing.TracingFeature;
 
 import java.util.Arrays;
+import java.util.HashMap;
 
 import javax.inject.Inject;
 
@@ -60,6 +62,13 @@ public class TracingListFragment extends RecordListFragment {
     @Override
     protected SpinnerState[] getDefaultSpinnerStates() {
         return SPINNER_STATES;
+    }
+
+    @Override
+    protected HashMap<String, View.OnClickListener> getCreateEvents() {
+        HashMap<String, View.OnClickListener> events = new HashMap<>();
+        events.put("Tracing", null);
+        return events;
     }
 
     @Override

@@ -5,6 +5,7 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import org.greenrobot.eventbus.EventBus;
 import org.unicef.rapidreg.PrimeroConfiguration;
@@ -18,10 +19,11 @@ import org.unicef.rapidreg.childcase.CaseFeature;
 import org.unicef.rapidreg.event.LoadCPCaseFormEvent;
 
 import java.util.Arrays;
+import java.util.HashMap;
 
 import javax.inject.Inject;
 
-import butterknife.OnClick;
+import static android.view.View.*;
 
 
 public class CaseListFragment extends RecordListFragment {
@@ -61,6 +63,32 @@ public class CaseListFragment extends RecordListFragment {
     }
 
     @Override
+    protected HashMap<String, OnClickListener> getCreateEvents() {
+        HashMap<String, OnClickListener> events = new HashMap<>();
+        events.put("CASE", createOnClickListener("CASE"));
+        events.put("GBV", createOnClickListener("GBV"));
+        return events;
+    }
+
+    private OnClickListener createOnClickListener(String eventType) {
+        switch (eventType) {
+            case "CASE" : return new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    onCPCaseAddClicked();
+                }
+            };
+            case "GBV" :return new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    onGBVCaseAddClicked();
+                }
+            };
+            default: return null;
+        }
+    }
+
+    @Override
     protected void sendSyncFormEvent() {
         EventBus.getDefault().postSticky(new LoadCPCaseFormEvent(PrimeroConfiguration.getCookie()));
     }
@@ -70,8 +98,7 @@ public class CaseListFragment extends RecordListFragment {
         return caseListAdapter;
     }
 
-    @OnClick(R.id.add)
-    public void onCaseAddClicked() {
+    private void onCPCaseAddClicked() {
         caseListPresenter.clearAudioFile();
 
         if (!caseListPresenter.isFormReady()) {
@@ -81,6 +108,11 @@ public class CaseListFragment extends RecordListFragment {
 
         RecordActivity activity = (RecordActivity) getActivity();
         activity.turnToFeature(CaseFeature.ADD_MINI, null, null);
+    }
+
+    private void onGBVCaseAddClicked() {
+        //TODO redirect to GBVCaseRegisterFragment
+        Toast.makeText(getActivity(), "GBV creation has been clicked", Toast.LENGTH_SHORT).show();
     }
 
 }
