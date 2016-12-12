@@ -2,6 +2,7 @@ package org.unicef.rapidreg.service;
 
 import com.raizlabs.android.dbflow.sql.language.ConditionGroup;
 
+import org.easymock.EasyMock;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -9,6 +10,7 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.powermock.api.easymock.PowerMock;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 import org.unicef.rapidreg.PrimeroConfiguration;
@@ -26,6 +28,7 @@ import java.util.UUID;
 import edu.emory.mathcs.backport.java.util.Arrays;
 
 import static org.easymock.EasyMock.expect;
+import static org.easymock.EasyMock.verify;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Matchers.any;
@@ -36,7 +39,7 @@ import static org.mockito.MockitoAnnotations.initMocks;
 import static org.powermock.api.easymock.PowerMock.*;
 
 @RunWith(PowerMockRunner.class)
-@PrepareForTest( {UUID.class, PrimeroConfiguration.class} )
+@PrepareForTest( {UUID.class, PrimeroConfiguration.class, TracingService.class} )
 public class TracingServiceTest {
 
     @Mock
@@ -50,7 +53,6 @@ public class TracingServiceTest {
     @Before
     public void setUp() throws Exception {
         initMocks(this);
-        mockStatic(UUID.class);
 
         tracingService = new TracingService(tracingDao, tracingPhotoDao);
     }
@@ -73,11 +75,6 @@ public class TracingServiceTest {
 
     @Test
     public void should_return_search_result_when_give_search_conditions() throws Exception {
-        String uniqueId = "uniqueId";
-        String name = "name";
-        int fromAge = 1;
-        int toAge = 20;
-        Date date = new Date(20161108);
 
         Tracing[] orders = new Tracing[]{new Tracing(3), new Tracing(2), new Tracing(1)};
         List<Tracing> orderList = Arrays.asList(orders);
@@ -85,32 +82,23 @@ public class TracingServiceTest {
         when(tracingDao.getAllTracingsByConditionGroup(any(ConditionGroup.class))).thenReturn(orderList);
 
         assertThat("When call getSearchResult() should return search result depends on search condition",
-                tracingService.getSearchResult(uniqueId, name, fromAge, toAge, date),
+                tracingService.getSearchResult("uniqueId", "name", 1, 20, new Date(20161108)),
                 is(Arrays.asList(new Long[]{3L, 2L, 1L})));
     }
 
-    @Ignore
     @Test
-    public void should_return_save_tracing_and_store_photos_when_give_item_values_and_photos() throws Exception {
+    public void should_return_tracing_and_store_photos_when_give_item_values_and_photos() throws Exception {
+        ItemValues itemValues = new ItemValues();
+        List<String> photoPaths = new ArrayList<>();
 
-        mockStatic(PrimeroConfiguration.class);
+        Tracing tracing = EasyMock.mock(Tracing.class);
 
-        String uuid = "123test";
-        TracingService tracingServiceSpy = spy(tracingService);
-        when(tracingServiceSpy.createUniqueId()).thenReturn(uuid);
+        when(tracingDao.save(itemValues)).thenReturn(tracing);
+        when(tracingPhotoDao.save(tracing, photoPaths)).thenReturn(tracing);
 
-        User user = mock(User.class);
-        when(user.getUsername()).thenReturn("userName");
-        expect(PrimeroConfiguration.getCurrentUser()).andReturn(user);
-        replay(PrimeroConfiguration.class);
+        tracingService.save(itemValues, photoPaths);
 
-        Tracing actual = tracingService.save(new ItemValues(), new ArrayList<String>());
-
-        Mockito.verify(actual).save();
-        Mockito.verify(tracingServiceSpy).createUniqueId();
-
-        assertThat("When call save() should return tracing which has same record id", actual.getUniqueId(), is(uuid));
+        Mockito.verify(tracingDao).save(itemValues);
+        Mockito.verify(tracingPhotoDao).save(tracing, photoPaths);
     }
-
-
 }

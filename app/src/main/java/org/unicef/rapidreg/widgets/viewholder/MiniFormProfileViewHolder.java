@@ -19,6 +19,8 @@ import org.unicef.rapidreg.service.cache.ItemValuesMap;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+import static org.unicef.rapidreg.db.impl.TracingDaoImpl.TRACING_ID;
+
 public class MiniFormProfileViewHolder extends BaseViewHolder<Field> {
 
     public static final String TAG = MiniFormProfileViewHolder.class.getSimpleName();
@@ -50,7 +52,7 @@ public class MiniFormProfileViewHolder extends BaseViewHolder<Field> {
         if (itemValues.getAsString(TracingService.SEX) != null) {
             gender = Gender.valueOf(itemValues.getAsString(TracingService.SEX).toUpperCase());
         } else {
-            gender = itemValues.has(TracingService.TRACING_ID)
+            gender = itemValues.has(TRACING_ID)
                     ? Gender.EMPTY
                     : Gender.PLACEHOLDER;
         }

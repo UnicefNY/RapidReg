@@ -32,6 +32,8 @@ import rx.Observable;
 import rx.Subscriber;
 import rx.functions.Func1;
 
+import static org.unicef.rapidreg.db.impl.TracingDaoImpl.TRACING_ID;
+
 
 public class SyncTracingService extends BaseRetrofitService {
 
@@ -70,7 +72,7 @@ public class SyncTracingService extends BaseRetrofitService {
         ItemValues values = ItemValues.fromJson(new String(item.getContent().getBlob()));
         String shortUUID = RecordService.getShortUUID(item.getUniqueId());
         values.addStringItem("short_id", shortUUID);
-        values.addStringItem(TracingService.TRACING_ID, shortUUID);
+        values.addStringItem(TRACING_ID, shortUUID);
         values.addStringItem("tracing_request_id", item.getUniqueId());
         values.removeItem("_attachments");
 
