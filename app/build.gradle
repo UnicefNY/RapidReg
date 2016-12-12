@@ -59,15 +59,16 @@ android {
     }
 }
 
+def androidSupportVersion = '23.3.0'
 def powerMockVersion = '1.6.5'
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile "com.android.support:appcompat-v7:23.3.0"
-    compile "com.android.support:design:23.3.0"
-    compile "com.android.support:recyclerview-v7:23.3.0"
-    compile 'com.android.support:support-v4:23.3.0'
-    compile "com.android.support:cardview-v7:23.3.0"
+    compile "com.android.support:appcompat-v7:${androidSupportVersion}"
+    compile "com.android.support:design:${androidSupportVersion}"
+    compile "com.android.support:recyclerview-v7:${androidSupportVersion}"
+    compile "com.android.support:support-v4:${androidSupportVersion}"
+    compile "com.android.support:cardview-v7:${androidSupportVersion}"
 
     compile 'com.google.dagger:dagger:2.4'
     apt 'com.google.dagger:dagger-compiler:2.4'
