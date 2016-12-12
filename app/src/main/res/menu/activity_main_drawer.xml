@@ -13,6 +13,10 @@
             android:id="@+id/nav_tracing"
             android:icon="@drawable/tracing"
             android:title="Tracing request" />
+        <item
+            android:id="@+id/nav_incident"
+            android:icon="@drawable/connect_big"
+            android:title="Incident"/>
     </group>
 
     <group

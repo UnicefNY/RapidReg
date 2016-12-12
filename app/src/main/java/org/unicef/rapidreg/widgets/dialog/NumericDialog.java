@@ -16,7 +16,8 @@ public class NumericDialog extends BaseDialog {
 
     private EditText editText;
 
-    public NumericDialog(Context context, Field field, ItemValuesMap itemValues, TextView resultView, ViewSwitcher viewSwitcher) {
+    public NumericDialog(Context context, Field field, ItemValuesMap itemValues, TextView
+            resultView, ViewSwitcher viewSwitcher) {
         super(context, field, itemValues, resultView, viewSwitcher);
     }
 

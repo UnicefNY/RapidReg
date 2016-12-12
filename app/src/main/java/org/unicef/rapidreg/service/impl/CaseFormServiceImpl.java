@@ -1,7 +1,6 @@
 package org.unicef.rapidreg.service.impl;
 
 import android.text.TextUtils;
-import android.util.Log;
 
 import com.google.gson.Gson;
 import com.raizlabs.android.dbflow.data.Blob;

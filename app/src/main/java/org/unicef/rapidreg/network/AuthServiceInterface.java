@@ -2,6 +2,7 @@ package org.unicef.rapidreg.network;
 
 
 import org.unicef.rapidreg.forms.CaseTemplateForm;
+import org.unicef.rapidreg.forms.IncidentTemplateForm;
 import org.unicef.rapidreg.forms.TracingTemplateForm;
 import org.unicef.rapidreg.model.LoginRequestBody;
 import org.unicef.rapidreg.model.LoginResponse;
@@ -29,6 +30,14 @@ public interface AuthServiceInterface {
 
     @GET("/api/form_sections")
     Observable<TracingTemplateForm> getTracingForm(
+            @Header("Cookie") String cookie,
+            @Query("locale") String locale,
+            @Query("mobile") Boolean isMobile,
+            @Query("parent_form") String parentForm,
+            @Query("module_id") String moduleId);
+
+    @GET("/api/form_sections")
+    Observable<IncidentTemplateForm> getIncidentForm(
             @Header("Cookie") String cookie,
             @Query("locale") String locale,
             @Query("mobile") Boolean isMobile,

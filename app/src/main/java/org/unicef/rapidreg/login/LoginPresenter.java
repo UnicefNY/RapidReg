@@ -14,6 +14,7 @@ import org.unicef.rapidreg.PrimeroConfiguration;
 import org.unicef.rapidreg.R;
 import org.unicef.rapidreg.event.LoadCPCaseFormEvent;
 import org.unicef.rapidreg.event.LoadGBVCaseFormEvent;
+import org.unicef.rapidreg.event.LoadGBVIncidentFormEvent;
 import org.unicef.rapidreg.event.LoadTracingFormEvent;
 import org.unicef.rapidreg.injection.ActivityContext;
 import org.unicef.rapidreg.model.LoginRequestBody;
@@ -147,6 +148,8 @@ public class LoginPresenter extends MvpBasePresenter<LoginView> {
 
                                 goToLoginSuccessScreen();
 
+                                EventBus.getDefault().postSticky(new LoadGBVIncidentFormEvent(PrimeroConfiguration
+                                        .getCookie()));
                                 EventBus.getDefault().postSticky(new LoadGBVCaseFormEvent(PrimeroConfiguration
                                         .getCookie()));
                                 EventBus.getDefault().postSticky(new LoadCPCaseFormEvent(PrimeroConfiguration

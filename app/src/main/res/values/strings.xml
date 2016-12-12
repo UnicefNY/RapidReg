@@ -48,6 +48,9 @@
     <string name="child_case">Case</string>
     <string name="edit">Edit</string>
     <string name="case_details">Case details</string>
+    <string name="incidents">Incidents</string>
+    <string name="child_incident">Incident</string>
+    <string name="incident_details">Incident details</string>
     <string name="tracing">Tracing request</string>
     <string name="tracing_details">Tracing request details</string>
     <string name="sync">Synchronization</string>
@@ -70,6 +73,7 @@
     <string name="save">Save</string>
     <string name="new_case">New case</string>
     <string name="new_tracing">New tracing request</string>
+    <string name="new_incident">New incident</string>
     <string name="quit">Quit</string>
     <string name="quit_without_saving">Are you sure you want to quit without saving?</string>
     <string name="delete_subform">Are you sure you want to delete this subform</string>
@@ -109,6 +113,7 @@
     <string name="sync_forms_message">forms were not pulled down successfully, press OK to resync.</string>
     <string name="sync_forms_error">Sync forms error, please try it later</string>
     <string name="sync_tracing_forms_error">Sync forms error, please try it later</string>
+    <string name="sync_incident_forms_error">Sync forms error, please try it later</string>
     <string name="tracing_request">Tracing request</string>
     <string name="not_sync_promote">Not synced yet</string>
     <string name="produce_cases_successfully_msg">Produce cases complete!</string>

@@ -18,7 +18,8 @@ public class MultipleSelectDialog extends BaseDialog {
     private List<String> result;
     private String[] optionItems;
 
-    public MultipleSelectDialog(Context context, Field field, ItemValuesMap itemValues, TextView resultView, ViewSwitcher viewSwitcher) {
+    public MultipleSelectDialog(Context context, Field field, ItemValuesMap itemValues, TextView
+            resultView, ViewSwitcher viewSwitcher) {
         super(context, field, itemValues, resultView, viewSwitcher);
         result = new ArrayList<>();
     }
@@ -29,7 +30,8 @@ public class MultipleSelectDialog extends BaseDialog {
         optionItems = getSelectOptions(fieldType, field);
         result.addAll(itemValues.getAsList(field.getName()));
 
-        boolean[] selectedValues = getSelectedValues(itemValues.getAsList(field.getName()), optionItems);
+        boolean[] selectedValues = getSelectedValues(itemValues.getAsList(field.getName()),
+                optionItems);
 
         getBuilder().setMultiChoiceItems(optionItems, selectedValues,
                 new DialogInterface.OnMultiChoiceClickListener() {

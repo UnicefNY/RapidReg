@@ -16,7 +16,8 @@ public class MultipleTextDialog extends BaseDialog {
 
     private EditText editText;
 
-    public MultipleTextDialog(Context context, Field field, ItemValuesMap itemValues, TextView resultView, ViewSwitcher viewSwitcher) {
+    public MultipleTextDialog(Context context, Field field, ItemValuesMap itemValues, TextView
+            resultView, ViewSwitcher viewSwitcher) {
         super(context, field, itemValues, resultView, viewSwitcher);
     }
 

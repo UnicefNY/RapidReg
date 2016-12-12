@@ -81,6 +81,16 @@ public class CaseActivity extends RecordActivity implements BaseView {
     }
 
     @Override
+    protected void navIncidentAction() {
+        if (currentFeature.isEditMode()) {
+            showQuitDialog(R.id.nav_incident);
+        } else {
+            CaseService.clearAudioFile();
+            intentSender.showIncidentActivity(this);
+        }
+    }
+
+    @Override
     protected void showQuitDialog(final int clickedButton) {
         AlertDialog dialog = new AlertDialog.Builder(this)
                 .setTitle(R.string.quit)
@@ -95,6 +105,9 @@ public class CaseActivity extends RecordActivity implements BaseView {
                                 break;
                             case R.id.nav_tracing:
                                 intentSender.showTracingActivity(CaseActivity.this);
+                                break;
+                            case R.id.nav_incident:
+                                intentSender.showIncidentActivity(CaseActivity.this);
                                 break;
                             case R.id.nav_sync:
                                 intentSender.showSyncActivity(CaseActivity.this);

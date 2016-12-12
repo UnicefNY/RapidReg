@@ -13,7 +13,8 @@ public class DateDialog extends BaseDialog {
     private String result;
     private DatePicker datePicker;
 
-    public DateDialog(Context context, Field field, ItemValuesMap itemValues, TextView resultView, ViewSwitcher viewSwitcher) {
+    public DateDialog(Context context, Field field, ItemValuesMap itemValues, TextView
+            resultView, ViewSwitcher viewSwitcher) {
         super(context, field, itemValues, resultView, viewSwitcher);
         result = resultView.getText().toString().trim();
     }
@@ -34,6 +35,7 @@ public class DateDialog extends BaseDialog {
 
     @Override
     public String getResult() {
-        return String.format("%s/%s/%s",  datePicker.getDayOfMonth(),datePicker.getMonth() + 1, datePicker.getYear());
+        return String.format("%s/%s/%s", datePicker.getDayOfMonth(), datePicker.getMonth() + 1,
+                datePicker.getYear());
     }
 }
