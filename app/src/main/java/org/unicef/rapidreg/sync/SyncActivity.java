@@ -38,6 +38,11 @@ public class SyncActivity extends BaseActivity {
     }
 
     @Override
+    protected void navIncidentAction() {
+        intentSender.showIncidentActivity(this);
+    }
+
+    @Override
     protected void processBackButton() {
         intentSender.showCasesActivity(this, true);
     }

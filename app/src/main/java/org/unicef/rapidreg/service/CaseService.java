@@ -28,9 +28,6 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.UUID;
 
-import javax.inject.Inject;
-import javax.inject.Singleton;
-
 public class CaseService extends RecordService {
     public static final String TAG = CaseService.class.getSimpleName();
     public static final String CASE_DISPLAY_ID = "case_id_display";

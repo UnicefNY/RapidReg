@@ -1,12 +1,10 @@
 package org.unicef.rapidreg.tracing.tracingsearch;
 
-import android.content.Context;
-
 import org.unicef.rapidreg.base.record.recordsearch.RecordSearchPresenter;
 import org.unicef.rapidreg.service.TracingService;
-import org.unicef.rapidreg.tracing.tracinglist.TracingListAdapter;
 
 import java.util.List;
+
 import javax.inject.Inject;
 
 public class TracingSearchPresenter extends RecordSearchPresenter {
@@ -18,7 +16,9 @@ public class TracingSearchPresenter extends RecordSearchPresenter {
     }
 
     @Override
-    protected List<Long> getSearchResult(String shortId, String name, int ageFrom, int ageTo, String caregiver, String registrationDate) {
-        return tracingService.getSearchResult(shortId, name, ageFrom, ageTo, getDate(registrationDate));
+    protected List<Long> getSearchResult(String shortId, String name, int ageFrom, int ageTo,
+                                         String caregiver, String registrationDate) {
+        return tracingService.getSearchResult(shortId, name, ageFrom, ageTo, getDate
+                (registrationDate));
     }
 }

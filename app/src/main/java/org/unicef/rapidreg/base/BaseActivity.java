@@ -47,6 +47,7 @@ public abstract class BaseActivity extends MvpActivity<BaseView, BasePresenter> 
 
     protected ColorStateList caseColor;
     protected ColorStateList tracingColor;
+    protected ColorStateList incidentColor;
     protected ColorStateList syncColor;
 
     @Inject
@@ -69,6 +70,7 @@ public abstract class BaseActivity extends MvpActivity<BaseView, BasePresenter> 
         navigationView.setItemIconTintList(null);
         caseColor = generateColors(R.color.primero_green);
         tracingColor = generateColors(R.color.primero_red);
+        incidentColor = generateColors(R.color.black);
         syncColor = generateColors(R.color.primero_blue);
         navigationView.setItemTextColor(caseColor);
 
@@ -135,6 +137,10 @@ public abstract class BaseActivity extends MvpActivity<BaseView, BasePresenter> 
                 navTracingAction();
                 navigationView.setItemTextColor(tracingColor);
                 break;
+            case R.id.nav_incident:
+                navIncidentAction();
+                navigationView.setItemTextColor(incidentColor);
+                break;
             case R.id.nav_sync:
                 navigationView.setItemTextColor(syncColor);
                 navSyncAction();
@@ -172,6 +178,8 @@ public abstract class BaseActivity extends MvpActivity<BaseView, BasePresenter> 
     protected abstract void navCaseAction();
 
     protected abstract void navTracingAction();
+
+    protected abstract void navIncidentAction();
 
     protected abstract void processBackButton();
 

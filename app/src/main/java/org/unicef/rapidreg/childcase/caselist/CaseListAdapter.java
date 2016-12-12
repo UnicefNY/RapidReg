@@ -2,18 +2,12 @@ package org.unicef.rapidreg.childcase.caselist;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.support.v4.content.ContextCompat;
 import android.view.View;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
-
-import org.unicef.rapidreg.R;
 import org.unicef.rapidreg.base.record.RecordActivity;
 import org.unicef.rapidreg.base.record.recordlist.RecordListAdapter;
 import org.unicef.rapidreg.childcase.CaseFeature;
 import org.unicef.rapidreg.injection.ActivityContext;
-import org.unicef.rapidreg.model.Case;
 import org.unicef.rapidreg.model.Gender;
 import org.unicef.rapidreg.model.RecordModel;
 import org.unicef.rapidreg.service.CaseService;
@@ -22,10 +16,7 @@ import org.unicef.rapidreg.service.cache.ItemValues;
 import org.unicef.rapidreg.utils.StreamUtil;
 
 import java.io.IOException;
-import java.util.Date;
-
 import javax.inject.Inject;
-import javax.inject.Singleton;
 
 public class CaseListAdapter extends RecordListAdapter {
 

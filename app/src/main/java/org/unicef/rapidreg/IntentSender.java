@@ -4,7 +4,9 @@ import android.app.Activity;
 import android.content.Intent;
 
 import org.unicef.rapidreg.childcase.CaseActivity;
+import org.unicef.rapidreg.incident.IncidentActivity;
 import org.unicef.rapidreg.login.LoginActivity;
+import org.unicef.rapidreg.model.Incident;
 import org.unicef.rapidreg.sync.SyncActivity;
 import org.unicef.rapidreg.tracing.TracingActivity;
 
@@ -30,6 +32,16 @@ public class IntentSender {
 
     public void showTracingAddPage(Activity context) {
         Intent intent = new Intent(context, TracingActivity.class);
+        intent.putExtra(SHOW_ADD_PAGE, true);
+        showActivity(context, null, intent);
+    }
+
+    public void showIncidentActivity(Activity context) {
+        showActivity(context, IncidentActivity.class, null);
+    }
+
+    public void showIncidentAddPage(Activity context) {
+        Intent intent = new Intent(context, IncidentActivity.class);
         intent.putExtra(SHOW_ADD_PAGE, true);
         showActivity(context, null, intent);
     }

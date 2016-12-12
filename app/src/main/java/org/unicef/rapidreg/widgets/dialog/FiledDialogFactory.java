@@ -10,7 +10,8 @@ import org.unicef.rapidreg.service.cache.ItemValuesMap;
 
 public class FiledDialogFactory {
     public static BaseDialog createDialog(Field.FieldType fieldType, Context context,
-                                          Field field, ItemValuesMap itemValues, TextView resultView,
+                                          Field field, ItemValuesMap itemValues, TextView
+                                                  resultView,
                                           ViewSwitcher viewSwitcher) throws DialogException {
         try {
             return fieldType.getClz().getConstructor(Context.class, Field.class,

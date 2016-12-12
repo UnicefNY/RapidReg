@@ -22,7 +22,8 @@ public class SingleSelectDialog extends BaseDialog {
     SearchAbleDialog dialog;
 
     public SingleSelectDialog(Context context, Field field,
-                              ItemValuesMap itemValues, TextView resultView, ViewSwitcher viewSwitcher) {
+                              ItemValuesMap itemValues, TextView resultView, ViewSwitcher
+                                      viewSwitcher) {
         super(context, field, itemValues, resultView, viewSwitcher);
         result = resultView.getText().toString().trim();
     }
@@ -41,7 +42,8 @@ public class SingleSelectDialog extends BaseDialog {
         //selectIndex = selectIndex == -1 ? 0 : selectIndex;
 
 
-        dialog = new SearchAbleDialog(context, field.getDisplayName().get(Locale.getDefault().getLanguage()), optionItems, selectIndex);
+        dialog = new SearchAbleDialog(context, field.getDisplayName().get(Locale.getDefault()
+                .getLanguage()), optionItems, selectIndex);
 
         dialog.setOnClick(new SearchAbleDialog.SearchAbleDialogOnClickListener() {
             @Override

@@ -8,8 +8,14 @@ import org.unicef.rapidreg.childcase.caseregister.CaseMiniFormFragment;
 import org.unicef.rapidreg.childcase.caseregister.CaseRegisterFragment;
 import org.unicef.rapidreg.childcase.caseregister.CaseRegisterWrapperFragment;
 import org.unicef.rapidreg.childcase.casesearch.CaseSearchFragment;
+import org.unicef.rapidreg.incident.incidentlist.IncidentListFragment;
+import org.unicef.rapidreg.incident.incidentregister.IncidentMiniFormFragment;
+import org.unicef.rapidreg.incident.incidentregister.IncidentRegisterFragment;
+import org.unicef.rapidreg.incident.incidentregister.IncidentRegisterWrapperFragment;
+import org.unicef.rapidreg.incident.incidentsearch.IncidentSearchFragment;
 import org.unicef.rapidreg.injection.PerFragment;
 import org.unicef.rapidreg.injection.module.FragmentModule;
+import org.unicef.rapidreg.model.Incident;
 import org.unicef.rapidreg.sync.SyncFragment;
 import org.unicef.rapidreg.tracing.tracinglist.TracingListFragment;
 import org.unicef.rapidreg.tracing.tracingregister.TracingMiniFormFragment;
@@ -50,5 +56,15 @@ public interface FragmentComponent {
     void inject(TracingRegisterWrapperFragment tracingRegisterWrapperFragment);
 
     void inject(TracingSearchFragment tracingSearchFragment);
+
+    void inject(IncidentListFragment incidentListFragment);
+
+    void inject(IncidentMiniFormFragment incidentMiniFormFragment);
+
+    void inject(IncidentRegisterFragment incidentRegisterFragment);
+
+    void inject(IncidentRegisterWrapperFragment incidentRegisterWrapperFragment);
+
+    void inject(IncidentSearchFragment incidentSearchFragment);
 
 }

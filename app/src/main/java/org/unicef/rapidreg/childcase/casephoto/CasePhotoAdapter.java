@@ -7,8 +7,6 @@ import org.unicef.rapidreg.injection.ActivityContext;
 import org.unicef.rapidreg.model.RecordPhoto;
 import org.unicef.rapidreg.service.CasePhotoService;
 
-import java.util.List;
-
 import javax.inject.Inject;
 
 public class CasePhotoAdapter extends RecordPhotoAdapter {
