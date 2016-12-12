@@ -18,6 +18,8 @@ import java.io.IOException;
 
 import javax.inject.Inject;
 
+import static org.unicef.rapidreg.db.impl.TracingDaoImpl.TRACING_PRIMARY_ID;
+
 public class TracingListAdapter extends RecordListAdapter {
 
     @Inject
@@ -47,7 +49,7 @@ public class TracingListAdapter extends RecordListAdapter {
             @Override
             public void onClick(View v) {
                 Bundle args = new Bundle();
-                args.putLong(TracingService.TRACING_PRIMARY_ID, record.getId());
+                args.putLong(TRACING_PRIMARY_ID, record.getId());
                 ((RecordActivity) context).turnToFeature(TracingFeature.DETAILS_MINI, args, null);
                 try {
                     RecordService.clearAudioFile();

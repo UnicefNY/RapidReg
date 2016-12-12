@@ -31,6 +31,9 @@ import java.util.Locale;
 
 import javax.inject.Inject;
 
+import static org.unicef.rapidreg.db.impl.TracingDaoImpl.TRACING_ID;
+import static org.unicef.rapidreg.db.impl.TracingDaoImpl.TRACING_PRIMARY_ID;
+
 public class TracingRegisterPresenter extends RecordRegisterPresenter {
 
     private static final String TAG = TracingRegisterPresenter.class.getSimpleName();
@@ -48,7 +51,7 @@ public class TracingRegisterPresenter extends RecordRegisterPresenter {
 
     @Override
     protected Long getRecordId(Bundle bundle) {
-        return bundle.getLong(TracingService.TRACING_PRIMARY_ID, RecordRegisterFragment.INVALID_RECORD_ID);
+        return bundle.getLong(TRACING_PRIMARY_ID, RecordRegisterFragment.INVALID_RECORD_ID);
     }
 
     @Override
@@ -57,7 +60,7 @@ public class TracingRegisterPresenter extends RecordRegisterPresenter {
         String tracingJson = new String(tracingItem.getContent().getBlob());
 
         ItemValuesMap itemValues = new ItemValuesMap(JsonUtils.toMap(ItemValues.generateItemValues(tracingJson).getValues()));
-        itemValues.addStringItem(TracingService.TRACING_ID, tracingItem.getUniqueId());
+        itemValues.addStringItem(TRACING_ID, tracingItem.getUniqueId());
 
         DateFormat dateFormat = SimpleDateFormat.getDateInstance(DateFormat.MEDIUM, Locale.US);
         String shortUUID = RecordService.getShortUUID(tracingItem.getUniqueId());

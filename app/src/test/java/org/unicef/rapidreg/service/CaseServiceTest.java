@@ -18,8 +18,7 @@ import static org.mockito.Mockito.mock;
 @RunWith(RobolectricTestRunner.class)
 public class CaseServiceTest {
     private CaseDao caseDao = mock(CaseDaoImpl.class);
-    private UserService userService = mock(UserService.class);
-    private CaseService caseService = new CaseService(userService, caseDao);
+    private CaseService caseService = new CaseService(caseDao);
 
     @Test
     public void should_get_required_filed_list_when_exist_in_case_fields() {
@@ -41,7 +40,7 @@ public class CaseServiceTest {
         fields.add(makeCaseField("name", false));
 
         List<String> requiredFiledNames = caseService.fetchRequiredFiledNames(fields);
-        assertThat(requiredFiledNames, hasSize(0));
+           assertThat(requiredFiledNames, hasSize(0));
     }
 
     private Field makeCaseField(String name, boolean required) {

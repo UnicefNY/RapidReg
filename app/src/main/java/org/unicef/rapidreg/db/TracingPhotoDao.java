@@ -1,7 +1,10 @@
 package org.unicef.rapidreg.db;
 
+import org.unicef.rapidreg.model.Tracing;
 import org.unicef.rapidreg.model.TracingPhoto;
+import org.unicef.rapidreg.service.cache.ItemValues;
 
+import java.io.IOException;
 import java.util.List;
 
 public interface TracingPhotoDao {
@@ -16,4 +19,8 @@ public interface TracingPhotoDao {
     long countUnSynced(long tracingId);
 
     void deleteByTracingId(long tracingId);
+
+    Tracing save(Tracing tracing, List<String> photoPaths) throws IOException;
+
+    Tracing update(Tracing update, List<String> photoPaths) throws IOException;
 }

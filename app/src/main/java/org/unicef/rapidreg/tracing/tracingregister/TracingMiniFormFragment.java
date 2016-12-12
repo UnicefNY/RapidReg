@@ -29,6 +29,8 @@ import javax.inject.Inject;
 
 import butterknife.OnClick;
 
+import static org.unicef.rapidreg.db.impl.TracingDaoImpl.TRACING_PRIMARY_ID;
+
 public class TracingMiniFormFragment extends RecordRegisterFragment {
 
     public static final String TAG = TracingMiniFormFragment.class.getSimpleName();
@@ -98,7 +100,7 @@ public class TracingMiniFormFragment extends RecordRegisterFragment {
     @Override
     public void onSaveSuccessful(long recordId) {
         Bundle args = new Bundle();
-        args.putLong(TracingService.TRACING_PRIMARY_ID, recordId);
+        args.putLong(TRACING_PRIMARY_ID, recordId);
         Toast.makeText(getActivity(), R.string.save_success, Toast.LENGTH_SHORT).show();
         ((RecordActivity) getActivity()).turnToFeature(TracingFeature.DETAILS_MINI, args, null);
     }
