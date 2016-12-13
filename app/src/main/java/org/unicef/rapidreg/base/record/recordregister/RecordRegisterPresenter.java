@@ -65,7 +65,11 @@ public abstract class RecordRegisterPresenter extends MvpBasePresenter<RecordReg
         }
 
         if (getRecordId(bundle) == INVALID_RECORD_ID) {
-            return (ItemValuesMap) bundle.getSerializable(ITEM_VALUES);
+            ItemValuesMap itemValuesMap = (ItemValuesMap) bundle.getSerializable(ITEM_VALUES);
+            if (itemValuesMap != null) {
+                return itemValuesMap;
+            }
+            return new ItemValuesMap();
         }
 
         try {
