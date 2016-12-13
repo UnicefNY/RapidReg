@@ -62,11 +62,6 @@ public class IncidentListFragment extends RecordListFragment {
     }
 
     @Override
-    protected HashMap<String, View.OnClickListener> getCreateEvents() {
-        return null;
-    }
-
-    @Override
     protected void sendSyncFormEvent() {
         EventBus.getDefault().postSticky(new LoadGBVIncidentFormEvent(PrimeroConfiguration
                 .getCookie()));
