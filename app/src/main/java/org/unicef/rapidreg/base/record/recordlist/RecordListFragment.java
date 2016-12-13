@@ -19,12 +19,12 @@ import android.widget.ViewSwitcher;
 import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.getbase.floatingactionbutton.FloatingActionsMenu;
 import com.hannesdorfmann.mosby.mvp.MvpFragment;
-
 import org.unicef.rapidreg.PrimeroApplication;
 import org.unicef.rapidreg.R;
 import org.unicef.rapidreg.base.record.RecordActivity;
 import org.unicef.rapidreg.base.record.recordlist.spinner.SpinnerAdapter;
 import org.unicef.rapidreg.base.record.recordlist.spinner.SpinnerState;
+import org.unicef.rapidreg.base.record.recordregister.RecordRegisterBtnType;
 import org.unicef.rapidreg.injection.component.DaggerFragmentComponent;
 import org.unicef.rapidreg.injection.component.FragmentComponent;
 import org.unicef.rapidreg.injection.module.FragmentModule;
@@ -92,7 +92,7 @@ public abstract class RecordListFragment extends MvpFragment<RecordListView, Rec
         initCreateEventView(getCreateEvents());
     }
 
-    private void initCreateEventView(HashMap<String, OnClickListener> events) {
+    private void initCreateEventView(HashMap<RecordRegisterBtnType, OnClickListener> events) {
         if (events == null || events.size() <= 1) {
             initFloatingActionButton();
         } else {
@@ -100,11 +100,10 @@ public abstract class RecordListFragment extends MvpFragment<RecordListView, Rec
         }
     }
 
-    private void initFloatingActionMenu(HashMap<String, OnClickListener> events) {
+    private void initFloatingActionMenu(HashMap<RecordRegisterBtnType, OnClickListener> events) {
         addMenu.setVisibility(VISIBLE);
         addButton.setVisibility(INVISIBLE);
-
-        for (Entry<String, OnClickListener> entry : events.entrySet()) {
+        for(Entry<RecordRegisterBtnType, OnClickListener> entry : events.entrySet()) {
             addMenu.addButton(createFloatingActionButton(entry.getKey(), entry.getValue()));
         }
     }
@@ -114,13 +113,12 @@ public abstract class RecordListFragment extends MvpFragment<RecordListView, Rec
         addMenu.setVisibility(INVISIBLE);
     }
 
-    private FloatingActionButton createFloatingActionButton(String title, OnClickListener
-            listener) {
+    private FloatingActionButton createFloatingActionButton(RecordRegisterBtnType type, OnClickListener listener) {
         FloatingActionButton button = new FloatingActionButton(getActivity());
-        button.setTitle(title);
-        button.setColorNormalResId(R.color.primero_lighter_white);
-        button.setColorPressedResId(R.color.primero_lighter_white);
-        button.setIcon(R.drawable.add_blue);
+        button.setTitle(type.getBtnTitle());
+        button.setIcon(type.getResId());
+        button.setColorNormalResId(R.color.primero_green);
+        button.setColorPressedResId(R.color.primero_green);
         button.setOnClickListener(listener);
 
         return button;
@@ -191,13 +189,15 @@ public abstract class RecordListFragment extends MvpFragment<RecordListView, Rec
         });
     }
 
+    protected HashMap<RecordRegisterBtnType, OnClickListener> getCreateEvents() {
+        return null;
+    }
+
     protected abstract RecordListAdapter createRecordListAdapter();
 
     protected abstract int getDefaultSpinnerStatePosition();
 
     protected abstract SpinnerState[] getDefaultSpinnerStates();
-
-    protected abstract HashMap<String, OnClickListener> getCreateEvents();
 
     protected abstract void sendSyncFormEvent();
 }
