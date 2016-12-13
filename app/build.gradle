@@ -1,5 +1,6 @@
 apply plugin: 'com.android.application'
 apply plugin: 'com.neenbedankt.android-apt'
+apply from: './jacoco.gradle'
 
 android {
     compileSdkVersion 23
@@ -32,6 +33,7 @@ android {
                     output.outputFile = new File(output.outputFile.parent, newName)
                 }
             }
+            testCoverageEnabled true            
         }
         release {
             minifyEnabled false
@@ -130,3 +132,4 @@ dependencies {
     compile 'de.hdodenhof:circleimageview:2.0.0'
     compile 'org.robolectric:robolectric-annotations:3.1.1'
 }
+
