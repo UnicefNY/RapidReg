@@ -19,11 +19,8 @@ import org.unicef.rapidreg.base.record.recordregister.RecordRegisterFragment;
 import org.unicef.rapidreg.event.SaveIncidentEvent;
 import org.unicef.rapidreg.incident.IncidentActivity;
 import org.unicef.rapidreg.incident.IncidentFeature;
-import org.unicef.rapidreg.incident.incidentphoto.IncidentPhotoAdapter;
 import org.unicef.rapidreg.service.IncidentService;
 import org.unicef.rapidreg.service.RecordService;
-
-import java.util.ArrayList;
 
 import javax.inject.Inject;
 
@@ -35,9 +32,6 @@ public class IncidentMiniFormFragment extends RecordRegisterFragment {
 
     @Inject
     IncidentRegisterPresenter incidentRegisterPresenter;
-
-    @Inject
-    IncidentPhotoAdapter incidentPhotoAdapter;
 
     @NonNull
     @Override
@@ -82,10 +76,6 @@ public class IncidentMiniFormFragment extends RecordRegisterFragment {
                 incidentRegisterPresenter.getValidFields(),
                 incidentRegisterPresenter.getDefaultItemValues(),
                 true);
-
-        incidentPhotoAdapter.setItems(incidentRegisterPresenter.getDefaultPhotoPaths());
-        recordRegisterAdapter.setPhotoAdapter(incidentPhotoAdapter);
-
         return recordRegisterAdapter;
     }
 
@@ -106,8 +96,6 @@ public class IncidentMiniFormFragment extends RecordRegisterFragment {
     public void onEditClicked() {
         Bundle args = new Bundle();
         args.putSerializable(RecordService.ITEM_VALUES, getRecordRegisterData());
-        args.putStringArrayList(RecordService.RECORD_PHOTOS, (ArrayList<String>)
-                getPhotoPathsData());
         ((IncidentActivity) getActivity()).turnToFeature(IncidentFeature.EDIT_MINI, args, null);
     }
 
@@ -115,8 +103,6 @@ public class IncidentMiniFormFragment extends RecordRegisterFragment {
     public void onSwitcherChecked() {
         Bundle args = new Bundle();
         args.putSerializable(RecordService.ITEM_VALUES, getRecordRegisterData());
-        args.putStringArrayList(RecordService.RECORD_PHOTOS, (ArrayList<String>)
-                getPhotoPathsData());
         Feature feature = ((RecordActivity) getActivity()).getCurrentFeature().isDetailMode() ?
                 IncidentFeature.DETAILS_FULL : ((RecordActivity) getActivity()).getCurrentFeature()
                 .isAddMode() ?

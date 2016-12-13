@@ -6,10 +6,6 @@ import com.google.gson.annotations.SerializedName;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by cfzhang on 12/8/16.
- */
-
 public class IncidentTemplateForm implements RecordForm {
 
     @SerializedName("Incident")

@@ -20,7 +20,6 @@ import org.unicef.rapidreg.event.SaveIncidentEvent;
 import org.unicef.rapidreg.forms.Section;
 import org.unicef.rapidreg.incident.IncidentActivity;
 import org.unicef.rapidreg.incident.IncidentFeature;
-import org.unicef.rapidreg.incident.incidentphoto.IncidentPhotoAdapter;
 import org.unicef.rapidreg.service.RecordService;
 import org.unicef.rapidreg.service.cache.ItemValuesMap;
 
@@ -37,9 +36,6 @@ public class IncidentRegisterWrapperFragment extends RecordRegisterWrapperFragme
     @Inject
     IncidentRegisterPresenter incidentRegisterPresenter;
 
-    @Inject
-    IncidentPhotoAdapter incidentPhotoAdapter;
-
     @Override
     public IncidentRegisterPresenter createPresenter() {
         return incidentRegisterPresenter;
@@ -55,8 +51,7 @@ public class IncidentRegisterWrapperFragment extends RecordRegisterWrapperFragme
 
     @Override
     protected RecordPhotoAdapter createRecordPhotoAdapter() {
-        incidentPhotoAdapter.setItems(getArguments().getStringArrayList(RecordService.RECORD_PHOTOS));
-        return incidentPhotoAdapter;
+        return null;
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -68,8 +63,6 @@ public class IncidentRegisterWrapperFragment extends RecordRegisterWrapperFragme
     public void onEditClicked() {
         Bundle args = new Bundle();
         args.putSerializable(RecordService.ITEM_VALUES, getRecordRegisterData());
-        args.putStringArrayList(RecordService.RECORD_PHOTOS, (ArrayList<String>)
-                recordPhotoAdapter.getAllItems());
         ((IncidentActivity) getActivity()).turnToFeature(IncidentFeature.EDIT_FULL, args, null);
     }
 
@@ -104,8 +97,6 @@ public class IncidentRegisterWrapperFragment extends RecordRegisterWrapperFragme
     public void onSaveSuccessful(long recordId) {
         Bundle args = new Bundle();
         args.putSerializable(RecordService.ITEM_VALUES, getRecordRegisterData());
-        args.putStringArrayList(RecordService.RECORD_PHOTOS, (ArrayList<String>)
-                getPhotoPathsData());
         ((RecordActivity) getActivity()).turnToFeature(IncidentFeature.DETAILS_FULL, args, null);
     }
 

@@ -38,8 +38,9 @@ public class IncidentDaoImpl implements IncidentDao {
     }
 
     @Override
-    public Incident getIncidentById(long caseId) {
-        return SQLite.select().from(Incident.class).where(Incident_Table.id.eq(caseId)).querySingle();
+    public Incident getIncidentById(long incidentId) {
+        return SQLite.select().from(Incident.class).where(Incident_Table.id.eq(incidentId))
+                .querySingle();
     }
 
     @Override

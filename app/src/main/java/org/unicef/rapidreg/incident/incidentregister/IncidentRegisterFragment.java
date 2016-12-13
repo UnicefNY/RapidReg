@@ -15,7 +15,6 @@ import org.unicef.rapidreg.base.record.RecordActivity;
 import org.unicef.rapidreg.base.record.recordregister.RecordRegisterAdapter;
 import org.unicef.rapidreg.base.record.recordregister.RecordRegisterFragment;
 import org.unicef.rapidreg.incident.IncidentFeature;
-import org.unicef.rapidreg.incident.incidentphoto.IncidentPhotoAdapter;
 import org.unicef.rapidreg.service.RecordService;
 
 import java.util.ArrayList;
@@ -27,9 +26,6 @@ import butterknife.OnClick;
 public class IncidentRegisterFragment extends RecordRegisterFragment {
     @Inject
     IncidentRegisterPresenter incidentRegisterPresenter;
-
-    @Inject
-    IncidentPhotoAdapter incidentPhotoAdapter;
 
     @Nullable
     @Override
@@ -46,10 +42,6 @@ public class IncidentRegisterFragment extends RecordRegisterFragment {
                 incidentRegisterPresenter.getValidFields(FragmentPagerItem.getPosition(getArguments())),
                 incidentRegisterPresenter.getDefaultItemValues(),
                 false);
-
-        incidentPhotoAdapter.setItems(incidentRegisterPresenter.getDefaultPhotoPaths());
-        recordRegisterAdapter.setPhotoAdapter(incidentPhotoAdapter);
-
         return recordRegisterAdapter;
     }
 

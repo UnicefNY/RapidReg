@@ -7,8 +7,6 @@ public interface IncidentFormService {
 
     boolean isReady();
 
-    IncidentTemplateForm getCPTemplate();
-
     IncidentTemplateForm getGBVTemplate();
 
     void saveOrUpdate(IncidentForm incidentForm);

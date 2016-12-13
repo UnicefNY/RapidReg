@@ -15,7 +15,6 @@ import org.unicef.rapidreg.incident.incidentregister.IncidentRegisterWrapperFrag
 import org.unicef.rapidreg.incident.incidentsearch.IncidentSearchFragment;
 import org.unicef.rapidreg.injection.PerFragment;
 import org.unicef.rapidreg.injection.module.FragmentModule;
-import org.unicef.rapidreg.model.Incident;
 import org.unicef.rapidreg.sync.SyncFragment;
 import org.unicef.rapidreg.tracing.tracinglist.TracingListFragment;
 import org.unicef.rapidreg.tracing.tracingregister.TracingMiniFormFragment;

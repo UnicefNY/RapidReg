@@ -1,6 +1,5 @@
 package org.unicef.rapidreg.service;
 
-import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.google.gson.Gson;
@@ -9,15 +8,12 @@ import com.raizlabs.android.dbflow.sql.language.Condition;
 import com.raizlabs.android.dbflow.sql.language.ConditionGroup;
 import com.raizlabs.android.dbflow.sql.language.NameAlias;
 
+import org.unicef.rapidreg.PrimeroConfiguration;
 import org.unicef.rapidreg.db.IncidentDao;
-import org.unicef.rapidreg.db.IncidentPhotoDao;
 import org.unicef.rapidreg.db.impl.IncidentDaoImpl;
-import org.unicef.rapidreg.db.impl.IncidentPhotoDaoImpl;
 import org.unicef.rapidreg.model.Incident;
-import org.unicef.rapidreg.model.IncidentPhoto;
 import org.unicef.rapidreg.model.RecordModel;
 import org.unicef.rapidreg.service.cache.ItemValues;
-import org.unicef.rapidreg.utils.ImageCompressUtil;
 import org.unicef.rapidreg.utils.StreamUtil;
 
 import java.io.IOException;
@@ -25,7 +21,6 @@ import java.sql.Date;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
-import java.util.UUID;
 
 public class IncidentService extends RecordService{
     public static final String TAG = IncidentService.class.getSimpleName();
@@ -34,12 +29,9 @@ public class IncidentService extends RecordService{
     public static final String INCIDENT_PRIMARY_ID = "incident_primary_id";
 
     private IncidentDao incidentDao = new IncidentDaoImpl();
-    private IncidentPhotoDao incidentPhotoDao = new IncidentPhotoDaoImpl();
 
-    UserService userService;
+    public IncidentService() {
 
-    public IncidentService(UserService userService) {
-        this.userService = userService;
     }
 
     public IncidentService(IncidentDao incidentDao) {
@@ -108,22 +100,22 @@ public class IncidentService extends RecordService{
         return conditionGroup;
     }
 
-    public Incident saveOrUpdate(ItemValues itemValues, List<String> photoPaths) throws IOException {
+    public Incident saveOrUpdate(ItemValues itemValues) throws IOException {
 
         if (itemValues.getAsString(INCIDENT_ID) == null) {
-            return save(itemValues, photoPaths);
+            return save(itemValues);
         } else {
             Log.d(TAG, "update the existing incident");
-            return update(itemValues, photoPaths);
+            return update(itemValues);
         }
     }
 
-    public Incident save(ItemValues itemValues, List<String> photoPath) throws IOException {
+    public Incident save(ItemValues itemValues) throws IOException {
         String uniqueId = createUniqueId();
         itemValues.addStringItem(INCIDENT_DISPLAY_ID, getShortUUID(uniqueId));
         itemValues.addStringItem(INCIDENT_ID, uniqueId);
-        String username = userService.getCurrentUser().getUsername();
-        itemValues.addStringItem(MODULE, "primeromodule-cp");
+        String username = PrimeroConfiguration.getCurrentUser().getUsername();
+        itemValues.addStringItem(MODULE, "primeromodule-gbv");
         itemValues.addStringItem(CASEWORKER_CODE, username);
         itemValues.addStringItem(RECORD_CREATED_BY, username);
         itemValues.addStringItem(PREVIOUS_OWNER, username);
@@ -151,22 +143,11 @@ public class IncidentService extends RecordService{
         incident.setAudio(audioFileDefault);
         incident.setCreatedBy(username);
         incident.save();
-
-        savePhoto(incident, photoPath);
-
         return incident;
     }
 
-    public void savePhoto(Incident parent, List<String> photoPaths) throws IOException {
-        for (int i = 0; i < photoPaths.size(); i++) {
-            IncidentPhoto incidentPhoto = generateSavePhoto(parent, photoPaths, i);
-            incidentPhoto.setKey(UUID.randomUUID().toString());
-            incidentPhoto.save();
-        }
-    }
 
-    public Incident update(ItemValues itemValues,
-                          List<String> photoBitPaths) throws IOException {
+    public Incident update(ItemValues itemValues) throws IOException {
         Gson gson = new Gson();
         Blob blob = new Blob(gson.toJson(itemValues.getValues()).getBytes());
         Blob audioFileDefault = null;
@@ -183,75 +164,8 @@ public class IncidentService extends RecordService{
         incident.setRegistrationDate(getRegisterDate(itemValues.getAsString(INQUIRY_DATE)));
         incident.setAudio(audioFileDefault);
         incident.update();
-        updatePhoto(incident, photoBitPaths);
 
         return incident;
-    }
-
-    public void updatePhoto(Incident incident, List<String> photoPaths) throws IOException {
-        int previousCount = incidentPhotoDao.getIdsByIncidentId(incident.getId()).size();
-
-        if (previousCount < photoPaths.size()) {
-            for (int i = 0; i < previousCount; i++) {
-                IncidentPhoto incidentPhoto = generateUpdatePhoto(incident, photoPaths, i);
-                incidentPhoto.update();
-            }
-            for (int i = previousCount; i < photoPaths.size(); i++) {
-                IncidentPhoto incidentPhoto = generateSavePhoto(incident, photoPaths, i);
-                if (incidentPhoto.getId() == 0) {
-                    incidentPhoto.save();
-                } else {
-                    incidentPhoto.update();
-                }
-            }
-        } else {
-            for (int i = 0; i < photoPaths.size(); i++) {
-                IncidentPhoto incidentPhoto = generateUpdatePhoto(incident, photoPaths, i);
-                incidentPhoto.update();
-            }
-            for (int i = photoPaths.size(); i < previousCount; i++) {
-                IncidentPhoto incidentPhoto =
-                        incidentPhotoDao.getByIncidentIdAndOrder(incident.getId(), i + 1);
-                incidentPhoto.setPhoto(null);
-                incidentPhoto.update();
-            }
-        }
-    }
-
-    private IncidentPhoto generateSavePhoto(Incident parent, List<String> photoPaths,
-                                           int index) throws IOException {
-
-        IncidentPhoto incidentPhoto
-                = incidentPhotoDao.getByIncidentIdAndOrder(parent.getId(), index + 1);
-        if (incidentPhoto == null) {
-            incidentPhoto = new IncidentPhoto();
-        }
-        String filePath = photoPaths.get(index);
-        incidentPhoto.setPhoto(ImageCompressUtil.readImageFile(filePath));
-        incidentPhoto.setIncidentId(parent);
-        incidentPhoto.setOrder(index + 1);
-        incidentPhoto.setKey(UUID.randomUUID().toString());
-        return incidentPhoto;
-    }
-
-    @NonNull
-    private IncidentPhoto generateUpdatePhoto(Incident incident, List<String> photoPaths,
-                                              int index) throws IOException {
-        IncidentPhoto incidentPhoto;
-        String filePath = photoPaths.get(index);
-        try {
-            long photoId = Long.parseLong(filePath);
-            incidentPhoto = incidentPhotoDao.getById(photoId);
-        } catch (NumberFormatException e) {
-            incidentPhoto = new IncidentPhoto();
-            incidentPhoto.setIncidentId(incident);
-            incidentPhoto.setPhoto(ImageCompressUtil.readImageFile(filePath));
-        }
-        incidentPhoto.setId(incidentPhotoDao
-                .getByIncidentIdAndOrder(incident.getId(), index + 1).getId());
-        incidentPhoto.setOrder(index + 1);
-        incidentPhoto.setKey(UUID.randomUUID().toString());
-        return incidentPhoto;
     }
 
     private Blob getAudioBlob(Blob blob) {

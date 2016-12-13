@@ -10,16 +10,20 @@ import org.unicef.rapidreg.childcase.caseregister.CaseRegisterWrapperFragment;
 import org.unicef.rapidreg.childcase.casesearch.CaseSearchFragment;
 import org.unicef.rapidreg.exception.FragmentSwitchException;
 import org.unicef.rapidreg.incident.incidentlist.IncidentListFragment;
+import org.unicef.rapidreg.incident.incidentregister.IncidentMiniFormFragment;
+import org.unicef.rapidreg.incident.incidentregister.IncidentRegisterWrapperFragment;
+import org.unicef.rapidreg.incident.incidentsearch.IncidentSearchFragment;
+import org.unicef.rapidreg.model.Incident;
 
 public enum IncidentFeature implements Feature {
     LIST(R.string.incidents, IncidentListFragment.class),
-    ADD_MINI(R.string.new_incident, CaseMiniFormFragment.class),
-    ADD_FULL(R.string.new_incident, CaseRegisterWrapperFragment.class),
-    EDIT_MINI(R.string.edit, CaseMiniFormFragment.class),
-    EDIT_FULL(R.string.edit, CaseRegisterWrapperFragment.class),
-    DETAILS_MINI(R.string.incident_details, CaseMiniFormFragment.class),
-    DETAILS_FULL(R.string.incident_details, CaseRegisterWrapperFragment.class),
-    SEARCH(R.string.search, CaseSearchFragment.class);
+    ADD_MINI(R.string.new_incident, IncidentMiniFormFragment.class),
+    ADD_FULL(R.string.new_incident, IncidentRegisterWrapperFragment.class),
+    EDIT_MINI(R.string.edit, IncidentMiniFormFragment.class),
+    EDIT_FULL(R.string.edit, IncidentRegisterWrapperFragment.class),
+    DETAILS_MINI(R.string.incident_details, IncidentMiniFormFragment.class),
+    DETAILS_FULL(R.string.incident_details, IncidentRegisterWrapperFragment.class),
+    SEARCH(R.string.search, IncidentSearchFragment.class);
 
     private int titleId;
     private Class clz;
