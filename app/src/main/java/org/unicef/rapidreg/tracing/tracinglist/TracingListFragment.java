@@ -14,6 +14,7 @@ import org.unicef.rapidreg.base.record.recordlist.RecordListAdapter;
 import org.unicef.rapidreg.base.record.recordlist.RecordListFragment;
 import org.unicef.rapidreg.base.record.recordlist.RecordListPresenter;
 import org.unicef.rapidreg.base.record.recordlist.spinner.SpinnerState;
+import org.unicef.rapidreg.base.record.recordregister.RecordRegisterBtnType;
 import org.unicef.rapidreg.event.LoadTracingFormEvent;
 import org.unicef.rapidreg.tracing.TracingActivity;
 import org.unicef.rapidreg.tracing.TracingFeature;
@@ -65,9 +66,9 @@ public class TracingListFragment extends RecordListFragment {
     }
 
     @Override
-    protected HashMap<String, View.OnClickListener> getCreateEvents() {
-        HashMap<String, View.OnClickListener> events = new HashMap<>();
-        events.put("Tracing", null);
+    protected HashMap<RecordRegisterBtnType, View.OnClickListener> getCreateEvents() {
+        HashMap<RecordRegisterBtnType, View.OnClickListener> events = new HashMap<>();
+        events.put(RecordRegisterBtnType.TRACING, null);
         return events;
     }
 

@@ -15,6 +15,7 @@ import org.unicef.rapidreg.base.record.recordlist.RecordListAdapter;
 import org.unicef.rapidreg.base.record.recordlist.RecordListFragment;
 import org.unicef.rapidreg.base.record.recordlist.RecordListPresenter;
 import org.unicef.rapidreg.base.record.recordlist.spinner.SpinnerState;
+import org.unicef.rapidreg.base.record.recordregister.RecordRegisterBtnType;
 import org.unicef.rapidreg.childcase.CaseFeature;
 import org.unicef.rapidreg.event.LoadCPCaseFormEvent;
 
@@ -24,6 +25,8 @@ import java.util.HashMap;
 import javax.inject.Inject;
 
 import static android.view.View.*;
+import static org.unicef.rapidreg.base.record.recordregister.RecordRegisterBtnType.CASE_CP;
+import static org.unicef.rapidreg.base.record.recordregister.RecordRegisterBtnType.CASE_GBV;
 
 
 public class CaseListFragment extends RecordListFragment {
@@ -63,22 +66,22 @@ public class CaseListFragment extends RecordListFragment {
     }
 
     @Override
-    protected HashMap<String, OnClickListener> getCreateEvents() {
-        HashMap<String, OnClickListener> events = new HashMap<>();
-        events.put("CASE", createOnClickListener("CASE"));
-        events.put("GBV", createOnClickListener("GBV"));
+    protected HashMap<RecordRegisterBtnType, OnClickListener> getCreateEvents() {
+        HashMap<RecordRegisterBtnType, OnClickListener> events = new HashMap<>();
+        events.put(CASE_CP, createOnClickListener(CASE_CP));
+        events.put(CASE_GBV, createOnClickListener(CASE_GBV));
         return events;
     }
 
-    private OnClickListener createOnClickListener(String eventType) {
+    private OnClickListener createOnClickListener(RecordRegisterBtnType eventType) {
         switch (eventType) {
-            case "CASE" : return new OnClickListener() {
+            case CASE_CP: return new OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     onCPCaseAddClicked();
                 }
             };
-            case "GBV" :return new OnClickListener() {
+            case CASE_GBV:return new OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     onGBVCaseAddClicked();
