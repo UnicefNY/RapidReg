@@ -17,7 +17,9 @@ import org.unicef.rapidreg.base.record.recordlist.RecordListPresenter;
 import org.unicef.rapidreg.base.record.recordlist.spinner.SpinnerState;
 import org.unicef.rapidreg.base.record.recordregister.RecordRegisterBtnType;
 import org.unicef.rapidreg.childcase.CaseFeature;
+import org.unicef.rapidreg.childcase.caseregister.CaseRegisterPresenter;
 import org.unicef.rapidreg.event.LoadCPCaseFormEvent;
+import org.unicef.rapidreg.event.LoadGBVCaseFormEvent;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -27,11 +29,12 @@ import javax.inject.Inject;
 import static android.view.View.*;
 import static org.unicef.rapidreg.base.record.recordregister.RecordRegisterBtnType.CASE_CP;
 import static org.unicef.rapidreg.base.record.recordregister.RecordRegisterBtnType.CASE_GBV;
+import static org.unicef.rapidreg.childcase.caseregister.CaseRegisterPresenter.MODULE_CASE_CP;
+import static org.unicef.rapidreg.childcase.caseregister.CaseRegisterPresenter.MODULE_CASE_GBV;
+import static org.unicef.rapidreg.service.RecordService.MODULE;
 
 
 public class CaseListFragment extends RecordListFragment {
-
-    public static final String BUNDLE_CASE_TYPE = "case_type";
 
     private static final SpinnerState[] SPINNER_STATES = {
             SpinnerState.AGE_ASC,
@@ -96,6 +99,7 @@ public class CaseListFragment extends RecordListFragment {
     @Override
     protected void sendSyncFormEvent() {
         EventBus.getDefault().postSticky(new LoadCPCaseFormEvent(PrimeroConfiguration.getCookie()));
+        EventBus.getDefault().postSticky(new LoadGBVCaseFormEvent(PrimeroConfiguration.getCookie()));
     }
 
     @Override
@@ -113,7 +117,7 @@ public class CaseListFragment extends RecordListFragment {
 
         RecordActivity activity = (RecordActivity) getActivity();
         Bundle bundle = new Bundle();
-        bundle.putString(BUNDLE_CASE_TYPE, CASE_CP.getBtnTitle());
+        bundle.putString(MODULE, MODULE_CASE_CP);
         activity.turnToFeature(CaseFeature.ADD_MINI, bundle, null);
     }
 
@@ -127,7 +131,7 @@ public class CaseListFragment extends RecordListFragment {
 
         RecordActivity activity = (RecordActivity) getActivity();
         Bundle bundle = new Bundle();
-        bundle.putString(BUNDLE_CASE_TYPE, CASE_GBV.getBtnTitle());
+        bundle.putString(MODULE, MODULE_CASE_GBV);
         activity.turnToFeature(CaseFeature.ADD_MINI, bundle, null);
     }
 

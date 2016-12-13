@@ -30,7 +30,7 @@ import javax.inject.Inject;
 
 import butterknife.OnClick;
 
-import static org.unicef.rapidreg.childcase.caselist.CaseListFragment.BUNDLE_CASE_TYPE;
+import static org.unicef.rapidreg.service.RecordService.MODULE;
 
 public class CaseMiniFormFragment extends RecordRegisterFragment {
     public static final String TAG = CaseMiniFormFragment.class.getSimpleName();
@@ -44,6 +44,9 @@ public class CaseMiniFormFragment extends RecordRegisterFragment {
     @NonNull
     @Override
     public CaseRegisterPresenter createPresenter() {
+        if (getArguments() != null && getArguments().containsKey(MODULE)) {
+            caseRegisterPresenter.setCaseType(getArguments().getString(MODULE));
+        }
         return caseRegisterPresenter;
     }
 
@@ -58,13 +61,7 @@ public class CaseMiniFormFragment extends RecordRegisterFragment {
 
     @Override
     public void onInitViewContent() {
-        String caseType = getArguments().getString(BUNDLE_CASE_TYPE);
-        if (caseType != null) {
-            caseRegisterPresenter.setCaseType(caseType);
-        }
-
         super.onInitViewContent();
-
         addProfileFieldForDetailsPage(caseRegisterPresenter.getFields());
         formSwitcher.setText(R.string.show_more_details);
         if (((RecordActivity) getActivity()).getCurrentFeature().isDetailMode()) {
@@ -106,6 +103,7 @@ public class CaseMiniFormFragment extends RecordRegisterFragment {
     public void onSaveSuccessful(long recordId) {
         Toast.makeText(getActivity(), R.string.save_success, Toast.LENGTH_SHORT).show();
         Bundle args = new Bundle();
+        args.putString(MODULE, caseRegisterPresenter.getCaseType());
         args.putLong(CaseService.CASE_PRIMARY_ID, recordId);
         ((RecordActivity)getActivity()).turnToFeature(CaseFeature.DETAILS_MINI, args, null);
     }
@@ -113,6 +111,7 @@ public class CaseMiniFormFragment extends RecordRegisterFragment {
     @OnClick(R.id.edit)
     public void onEditClicked() {
         Bundle args = new Bundle();
+        args.putString(MODULE, caseRegisterPresenter.getCaseType());
         args.putSerializable(RecordService.ITEM_VALUES, getRecordRegisterData());
         args.putStringArrayList(RecordService.RECORD_PHOTOS, (ArrayList<String>) getPhotoPathsData());
         ((CaseActivity) getActivity()).turnToFeature(CaseFeature.EDIT_MINI, args, null);
@@ -122,6 +121,7 @@ public class CaseMiniFormFragment extends RecordRegisterFragment {
     public void onSwitcherChecked() {
         Bundle args = new Bundle();
         args.putSerializable(RecordService.ITEM_VALUES, getRecordRegisterData());
+        args.putString(MODULE, caseRegisterPresenter.getCaseType());
         args.putStringArrayList(RecordService.RECORD_PHOTOS, (ArrayList<String>) getPhotoPathsData());
         Feature feature = ((RecordActivity) getActivity()).getCurrentFeature().isDetailMode() ?
                 CaseFeature.DETAILS_FULL : ((RecordActivity) getActivity()).getCurrentFeature().isAddMode() ?

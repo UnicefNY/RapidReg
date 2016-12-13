@@ -18,6 +18,8 @@ import org.unicef.rapidreg.utils.StreamUtil;
 import java.io.IOException;
 import javax.inject.Inject;
 
+import static org.unicef.rapidreg.service.RecordService.MODULE;
+
 public class CaseListAdapter extends RecordListAdapter {
 
     @Inject
@@ -50,6 +52,7 @@ public class CaseListAdapter extends RecordListAdapter {
             @Override
             public void onClick(View v) {
                 Bundle args = new Bundle();
+                args.putString(MODULE, itemValues.getAsString(MODULE));
                 args.putLong(CaseService.CASE_PRIMARY_ID, recordId);
                 ((RecordActivity)context).turnToFeature(CaseFeature.DETAILS_MINI, args, null);
                 try {

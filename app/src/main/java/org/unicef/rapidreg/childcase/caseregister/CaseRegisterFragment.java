@@ -25,8 +25,9 @@ import javax.inject.Inject;
 
 import butterknife.OnClick;
 
-public class CaseRegisterFragment extends RecordRegisterFragment {
+import static org.unicef.rapidreg.service.RecordService.MODULE;
 
+public class CaseRegisterFragment extends RecordRegisterFragment {
     @Inject
     CaseRegisterPresenter caseRegisterPresenter;
 
@@ -57,12 +58,16 @@ public class CaseRegisterFragment extends RecordRegisterFragment {
 
     @Override
     public CaseRegisterPresenter createPresenter() {
+        if (getArguments() != null && getArguments().containsKey(MODULE)) {
+            caseRegisterPresenter.setCaseType(getArguments().getString(MODULE));
+        }
         return caseRegisterPresenter;
     }
 
     @OnClick(R.id.form_switcher)
     public void onSwitcherChecked() {
         Bundle args = new Bundle();
+        args.putString(MODULE, caseRegisterPresenter.getCaseType());
         args.putStringArrayList(RecordService.RECORD_PHOTOS, (ArrayList<String>) getPhotoPathsData());
         args.putSerializable(RecordService.ITEM_VALUES, getRecordRegisterData());
 

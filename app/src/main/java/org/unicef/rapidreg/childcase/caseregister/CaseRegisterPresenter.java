@@ -31,9 +31,14 @@ import java.util.Locale;
 
 import javax.inject.Inject;
 
+import static org.unicef.rapidreg.service.RecordService.MODULE;
+
 
 public class CaseRegisterPresenter extends RecordRegisterPresenter {
     private static final String TAG = CaseRegisterPresenter.class.getSimpleName();
+
+    public static final String MODULE_CASE_CP = "primeromodule-cp";
+    public static final String MODULE_CASE_GBV = "primeromodule-gbv";
 
     private CaseService caseService;
     private CaseFormService caseFormService;
@@ -51,6 +56,10 @@ public class CaseRegisterPresenter extends RecordRegisterPresenter {
 
     public void setCaseType(String caseType) {
         this.caseType = caseType;
+    }
+
+    public String getCaseType() {
+        return caseType;
     }
 
     @Override
@@ -119,8 +128,8 @@ public class CaseRegisterPresenter extends RecordRegisterPresenter {
     @Override
     public RecordForm getTemplateForm() {
         switch (caseType) {
-            case "CP": return caseFormService.getCPTemplate();
-            case "GBV": return caseFormService.getGBVTemplate();
+            case MODULE_CASE_CP: return caseFormService.getCPTemplate();
+            case MODULE_CASE_GBV: return caseFormService.getGBVTemplate();
             default: return new CaseTemplateForm();
         }
     }
@@ -138,6 +147,7 @@ public class CaseRegisterPresenter extends RecordRegisterPresenter {
         List<String> photoPaths = getView().getPhotoPathsData();
         ItemValues newItemValues = new ItemValues(new Gson().fromJson(new Gson().toJson(
                 itemValues.getValues()), JsonObject.class));
+        newItemValues.addStringItem(MODULE, caseType);
         clearProfileItems(newItemValues);
         try {
             Case record = caseService.saveOrUpdate(newItemValues, photoPaths);
