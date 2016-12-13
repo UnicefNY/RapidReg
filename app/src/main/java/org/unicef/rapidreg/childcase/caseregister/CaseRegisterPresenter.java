@@ -83,7 +83,7 @@ public class CaseRegisterPresenter extends RecordRegisterPresenter {
     protected List<Field> getFields() {
         List<Field> fields = new ArrayList<>();
 
-        RecordForm form = caseFormService.getCPTemplate();
+        RecordForm form = getTemplateForm();
 
         List<Section> sections = form.getSections();
 
@@ -103,7 +103,7 @@ public class CaseRegisterPresenter extends RecordRegisterPresenter {
 
     @Override
     public List<Field> getFields(int position) {
-        RecordForm form = caseFormService.getCPTemplate();
+        RecordForm form = getTemplateForm();
         if (form != null) {
             return form.getSections().get(position).getFields();
         }
@@ -111,8 +111,12 @@ public class CaseRegisterPresenter extends RecordRegisterPresenter {
     }
 
     @Override
-    public RecordForm getCPTemplate() {
-        return caseFormService.getCPTemplate();
+    public RecordForm getTemplateForm() {
+        switch (caseType) {
+            case "CP": return caseFormService.getCPTemplate();
+            case "GBV": return caseFormService.getGBVTemplate();
+            default: return new CaseTemplateForm();
+        }
     }
 
     @Override
@@ -138,7 +142,6 @@ public class CaseRegisterPresenter extends RecordRegisterPresenter {
     }
 
     private boolean validateRequiredField(ItemValuesMap itemValuesMap) {
-        CaseTemplateForm caseForm = caseFormService.getCPTemplate();
-        return RecordService.validateRequiredFields(caseForm, itemValuesMap);
+        return RecordService.validateRequiredFields(getTemplateForm(), itemValuesMap);
     }
 }

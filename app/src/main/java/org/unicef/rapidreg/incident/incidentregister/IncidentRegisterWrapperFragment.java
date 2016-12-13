@@ -75,7 +75,7 @@ public class IncidentRegisterWrapperFragment extends RecordRegisterWrapperFragme
 
     @Override
     protected void initFormData() {
-        form = incidentRegisterPresenter.getCPTemplate();
+        form = incidentRegisterPresenter.getTemplateForm();
         sections = form.getSections();
     }
 
