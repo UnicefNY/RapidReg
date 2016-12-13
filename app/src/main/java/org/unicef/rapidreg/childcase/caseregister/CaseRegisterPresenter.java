@@ -39,12 +39,18 @@ public class CaseRegisterPresenter extends RecordRegisterPresenter {
     private CaseFormService caseFormService;
     private CasePhotoService casePhotoService;
 
+    private String caseType = "";
+
     @Inject
     public CaseRegisterPresenter(CaseService caseService, CaseFormService caseFormService, CasePhotoService
             casePhotoService) {
         this.caseService = caseService;
         this.caseFormService = caseFormService;
         this.casePhotoService = casePhotoService;
+    }
+
+    public void setCaseType(String caseType) {
+        this.caseType = caseType;
     }
 
     @Override

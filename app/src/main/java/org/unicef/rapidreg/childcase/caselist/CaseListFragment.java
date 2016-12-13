@@ -31,6 +31,8 @@ import static org.unicef.rapidreg.base.record.recordregister.RecordRegisterBtnTy
 
 public class CaseListFragment extends RecordListFragment {
 
+    public static final String BUNDLE_CASE_TYPE = "case_type";
+
     private static final SpinnerState[] SPINNER_STATES = {
             SpinnerState.AGE_ASC,
             SpinnerState.AGE_DES,
@@ -110,12 +112,23 @@ public class CaseListFragment extends RecordListFragment {
         }
 
         RecordActivity activity = (RecordActivity) getActivity();
-        activity.turnToFeature(CaseFeature.ADD_MINI, null, null);
+        Bundle bundle = new Bundle();
+        bundle.putString(BUNDLE_CASE_TYPE, CASE_CP.getBtnTitle());
+        activity.turnToFeature(CaseFeature.ADD_MINI, bundle, null);
     }
 
     private void onGBVCaseAddClicked() {
-        //TODO redirect to GBVCaseRegisterFragment
-        Toast.makeText(getActivity(), "GBV creation has been clicked", Toast.LENGTH_SHORT).show();
+        caseListPresenter.clearAudioFile();
+
+        if (!caseListPresenter.isFormReady()) {
+            showSyncFormDialog(getResources().getString(R.string.child_case));
+            return;
+        }
+
+        RecordActivity activity = (RecordActivity) getActivity();
+        Bundle bundle = new Bundle();
+        bundle.putString(BUNDLE_CASE_TYPE, CASE_GBV.getBtnTitle());
+        activity.turnToFeature(CaseFeature.ADD_MINI, bundle, null);
     }
 
 }
