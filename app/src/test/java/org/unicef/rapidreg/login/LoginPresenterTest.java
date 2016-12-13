@@ -67,6 +67,7 @@ public class LoginPresenterTest {
         when(userService.isNameValid("pri mero")).thenReturn(false);
         when(userService.isPasswordValid("password")).thenReturn(true);
         when(userService.isUrlValid("http://10.29.3.184:3000")).thenReturn(true);
+
         boolean valid = loginPresenter.validate(RuntimeEnvironment.application, "pri mero", "password", "http://10.29.3.184:3000");
         verify(loginView).showUserNameError("Enter a valid username!");
         assertEquals(valid, false);
