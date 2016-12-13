@@ -114,7 +114,7 @@ public class TracingRegisterPresenter extends RecordRegisterPresenter {
     }
 
     @Override
-    public RecordForm getCPTemplate() {
+    public RecordForm getTemplateForm() {
         return tracingFormService.getCPTemplate();
     }
 

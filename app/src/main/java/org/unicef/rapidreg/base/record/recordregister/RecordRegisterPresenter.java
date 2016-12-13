@@ -110,5 +110,5 @@ public abstract class RecordRegisterPresenter extends MvpBasePresenter<RecordReg
 
     public abstract List<Field> getFields(int position);
 
-    public abstract RecordForm getCPTemplate();
+    public abstract RecordForm getTemplateForm();
 }

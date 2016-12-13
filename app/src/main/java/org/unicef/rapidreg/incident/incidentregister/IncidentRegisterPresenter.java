@@ -106,7 +106,7 @@ public class IncidentRegisterPresenter extends RecordRegisterPresenter {
     }
 
     @Override
-    public RecordForm getCPTemplate() {
+    public RecordForm getTemplateForm() {
         return incidentFormService.getGBVTemplate();
     }
 

@@ -78,7 +78,7 @@ public class CaseRegisterWrapperFragment extends RecordRegisterWrapperFragment {
 
     @Override
     protected void initFormData() {
-        form = caseRegisterPresenter.getCPTemplate();
+        form = caseRegisterPresenter.getTemplateForm();
         sections = form.getSections();
     }
 
