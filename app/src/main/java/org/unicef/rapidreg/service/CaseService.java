@@ -121,7 +121,6 @@ public class CaseService extends RecordService {
         String username = PrimeroConfiguration.getCurrentUser().getUsername();
         itemValues.addStringItem(CASE_DISPLAY_ID, getShortUUID(uniqueId));
         itemValues.addStringItem(CASE_ID, uniqueId);
-        itemValues.addStringItem(MODULE, "primeromodule-cp");
         itemValues.addStringItem(CASEWORKER_CODE, username);
         itemValues.addStringItem(RECORD_CREATED_BY, username);
         itemValues.addStringItem(PREVIOUS_OWNER, username);
@@ -150,6 +149,7 @@ public class CaseService extends RecordService {
         child.setRegistrationDate(getRegisterDate(itemValues.getAsString(REGISTRATION_DATE)));
         child.setAudio(audioFileDefault);
         child.setCreatedBy(username);
+        child.setModuleId(itemValues.getAsString(MODULE));
         child.save();
 
         savePhoto(child, photoPath);

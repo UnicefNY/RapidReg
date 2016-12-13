@@ -29,6 +29,8 @@ import javax.inject.Inject;
 
 import butterknife.OnClick;
 
+import static org.unicef.rapidreg.service.RecordService.MODULE;
+
 public class CaseRegisterWrapperFragment extends RecordRegisterWrapperFragment {
     public static final String TAG = CaseRegisterWrapperFragment.class.getSimpleName();
 
@@ -40,6 +42,9 @@ public class CaseRegisterWrapperFragment extends RecordRegisterWrapperFragment {
 
     @Override
     public CaseRegisterPresenter createPresenter() {
+        if (getArguments() != null && getArguments().containsKey(MODULE)) {
+            caseRegisterPresenter.setCaseType(getArguments().getString(MODULE));
+        }
         return caseRegisterPresenter;
     }
 
@@ -64,6 +69,7 @@ public class CaseRegisterWrapperFragment extends RecordRegisterWrapperFragment {
     @OnClick(R.id.edit)
     public void onEditClicked() {
         Bundle args = new Bundle();
+        args.putString(MODULE, caseRegisterPresenter.getCaseType());
         args.putSerializable(RecordService.ITEM_VALUES, getRecordRegisterData());
         args.putStringArrayList(RecordService.RECORD_PHOTOS, (ArrayList<String>) recordPhotoAdapter.getAllItems());
         ((CaseActivity) getActivity()).turnToFeature(CaseFeature.EDIT_FULL, args, null);
@@ -88,6 +94,7 @@ public class CaseRegisterWrapperFragment extends RecordRegisterWrapperFragment {
         for (Section section : sections) {
             String[] values = section.getName().values().toArray(new String[0]);
             Bundle args = new Bundle();
+            args.putString(MODULE, caseRegisterPresenter.getCaseType());
             args.putSerializable(RecordService.ITEM_VALUES, getRecordRegisterData());
             args.putStringArrayList(RecordService.RECORD_PHOTOS, (ArrayList<String>) recordPhotoAdapter.getAllItems());
             pages.add(FragmentPagerItem.of(values[0], CaseRegisterFragment.class, args));
@@ -98,6 +105,7 @@ public class CaseRegisterWrapperFragment extends RecordRegisterWrapperFragment {
     @Override
     public void onSaveSuccessful(long recordId) {
         Bundle args = new Bundle();
+        args.putString(MODULE, caseRegisterPresenter.getCaseType());
         args.putSerializable(RecordService.ITEM_VALUES, getRecordRegisterData());
         args.putStringArrayList(RecordService.RECORD_PHOTOS, (ArrayList<String>) getPhotoPathsData());
         ((RecordActivity) getActivity()).turnToFeature(CaseFeature.DETAILS_FULL, args, null);

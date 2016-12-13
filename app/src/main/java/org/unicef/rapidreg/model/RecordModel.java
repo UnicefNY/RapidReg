@@ -57,6 +57,8 @@ public class RecordModel extends BaseModel {
     private Date lastSyncedDate;
     @Column(name = "type")
     private int type;
+    @Column(name = "module_id")
+    private String moduleId;
 
     @Column
     private boolean isAudioSynced;
@@ -220,6 +222,14 @@ public class RecordModel extends BaseModel {
         this.shortId = shortId;
     }
 
+    public String getModuleId() {
+        return moduleId;
+    }
+
+    public void setModuleId(String moduleId) {
+        this.moduleId = moduleId;
+    }
+
     @Override
     public String toString() {
         return "RecordModel{" +
@@ -241,6 +251,7 @@ public class RecordModel extends BaseModel {
                 ", lastUpdatedDate=" + lastUpdatedDate +
                 ", lastSyncedDate=" + lastSyncedDate +
                 ", type=" + type +
+                ", moduleId=" + moduleId +
                 ", isAudioSynced=" + isAudioSynced +
                 '}';
     }

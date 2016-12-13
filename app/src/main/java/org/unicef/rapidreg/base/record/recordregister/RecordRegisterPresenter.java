@@ -3,6 +3,8 @@ package org.unicef.rapidreg.base.record.recordregister;
 import android.os.Bundle;
 import android.util.Log;
 import com.hannesdorfmann.mosby.mvp.MvpBasePresenter;
+import com.hannesdorfmann.mosby.mvp.MvpFragment;
+
 import org.json.JSONException;
 import org.unicef.rapidreg.base.record.recordregister.RecordRegisterView.SaveRecordCallback;
 import org.unicef.rapidreg.forms.Field;
@@ -59,7 +61,7 @@ public abstract class RecordRegisterPresenter extends MvpBasePresenter<RecordReg
             return new ItemValuesMap();
         }
 
-        Bundle bundle = ((RecordRegisterFragment) getView()).getArguments();
+        Bundle bundle = ((MvpFragment) getView()).getArguments();
         if (bundle == null) {
             return new ItemValuesMap();
         }

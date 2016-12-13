@@ -27,6 +27,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.MockitoAnnotations.initMocks;
 import static org.powermock.api.mockito.PowerMockito.mock;
 import static org.powermock.api.mockito.PowerMockito.when;
+import static org.unicef.rapidreg.childcase.caseregister.CaseRegisterPresenter.MODULE_CASE_CP;
 
 @RunWith(MockitoJUnitRunner.class)
 public class CaseRegisterPresenterTest {
@@ -53,7 +54,7 @@ public class CaseRegisterPresenterTest {
         CaseTemplateForm form = mock(CaseTemplateForm.class);
         when(caseFormService.getCPTemplate()).thenReturn(form);
 
-        caseRegisterPresenter.setCaseType("CP");
+        caseRegisterPresenter.setCaseType(MODULE_CASE_CP);
         RecordForm actual = caseRegisterPresenter.getTemplateForm();
 
         assertThat("Should return CP template when case type is CP.", actual, Is.<RecordForm>is(form));
@@ -78,7 +79,7 @@ public class CaseRegisterPresenterTest {
 
         when(caseFormService.getCPTemplate()).thenReturn(form);
 
-        caseRegisterPresenter.setCaseType("CP");
+        caseRegisterPresenter.setCaseType(MODULE_CASE_CP);
 
         List<Field> actual = caseRegisterPresenter.getFields();
 
