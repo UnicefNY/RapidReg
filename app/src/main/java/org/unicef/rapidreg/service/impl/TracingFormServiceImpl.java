@@ -20,8 +20,7 @@ public class TracingFormServiceImpl implements TracingFormService {
     }
 
     public boolean isReady() {
-        Blob form = tracingFormDao.getTracingForm().getForm();
-        return form != null;
+        return tracingFormDao.getTracingForm() != null && tracingFormDao.getTracingForm().getForm() != null;
     }
 
     public TracingTemplateForm getCPTemplate() {

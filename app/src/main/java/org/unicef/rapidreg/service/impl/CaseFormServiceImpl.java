@@ -21,9 +21,8 @@ public class CaseFormServiceImpl implements CaseFormService {
     }
 
     public boolean isReady() {
-        Blob cpForm = caseFormDao.getCaseForm(RecordConfiguration.MODULE_ID_CP).getForm();
-        Blob gbvForm = caseFormDao.getCaseForm(RecordConfiguration.MODULE_ID_GBV).getForm();
-        return cpForm != null && gbvForm != null;
+        return caseFormDao.getCaseForm(RecordConfiguration.MODULE_ID_CP) != null && caseFormDao.getCaseForm(RecordConfiguration.MODULE_ID_CP).getForm() != null
+                && caseFormDao.getCaseForm(RecordConfiguration.MODULE_ID_GBV) != null && caseFormDao.getCaseForm(RecordConfiguration.MODULE_ID_GBV).getForm() != null;
     }
 
     public CaseTemplateForm getCPTemplate() {
