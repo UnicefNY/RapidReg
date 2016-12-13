@@ -14,6 +14,7 @@ import org.greenrobot.eventbus.ThreadMode;
 import org.unicef.rapidreg.R;
 import org.unicef.rapidreg.base.Feature;
 import org.unicef.rapidreg.base.record.RecordActivity;
+import org.unicef.rapidreg.base.record.recordphoto.PhotoConfig;
 import org.unicef.rapidreg.base.record.recordregister.RecordRegisterAdapter;
 import org.unicef.rapidreg.base.record.recordregister.RecordRegisterFragment;
 import org.unicef.rapidreg.childcase.CaseActivity;
@@ -28,6 +29,8 @@ import java.util.ArrayList;
 import javax.inject.Inject;
 
 import butterknife.OnClick;
+
+import static org.unicef.rapidreg.childcase.caselist.CaseListFragment.BUNDLE_CASE_TYPE;
 
 public class CaseMiniFormFragment extends RecordRegisterFragment {
     public static final String TAG = CaseMiniFormFragment.class.getSimpleName();
@@ -55,7 +58,13 @@ public class CaseMiniFormFragment extends RecordRegisterFragment {
 
     @Override
     public void onInitViewContent() {
+        String caseType = getArguments().getString(BUNDLE_CASE_TYPE);
+        if (caseType != null) {
+            caseRegisterPresenter.setCaseType(caseType);
+        }
+
         super.onInitViewContent();
+
         addProfileFieldForDetailsPage(caseRegisterPresenter.getFields());
         formSwitcher.setText(R.string.show_more_details);
         if (((RecordActivity) getActivity()).getCurrentFeature().isDetailMode()) {
