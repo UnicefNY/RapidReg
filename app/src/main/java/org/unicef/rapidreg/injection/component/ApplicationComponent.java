@@ -13,7 +13,6 @@ import org.unicef.rapidreg.service.CaseFormService;
 import org.unicef.rapidreg.service.CasePhotoService;
 import org.unicef.rapidreg.service.CaseService;
 import org.unicef.rapidreg.service.IncidentFormService;
-import org.unicef.rapidreg.service.IncidentPhotoService;
 import org.unicef.rapidreg.service.IncidentService;
 import org.unicef.rapidreg.service.RecordService;
 import org.unicef.rapidreg.service.TracingFormService;
@@ -55,8 +54,6 @@ public interface ApplicationComponent {
     IncidentService incidentService();
 
     IncidentFormService incidentFormService();
-
-    IncidentPhotoService incidentPhotoService();
 
     AuthService authService();
 

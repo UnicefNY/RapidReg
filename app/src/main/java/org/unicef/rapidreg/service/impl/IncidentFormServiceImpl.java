@@ -20,13 +20,9 @@ public class IncidentFormServiceImpl implements IncidentFormService {
     }
 
     public boolean isReady() {
-        Blob gbvForm = incidentFormDao.getIncidentForm(RecordConfiguration.MODULE_ID_GBV).getForm();
-        return gbvForm != null;
-    }
-
-    public IncidentTemplateForm getCPTemplate() {
-        Blob form = incidentFormDao.getIncidentForm(RecordConfiguration.MODULE_ID_CP).getForm();
-        return getIncidentTemplateForm(form);
+        IncidentForm incidentForm = incidentFormDao.getIncidentForm(RecordConfiguration
+                .MODULE_ID_GBV);
+        return incidentForm != null && incidentForm.getForm() != null;
     }
 
     @Override

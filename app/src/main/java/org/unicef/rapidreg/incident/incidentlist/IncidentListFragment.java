@@ -18,6 +18,7 @@ import org.unicef.rapidreg.event.LoadGBVIncidentFormEvent;
 import org.unicef.rapidreg.incident.IncidentFeature;
 
 import java.util.Arrays;
+import java.util.HashMap;
 
 import javax.inject.Inject;
 
@@ -58,6 +59,11 @@ public class IncidentListFragment extends RecordListFragment {
     @Override
     protected SpinnerState[] getDefaultSpinnerStates() {
         return SPINNER_STATES;
+    }
+
+    @Override
+    protected HashMap<String, View.OnClickListener> getCreateEvents() {
+        return null;
     }
 
     @Override

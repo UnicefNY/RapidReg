@@ -15,7 +15,6 @@ import org.unicef.rapidreg.forms.RecordForm;
 import org.unicef.rapidreg.forms.Section;
 import org.unicef.rapidreg.model.Incident;
 import org.unicef.rapidreg.service.IncidentFormService;
-import org.unicef.rapidreg.service.IncidentPhotoService;
 import org.unicef.rapidreg.service.IncidentService;
 import org.unicef.rapidreg.service.RecordService;
 import org.unicef.rapidreg.service.cache.ItemValues;
@@ -37,15 +36,12 @@ public class IncidentRegisterPresenter extends RecordRegisterPresenter {
 
     private IncidentService incidentService;
     private IncidentFormService incidentFormService;
-    private IncidentPhotoService incidentPhotoService;
 
     @Inject
     public IncidentRegisterPresenter(IncidentService incidentService, IncidentFormService
-            incidentFormService, IncidentPhotoService
-            incidentPhotoService) {
+            incidentFormService) {
         this.incidentService = incidentService;
         this.incidentFormService = incidentFormService;
-        this.incidentPhotoService = incidentPhotoService;
     }
 
     @Override
@@ -75,18 +71,14 @@ public class IncidentRegisterPresenter extends RecordRegisterPresenter {
 
     @Override
     protected List<String> getPhotoPathsByRecordId(Long recordId) {
-        List<String> paths = new ArrayList<>();
-        for (Long incidentPhotoId : incidentPhotoService.getIdsByIncidentId(recordId)) {
-            paths.add(String.valueOf(incidentPhotoId));
-        }
-        return paths;
+        return null;
     }
 
     @Override
     protected List<Field> getFields() {
         List<Field> fields = new ArrayList<>();
 
-        RecordForm form = incidentFormService.getCPTemplate();
+        RecordForm form = incidentFormService.getGBVTemplate();
 
         List<Section> sections = form.getSections();
 
@@ -106,7 +98,7 @@ public class IncidentRegisterPresenter extends RecordRegisterPresenter {
 
     @Override
     public List<Field> getFields(int position) {
-        RecordForm form = incidentFormService.getCPTemplate();
+        RecordForm form = incidentFormService.getGBVTemplate();
         if (form != null) {
             return form.getSections().get(position).getFields();
         }
@@ -115,7 +107,7 @@ public class IncidentRegisterPresenter extends RecordRegisterPresenter {
 
     @Override
     public RecordForm getCPTemplate() {
-        return incidentFormService.getCPTemplate();
+        return incidentFormService.getGBVTemplate();
     }
 
     @Override
@@ -128,12 +120,11 @@ public class IncidentRegisterPresenter extends RecordRegisterPresenter {
         if (!isViewAttached()) {
             return;
         }
-        List<String> photoPaths = getView().getPhotoPathsData();
         ItemValues newItemValues = new ItemValues(new Gson().fromJson(new Gson().toJson(
                 itemValues.getValues()), JsonObject.class));
         clearProfileItems(newItemValues);
         try {
-            Incident record = incidentService.saveOrUpdate(newItemValues, photoPaths);
+            Incident record = incidentService.saveOrUpdate(newItemValues);
             callback.onSaveSuccessful(record.getId());
         } catch (IOException e) {
             callback.onSavedFail();
@@ -141,7 +132,7 @@ public class IncidentRegisterPresenter extends RecordRegisterPresenter {
     }
 
     private boolean validateRequiredField(ItemValuesMap itemValuesMap) {
-        IncidentTemplateForm incidentForm = incidentFormService.getCPTemplate();
+        IncidentTemplateForm incidentForm = incidentFormService.getGBVTemplate();
         return RecordService.validateRequiredFields(incidentForm, itemValuesMap);
     }
 

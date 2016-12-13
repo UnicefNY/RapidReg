@@ -33,6 +33,7 @@ import org.unicef.rapidreg.utils.Utils;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Map.Entry;
 
 import butterknife.BindView;
@@ -92,11 +93,7 @@ public abstract class RecordListFragment extends MvpFragment<RecordListView, Rec
     }
 
     private void initCreateEventView(HashMap<String, OnClickListener> events) {
-        if (events.isEmpty()) {
-            initFloatingActionButton();
-        }
-
-        if (events.size() == 1) {
+        if (events == null || events.size() <= 1) {
             initFloatingActionButton();
         } else {
             initFloatingActionMenu(events);
@@ -107,7 +104,7 @@ public abstract class RecordListFragment extends MvpFragment<RecordListView, Rec
         addMenu.setVisibility(VISIBLE);
         addButton.setVisibility(INVISIBLE);
 
-        for(Entry<String, OnClickListener> entry : events.entrySet()) {
+        for (Entry<String, OnClickListener> entry : events.entrySet()) {
             addMenu.addButton(createFloatingActionButton(entry.getKey(), entry.getValue()));
         }
     }
@@ -117,7 +114,8 @@ public abstract class RecordListFragment extends MvpFragment<RecordListView, Rec
         addMenu.setVisibility(INVISIBLE);
     }
 
-    private FloatingActionButton createFloatingActionButton(String title, OnClickListener listener) {
+    private FloatingActionButton createFloatingActionButton(String title, OnClickListener
+            listener) {
         FloatingActionButton button = new FloatingActionButton(getActivity());
         button.setTitle(title);
         button.setColorNormalResId(R.color.primero_lighter_white);
@@ -148,7 +146,8 @@ public abstract class RecordListFragment extends MvpFragment<RecordListView, Rec
         }
         AlertDialog dialog = new AlertDialog.Builder(getActivity())
                 .setTitle(R.string.sync_forms)
-                .setMessage(String.format("%s %s", message, getResources().getString(R.string.sync_forms_message)))
+                .setMessage(String.format("%s %s", message, getResources().getString(R.string
+                        .sync_forms_message)))
                 .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -198,7 +197,7 @@ public abstract class RecordListFragment extends MvpFragment<RecordListView, Rec
 
     protected abstract SpinnerState[] getDefaultSpinnerStates();
 
-    protected abstract HashMap<String,OnClickListener> getCreateEvents();
+    protected abstract HashMap<String, OnClickListener> getCreateEvents();
 
     protected abstract void sendSyncFormEvent();
 }

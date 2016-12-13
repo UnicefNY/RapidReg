@@ -8,7 +8,6 @@ import org.unicef.rapidreg.db.impl.CaseFormDaoImpl;
 import org.unicef.rapidreg.db.impl.CasePhotoDaoImpl;
 import org.unicef.rapidreg.db.impl.TracingDaoImpl;
 import org.unicef.rapidreg.db.impl.IncidentFormDaoImpl;
-import org.unicef.rapidreg.db.impl.IncidentPhotoDaoImpl;
 import org.unicef.rapidreg.db.impl.TracingFormDaoImpl;
 import org.unicef.rapidreg.db.impl.TracingPhotoDaoImpl;
 import org.unicef.rapidreg.db.impl.UserDaoImpl;
@@ -20,7 +19,6 @@ import org.unicef.rapidreg.service.CaseFormService;
 import org.unicef.rapidreg.service.CasePhotoService;
 import org.unicef.rapidreg.service.CaseService;
 import org.unicef.rapidreg.service.IncidentFormService;
-import org.unicef.rapidreg.service.IncidentPhotoService;
 import org.unicef.rapidreg.service.IncidentService;
 import org.unicef.rapidreg.service.RecordService;
 import org.unicef.rapidreg.service.TracingFormService;
@@ -29,7 +27,6 @@ import org.unicef.rapidreg.service.TracingService;
 import org.unicef.rapidreg.service.UserService;
 import org.unicef.rapidreg.service.impl.CaseFormServiceImpl;
 import org.unicef.rapidreg.service.impl.IncidentFormServiceImpl;
-import org.unicef.rapidreg.service.impl.IncidentPhotoServiceImpl;
 import org.unicef.rapidreg.service.impl.TracingFormServiceImpl;
 
 import javax.inject.Singleton;
@@ -83,20 +80,14 @@ public class ApplicationModule {
 
     @Provides
     @Singleton
-    public IncidentService provideIncidentService(UserService userService) {
-        return new IncidentService(userService);
+    public IncidentService provideIncidentService() {
+        return new IncidentService();
     }
 
     @Provides
     @Singleton
     public IncidentFormService provideIncidentFormService() {
         return new IncidentFormServiceImpl(new IncidentFormDaoImpl());
-    }
-
-    @Provides
-    @Singleton
-    public IncidentPhotoService provideIncidentPhotoService() {
-        return new IncidentPhotoServiceImpl(new IncidentPhotoDaoImpl());
     }
 
     @Provides
