@@ -151,11 +151,10 @@ public class CaseService extends RecordService {
         child.setCreatedBy(username);
         child.setModuleId(itemValues.getAsString(MODULE));
 
-        caseDao.save(child);
+        Case savedCase = caseDao.save(child);
+        savePhoto(savedCase, photoPaths);
 
-        savePhoto(child, photoPaths);
-
-        return child;
+        return savedCase;
     }
 
     public void savePhoto(Case child, List<String> photoPaths) throws IOException {

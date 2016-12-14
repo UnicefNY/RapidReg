@@ -5,10 +5,7 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
-
 import com.ogaclejapan.smarttablayout.utils.v4.FragmentPagerItem;
-
 import org.unicef.rapidreg.R;
 import org.unicef.rapidreg.base.Feature;
 import org.unicef.rapidreg.base.record.RecordActivity;
@@ -70,8 +67,8 @@ public class CaseRegisterFragment extends RecordRegisterFragment {
     public void onSwitcherChecked() {
         Bundle args = new Bundle();
         args.putString(MODULE, caseRegisterPresenter.getCaseType());
-        args.putStringArrayList(RecordService.RECORD_PHOTOS, (ArrayList<String>) getPhotoPathsData());
-        args.putSerializable(RecordService.ITEM_VALUES, getRecordRegisterData());
+        args.putStringArrayList(RecordService.RECORD_PHOTOS, (ArrayList<String>) caseRegisterPresenter.getDefaultPhotoPaths());
+        args.putSerializable(RecordService.ITEM_VALUES, caseRegisterPresenter.getDefaultItemValues());
 
         CaseFeature currentFeature = (CaseFeature) ((CaseActivity) getActivity()).getCurrentFeature();
 
@@ -83,6 +80,6 @@ public class CaseRegisterFragment extends RecordRegisterFragment {
 
     @Override
     public void onSaveSuccessful(long recordId) {
-        Toast.makeText(getActivity(), "CaseRgisterFragment save successfully", Toast.LENGTH_SHORT).show();
+
     }
 }
