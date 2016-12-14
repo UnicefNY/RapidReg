@@ -116,7 +116,7 @@ public class CaseService extends RecordService {
         return caseDao.getAllIds();
     }
 
-    public Case save(ItemValues itemValues, List<String> photoPath) throws IOException {
+    public Case save(ItemValues itemValues, List<String> photoPaths) throws IOException {
         String uniqueId = createUniqueId();
         String username = PrimeroConfiguration.getCurrentUser().getUsername();
         itemValues.addStringItem(CASE_DISPLAY_ID, getShortUUID(uniqueId));

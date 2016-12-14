@@ -111,8 +111,7 @@ public class IncidentRegisterPresenter extends RecordRegisterPresenter {
     }
 
     @Override
-    public void saveRecord(RecordRegisterView.SaveRecordCallback callback) {
-        ItemValuesMap itemValues = getView().getRecordRegisterData();
+    public void saveRecord(ItemValuesMap itemValues, RecordRegisterView.SaveRecordCallback callback) {
         if (!validateRequiredField(itemValues)) {
             callback.onRequiredFieldNotFilled();
             return;
