@@ -1,5 +1,6 @@
 package org.unicef.rapidreg.db;
 
+import org.unicef.rapidreg.model.Case;
 import org.unicef.rapidreg.model.CasePhoto;
 
 import java.util.List;
@@ -16,4 +17,6 @@ public interface CasePhotoDao {
     long countUnSynced(long caseId);
 
     void deleteByCaseId(long caseId);
+
+    CasePhoto save(CasePhoto casePhoto);
 }
