@@ -117,6 +117,8 @@
     <string name="tracing_request">Tracing request</string>
     <string name="not_sync_promote">Not synced yet</string>
     <string name="produce_cases_successfully_msg">Produce cases complete!</string>
+    <string name="new_cp_case">New CP case</string>
+    <string name="new_gbv_case">New GBV case</string>
     <!--Sync-->
 
     <!--Transparent theme-->

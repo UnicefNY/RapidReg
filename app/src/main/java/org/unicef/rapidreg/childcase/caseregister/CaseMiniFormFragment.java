@@ -30,6 +30,10 @@ import javax.inject.Inject;
 
 import butterknife.OnClick;
 
+import static org.unicef.rapidreg.childcase.CaseFeature.ADD_CP_FULL;
+import static org.unicef.rapidreg.childcase.CaseFeature.ADD_GBV_FULL;
+import static org.unicef.rapidreg.childcase.CaseFeature.DETAILS_FULL;
+import static org.unicef.rapidreg.childcase.CaseFeature.EDIT_FULL;
 import static org.unicef.rapidreg.service.RecordService.MODULE;
 
 public class CaseMiniFormFragment extends RecordRegisterFragment {
@@ -123,9 +127,12 @@ public class CaseMiniFormFragment extends RecordRegisterFragment {
         args.putSerializable(RecordService.ITEM_VALUES, getRecordRegisterData());
         args.putString(MODULE, caseRegisterPresenter.getCaseType());
         args.putStringArrayList(RecordService.RECORD_PHOTOS, (ArrayList<String>) getPhotoPathsData());
-        Feature feature = ((RecordActivity) getActivity()).getCurrentFeature().isDetailMode() ?
-                CaseFeature.DETAILS_FULL : ((RecordActivity) getActivity()).getCurrentFeature().isAddMode() ?
-                CaseFeature.ADD_FULL : CaseFeature.EDIT_FULL;
+
+        CaseFeature currentFeature = (CaseFeature) ((CaseActivity) getActivity()).getCurrentFeature();
+
+        Feature feature = currentFeature.isDetailMode() ?
+                DETAILS_FULL : currentFeature.isAddMode() ?
+                (currentFeature.isCPCase() ? ADD_CP_FULL : ADD_GBV_FULL) : EDIT_FULL;
         ((RecordActivity) getActivity()).turnToFeature(feature, args, ANIM_TO_FULL);
     }
 }

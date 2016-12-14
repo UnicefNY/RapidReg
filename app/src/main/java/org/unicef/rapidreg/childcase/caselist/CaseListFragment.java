@@ -118,7 +118,7 @@ public class CaseListFragment extends RecordListFragment {
         RecordActivity activity = (RecordActivity) getActivity();
         Bundle bundle = new Bundle();
         bundle.putString(MODULE, MODULE_CASE_CP);
-        activity.turnToFeature(CaseFeature.ADD_MINI, bundle, null);
+        activity.turnToFeature(CaseFeature.ADD_CP_MINI, bundle, null);
     }
 
     private void onGBVCaseAddClicked() {
@@ -132,7 +132,7 @@ public class CaseListFragment extends RecordListFragment {
         RecordActivity activity = (RecordActivity) getActivity();
         Bundle bundle = new Bundle();
         bundle.putString(MODULE, MODULE_CASE_GBV);
-        activity.turnToFeature(CaseFeature.ADD_MINI, bundle, null);
+        activity.turnToFeature(CaseFeature.ADD_GBV_MINI, bundle, null);
     }
 
 }
