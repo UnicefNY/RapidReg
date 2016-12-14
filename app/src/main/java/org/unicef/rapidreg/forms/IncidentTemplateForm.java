@@ -8,7 +8,7 @@ import java.util.List;
 
 public class IncidentTemplateForm implements RecordForm {
 
-    @SerializedName("Incident")
+    @SerializedName("Incidents")
     @Expose
     private List<Section> sections = new ArrayList<>();
 
@@ -22,7 +22,7 @@ public class IncidentTemplateForm implements RecordForm {
 
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder("<Incident>").append("\n");
+        StringBuilder sb = new StringBuilder("<Incidents>").append("\n");
         for (Section section : sections) {
             sb.append(section).append("\n");
         }

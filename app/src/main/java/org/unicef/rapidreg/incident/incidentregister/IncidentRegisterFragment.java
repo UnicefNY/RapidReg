@@ -53,8 +53,6 @@ public class IncidentRegisterFragment extends RecordRegisterFragment {
     @OnClick(R.id.form_switcher)
     public void onSwitcherChecked() {
         Bundle args = new Bundle();
-        args.putStringArrayList(RecordService.RECORD_PHOTOS, (ArrayList<String>)
-                getPhotoPathsData());
         args.putSerializable(RecordService.ITEM_VALUES, getRecordRegisterData());
 
         Feature feature = ((RecordActivity) getActivity()).getCurrentFeature().isDetailMode() ?

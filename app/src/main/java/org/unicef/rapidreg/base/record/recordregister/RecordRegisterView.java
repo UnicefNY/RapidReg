@@ -10,7 +10,7 @@ public interface RecordRegisterView extends MvpView {
     void onInitViewContent();
     void setRecordRegisterData(ItemValuesMap itemValues);
     void setPhotoPathsData(List<String> photoPaths);
-    List<String> getPhotoPathsData();
+    List getPhotoPathsData();
     ItemValuesMap getRecordRegisterData();
 
     interface SaveRecordCallback {

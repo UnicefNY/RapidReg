@@ -24,6 +24,8 @@ import org.unicef.rapidreg.injection.component.DaggerFragmentComponent;
 import org.unicef.rapidreg.injection.component.FragmentComponent;
 import org.unicef.rapidreg.injection.module.FragmentModule;
 import org.unicef.rapidreg.service.cache.ItemValuesMap;
+
+import java.util.Collections;
 import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -130,7 +132,6 @@ public abstract class RecordRegisterFragment extends MvpFragment<RecordRegisterV
         Toast.makeText(getActivity(), R.string.save_failed, Toast.LENGTH_SHORT).show();
     }
 
-    @Deprecated
     public RecordPhotoAdapter getPhotoAdapter() {
         return recordRegisterAdapter.getPhotoAdapter();
     }
