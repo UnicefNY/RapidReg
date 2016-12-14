@@ -14,6 +14,7 @@ import org.unicef.rapidreg.base.Feature;
 import org.unicef.rapidreg.base.record.RecordActivity;
 import org.unicef.rapidreg.base.record.recordregister.RecordRegisterAdapter;
 import org.unicef.rapidreg.base.record.recordregister.RecordRegisterFragment;
+import org.unicef.rapidreg.childcase.CaseActivity;
 import org.unicef.rapidreg.childcase.CaseFeature;
 import org.unicef.rapidreg.childcase.casephoto.CasePhotoAdapter;
 import org.unicef.rapidreg.service.RecordService;
@@ -25,6 +26,10 @@ import javax.inject.Inject;
 
 import butterknife.OnClick;
 
+import static org.unicef.rapidreg.childcase.CaseFeature.ADD_CP_MINI;
+import static org.unicef.rapidreg.childcase.CaseFeature.ADD_GBV_MINI;
+import static org.unicef.rapidreg.childcase.CaseFeature.DETAILS_MINI;
+import static org.unicef.rapidreg.childcase.CaseFeature.EDIT_MINI;
 import static org.unicef.rapidreg.service.RecordService.MODULE;
 
 public class CaseRegisterFragment extends RecordRegisterFragment {
@@ -71,9 +76,11 @@ public class CaseRegisterFragment extends RecordRegisterFragment {
         args.putStringArrayList(RecordService.RECORD_PHOTOS, (ArrayList<String>) getPhotoPathsData());
         args.putSerializable(RecordService.ITEM_VALUES, getRecordRegisterData());
 
-        Feature feature = ((RecordActivity) getActivity()).getCurrentFeature().isDetailMode() ?
-                CaseFeature.DETAILS_MINI : ((RecordActivity) getActivity()).getCurrentFeature().isAddMode() ?
-                CaseFeature.ADD_MINI : CaseFeature.EDIT_MINI;
+        CaseFeature currentFeature = (CaseFeature) ((CaseActivity) getActivity()).getCurrentFeature();
+
+        Feature feature = currentFeature.isDetailMode() ?
+                DETAILS_MINI : currentFeature.isAddMode() ?
+                (currentFeature.isCPCase() ? ADD_CP_MINI : ADD_GBV_MINI) : EDIT_MINI;
         ((RecordActivity) getActivity()).turnToFeature(feature, args, ANIM_TO_MINI);
     }
 
