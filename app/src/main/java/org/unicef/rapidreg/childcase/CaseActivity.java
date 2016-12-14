@@ -44,8 +44,7 @@ public class CaseActivity extends RecordActivity implements BaseView {
         navigationView.setCheckedItem(R.id.nav_cases);
         navigationView.setItemTextColor(caseColor);
 
-        boolean showAddPage = getIntent().getBooleanExtra(IntentSender.SHOW_ADD_PAGE, false);
-        turnToFeature(showAddPage ? CaseFeature.ADD_MINI : CaseFeature.LIST, null, null);
+        turnToFeature(CaseFeature.LIST, null, null);
     }
 
     @Override

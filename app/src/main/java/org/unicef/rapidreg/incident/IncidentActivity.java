@@ -44,8 +44,7 @@ public class IncidentActivity extends RecordActivity implements BaseView {
         navigationView.setCheckedItem(R.id.nav_incident);
         navigationView.setItemTextColor(incidentColor);
 
-        boolean showAddPage = getIntent().getBooleanExtra(IntentSender.SHOW_ADD_PAGE, false);
-        turnToFeature(showAddPage ? IncidentFeature.ADD_MINI : IncidentFeature.LIST, null, null);
+        turnToFeature(IncidentFeature.LIST, null, null);
     }
 
     @Override
