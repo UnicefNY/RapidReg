@@ -22,6 +22,7 @@ import org.unicef.rapidreg.service.CaseFormService;
 import org.unicef.rapidreg.service.CasePhotoService;
 import org.unicef.rapidreg.service.CaseService;
 import org.unicef.rapidreg.service.RecordService;
+import org.unicef.rapidreg.service.cache.ItemValues;
 import org.unicef.rapidreg.service.cache.ItemValuesMap;
 
 import java.util.ArrayList;
@@ -32,6 +33,7 @@ import edu.emory.mathcs.backport.java.util.Arrays;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyMap;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.MockitoAnnotations.initMocks;
@@ -105,13 +107,16 @@ public class CaseRegisterPresenterTest {
         caseRegisterPresenter.setCaseType(MODULE_CASE_CP);
 
         ItemValuesMap itemValuesMap = mock(ItemValuesMap.class);
+        String photoPath = mock(String.class);
+        List<String> photoPaths = Arrays.asList(new String[]{photoPath});
         SaveRecordCallback callback = mock(SaveRecordCallback.class);
 
         PowerMockito.mockStatic(RecordService.class);
         when(RecordService.validateRequiredFields(cpCaseTemplate, itemValuesMap)).thenReturn(false);
 
-        caseRegisterPresenter.saveRecord(itemValuesMap, callback);
+        caseRegisterPresenter.saveRecord(itemValuesMap, photoPaths, callback);
 
         verify(callback).onRequiredFieldNotFilled();
     }
+
 }

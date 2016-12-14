@@ -8,6 +8,7 @@ import com.google.gson.JsonObject;
 import org.json.JSONException;
 import org.unicef.rapidreg.base.record.recordregister.RecordRegisterFragment;
 import org.unicef.rapidreg.base.record.recordregister.RecordRegisterPresenter;
+import org.unicef.rapidreg.base.record.recordregister.RecordRegisterView;
 import org.unicef.rapidreg.base.record.recordregister.RecordRegisterView.SaveRecordCallback;
 import org.unicef.rapidreg.forms.Field;
 import org.unicef.rapidreg.forms.RecordForm;
@@ -52,6 +53,25 @@ public class TracingRegisterPresenter extends RecordRegisterPresenter {
     @Override
     protected Long getRecordId(Bundle bundle) {
         return bundle.getLong(TRACING_PRIMARY_ID, RecordRegisterFragment.INVALID_RECORD_ID);
+    }
+
+    @Override
+    public void saveRecord(ItemValuesMap itemValuesMap, List<String> photoPaths, SaveRecordCallback callback) {
+        if (!validateRequiredField(itemValuesMap)) {
+            callback.onRequiredFieldNotFilled();
+            return;
+        }
+        
+        ItemValues newItemValues = new ItemValues(new Gson().fromJson(new Gson().toJson(
+                itemValuesMap.getValues()), JsonObject.class));
+        clearProfileItems(newItemValues);
+
+        try {
+            Tracing record = tracingService.saveOrUpdate(newItemValues, photoPaths);
+            callback.onSaveSuccessful(record.getId());
+        } catch (IOException e) {
+            callback.onSavedFail();
+        }
     }
 
     @Override
@@ -116,28 +136,6 @@ public class TracingRegisterPresenter extends RecordRegisterPresenter {
     @Override
     public RecordForm getTemplateForm() {
         return tracingFormService.getCPTemplate();
-    }
-
-    @Override
-    public void saveRecord(ItemValuesMap itemValuesMap, SaveRecordCallback callback) {
-        if (!validateRequiredField(itemValuesMap)) {
-            callback.onRequiredFieldNotFilled();
-            return;
-        }
-        if (!isViewAttached()) {
-            return;
-        }
-        List<String> photoPaths = getView().getPhotoPathsData();
-        ItemValues newItemValues = new ItemValues(new Gson().fromJson(new Gson().toJson(
-                itemValuesMap.getValues()), JsonObject.class));
-        clearProfileItems(newItemValues);
-
-        try {
-            Tracing record = tracingService.saveOrUpdate(newItemValues, photoPaths);
-            callback.onSaveSuccessful(record.getId());
-        } catch (IOException e) {
-            callback.onSavedFail();
-        }
     }
 
     private boolean validateRequiredField(ItemValuesMap itemValuesMap) {

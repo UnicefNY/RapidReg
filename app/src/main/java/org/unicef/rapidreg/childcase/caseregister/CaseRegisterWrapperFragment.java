@@ -63,7 +63,7 @@ public class CaseRegisterWrapperFragment extends RecordRegisterWrapperFragment {
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void saveCase(SaveCaseEvent event) {
-       caseRegisterPresenter.saveRecord(getRecordRegisterData(), this);
+       caseRegisterPresenter.saveRecord(getRecordRegisterData(), getPhotoPathsData(), this);
     }
 
     @OnClick(R.id.edit)

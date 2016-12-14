@@ -20,10 +20,7 @@ import org.unicef.rapidreg.childcase.casephoto.CasePhotoAdapter;
 import org.unicef.rapidreg.service.RecordService;
 
 import java.util.ArrayList;
-import java.util.List;
-
 import javax.inject.Inject;
-
 import butterknife.OnClick;
 
 import static org.unicef.rapidreg.childcase.CaseFeature.ADD_CP_MINI;

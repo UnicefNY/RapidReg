@@ -81,7 +81,7 @@ public class IncidentMiniFormFragment extends RecordRegisterFragment {
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void saveIncident(SaveIncidentEvent event) {
-        incidentRegisterPresenter.saveRecord(getRecordRegisterData(), this);
+        incidentRegisterPresenter.saveRecord(getRecordRegisterData(), getPhotoPathsData(), this);
     }
 
     @Override

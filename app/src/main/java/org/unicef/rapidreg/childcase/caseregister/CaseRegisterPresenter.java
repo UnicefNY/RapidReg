@@ -8,6 +8,7 @@ import com.google.gson.JsonObject;
 import org.json.JSONException;
 import org.unicef.rapidreg.base.record.recordregister.RecordRegisterFragment;
 import org.unicef.rapidreg.base.record.recordregister.RecordRegisterPresenter;
+import org.unicef.rapidreg.base.record.recordregister.RecordRegisterView;
 import org.unicef.rapidreg.base.record.recordregister.RecordRegisterView.SaveRecordCallback;
 import org.unicef.rapidreg.forms.CaseTemplateForm;
 import org.unicef.rapidreg.forms.Field;
@@ -65,6 +66,24 @@ public class CaseRegisterPresenter extends RecordRegisterPresenter {
     @Override
     protected Long getRecordId(Bundle bundle) {
         return bundle.getLong(CaseService.CASE_PRIMARY_ID, RecordRegisterFragment.INVALID_RECORD_ID);
+    }
+
+    @Override
+    public void saveRecord(ItemValuesMap itemValuesMap, List<String> photoPaths, SaveRecordCallback callback) {
+        if (!validateRequiredField(itemValuesMap)) {
+            callback.onRequiredFieldNotFilled();
+            return;
+        }
+        ItemValues newItemValues = new ItemValues(new Gson().fromJson(new Gson().toJson(
+                itemValuesMap.getValues()), JsonObject.class));
+        newItemValues.addStringItem(MODULE, caseType);
+        clearProfileItems(newItemValues);
+        try {
+            Case record = caseService.saveOrUpdate(newItemValues, photoPaths);
+            callback.onSaveSuccessful(record.getId());
+        } catch (IOException e) {
+            callback.onSavedFail();
+        }
     }
 
     @Override
@@ -131,28 +150,6 @@ public class CaseRegisterPresenter extends RecordRegisterPresenter {
             case MODULE_CASE_CP: return caseFormService.getCPTemplate();
             case MODULE_CASE_GBV: return caseFormService.getGBVTemplate();
             default: return new CaseTemplateForm();
-        }
-    }
-
-    @Override
-    public void saveRecord(ItemValuesMap itemValues, SaveRecordCallback callback) {
-        if (!validateRequiredField(itemValues)) {
-            callback.onRequiredFieldNotFilled();
-            return;
-        }
-        if (!isViewAttached()) {
-            return;
-        }
-        List<String> photoPaths = getView().getPhotoPathsData();
-        ItemValues newItemValues = new ItemValues(new Gson().fromJson(new Gson().toJson(
-                itemValues.getValues()), JsonObject.class));
-        newItemValues.addStringItem(MODULE, caseType);
-        clearProfileItems(newItemValues);
-        try {
-            Case record = caseService.saveOrUpdate(newItemValues, photoPaths);
-            callback.onSaveSuccessful(record.getId());
-        } catch (IOException e) {
-            callback.onSavedFail();
         }
     }
 
