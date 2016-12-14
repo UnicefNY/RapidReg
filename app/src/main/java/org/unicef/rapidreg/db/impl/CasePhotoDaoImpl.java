@@ -3,6 +3,7 @@ package org.unicef.rapidreg.db.impl;
 import com.raizlabs.android.dbflow.sql.language.SQLite;
 
 import org.unicef.rapidreg.db.CasePhotoDao;
+import org.unicef.rapidreg.model.Case;
 import org.unicef.rapidreg.model.CasePhoto;
 import org.unicef.rapidreg.model.CasePhoto_Table;
 
@@ -55,6 +56,12 @@ public class CasePhotoDaoImpl implements CasePhotoDao {
     @Override
     public void deleteByCaseId(long caseId) {
         SQLite.delete().from(CasePhoto.class).where(CasePhoto_Table.caseId.eq(caseId)).execute();
+    }
+
+    @Override
+    public CasePhoto save(CasePhoto casePhoto) {
+        casePhoto.save();
+        return casePhoto;
     }
 
     @Override

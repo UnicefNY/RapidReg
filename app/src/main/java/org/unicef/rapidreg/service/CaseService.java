@@ -150,9 +150,10 @@ public class CaseService extends RecordService {
         child.setAudio(audioFileDefault);
         child.setCreatedBy(username);
         child.setModuleId(itemValues.getAsString(MODULE));
-        child.save();
 
-        savePhoto(child, photoPath);
+        caseDao.save(child);
+
+        savePhoto(child, photoPaths);
 
         return child;
     }
@@ -161,7 +162,7 @@ public class CaseService extends RecordService {
         for (int i = 0; i < photoPaths.size(); i++) {
             CasePhoto casePhoto = generateSavePhoto(child, photoPaths, i);
             casePhoto.setKey(UUID.randomUUID().toString());
-            casePhoto.save();
+            casePhotoDao.save(casePhoto);
         }
     }
 
