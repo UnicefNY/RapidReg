@@ -21,7 +21,9 @@ import org.unicef.rapidreg.childcase.CaseFeature;
 import org.unicef.rapidreg.childcase.casephoto.CasePhotoAdapter;
 import org.unicef.rapidreg.event.SaveCaseEvent;
 import org.unicef.rapidreg.forms.Section;
+import org.unicef.rapidreg.service.CaseService;
 import org.unicef.rapidreg.service.RecordService;
+import org.unicef.rapidreg.service.cache.ItemValues;
 import org.unicef.rapidreg.service.cache.ItemValuesMap;
 import java.util.ArrayList;
 
@@ -72,6 +74,7 @@ public class CaseRegisterWrapperFragment extends RecordRegisterWrapperFragment {
         args.putString(MODULE, caseRegisterPresenter.getCaseType());
         args.putSerializable(RecordService.ITEM_VALUES, getRecordRegisterData());
         args.putStringArrayList(RecordService.RECORD_PHOTOS, (ArrayList<String>) recordPhotoAdapter.getAllItems());
+
         ((CaseActivity) getActivity()).turnToFeature(CaseFeature.EDIT_FULL, args, null);
     }
 
@@ -105,9 +108,11 @@ public class CaseRegisterWrapperFragment extends RecordRegisterWrapperFragment {
     @Override
     public void onSaveSuccessful(long recordId) {
         Bundle args = new Bundle();
+        args.putLong(CaseService.CASE_PRIMARY_ID, recordId);
         args.putString(MODULE, caseRegisterPresenter.getCaseType());
         args.putSerializable(RecordService.ITEM_VALUES, getRecordRegisterData());
         args.putStringArrayList(RecordService.RECORD_PHOTOS, (ArrayList<String>) getPhotoPathsData());
+
         ((RecordActivity) getActivity()).turnToFeature(CaseFeature.DETAILS_FULL, args, null);
     }
 }
