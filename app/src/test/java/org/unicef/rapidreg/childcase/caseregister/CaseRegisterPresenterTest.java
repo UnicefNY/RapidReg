@@ -7,13 +7,22 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
+import org.powermock.api.easymock.PowerMock;
+import org.powermock.api.mockito.PowerMockito;
+import org.powermock.core.classloader.annotations.PrepareForTest;
+import org.powermock.modules.junit4.PowerMockRunner;
+import org.unicef.rapidreg.base.record.recordregister.RecordRegisterView;
+import org.unicef.rapidreg.base.record.recordregister.RecordRegisterView.SaveRecordCallback;
 import org.unicef.rapidreg.forms.CaseTemplateForm;
 import org.unicef.rapidreg.forms.Field;
 import org.unicef.rapidreg.forms.RecordForm;
 import org.unicef.rapidreg.forms.Section;
+import org.unicef.rapidreg.model.Case;
 import org.unicef.rapidreg.service.CaseFormService;
 import org.unicef.rapidreg.service.CasePhotoService;
 import org.unicef.rapidreg.service.CaseService;
+import org.unicef.rapidreg.service.RecordService;
+import org.unicef.rapidreg.service.cache.ItemValuesMap;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,6 +31,7 @@ import edu.emory.mathcs.backport.java.util.Arrays;
 
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
+import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.MockitoAnnotations.initMocks;
@@ -29,7 +39,8 @@ import static org.powermock.api.mockito.PowerMockito.mock;
 import static org.powermock.api.mockito.PowerMockito.when;
 import static org.unicef.rapidreg.childcase.caseregister.CaseRegisterPresenter.MODULE_CASE_CP;
 
-@RunWith(MockitoJUnitRunner.class)
+@RunWith(PowerMockRunner.class)
+@PrepareForTest({RecordService.class})
 public class CaseRegisterPresenterTest {
 
     @Mock
@@ -85,5 +96,22 @@ public class CaseRegisterPresenterTest {
 
         assertThat("Should contain mini form field", actual.contains(miniFormField), is(true));
         assertThat("Should not contain full form field", actual.contains(otherField), is(false));
+    }
+
+    @Test
+    public void should_save_fail_when_required_field_is_not_finished() throws Exception {
+        CaseTemplateForm cpCaseTemplate = mock(CaseTemplateForm.class);
+        when(caseFormService.getCPTemplate()).thenReturn(cpCaseTemplate);
+        caseRegisterPresenter.setCaseType(MODULE_CASE_CP);
+
+        ItemValuesMap itemValuesMap = mock(ItemValuesMap.class);
+        SaveRecordCallback callback = mock(SaveRecordCallback.class);
+
+        PowerMockito.mockStatic(RecordService.class);
+        when(RecordService.validateRequiredFields(cpCaseTemplate, itemValuesMap)).thenReturn(false);
+
+        caseRegisterPresenter.saveRecord(itemValuesMap, callback);
+
+        verify(callback).onRequiredFieldNotFilled();
     }
 }

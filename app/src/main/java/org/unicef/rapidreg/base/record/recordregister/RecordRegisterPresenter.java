@@ -103,8 +103,7 @@ public abstract class RecordRegisterPresenter extends MvpBasePresenter<RecordReg
 
         return getPhotoPathsByRecordId(getRecordId(bundle));
     }
-
-    public abstract void saveRecord(SaveRecordCallback callback);
+    public abstract void saveRecord(ItemValuesMap itemValuesMap, SaveRecordCallback callback);
 
     protected abstract ItemValuesMap getItemValuesByRecordId(Long recordId) throws JSONException;
 

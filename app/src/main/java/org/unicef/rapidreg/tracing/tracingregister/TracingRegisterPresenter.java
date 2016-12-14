@@ -119,8 +119,7 @@ public class TracingRegisterPresenter extends RecordRegisterPresenter {
     }
 
     @Override
-    public void saveRecord(SaveRecordCallback callback) {
-        ItemValuesMap itemValuesMap = getView().getRecordRegisterData();
+    public void saveRecord(ItemValuesMap itemValuesMap, SaveRecordCallback callback) {
         if (!validateRequiredField(itemValuesMap)) {
             callback.onRequiredFieldNotFilled();
             return;

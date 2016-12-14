@@ -56,7 +56,7 @@ public class IncidentRegisterWrapperFragment extends RecordRegisterWrapperFragme
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void saveIncident(SaveIncidentEvent event) {
-        incidentRegisterPresenter.saveRecord(this);
+        incidentRegisterPresenter.saveRecord(getRecordRegisterData(), this);
     }
 
     @OnClick(R.id.edit)

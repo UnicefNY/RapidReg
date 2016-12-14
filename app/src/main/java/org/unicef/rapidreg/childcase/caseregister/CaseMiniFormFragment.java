@@ -100,7 +100,7 @@ public class CaseMiniFormFragment extends RecordRegisterFragment {
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void saveCase(SaveCaseEvent event) {
-        caseRegisterPresenter.saveRecord(this);
+        caseRegisterPresenter.saveRecord(getRecordRegisterData(), this);
     }
 
     @Override

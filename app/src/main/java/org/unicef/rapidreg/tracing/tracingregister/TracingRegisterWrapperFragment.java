@@ -59,7 +59,7 @@ public class TracingRegisterWrapperFragment extends RecordRegisterWrapperFragmen
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void saveTracing(SaveTracingEvent event) {
-        tracingRegisterPresenter.saveRecord(this);
+        tracingRegisterPresenter.saveRecord(getRecordRegisterData(), this);
     }
 
     @OnClick(R.id.edit)
