@@ -51,6 +51,24 @@ public class IncidentRegisterPresenter extends RecordRegisterPresenter {
     }
 
     @Override
+    public void saveRecord(ItemValuesMap itemValuesMap, List<String> photoPaths, RecordRegisterView.SaveRecordCallback callback) {
+        if (!validateRequiredField(itemValuesMap)) {
+            callback.onRequiredFieldNotFilled();
+            return;
+        }
+
+        ItemValues newItemValues = new ItemValues(new Gson().fromJson(new Gson().toJson(
+                itemValuesMap.getValues()), JsonObject.class));
+        clearProfileItems(newItemValues);
+        try {
+            Incident record = incidentService.saveOrUpdate(newItemValues);
+            callback.onSaveSuccessful(record.getId());
+        } catch (IOException e) {
+            callback.onSavedFail();
+        }
+    }
+
+    @Override
     protected ItemValuesMap getItemValuesByRecordId(Long recordId) throws JSONException {
         Incident incidentItem = incidentService.getById(recordId);
         String incidentJson = new String(incidentItem.getContent().getBlob());
@@ -108,26 +126,6 @@ public class IncidentRegisterPresenter extends RecordRegisterPresenter {
     @Override
     public RecordForm getTemplateForm() {
         return incidentFormService.getGBVTemplate();
-    }
-
-    @Override
-    public void saveRecord(ItemValuesMap itemValues, RecordRegisterView.SaveRecordCallback callback) {
-        if (!validateRequiredField(itemValues)) {
-            callback.onRequiredFieldNotFilled();
-            return;
-        }
-        if (!isViewAttached()) {
-            return;
-        }
-        ItemValues newItemValues = new ItemValues(new Gson().fromJson(new Gson().toJson(
-                itemValues.getValues()), JsonObject.class));
-        clearProfileItems(newItemValues);
-        try {
-            Incident record = incidentService.saveOrUpdate(newItemValues);
-            callback.onSaveSuccessful(record.getId());
-        } catch (IOException e) {
-            callback.onSavedFail();
-        }
     }
 
     private boolean validateRequiredField(ItemValuesMap itemValuesMap) {

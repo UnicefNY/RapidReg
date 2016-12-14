@@ -94,7 +94,7 @@ public class TracingMiniFormFragment extends RecordRegisterFragment {
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void saveTracing(SaveTracingEvent event) {
-        tracingRegisterPresenter.saveRecord(getRecordRegisterData(), this);
+        tracingRegisterPresenter.saveRecord(getRecordRegisterData(), getPhotoPathsData(), this);
     }
 
     @Override
