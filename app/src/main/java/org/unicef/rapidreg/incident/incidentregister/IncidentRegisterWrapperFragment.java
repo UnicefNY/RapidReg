@@ -86,8 +86,6 @@ public class IncidentRegisterWrapperFragment extends RecordRegisterWrapperFragme
             String[] values = section.getName().values().toArray(new String[0]);
             Bundle args = new Bundle();
             args.putSerializable(RecordService.ITEM_VALUES, getRecordRegisterData());
-            args.putStringArrayList(RecordService.RECORD_PHOTOS, (ArrayList<String>)
-                    recordPhotoAdapter.getAllItems());
             pages.add(FragmentPagerItem.of(values[0], IncidentRegisterFragment.class, args));
         }
         return pages;

@@ -35,7 +35,8 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public abstract class RecordRegisterWrapperFragment extends MvpFragment<RecordRegisterView, RecordRegisterPresenter>
+public abstract class RecordRegisterWrapperFragment extends MvpFragment<RecordRegisterView,
+        RecordRegisterPresenter>
         implements RecordRegisterView, RecordRegisterView.SaveRecordCallback {
     private static final String TAG = RecordRegisterWrapperFragment.class.getSimpleName();
     public static final String ITEM_VALUES = "item_values";
@@ -112,7 +113,8 @@ public abstract class RecordRegisterWrapperFragment extends MvpFragment<RecordRe
 
     @Override
     public void onRequiredFieldNotFilled() {
-        Toast.makeText(getActivity(), R.string.required_field_is_not_filled, Toast.LENGTH_LONG).show();
+        Toast.makeText(getActivity(), R.string.required_field_is_not_filled, Toast.LENGTH_LONG)
+                .show();
     }
 
     @Override
@@ -154,19 +156,24 @@ public abstract class RecordRegisterWrapperFragment extends MvpFragment<RecordRe
         viewPagerTab.setViewPager(viewPager);
         viewPagerTab.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+            public void onPageScrolled(int position, float positionOffset, int
+                    positionOffsetPixels) {
 
             }
 
             @Override
             public void onPageSelected(int position) {
-                RecordRegisterFragment currentPage = (RecordRegisterFragment) adapter.getPage(position);
-                recordPhotoAdapter = currentPage.getPhotoAdapter();
-                recordPhotoAdapter.setItems(currentPage.getPhotoPathsData());
+                RecordRegisterFragment currentPage = (RecordRegisterFragment) adapter.getPage
+                        (position);
+                if (recordPhotoAdapter != null) {
+                    recordPhotoAdapter = currentPage.getPhotoAdapter();
+                    recordPhotoAdapter.setItems(currentPage.getPhotoPathsData());
+                }
             }
 
             @Override
-            public void onPageScrollStateChanged(int state) {}
+            public void onPageScrollStateChanged(int state) {
+            }
         });
     }
 

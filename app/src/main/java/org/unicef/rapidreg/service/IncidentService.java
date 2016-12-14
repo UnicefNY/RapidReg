@@ -127,8 +127,6 @@ public class IncidentService extends RecordService{
         Gson gson = new Gson();
         Date date = new Date(Calendar.getInstance().getTimeInMillis());
         Blob tracingBlob = new Blob(gson.toJson(itemValues.getValues()).getBytes());
-        Blob audioFileDefault = null;
-        audioFileDefault = getAudioBlob(audioFileDefault);
 
         Incident incident = new Incident();
         incident.setUniqueId(uniqueId);
@@ -140,7 +138,6 @@ public class IncidentService extends RecordService{
         incident.setAge(age);
         incident.setCaregiver(getCaregiverName(itemValues));
         incident.setRegistrationDate(getRegisterDate(itemValues.getAsString(INQUIRY_DATE)));
-        incident.setAudio(audioFileDefault);
         incident.setCreatedBy(username);
         incident.save();
         return incident;
@@ -150,8 +147,6 @@ public class IncidentService extends RecordService{
     public Incident update(ItemValues itemValues) throws IOException {
         Gson gson = new Gson();
         Blob blob = new Blob(gson.toJson(itemValues.getValues()).getBytes());
-        Blob audioFileDefault = null;
-        audioFileDefault = getAudioBlob(audioFileDefault);
 
         Incident incident = incidentDao.getIncidentByUniqueId(itemValues.getAsString(INCIDENT_ID));
         incident.setLastUpdatedDate(new Date(Calendar.getInstance().getTimeInMillis()));
@@ -162,23 +157,12 @@ public class IncidentService extends RecordService{
         incident.setCaregiver(getCaregiverName(itemValues));
         setSyncedStatus(incident);
         incident.setRegistrationDate(getRegisterDate(itemValues.getAsString(INQUIRY_DATE)));
-        incident.setAudio(audioFileDefault);
         incident.update();
 
         return incident;
     }
 
-    private Blob getAudioBlob(Blob blob) {
-        if (StreamUtil.isFileExists(AUDIO_FILE_PATH)) {
-            try {
-                blob = new Blob(StreamUtil.readFile(AUDIO_FILE_PATH));
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-        return blob;
-    }
-
+   
     private String getName(ItemValues values) {
         return values.getAsString(RELATION_NAME) + " "
                 + values.getAsString(RELATION_AGE) + " "
