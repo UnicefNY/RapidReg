@@ -42,8 +42,7 @@ public class TracingActivity extends RecordActivity implements BaseView {
         navigationView.setCheckedItem(R.id.nav_tracing);
         navigationView.setItemTextColor(tracingColor);
 
-        boolean showAddPage = getIntent().getBooleanExtra(IntentSender.SHOW_ADD_PAGE, false);
-        turnToFeature(showAddPage ? TracingFeature.ADD_MINI : TracingFeature.LIST, null, null);
+        turnToFeature(TracingFeature.LIST, null, null);
     }
 
     @Override
