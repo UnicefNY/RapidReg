@@ -13,6 +13,7 @@ import com.ogaclejapan.smarttablayout.utils.v4.FragmentPagerItems;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 import org.unicef.rapidreg.R;
+import org.unicef.rapidreg.base.Feature;
 import org.unicef.rapidreg.base.record.RecordActivity;
 import org.unicef.rapidreg.base.record.recordphoto.RecordPhotoAdapter;
 import org.unicef.rapidreg.base.record.recordregister.RecordRegisterWrapperFragment;
@@ -31,6 +32,8 @@ import javax.inject.Inject;
 
 import butterknife.OnClick;
 
+import static org.unicef.rapidreg.childcase.CaseFeature.*;
+import static org.unicef.rapidreg.childcase.caseregister.CaseRegisterPresenter.MODULE_CASE_CP;
 import static org.unicef.rapidreg.service.RecordService.MODULE;
 
 public class CaseRegisterWrapperFragment extends RecordRegisterWrapperFragment {
@@ -75,7 +78,7 @@ public class CaseRegisterWrapperFragment extends RecordRegisterWrapperFragment {
         args.putSerializable(RecordService.ITEM_VALUES, getRecordRegisterData());
         args.putStringArrayList(RecordService.RECORD_PHOTOS, (ArrayList<String>) recordPhotoAdapter.getAllItems());
 
-        ((CaseActivity) getActivity()).turnToFeature(CaseFeature.EDIT_FULL, args, null);
+        ((CaseActivity) getActivity()).turnToFeature(EDIT_FULL, args, null);
     }
 
     @Override
@@ -107,12 +110,15 @@ public class CaseRegisterWrapperFragment extends RecordRegisterWrapperFragment {
 
     @Override
     public void onSaveSuccessful(long recordId) {
+        String moduleId = caseRegisterPresenter.getCaseType();
+        Feature feature = moduleId.equals(MODULE_CASE_CP) ? DETAILS_CP_FULL : DETAILS_GBV_FULL;
+
         Bundle args = new Bundle();
         args.putLong(CaseService.CASE_PRIMARY_ID, recordId);
         args.putString(MODULE, caseRegisterPresenter.getCaseType());
         args.putSerializable(RecordService.ITEM_VALUES, getRecordRegisterData());
         args.putStringArrayList(RecordService.RECORD_PHOTOS, (ArrayList<String>) getPhotoPathsData());
 
-        ((RecordActivity) getActivity()).turnToFeature(CaseFeature.DETAILS_FULL, args, null);
+        ((RecordActivity) getActivity()).turnToFeature(feature, args, null);
     }
 }

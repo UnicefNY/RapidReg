@@ -75,7 +75,7 @@ public class IncidentMiniFormFragment extends RecordRegisterFragment {
     @Override
     protected RecordRegisterAdapter createRecordRegisterAdapter() {
         List<Field> fields = incidentRegisterPresenter.getValidFields();
-        addProfileFieldForDetailsPage(fields);
+        addProfileFieldForDetailsPage(0, fields);
 
         RecordRegisterAdapter recordRegisterAdapter = new RecordRegisterAdapter(getActivity(),
                 fields,

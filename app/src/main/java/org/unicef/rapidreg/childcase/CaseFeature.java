@@ -18,8 +18,10 @@ public enum CaseFeature implements Feature {
     ADD_GBV_FULL(R.string.new_gbv_case, CaseRegisterWrapperFragment.class),
     EDIT_MINI(R.string.edit, CaseMiniFormFragment.class),
     EDIT_FULL(R.string.edit, CaseRegisterWrapperFragment.class),
-    DETAILS_MINI(R.string.case_details, CaseMiniFormFragment.class),
-    DETAILS_FULL(R.string.case_details, CaseRegisterWrapperFragment.class),
+    DETAILS_CP_MINI(R.string.cp_case_details, CaseMiniFormFragment.class),
+    DETAILS_CP_FULL(R.string.cp_case_details, CaseRegisterWrapperFragment.class),
+    DETAILS_GBV_MINI(R.string.gbv_case_details, CaseMiniFormFragment.class),
+    DETAILS_GBV_FULL(R.string.gbv_case_details, CaseRegisterWrapperFragment.class),
     SEARCH(R.string.search, CaseSearchFragment.class),;
 
     private int titleId;
@@ -55,7 +57,8 @@ public enum CaseFeature implements Feature {
     }
 
     public boolean isDetailMode() {
-        return this == DETAILS_FULL || this == DETAILS_MINI;
+        return this == DETAILS_CP_FULL || this == DETAILS_CP_MINI ||
+                this == DETAILS_GBV_FULL || this == DETAILS_GBV_MINI;
     }
 
     @Override
@@ -64,6 +67,6 @@ public enum CaseFeature implements Feature {
     }
 
     public boolean isCPCase() {
-        return this == ADD_CP_MINI;
+        return this == ADD_CP_MINI || this == ADD_CP_FULL || this == DETAILS_CP_MINI || this == DETAILS_CP_FULL;
     }
 }

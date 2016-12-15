@@ -119,6 +119,8 @@
     <string name="produce_cases_successfully_msg">Produce cases complete!</string>
     <string name="new_cp_case">New CP case</string>
     <string name="new_gbv_case">New GBV case</string>
+    <string name="cp_case_details">CP case details</string>
+    <string name="gbv_case_details">GBV case details</string>
     <!--Sync-->
 
     <!--Transparent theme-->

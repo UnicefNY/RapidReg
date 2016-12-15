@@ -22,7 +22,8 @@ import butterknife.OnClick;
 
 import static org.unicef.rapidreg.childcase.CaseFeature.ADD_CP_MINI;
 import static org.unicef.rapidreg.childcase.CaseFeature.ADD_GBV_MINI;
-import static org.unicef.rapidreg.childcase.CaseFeature.DETAILS_MINI;
+import static org.unicef.rapidreg.childcase.CaseFeature.DETAILS_CP_MINI;
+import static org.unicef.rapidreg.childcase.CaseFeature.DETAILS_GBV_MINI;
 import static org.unicef.rapidreg.childcase.CaseFeature.EDIT_MINI;
 import static org.unicef.rapidreg.service.RecordService.MODULE;
 
@@ -73,7 +74,7 @@ public class CaseRegisterFragment extends RecordRegisterFragment {
         CaseFeature currentFeature = (CaseFeature) ((CaseActivity) getActivity()).getCurrentFeature();
 
         Feature feature = currentFeature.isDetailMode() ?
-                DETAILS_MINI : currentFeature.isAddMode() ?
+                (currentFeature.isCPCase() ? DETAILS_CP_MINI : DETAILS_GBV_MINI) : currentFeature.isAddMode() ?
                 (currentFeature.isCPCase() ? ADD_CP_MINI : ADD_GBV_MINI) : EDIT_MINI;
         ((RecordActivity) getActivity()).turnToFeature(feature, args, ANIM_TO_MINI);
     }
