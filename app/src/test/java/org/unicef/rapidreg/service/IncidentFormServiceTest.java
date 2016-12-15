@@ -3,7 +3,6 @@ package org.unicef.rapidreg.service;
 import com.raizlabs.android.dbflow.data.Blob;
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.runners.MockitoJUnitRunner;
@@ -13,7 +12,6 @@ import org.unicef.rapidreg.db.impl.IncidentFormDaoImpl;
 import org.unicef.rapidreg.forms.Field;
 import org.unicef.rapidreg.forms.IncidentTemplateForm;
 import org.unicef.rapidreg.forms.Section;
-import org.unicef.rapidreg.model.Incident;
 import org.unicef.rapidreg.model.IncidentForm;
 import org.unicef.rapidreg.service.impl.IncidentFormServiceImpl;
 

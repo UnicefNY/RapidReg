@@ -7,7 +7,6 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.runners.MockitoJUnitRunner;
-import org.robolectric.RobolectricTestRunner;
 import org.unicef.rapidreg.db.CaseFormDao;
 import org.unicef.rapidreg.db.impl.CaseFormDaoImpl;
 import org.unicef.rapidreg.forms.CaseTemplateForm;
