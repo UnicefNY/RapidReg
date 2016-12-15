@@ -13,6 +13,7 @@ import org.unicef.rapidreg.db.impl.IncidentFormDaoImpl;
 import org.unicef.rapidreg.forms.Field;
 import org.unicef.rapidreg.forms.IncidentTemplateForm;
 import org.unicef.rapidreg.forms.Section;
+import org.unicef.rapidreg.model.Incident;
 import org.unicef.rapidreg.model.IncidentForm;
 import org.unicef.rapidreg.service.impl.IncidentFormServiceImpl;
 
@@ -80,7 +81,8 @@ public class IncidentFormServiceTest {
         incidentForm.setForm(new Blob());
         when(incidentFormDao.getIncidentForm(RecordConfiguration.MODULE_ID_GBV)).thenReturn
                 (incidentForm);
-        assertThat(incidentFormService.isReady(), is(true));
+        boolean result = incidentFormService.isReady();
+        assertThat(result, is(true));
         verify(incidentFormDao, times(1)).getIncidentForm(RecordConfiguration.MODULE_ID_GBV);
     }
 
@@ -92,10 +94,12 @@ public class IncidentFormServiceTest {
     }
 
     @Test
-    public void should_be_false_when_form_can_not_get_from_incident_form() {
-        when(incidentFormDao.getIncidentForm(RecordConfiguration.MODULE_ID_GBV)).thenReturn(null);
-        assertThat(incidentFormService.isReady(),is(false));
-        verify(incidentFormDao,times(1)).getIncidentForm(RecordConfiguration.MODULE_ID_GBV);
+    public void should_be_false_when_incident_form_can_not_get_form() {
+        IncidentForm incidentForm = new IncidentForm();
+        when(incidentFormDao.getIncidentForm(RecordConfiguration.MODULE_ID_GBV)).thenReturn
+                (incidentForm);
+            assertThat(incidentFormService.isReady(), is(false));
+        verify(incidentFormDao, times(1)).getIncidentForm(RecordConfiguration.MODULE_ID_GBV);
     }
 
     @Test
@@ -108,17 +112,39 @@ public class IncidentFormServiceTest {
         assertThat(form.getSections().size(), is(1));
 
         Section section = form.getSections().get(0);
-        assertThat(section.getName().get("en"), is("Basic Identity"));
+        assertThat(section.getName().get("en"), is("Record Owner"));
         assertThat(section.getOrder(), is(10));
         assertThat(section.getHelpText().get("en"), is(""));
         assertThat(section.getBaseLanguage(), is("en"));
 
         Field field = section.getFields().get(0);
-        assertThat(field.getName(), is("case_id"));
-        assertThat(field.getDisplayName().get("en"), is("Long ID"));
+        assertThat(field.getName(), is("caseworker_name"));
+        assertThat(field.getDisplayName().get("en"), is("Field/Case/Social Worker"));
         assertThat(field.getHelpText().get("en"), is(""));
         assertThat(field.getType(), is("text_field"));
         assertThat(field.getOptionStringsText().get("en").size(), is(0));
+        assertThat(field.isShowOnMiniForm(), is(true));
+        assertThat(field.isMultiSelect(), is(false));
+        assertThat(field.isEditable(), is(true));
+        assertThat(field.isRequired(), is(false));
         assertThat(field.getSubForm(), is(nullValue()));
+    }
+
+    @Test
+    public void should_save_when_existing_incident_form_is_null() {
+        when(incidentFormDao.getIncidentForm(anyString())).thenReturn(null);
+        IncidentForm incidentForm = mock(IncidentForm.class);
+        incidentFormService.saveOrUpdate(incidentForm);
+        verify(incidentForm, times(1)).save();
+    }
+
+    @Test
+    public void should_update_when_existing_incident_form_is_not_null() {
+        IncidentForm existingIncidentForm = mock(IncidentForm.class);
+        when(incidentFormDao.getIncidentForm(anyString())).thenReturn(existingIncidentForm);
+        IncidentForm incidentForm = mock(IncidentForm.class);
+        incidentFormService.saveOrUpdate(incidentForm);
+        verify(existingIncidentForm,times(1)).setForm(incidentForm.getForm());
+        verify(existingIncidentForm,times(1)).update();
     }
 }
