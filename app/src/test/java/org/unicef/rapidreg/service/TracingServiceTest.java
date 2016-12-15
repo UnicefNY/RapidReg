@@ -40,7 +40,6 @@ public class TracingServiceTest {
     @Before
     public void setUp() throws Exception {
         initMocks(this);
-
         tracingService = new TracingService(tracingDao, tracingPhotoDao);
     }
 

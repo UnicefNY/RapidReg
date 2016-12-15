@@ -28,6 +28,7 @@ import org.unicef.rapidreg.service.UserService;
 import org.unicef.rapidreg.service.impl.CaseFormServiceImpl;
 import org.unicef.rapidreg.service.impl.IncidentFormServiceImpl;
 import org.unicef.rapidreg.service.impl.TracingFormServiceImpl;
+import org.unicef.rapidreg.service.impl.UserServiceImpl;
 
 import javax.inject.Singleton;
 
@@ -57,7 +58,7 @@ public class ApplicationModule {
     @Provides
     @Singleton
     public UserService provideUserService() {
-        return new UserService(new UserDaoImpl());
+        return new UserServiceImpl(new UserDaoImpl());
     }
 
     @Provides
