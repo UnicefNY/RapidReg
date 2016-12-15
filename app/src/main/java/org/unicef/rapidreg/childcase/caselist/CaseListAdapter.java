@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
 
+import org.unicef.rapidreg.base.Feature;
 import org.unicef.rapidreg.base.record.RecordActivity;
 import org.unicef.rapidreg.base.record.recordlist.RecordListAdapter;
 import org.unicef.rapidreg.childcase.CaseFeature;
@@ -18,6 +19,7 @@ import org.unicef.rapidreg.utils.StreamUtil;
 import java.io.IOException;
 import javax.inject.Inject;
 
+import static org.unicef.rapidreg.childcase.caseregister.CaseRegisterPresenter.MODULE_CASE_CP;
 import static org.unicef.rapidreg.service.RecordService.MODULE;
 
 public class CaseListAdapter extends RecordListAdapter {
@@ -52,9 +54,12 @@ public class CaseListAdapter extends RecordListAdapter {
             @Override
             public void onClick(View v) {
                 Bundle args = new Bundle();
-                args.putString(MODULE, itemValues.getAsString(MODULE));
+                String moduleId = itemValues.getAsString(MODULE);
+                Feature feature = moduleId.equals(MODULE_CASE_CP) ? CaseFeature.DETAILS_CP_MINI : CaseFeature.DETAILS_GBV_MINI;
+
+                args.putString(MODULE, moduleId);
                 args.putLong(CaseService.CASE_PRIMARY_ID, recordId);
-                ((RecordActivity)context).turnToFeature(CaseFeature.DETAILS_MINI, args, null);
+                ((RecordActivity)context).turnToFeature(feature, args, null);
                 try {
                     RecordService.clearAudioFile();
                     if (record.getAudio() != null) {

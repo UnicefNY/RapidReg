@@ -15,6 +15,7 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 import org.unicef.rapidreg.PrimeroApplication;
 import org.unicef.rapidreg.R;
+import org.unicef.rapidreg.base.Feature;
 import org.unicef.rapidreg.base.record.RecordActivity;
 import org.unicef.rapidreg.base.record.recordphoto.RecordPhotoAdapter;
 import org.unicef.rapidreg.event.UpdateImageEvent;
@@ -96,7 +97,7 @@ public abstract class RecordRegisterFragment extends MvpFragment<RecordRegisterV
         return recordRegisterAdapter.getItemValues();
     }
 
-    public void addProfileFieldForDetailsPage(List<Field> fields) {
+    public void addProfileFieldForDetailsPage(int position, List<Field> fields) {
         if (fields.isEmpty()) {
             return;
         }
@@ -105,7 +106,7 @@ public abstract class RecordRegisterFragment extends MvpFragment<RecordRegisterV
             Field field = new Field();
             field.setType(Field.TYPE_MINI_FORM_PROFILE);
             try {
-                fields.add(1, field);
+                fields.add(position, field);
             } catch (Exception e) {
                 fields.add(field);
             }

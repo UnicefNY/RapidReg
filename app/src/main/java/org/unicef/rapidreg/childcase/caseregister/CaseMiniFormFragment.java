@@ -35,8 +35,12 @@ import butterknife.OnClick;
 
 import static org.unicef.rapidreg.childcase.CaseFeature.ADD_CP_FULL;
 import static org.unicef.rapidreg.childcase.CaseFeature.ADD_GBV_FULL;
-import static org.unicef.rapidreg.childcase.CaseFeature.DETAILS_FULL;
+import static org.unicef.rapidreg.childcase.CaseFeature.DETAILS_CP_FULL;
+import static org.unicef.rapidreg.childcase.CaseFeature.DETAILS_CP_MINI;
+import static org.unicef.rapidreg.childcase.CaseFeature.DETAILS_GBV_FULL;
+import static org.unicef.rapidreg.childcase.CaseFeature.DETAILS_GBV_MINI;
 import static org.unicef.rapidreg.childcase.CaseFeature.EDIT_FULL;
+import static org.unicef.rapidreg.childcase.caseregister.CaseRegisterPresenter.MODULE_CASE_CP;
 import static org.unicef.rapidreg.service.RecordService.MODULE;
 
 public class CaseMiniFormFragment extends RecordRegisterFragment {
@@ -90,7 +94,9 @@ public class CaseMiniFormFragment extends RecordRegisterFragment {
     @Override
     protected RecordRegisterAdapter createRecordRegisterAdapter() {
         List<Field> fields = caseRegisterPresenter.getValidFields();
-        addProfileFieldForDetailsPage(fields);
+
+        int position = caseRegisterPresenter.getCaseType().equals(MODULE_CASE_CP) ? 1 : 0;
+        addProfileFieldForDetailsPage(position, fields);
 
         RecordRegisterAdapter recordRegisterAdapter = new RecordRegisterAdapter(getActivity(),
                 fields,
@@ -111,9 +117,13 @@ public class CaseMiniFormFragment extends RecordRegisterFragment {
     public void onSaveSuccessful(long recordId) {
         Toast.makeText(getActivity(), R.string.save_success, Toast.LENGTH_SHORT).show();
         Bundle args = new Bundle();
-        args.putString(MODULE, caseRegisterPresenter.getCaseType());
+
+        String moduleId = caseRegisterPresenter.getCaseType();
+        Feature feature = moduleId.equals(MODULE_CASE_CP) ? DETAILS_CP_MINI : DETAILS_GBV_MINI;
+
+        args.putString(MODULE, moduleId);
         args.putLong(CaseService.CASE_PRIMARY_ID, recordId);
-        ((RecordActivity)getActivity()).turnToFeature(CaseFeature.DETAILS_MINI, args, null);
+        ((RecordActivity)getActivity()).turnToFeature(feature, args, null);
     }
 
     @OnClick(R.id.edit)
@@ -135,7 +145,7 @@ public class CaseMiniFormFragment extends RecordRegisterFragment {
         CaseFeature currentFeature = (CaseFeature) ((CaseActivity) getActivity()).getCurrentFeature();
 
         Feature feature = currentFeature.isDetailMode() ?
-                DETAILS_FULL : currentFeature.isAddMode() ?
+                (currentFeature.isCPCase() ? DETAILS_CP_FULL : DETAILS_GBV_FULL) : currentFeature.isAddMode() ?
                 (currentFeature.isCPCase() ? ADD_CP_FULL : ADD_GBV_FULL) : EDIT_FULL;
         ((RecordActivity) getActivity()).turnToFeature(feature, args, ANIM_TO_FULL);
     }
