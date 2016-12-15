@@ -22,10 +22,12 @@ import org.unicef.rapidreg.childcase.CaseActivity;
 import org.unicef.rapidreg.childcase.CaseFeature;
 import org.unicef.rapidreg.childcase.casephoto.CasePhotoAdapter;
 import org.unicef.rapidreg.event.SaveCaseEvent;
+import org.unicef.rapidreg.forms.Field;
 import org.unicef.rapidreg.service.CaseService;
 import org.unicef.rapidreg.service.RecordService;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -67,7 +69,6 @@ public class CaseMiniFormFragment extends RecordRegisterFragment {
     @Override
     public void onInitViewContent() {
         super.onInitViewContent();
-        addProfileFieldForDetailsPage(caseRegisterPresenter.getFields());
         formSwitcher.setText(R.string.show_more_details);
         if (((RecordActivity) getActivity()).getCurrentFeature().isDetailMode()) {
             editButton.setVisibility(View.VISIBLE);
@@ -88,11 +89,13 @@ public class CaseMiniFormFragment extends RecordRegisterFragment {
 
     @Override
     protected RecordRegisterAdapter createRecordRegisterAdapter() {
+        List<Field> fields = caseRegisterPresenter.getValidFields();
+        addProfileFieldForDetailsPage(fields);
+
         RecordRegisterAdapter recordRegisterAdapter = new RecordRegisterAdapter(getActivity(),
-                caseRegisterPresenter.getValidFields(),
+                fields,
                 caseRegisterPresenter.getDefaultItemValues(),
                 true);
-
         casePhotoAdapter.setItems(caseRegisterPresenter.getDefaultPhotoPaths());
         recordRegisterAdapter.setPhotoAdapter(casePhotoAdapter);
 
