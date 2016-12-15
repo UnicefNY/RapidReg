@@ -3,7 +3,6 @@ package org.unicef.rapidreg.service;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.runners.MockitoJUnitRunner;
-import org.robolectric.RobolectricTestRunner;
 import org.unicef.rapidreg.db.CaseDao;
 import org.unicef.rapidreg.db.impl.CaseDaoImpl;
 import org.unicef.rapidreg.forms.Field;
