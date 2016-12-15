@@ -1,6 +1,5 @@
 package org.unicef.rapidreg.service.impl;
 
-import android.text.TextUtils;
 import android.util.Log;
 
 import com.google.gson.Gson;
@@ -20,15 +19,17 @@ public class TracingFormServiceImpl implements TracingFormService {
     }
 
     public boolean isReady() {
-        return tracingFormDao.getTracingForm() != null && tracingFormDao.getTracingForm().getForm() != null;
+        return tracingFormDao.getTracingForm() != null && tracingFormDao.getTracingForm().getForm
+                () != null;
     }
 
     public TracingTemplateForm getCPTemplate() {
         Blob form = tracingFormDao.getTracingForm().getForm();
         String formJson = new String(form.getBlob());
-        TracingTemplateForm tracingTemplateForm = TextUtils.isEmpty(formJson) ?
-                null : new Gson().fromJson(formJson, TracingTemplateForm.class);
-        return tracingTemplateForm;
+        if ("".equals(formJson)) {
+            return null;
+        }
+        return new Gson().fromJson(formJson, TracingTemplateForm.class);
     }
 
     public void saveOrUpdateForm(TracingForm tracingForm) {

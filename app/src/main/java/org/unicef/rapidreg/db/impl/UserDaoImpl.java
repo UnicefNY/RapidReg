@@ -8,7 +8,12 @@ import org.unicef.rapidreg.model.User_Table;
 
 import java.util.List;
 
+import javax.inject.Inject;
+
 public class UserDaoImpl implements UserDao {
+    @Inject
+    public UserDaoImpl() {
+    }
 
     @Override
     public User getUser(String username) {

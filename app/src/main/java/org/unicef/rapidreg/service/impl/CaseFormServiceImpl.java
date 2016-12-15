@@ -1,7 +1,5 @@
 package org.unicef.rapidreg.service.impl;
 
-import android.text.TextUtils;
-
 import com.google.gson.Gson;
 import com.raizlabs.android.dbflow.data.Blob;
 
@@ -20,8 +18,10 @@ public class CaseFormServiceImpl implements CaseFormService {
     }
 
     public boolean isReady() {
-        return caseFormDao.getCaseForm(RecordConfiguration.MODULE_ID_CP) != null && caseFormDao.getCaseForm(RecordConfiguration.MODULE_ID_CP).getForm() != null
-                && caseFormDao.getCaseForm(RecordConfiguration.MODULE_ID_GBV) != null && caseFormDao.getCaseForm(RecordConfiguration.MODULE_ID_GBV).getForm() != null;
+        return caseFormDao.getCaseForm(RecordConfiguration.MODULE_ID_CP) != null && caseFormDao
+                .getCaseForm(RecordConfiguration.MODULE_ID_CP).getForm() != null
+                && caseFormDao.getCaseForm(RecordConfiguration.MODULE_ID_GBV) != null &&
+                caseFormDao.getCaseForm(RecordConfiguration.MODULE_ID_GBV).getForm() != null;
     }
 
     public CaseTemplateForm getCPTemplate() {
@@ -37,9 +37,10 @@ public class CaseFormServiceImpl implements CaseFormService {
 
     private CaseTemplateForm getCaseTemplateForm(Blob form) {
         String formJson = new String(form.getBlob());
-        CaseTemplateForm caseForm = TextUtils.isEmpty(formJson) ?
-                null : new Gson().fromJson(formJson, CaseTemplateForm.class);
-        return caseForm;
+        if ("".equals(formJson)) {
+            return null;
+        }
+        return new Gson().fromJson(formJson, CaseTemplateForm.class);
     }
 
     public void saveOrUpdate(org.unicef.rapidreg.model.CaseForm caseForm) {

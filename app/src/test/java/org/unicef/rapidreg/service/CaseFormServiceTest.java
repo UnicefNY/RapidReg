@@ -6,6 +6,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.runners.MockitoJUnitRunner;
 import org.robolectric.RobolectricTestRunner;
 import org.unicef.rapidreg.db.CaseFormDao;
 import org.unicef.rapidreg.db.impl.CaseFormDaoImpl;
@@ -24,7 +25,7 @@ import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-@RunWith(RobolectricTestRunner.class)
+@RunWith(MockitoJUnitRunner.class)
 public class CaseFormServiceTest {
     private static final int MAX_RETRY_NUM = 3;
 

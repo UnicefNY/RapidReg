@@ -1,7 +1,5 @@
 package org.unicef.rapidreg.service.impl;
 
-import android.text.TextUtils;
-
 import com.google.gson.Gson;
 import com.raizlabs.android.dbflow.data.Blob;
 
@@ -33,9 +31,10 @@ public class IncidentFormServiceImpl implements IncidentFormService {
 
     private IncidentTemplateForm getIncidentTemplateForm(Blob form) {
         String formJson = new String(form.getBlob());
-        IncidentTemplateForm incidentForm = TextUtils.isEmpty(formJson) ?
-                null : new Gson().fromJson(formJson, IncidentTemplateForm.class);
-        return incidentForm;
+        if ("".equals(formJson)) {
+            return null;
+        }
+        return new Gson().fromJson(formJson, IncidentTemplateForm.class);
     }
 
     public void saveOrUpdate(IncidentForm incidentForm) {

@@ -1,33 +1,36 @@
 package org.unicef.rapidreg.service;
 
-import org.junit.BeforeClass;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mock;
 import org.robolectric.RobolectricTestRunner;
 import org.unicef.rapidreg.db.UserDao;
-import org.unicef.rapidreg.db.impl.UserDaoImpl;
 import org.unicef.rapidreg.model.User;
+import org.unicef.rapidreg.service.impl.UserServiceImpl;
 import org.unicef.rapidreg.utils.EncryptHelper;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.mockito.Matchers.anyString;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+import static org.mockito.MockitoAnnotations.initMocks;
 
 @RunWith(RobolectricTestRunner.class)
 public class UserServiceTest {
-    private static UserDao userDao;
-    private static UserService userService;
+    @Mock
+    private UserDao userDao;
+
+    private UserService userService;
 
     private String username = "Jack";
     private String password = "123456";
     private User jack = new User(username, EncryptHelper.encrypt(password));
 
-    @BeforeClass
-    public static void setup() {
-        userDao = mock(UserDaoImpl.class);
-        userService = new UserService(userDao);
+    @Before
+    public void setup() {
+        initMocks(this);
+        userService = new UserServiceImpl(userDao);
     }
 
     @Test

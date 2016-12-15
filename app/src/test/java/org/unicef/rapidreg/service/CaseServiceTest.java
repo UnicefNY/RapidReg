@@ -2,6 +2,7 @@ package org.unicef.rapidreg.service;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.runners.MockitoJUnitRunner;
 import org.robolectric.RobolectricTestRunner;
 import org.unicef.rapidreg.db.CaseDao;
 import org.unicef.rapidreg.db.impl.CaseDaoImpl;
@@ -15,7 +16,7 @@ import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.hasSize;
 import static org.mockito.Mockito.mock;
 
-@RunWith(RobolectricTestRunner.class)
+@RunWith(MockitoJUnitRunner.class)
 public class CaseServiceTest {
     private CaseDao caseDao = mock(CaseDaoImpl.class);
     private CaseService caseService = new CaseService(caseDao);
