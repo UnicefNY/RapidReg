@@ -17,10 +17,13 @@ import org.unicef.rapidreg.base.record.RecordActivity;
 import org.unicef.rapidreg.base.record.recordregister.RecordRegisterAdapter;
 import org.unicef.rapidreg.base.record.recordregister.RecordRegisterFragment;
 import org.unicef.rapidreg.event.SaveIncidentEvent;
+import org.unicef.rapidreg.forms.Field;
 import org.unicef.rapidreg.incident.IncidentActivity;
 import org.unicef.rapidreg.incident.IncidentFeature;
 import org.unicef.rapidreg.service.IncidentService;
 import org.unicef.rapidreg.service.RecordService;
+
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -51,7 +54,6 @@ public class IncidentMiniFormFragment extends RecordRegisterFragment {
     @Override
     public void onInitViewContent() {
         super.onInitViewContent();
-        addProfileFieldForDetailsPage(incidentRegisterPresenter.getFields());
         formSwitcher.setText(R.string.show_more_details);
         if (((RecordActivity) getActivity()).getCurrentFeature().isDetailMode()) {
             editButton.setVisibility(View.VISIBLE);
@@ -72,8 +74,11 @@ public class IncidentMiniFormFragment extends RecordRegisterFragment {
 
     @Override
     protected RecordRegisterAdapter createRecordRegisterAdapter() {
+        List<Field> fields = incidentRegisterPresenter.getValidFields();
+        addProfileFieldForDetailsPage(fields);
+
         RecordRegisterAdapter recordRegisterAdapter = new RecordRegisterAdapter(getActivity(),
-                incidentRegisterPresenter.getValidFields(),
+                fields,
                 incidentRegisterPresenter.getDefaultItemValues(),
                 true);
         return recordRegisterAdapter;

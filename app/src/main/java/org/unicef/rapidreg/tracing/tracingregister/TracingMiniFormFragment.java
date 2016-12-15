@@ -17,6 +17,7 @@ import org.unicef.rapidreg.base.record.RecordActivity;
 import org.unicef.rapidreg.base.record.recordregister.RecordRegisterAdapter;
 import org.unicef.rapidreg.base.record.recordregister.RecordRegisterFragment;
 import org.unicef.rapidreg.event.SaveTracingEvent;
+import org.unicef.rapidreg.forms.Field;
 import org.unicef.rapidreg.service.RecordService;
 import org.unicef.rapidreg.service.TracingService;
 import org.unicef.rapidreg.tracing.TracingActivity;
@@ -24,6 +25,7 @@ import org.unicef.rapidreg.tracing.TracingFeature;
 import org.unicef.rapidreg.tracing.tracingphoto.TracingPhotoAdapter;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -58,8 +60,11 @@ public class TracingMiniFormFragment extends RecordRegisterFragment {
 
     @Override
     protected RecordRegisterAdapter createRecordRegisterAdapter() {
+        List<Field> fields = tracingRegisterPresenter.getValidFields();
+        addProfileFieldForDetailsPage(fields);
+
         RecordRegisterAdapter recordRegisterAdapter = new RecordRegisterAdapter(getActivity(),
-                tracingRegisterPresenter.getFields(),
+                fields,
                 tracingRegisterPresenter.getDefaultItemValues(),
                 true);
 
@@ -84,7 +89,6 @@ public class TracingMiniFormFragment extends RecordRegisterFragment {
     @Override
     public void onInitViewContent() {
         super.onInitViewContent();
-        addProfileFieldForDetailsPage(tracingRegisterPresenter.getFields());
         formSwitcher.setText(R.string.show_more_details);
 
         if (((RecordActivity) getActivity()).getCurrentFeature().isDetailMode()) {

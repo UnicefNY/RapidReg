@@ -95,7 +95,9 @@ public class CaseRegisterPresenter extends RecordRegisterPresenter {
         itemValues.addStringItem(CaseService.CASE_ID, caseItem.getUniqueId());
 
         DateFormat dateFormat = SimpleDateFormat.getDateInstance(DateFormat.MEDIUM, Locale.US);
+
         String shortUUID = RecordService.getShortUUID(caseItem.getUniqueId());
+
         itemValues.addStringItem(ItemValues.RecordProfile.ID_NORMAL_STATE, shortUUID);
         itemValues.addStringItem(ItemValues.RecordProfile.REGISTRATION_DATE,
                 dateFormat.format(caseItem.getRegistrationDate()));
