@@ -15,7 +15,6 @@ import org.unicef.rapidreg.model.RecordModel;
 import org.unicef.rapidreg.model.Tracing;
 import org.unicef.rapidreg.service.cache.ItemValues;
 import org.unicef.rapidreg.utils.StreamUtil;
-import org.unicef.rapidreg.utils.Utils;
 
 import java.io.IOException;
 import java.sql.Date;
@@ -25,7 +24,6 @@ import java.util.List;
 
 import static org.unicef.rapidreg.db.impl.TracingDaoImpl.TRACING_DISPLAY_ID;
 import static org.unicef.rapidreg.db.impl.TracingDaoImpl.TRACING_ID;
-import static org.unicef.rapidreg.service.CaseService.CASE_ID;
 import static org.unicef.rapidreg.utils.Utils.getRegisterDate;
 
 public class TracingService extends RecordService {
@@ -110,7 +108,7 @@ public class TracingService extends RecordService {
 
     public Tracing update(ItemValues itemValues,
                           List<String> photoBitPaths) throws IOException {
-        Tracing tracing = tracingDao.update(generateTracingFromItemValues(itemValues));
+        Tracing tracing = tracingDao.update(updateTracingFromItemValues(itemValues));
         return tracingPhotoDao.update(tracing, photoBitPaths);
     }
 
@@ -139,11 +137,27 @@ public class TracingService extends RecordService {
         return tracing;
     }
 
-    private Tracing generateTracingFromItemValues(ItemValues itemValues) {
+    private Tracing updateTracingFromItemValues(ItemValues itemValues) {
         Tracing tracing = tracingDao.getTracingByUniqueId(itemValues.getAsString(TRACING_ID));
-        String uniqueId = tracing.getUniqueId();
+        String username = PrimeroConfiguration.getCurrentUser().getUsername();
+        tracing.setCreatedBy(username);
 
-        return generateTracingFromItemValues(itemValues, uniqueId);
+        tracing.setContent(generateTracingBlob(itemValues, tracing.getUniqueId(), username));
+
+        Date date = new Date(Calendar.getInstance().getTimeInMillis());
+        tracing.setCreateDate(date);
+        tracing.setLastUpdatedDate(date);
+
+        tracing.setName(getName(itemValues));
+
+        int age = itemValues.getAsInt(RELATION_AGE) != null ? itemValues.getAsInt(RELATION_AGE) : 0;
+        tracing.setAge(age);
+
+        tracing.setCaregiver(getCaregiverName(itemValues));
+        tracing.setRegistrationDate(getRegisterDate(itemValues.getAsString(INQUIRY_DATE)));
+        tracing.setAudio(getAudioBlob());
+
+        return tracing;
     }
 
     private Blob generateTracingBlob(ItemValues itemValues, String uniqueId, String username) {
