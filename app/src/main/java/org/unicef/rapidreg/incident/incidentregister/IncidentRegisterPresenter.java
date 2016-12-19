@@ -79,7 +79,7 @@ public class IncidentRegisterPresenter extends RecordRegisterPresenter {
         itemValues.addStringItem(IncidentService.INCIDENT_ID, incidentItem.getUniqueId());
 
         DateFormat dateFormat = SimpleDateFormat.getDateInstance(DateFormat.MEDIUM, Locale.US);
-        String shortUUID = RecordService.getShortUUID(incidentItem.getUniqueId());
+        String shortUUID = incidentService.getShortUUID(incidentItem.getUniqueId());
         itemValues.addStringItem(ItemValues.RecordProfile.ID_NORMAL_STATE, shortUUID);
         itemValues.addStringItem(ItemValues.RecordProfile.REGISTRATION_DATE,
                 dateFormat.format(incidentItem.getRegistrationDate()));

@@ -83,7 +83,7 @@ public class TracingRegisterPresenter extends RecordRegisterPresenter {
         itemValues.addStringItem(TRACING_ID, tracingItem.getUniqueId());
 
         DateFormat dateFormat = SimpleDateFormat.getDateInstance(DateFormat.MEDIUM, Locale.US);
-        String shortUUID = RecordService.getShortUUID(tracingItem.getUniqueId());
+        String shortUUID = tracingService.getShortUUID(tracingItem.getUniqueId());
         itemValues.addStringItem(ItemValues.RecordProfile.ID_NORMAL_STATE, shortUUID);
         itemValues.addStringItem(ItemValues.RecordProfile.REGISTRATION_DATE,
                 dateFormat.format(tracingItem.getRegistrationDate()));

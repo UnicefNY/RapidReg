@@ -2,21 +2,31 @@ package org.unicef.rapidreg.service;
 
 import android.util.Log;
 
+import com.google.gson.Gson;
+import com.raizlabs.android.dbflow.data.Blob;
 import com.raizlabs.android.dbflow.sql.language.Condition;
 import com.raizlabs.android.dbflow.sql.language.ConditionGroup;
 import com.raizlabs.android.dbflow.sql.language.NameAlias;
 
+import org.unicef.rapidreg.PrimeroConfiguration;
 import org.unicef.rapidreg.db.TracingDao;
 import org.unicef.rapidreg.db.TracingPhotoDao;
 import org.unicef.rapidreg.model.RecordModel;
 import org.unicef.rapidreg.model.Tracing;
 import org.unicef.rapidreg.service.cache.ItemValues;
+import org.unicef.rapidreg.utils.StreamUtil;
+import org.unicef.rapidreg.utils.Utils;
 
 import java.io.IOException;
 import java.sql.Date;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
+
+import static org.unicef.rapidreg.db.impl.TracingDaoImpl.TRACING_DISPLAY_ID;
 import static org.unicef.rapidreg.db.impl.TracingDaoImpl.TRACING_ID;
+import static org.unicef.rapidreg.service.CaseService.CASE_ID;
+import static org.unicef.rapidreg.utils.Utils.getRegisterDate;
 
 public class TracingService extends RecordService {
     public static final String TAG = TracingService.class.getSimpleName();

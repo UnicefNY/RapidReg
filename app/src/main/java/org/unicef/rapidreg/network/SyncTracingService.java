@@ -39,6 +39,8 @@ public class SyncTracingService extends BaseRetrofitService {
 
     private SyncTracingsServiceInterface serviceInterface;
 
+    private RecordService recordService;
+
     private TracingPhotoService tracingPhotoService;
 
     @Override
@@ -46,8 +48,9 @@ public class SyncTracingService extends BaseRetrofitService {
         return PrimeroConfiguration.getApiBaseUrl();
     }
 
-    public SyncTracingService(Context context, TracingPhotoService tracingPhotoService){
+    public SyncTracingService(Context context, RecordService recordService, TracingPhotoService tracingPhotoService){
         createRetrofit(context);
+        this.recordService = recordService;
         this.tracingPhotoService = tracingPhotoService;
         serviceInterface = getRetrofit().create(SyncTracingsServiceInterface.class);
     }
@@ -70,7 +73,7 @@ public class SyncTracingService extends BaseRetrofitService {
 
     public Response<JsonElement> uploadJsonProfile(RecordModel item) {
         ItemValues values = ItemValues.fromJson(new String(item.getContent().getBlob()));
-        String shortUUID = RecordService.getShortUUID(item.getUniqueId());
+        String shortUUID = recordService.getShortUUID(item.getUniqueId());
         values.addStringItem("short_id", shortUUID);
         values.addStringItem(TRACING_ID, shortUUID);
         values.addStringItem("tracing_request_id", item.getUniqueId());

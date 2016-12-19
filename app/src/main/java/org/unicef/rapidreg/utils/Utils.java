@@ -10,9 +10,9 @@ import android.view.View;
 import org.unicef.rapidreg.R;
 
 import java.io.File;
-import java.sql.Date;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;

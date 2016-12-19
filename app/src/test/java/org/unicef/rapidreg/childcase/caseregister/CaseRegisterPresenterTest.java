@@ -133,7 +133,7 @@ public class CaseRegisterPresenterTest {
         SaveRecordCallback callback = mock(SaveRecordCallback.class);
 
         PowerMockito.mockStatic(RecordService.class);
-        when(RecordService.validateRequiredFields(cpCaseTemplate, itemValuesMap)).thenReturn(false);
+        when(caseService.validateRequiredFields(cpCaseTemplate, itemValuesMap)).thenReturn(false);
 
         caseRegisterPresenter.saveRecord(itemValuesMap, photoPaths, callback);
 
@@ -158,7 +158,7 @@ public class CaseRegisterPresenterTest {
 
         String shortUUID = "uuid";
         PowerMockito.mockStatic(RecordService.class);
-        when(RecordService.getShortUUID(caseItem.getUniqueId())).thenReturn(shortUUID);
+        when(caseService.getShortUUID(caseItem.getUniqueId())).thenReturn(shortUUID);
 
         ItemValuesMap actual = caseRegisterPresenter.getItemValuesByRecordId(123L);
 
