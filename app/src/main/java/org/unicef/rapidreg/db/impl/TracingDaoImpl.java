@@ -1,27 +1,20 @@
 package org.unicef.rapidreg.db.impl;
 
-import com.google.gson.Gson;
-import com.raizlabs.android.dbflow.data.Blob;
 import com.raizlabs.android.dbflow.list.FlowQueryList;
 import com.raizlabs.android.dbflow.sql.language.ConditionGroup;
 import com.raizlabs.android.dbflow.sql.language.SQLite;
 
-import org.unicef.rapidreg.PrimeroConfiguration;
 import org.unicef.rapidreg.db.TracingDao;
 import org.unicef.rapidreg.model.Tracing;
 import org.unicef.rapidreg.model.Tracing_Table;
 import org.unicef.rapidreg.service.cache.ItemValues;
-import org.unicef.rapidreg.utils.StreamUtil;
 
-import java.io.IOException;
-import java.sql.Date;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 import java.util.UUID;
 
-import static org.unicef.rapidreg.service.RecordService.*;
+import static org.unicef.rapidreg.service.RecordService.CAREGIVER_NAME;
 
 public class TracingDaoImpl implements TracingDao {
 
@@ -30,45 +23,17 @@ public class TracingDaoImpl implements TracingDao {
     public static final String TRACING_PRIMARY_ID = "tracing_primary_id";
 
     @Override
-    public Tracing save(ItemValues itemValues) {
-        String uniqueId = createUniqueId();
-        itemValues.addStringItem(TRACING_DISPLAY_ID, getShortUUID(uniqueId));
-        itemValues.addStringItem(TRACING_ID, uniqueId);
-        String username = PrimeroConfiguration.getCurrentUser().getUsername();
-        itemValues.addStringItem(MODULE, "primeromodule-cp");
-        itemValues.addStringItem(CASEWORKER_CODE, username);
-        itemValues.addStringItem(RECORD_CREATED_BY, username);
-        itemValues.addStringItem(PREVIOUS_OWNER, username);
-
-        if (!itemValues.has(INQUIRY_DATE)) {
-            itemValues.addStringItem(INQUIRY_DATE, getCurrentRegistrationDateAsString());
-        }
-
-        Gson gson = new Gson();
-        Date date = new Date(Calendar.getInstance().getTimeInMillis());
-        Blob tracingBlob = new Blob(gson.toJson(itemValues.getValues()).getBytes());
-        Blob audioFileDefault = getAudioBlob();
-
-        Tracing tracing = new Tracing();
-        tracing.setUniqueId(uniqueId);
-        tracing.setCreateDate(date);
-        tracing.setLastUpdatedDate(date);
-        tracing.setContent(tracingBlob);
-        tracing.setName(getName(itemValues));
-        int age = itemValues.getAsInt(RELATION_AGE) != null ? itemValues.getAsInt(RELATION_AGE) : 0;
-        tracing.setAge(age);
-        tracing.setCaregiver(getCaregiverName(itemValues));
-        tracing.setRegistrationDate(getRegisterDate(itemValues.getAsString(INQUIRY_DATE)));
-        tracing.setAudio(audioFileDefault);
-        tracing.setCreatedBy(username);
+    public Tracing save(Tracing tracing) {
         tracing.save();
 
         return tracing;
     }
 
     @Override
-    public Tracing update(ItemValues itemValues) {
-        return null;
+    public Tracing update(Tracing tracing) {
+        tracing.update();
+
+        return tracing;
     }
 
     @Override
@@ -116,7 +81,7 @@ public class TracingDaoImpl implements TracingDao {
         return result;
     }
 
-    private   String createUniqueId() {
+    private String createUniqueId() {
         return UUID.randomUUID().toString();
     }
 
@@ -136,22 +101,5 @@ public class TracingDaoImpl implements TracingDao {
     private List<Tracing> getTracingsByDateDES() {
         return SQLite.select().from(Tracing.class)
                 .orderBy(Tracing_Table.registration_date, false).queryList();
-    }
-
-    private Blob getAudioBlob() {
-        if (StreamUtil.isFileExists(AUDIO_FILE_PATH)) {
-            try {
-                return new Blob(StreamUtil.readFile(AUDIO_FILE_PATH));
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-        return null;
-    }
-
-    private String getName(ItemValues values) {
-        return values.getAsString(RELATION_NAME) + " "
-                + values.getAsString(RELATION_AGE) + " "
-                + values.getAsString(RELATION_NICKNAME);
     }
 }

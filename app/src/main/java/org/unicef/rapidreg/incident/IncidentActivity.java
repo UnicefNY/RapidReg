@@ -22,6 +22,8 @@ import org.unicef.rapidreg.utils.Utils;
 
 import javax.inject.Inject;
 
+import static org.unicef.rapidreg.service.RecordService.AUDIO_FILE_PATH;
+
 public class IncidentActivity extends RecordActivity implements BaseView {
 
     public static final String TAG = IncidentActivity.class.getSimpleName();
@@ -53,7 +55,7 @@ public class IncidentActivity extends RecordActivity implements BaseView {
         } else if (currentFeature.isEditMode()) {
             showQuitDialog(R.id.nav_incident);
         } else {
-            IncidentService.clearAudioFile();
+            Utils.clearAudioFile(AUDIO_FILE_PATH);
             turnToFeature(IncidentFeature.LIST, null, null);
         }
     }
@@ -63,7 +65,7 @@ public class IncidentActivity extends RecordActivity implements BaseView {
         if (currentFeature.isEditMode()) {
             showQuitDialog(R.id.nav_incident);
         } else {
-            IncidentService.clearAudioFile();
+            Utils.clearAudioFile(AUDIO_FILE_PATH);
             turnToFeature(IncidentFeature.LIST, null, null);
         }
     }
@@ -73,7 +75,7 @@ public class IncidentActivity extends RecordActivity implements BaseView {
         if (currentFeature.isEditMode()) {
             showQuitDialog(R.id.nav_tracing);
         } else {
-            IncidentService.clearAudioFile();
+            Utils.clearAudioFile(AUDIO_FILE_PATH);
             intentSender.showTracingActivity(this);
         }
     }
@@ -82,7 +84,7 @@ public class IncidentActivity extends RecordActivity implements BaseView {
         if (currentFeature.isEditMode()) {
             showQuitDialog(R.id.nav_cases);
         } else {
-            IncidentService.clearAudioFile();
+            Utils.clearAudioFile(AUDIO_FILE_PATH);
             intentSender.showCasesActivity(this, false);
         }
     }
@@ -95,7 +97,7 @@ public class IncidentActivity extends RecordActivity implements BaseView {
                 .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        IncidentService.clearAudioFile();
+                        Utils.clearAudioFile(AUDIO_FILE_PATH);
                         switch (clickedButton) {
                             case R.id.nav_incident:
                                 turnToFeature(IncidentFeature.LIST, null, null);

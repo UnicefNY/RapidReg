@@ -45,19 +45,12 @@ public class RecordService {
     public static final String AUDIO_FILE_PATH = PrimeroConfiguration.getInternalFilePath() + "/audioFile.amr";
     private static final String TAG = RecordService.class.getSimpleName();
 
-    protected static SimpleDateFormat registrationDateFormat = new SimpleDateFormat("dd/MM/yyyy");
-
-    public static void clearAudioFile() {
-        File file = new File(AUDIO_FILE_PATH);
-        file.delete();
-    }
-
     public static String getShortUUID(String uuid) {
         int length = uuid.length();
         return length > 7 ? uuid.substring(length - 7) : uuid;
     }
 
-    public static List<String> fetchRequiredFiledNames(List<Field> fields) {
+    public List<String> fetchRequiredFiledNames(List<Field> fields) {
         List<String> result = new ArrayList<>();
         for (Field field : fields) {
             if (field.isRequired()) {
@@ -76,28 +69,17 @@ public class RecordService {
     }
 
     public String getCurrentRegistrationDateAsString() {
-        return registrationDateFormat.format(new java.util.Date());
-    }
-
-    public static Date getRegisterDate(String registrationDateString) {
-        try {
-            java.util.Date date = registrationDateFormat.parse(registrationDateString);
-            return new Date(date.getTime());
-        } catch (ParseException e) {
-            Log.e(TAG, "date format error");
-            return new Date(System.currentTimeMillis());
-        }
+        return new SimpleDateFormat("dd/MM/yyyy").format(new java.util.Date());
     }
 
     public  String createUniqueId() {
         return UUID.randomUUID().toString();
     }
 
-    public static boolean validateRequiredFields(RecordForm recordForm, ItemValuesMap itemValues) {
+    public boolean validateRequiredFields(RecordForm recordForm, ItemValuesMap itemValues) {
         List<String> requiredFieldNames = new ArrayList<>();
         for (Section section : recordForm.getSections()) {
-            Collections.addAll(requiredFieldNames, RecordService
-                    .fetchRequiredFiledNames(section.getFields()).toArray(new String[0]));
+            Collections.addAll(requiredFieldNames, fetchRequiredFiledNames(section.getFields()).toArray(new String[0]));
         }
         for (String field : requiredFieldNames) {
             Object fieldValue = itemValues.getValues().get(field);
@@ -107,7 +89,6 @@ public class RecordService {
         }
         return true;
     }
-
 
     protected void setSyncedStatus(RecordModel record) {
         record.setSynced(false);

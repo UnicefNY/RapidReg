@@ -4,15 +4,22 @@ package org.unicef.rapidreg.utils;
 import android.app.Dialog;
 import android.content.Context;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.view.View;
 
 import org.unicef.rapidreg.R;
 
+import java.io.File;
+import java.sql.Date;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class Utils {
+    private static final String TAG = Utils.class.getSimpleName();
+
     public static String toStringResult(List<String> result) {
         String res = "";
 
@@ -58,5 +65,21 @@ public class Utils {
         if (len < 2) {
             throw new IllegalArgumentException();
         }
+    }
+
+    public static Date getRegisterDate(String registrationDateString) {
+        SimpleDateFormat registrationDateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        try {
+            java.util.Date date = registrationDateFormat.parse(registrationDateString);
+            return new Date(date.getTime());
+        } catch (ParseException e) {
+            Log.e(TAG, "date format error");
+            return new Date(System.currentTimeMillis());
+        }
+    }
+
+    public static void clearAudioFile(String fileName) {
+        File file = new File(fileName);
+        file.delete();
     }
 }

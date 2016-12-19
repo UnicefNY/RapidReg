@@ -15,6 +15,7 @@ import org.unicef.rapidreg.model.Incident;
 import org.unicef.rapidreg.model.RecordModel;
 import org.unicef.rapidreg.service.cache.ItemValues;
 import org.unicef.rapidreg.utils.StreamUtil;
+import org.unicef.rapidreg.utils.Utils;
 
 import java.io.IOException;
 import java.sql.Date;
@@ -22,7 +23,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
-public class IncidentService extends RecordService{
+public class IncidentService extends RecordService {
     public static final String TAG = IncidentService.class.getSimpleName();
     public static final String INCIDENT_DISPLAY_ID = "incident_id_display";
     public static final String INCIDENT_ID = "incident_id";
@@ -137,7 +138,7 @@ public class IncidentService extends RecordService{
         int age = itemValues.getAsInt(RELATION_AGE) != null ? itemValues.getAsInt(RELATION_AGE) : 0;
         incident.setAge(age);
         incident.setCaregiver(getCaregiverName(itemValues));
-        incident.setRegistrationDate(getRegisterDate(itemValues.getAsString(INQUIRY_DATE)));
+        incident.setRegistrationDate(Utils.getRegisterDate(itemValues.getAsString(INQUIRY_DATE)));
         incident.setCreatedBy(username);
         incident.save();
         return incident;
@@ -156,7 +157,7 @@ public class IncidentService extends RecordService{
         incident.setAge(age);
         incident.setCaregiver(getCaregiverName(itemValues));
         setSyncedStatus(incident);
-        incident.setRegistrationDate(getRegisterDate(itemValues.getAsString(INQUIRY_DATE)));
+        incident.setRegistrationDate(Utils.getRegisterDate(itemValues.getAsString(INQUIRY_DATE)));
         incident.update();
 
         return incident;
