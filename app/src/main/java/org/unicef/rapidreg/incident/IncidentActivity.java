@@ -10,7 +10,6 @@ import android.widget.Toast;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
-import org.unicef.rapidreg.IntentSender;
 import org.unicef.rapidreg.R;
 import org.unicef.rapidreg.base.BaseView;
 import org.unicef.rapidreg.base.RecordConfiguration;
@@ -157,7 +156,8 @@ public class IncidentActivity extends RecordActivity implements BaseView {
 
     @Override
     public void promoteSyncFormsError() {
-        Toast.makeText(IncidentActivity.this, R.string.sync_forms_error, Toast.LENGTH_SHORT).show();
+        Toast.makeText(IncidentActivity.this, R.string.sync_forms_error,
+                Toast.LENGTH_SHORT).show();
     }
 
 }
