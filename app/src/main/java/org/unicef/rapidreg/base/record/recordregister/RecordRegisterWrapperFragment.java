@@ -30,6 +30,7 @@ import org.unicef.rapidreg.injection.component.FragmentComponent;
 import org.unicef.rapidreg.injection.module.FragmentModule;
 import org.unicef.rapidreg.service.cache.ItemValuesMap;
 
+import java.util.Collections;
 import java.util.List;
 
 import butterknife.BindView;
@@ -102,6 +103,9 @@ public abstract class RecordRegisterWrapperFragment extends MvpFragment<RecordRe
 
     @Override
     public List<String> getPhotoPathsData() {
+        if(recordPhotoAdapter == null) {
+            return Collections.EMPTY_LIST;
+        }
         return recordPhotoAdapter.getAllItems();
     }
 
