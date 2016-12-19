@@ -1,24 +1,69 @@
 package org.unicef.rapidreg.service;
 
+import android.os.Bundle;
+
+import com.raizlabs.android.dbflow.data.Blob;
+
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.powermock.api.mockito.PowerMockito;
+import org.powermock.core.classloader.annotations.PrepareForTest;
+import org.powermock.modules.junit4.PowerMockRunner;
+import org.unicef.rapidreg.PrimeroConfiguration;
 import org.unicef.rapidreg.db.CaseDao;
-import org.unicef.rapidreg.db.impl.CaseDaoImpl;
+import org.unicef.rapidreg.db.CasePhotoDao;
 import org.unicef.rapidreg.forms.Field;
 import org.unicef.rapidreg.forms.Section;
+import org.unicef.rapidreg.incident.incidentregister.IncidentRegisterPresenter;
+import org.unicef.rapidreg.model.Case;
+import org.unicef.rapidreg.model.User;
+import org.unicef.rapidreg.service.cache.ItemValues;
+import org.unicef.rapidreg.utils.Utils;
 
+import java.util.Collections;
+import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
+import static junit.framework.Assert.assertFalse;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.hasSize;
-import static org.mockito.Mockito.mock;
+import static org.hamcrest.core.Is.is;
+import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.MockitoAnnotations.initMocks;
+import static org.powermock.api.mockito.PowerMockito.mock;
+import static org.powermock.api.mockito.PowerMockito.when;
+import static org.unicef.rapidreg.service.CaseService.CASE_ID;
+import static org.unicef.rapidreg.service.RecordService.AGE;
+import static org.unicef.rapidreg.service.RecordService.FULL_NAME;
+import static org.unicef.rapidreg.service.RecordService.REGISTRATION_DATE;
 
-@RunWith(MockitoJUnitRunner.class)
+@RunWith(PowerMockRunner.class)
+@PrepareForTest({UUID.class, PrimeroConfiguration.class})
 public class CaseServiceTest {
-    private CaseDao caseDao = mock(CaseDaoImpl.class);
-    private CaseService caseService = new CaseService(caseDao);
+
+    @Mock
+    CaseDao caseDao;
+
+    @Mock
+    CasePhotoDao casePhotoDao;
+
+    @InjectMocks
+    CaseService caseService;
+
+    @Before
+    public void setUp() throws Exception {
+        initMocks(this);
+        PowerMockito.mockStatic(UUID.class);
+        PowerMockito.mockStatic(PrimeroConfiguration.class);
+    }
 
     @Test
     public void should_get_required_filed_list_when_exist_in_case_fields() {
@@ -41,6 +86,49 @@ public class CaseServiceTest {
 
         List<String> requiredFiledNames = caseService.fetchRequiredFiledNames(fields);
            assertThat(requiredFiledNames, hasSize(0));
+    }
+
+    @Test
+    public void should_save_case_when_give_item_values() throws Exception {
+        UUID uuid = mock(UUID.class);
+        when(uuid.toString()).thenReturn("anuuidwhichlengthis21");
+        when(UUID.randomUUID()).thenReturn(uuid);
+
+        User user = new User("primero");
+        Mockito.when(PrimeroConfiguration.getCurrentUser()).thenReturn(user);
+
+        Case expected = new Case();
+        expected.setUniqueId(uuid.toString());
+
+        when(caseDao.save(any(Case.class))).thenReturn(expected);
+        ItemValues itemValues = new ItemValues();
+        Case actual = caseService.save(itemValues, Collections.EMPTY_LIST);
+
+        assertThat("Should have same uuid.", actual.getUniqueId(), is(uuid.toString()));
+        assertThat("Should return default age value.", actual.getAge(), is(0));
+    }
+
+    @Test
+    public void should_update_case_when_give_item_values() throws Exception {
+        ItemValues itemValues = new ItemValues();
+        itemValues.addStringItem(CASE_ID, "existedUniqueId");
+        itemValues.addNumberItem(AGE, 18);
+        itemValues.addStringItem(REGISTRATION_DATE, "25/12/2016");
+
+        Case expected = new Case();
+        when(caseDao.getCaseByUniqueId("existedUniqueId")).thenReturn(expected);
+
+        expected.setContent(new Blob(new String("").getBytes()));
+
+        when(caseDao.update(expected)).thenReturn(expected);
+
+        Case actual = caseService.update(itemValues, Collections.EMPTY_LIST);
+
+        verify(caseDao, times(1)).update(actual);
+
+        assertFalse("Sync status should be false", actual.isSynced());
+        assertThat("Age should be 18", actual.getAge(), is(18));
+        assertThat("Registration date should be 25/12/2016", actual.getRegistrationDate(), is(Utils.getRegisterDate("25/12/2016")));
     }
 
     private Field makeCaseField(String name, boolean required) {

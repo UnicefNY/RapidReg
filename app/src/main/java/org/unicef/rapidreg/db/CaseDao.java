@@ -24,4 +24,6 @@ public interface CaseDao {
     List<Long> getAllIds();
 
     Case save(Case childCase);
+
+    Case update(Case childCase);
 }

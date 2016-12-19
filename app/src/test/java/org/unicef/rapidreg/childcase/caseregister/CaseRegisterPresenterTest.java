@@ -8,12 +8,9 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
-import org.powermock.api.easymock.PowerMock;
 import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
-import org.unicef.rapidreg.base.record.recordregister.RecordRegisterView;
 import org.unicef.rapidreg.base.record.recordregister.RecordRegisterView.SaveRecordCallback;
 import org.unicef.rapidreg.forms.CaseTemplateForm;
 import org.unicef.rapidreg.forms.Field;
@@ -24,7 +21,6 @@ import org.unicef.rapidreg.service.CaseFormService;
 import org.unicef.rapidreg.service.CasePhotoService;
 import org.unicef.rapidreg.service.CaseService;
 import org.unicef.rapidreg.service.RecordService;
-import org.unicef.rapidreg.service.cache.ItemValues;
 import org.unicef.rapidreg.service.cache.ItemValuesMap;
 
 import java.text.DateFormat;
@@ -37,15 +33,12 @@ import edu.emory.mathcs.backport.java.util.Arrays;
 
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.MockitoAnnotations.initMocks;
 import static org.powermock.api.mockito.PowerMockito.mock;
 import static org.powermock.api.mockito.PowerMockito.when;
 import static org.unicef.rapidreg.childcase.caseregister.CaseRegisterPresenter.MODULE_CASE_CP;
-import static org.unicef.rapidreg.service.cache.ItemValues.RecordProfile.ID;
-import static org.unicef.rapidreg.service.cache.ItemValues.RecordProfile.ID_NORMAL_STATE;
-import static org.unicef.rapidreg.service.cache.ItemValues.RecordProfile.REGISTRATION_DATE;
 
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({RecordService.class})
@@ -178,4 +171,6 @@ public class CaseRegisterPresenterTest {
                 is(SimpleDateFormat.getDateInstance(DateFormat.MEDIUM, Locale.US).format(date)));
         assertThat("registration_date should be right", actual.getAsString("registration_date"), is("15/12/2016"));
     }
+
+
 }
