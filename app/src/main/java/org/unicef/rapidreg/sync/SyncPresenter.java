@@ -29,6 +29,7 @@ import org.unicef.rapidreg.service.RecordService;
 import org.unicef.rapidreg.service.TracingPhotoService;
 import org.unicef.rapidreg.service.TracingService;
 import org.unicef.rapidreg.service.cache.ItemValues;
+import org.unicef.rapidreg.utils.Utils;
 
 import java.io.IOException;
 import java.net.ConnectException;
@@ -656,7 +657,7 @@ public class SyncPresenter extends MvpBasePresenter<SyncView> {
             item.setInternalId(casesJsonObject.get("_id").getAsString());
             item.setInternalRev(newRev);
             item.setRegistrationDate(
-                    RecordService.getRegisterDate(casesJsonObject.get("registration_date").getAsString()));
+                    Utils.getRegisterDate(casesJsonObject.get("registration_date").getAsString()));
             item.setCreatedBy(casesJsonObject.get("created_by").getAsString());
             item.setLastSyncedDate(Calendar.getInstance().getTime());
             item.setLastUpdatedDate(Calendar.getInstance().getTime());
@@ -688,7 +689,7 @@ public class SyncPresenter extends MvpBasePresenter<SyncView> {
             item.setUniqueId(tracingsJsonObject.get("tracing_request_id").getAsString());
             item.setInternalId(tracingsJsonObject.get("_id").getAsString());
             item.setInternalRev(newRev);
-            item.setRegistrationDate(RecordService.getRegisterDate(registrationDate));
+            item.setRegistrationDate(Utils.getRegisterDate(registrationDate));
             item.setCreatedBy(tracingsJsonObject.get("created_by").getAsString());
             item.setLastSyncedDate(Calendar.getInstance().getTime());
             item.setLastUpdatedDate(Calendar.getInstance().getTime());

@@ -21,6 +21,8 @@ import org.unicef.rapidreg.utils.Utils;
 
 import javax.inject.Inject;
 
+import static org.unicef.rapidreg.service.RecordService.AUDIO_FILE_PATH;
+
 public class TracingActivity extends RecordActivity implements BaseView {
     public static final String TAG = TracingActivity.class.getSimpleName();
 
@@ -51,7 +53,7 @@ public class TracingActivity extends RecordActivity implements BaseView {
         } else if (currentFeature.isEditMode()) {
             showQuitDialog(R.id.nav_tracing);
         } else {
-            TracingService.clearAudioFile();
+            Utils.clearAudioFile(AUDIO_FILE_PATH);
             turnToFeature(TracingFeature.LIST, null, null);
         }
     }
@@ -61,7 +63,7 @@ public class TracingActivity extends RecordActivity implements BaseView {
         if (currentFeature.isEditMode()) {
             showQuitDialog(R.id.nav_cases);
         } else {
-            TracingService.clearAudioFile();
+            Utils.clearAudioFile(AUDIO_FILE_PATH);
             intentSender.showCasesActivity(this, false);
         }
     }
@@ -71,7 +73,7 @@ public class TracingActivity extends RecordActivity implements BaseView {
         if (currentFeature.isEditMode()) {
             showQuitDialog(R.id.nav_tracing);
         } else {
-            TracingService.clearAudioFile();
+            Utils.clearAudioFile(AUDIO_FILE_PATH);
             turnToFeature(TracingFeature.LIST, null, null);
         }
     }
@@ -81,7 +83,7 @@ public class TracingActivity extends RecordActivity implements BaseView {
         if (currentFeature.isEditMode()) {
             showQuitDialog(R.id.nav_incident);
         } else {
-            TracingService.clearAudioFile();
+            Utils.clearAudioFile(AUDIO_FILE_PATH);
             intentSender.showIncidentActivity(this);
         }
     }
@@ -94,7 +96,7 @@ public class TracingActivity extends RecordActivity implements BaseView {
                 .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        TracingService.clearAudioFile();
+                        Utils.clearAudioFile(AUDIO_FILE_PATH);
                         switch (clickedButton) {
                             case R.id.nav_tracing:
                                 turnToFeature(TracingFeature.LIST, null, null);

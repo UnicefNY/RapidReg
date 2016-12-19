@@ -96,7 +96,7 @@ public class CaseRegisterPresenter extends RecordRegisterPresenter {
 
         DateFormat dateFormat = SimpleDateFormat.getDateInstance(DateFormat.MEDIUM, Locale.US);
 
-        String shortUUID = RecordService.getShortUUID(caseItem.getUniqueId());
+        String shortUUID = caseService.getShortUUID(caseItem.getUniqueId());
 
         itemValues.addStringItem(ItemValues.RecordProfile.ID_NORMAL_STATE, shortUUID);
         itemValues.addStringItem(ItemValues.RecordProfile.REGISTRATION_DATE,
@@ -157,6 +157,6 @@ public class CaseRegisterPresenter extends RecordRegisterPresenter {
     }
 
     private boolean validateRequiredField(ItemValuesMap itemValuesMap) {
-        return RecordService.validateRequiredFields(getTemplateForm(), itemValuesMap);
+        return caseService.validateRequiredFields(getTemplateForm(), itemValuesMap);
     }
 }

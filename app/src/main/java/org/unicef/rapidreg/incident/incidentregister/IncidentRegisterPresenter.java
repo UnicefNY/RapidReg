@@ -131,7 +131,7 @@ public class IncidentRegisterPresenter extends RecordRegisterPresenter {
 
     private boolean validateRequiredField(ItemValuesMap itemValuesMap) {
         IncidentTemplateForm incidentForm = incidentFormService.getGBVTemplate();
-        return RecordService.validateRequiredFields(incidentForm, itemValuesMap);
+        return incidentService.validateRequiredFields(incidentForm, itemValuesMap);
     }
 
 }

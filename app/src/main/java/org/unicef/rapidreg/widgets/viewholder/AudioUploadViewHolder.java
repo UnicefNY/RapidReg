@@ -12,10 +12,13 @@ import org.unicef.rapidreg.base.record.RecordActivity;
 import org.unicef.rapidreg.service.CaseService;
 import org.unicef.rapidreg.service.cache.ItemValuesMap;
 import org.unicef.rapidreg.utils.StreamUtil;
+import org.unicef.rapidreg.utils.Utils;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+
+import static org.unicef.rapidreg.service.RecordService.AUDIO_FILE_PATH;
 
 
 public class AudioUploadViewHolder extends BaseViewHolder {
@@ -37,7 +40,7 @@ public class AudioUploadViewHolder extends BaseViewHolder {
         ButterKnife.bind(this, itemView);
         activity = (RecordActivity) context;
 
-        mFileName = CaseService.AUDIO_FILE_PATH;
+        mFileName = AUDIO_FILE_PATH;
     }
 
     @Override
@@ -82,7 +85,7 @@ public class AudioUploadViewHolder extends BaseViewHolder {
     @OnClick(R.id.delete_button)
     public void onDeleteButtonClicked() {
         initAudioRecordUI();
-        CaseService.clearAudioFile();
+        Utils.clearAudioFile(AUDIO_FILE_PATH);
     }
 
     @OnClick(R.id.record_button)

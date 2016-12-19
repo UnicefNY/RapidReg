@@ -23,6 +23,7 @@ import org.unicef.rapidreg.base.record.recordphoto.PhotoConfig;
 import org.unicef.rapidreg.event.UpdateImageEvent;
 import org.unicef.rapidreg.service.RecordService;
 import org.unicef.rapidreg.utils.ImageCompressUtil;
+import org.unicef.rapidreg.utils.Utils;
 import org.unicef.rapidreg.widgets.viewholder.PhotoUploadViewHolder;
 
 import java.io.File;
@@ -31,6 +32,8 @@ import java.io.IOException;
 import javax.inject.Inject;
 
 import rx.subscriptions.CompositeSubscription;
+
+import static org.unicef.rapidreg.service.RecordService.AUDIO_FILE_PATH;
 
 public abstract class RecordActivity extends BaseActivity {
     public static final String TAG = RecordActivity.class.getSimpleName();
@@ -102,7 +105,7 @@ public abstract class RecordActivity extends BaseActivity {
         if (currentFeature.isEditMode()) {
             showQuitDialog(R.id.nav_sync);
         } else {
-            RecordService.clearAudioFile();
+            Utils.clearAudioFile(AUDIO_FILE_PATH);
             intentSender.showSyncActivity(this);
         }
     }

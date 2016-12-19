@@ -140,6 +140,6 @@ public class TracingRegisterPresenter extends RecordRegisterPresenter {
 
     private boolean validateRequiredField(ItemValuesMap itemValuesMap) {
         TracingTemplateForm recordForm = tracingFormService.getCPTemplate();
-        return RecordService.validateRequiredFields(recordForm, itemValuesMap);
+        return tracingService.validateRequiredFields(recordForm, itemValuesMap);
     }
 }

@@ -14,10 +14,13 @@ import org.unicef.rapidreg.service.IncidentService;
 import org.unicef.rapidreg.service.RecordService;
 import org.unicef.rapidreg.service.cache.ItemValues;
 import org.unicef.rapidreg.utils.StreamUtil;
+import org.unicef.rapidreg.utils.Utils;
 
 import java.io.IOException;
 
 import javax.inject.Inject;
+
+import static org.unicef.rapidreg.service.RecordService.AUDIO_FILE_PATH;
 
 public class IncidentListAdapter extends RecordListAdapter {
 
@@ -55,7 +58,7 @@ public class IncidentListAdapter extends RecordListAdapter {
                 args.putLong(IncidentService.INCIDENT_PRIMARY_ID, recordId);
                 ((RecordActivity) context).turnToFeature(IncidentFeature.DETAILS_MINI, args, null);
                 try {
-                    RecordService.clearAudioFile();
+                    Utils.clearAudioFile(AUDIO_FILE_PATH);
                     if (record.getAudio() != null) {
                         StreamUtil.writeFile(record.getAudio().getBlob(), RecordService
                                 .AUDIO_FILE_PATH);

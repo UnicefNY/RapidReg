@@ -15,11 +15,13 @@ import org.unicef.rapidreg.service.CaseService;
 import org.unicef.rapidreg.service.RecordService;
 import org.unicef.rapidreg.service.cache.ItemValues;
 import org.unicef.rapidreg.utils.StreamUtil;
+import org.unicef.rapidreg.utils.Utils;
 
 import java.io.IOException;
 import javax.inject.Inject;
 
 import static org.unicef.rapidreg.childcase.caseregister.CaseRegisterPresenter.MODULE_CASE_CP;
+import static org.unicef.rapidreg.service.RecordService.AUDIO_FILE_PATH;
 import static org.unicef.rapidreg.service.RecordService.MODULE;
 
 public class CaseListAdapter extends RecordListAdapter {
@@ -47,7 +49,7 @@ public class CaseListAdapter extends RecordListAdapter {
         } catch (Exception e) {
             gender = Gender.PLACEHOLDER;
         }
-        final String shortUUID = RecordService.getShortUUID(record.getUniqueId());
+        final String shortUUID = caseService.getShortUUID(record.getUniqueId());
         String age = itemValues.getAsString(RecordService.AGE);
         holder.setValues(gender, shortUUID, age, record);
         holder.setViewOnClickListener(new View.OnClickListener() {
@@ -61,7 +63,7 @@ public class CaseListAdapter extends RecordListAdapter {
                 args.putLong(CaseService.CASE_PRIMARY_ID, recordId);
                 ((RecordActivity)context).turnToFeature(feature, args, null);
                 try {
-                    RecordService.clearAudioFile();
+                    Utils.clearAudioFile(AUDIO_FILE_PATH);
                     if (record.getAudio() != null) {
                         StreamUtil.writeFile(record.getAudio().getBlob(), RecordService.AUDIO_FILE_PATH);
                     }

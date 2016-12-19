@@ -64,7 +64,7 @@ public class ApplicationModule {
     @Provides
     @Singleton
     public CaseService provideCaseService() {
-        return new CaseService(new CaseDaoImpl());
+        return new CaseService(new CaseDaoImpl(), new CasePhotoDaoImpl());
     }
 
     @Provides

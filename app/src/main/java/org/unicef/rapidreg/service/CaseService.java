@@ -20,6 +20,7 @@ import org.unicef.rapidreg.model.RecordModel;
 import org.unicef.rapidreg.service.cache.ItemValues;
 import org.unicef.rapidreg.utils.ImageCompressUtil;
 import org.unicef.rapidreg.utils.StreamUtil;
+import org.unicef.rapidreg.utils.Utils;
 
 import java.io.IOException;
 import java.sql.Date;
@@ -37,10 +38,9 @@ public class CaseService extends RecordService {
     private CaseDao caseDao = new CaseDaoImpl();
     private CasePhotoDao casePhotoDao = new CasePhotoDaoImpl();
 
-    public CaseService() {}
-
-    public CaseService(CaseDao caseDao) {
+    public CaseService(CaseDao caseDao, CasePhotoDao casePhotoDao) {
         this.caseDao = caseDao;
+        this.casePhotoDao = casePhotoDao;
     }
 
     public List<Case> getAll() {
@@ -146,7 +146,7 @@ public class CaseService extends RecordService {
         int age = itemValues.getAsInt(AGE) != null ? itemValues.getAsInt(AGE) : 0;
         child.setAge(age);
         child.setCaregiver(getCaregiverName(itemValues));
-        child.setRegistrationDate(getRegisterDate(itemValues.getAsString(REGISTRATION_DATE)));
+        child.setRegistrationDate(Utils.getRegisterDate(itemValues.getAsString(REGISTRATION_DATE)));
         child.setAudio(audioFileDefault);
         child.setCreatedBy(username);
         child.setModuleId(itemValues.getAsString(MODULE));
@@ -178,7 +178,7 @@ public class CaseService extends RecordService {
         int age = itemValues.getAsInt(AGE) != null ? itemValues.getAsInt(AGE) : 0;
         child.setAge(age);
         child.setCaregiver(getCaregiverName(itemValues));
-        child.setRegistrationDate(getRegisterDate(itemValues.getAsString(REGISTRATION_DATE)));
+        child.setRegistrationDate(Utils.getRegisterDate(itemValues.getAsString(REGISTRATION_DATE)));
         child.setAudio(audioFileDefault);
         child.update();
         updatePhoto(child, photoBitPaths);

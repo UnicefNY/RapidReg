@@ -24,6 +24,8 @@ import org.unicef.rapidreg.utils.Utils;
 
 import javax.inject.Inject;
 
+import static org.unicef.rapidreg.service.RecordService.AUDIO_FILE_PATH;
+
 public class CaseActivity extends RecordActivity implements BaseView {
     public static final String TAG = CaseActivity.class.getSimpleName();
 
@@ -54,7 +56,7 @@ public class CaseActivity extends RecordActivity implements BaseView {
         } else if (currentFeature.isEditMode()) {
             showQuitDialog(R.id.nav_cases);
         } else {
-            CaseService.clearAudioFile();
+            Utils.clearAudioFile(AUDIO_FILE_PATH);
             turnToFeature(CaseFeature.LIST, null, null);
         }
     }
@@ -64,7 +66,7 @@ public class CaseActivity extends RecordActivity implements BaseView {
         if (currentFeature.isEditMode()) {
             showQuitDialog(R.id.nav_cases);
         } else {
-            CaseService.clearAudioFile();
+            Utils.clearAudioFile(AUDIO_FILE_PATH);
             turnToFeature(CaseFeature.LIST, null, null);
         }
     }
@@ -74,7 +76,7 @@ public class CaseActivity extends RecordActivity implements BaseView {
         if (currentFeature.isEditMode()) {
             showQuitDialog(R.id.nav_tracing);
         } else {
-            CaseService.clearAudioFile();
+            Utils.clearAudioFile(AUDIO_FILE_PATH);
             intentSender.showTracingActivity(this);
         }
     }
@@ -84,7 +86,7 @@ public class CaseActivity extends RecordActivity implements BaseView {
         if (currentFeature.isEditMode()) {
             showQuitDialog(R.id.nav_incident);
         } else {
-            CaseService.clearAudioFile();
+            Utils.clearAudioFile(AUDIO_FILE_PATH);
             intentSender.showIncidentActivity(this);
         }
     }
@@ -97,7 +99,7 @@ public class CaseActivity extends RecordActivity implements BaseView {
                 .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        CaseService.clearAudioFile();
+                        Utils.clearAudioFile(AUDIO_FILE_PATH);
                         switch (clickedButton) {
                             case R.id.nav_cases:
                                 turnToFeature(CaseFeature.LIST, null, null);
