@@ -95,24 +95,87 @@ public class TracingService extends RecordService {
     public Tracing saveOrUpdate(ItemValues itemValues, List<String> photoPaths) throws IOException {
 
         if (itemValues.getAsString(TRACING_ID) == null) {
-            return tracingPhotoDao.save(tracingDao.save(itemValues), photoPaths);
+            return save(itemValues, photoPaths);
         } else {
             Log.d(TAG, "update the existing tracing request");
-            return tracingPhotoDao.update(tracingDao.update(itemValues), photoPaths);
+            return update(itemValues, photoPaths);
         }
     }
 
     public Tracing save(ItemValues itemValues, List<String> photoPaths) throws IOException {
-        return tracingPhotoDao.save(tracingDao.save(itemValues), photoPaths);
+        Tracing tracing = tracingDao.save(generateTracingFromItemValues(itemValues, generateUniqueId()));
+
+        return tracingPhotoDao.save(tracing, photoPaths);
     }
 
     public Tracing update(ItemValues itemValues,
                           List<String> photoBitPaths) throws IOException {
-        return tracingPhotoDao.update(tracingDao.update(itemValues), photoBitPaths);
+        Tracing tracing = tracingDao.update(generateTracingFromItemValues(itemValues));
+        return tracingPhotoDao.update(tracing, photoBitPaths);
     }
 
-    public void savePhoto(Tracing parent, List<String> photoPaths) throws IOException {
-        tracingPhotoDao.save(parent, photoPaths);
+    private Tracing generateTracingFromItemValues(ItemValues itemValues, String uniqueId) {
+        Tracing tracing = new Tracing();
+        tracing.setUniqueId(uniqueId);
+
+        String username = PrimeroConfiguration.getCurrentUser().getUsername();
+        tracing.setCreatedBy(username);
+
+        tracing.setContent(generateTracingBlob(itemValues, uniqueId, username));
+
+        Date date = new Date(Calendar.getInstance().getTimeInMillis());
+        tracing.setCreateDate(date);
+        tracing.setLastUpdatedDate(date);
+
+        tracing.setName(getName(itemValues));
+
+        int age = itemValues.getAsInt(RELATION_AGE) != null ? itemValues.getAsInt(RELATION_AGE) : 0;
+        tracing.setAge(age);
+
+        tracing.setCaregiver(getCaregiverName(itemValues));
+        tracing.setRegistrationDate(getRegisterDate(itemValues.getAsString(INQUIRY_DATE)));
+        tracing.setAudio(getAudioBlob());
+
+        return tracing;
+    }
+
+    private Tracing generateTracingFromItemValues(ItemValues itemValues) {
+        Tracing tracing = tracingDao.getTracingByUniqueId(itemValues.getAsString(TRACING_ID));
+        String uniqueId = tracing.getUniqueId();
+
+        return generateTracingFromItemValues(itemValues, uniqueId);
+    }
+
+    private Blob generateTracingBlob(ItemValues itemValues, String uniqueId, String username) {
+        itemValues.addStringItem(TRACING_DISPLAY_ID, getShortUUID(uniqueId));
+        itemValues.addStringItem(TRACING_ID, uniqueId);
+        itemValues.addStringItem(MODULE, "primeromodule-cp");
+        itemValues.addStringItem(CASEWORKER_CODE, username);
+        itemValues.addStringItem(RECORD_CREATED_BY, username);
+        itemValues.addStringItem(PREVIOUS_OWNER, username);
+
+        if (!itemValues.has(INQUIRY_DATE)) {
+            itemValues.addStringItem(INQUIRY_DATE, getCurrentRegistrationDateAsString());
+        }
+
+        return new Blob(new Gson().toJson(itemValues.getValues()).getBytes());
+    }
+
+    private String getName(ItemValues values) {
+        return values.getAsString(RELATION_NAME) + " "
+                + values.getAsString(RELATION_AGE) + " "
+                + values.getAsString(RELATION_NICKNAME);
+    }
+
+    private Blob getAudioBlob() {
+        if (StreamUtil.isFileExists(AUDIO_FILE_PATH)) {
+            try {
+                return new Blob(StreamUtil.readFile(AUDIO_FILE_PATH));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return null;
     }
 
     public Tracing getByInternalId(String id) {
