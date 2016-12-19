@@ -14,7 +14,6 @@ import org.unicef.rapidreg.db.impl.IncidentDaoImpl;
 import org.unicef.rapidreg.model.Incident;
 import org.unicef.rapidreg.model.RecordModel;
 import org.unicef.rapidreg.service.cache.ItemValues;
-import org.unicef.rapidreg.utils.StreamUtil;
 import org.unicef.rapidreg.utils.Utils;
 
 import java.io.IOException;
@@ -112,7 +111,7 @@ public class IncidentService extends RecordService {
     }
 
     public Incident save(ItemValues itemValues) throws IOException {
-        String uniqueId = createUniqueId();
+        String uniqueId = generateUniqueId();
         itemValues.addStringItem(INCIDENT_DISPLAY_ID, getShortUUID(uniqueId));
         itemValues.addStringItem(INCIDENT_ID, uniqueId);
         String username = PrimeroConfiguration.getCurrentUser().getUsername();
