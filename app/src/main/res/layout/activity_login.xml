@@ -50,13 +50,14 @@
         <!--https://52.34.194.254:8443-->
         <!--https://35.161.56.113:8443-->
         <!--http://10.29.4.91:12306-->
+        <!--http://35.164.57.91:12306-->
         <EditText
             android:id="@+id/url"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/url_hint_text"
             android:inputType="textUri"
-            android:text="http://10.205.124.127:12306"/>
+            android:text="http://35.164.57.91:12306"/>
 
         <TextView
             android:id="@+id/change_url"
