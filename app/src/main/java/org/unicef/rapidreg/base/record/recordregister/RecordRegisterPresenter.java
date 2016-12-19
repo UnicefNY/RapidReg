@@ -37,6 +37,7 @@ public abstract class RecordRegisterPresenter extends MvpBasePresenter<RecordReg
         return validFields;
     }
 
+
     public List<Field> removeSeparatorFields(List<Field> fields) {
         Iterator<Field> iterator = fields.iterator();
 

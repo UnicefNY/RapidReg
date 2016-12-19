@@ -123,6 +123,7 @@ public class CaseRegisterPresenter extends RecordRegisterPresenter {
 
         List<Section> sections = form.getSections();
 
+
         for (Section section : sections) {
             for (Field field : section.getFields()) {
                 if (field.isShowOnMiniForm()) {

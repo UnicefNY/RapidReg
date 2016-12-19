@@ -81,10 +81,10 @@ public class CaseRegisterPresenterTest {
 
         Field otherField = mock(Field.class);
         when(otherField.isShowOnMiniForm()).thenReturn(false);
-        List<Field> mockFields = Arrays.asList(new Field[]{miniFormField, otherField});
 
         Section section = mock(Section.class);
-        when(section.getFields()).thenReturn(mockFields);
+        when(section.getFields()).thenReturn(Arrays.asList(new Field[]{miniFormField, otherField}));
+
         List<Section> sections = Arrays.asList(new Section[]{section});
 
         CaseTemplateForm form = mock(CaseTemplateForm.class);
@@ -98,6 +98,7 @@ public class CaseRegisterPresenterTest {
 
         assertThat("Should contain mini form field", actual.contains(miniFormField), is(true));
         assertThat("Should not contain full form field", actual.contains(otherField), is(false));
+        verify(caseFormService,times(1)).getCPTemplate();
     }
 
     @Test
