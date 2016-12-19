@@ -72,7 +72,7 @@ public class RecordService {
         return new SimpleDateFormat("dd/MM/yyyy").format(new java.util.Date());
     }
 
-    public  String createUniqueId() {
+    public  String generateUniqueId() {
         return UUID.randomUUID().toString();
     }
 
