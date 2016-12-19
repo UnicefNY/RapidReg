@@ -8,12 +8,14 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 import org.unicef.rapidreg.PrimeroConfiguration;
 import org.unicef.rapidreg.db.impl.TracingDaoImpl;
 import org.unicef.rapidreg.db.impl.TracingPhotoDaoImpl;
 import org.unicef.rapidreg.model.Tracing;
+import org.unicef.rapidreg.model.User;
 import org.unicef.rapidreg.service.cache.ItemValues;
 
 import java.sql.Date;
@@ -45,6 +47,10 @@ public class TracingServiceTest {
     public void setUp() throws Exception {
         initMocks(this);
         tracingService = new TracingService(tracingDao, tracingPhotoDao);
+
+        PowerMockito.mockStatic(PrimeroConfiguration.class);
+        User user = new User("primero");
+        when(PrimeroConfiguration.getCurrentUser()).thenReturn(user);
     }
 
     @Test
@@ -78,22 +84,5 @@ public class TracingServiceTest {
                 "condition",
                 tracingService.getSearchResult("uniqueId", "name", 1, 20, new Date(20161108)),
                 is(Arrays.asList(new Long[]{3L, 2L, 1L})));
-    }
-
-    @Test
-    public void should_return_tracing_and_store_photos_when_give_item_values_and_photos() throws
-            Exception {
-        ItemValues itemValues = new ItemValues();
-        List<String> photoPaths = new ArrayList<>();
-
-        Tracing tracing = EasyMock.mock(Tracing.class);
-
-        when(tracingDao.save(itemValues)).thenReturn(tracing);
-        when(tracingPhotoDao.save(tracing, photoPaths)).thenReturn(tracing);
-
-        tracingService.save(itemValues, photoPaths);
-
-        Mockito.verify(tracingDao).save(itemValues);
-        Mockito.verify(tracingPhotoDao).save(tracing, photoPaths);
     }
 }

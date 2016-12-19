@@ -81,18 +81,6 @@ public class TracingDaoImpl implements TracingDao {
         return result;
     }
 
-    private String createUniqueId() {
-        return UUID.randomUUID().toString();
-    }
-
-    private String getCurrentRegistrationDateAsString() {
-        return new SimpleDateFormat("dd/MM/yyyy").format(new java.util.Date());
-    }
-
-    private String getCaregiverName(ItemValues itemValues) {
-        return "" + itemValues.getAsString(CAREGIVER_NAME);
-    }
-
     private List<Tracing> getTracingsByDateASC() {
         return SQLite.select().from(Tracing.class)
                 .orderBy(Tracing_Table.registration_date, true).queryList();
