@@ -44,7 +44,7 @@ public class TracingListAdapter extends RecordListAdapter {
             gender = Gender.valueOf(itemValues.getAsString(RecordService.SEX).toUpperCase());
         }
 
-        final String shortUUID = RecordService.getShortUUID(record.getUniqueId());
+        final String shortUUID = tracingService.getShortUUID(record.getUniqueId());
         String age = itemValues.getAsString(RecordService.RELATION_AGE);
         holder.setValues(gender, shortUUID, age, record);
         holder.setViewOnClickListener(new View.OnClickListener() {

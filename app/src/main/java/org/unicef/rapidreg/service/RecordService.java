@@ -45,7 +45,7 @@ public class RecordService {
     public static final String AUDIO_FILE_PATH = PrimeroConfiguration.getInternalFilePath() + "/audioFile.amr";
     private static final String TAG = RecordService.class.getSimpleName();
 
-    public static String getShortUUID(String uuid) {
+    public String getShortUUID(String uuid) {
         int length = uuid.length();
         return length > 7 ? uuid.substring(length - 7) : uuid;
     }

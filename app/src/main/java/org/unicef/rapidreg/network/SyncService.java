@@ -39,14 +39,17 @@ public class SyncService extends BaseRetrofitService {
 
     private CasePhotoService casePhotoService;
 
+    private RecordService recordService;
+
     @Override
     String getBaseUrl() {
         return PrimeroConfiguration.getApiBaseUrl();
     }
 
-    public SyncService(Context context, CasePhotoService casePhotoService) {
+    public SyncService(Context context, CasePhotoService casePhotoService, RecordService recordService) {
         createRetrofit(context);
         this.casePhotoService = casePhotoService;
+        this.recordService = recordService;
         serviceInterface = getRetrofit().create(SyncServiceInterface.class);
     }
 
@@ -68,7 +71,7 @@ public class SyncService extends BaseRetrofitService {
 
     public Response<JsonElement> uploadCaseJsonProfile(RecordModel item) {
         ItemValues values = ItemValues.fromJson(new String(item.getContent().getBlob()));
-        String shortUUID = RecordService.getShortUUID(item.getUniqueId());
+        String shortUUID = recordService.getShortUUID(item.getUniqueId());
         values.addStringItem("short_id", shortUUID);
         values.removeItem("_attachments");
 
