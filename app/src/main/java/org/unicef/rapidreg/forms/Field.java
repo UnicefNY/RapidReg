@@ -302,7 +302,7 @@ public class Field {
         MULTI_SELECT_BOX(MultipleSelectDialog.class),
         PHOTO_UPLOAD_BOX(null),
         AUDIO_UPLOAD_BOX(null),
-        SUBFORM(null);
+        SUBFORM(null), ;
 
         private Class<? extends BaseDialog> clz;
 
