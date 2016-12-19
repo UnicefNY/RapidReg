@@ -117,7 +117,7 @@ public class CaseService extends RecordService {
     }
 
     public Case save(ItemValues itemValues, List<String> photoPaths) throws IOException {
-        String uniqueId = createUniqueId();
+        String uniqueId = generateUniqueId();
         String username = PrimeroConfiguration.getCurrentUser().getUsername();
         itemValues.addStringItem(CASE_DISPLAY_ID, getShortUUID(uniqueId));
         itemValues.addStringItem(CASE_ID, uniqueId);
@@ -136,8 +136,6 @@ public class CaseService extends RecordService {
 
         Case child = new Case();
         child.setUniqueId(uniqueId);
-        // Now, short_id is generate by last 7 charactors of case_id as server. If server change the
-        // short_id generation rule, there should be changed.
         child.setShortId(getShortUUID(uniqueId));
         child.setCreateDate(date);
         child.setLastUpdatedDate(date);
@@ -180,7 +178,9 @@ public class CaseService extends RecordService {
         child.setCaregiver(getCaregiverName(itemValues));
         child.setRegistrationDate(Utils.getRegisterDate(itemValues.getAsString(REGISTRATION_DATE)));
         child.setAudio(audioFileDefault);
-        child.update();
+
+        child = caseDao.update(child);
+
         updatePhoto(child, photoBitPaths);
 
         return child;

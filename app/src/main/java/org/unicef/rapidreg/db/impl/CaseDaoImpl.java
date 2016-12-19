@@ -69,6 +69,12 @@ public class CaseDaoImpl implements CaseDao {
         return childCase;
     }
 
+    @Override
+    public Case update(Case childCase) {
+        childCase.update();
+        return childCase;
+    }
+
     private List<Case> getCasesByAgeASC() {
         return SQLite.select().from(Case.class).orderBy(Case_Table.age, true).queryList();
     }
