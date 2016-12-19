@@ -51,7 +51,8 @@ public class IncidentRegisterPresenter extends RecordRegisterPresenter {
     }
 
     @Override
-    public void saveRecord(ItemValuesMap itemValuesMap, List<String> photoPaths, RecordRegisterView.SaveRecordCallback callback) {
+    public void saveRecord(ItemValuesMap itemValuesMap, List<String> photoPaths,
+                           RecordRegisterView.SaveRecordCallback callback) {
         if (!validateRequiredField(itemValuesMap)) {
             callback.onRequiredFieldNotFilled();
             return;

@@ -10,12 +10,12 @@ import android.widget.Toast;
 
 import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.hannesdorfmann.mosby.mvp.MvpFragment;
+
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 import org.unicef.rapidreg.PrimeroApplication;
 import org.unicef.rapidreg.R;
-import org.unicef.rapidreg.base.Feature;
 import org.unicef.rapidreg.base.record.RecordActivity;
 import org.unicef.rapidreg.base.record.recordphoto.RecordPhotoAdapter;
 import org.unicef.rapidreg.event.UpdateImageEvent;
@@ -27,16 +27,19 @@ import org.unicef.rapidreg.service.cache.ItemValuesMap;
 
 import java.util.Collections;
 import java.util.List;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public abstract class RecordRegisterFragment extends MvpFragment<RecordRegisterView, RecordRegisterPresenter>
+public abstract class RecordRegisterFragment extends MvpFragment<RecordRegisterView,
+        RecordRegisterPresenter>
         implements RecordRegisterView, RecordRegisterView.SaveRecordCallback {
 
     public static final String ITEM_VALUES = "item_values";
 
     protected static final int[] ANIM_TO_FULL = {R.anim.slide_in_right, R.anim.slide_out_left};
-    protected static final int[] ANIM_TO_MINI = {android.R.anim.slide_in_left, android.R.anim.slide_out_right};
+    protected static final int[] ANIM_TO_MINI = {android.R.anim.slide_in_left, android.R.anim
+            .slide_out_right};
     public static final int INVALID_RECORD_ID = -100;
 
     @BindView(R.id.register_forms_content)
@@ -91,6 +94,9 @@ public abstract class RecordRegisterFragment extends MvpFragment<RecordRegisterV
 
     @Override
     public List<String> getPhotoPathsData() {
+        if(recordRegisterAdapter.getPhotoAdapter() == null) {
+            return Collections.EMPTY_LIST;
+        }
         return recordRegisterAdapter.getPhotoAdapter().getAllItems();
     }
 
@@ -124,7 +130,8 @@ public abstract class RecordRegisterFragment extends MvpFragment<RecordRegisterV
 
     @Override
     public void onRequiredFieldNotFilled() {
-        Toast.makeText(getActivity(), R.string.required_field_is_not_filled, Toast.LENGTH_LONG).show();
+        Toast.makeText(getActivity(), R.string.required_field_is_not_filled, Toast.LENGTH_LONG)
+                .show();
     }
 
     @Override
