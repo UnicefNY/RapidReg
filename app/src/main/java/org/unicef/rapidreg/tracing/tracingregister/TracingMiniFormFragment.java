@@ -61,7 +61,7 @@ public class TracingMiniFormFragment extends RecordRegisterFragment {
     @Override
     protected RecordRegisterAdapter createRecordRegisterAdapter() {
         List<Field> fields = tracingRegisterPresenter.getValidFields();
-        addProfileFieldForDetailsPage(0, fields);
+        addProfileFieldForDetailsPage(1, fields);
 
         RecordRegisterAdapter recordRegisterAdapter = new RecordRegisterAdapter(getActivity(),
                 fields,
