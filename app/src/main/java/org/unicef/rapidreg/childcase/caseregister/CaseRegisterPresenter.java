@@ -4,11 +4,9 @@ import android.os.Bundle;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
-
 import org.json.JSONException;
 import org.unicef.rapidreg.base.record.recordregister.RecordRegisterFragment;
 import org.unicef.rapidreg.base.record.recordregister.RecordRegisterPresenter;
-import org.unicef.rapidreg.base.record.recordregister.RecordRegisterView;
 import org.unicef.rapidreg.base.record.recordregister.RecordRegisterView.SaveRecordCallback;
 import org.unicef.rapidreg.forms.CaseTemplateForm;
 import org.unicef.rapidreg.forms.Field;
@@ -18,11 +16,9 @@ import org.unicef.rapidreg.model.Case;
 import org.unicef.rapidreg.service.CaseFormService;
 import org.unicef.rapidreg.service.CasePhotoService;
 import org.unicef.rapidreg.service.CaseService;
-import org.unicef.rapidreg.service.RecordService;
 import org.unicef.rapidreg.service.cache.ItemValues;
 import org.unicef.rapidreg.service.cache.ItemValuesMap;
 import org.unicef.rapidreg.utils.JsonUtils;
-
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
