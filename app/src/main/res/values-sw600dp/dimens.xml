@@ -1,0 +1,91 @@
+<resources>
+    <!-- Example customization of dimensions originally defined in res/values/dimens.xml
+         (such as screen margins) for screens with more than 820dp of available width. This
+         would include 7" and 10" devices in landscape (~960dp and ~1280dp respectively). -->
+    <dimen name="activity_horizontal_margin">32dp</dimen>
+    <dimen name="activity_vertical_margin">32dp</dimen>
+    <dimen name="activity_top_margin">40dp</dimen>
+    <!--Text size-->
+
+    <dimen name="size_2">5dp</dimen>
+    <dimen name="size_5">13dp</dimen>
+    <dimen name="size_15">40dp</dimen>
+    <dimen name="text_size_12">30sp</dimen>
+    <dimen name="text_size_14">35sp</dimen>
+    <dimen name="text_size_16">40sp</dimen>
+    <dimen name="text_size_18">45sp</dimen>
+    <dimen name="text_size_20">50sp</dimen>
+    <dimen name="text_size_24">60sp</dimen>
+    <dimen name="text_size_48">120sp</dimen>
+    <dimen name="text_size_200">500sp</dimen>
+    <dimen name="text_size_hidden_state">30sp</dimen>
+
+    <dimen name="field_padding_top_bottom">10dp</dimen>
+    <dimen name="field_padding_left">30dp</dimen>
+
+    <!--row in list start-->
+    <dimen name="row_height">180dp</dimen>
+    <dimen name="img_left_margin">40dp</dimen>
+    <dimen name="img_vertical_margin">22dp</dimen>
+    <dimen name="text_area_left_margin">210dp</dimen>
+    <dimen name="text_area_bottom_margin">48dp</dimen>
+    <dimen name="text_area_right_margin">40dp</dimen>
+    <dimen name="text_area_top_margin">40dp</dimen>
+    <dimen name="gender_left_margin">30dp</dimen>
+    <dimen name="age_badge_left_margin">80dp</dimen>
+    <dimen name="age_left_margin">30dp</dimen>
+    <dimen name="gender_name_length">140dp</dimen>
+    <dimen name="matching_badge_left_margin">45dp</dimen>
+    <dimen name="fab_margin">32dp</dimen>
+    <dimen name="case_spinner_indicator_left_margin">40dp</dimen>
+    <dimen name="case_spinner_order_left_margin">120dp</dimen>
+    <dimen name="case_spinner_order_name_left_margin">250dp</dimen>
+    <dimen name="case_spinner_height_opened">110dp</dimen>
+    <dimen name="case_spinner_height_closed">82dp</dimen>
+    <dimen name="case_spinner_arrow_right_margin">24dp</dimen>
+    <dimen name="case_avatar_width">140dp</dimen>
+    <dimen name="case_avatar_height">140dp</dimen>
+    <!--row in list end-->
+
+    <!--search start-->
+    <dimen name="search_bar_left_margin">40dp</dimen>
+    <dimen name="search_bar_right_margin">40dp</dimen>
+    <dimen name="search_bar_left_padding">40dp</dimen>
+    <dimen name="search_bar_right_padding">40dp</dimen>
+    <dimen name="search_bar_item_height">90dp</dimen>
+    <dimen name="search_button_height">125dp</dimen>
+    <dimen name="no_result_vertical_padding">32dp</dimen>
+    <dimen name="no_result_horizontal_padding">16dp</dimen>
+    <!--search end-->
+
+    <!--login start-->
+    <dimen name="login_logo_size">250dp</dimen>
+    <dimen name="login_logo_top_margin">200dp</dimen>
+    <dimen name="login_input_margin">50dp</dimen>
+    <dimen name="login_username_top_margin">280dp</dimen>
+    <!--login end-->
+
+    <!--case register start-->
+    <dimen name="case_register_mini_heigh">100dp</dimen>
+    <dimen name="pull_back_text_padding">30dp</dimen>
+    <dimen name="case_register_label_padding_left_right">40dp</dimen>
+    <dimen name="case_register_field_padding_left_right">30dp</dimen>
+    <dimen name="case_register_field_padding_top_bottom">18dp</dimen>
+    <dimen name="case_photo_view_pager_height_mini_form">410dp</dimen>
+    <dimen name="case_photo_view_dot_margin_mini_form">-20dp</dimen>
+    <dimen name="case_register_photo_grid_spacing">10dp</dimen>
+    <!--case register end-->
+
+    <!--sync start-->
+    <dimen name="sync_padding_left_right">40dp</dimen>
+    <dimen name="sync_padding_top_bottom">18dp</dimen>
+    <dimen name="sync_value_padding_top_bottom">52dp</dimen>
+    <dimen name="sync_button_padding_top">160dp</dimen>
+    <!--sync end-->
+
+    <!--action bar start-->
+    <dimen name="action_bar_size">150dp</dimen>
+    <dimen name="navigation_height">300dp</dimen>
+    <dimen name="navigation_width">600dp</dimen>
+    <!--action bar end-->
+</resources>
