@@ -39,6 +39,7 @@ import static org.mockito.MockitoAnnotations.initMocks;
 import static org.powermock.api.mockito.PowerMockito.mock;
 import static org.powermock.api.mockito.PowerMockito.when;
 import static org.unicef.rapidreg.childcase.caseregister.CaseRegisterPresenter.MODULE_CASE_CP;
+import static org.unicef.rapidreg.childcase.caseregister.CaseRegisterPresenter.MODULE_CASE_GBV;
 
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({RecordService.class})
@@ -172,5 +173,31 @@ public class CaseRegisterPresenterTest {
         assertThat("registration_date should be right", actual.getAsString("registration_date"), is("15/12/2016"));
     }
 
+    @Test
+    public void should_return_cp_case_form_when_type_is_cp() throws Exception {
+        CaseTemplateForm cpCaseTemplateForm = new CaseTemplateForm();
+        when(caseFormService.getCPTemplate()).thenReturn(cpCaseTemplateForm);
+        CaseTemplateForm gbvCaseTemplateForm = new CaseTemplateForm();
+        when(caseFormService.getGBVTemplate()).thenReturn(gbvCaseTemplateForm);
 
+        caseRegisterPresenter.setCaseType(MODULE_CASE_CP);
+
+        RecordForm actual = caseRegisterPresenter.getTemplateForm();
+
+        assertThat("Should be CP case template form", actual, Is.<RecordForm>is(cpCaseTemplateForm));
+    }
+
+    @Test
+    public void should_return_gbv_case_form_when_type_is_cp() throws Exception {
+        CaseTemplateForm cpCaseTemplateForm = new CaseTemplateForm();
+        when(caseFormService.getCPTemplate()).thenReturn(cpCaseTemplateForm);
+        CaseTemplateForm gbvCaseTemplateForm = new CaseTemplateForm();
+        when(caseFormService.getGBVTemplate()).thenReturn(gbvCaseTemplateForm);
+
+        caseRegisterPresenter.setCaseType(MODULE_CASE_GBV);
+
+        RecordForm actual = caseRegisterPresenter.getTemplateForm();
+
+        assertThat("Should be CP case template form", actual, Is.<RecordForm>is(gbvCaseTemplateForm));
+    }
 }
