@@ -1,48 +1,72 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:orientation="vertical">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:weightSum="8">
 
-    <de.hdodenhof.circleimageview.CircleImageView
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/logo"
-        android:layout_width="@dimen/login_logo_size"
-        android:layout_height="@dimen/login_logo_size"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="@dimen/login_logo_top_margin"
-        android:src="@drawable/logo"
-        app:civ_border_color="#00000000"
-        app:civ_border_width="0dp"/>
-
-    <EditText
-        android:id="@+id/username"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
+        android:layout_weight="5"
+        android:gravity="center">
+
+        <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/logo"
+            android:layout_width="@dimen/login_logo_size"
+            android:layout_height="@dimen/login_logo_size"
+            android:src="@drawable/logo"
+            app:civ_border_color="#00000000"
+            app:civ_border_width="0dp" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
         android:layout_marginLeft="@dimen/login_input_margin"
         android:layout_marginRight="@dimen/login_input_margin"
-        android:layout_marginTop="@dimen/login_username_top_margin"
-        android:hint="@string/username_hint_text"
-        android:imeOptions="actionDone"
-        android:text="primero"
-        android:textColor="@color/primero_font_dark"/>
+        android:layout_weight="3"
+        android:gravity="center"
+        android:orientation="vertical">
 
-    <EditText
-        android:id="@+id/password"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/login_input_margin"
-        android:layout_marginRight="@dimen/login_input_margin"
-        android:text="qu01n23!"
-        android:hint="@string/password_hint_text"
-        android:inputType="textPassword"
-        android:textColor="@color/primero_font_dark"/>
+        <EditText
+            android:id="@+id/username"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/username_hint_text"
+            android:imeOptions="actionDone"
+            android:text="primero"
+            android:textColor="@color/primero_font_dark"
+            android:textSize="@dimen/text_size_18" />
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/login_input_margin"
-        android:layout_marginRight="@dimen/login_input_margin">
+        <EditText
+            android:id="@+id/password"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/password_hint_text"
+            android:inputType="textPassword"
+            android:text="qu01n23!"
+            android:textColor="@color/primero_font_dark"
+            android:textSize="@dimen/text_size_18" />
+
+        <EditText
+            android:id="@+id/url"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/url_hint_text"
+            android:inputType="textUri"
+            android:text="http://35.164.57.91:12306"
+            android:textSize="@dimen/text_size_18" />
+
+        <TextView
+            android:id="@+id/change_url"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/field_padding_top_bottom"
+            android:text="@string/text_view_change_url"
+            android:textColor="@color/primero_blue"
+            android:textSize="@dimen/text_size_12" />
 
         <!--http://10.29.2.190:3000-->
         <!--https://10.29.2.190:8443-->
@@ -51,39 +75,16 @@
         <!--https://35.161.56.113:8443-->
         <!--http://10.29.4.91:12306-->
         <!--http://35.164.57.91:12306-->
-        <EditText
-            android:id="@+id/url"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/url_hint_text"
-            android:inputType="textUri"
-            android:text="http://35.164.57.91:12306"/>
 
-        <TextView
-            android:id="@+id/change_url"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_centerVertical="true"
-            android:text="@string/text_view_change_url"
-            android:textColor="@color/primero_blue"
-            android:textSize="@dimen/text_size_14"/>
-
-    </RelativeLayout>
-
-    <View
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_weight="1"/>
+    </LinearLayout>
 
     <Button
         android:id="@+id/login"
         android:layout_width="match_parent"
         android:layout_height="@dimen/search_button_height"
         android:background="@color/primero_blue"
-        android:gravity="center"
         android:text="@string/button_login_text"
         android:textColor="@color/white"
-        android:textSize="@dimen/text_size_20"/>
+        android:textSize="@dimen/text_size_20" />
 
 </LinearLayout>
