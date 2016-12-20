@@ -107,7 +107,7 @@ public class LoginActivity extends MvpActivity<LoginView, LoginPresenter> implem
             urlEditView.setText(url);
 
             if (!"".equals(url)) {
-                urlEditView.setVisibility(View.INVISIBLE);
+                urlEditView.setVisibility(View.GONE);
                 changeUrlTextView.setVisibility(View.VISIBLE);
             }
         } catch (Exception e) {
