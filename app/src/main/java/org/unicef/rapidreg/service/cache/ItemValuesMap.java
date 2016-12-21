@@ -70,12 +70,11 @@ public class ItemValuesMap implements Serializable {
         return Double.valueOf(values.get(key).toString()).longValue();
     }
 
-    public Integer
-    getAsInt(String key) {
+    public Integer getAsInt(String key) {
         if (values.get(key) == null) {
             return null;
         }
-        return Double.valueOf(values.get(key).toString()).intValue();
+        return Integer.valueOf(values.get(key).toString()).intValue();
     }
 
     public List<String> getAsList(String key) {
