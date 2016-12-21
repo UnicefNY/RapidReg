@@ -76,7 +76,7 @@ public class ImageCompressUtil {
         int imageHeight = options.outHeight;
         int imageWidth = options.outWidth;
 
-        float imgRatio = imageWidth / imageHeight;
+        float imgRatio = imageWidth / (float) imageHeight;
         float maxRatio = maxWidth / maxHeight;
 
         if (imageHeight > maxHeight || imageWidth > maxWidth) {
