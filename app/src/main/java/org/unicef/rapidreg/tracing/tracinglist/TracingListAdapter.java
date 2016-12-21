@@ -3,6 +3,10 @@ package org.unicef.rapidreg.tracing.tracinglist;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
+
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+
 import org.unicef.rapidreg.base.record.RecordActivity;
 import org.unicef.rapidreg.base.record.recordlist.RecordListAdapter;
 import org.unicef.rapidreg.injection.ActivityContext;
@@ -12,6 +16,7 @@ import org.unicef.rapidreg.service.RecordService;
 import org.unicef.rapidreg.service.TracingService;
 import org.unicef.rapidreg.service.cache.ItemValuesMap;
 import org.unicef.rapidreg.tracing.TracingFeature;
+import org.unicef.rapidreg.utils.JsonUtils;
 import org.unicef.rapidreg.utils.StreamUtil;
 import org.unicef.rapidreg.utils.Utils;
 
@@ -37,7 +42,8 @@ public class TracingListAdapter extends RecordListAdapter {
         final long recordId = recordList.get(position);
         final RecordModel record = tracingService.getById(recordId);
         final String recordJson = new String(record.getContent().getBlob());
-        final ItemValuesMap itemValues = ItemValuesMap.fromJson(recordJson);
+        final ItemValuesMap itemValues = new ItemValuesMap(JsonUtils.toMap(new Gson().fromJson
+                (recordJson, JsonObject.class)));
         Gender gender = Gender.EMPTY;
         if (itemValues.has(RecordService.SEX)) {
             gender = Gender.valueOf(itemValues.getAsString(RecordService.SEX).toUpperCase());
@@ -55,7 +61,8 @@ public class TracingListAdapter extends RecordListAdapter {
                 try {
                     Utils.clearAudioFile(AUDIO_FILE_PATH);
                     if (record.getAudio() != null) {
-                        StreamUtil.writeFile(record.getAudio().getBlob(), RecordService.AUDIO_FILE_PATH);
+                        StreamUtil.writeFile(record.getAudio().getBlob(), RecordService
+                                .AUDIO_FILE_PATH);
                     }
                 } catch (IOException e) {
                 }

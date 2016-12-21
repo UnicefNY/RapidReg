@@ -93,12 +93,26 @@ public class IncidentRegisterPresenterTest {
     }
 
     @Test
+    public void required_Field_is_false_when_save_record() {
+        ItemValuesMap itemValuesMap = new ItemValuesMap();
+        itemValuesMap.addBooleanItem("is_case", true);
+        itemValuesMap.addNumberItem("age", 12);
+        RecordRegisterView.SaveRecordCallback callback = mock(RecordRegisterView
+                .SaveRecordCallback.class);
+
+        IncidentTemplateForm incidentTemplateForm = mock(IncidentTemplateForm.class);
+
+        when(incidentFormService.getGBVTemplate()).thenReturn(incidentTemplateForm);
+        when(incidentService.validateRequiredFields(incidentTemplateForm, itemValuesMap))
+                .thenReturn(false);
+    }
+
+    @Test
     public void should_return_get_fields_from_incident_form_sections() {
         Field miniFormField = mock(Field.class);
         Field otherFormField = mock(Field.class);
         Section section = mock(Section.class);
         IncidentTemplateForm incidentTemplateForm = mock(IncidentTemplateForm.class);
-
 
         List<Field> fields = Arrays.asList(new Field[]{miniFormField, otherFormField});
         List<Section> sections = Arrays.asList(new Section[]{section});
