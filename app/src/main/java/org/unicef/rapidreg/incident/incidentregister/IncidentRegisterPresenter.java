@@ -20,12 +20,8 @@ import org.unicef.rapidreg.service.cache.ItemValuesMap;
 import org.unicef.rapidreg.utils.JsonUtils;
 
 import java.io.IOException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 import javax.inject.Inject;
 
@@ -81,7 +77,8 @@ public class IncidentRegisterPresenter extends RecordRegisterPresenter {
                 (incidentJson, JsonObject.class)));
         itemValues.addStringItem(IncidentService.INCIDENT_ID, incidentItem.getUniqueId());
 
-        addProfileItems(itemValues, incidentItem.getRegistrationDate(), incidentItem.getUniqueId(), recordId);
+        addProfileItems(itemValues, incidentItem.getRegistrationDate(), incidentItem.getUniqueId
+                (), recordId);
 
         return itemValues;
     }

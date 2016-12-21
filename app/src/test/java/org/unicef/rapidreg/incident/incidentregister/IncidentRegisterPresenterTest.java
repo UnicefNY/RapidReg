@@ -29,8 +29,6 @@ import edu.emory.mathcs.backport.java.util.Arrays;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Matchers.anyInt;
-import static org.mockito.Matchers.anyLong;
-import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.MockitoAnnotations.initMocks;
@@ -69,7 +67,7 @@ public class IncidentRegisterPresenterTest {
     }
 
     @Test
-    public void should_required_field_is_true_when_save_record() throws IOException {
+    public void required_field_is_true_when_save_record() throws IOException {
         ItemValuesMap itemValuesMap = new ItemValuesMap();
         itemValuesMap.addBooleanItem("is_case", true);
         itemValuesMap.addNumberItem("age", 12);
