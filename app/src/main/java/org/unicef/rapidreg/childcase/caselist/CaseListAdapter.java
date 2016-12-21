@@ -22,6 +22,7 @@ import org.unicef.rapidreg.utils.StreamUtil;
 import org.unicef.rapidreg.utils.Utils;
 
 import java.io.IOException;
+
 import javax.inject.Inject;
 
 import static org.unicef.rapidreg.childcase.caseregister.CaseRegisterPresenter.MODULE_CASE_CP;
@@ -44,9 +45,8 @@ public class CaseListAdapter extends RecordListAdapter {
         final RecordModel record = caseService.getById(recordId);
 
         final String recordJson = new String(record.getContent().getBlob());
-        final ItemValuesMap itemValues = new ItemValuesMap(JsonUtils.toMap(new Gson().fromJson(recordJson, JsonObject.class)));
-
-
+        final ItemValuesMap itemValues = new ItemValuesMap(JsonUtils.toMap(new Gson().fromJson
+                (recordJson, JsonObject.class)));
         Gender gender;
         try {
             gender = Gender.valueOf(itemValues.getAsString(RecordService.SEX).toUpperCase());
@@ -54,22 +54,25 @@ public class CaseListAdapter extends RecordListAdapter {
             gender = Gender.PLACEHOLDER;
         }
         final String shortUUID = caseService.getShortUUID(record.getUniqueId());
-        int age = itemValues.getAsInt(RecordService.AGE);
-        holder.setValues(gender, shortUUID, String.valueOf(age), record);
+
+        String age = itemValues.getAsString(RecordService.AGE);
+        holder.setValues(gender, shortUUID, age, record);
         holder.setViewOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Bundle args = new Bundle();
                 String moduleId = itemValues.getAsString(MODULE);
-                Feature feature = moduleId.equals(MODULE_CASE_CP) ? CaseFeature.DETAILS_CP_MINI : CaseFeature.DETAILS_GBV_MINI;
+                Feature feature = moduleId.equals(MODULE_CASE_CP) ? CaseFeature.DETAILS_CP_MINI :
+                        CaseFeature.DETAILS_GBV_MINI;
 
                 args.putString(MODULE, moduleId);
                 args.putLong(CaseService.CASE_PRIMARY_ID, recordId);
-                ((RecordActivity)context).turnToFeature(feature, args, null);
+                ((RecordActivity) context).turnToFeature(feature, args, null);
                 try {
                     Utils.clearAudioFile(AUDIO_FILE_PATH);
                     if (record.getAudio() != null) {
-                        StreamUtil.writeFile(record.getAudio().getBlob(), RecordService.AUDIO_FILE_PATH);
+                        StreamUtil.writeFile(record.getAudio().getBlob(), RecordService
+                                .AUDIO_FILE_PATH);
                     }
                 } catch (IOException e) {
                 }

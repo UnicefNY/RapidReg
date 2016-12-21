@@ -4,6 +4,9 @@ import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+
 import org.unicef.rapidreg.base.record.RecordActivity;
 import org.unicef.rapidreg.base.record.recordlist.RecordListAdapter;
 import org.unicef.rapidreg.incident.IncidentFeature;
@@ -13,6 +16,7 @@ import org.unicef.rapidreg.model.RecordModel;
 import org.unicef.rapidreg.service.IncidentService;
 import org.unicef.rapidreg.service.RecordService;
 import org.unicef.rapidreg.service.cache.ItemValuesMap;
+import org.unicef.rapidreg.utils.JsonUtils;
 import org.unicef.rapidreg.utils.StreamUtil;
 import org.unicef.rapidreg.utils.Utils;
 
@@ -37,11 +41,9 @@ public class IncidentListAdapter extends RecordListAdapter {
             position) {
         final long recordId = recordList.get(position);
         final RecordModel record = incidentService.getById(recordId);
-
         final String recordJson = new String(record.getContent().getBlob());
-
-        final ItemValuesMap itemValues = ItemValuesMap.fromJson(recordJson);
-
+        final ItemValuesMap itemValues = new ItemValuesMap(JsonUtils.toMap(new Gson().fromJson
+                (recordJson, JsonObject.class)));
         Gender gender;
         try {
             gender = Gender.valueOf(itemValues.getAsString(RecordService.SEX).toUpperCase());

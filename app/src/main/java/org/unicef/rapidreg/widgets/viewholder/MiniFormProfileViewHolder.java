@@ -68,7 +68,13 @@ public class MiniFormProfileViewHolder extends BaseViewHolder<Field> {
         } else {
             age = itemValues.getAsInt(RecordService.AGE);
         }
-        this.age.setText((age > 0) ? String.valueOf(age) : "---");
+
+        if (age != null) {
+            this.age.setText(age > 0 ? String.valueOf(age) : "---");
+        } else {
+            this.age.setText("---");
+        }
+
     }
 
     @Override
