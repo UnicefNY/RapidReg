@@ -35,11 +35,11 @@ public class JsonUtils {
         }
     }
 
-    public static Map<String, Object> getMap(JsonObject object, String key) throws JSONException {
+    public static Map<String, Object> getMap(JsonObject object, String key) {
         return toMap(object.getAsJsonObject(key));
     }
 
-    public static Map<String, Object> toMap(JsonObject object) throws JSONException {
+    public static Map<String, Object> toMap(JsonObject object) {
         Map<String, Object> map = new HashMap();
         for (Map.Entry<String, JsonElement> element : object.entrySet()) {
             map.put(element.getKey(), fromJson(element.getValue()));
@@ -47,7 +47,7 @@ public class JsonUtils {
         return map;
     }
 
-    public static List toList(JsonArray array) throws JSONException {
+    public static List toList(JsonArray array) {
         List list = new ArrayList();
         for (int i = 0; i < array.size(); i++) {
             list.add(fromJson(array.get(i)));
@@ -55,7 +55,7 @@ public class JsonUtils {
         return list;
     }
 
-    private static Object fromJson(Object json) throws JSONException {
+    private static Object fromJson(Object json) {
         if (json == null) {
             return null;
         }
@@ -65,15 +65,19 @@ public class JsonUtils {
         if (json instanceof JsonArray) {
             return toList((JsonArray) json);
         }
-        if(json instanceof JsonPrimitive){
+        if (json instanceof JsonPrimitive) {
             JsonPrimitive result = (JsonPrimitive) json;
-            if(result.isBoolean()){
+            if (result.isBoolean()) {
                 return result.getAsBoolean();
             }
-            if (result.isNumber()){
-                return result.getAsNumber().longValue();
+            if (result.isNumber()) {
+                double doubleValue = result.getAsNumber().doubleValue();
+                if (Math.ceil(doubleValue) == doubleValue) {
+                    return result.getAsNumber().longValue();
+                }
+                return result.getAsNumber();
             }
-            if (result.isString()){
+            if (result.isString()) {
                 return result.getAsString();
             }
             return json;

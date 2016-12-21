@@ -9,7 +9,6 @@ import org.unicef.rapidreg.forms.TracingTemplateForm;
 import org.unicef.rapidreg.model.TracingForm;
 import org.unicef.rapidreg.network.AuthService;
 import org.unicef.rapidreg.service.TracingFormService;
-import org.unicef.rapidreg.service.UserService;
 
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
@@ -45,7 +44,8 @@ public class TracingPresenter extends RecordPresenter {
                 Locale.getDefault().getLanguage(), true, "tracing_request", "primeromodule-cp")
                 .flatMap(new Func1<TracingTemplateForm, Observable<TracingTemplateForm>>() {
                     @Override
-                    public Observable<TracingTemplateForm> call(TracingTemplateForm tracingTemplateForm) {
+                    public Observable<TracingTemplateForm> call(TracingTemplateForm
+                                                                        tracingTemplateForm) {
                         if (tracingTemplateForm == null) {
                             return Observable.error(new Exception());
                         }
@@ -59,13 +59,15 @@ public class TracingPresenter extends RecordPresenter {
                     @Override
                     public void call(TracingTemplateForm tracingTemplateForm) {
                         saveForm(tracingTemplateForm, RecordConfiguration.MODULE_ID_CP);
-                        ((TracingActivity) getView()).setFormSyncFail(false);
+                        setFormSyncFail(false);
                     }
                 }, new Action1<Throwable>() {
                     @Override
                     public void call(Throwable throwable) {
-                        ((TracingActivity) getView()).setFormSyncFail(true);
-                        getView().promoteSyncFormsError();
+                        if (isViewAttached()) {
+                            getView().promoteSyncFormsError();
+                        }
+                        setFormSyncFail(true);
                     }
                 });
     }

@@ -21,7 +21,6 @@ import org.unicef.rapidreg.base.BaseActivity;
 import org.unicef.rapidreg.base.Feature;
 import org.unicef.rapidreg.base.record.recordphoto.PhotoConfig;
 import org.unicef.rapidreg.event.UpdateImageEvent;
-import org.unicef.rapidreg.service.RecordService;
 import org.unicef.rapidreg.utils.ImageCompressUtil;
 import org.unicef.rapidreg.utils.Utils;
 import org.unicef.rapidreg.widgets.viewholder.PhotoUploadViewHolder;
@@ -47,7 +46,7 @@ public abstract class RecordActivity extends BaseActivity {
 
     private String imagePath;
     private CompositeSubscription subscriptions;
-    private volatile boolean isFormSyncFail;
+
 
     @Inject
     RecordPresenter recordPresenter;
@@ -59,11 +58,7 @@ public abstract class RecordActivity extends BaseActivity {
     }
 
     public boolean isFormSyncFail() {
-        return isFormSyncFail;
-    }
-
-    public void setFormSyncFail(boolean formSyncFail) {
-        isFormSyncFail = formSyncFail;
+        return recordPresenter.isFormSyncFail();
     }
 
     @Override
@@ -167,7 +162,8 @@ public abstract class RecordActivity extends BaseActivity {
 
     private void onCaptureImageResult() {
         try {
-            Bitmap compressedImage = ImageCompressUtil.compressImage(PhotoConfig.MEDIA_PATH_FOR_CAMERA,
+            Bitmap compressedImage = ImageCompressUtil.compressImage(PhotoConfig
+                    .MEDIA_PATH_FOR_CAMERA,
                     PhotoConfig.MAX_WIDTH, PhotoConfig.MAX_HEIGHT);
             imagePath = getOutputMediaFilePath();
             ImageCompressUtil.storeImage(compressedImage, imagePath);

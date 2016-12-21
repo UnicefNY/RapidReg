@@ -1,7 +1,5 @@
 package org.unicef.rapidreg.service;
 
-import android.os.Bundle;
-
 import com.raizlabs.android.dbflow.data.Blob;
 
 import org.junit.Before;
@@ -18,14 +16,12 @@ import org.unicef.rapidreg.db.CaseDao;
 import org.unicef.rapidreg.db.CasePhotoDao;
 import org.unicef.rapidreg.forms.Field;
 import org.unicef.rapidreg.forms.Section;
-import org.unicef.rapidreg.incident.incidentregister.IncidentRegisterPresenter;
 import org.unicef.rapidreg.model.Case;
 import org.unicef.rapidreg.model.User;
-import org.unicef.rapidreg.service.cache.ItemValues;
+import org.unicef.rapidreg.service.cache.ItemValuesMap;
 import org.unicef.rapidreg.utils.Utils;
 
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -42,7 +38,6 @@ import static org.powermock.api.mockito.PowerMockito.mock;
 import static org.powermock.api.mockito.PowerMockito.when;
 import static org.unicef.rapidreg.service.CaseService.CASE_ID;
 import static org.unicef.rapidreg.service.RecordService.AGE;
-import static org.unicef.rapidreg.service.RecordService.FULL_NAME;
 import static org.unicef.rapidreg.service.RecordService.REGISTRATION_DATE;
 
 @RunWith(PowerMockRunner.class)
@@ -101,7 +96,7 @@ public class CaseServiceTest {
         expected.setUniqueId(uuid.toString());
 
         when(caseDao.save(any(Case.class))).thenReturn(expected);
-        ItemValues itemValues = new ItemValues();
+        ItemValuesMap itemValues = new ItemValuesMap();
         Case actual = caseService.save(itemValues, Collections.EMPTY_LIST);
 
         assertThat("Should have same uuid.", actual.getUniqueId(), is(uuid.toString()));
@@ -110,7 +105,7 @@ public class CaseServiceTest {
 
     @Test
     public void should_update_case_when_give_item_values() throws Exception {
-        ItemValues itemValues = new ItemValues();
+        ItemValuesMap itemValues = new ItemValuesMap();
         itemValues.addStringItem(CASE_ID, "existedUniqueId");
         itemValues.addNumberItem(AGE, 18);
         itemValues.addStringItem(REGISTRATION_DATE, "25/12/2016");

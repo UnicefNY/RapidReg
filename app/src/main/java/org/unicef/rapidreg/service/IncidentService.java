@@ -13,7 +13,7 @@ import org.unicef.rapidreg.db.IncidentDao;
 import org.unicef.rapidreg.db.impl.IncidentDaoImpl;
 import org.unicef.rapidreg.model.Incident;
 import org.unicef.rapidreg.model.RecordModel;
-import org.unicef.rapidreg.service.cache.ItemValues;
+import org.unicef.rapidreg.service.cache.ItemValuesMap;
 import org.unicef.rapidreg.utils.Utils;
 
 import java.io.IOException;
@@ -41,6 +41,7 @@ public class IncidentService extends RecordService {
     public Incident getById(long incidentId) {
         return incidentDao.getIncidentById(incidentId);
     }
+
     public Incident getByUniqueId(String uniqueId) {
         return incidentDao.getIncidentByUniqueId(uniqueId);
     }
@@ -49,7 +50,7 @@ public class IncidentService extends RecordService {
         return incidentDao.getAllIncidentsOrderByDate(false);
     }
 
-    public List<Long> getAllIds(){
+    public List<Long> getAllIds() {
         return incidentDao.getAllIds();
     }
 
@@ -75,7 +76,7 @@ public class IncidentService extends RecordService {
         return extractIds(incidentDao.getIncidentListByConditionGroup(searchCondition));
     }
 
-    private List<Long> extractIds(List<Incident> incidents){
+    private List<Long> extractIds(List<Incident> incidents) {
         List<Long> result = new ArrayList<>();
         for (Incident incident : incidents) {
             result.add(incident.getId());
@@ -100,7 +101,7 @@ public class IncidentService extends RecordService {
         return conditionGroup;
     }
 
-    public Incident saveOrUpdate(ItemValues itemValues) throws IOException {
+    public Incident saveOrUpdate(ItemValuesMap itemValues) throws IOException {
 
         if (itemValues.getAsString(INCIDENT_ID) == null) {
             return save(itemValues);
@@ -110,7 +111,7 @@ public class IncidentService extends RecordService {
         }
     }
 
-    public Incident save(ItemValues itemValues) throws IOException {
+    public Incident save(ItemValuesMap itemValues) throws IOException {
         String uniqueId = generateUniqueId();
         itemValues.addStringItem(INCIDENT_DISPLAY_ID, getShortUUID(uniqueId));
         itemValues.addStringItem(INCIDENT_ID, uniqueId);
@@ -144,7 +145,7 @@ public class IncidentService extends RecordService {
     }
 
 
-    public Incident update(ItemValues itemValues) throws IOException {
+    public Incident update(ItemValuesMap itemValues) throws IOException {
         Gson gson = new Gson();
         Blob blob = new Blob(gson.toJson(itemValues.getValues()).getBytes());
 
@@ -162,8 +163,8 @@ public class IncidentService extends RecordService {
         return incident;
     }
 
-   
-    private String getName(ItemValues values) {
+
+    private String getName(ItemValuesMap values) {
         return values.getAsString(RELATION_NAME) + " "
                 + values.getAsString(RELATION_AGE) + " "
                 + values.getAsString(RELATION_NICKNAME);

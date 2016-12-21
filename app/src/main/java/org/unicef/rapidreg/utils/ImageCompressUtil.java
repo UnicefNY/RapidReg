@@ -4,12 +4,8 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.media.ExifInterface;
-import android.media.ThumbnailUtils;
-
 import com.raizlabs.android.dbflow.data.Blob;
-
 import org.unicef.rapidreg.base.record.recordphoto.PhotoConfig;
-
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -19,60 +15,10 @@ import java.io.IOException;
 public class ImageCompressUtil {
 
 
-    public static byte[] convertImageToBytes(String imageSource) {
-        ByteArrayOutputStream stream = new ByteArrayOutputStream();
-        BitmapFactory.decodeFile(imageSource).compress(Bitmap.CompressFormat.JPEG, 100, stream);
-        return stream.toByteArray();
-    }
-
     public static byte[] convertImageToBytes(Bitmap imageSource) {
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
         imageSource.compress(Bitmap.CompressFormat.JPEG, 100, stream);
         return stream.toByteArray();
-    }
-
-    public static Bitmap getThumbnail(Bitmap bitmap, int width, int height) {
-        return ThumbnailUtils.extractThumbnail(bitmap, width, height);
-    }
-
-    public static Bitmap compressByQuality(Bitmap bitmap, int maxSize) {
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        int quality = 100;
-        bitmap.compress(Bitmap.CompressFormat.JPEG, quality, baos);
-        boolean isCompressed = false;
-
-        while (baos.toByteArray().length / 1024 > maxSize) {
-            quality -= 5;
-            baos.reset();
-            bitmap.compress(Bitmap.CompressFormat.JPEG, quality, baos);
-            isCompressed = true;
-        }
-        if (isCompressed) {
-            Bitmap compressedBitmap = BitmapFactory.decodeByteArray(
-                    baos.toByteArray(), 0, baos.toByteArray().length);
-            recycleBitmap(bitmap);
-            return compressedBitmap;
-        } else {
-            return bitmap;
-        }
-    }
-
-    public static int readPictureRotateDegree(String path) throws IOException {
-        int degree = 0;
-        ExifInterface exifInterface = new ExifInterface(path);
-        int orientation = exifInterface.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL);
-        switch (orientation) {
-            case ExifInterface.ORIENTATION_ROTATE_90:
-                degree = 90;
-                break;
-            case ExifInterface.ORIENTATION_ROTATE_180:
-                degree = 180;
-                break;
-            case ExifInterface.ORIENTATION_ROTATE_270:
-                degree = 270;
-                break;
-        }
-        return degree;
     }
 
     public static Bitmap rotateBitmapByExif(String srcPath, Bitmap bitmap) {
@@ -172,12 +118,6 @@ public class ImageCompressUtil {
             inSampleSize++;
         }
         return inSampleSize;
-    }
-
-    public static Bitmap rotateImage(Bitmap img, int rotateDegree) {
-        Matrix matrix = new Matrix();
-        matrix.postRotate(rotateDegree);
-        return Bitmap.createBitmap(img, 0, 0, img.getWidth(), img.getHeight(), matrix, true);
     }
 
     public static Blob readImageFile(String filePath) throws IOException {

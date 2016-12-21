@@ -13,7 +13,6 @@ import org.unicef.rapidreg.forms.Field;
 import org.unicef.rapidreg.model.Gender;
 import org.unicef.rapidreg.service.RecordService;
 import org.unicef.rapidreg.service.TracingService;
-import org.unicef.rapidreg.service.cache.ItemValues;
 import org.unicef.rapidreg.service.cache.ItemValuesMap;
 
 import butterknife.BindView;
@@ -47,7 +46,7 @@ public class MiniFormProfileViewHolder extends BaseViewHolder<Field> {
 
     @Override
     public void setValue(Field field) {
-        idView.setText(itemValues.getAsString(ItemValues.RecordProfile.ID_NORMAL_STATE));
+        idView.setText(itemValues.getAsString(ItemValuesMap.RecordProfile.ID_NORMAL_STATE));
         Gender gender;
         if (itemValues.getAsString(TracingService.SEX) != null) {
             gender = Gender.valueOf(itemValues.getAsString(TracingService.SEX).toUpperCase());
@@ -56,18 +55,20 @@ public class MiniFormProfileViewHolder extends BaseViewHolder<Field> {
                     ? Gender.EMPTY
                     : Gender.PLACEHOLDER;
         }
-        Drawable drawable = ResourcesCompat.getDrawable(context.getResources(), gender.getGenderId(), null);
+        Drawable drawable = ResourcesCompat.getDrawable(context.getResources(), gender
+                .getGenderId(), null);
         genderBadge.setImageDrawable(drawable);
         genderName.setText(gender.getName());
         genderName.setTextColor(ContextCompat.getColor(context, gender.getColorId()));
-        String age;
+        registrationDate.setText(itemValues.getAsString(ItemValuesMap.RecordProfile
+                .REGISTRATION_DATE));
+        Integer age;
         if (itemValues.has(RecordService.RELATION_AGE)) {
-            age = itemValues.getAsString(RecordService.RELATION_AGE);
+            age = itemValues.getAsInt(RecordService.RELATION_AGE);
         } else {
-            age = itemValues.getAsString(RecordService.AGE);
+            age = itemValues.getAsInt(RecordService.AGE);
         }
-        this.age.setText(isValidAge(age) ? age : "---");
-        registrationDate.setText(itemValues.getAsString(ItemValues.RecordProfile.REGISTRATION_DATE));
+        this.age.setText((age > 0) ? String.valueOf(age) : "---");
     }
 
     @Override
@@ -78,12 +79,5 @@ public class MiniFormProfileViewHolder extends BaseViewHolder<Field> {
     @Override
     public void setFieldEditable(boolean editable) {
 
-    }
-
-    protected boolean isValidAge(String value) {
-        if (value == null) {
-            return false;
-        }
-        return Integer.valueOf(value) > 0;
     }
 }

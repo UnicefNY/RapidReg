@@ -24,7 +24,6 @@ import org.unicef.rapidreg.injection.component.ActivityComponent;
 import org.unicef.rapidreg.injection.component.DaggerActivityComponent;
 import org.unicef.rapidreg.injection.module.ActivityModule;
 import org.unicef.rapidreg.model.User;
-import org.unicef.rapidreg.service.cache.PageModeCached;
 
 import javax.inject.Inject;
 
@@ -118,7 +117,6 @@ public abstract class BaseActivity extends MvpActivity<BaseView, BasePresenter> 
     public void onBackPressed() {
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
-            PageModeCached.setListMode();
         } else {
             processBackButton();
         }

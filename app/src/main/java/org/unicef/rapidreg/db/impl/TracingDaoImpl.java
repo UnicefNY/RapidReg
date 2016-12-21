@@ -7,14 +7,9 @@ import com.raizlabs.android.dbflow.sql.language.SQLite;
 import org.unicef.rapidreg.db.TracingDao;
 import org.unicef.rapidreg.model.Tracing;
 import org.unicef.rapidreg.model.Tracing_Table;
-import org.unicef.rapidreg.service.cache.ItemValues;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
-
-import static org.unicef.rapidreg.service.RecordService.CAREGIVER_NAME;
 
 public class TracingDaoImpl implements TracingDao {
 

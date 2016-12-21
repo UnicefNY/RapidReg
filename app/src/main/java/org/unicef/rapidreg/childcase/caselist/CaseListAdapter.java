@@ -4,6 +4,9 @@ import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+
 import org.unicef.rapidreg.base.Feature;
 import org.unicef.rapidreg.base.record.RecordActivity;
 import org.unicef.rapidreg.base.record.recordlist.RecordListAdapter;
@@ -13,7 +16,8 @@ import org.unicef.rapidreg.model.Gender;
 import org.unicef.rapidreg.model.RecordModel;
 import org.unicef.rapidreg.service.CaseService;
 import org.unicef.rapidreg.service.RecordService;
-import org.unicef.rapidreg.service.cache.ItemValues;
+import org.unicef.rapidreg.service.cache.ItemValuesMap;
+import org.unicef.rapidreg.utils.JsonUtils;
 import org.unicef.rapidreg.utils.StreamUtil;
 import org.unicef.rapidreg.utils.Utils;
 
@@ -40,8 +44,8 @@ public class CaseListAdapter extends RecordListAdapter {
         final RecordModel record = caseService.getById(recordId);
 
         final String recordJson = new String(record.getContent().getBlob());
+        final ItemValuesMap itemValues = new ItemValuesMap(JsonUtils.toMap(new Gson().fromJson(recordJson, JsonObject.class)));
 
-        final ItemValues itemValues = ItemValues.generateItemValues(recordJson);
 
         Gender gender;
         try {
@@ -50,8 +54,8 @@ public class CaseListAdapter extends RecordListAdapter {
             gender = Gender.PLACEHOLDER;
         }
         final String shortUUID = caseService.getShortUUID(record.getUniqueId());
-        String age = itemValues.getAsString(RecordService.AGE);
-        holder.setValues(gender, shortUUID, age, record);
+        int age = itemValues.getAsInt(RecordService.AGE);
+        holder.setValues(gender, shortUUID, String.valueOf(age), record);
         holder.setViewOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -73,6 +77,4 @@ public class CaseListAdapter extends RecordListAdapter {
         });
         toggleTextArea(holder);
     }
-
-
 }

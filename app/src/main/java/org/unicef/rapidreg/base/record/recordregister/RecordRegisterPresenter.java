@@ -2,6 +2,7 @@ package org.unicef.rapidreg.base.record.recordregister;
 
 import android.os.Bundle;
 import android.util.Log;
+
 import com.hannesdorfmann.mosby.mvp.MvpBasePresenter;
 import com.hannesdorfmann.mosby.mvp.MvpFragment;
 
@@ -10,13 +11,20 @@ import org.unicef.rapidreg.base.record.recordregister.RecordRegisterView.SaveRec
 import org.unicef.rapidreg.forms.Field;
 import org.unicef.rapidreg.forms.RecordForm;
 import org.unicef.rapidreg.service.RecordService;
-import org.unicef.rapidreg.service.cache.ItemValues;
 import org.unicef.rapidreg.service.cache.ItemValuesMap;
+
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 
-import static org.unicef.rapidreg.base.record.recordregister.RecordRegisterFragment.INVALID_RECORD_ID;
+import javax.inject.Inject;
+
+import static org.unicef.rapidreg.base.record.recordregister.RecordRegisterFragment
+        .INVALID_RECORD_ID;
 import static org.unicef.rapidreg.base.record.recordregister.RecordRegisterFragment.ITEM_VALUES;
 
 public abstract class RecordRegisterPresenter extends MvpBasePresenter<RecordRegisterView> {
@@ -24,6 +32,12 @@ public abstract class RecordRegisterPresenter extends MvpBasePresenter<RecordReg
     private static final String TAG = RecordRegisterPresenter.class.getSimpleName();
 
     private List<Field> validFields;
+
+    private RecordService recordService;
+
+    public RecordRegisterPresenter(RecordService recordService) {
+        this.recordService = recordService;
+    }
 
     public List<Field> getValidFields() {
         List<Field> fields = getFields();
@@ -51,10 +65,21 @@ public abstract class RecordRegisterPresenter extends MvpBasePresenter<RecordReg
         return fields;
     }
 
-    public void clearProfileItems(ItemValues itemValues) {
-        itemValues.removeItem(ItemValues.RecordProfile.ID_NORMAL_STATE);
-        itemValues.removeItem(ItemValues.RecordProfile.REGISTRATION_DATE);
-        itemValues.removeItem(ItemValues.RecordProfile.ID);
+
+    public void addProfileItems(ItemValuesMap itemValues, Date registrationDate, String
+            uniqueId, long recordId) {
+        String shortUUID = recordService.getShortUUID(uniqueId);
+        DateFormat dateFormat = SimpleDateFormat.getDateInstance(DateFormat.MEDIUM, Locale.US);
+        itemValues.addStringItem(ItemValuesMap.RecordProfile.ID_NORMAL_STATE, shortUUID);
+        itemValues.addStringItem(ItemValuesMap.RecordProfile.REGISTRATION_DATE,
+                dateFormat.format(registrationDate));
+        itemValues.addNumberItem(ItemValuesMap.RecordProfile.ID, recordId);
+    }
+
+    public void clearProfileItems(ItemValuesMap itemValues) {
+        itemValues.removeItem(ItemValuesMap.RecordProfile.ID_NORMAL_STATE);
+        itemValues.removeItem(ItemValuesMap.RecordProfile.REGISTRATION_DATE);
+        itemValues.removeItem(ItemValuesMap.RecordProfile.ID);
     }
 
     public ItemValuesMap getDefaultItemValues() {
@@ -104,7 +129,9 @@ public abstract class RecordRegisterPresenter extends MvpBasePresenter<RecordReg
 
         return getPhotoPathsByRecordId(getRecordId(bundle));
     }
-    public abstract void saveRecord(ItemValuesMap itemValuesMap, List<String> photoPaths, SaveRecordCallback callback);
+
+    public abstract void saveRecord(ItemValuesMap itemValuesMap, List<String> photoPaths,
+                                    SaveRecordCallback callback);
 
     protected abstract ItemValuesMap getItemValuesByRecordId(Long recordId) throws JSONException;
 

@@ -12,7 +12,7 @@ import org.unicef.rapidreg.model.Gender;
 import org.unicef.rapidreg.model.RecordModel;
 import org.unicef.rapidreg.service.IncidentService;
 import org.unicef.rapidreg.service.RecordService;
-import org.unicef.rapidreg.service.cache.ItemValues;
+import org.unicef.rapidreg.service.cache.ItemValuesMap;
 import org.unicef.rapidreg.utils.StreamUtil;
 import org.unicef.rapidreg.utils.Utils;
 
@@ -40,7 +40,7 @@ public class IncidentListAdapter extends RecordListAdapter {
 
         final String recordJson = new String(record.getContent().getBlob());
 
-        final ItemValues itemValues = ItemValues.generateItemValues(recordJson);
+        final ItemValuesMap itemValues = ItemValuesMap.fromJson(recordJson);
 
         Gender gender;
         try {
@@ -49,8 +49,7 @@ public class IncidentListAdapter extends RecordListAdapter {
             gender = Gender.PLACEHOLDER;
         }
         final String shortUUID = incidentService.getShortUUID(record.getUniqueId());
-        String age = itemValues.getAsString(RecordService.AGE);
-        holder.setValues(gender, shortUUID, age, record);
+        holder.setValues(gender, shortUUID, String.valueOf(0), record);
         holder.setViewOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

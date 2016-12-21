@@ -5,6 +5,7 @@ import android.content.Context;
 import android.support.v4.util.Pair;
 import android.text.TextUtils;
 
+import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -17,11 +18,9 @@ import org.unicef.rapidreg.model.CasePhoto;
 import org.unicef.rapidreg.model.RecordModel;
 import org.unicef.rapidreg.service.CasePhotoService;
 import org.unicef.rapidreg.service.RecordService;
-import org.unicef.rapidreg.service.cache.ItemValues;
+import org.unicef.rapidreg.service.cache.ItemValuesMap;
 
 import java.util.List;
-
-import javax.inject.Inject;
 
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
@@ -46,15 +45,18 @@ public class SyncService extends BaseRetrofitService {
         return PrimeroConfiguration.getApiBaseUrl();
     }
 
-    public SyncService(Context context, CasePhotoService casePhotoService, RecordService recordService) {
+    public SyncService(Context context, CasePhotoService casePhotoService, RecordService
+            recordService) {
         createRetrofit(context);
         this.casePhotoService = casePhotoService;
         this.recordService = recordService;
         serviceInterface = getRetrofit().create(SyncServiceInterface.class);
     }
 
-    public Observable<Response<ResponseBody>> getCasePhoto(String id, String photoKey, int photoSize) {
-        return serviceInterface.getCasePhoto(PrimeroConfiguration.getCookie(), id, photoKey, photoSize);
+    public Observable<Response<ResponseBody>> getCasePhoto(String id, String photoKey, int
+            photoSize) {
+        return serviceInterface.getCasePhoto(PrimeroConfiguration.getCookie(), id, photoKey,
+                photoSize);
     }
 
     public Observable<Response<ResponseBody>> getCaseAudio(String id) {
@@ -70,19 +72,23 @@ public class SyncService extends BaseRetrofitService {
     }
 
     public Response<JsonElement> uploadCaseJsonProfile(RecordModel item) {
-        ItemValues values = ItemValues.fromJson(new String(item.getContent().getBlob()));
+        ItemValuesMap itemValuesMap = ItemValuesMap.fromJson(new String(item.getContent().getBlob
+                ()));
         String shortUUID = recordService.getShortUUID(item.getUniqueId());
-        values.addStringItem("short_id", shortUUID);
-        values.removeItem("_attachments");
+        itemValuesMap.addStringItem("short_id", shortUUID);
+        itemValuesMap.removeItem("_attachments");
 
         JsonObject jsonObject = new JsonObject();
-        jsonObject.add("child", values.getValues());
+        jsonObject.add("child", new Gson().fromJson(new Gson().toJson(
+                itemValuesMap.getValues()), JsonObject.class));
 
         Observable<Response<JsonElement>> responseObservable;
         if (!TextUtils.isEmpty(item.getInternalId())) {
-            responseObservable = serviceInterface.putCase(PrimeroConfiguration.getCookie(), item.getInternalId(), jsonObject);
+            responseObservable = serviceInterface.putCase(PrimeroConfiguration.getCookie(), item
+                    .getInternalId(), jsonObject);
         } else {
-            responseObservable = serviceInterface.postCaseExcludeMediaData(PrimeroConfiguration.getCookie(), jsonObject);
+            responseObservable = serviceInterface.postCaseExcludeMediaData(PrimeroConfiguration
+                    .getCookie(), jsonObject);
         }
         Response<JsonElement> response = responseObservable.toBlocking().first();
         if (!response.isSuccessful()) {
@@ -103,7 +109,8 @@ public class SyncService extends BaseRetrofitService {
         if (item.getAudio() != null) {
             RequestBody requestFile = RequestBody.create(MediaType.parse(
                     PhotoConfig.CONTENT_TYPE_AUDIO), item.getAudio().getBlob());
-            MultipartBody.Part body = MultipartBody.Part.createFormData(FORM_DATA_KEY_AUDIO, "audioFile.amr", requestFile);
+            MultipartBody.Part body = MultipartBody.Part.createFormData(FORM_DATA_KEY_AUDIO,
+                    "audioFile.amr", requestFile);
             Observable<Response<JsonElement>> observable = serviceInterface.postCaseMediaData(
                     PrimeroConfiguration.getCookie(), item.getInternalId(), body);
 
@@ -134,17 +141,24 @@ public class SyncService extends BaseRetrofitService {
                 })
                 .flatMap(new Func1<Long, Observable<Pair<CasePhoto, Response<JsonElement>>>>() {
                     @Override
-                    public Observable<Pair<CasePhoto, Response<JsonElement>>> call(final Long casePhotoId) {
-                        return Observable.create(new Observable.OnSubscribe<Pair<CasePhoto, Response<JsonElement>>>() {
+                    public Observable<Pair<CasePhoto, Response<JsonElement>>> call(final Long
+                                                                                           casePhotoId) {
+                        return Observable.create(new Observable.OnSubscribe<Pair<CasePhoto,
+                                Response<JsonElement>>>() {
                             @Override
-                            public void call(Subscriber<? super Pair<CasePhoto, Response<JsonElement>>> subscriber) {
+                            public void call(Subscriber<? super Pair<CasePhoto,
+                                    Response<JsonElement>>> subscriber) {
                                 CasePhoto casePhoto = casePhotoService.getById(casePhotoId);
 
-                                RequestBody requestFile = RequestBody.create(MediaType.parse(PhotoConfig.CONTENT_TYPE_IMAGE),
+                                RequestBody requestFile = RequestBody.create(MediaType.parse
+                                                (PhotoConfig.CONTENT_TYPE_IMAGE),
                                         casePhoto.getPhoto().getBlob());
-                                MultipartBody.Part body = MultipartBody.Part.createFormData(FORM_DATA_KEY_PHOTO, casePhoto.getKey() + ".jpg",
-                                        requestFile);
-                                Observable<Response<JsonElement>> observable = serviceInterface.postCaseMediaData(PrimeroConfiguration.getCookie(), record.getInternalId(), body);
+                                MultipartBody.Part body = MultipartBody.Part.createFormData
+                                        (FORM_DATA_KEY_PHOTO, casePhoto.getKey() + ".jpg",
+                                                requestFile);
+                                Observable<Response<JsonElement>> observable = serviceInterface
+                                        .postCaseMediaData(PrimeroConfiguration.getCookie(),
+                                                record.getInternalId(), body);
                                 Response<JsonElement> response = observable.toBlocking().first();
                                 verifyResponse(response);
                                 subscriber.onNext(new Pair<>(casePhoto, response));
@@ -155,10 +169,12 @@ public class SyncService extends BaseRetrofitService {
                 })
                 .map(new Func1<Pair<CasePhoto, Response<JsonElement>>, Object>() {
                     @Override
-                    public Object call(Pair<CasePhoto, Response<JsonElement>> casePhotoResponsePair) {
+                    public Object call(Pair<CasePhoto, Response<JsonElement>>
+                                               casePhotoResponsePair) {
                         Response<JsonElement> response = casePhotoResponsePair.second;
                         CasePhoto casePhoto = casePhotoResponsePair.first;
-                        updateRecordRev(record, response.body().getAsJsonObject().get("_rev").getAsString());
+                        updateRecordRev(record, response.body().getAsJsonObject().get("_rev")
+                                .getAsString());
                         updateCasePhotoSyncStatus(casePhoto, true);
                         return null;
                     }
