@@ -1,11 +1,7 @@
 package org.unicef.rapidreg.service.cache;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonArray;
 import com.google.gson.reflect.TypeToken;
-
-import org.json.JSONException;
-import org.unicef.rapidreg.utils.JsonUtils;
 
 import java.io.Serializable;
 import java.lang.reflect.Type;
@@ -30,15 +26,6 @@ public class ItemValuesMap implements Serializable {
         }.getType();
         Map<String, Object> values = new Gson().fromJson(json, type);
         return new ItemValuesMap(values);
-    }
-
-
-    public static ItemValuesMap generateItemValues(String parentJson) {
-        Type parentType = new TypeToken<Map<String, Object>>() {
-        }.getType();
-        Map<String, Object> caseInfo = new Gson().fromJson(parentJson, parentType);
-        ItemValuesMap itemValues = new ItemValuesMap(caseInfo);
-        return itemValues;
     }
 
     public void addItem(String itemKey, Object itemValue) {
@@ -80,7 +67,15 @@ public class ItemValuesMap implements Serializable {
         if (values.get(key) == null) {
             return null;
         }
-        return Long.valueOf(values.get(key).toString());
+        return Double.valueOf(values.get(key).toString()).longValue();
+    }
+
+    public Integer
+    getAsInt(String key) {
+        if (values.get(key) == null) {
+            return null;
+        }
+        return Double.valueOf(values.get(key).toString()).intValue();
     }
 
     public List<String> getAsList(String key) {
@@ -139,34 +134,16 @@ public class ItemValuesMap implements Serializable {
         return values.containsKey(key);
     }
 
-    public Map<String, List<Map<String, Object>>> getChildrenAsJsonObject() {
-        Map<String, List<Map<String, Object>>> children = new HashMap<>();
-        for (Map.Entry<String, Object> element : values.entrySet()) {
-            if (element.getValue() instanceof List) {
-                children.put(element.getKey(), (List<Map<String, Object>>) element.getValue());
-            }
-        }
-        return children;
+    public static class RecordProfile {
+        public static final String ID_NORMAL_STATE = "_id_normal_state";
+        public static final String REGISTRATION_DATE = "_registration_date";
+        public static final String ID = "_id";
     }
 
-    public static JsonArray generateJsonArray(List<String> elements) {
-        return generateJsonArray(elements.toArray(new String[0]));
-    }
-
-    public static JsonArray generateJsonArray(String... elements) {
-        JsonArray array = new JsonArray();
-        for (String element : elements) {
-            array.add(element);
-        }
-        return array;
-    }
-
-    public static ItemValuesMap fromItemValuesJsonObject(ItemValues itemValues) {
+    public ItemValuesMap copy() {
         Map<String, Object> result = new HashMap<>();
-        try {
-            result = JsonUtils.toMap(itemValues.getValues());
-        } catch (JSONException e) {
-            e.printStackTrace();
+        for (Map.Entry<String, Object> entry : values.entrySet()) {
+            result.put(entry.getKey(), entry.getValue());
         }
         return new ItemValuesMap(result);
     }

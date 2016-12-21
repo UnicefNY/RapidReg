@@ -16,8 +16,6 @@ import org.unicef.rapidreg.forms.Section;
 import org.unicef.rapidreg.model.Incident;
 import org.unicef.rapidreg.service.IncidentFormService;
 import org.unicef.rapidreg.service.IncidentService;
-import org.unicef.rapidreg.service.RecordService;
-import org.unicef.rapidreg.service.cache.ItemValues;
 import org.unicef.rapidreg.service.cache.ItemValuesMap;
 import org.unicef.rapidreg.utils.JsonUtils;
 
@@ -25,6 +23,7 @@ import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -40,6 +39,7 @@ public class IncidentRegisterPresenter extends RecordRegisterPresenter {
     @Inject
     public IncidentRegisterPresenter(IncidentService incidentService, IncidentFormService
             incidentFormService) {
+        super(incidentService);
         this.incidentService = incidentService;
         this.incidentFormService = incidentFormService;
     }
@@ -53,16 +53,20 @@ public class IncidentRegisterPresenter extends RecordRegisterPresenter {
     @Override
     public void saveRecord(ItemValuesMap itemValuesMap, List<String> photoPaths,
                            RecordRegisterView.SaveRecordCallback callback) {
-        if (!validateRequiredField(itemValuesMap)) {
+
+        IncidentTemplateForm incidentForm = incidentFormService.getGBVTemplate();
+        boolean validateRequiredFields = incidentService.validateRequiredFields(incidentForm,
+                itemValuesMap);
+
+        if (!validateRequiredFields) {
             callback.onRequiredFieldNotFilled();
             return;
         }
-
-        ItemValues newItemValues = new ItemValues(new Gson().fromJson(new Gson().toJson(
-                itemValuesMap.getValues()), JsonObject.class));
-        clearProfileItems(newItemValues);
+        clearProfileItems(itemValuesMap);
         try {
-            Incident record = incidentService.saveOrUpdate(newItemValues);
+            Incident record = incidentService.saveOrUpdate(itemValuesMap);
+            addProfileItems(itemValuesMap, record.getRegistrationDate(), record.getUniqueId(),
+                    record.getId());
             callback.onSaveSuccessful(record.getId());
         } catch (IOException e) {
             callback.onSavedFail();
@@ -73,17 +77,11 @@ public class IncidentRegisterPresenter extends RecordRegisterPresenter {
     protected ItemValuesMap getItemValuesByRecordId(Long recordId) throws JSONException {
         Incident incidentItem = incidentService.getById(recordId);
         String incidentJson = new String(incidentItem.getContent().getBlob());
-        ItemValuesMap itemValues = new ItemValuesMap(JsonUtils.toMap(ItemValues
-                .generateItemValues(incidentJson)
-                .getValues()));
+        final ItemValuesMap itemValues = new ItemValuesMap(JsonUtils.toMap(new Gson().fromJson
+                (incidentJson, JsonObject.class)));
         itemValues.addStringItem(IncidentService.INCIDENT_ID, incidentItem.getUniqueId());
 
-        DateFormat dateFormat = SimpleDateFormat.getDateInstance(DateFormat.MEDIUM, Locale.US);
-        String shortUUID = incidentService.getShortUUID(incidentItem.getUniqueId());
-        itemValues.addStringItem(ItemValues.RecordProfile.ID_NORMAL_STATE, shortUUID);
-        itemValues.addStringItem(ItemValues.RecordProfile.REGISTRATION_DATE,
-                dateFormat.format(incidentItem.getRegistrationDate()));
-        itemValues.addNumberItem(ItemValues.RecordProfile.ID, incidentItem.getId());
+        addProfileItems(itemValues, incidentItem.getRegistrationDate(), incidentItem.getUniqueId(), recordId);
 
         return itemValues;
     }

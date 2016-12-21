@@ -18,9 +18,6 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import org.unicef.rapidreg.R;
 import org.unicef.rapidreg.model.Gender;
 import org.unicef.rapidreg.model.RecordModel;
-import org.unicef.rapidreg.model.Tracing;
-import org.unicef.rapidreg.service.RecordService;
-import org.unicef.rapidreg.service.cache.ItemValues;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -84,7 +81,7 @@ public abstract class RecordListAdapter extends RecyclerView.Adapter<RecordListA
         if (value == null) {
             return false;
         }
-        return Integer.valueOf(value) > 0;
+        return Double.valueOf(value).intValue() > 0;
     }
 
     public class RecordListViewHolder extends RecyclerView.ViewHolder {

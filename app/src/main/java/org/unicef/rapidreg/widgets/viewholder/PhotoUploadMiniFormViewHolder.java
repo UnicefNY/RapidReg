@@ -19,7 +19,6 @@ import org.unicef.rapidreg.model.RecordPhoto;
 import org.unicef.rapidreg.model.TracingPhoto;
 import org.unicef.rapidreg.service.CasePhotoService;
 import org.unicef.rapidreg.service.TracingPhotoService;
-import org.unicef.rapidreg.service.cache.ItemValues;
 import org.unicef.rapidreg.service.cache.ItemValuesMap;
 
 import java.util.ArrayList;
@@ -70,7 +69,7 @@ public class PhotoUploadMiniFormViewHolder extends BaseViewHolder<Field> {
         private List<RecordPhoto> photos = new ArrayList<>();
 
         public RecordPhotoViewPagerAdapter() {
-            Long recordId = itemValues.getAsLong(ItemValues.RecordProfile.ID);
+            Long recordId = itemValues.getAsLong(ItemValuesMap.RecordProfile.ID);
 
             if (recordId == null) {
                 return;

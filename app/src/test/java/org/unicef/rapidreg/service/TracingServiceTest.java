@@ -2,12 +2,10 @@ package org.unicef.rapidreg.service;
 
 import com.raizlabs.android.dbflow.sql.language.ConditionGroup;
 
-import org.easymock.EasyMock;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
@@ -16,10 +14,8 @@ import org.unicef.rapidreg.db.impl.TracingDaoImpl;
 import org.unicef.rapidreg.db.impl.TracingPhotoDaoImpl;
 import org.unicef.rapidreg.model.Tracing;
 import org.unicef.rapidreg.model.User;
-import org.unicef.rapidreg.service.cache.ItemValues;
 
 import java.sql.Date;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 

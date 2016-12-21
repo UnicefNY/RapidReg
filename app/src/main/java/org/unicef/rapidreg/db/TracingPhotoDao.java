@@ -2,7 +2,6 @@ package org.unicef.rapidreg.db;
 
 import org.unicef.rapidreg.model.Tracing;
 import org.unicef.rapidreg.model.TracingPhoto;
-import org.unicef.rapidreg.service.cache.ItemValues;
 
 import java.io.IOException;
 import java.util.List;

@@ -8,18 +8,15 @@ import com.google.gson.JsonObject;
 import org.json.JSONException;
 import org.unicef.rapidreg.base.record.recordregister.RecordRegisterFragment;
 import org.unicef.rapidreg.base.record.recordregister.RecordRegisterPresenter;
-import org.unicef.rapidreg.base.record.recordregister.RecordRegisterView;
 import org.unicef.rapidreg.base.record.recordregister.RecordRegisterView.SaveRecordCallback;
 import org.unicef.rapidreg.forms.Field;
 import org.unicef.rapidreg.forms.RecordForm;
 import org.unicef.rapidreg.forms.Section;
 import org.unicef.rapidreg.forms.TracingTemplateForm;
 import org.unicef.rapidreg.model.Tracing;
-import org.unicef.rapidreg.service.RecordService;
 import org.unicef.rapidreg.service.TracingFormService;
 import org.unicef.rapidreg.service.TracingPhotoService;
 import org.unicef.rapidreg.service.TracingService;
-import org.unicef.rapidreg.service.cache.ItemValues;
 import org.unicef.rapidreg.service.cache.ItemValuesMap;
 import org.unicef.rapidreg.utils.JsonUtils;
 
@@ -44,7 +41,9 @@ public class TracingRegisterPresenter extends RecordRegisterPresenter {
     private TracingPhotoService tracingPhotoService;
 
     @Inject
-    public TracingRegisterPresenter(TracingService tracingService, TracingFormService tracingFormService, TracingPhotoService tracingPhotoService) {
+    public TracingRegisterPresenter(TracingService tracingService, TracingFormService
+            tracingFormService, TracingPhotoService tracingPhotoService) {
+        super(tracingService);
         this.tracingService = tracingService;
         this.tracingFormService = tracingFormService;
         this.tracingPhotoService = tracingPhotoService;
@@ -56,18 +55,18 @@ public class TracingRegisterPresenter extends RecordRegisterPresenter {
     }
 
     @Override
-    public void saveRecord(ItemValuesMap itemValuesMap, List<String> photoPaths, SaveRecordCallback callback) {
+    public void saveRecord(ItemValuesMap itemValuesMap, List<String> photoPaths,
+                           SaveRecordCallback callback) {
         if (!validateRequiredField(itemValuesMap)) {
             callback.onRequiredFieldNotFilled();
             return;
         }
-        
-        ItemValues newItemValues = new ItemValues(new Gson().fromJson(new Gson().toJson(
-                itemValuesMap.getValues()), JsonObject.class));
-        clearProfileItems(newItemValues);
 
+        clearProfileItems(itemValuesMap);
         try {
-            Tracing record = tracingService.saveOrUpdate(newItemValues, photoPaths);
+            Tracing record = tracingService.saveOrUpdate(itemValuesMap, photoPaths);
+            addProfileItems(itemValuesMap, record.getRegistrationDate(), record.getUniqueId(),
+                    record.getId());
             callback.onSaveSuccessful(record.getId());
         } catch (IOException e) {
             callback.onSavedFail();
@@ -78,16 +77,10 @@ public class TracingRegisterPresenter extends RecordRegisterPresenter {
     protected ItemValuesMap getItemValuesByRecordId(Long recordId) throws JSONException {
         Tracing tracingItem = tracingService.getById(recordId);
         String tracingJson = new String(tracingItem.getContent().getBlob());
-
-        ItemValuesMap itemValues = new ItemValuesMap(JsonUtils.toMap(ItemValues.generateItemValues(tracingJson).getValues()));
+        final ItemValuesMap itemValues = new ItemValuesMap(JsonUtils.toMap(new Gson().fromJson(tracingJson, JsonObject.class)));
         itemValues.addStringItem(TRACING_ID, tracingItem.getUniqueId());
-
-        DateFormat dateFormat = SimpleDateFormat.getDateInstance(DateFormat.MEDIUM, Locale.US);
-        String shortUUID = tracingService.getShortUUID(tracingItem.getUniqueId());
-        itemValues.addStringItem(ItemValues.RecordProfile.ID_NORMAL_STATE, shortUUID);
-        itemValues.addStringItem(ItemValues.RecordProfile.REGISTRATION_DATE,
-                dateFormat.format(tracingItem.getRegistrationDate()));
-        itemValues.addNumberItem(ItemValues.RecordProfile.ID, tracingItem.getId());
+        addProfileItems(itemValues, tracingItem.getRegistrationDate(), tracingItem.getUniqueId(),
+                tracingItem.getId());
 
         return itemValues;
     }

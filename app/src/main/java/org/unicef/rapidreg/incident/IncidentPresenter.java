@@ -1,6 +1,7 @@
 package org.unicef.rapidreg.incident;
 
 import com.raizlabs.android.dbflow.data.Blob;
+
 import org.unicef.rapidreg.base.record.RecordPresenter;
 import org.unicef.rapidreg.forms.IncidentTemplateForm;
 import org.unicef.rapidreg.forms.RecordForm;
@@ -59,15 +60,15 @@ public class IncidentPresenter extends RecordPresenter {
                     @Override
                     public void call(IncidentTemplateForm incidentForm) {
                         saveForm(incidentForm, moduleId);
-                        ((IncidentActivity) getView()).setFormSyncFail(false);
+                        setFormSyncFail(false);
                     }
                 }, new Action1<Throwable>() {
                     @Override
                     public void call(Throwable throwable) {
-                        ((IncidentActivity) getView()).setFormSyncFail(true);
                         if (isViewAttached()) {
                             getView().promoteSyncFormsError();
                         }
+                        setFormSyncFail(true);
                     }
                 });
     }

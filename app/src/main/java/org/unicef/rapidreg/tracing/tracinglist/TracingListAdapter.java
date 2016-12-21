@@ -10,7 +10,7 @@ import org.unicef.rapidreg.model.Gender;
 import org.unicef.rapidreg.model.RecordModel;
 import org.unicef.rapidreg.service.RecordService;
 import org.unicef.rapidreg.service.TracingService;
-import org.unicef.rapidreg.service.cache.ItemValues;
+import org.unicef.rapidreg.service.cache.ItemValuesMap;
 import org.unicef.rapidreg.tracing.TracingFeature;
 import org.unicef.rapidreg.utils.StreamUtil;
 import org.unicef.rapidreg.utils.Utils;
@@ -37,16 +37,15 @@ public class TracingListAdapter extends RecordListAdapter {
         final long recordId = recordList.get(position);
         final RecordModel record = tracingService.getById(recordId);
         final String recordJson = new String(record.getContent().getBlob());
-        final ItemValues itemValues = ItemValues.generateItemValues(recordJson);
-
+        final ItemValuesMap itemValues = ItemValuesMap.fromJson(recordJson);
         Gender gender = Gender.EMPTY;
         if (itemValues.has(RecordService.SEX)) {
             gender = Gender.valueOf(itemValues.getAsString(RecordService.SEX).toUpperCase());
         }
 
         final String shortUUID = tracingService.getShortUUID(record.getUniqueId());
-        String age = itemValues.getAsString(RecordService.RELATION_AGE);
-        holder.setValues(gender, shortUUID, age, record);
+        int age = itemValues.getAsInt(RecordService.RELATION_AGE);
+        holder.setValues(gender, shortUUID, String.valueOf(age), record);
         holder.setViewOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

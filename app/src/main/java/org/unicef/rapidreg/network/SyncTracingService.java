@@ -5,6 +5,7 @@ import android.content.Context;
 import android.support.v4.util.Pair;
 import android.text.TextUtils;
 
+import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -17,8 +18,7 @@ import org.unicef.rapidreg.model.RecordModel;
 import org.unicef.rapidreg.model.TracingPhoto;
 import org.unicef.rapidreg.service.RecordService;
 import org.unicef.rapidreg.service.TracingPhotoService;
-import org.unicef.rapidreg.service.TracingService;
-import org.unicef.rapidreg.service.cache.ItemValues;
+import org.unicef.rapidreg.service.cache.ItemValuesMap;
 
 import java.util.List;
 
@@ -48,14 +48,16 @@ public class SyncTracingService extends BaseRetrofitService {
         return PrimeroConfiguration.getApiBaseUrl();
     }
 
-    public SyncTracingService(Context context, RecordService recordService, TracingPhotoService tracingPhotoService){
+    public SyncTracingService(Context context, RecordService recordService, TracingPhotoService
+            tracingPhotoService) {
         createRetrofit(context);
         this.recordService = recordService;
         this.tracingPhotoService = tracingPhotoService;
         serviceInterface = getRetrofit().create(SyncTracingsServiceInterface.class);
     }
 
-    public Observable<Response<ResponseBody>> getPhoto(String id, String photoKey, String photoSize) {
+    public Observable<Response<ResponseBody>> getPhoto(String id, String photoKey, String
+            photoSize) {
         return serviceInterface.getPhoto(PrimeroConfiguration.getCookie(), id, photoKey, photoSize);
     }
 
@@ -72,7 +74,7 @@ public class SyncTracingService extends BaseRetrofitService {
     }
 
     public Response<JsonElement> uploadJsonProfile(RecordModel item) {
-        ItemValues values = ItemValues.fromJson(new String(item.getContent().getBlob()));
+        ItemValuesMap values = ItemValuesMap.fromJson(new String(item.getContent().getBlob()));
         String shortUUID = recordService.getShortUUID(item.getUniqueId());
         values.addStringItem("short_id", shortUUID);
         values.addStringItem(TRACING_ID, shortUUID);
@@ -80,7 +82,8 @@ public class SyncTracingService extends BaseRetrofitService {
         values.removeItem("_attachments");
 
         JsonObject jsonObject = new JsonObject();
-        jsonObject.add("tracing_request", values.getValues());
+        jsonObject.add("tracing_request", new Gson().fromJson(new Gson().toJson(values.getValues
+                ()), JsonObject.class));
 
         Observable<Response<JsonElement>> responseObservable;
         if (!TextUtils.isEmpty(item.getInternalId())) {
@@ -88,7 +91,8 @@ public class SyncTracingService extends BaseRetrofitService {
                             .getInternalId(),
                     jsonObject);
         } else {
-            responseObservable = serviceInterface.postExcludeMediaData(PrimeroConfiguration.getCookie(), jsonObject);
+            responseObservable = serviceInterface.postExcludeMediaData(PrimeroConfiguration
+                    .getCookie(), jsonObject);
         }
         Response<JsonElement> response = responseObservable.toBlocking().first();
         if (!response.isSuccessful()) {
@@ -109,7 +113,8 @@ public class SyncTracingService extends BaseRetrofitService {
         if (item.getAudio() != null) {
             RequestBody requestFile = RequestBody.create(MediaType.parse(
                     PhotoConfig.CONTENT_TYPE_AUDIO), item.getAudio().getBlob());
-            MultipartBody.Part body = MultipartBody.Part.createFormData(FORM_DATA_KEY_AUDIO, "audioFile.amr", requestFile);
+            MultipartBody.Part body = MultipartBody.Part.createFormData(FORM_DATA_KEY_AUDIO,
+                    "audioFile.amr", requestFile);
             Observable<Response<JsonElement>> observable = serviceInterface.postMediaData(
                     PrimeroConfiguration.getCookie(), item.getInternalId(), body);
 
@@ -143,17 +148,25 @@ public class SyncTracingService extends BaseRetrofitService {
                 })
                 .flatMap(new Func1<Long, Observable<Pair<TracingPhoto, Response<JsonElement>>>>() {
                     @Override
-                    public Observable<Pair<TracingPhoto, Response<JsonElement>>> call(final Long tracingPhotoId) {
-                        return Observable.create(new Observable.OnSubscribe<Pair<TracingPhoto, Response<JsonElement>>>() {
+                    public Observable<Pair<TracingPhoto, Response<JsonElement>>> call(final Long
+                                                                                              tracingPhotoId) {
+                        return Observable.create(new Observable.OnSubscribe<Pair<TracingPhoto,
+                                Response<JsonElement>>>() {
                             @Override
-                            public void call(Subscriber<? super Pair<TracingPhoto, Response<JsonElement>>> subscriber) {
-                                TracingPhoto tracingPhoto = tracingPhotoService.getById(tracingPhotoId);
-                                
-                                RequestBody requestFile = RequestBody.create(MediaType.parse(PhotoConfig.CONTENT_TYPE_IMAGE),
+                            public void call(Subscriber<? super Pair<TracingPhoto,
+                                    Response<JsonElement>>> subscriber) {
+                                TracingPhoto tracingPhoto = tracingPhotoService.getById
+                                        (tracingPhotoId);
+
+                                RequestBody requestFile = RequestBody.create(MediaType.parse
+                                                (PhotoConfig.CONTENT_TYPE_IMAGE),
                                         tracingPhoto.getPhoto().getBlob());
-                                MultipartBody.Part body = MultipartBody.Part.createFormData(FORM_DATA_KEY_PHOTO, tracingPhoto.getKey() + ".jpg",
-                                        requestFile);
-                                Observable<Response<JsonElement>> observable = serviceInterface.postMediaData(PrimeroConfiguration.getCookie(), record.getInternalId(), body);
+                                MultipartBody.Part body = MultipartBody.Part.createFormData
+                                        (FORM_DATA_KEY_PHOTO, tracingPhoto.getKey() + ".jpg",
+                                                requestFile);
+                                Observable<Response<JsonElement>> observable = serviceInterface
+                                        .postMediaData(PrimeroConfiguration.getCookie(), record
+                                                .getInternalId(), body);
                                 Response<JsonElement> response = observable.toBlocking().first();
                                 verifyResponse(response);
                                 subscriber.onNext(new Pair<>(tracingPhoto, response));
@@ -164,10 +177,12 @@ public class SyncTracingService extends BaseRetrofitService {
                 })
                 .map(new Func1<Pair<TracingPhoto, Response<JsonElement>>, Object>() {
                     @Override
-                    public Object call(Pair<TracingPhoto, Response<JsonElement>> tracingPhotoResponsePair) {
+                    public Object call(Pair<TracingPhoto, Response<JsonElement>>
+                                               tracingPhotoResponsePair) {
                         Response<JsonElement> response = tracingPhotoResponsePair.second;
                         TracingPhoto tracingPhoto = tracingPhotoResponsePair.first;
-                        updateRecordRev(record, response.body().getAsJsonObject().get("_rev").getAsString());
+                        updateRecordRev(record, response.body().getAsJsonObject().get("_rev")
+                                .getAsString());
                         updateTracingPhotoSyncStatus(tracingPhoto, true);
                         return null;
                     }

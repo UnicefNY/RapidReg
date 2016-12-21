@@ -13,7 +13,7 @@ import org.unicef.rapidreg.db.TracingDao;
 import org.unicef.rapidreg.db.TracingPhotoDao;
 import org.unicef.rapidreg.model.RecordModel;
 import org.unicef.rapidreg.model.Tracing;
-import org.unicef.rapidreg.service.cache.ItemValues;
+import org.unicef.rapidreg.service.cache.ItemValuesMap;
 import org.unicef.rapidreg.utils.StreamUtil;
 
 import java.io.IOException;
@@ -61,7 +61,8 @@ public class TracingService extends RecordService {
         return extractIds(tracingDao.getAllTracingsOrderByDate(false));
     }
 
-    public List<Long> getSearchResult(String uniqueId, String name, int ageFrom, int ageTo, Date date) {
+    public List<Long> getSearchResult(String uniqueId, String name, int ageFrom, int ageTo, Date
+            date) {
         ConditionGroup searchCondition = getSearchCondition(uniqueId, name, ageFrom, ageTo, date);
         return extractIds(tracingDao.getAllTracingsByConditionGroup(searchCondition));
     }
@@ -74,7 +75,8 @@ public class TracingService extends RecordService {
         return result;
     }
 
-    private ConditionGroup getSearchCondition(String uniqueId, String name, int ageFrom, int ageTo, Date date) {
+    private ConditionGroup getSearchCondition(String uniqueId, String name, int ageFrom, int
+            ageTo, Date date) {
         ConditionGroup conditionGroup = ConditionGroup.clause();
         conditionGroup.and(Condition.column(NameAlias.builder(RecordModel.COLUMN_UNIQUE_ID).build())
                 .like(getWrappedCondition(uniqueId)));
@@ -90,7 +92,8 @@ public class TracingService extends RecordService {
         return conditionGroup;
     }
 
-    public Tracing saveOrUpdate(ItemValues itemValues, List<String> photoPaths) throws IOException {
+    public Tracing saveOrUpdate(ItemValuesMap itemValues, List<String> photoPaths) throws
+            IOException {
 
         if (itemValues.getAsString(TRACING_ID) == null) {
             return save(itemValues, photoPaths);
@@ -100,19 +103,20 @@ public class TracingService extends RecordService {
         }
     }
 
-    public Tracing save(ItemValues itemValues, List<String> photoPaths) throws IOException {
-        Tracing tracing = tracingDao.save(generateTracingFromItemValues(itemValues, generateUniqueId()));
+    public Tracing save(ItemValuesMap itemValues, List<String> photoPaths) throws IOException {
+        Tracing tracing = tracingDao.save(generateTracingFromItemValues(itemValues,
+                generateUniqueId()));
 
         return tracingPhotoDao.save(tracing, photoPaths);
     }
 
-    public Tracing update(ItemValues itemValues,
+    public Tracing update(ItemValuesMap itemValues,
                           List<String> photoBitPaths) throws IOException {
         Tracing tracing = tracingDao.update(updateTracingFromItemValues(itemValues));
         return tracingPhotoDao.update(tracing, photoBitPaths);
     }
 
-    private Tracing generateTracingFromItemValues(ItemValues itemValues, String uniqueId) {
+    private Tracing generateTracingFromItemValues(ItemValuesMap itemValues, String uniqueId) {
         Tracing tracing = new Tracing();
         tracing.setUniqueId(uniqueId);
 
@@ -137,7 +141,7 @@ public class TracingService extends RecordService {
         return tracing;
     }
 
-    private Tracing updateTracingFromItemValues(ItemValues itemValues) {
+    private Tracing updateTracingFromItemValues(ItemValuesMap itemValues) {
         Tracing tracing = tracingDao.getTracingByUniqueId(itemValues.getAsString(TRACING_ID));
         String username = PrimeroConfiguration.getCurrentUser().getUsername();
         tracing.setCreatedBy(username);
@@ -160,7 +164,7 @@ public class TracingService extends RecordService {
         return tracing;
     }
 
-    private Blob generateTracingBlob(ItemValues itemValues, String uniqueId, String username) {
+    private Blob generateTracingBlob(ItemValuesMap itemValues, String uniqueId, String username) {
         itemValues.addStringItem(TRACING_DISPLAY_ID, getShortUUID(uniqueId));
         itemValues.addStringItem(TRACING_ID, uniqueId);
         itemValues.addStringItem(MODULE, "primeromodule-cp");
@@ -175,7 +179,7 @@ public class TracingService extends RecordService {
         return new Blob(new Gson().toJson(itemValues.getValues()).getBytes());
     }
 
-    private String getName(ItemValues values) {
+    private String getName(ItemValuesMap values) {
         return values.getAsString(RELATION_NAME) + " "
                 + values.getAsString(RELATION_AGE) + " "
                 + values.getAsString(RELATION_NICKNAME);

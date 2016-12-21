@@ -17,7 +17,7 @@ import org.unicef.rapidreg.db.impl.CasePhotoDaoImpl;
 import org.unicef.rapidreg.model.Case;
 import org.unicef.rapidreg.model.CasePhoto;
 import org.unicef.rapidreg.model.RecordModel;
-import org.unicef.rapidreg.service.cache.ItemValues;
+import org.unicef.rapidreg.service.cache.ItemValuesMap;
 import org.unicef.rapidreg.utils.ImageCompressUtil;
 import org.unicef.rapidreg.utils.StreamUtil;
 import org.unicef.rapidreg.utils.Utils;
@@ -71,7 +71,7 @@ public class CaseService extends RecordService {
         return extractIds(caseDao.getAllCasesOrderByAge(false));
     }
 
-    public List<Long> extractIds(List<Case> cases){
+    public List<Long> extractIds(List<Case> cases) {
         List<Long> result = new ArrayList<>();
         for (Case aCase : cases) {
             result.add(aCase.getId());
@@ -103,7 +103,7 @@ public class CaseService extends RecordService {
         return extractIds(caseDao.getCaseListByConditionGroup(conditionGroup));
     }
 
-    public Case saveOrUpdate(ItemValues itemValues, List<String> photoPaths) throws IOException {
+    public Case saveOrUpdate(ItemValuesMap itemValues, List<String> photoPaths) throws IOException {
         if (itemValues.getAsString(CASE_ID) == null) {
             return save(itemValues, photoPaths);
         } else {
@@ -116,7 +116,7 @@ public class CaseService extends RecordService {
         return caseDao.getAllIds();
     }
 
-    public Case save(ItemValues itemValues, List<String> photoPaths) throws IOException {
+    public Case save(ItemValuesMap itemValues, List<String> photoPaths) throws IOException {
         String uniqueId = generateUniqueId();
         String username = PrimeroConfiguration.getCurrentUser().getUsername();
         itemValues.addStringItem(CASE_DISPLAY_ID, getShortUUID(uniqueId));
@@ -163,7 +163,7 @@ public class CaseService extends RecordService {
         }
     }
 
-    public Case update(ItemValues itemValues, List<String> photoBitPaths) throws IOException {
+    public Case update(ItemValuesMap itemValues, List<String> photoBitPaths) throws IOException {
         Gson gson = new Gson();
         Blob caseBlob = new Blob(gson.toJson(itemValues.getValues()).getBytes());
         Blob audioFileDefault = getAudioBlob();
@@ -215,7 +215,8 @@ public class CaseService extends RecordService {
         }
     }
 
-    private CasePhoto generateSavePhoto(Case child, List<String> photoPaths, int index) throws IOException {
+    private CasePhoto generateSavePhoto(Case child, List<String> photoPaths, int index) throws
+            IOException {
         CasePhoto casePhoto = casePhotoDao.getByCaseIdAndOrder(child.getId(), index + 1);
         if (casePhoto == null) {
             casePhoto = new CasePhoto();
@@ -230,7 +231,8 @@ public class CaseService extends RecordService {
     }
 
     @NonNull
-    private CasePhoto generateUpdatePhoto(Case child, List<String> photoPaths, int index) throws IOException {
+    private CasePhoto generateUpdatePhoto(Case child, List<String> photoPaths, int index) throws
+            IOException {
         CasePhoto casePhoto;
         String filePath = photoPaths.get(index);
         try {
@@ -260,7 +262,7 @@ public class CaseService extends RecordService {
     }
 
 
-    private String getName(ItemValues values) {
+    private String getName(ItemValuesMap values) {
         return values.getAsString(FULL_NAME) + " "
                 + values.getAsString(FIRST_NAME) + " "
                 + values.getAsString(MIDDLE_NAME) + " "

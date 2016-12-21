@@ -1,18 +1,12 @@
 package org.unicef.rapidreg.service;
 
-import android.util.Log;
-
 import org.unicef.rapidreg.PrimeroConfiguration;
 import org.unicef.rapidreg.forms.Field;
 import org.unicef.rapidreg.forms.RecordForm;
 import org.unicef.rapidreg.forms.Section;
 import org.unicef.rapidreg.model.RecordModel;
-import org.unicef.rapidreg.service.cache.ItemValues;
 import org.unicef.rapidreg.service.cache.ItemValuesMap;
 
-import java.io.File;
-import java.sql.Date;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -60,7 +54,7 @@ public class RecordService {
         return result;
     }
 
-    protected String getCaregiverName(ItemValues itemValues) {
+    protected String getCaregiverName(ItemValuesMap itemValues) {
         return "" + itemValues.getAsString(CAREGIVER_NAME);
     }
 
@@ -93,5 +87,4 @@ public class RecordService {
     protected void setSyncedStatus(RecordModel record) {
         record.setSynced(false);
     }
-
 }
