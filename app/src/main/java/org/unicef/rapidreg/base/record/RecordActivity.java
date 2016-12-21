@@ -164,7 +164,7 @@ public abstract class RecordActivity extends BaseActivity {
         try {
             Bitmap compressedImage = ImageCompressUtil.compressImage(PhotoConfig
                     .MEDIA_PATH_FOR_CAMERA,
-                    PhotoConfig.MAX_WIDTH, PhotoConfig.MAX_HEIGHT);
+                    PhotoConfig.MAX_COMPRESS_WIDTH, PhotoConfig.MAX_COMPRESS_HEIGHT);
             imagePath = getOutputMediaFilePath();
             ImageCompressUtil.storeImage(compressedImage, imagePath);
             compressedImage.recycle();
