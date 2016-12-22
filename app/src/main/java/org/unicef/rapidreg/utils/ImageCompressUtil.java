@@ -4,14 +4,21 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.media.ExifInterface;
+import android.os.Environment;
 
 import com.raizlabs.android.dbflow.data.Blob;
+
+import org.unicef.rapidreg.PrimeroApplication;
 import org.unicef.rapidreg.base.record.recordphoto.PhotoConfig;
+
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
+import id.zelory.compressor.Compressor;
+
+import static android.graphics.Bitmap.Config.RGB_565;
 import static org.unicef.rapidreg.base.record.recordphoto.PhotoConfig.MAX_QUALITY_COMPRESS_SIZE;
 
 
@@ -150,7 +157,16 @@ public class ImageCompressUtil {
         if (new File(filePath).length() <= PhotoConfig.MAX_SIZE_KB) {
             return new Blob(StreamUtil.readFile(filePath));
         }
-        return new Blob(ImageCompressUtil.convertImageToBytes(
-                ImageCompressUtil.compressImage(filePath, PhotoConfig.MAX_COMPRESS_WIDTH, PhotoConfig.MAX_COMPRESS_HEIGHT)));
+
+        Bitmap compressedBmp = new Compressor.Builder(PrimeroApplication.getAppContext())
+                .setMaxWidth(PhotoConfig.MAX_COMPRESS_WIDTH)
+                .setMaxHeight(PhotoConfig.MAX_COMPRESS_HEIGHT)
+                .setCompressFormat(Bitmap.CompressFormat.JPEG)
+                .setDestinationDirectoryPath(Environment.getExternalStoragePublicDirectory(
+                        Environment.DIRECTORY_PICTURES).getAbsolutePath())
+                .build()
+                .compressToBitmap(new File(filePath));
+
+        return new Blob(convertImageToBytes(compressedBmp));
     }
 }
