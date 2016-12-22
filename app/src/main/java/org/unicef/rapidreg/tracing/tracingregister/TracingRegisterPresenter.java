@@ -29,6 +29,8 @@ import java.util.Locale;
 
 import javax.inject.Inject;
 
+import id.zelory.compressor.Compressor;
+
 import static org.unicef.rapidreg.db.impl.TracingDaoImpl.TRACING_ID;
 import static org.unicef.rapidreg.db.impl.TracingDaoImpl.TRACING_PRIMARY_ID;
 
