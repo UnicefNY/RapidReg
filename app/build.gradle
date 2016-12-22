@@ -87,6 +87,7 @@ dependencies {
     compile 'org.greenrobot:eventbus:3.0.0'
     compile 'com.hannesdorfmann.mosby:mvp:2.0.1'
     compile 'com.hannesdorfmann.mosby:viewstate:2.0.1'
+    compile 'id.zelory:compressor:1.0.4'
 
     compile 'com.hannesdorfmann.annotatedadapter:annotation:1.1.1'
     compile 'com.hannesdorfmann.annotatedadapter:support-recyclerview:1.1.1'
