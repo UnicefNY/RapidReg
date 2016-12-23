@@ -161,7 +161,7 @@ public class ImageCompressUtil {
         Bitmap compressedBmp = new Compressor.Builder(PrimeroApplication.getAppContext())
                 .setMaxWidth(PhotoConfig.MAX_COMPRESS_WIDTH)
                 .setMaxHeight(PhotoConfig.MAX_COMPRESS_HEIGHT)
-                .setCompressFormat(Bitmap.CompressFormat.JPEG)
+                .setCompressFormat(Bitmap.CompressFormat.WEBP)
                 .setDestinationDirectoryPath(Environment.getExternalStoragePublicDirectory(
                         Environment.DIRECTORY_PICTURES).getAbsolutePath())
                 .build()
