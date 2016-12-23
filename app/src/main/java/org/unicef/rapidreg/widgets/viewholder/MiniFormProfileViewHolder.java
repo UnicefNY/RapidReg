@@ -62,19 +62,14 @@ public class MiniFormProfileViewHolder extends BaseViewHolder<Field> {
         genderName.setTextColor(ContextCompat.getColor(context, gender.getColorId()));
         registrationDate.setText(itemValues.getAsString(ItemValuesMap.RecordProfile
                 .REGISTRATION_DATE));
-        Integer age;
-        if (itemValues.has(RecordService.RELATION_AGE)) {
-            age = itemValues.getAsInt(RecordService.RELATION_AGE);
-        } else {
-            age = itemValues.getAsInt(RecordService.AGE);
-        }
 
-        if (age != null) {
-            this.age.setText(age > 0 ? String.valueOf(age) : "---");
+        String age;
+        if(itemValues.has(RecordService.RELATION_AGE)){
+            age = itemValues.getAsString(RecordService.RELATION_AGE);
         } else {
-            this.age.setText("---");
+            age = itemValues.getAsString(RecordService.AGE);
         }
-
+        this.age.setText(age == null ? "---" :age);
     }
 
     @Override

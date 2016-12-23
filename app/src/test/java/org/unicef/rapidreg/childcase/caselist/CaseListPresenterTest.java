@@ -7,7 +7,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.powermock.modules.junit4.PowerMockRunner;
 import org.unicef.rapidreg.base.record.recordlist.spinner.SpinnerState;
-import org.unicef.rapidreg.childcase.caseregister.CaseRegisterPresenter;
 import org.unicef.rapidreg.service.CaseFormService;
 import org.unicef.rapidreg.service.CasePhotoService;
 import org.unicef.rapidreg.service.CaseService;
