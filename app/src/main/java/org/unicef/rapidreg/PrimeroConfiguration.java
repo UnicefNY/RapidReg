@@ -2,6 +2,8 @@ package org.unicef.rapidreg;
 
 import org.unicef.rapidreg.model.User;
 
+import java.util.Locale;
+
 public class PrimeroConfiguration {
     //    public static final String API_BASE_URL = "http://10.29.3.184:3000";
     private static String apiBaseUrl = "https://10.29.3.184:8443";
@@ -43,5 +45,9 @@ public class PrimeroConfiguration {
 
     public static void setInternalFilePath(String internalFilePath) {
         PrimeroConfiguration.internalFilePath = internalFilePath;
+    }
+
+    public static String getDefaultLanguage() {
+        return Locale.getDefault().getLanguage();
     }
 }

@@ -10,7 +10,7 @@ import android.widget.Toast;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
-import org.unicef.rapidreg.IntentSender;
+import org.unicef.rapidreg.PrimeroConfiguration;
 import org.unicef.rapidreg.R;
 import org.unicef.rapidreg.base.BaseView;
 import org.unicef.rapidreg.base.RecordConfiguration;
@@ -19,7 +19,6 @@ import org.unicef.rapidreg.childcase.caselist.CaseListFragment;
 import org.unicef.rapidreg.event.LoadCPCaseFormEvent;
 import org.unicef.rapidreg.event.LoadGBVCaseFormEvent;
 import org.unicef.rapidreg.event.SaveCaseEvent;
-import org.unicef.rapidreg.service.CaseService;
 import org.unicef.rapidreg.utils.Utils;
 
 import javax.inject.Inject;
@@ -150,7 +149,7 @@ public class CaseActivity extends RecordActivity implements BaseView {
         EventBus.getDefault().removeStickyEvent(event);
         String moduleId = RecordConfiguration.MODULE_ID_GBV;
         String cookie = event.getCookie();
-        casePresenter.loadCaseForm(cookie, moduleId);
+        casePresenter.loadCaseForm(PrimeroConfiguration.getDefaultLanguage(), cookie, moduleId);
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN, sticky = true, priority = 1)
@@ -158,7 +157,7 @@ public class CaseActivity extends RecordActivity implements BaseView {
         EventBus.getDefault().removeStickyEvent(event);
         String moduleId = RecordConfiguration.MODULE_ID_CP;
         String cookie = event.getCookie();
-        casePresenter.loadCaseForm(cookie, moduleId);
+        casePresenter.loadCaseForm(PrimeroConfiguration.getDefaultLanguage(), cookie, moduleId);
     }
 
     @Override
