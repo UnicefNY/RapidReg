@@ -51,7 +51,6 @@ public class IncidentListPresenter extends RecordListPresenter {
     @Override
     public int calculateDisplayedIndex() {
         List<Incident> incidents = incidentService.getAll();
-        ;
         return incidents.isEmpty() ? HAVE_NO_RESULT : HAVE_RESULT_LIST;
     }
 }

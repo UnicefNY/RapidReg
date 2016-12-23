@@ -2,6 +2,9 @@ package org.unicef.rapidreg.incident.incidentregister;
 
 import android.os.Bundle;
 
+import com.raizlabs.android.dbflow.data.Blob;
+
+import org.json.JSONException;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -20,6 +23,8 @@ import org.unicef.rapidreg.service.RecordService;
 import org.unicef.rapidreg.service.cache.ItemValuesMap;
 
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -27,6 +32,7 @@ import java.util.List;
 import edu.emory.mathcs.backport.java.util.Arrays;
 
 import static org.hamcrest.core.Is.is;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Matchers.anyInt;
 import static org.mockito.Mockito.times;
@@ -86,10 +92,10 @@ public class IncidentRegisterPresenterTest {
         when(record.getUniqueId()).thenReturn("");
         when(record.getId()).thenReturn(1L);
 
-        incidentRegisterPresenter.saveRecord(itemValuesMap,new ArrayList<String>(),callback);
+        incidentRegisterPresenter.saveRecord(itemValuesMap, new ArrayList<String>(), callback);
 
         verify(incidentService, times(1)).saveOrUpdate(itemValuesMap);
-        verify(callback,times(1)).onSaveSuccessful(anyInt());
+        verify(callback, times(1)).onSaveSuccessful(anyInt());
     }
 
     @Test
@@ -105,6 +111,28 @@ public class IncidentRegisterPresenterTest {
         when(incidentFormService.getGBVTemplate()).thenReturn(incidentTemplateForm);
         when(incidentService.validateRequiredFields(incidentTemplateForm, itemValuesMap))
                 .thenReturn(false);
+
+        incidentRegisterPresenter.saveRecord(itemValuesMap, new ArrayList<String>(), callback);
+        verify(callback, times(1)).onRequiredFieldNotFilled();
+    }
+
+    @Test
+    public void should_return_item_values_map_by_record_id() throws JSONException, ParseException {
+        Long recordId = 1L;
+        Incident incidentItem = new Incident();
+        String uniqueId = "89fdj89r34jif9af90a";
+        incidentItem.setContent(new Blob("{\"age\":\"12\"}".getBytes()));
+
+        incidentItem.setUniqueId(uniqueId);
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd ");
+        Date date = sdf.parse("2012-12-06 ");
+
+        incidentItem.setRegistrationDate(date);
+        when(incidentService.getById(recordId)).thenReturn(incidentItem);
+
+        ItemValuesMap itemValuesMap = incidentRegisterPresenter.getItemValuesByRecordId(recordId);
+
+        assertThat(itemValuesMap.getAsString("incident_id"), is("89fdj89r34jif9af90a"));
     }
 
     @Test
@@ -133,5 +161,29 @@ public class IncidentRegisterPresenterTest {
         verify(incidentFormService, times(1)).getGBVTemplate();
 
     }
+
+    @Test
+    public void should_return_get_fields_when_position_is_known_and_form_is_not_null(){
+        IncidentTemplateForm form = new IncidentTemplateForm();
+        when(incidentFormService.getGBVTemplate()).thenReturn(form);
+        Section section = new Section();
+        Field miniFormField = new Field();
+        Field otherFormField = new Field();
+        List<Field> fields = Arrays.asList(new Field[]{miniFormField, otherFormField});
+        List<Section> sections = Arrays.asList(new Section[]{section});
+        section.setFields(fields);
+        form.setSections(sections);
+        int position = 0;
+        assertThat(incidentRegisterPresenter.getFields(position).contains(miniFormField),is(true));
+        assertThat(incidentRegisterPresenter.getFields(position).contains(otherFormField),is(true));
+    }
+
+    @Test
+    public void should_return_null_when_position_is_known_and_form_is_null(){
+        when(incidentFormService.getGBVTemplate()).thenReturn(null);
+        List<Field> fieldList = incidentRegisterPresenter.getFields(0);
+        assertEquals(fieldList,null);
+    }
+
 
 }
