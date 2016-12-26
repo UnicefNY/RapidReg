@@ -24,18 +24,44 @@ project.afterEvaluate {
             def testTaskName = "test${sourceName.capitalize()}UnitTest"
 
             // Create coverage task of form 'testFlavorTypeCoverage' depending on 'testFlavorTypeUnitTest'
-            task "${testTaskName}Coverage" (type:JacocoReport, dependsOn: "$testTaskName") {
+            task "${testTaskName}Coverage"(type: JacocoReport, dependsOn: "$testTaskName") {
                 group = "Reporting"
                 description = "Generate Jacoco coverage reports on the ${sourceName.capitalize()} build."
 
                 classDirectories = fileTree(
                         dir: "${project.buildDir}/intermediates/classes/${sourcePath}",
-                        excludes: ['**/R.class',
-                                   '**/R$*.class',
-                                   '**/*$ViewInjector*.*',
-                                   '**/*$ViewBinder*.*',
-                                   '**/BuildConfig.*',
-                                   '**/Manifest*.*']
+                        excludes: [
+                                '**/R.class',
+                                '**/R$*.class',
+                                '**/*$ViewInjector*.*',
+                                '**/*$ViewBinder*.*',
+                                '**/BuildConfig.*',
+                                '**/Manifest*.*',
+                                '**/android/**',
+                                'org/unicef/rapidreg/base/**',
+                                'org/unicef/rapidreg/childcase/**',
+                                'org/unicef/rapidreg/db/**',
+                                'org/unicef/rapidreg/event/**',
+                                'org/unicef/rapidreg/login/*Activity.*',
+                                'org/unicef/rapidreg/login/*View.*',
+                                'org/unicef/rapidreg/model/**',
+                                'org/unicef/rapidreg/network/**',
+                                'org/unicef/rapidreg/network/tracing/**',
+                                'org/unicef/rapidreg/networkwidgets/**',
+                                'org/unicef/rapidreg/injection/component/**',
+                                'org/unicef/rapidreg/widgets/viewholder/**',
+                                'org/unicef/rapidreg/sync/**',
+                                'org/unicef/rapidreg/widgets/dialog/**',
+                                'org/unicef/rapidreg/tracing/tracingregister/**',
+                                'org/unicef/rapidreg/injection/module/**',
+                                'org/unicef/rapidreg/incident/incidentregister/**',
+                                'org/unicef/rapidreg/incident/**',
+                                'org/unicef/rapidreg/incident/incidentregister/**',
+                                'org/unicef/rapidreg/tracing/**',
+                                'org/unicef/rapidreg/tracing/tracinglist/**',
+                                'org/unicef/rapidreg/widgets/**',
+                                'org/unicef/rapidreg/exception/**'
+                        ]
                 )
 
                 def coverageSourceDirs = [
