@@ -121,8 +121,8 @@ public class IncidentService extends RecordService {
         itemValues.addStringItem(RECORD_CREATED_BY, username);
         itemValues.addStringItem(PREVIOUS_OWNER, username);
 
-        if (!itemValues.has(INQUIRY_DATE)) {
-            itemValues.addStringItem(INQUIRY_DATE, getCurrentRegistrationDateAsString());
+        if (!itemValues.has(REGISTRATION_DATE)) {
+            itemValues.addStringItem(REGISTRATION_DATE, getCurrentRegistrationDateAsString());
         }
 
         Gson gson = new Gson();
@@ -138,7 +138,7 @@ public class IncidentService extends RecordService {
         int age = itemValues.getAsInt(RELATION_AGE) != null ? itemValues.getAsInt(RELATION_AGE) : 0;
         incident.setAge(age);
         incident.setCaregiver(getCaregiverName(itemValues));
-        incident.setRegistrationDate(Utils.getRegisterDate(itemValues.getAsString(INQUIRY_DATE)));
+        incident.setRegistrationDate(Utils.getRegisterDate(itemValues.getAsString(REGISTRATION_DATE)));
         incident.setCreatedBy(username);
         incidentDao.save(incident);
         return incident;
@@ -157,8 +157,9 @@ public class IncidentService extends RecordService {
         incident.setAge(age);
         incident.setCaregiver(getCaregiverName(itemValues));
         setSyncedStatus(incident);
-        incident.setRegistrationDate(Utils.getRegisterDate(itemValues.getAsString(INQUIRY_DATE)));
-        incident.update();
+        incident.setRegistrationDate(Utils.getRegisterDate(itemValues.getAsString(REGISTRATION_DATE)));
+
+        incident = incidentDao.update(incident);
 
         return incident;
     }

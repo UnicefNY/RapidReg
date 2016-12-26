@@ -1,8 +1,8 @@
 package org.unicef.rapidreg.service;
 
+import com.raizlabs.android.dbflow.data.Blob;
 import com.raizlabs.android.dbflow.sql.language.ConditionGroup;
 
-import org.hamcrest.Matchers;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -29,6 +29,7 @@ import java.util.UUID;
 
 import edu.emory.mathcs.backport.java.util.Arrays;
 
+import static junit.framework.Assert.assertFalse;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.hasSize;
@@ -40,7 +41,10 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
+import static org.unicef.rapidreg.service.IncidentService.INCIDENT_ID;
+import static org.unicef.rapidreg.service.RecordService.AGE;
 import static org.unicef.rapidreg.service.RecordService.INQUIRY_DATE;
+import static org.unicef.rapidreg.service.RecordService.REGISTRATION_DATE;
 
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({UUID.class, PrimeroConfiguration.class})
@@ -129,14 +133,15 @@ public class IncidentServiceTest {
     }
 
     @Test
-    public void should_save_case_when_give_item_values() throws IOException {
-        String uniqueId = "test save case";
+    public void should_save_incident_when_give_item_values_and_item_values_map_have_register_date()
+            throws IOException {
+        String uniqueId = "test save incident";
         IncidentService incidentServiceSpy = spy(incidentService);
         when(incidentServiceSpy.generateUniqueId()).thenReturn(uniqueId);
         User user = new User("userName");
         Mockito.when(PrimeroConfiguration.getCurrentUser()).thenReturn(user);
         ItemValuesMap itemValuesMap = new ItemValuesMap();
-        itemValuesMap.addStringItem(INQUIRY_DATE,"11/11/1111");
+        itemValuesMap.addStringItem(INQUIRY_DATE, "11/11/1111");
 
         Incident incident = incidentServiceSpy.save(itemValuesMap);
         when(incidentDao.save(any(Incident.class))).thenReturn(incident);
@@ -144,6 +149,50 @@ public class IncidentServiceTest {
         assertThat(incident.getAge(), is(0));
         assertThat(incident.getUniqueId(), is(uniqueId));
         assertThat(incident.getRegistrationDate(), is(Utils.getRegisterDate("11/11/1111")));
+    }
+
+    @Test
+    public void
+    should_save_incident_when_give_item_values_and_item_values_map_has_not_register_date()
+            throws IOException {
+        String uniqueId = "test save incident";
+        IncidentService incidentServiceSpy = spy(incidentService);
+        when(incidentServiceSpy.generateUniqueId()).thenReturn(uniqueId);
+        User user = new User("userName");
+        Mockito.when(PrimeroConfiguration.getCurrentUser()).thenReturn(user);
+        ItemValuesMap itemValuesMap = new ItemValuesMap();
+
+        Incident incident = incidentServiceSpy.save(itemValuesMap);
+        when(incidentDao.save(any(Incident.class))).thenReturn(incident);
+
+        assertThat(incident.getAge(), is(0));
+        assertThat(incident.getUniqueId(), is(uniqueId));
+    }
+
+
+    @Test
+    public void should_update_incident_when_give_item_values() throws Exception {
+        ItemValuesMap itemValues = new ItemValuesMap();
+        itemValues.addStringItem(INCIDENT_ID, "existedUniqueId");
+        itemValues.addNumberItem(AGE, 18);
+        itemValues.addStringItem(REGISTRATION_DATE, "25/12/2016");
+
+        Incident expected = new Incident();
+        PowerMockito.when(incidentDao.getIncidentByUniqueId("existedUniqueId")).thenReturn
+                (expected);
+
+        expected.setContent(new Blob(new String("").getBytes()));
+
+        PowerMockito.when(incidentDao.update(expected)).thenReturn(expected);
+
+        Incident actual = incidentService.update(itemValues);
+
+        verify(incidentDao, times(1)).update(actual);
+
+        assertFalse("Sync status should be false", actual.isSynced());
+        assertThat("Age should be 18", actual.getAge(), is(18));
+        assertThat("Registration date should be 25/12/2016", actual.getRegistrationDate(), is
+                (Utils.getRegisterDate("25/12/2016")));
     }
 
     @Test
@@ -175,7 +224,7 @@ public class IncidentServiceTest {
     }
 
     @Test
-    public void should_get_empty_required_filed_list_when_does_not_exist_in_case_fields() {
+    public void should_get_empty_required_filed_list_when_does_not_exist_in_incident_fields() {
         List<Field> fields = new Section().getFields();
         fields.add(makeIncidentField("age", false));
         fields.add(makeIncidentField("sex", false));
