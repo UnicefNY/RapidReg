@@ -140,7 +140,7 @@ public class IncidentService extends RecordService {
         incident.setCaregiver(getCaregiverName(itemValues));
         incident.setRegistrationDate(Utils.getRegisterDate(itemValues.getAsString(INQUIRY_DATE)));
         incident.setCreatedBy(username);
-        incident.save();
+        incidentDao.save(incident);
         return incident;
     }
 

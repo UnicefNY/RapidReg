@@ -2,6 +2,7 @@ package org.unicef.rapidreg.db;
 
 import com.raizlabs.android.dbflow.sql.language.ConditionGroup;
 
+import org.unicef.rapidreg.model.Case;
 import org.unicef.rapidreg.model.Incident;
 
 import java.util.List;
@@ -23,5 +24,9 @@ public interface IncidentDao {
     Incident getFirst();
 
     List<Long> getAllIds();
+
+    Incident save(Incident incident);
+
+    Incident update(Incident incident);
 
 }
