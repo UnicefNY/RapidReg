@@ -42,19 +42,6 @@ public class TracingPresenter extends RecordPresenter {
     public void loadTracingForm(String cookie) {
         authService.getTracingForm(cookie,
                 Locale.getDefault().getLanguage(), true, "tracing_request", "primeromodule-cp")
-                .flatMap(new Func1<TracingTemplateForm, Observable<TracingTemplateForm>>() {
-                    @Override
-                    public Observable<TracingTemplateForm> call(TracingTemplateForm
-                                                                        tracingTemplateForm) {
-                        if (tracingTemplateForm == null) {
-                            return Observable.error(new Exception());
-                        }
-                        return Observable.just(tracingTemplateForm);
-                    }
-                })
-                .retry(3)
-                .timeout(60, TimeUnit.SECONDS)
-                .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Action1<TracingTemplateForm>() {
                     @Override
                     public void call(TracingTemplateForm tracingTemplateForm) {

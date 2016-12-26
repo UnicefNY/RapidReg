@@ -34,7 +34,9 @@ public class AuthService extends BaseRetrofitService {
     }
 
     public Observable<Response<LoginResponse>> loginRx(LoginRequestBody body) {
-        return serviceInterface.login(body);
+        return serviceInterface.login(body)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
     }
 
     public Observable<CaseTemplateForm> getCaseForm(String cookie, String locale,
@@ -51,17 +53,46 @@ public class AuthService extends BaseRetrofitService {
                 })
                 .retry(3)
                 .timeout(60, TimeUnit.SECONDS)
-                .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
     }
 
     public Observable<TracingTemplateForm> getTracingForm(String cookie, String locale,
                   Boolean isMobile, String parentForm, String moduleId) {
-        return serviceInterface.getTracingForm(cookie, locale, isMobile, parentForm, moduleId);
+        return serviceInterface.getTracingForm(cookie, locale, isMobile, parentForm, moduleId)
+                .flatMap(new Func1<TracingTemplateForm, Observable<TracingTemplateForm>>() {
+                    @Override
+                    public Observable<TracingTemplateForm> call(TracingTemplateForm
+                                                                        tracingTemplateForm) {
+                        if (tracingTemplateForm == null) {
+                            return Observable.error(new Exception());
+                        }
+                        return Observable.just(tracingTemplateForm);
+                    }
+                })
+                .retry(3)
+                .timeout(60, TimeUnit.SECONDS)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
     }
 
     public Observable<IncidentTemplateForm> getIncidentForm(String cookie, String locale,
                        Boolean isMobile, String parentForm, String moduleId) {
-        return serviceInterface.getIncidentForm(cookie, locale, isMobile, parentForm, moduleId);
+        return serviceInterface.getIncidentForm(cookie, locale, isMobile, parentForm, moduleId)
+                .flatMap(new Func1<IncidentTemplateForm, Observable<IncidentTemplateForm>>() {
+                    @Override
+                    public Observable<IncidentTemplateForm> call(IncidentTemplateForm
+                                                                         incidentForm) {
+                        if (incidentForm == null) {
+                            return Observable.error(new Exception());
+                        }
+                        return Observable.just(incidentForm);
+                    }
+                })
+                .retry(3)
+                .timeout(60, TimeUnit.SECONDS)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
     }
 }
 
