@@ -1,6 +1,7 @@
 package org.unicef.rapidreg.service;
 
 import com.raizlabs.android.dbflow.data.Blob;
+import com.raizlabs.android.dbflow.sql.language.ConditionGroup;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -21,9 +22,13 @@ import org.unicef.rapidreg.model.User;
 import org.unicef.rapidreg.service.cache.ItemValuesMap;
 import org.unicef.rapidreg.utils.Utils;
 
+import java.sql.Date;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
+
+import edu.emory.mathcs.backport.java.util.Arrays;
 
 import static junit.framework.Assert.assertFalse;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -124,6 +129,24 @@ public class CaseServiceTest {
         assertFalse("Sync status should be false", actual.isSynced());
         assertThat("Age should be 18", actual.getAge(), is(18));
         assertThat("Registration date should be 25/12/2016", actual.getRegistrationDate(), is(Utils.getRegisterDate("25/12/2016")));
+    }
+
+    @Test
+    public void should_get_search_result_by_condition_group() throws Exception {
+        Case searchCaseOne = new Case(10000L);
+        Case searchCaseTwo = new Case(10001L);
+        Case searchCaseThree = new Case(10002L);
+        Case searchCaseFour = new Case(10003L);
+        List<Case> searchResult = Arrays.asList(new Case[]{
+                searchCaseOne,
+                searchCaseTwo,
+                searchCaseThree,
+                searchCaseFour});
+        when(caseDao.getCaseListByConditionGroup(any(ConditionGroup.class))).thenReturn(searchResult);
+
+        List<Long> actual = caseService.getSearchResult("shortId", "name", 0, 10, "caregiver", null);
+
+        assertThat("Should return id list", actual, is(Arrays.asList(new Long[]{10000L, 10001L, 10002L, 10003L})));
     }
 
     private Field makeCaseField(String name, boolean required) {
