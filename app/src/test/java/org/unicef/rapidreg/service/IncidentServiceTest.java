@@ -141,7 +141,7 @@ public class IncidentServiceTest {
         User user = new User("userName");
         Mockito.when(PrimeroConfiguration.getCurrentUser()).thenReturn(user);
         ItemValuesMap itemValuesMap = new ItemValuesMap();
-        itemValuesMap.addStringItem(INQUIRY_DATE, "11/11/1111");
+        itemValuesMap.addStringItem(REGISTRATION_DATE, "11/11/1111");
 
         Incident incident = incidentServiceSpy.save(itemValuesMap);
         when(incidentDao.save(any(Incident.class))).thenReturn(incident);
