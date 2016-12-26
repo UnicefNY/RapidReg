@@ -126,7 +126,7 @@ public class LoginPresenter extends MvpBasePresenter<LoginView> {
                 username,
                 password,
                 tm.getLine1Number(),
-                androidId)).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+                androidId))
                 .subscribe(new Action1<Response<LoginResponse>>() {
                     @Override
                     public void call(Response<LoginResponse> response) {

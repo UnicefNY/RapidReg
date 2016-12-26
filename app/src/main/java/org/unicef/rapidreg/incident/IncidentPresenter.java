@@ -43,19 +43,6 @@ public class IncidentPresenter extends RecordPresenter {
     public void loadIncidentForm(String cookie, final String moduleId) {
         authService.getIncidentForm(cookie,
                 Locale.getDefault().getLanguage(), true, "incident", moduleId)
-                .flatMap(new Func1<IncidentTemplateForm, Observable<IncidentTemplateForm>>() {
-                    @Override
-                    public Observable<IncidentTemplateForm> call(IncidentTemplateForm
-                                                                         incidentForm) {
-                        if (incidentForm == null) {
-                            return Observable.error(new Exception());
-                        }
-                        return Observable.just(incidentForm);
-                    }
-                })
-                .retry(3)
-                .timeout(60, TimeUnit.SECONDS)
-                .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Action1<IncidentTemplateForm>() {
                     @Override
                     public void call(IncidentTemplateForm incidentForm) {
