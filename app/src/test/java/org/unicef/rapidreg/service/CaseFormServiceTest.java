@@ -6,6 +6,8 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.unicef.rapidreg.db.CaseFormDao;
 import org.unicef.rapidreg.db.impl.CaseFormDaoImpl;
@@ -17,19 +19,27 @@ import org.unicef.rapidreg.service.impl.CaseFormServiceImpl;
 
 import java.io.IOException;
 
+import static junit.framework.Assert.assertFalse;
+import static junit.framework.Assert.assertTrue;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.mockito.MockitoAnnotations.initMocks;
 
 @RunWith(MockitoJUnitRunner.class)
 public class CaseFormServiceTest {
     private static final int MAX_RETRY_NUM = 3;
 
-    private static CaseFormService caseFormService;
-    private static CaseFormDao caseFormDao;
+    @Mock
+    CaseFormDao caseFormDao;
+
+    @InjectMocks
+    CaseFormServiceImpl caseFormService;
 
     private String formForm = "{\n" +
             "  \"Children\": [\n" +
@@ -63,14 +73,51 @@ public class CaseFormServiceTest {
             "  ]\n" +
             "}";
 
-    @BeforeClass
-    public static void setup() {
-        caseFormDao = mock(CaseFormDaoImpl.class);
-        caseFormService = new CaseFormServiceImpl(caseFormDao);
-    }
-
     @Before
     public void setUp() throws Exception {
+        initMocks(this);
+    }
+
+    @Test
+    public void should_return_true_if_form_is_ready() throws Exception {
+        CaseForm cpCaseForm = createCPCaseForm();
+        CaseForm gbvCaseForm = createGBVCaseForm();
+        when(caseFormDao.getCaseForm("primeromodule-cp")).thenReturn(cpCaseForm);
+        when(caseFormDao.getCaseForm("primeromodule-gbv")).thenReturn(gbvCaseForm);
+
+        assertTrue(caseFormService.isReady());
+    }
+
+    @Test
+    public void should_return_false_if_form_is_not_ready() throws Exception {
+        when(caseFormDao.getCaseForm("primeromodule-cp")).thenReturn(createCPCaseForm());
+        when(caseFormDao.getCaseForm("primeromodule-gbv")).thenReturn(null);
+
+        assertFalse(caseFormService.isReady());
+    }
+
+    @Test
+    public void should_save_case_form_if_not_exist() throws Exception {
+        CaseForm caseForm = mock(CaseForm.class);
+        when(caseFormDao.getCaseForm("primeromodule-cp")).thenReturn(null);
+
+        caseFormService.saveOrUpdate(caseForm);
+
+        verify(caseForm, times(1)).save();
+    }
+
+    @Test
+    public void should_update_case_form_if_exist() throws Exception {
+        CaseForm caseForm = mock(CaseForm.class);
+        when(caseForm.getModuleId()).thenReturn("primeromodule-cp");
+        Blob formBlob = mock(Blob.class);
+        when(caseForm.getForm()).thenReturn(formBlob);
+        when(caseFormDao.getCaseForm("primeromodule-cp")).thenReturn(caseForm);
+
+        caseFormService.saveOrUpdate(caseForm);
+
+        verify(caseForm, times(1)).setForm(formBlob);
+        verify(caseForm, times(1)).update();
     }
 
     @Test
@@ -97,4 +144,19 @@ public class CaseFormServiceTest {
         assertThat(field.getSubForm(), is(nullValue()));
     }
 
+    private CaseForm createCPCaseForm() {
+        CaseForm caseForm = new CaseForm();
+        caseForm.setModuleId("primeromodule-cp");
+        caseForm.setForm(new Blob());
+
+        return caseForm;
+    }
+
+    private CaseForm createGBVCaseForm() {
+        CaseForm caseForm = new CaseForm();
+        caseForm.setModuleId("primeromodule-gbv");
+        caseForm.setForm(new Blob());
+
+        return caseForm;
+    }
 }
