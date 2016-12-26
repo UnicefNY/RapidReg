@@ -36,6 +36,7 @@ project.afterEvaluate {
                                 '**/*$ViewInjector*.*',
                                 '**/*$ViewBinder*.*',
                                 '**/BuildConfig.*',
+                                '**/*GlideModule*.*',
                                 '**/Manifest*.*',
                                 '**/android/**',
                                 'org/unicef/rapidreg/base/**',
