@@ -63,6 +63,18 @@ public class IncidentDaoImpl implements IncidentDao {
         return result;
     }
 
+    @Override
+    public Incident save(Incident incident) {
+        incident.save();
+        return incident;
+    }
+
+    @Override
+    public Incident update(Incident incident) {
+        incident.update();
+        return incident;
+    }
+
     private List<Incident> getIncidentsByAgeASC() {
         return SQLite.select().from(Incident.class).orderBy(Incident_Table.age, true).queryList();
     }

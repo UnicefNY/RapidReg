@@ -2,19 +2,30 @@ package org.unicef.rapidreg.service;
 
 import com.raizlabs.android.dbflow.sql.language.ConditionGroup;
 
+import org.hamcrest.Matchers;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.Mockito;
+import org.powermock.api.mockito.PowerMockito;
+import org.powermock.core.classloader.annotations.PrepareForTest;
+import org.powermock.modules.junit4.PowerMockRunner;
+import org.unicef.rapidreg.PrimeroConfiguration;
 import org.unicef.rapidreg.db.IncidentDao;
 import org.unicef.rapidreg.db.impl.IncidentDaoImpl;
 import org.unicef.rapidreg.forms.Field;
 import org.unicef.rapidreg.forms.Section;
 import org.unicef.rapidreg.model.Incident;
+import org.unicef.rapidreg.model.User;
+import org.unicef.rapidreg.service.cache.ItemValuesMap;
+import org.unicef.rapidreg.utils.Utils;
 
+import java.io.IOException;
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import edu.emory.mathcs.backport.java.util.Arrays;
 
@@ -24,39 +35,115 @@ import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.core.Is.is;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
+import static org.unicef.rapidreg.service.RecordService.INQUIRY_DATE;
 
-@RunWith(MockitoJUnitRunner.class)
+@RunWith(PowerMockRunner.class)
+@PrepareForTest({UUID.class, PrimeroConfiguration.class})
 public class IncidentServiceTest {
 
     private IncidentDao incidentDao = mock(IncidentDaoImpl.class);
     private IncidentService incidentService = new IncidentService(incidentDao);
 
-
     @Before
     public void setUp() throws Exception {
         initMocks(this);
-        incidentService = new IncidentService(incidentDao);
+        PowerMockito.mockStatic(UUID.class);
+        PowerMockito.mockStatic(PrimeroConfiguration.class);
     }
 
+    @Test
+    public void should_return_incident_by_incident_id() {
+        long incidentId = 1L;
+        Incident incident = mock(Incident.class);
+        when(incidentDao.getIncidentById(incidentId)).thenReturn(incident);
+        assertThat(incidentService.getById(incidentId), is(incident));
+        verify(incidentDao, times(1)).getIncidentById(incidentId);
+    }
 
     @Test
-    public void should_return_all_order_ids_sorted_by_ascending() throws Exception {
+    public void should_return_incident_by_uniqueId() {
+        String uniqueId = "uniqueId";
+        Incident incident = mock(Incident.class);
+        when(incidentDao.getIncidentByUniqueId(uniqueId)).thenReturn(incident);
+        assertThat(incidentService.getByUniqueId(uniqueId), is(incident));
+        verify(incidentDao, times(1)).getIncidentByUniqueId(uniqueId);
+    }
+
+    @Test
+    public void should_return_incident_list() {
+        Incident incident = new Incident();
+        List<Incident> incidentList = new ArrayList<Incident>();
+        incidentList.add(incident);
+        when(incidentDao.getAllIncidentsOrderByDate(false)).thenReturn(incidentList);
+        assertThat(incidentService.getAll(), is(incidentList));
+    }
+
+    @Test
+    public void should_return_all_ids() {
+        Long l = 1L;
+        List<Long> list = new ArrayList<>();
+        list.add(l);
+        when(incidentDao.getAllIds()).thenReturn(list);
+        assertThat(incidentService.getAllIds(), is(list));
+    }
+
+    @Test
+    public void should_return_all_order_ids_sorted_by_age_ascending() {
+        Incident[] orders = new Incident[]{new Incident(1), new Incident(2), new Incident(3)};
+        List<Incident> orderList = Arrays.asList(orders);
+        when(incidentDao.getAllIncidentsOrderByAge(true)).thenReturn(orderList);
+        assertThat(incidentService.getAllOrderByAgeASC(), is(Arrays.asList(new Long[]{1L, 2L,
+                3L})));
+    }
+
+    @Test
+    public void should_return_all_order_ids_sorted_by_age_descending() {
+        Incident[] orders = new Incident[]{new Incident(1), new Incident(2), new Incident(3)};
+        List<Incident> orderList = Arrays.asList(orders);
+        when(incidentDao.getAllIncidentsOrderByAge(false)).thenReturn(orderList);
+        assertThat(incidentService.getAllOrderByAgeDES(), is(Arrays.asList(new Long[]{1L, 2L,
+                3L})));
+    }
+
+    @Test
+    public void should_return_all_order_ids_sorted_by_date_ascending() throws Exception {
         Incident[] orders = new Incident[]{new Incident(1), new Incident(2), new Incident(3)};
         List<Incident> orderList = Arrays.asList(orders);
         when(incidentDao.getAllIncidentsOrderByDate(true)).thenReturn(orderList);
         assertThat("When call getAllOrdersByDateAsc() should return orders sorted by date.",
-                incidentService.getAllOrderByDateASC(), is(Arrays.asList(new Long[]{1L,2L,3L})));
+                incidentService.getAllOrderByDateASC(), is(Arrays.asList(new Long[]{1L, 2L, 3L})));
     }
 
     @Test
-    public void should_return_all_order_ids_sorted_by_descending() throws Exception {
+    public void should_return_all_order_ids_sorted_by_date_descending() throws Exception {
         Incident[] orders = new Incident[]{new Incident(3), new Incident(2), new Incident(1)};
         List<Incident> orderList = Arrays.asList(orders);
         when(incidentDao.getAllIncidentsOrderByDate(false)).thenReturn(orderList);
         assertThat("When call getAllOrderByDateDES() should return orders sorted by date.",
-                incidentService.getAllOrderByDateDES(), is(Arrays.asList(new Long[]{3L,2L,1L})));
+                incidentService.getAllOrderByDateDES(), is(Arrays.asList(new Long[]{3L, 2L, 1L})));
+    }
+
+    @Test
+    public void should_save_case_when_give_item_values() throws IOException {
+        String uniqueId = "test save case";
+        IncidentService incidentServiceSpy = spy(incidentService);
+        when(incidentServiceSpy.generateUniqueId()).thenReturn(uniqueId);
+        User user = new User("userName");
+        Mockito.when(PrimeroConfiguration.getCurrentUser()).thenReturn(user);
+        ItemValuesMap itemValuesMap = new ItemValuesMap();
+        itemValuesMap.addStringItem(INQUIRY_DATE,"11/11/1111");
+
+        Incident incident = incidentServiceSpy.save(itemValuesMap);
+        when(incidentDao.save(any(Incident.class))).thenReturn(incident);
+
+        assertThat(incident.getAge(), is(0));
+        assertThat(incident.getUniqueId(), is(uniqueId));
+        assertThat(incident.getRegistrationDate(), is(Utils.getRegisterDate("11/11/1111")));
     }
 
     @Test
@@ -80,7 +167,8 @@ public class IncidentServiceTest {
         when(incidentDao.getIncidentListByConditionGroup(any(ConditionGroup.class))).thenReturn
                 (orderList);
 
-        Assert.assertThat("When call getSearchResult() should return search result depends on search " +
+        Assert.assertThat("When call getSearchResult() should return search result depends on " +
+                        "search " +
                         "condition",
                 incidentService.getSearchResult("uniqueId", "name", 1, 20, new Date(20161108)),
                 is(Arrays.asList(new Long[]{3L, 2L, 1L})));

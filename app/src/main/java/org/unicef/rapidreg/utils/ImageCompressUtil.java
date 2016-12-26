@@ -18,7 +18,6 @@ import java.io.IOException;
 
 import id.zelory.compressor.Compressor;
 
-import static android.graphics.Bitmap.Config.RGB_565;
 import static org.unicef.rapidreg.base.record.recordphoto.PhotoConfig.MAX_QUALITY_COMPRESS_SIZE;
 
 

@@ -2,7 +2,6 @@ package org.unicef.rapidreg.db.impl;
 
 import com.raizlabs.android.dbflow.list.FlowQueryList;
 import com.raizlabs.android.dbflow.sql.language.ConditionGroup;
-import com.raizlabs.android.dbflow.sql.language.CursorResult;
 import com.raizlabs.android.dbflow.sql.language.SQLite;
 
 import org.unicef.rapidreg.db.CaseDao;
