@@ -81,7 +81,7 @@ public abstract class RecordListAdapter extends RecyclerView.Adapter<RecordListA
         if (value == null) {
             return false;
         }
-        return Double.valueOf(value).intValue() > 0;
+        return Double.valueOf(value).intValue() >= 0;
     }
 
     public class RecordListViewHolder extends RecyclerView.ViewHolder {
