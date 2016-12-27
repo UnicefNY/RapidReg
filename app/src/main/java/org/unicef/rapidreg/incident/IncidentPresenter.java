@@ -24,6 +24,7 @@ public class IncidentPresenter extends RecordPresenter {
     private IncidentFormService incidentFormService;
     private AuthService authService;
 
+
     @Inject
     public IncidentPresenter(AuthService authService,
                              IncidentFormService incidentFormService) {

@@ -15,6 +15,7 @@ import org.unicef.rapidreg.incident.incidentregister.IncidentRegisterWrapperFrag
 import org.unicef.rapidreg.incident.incidentsearch.IncidentSearchFragment;
 import org.unicef.rapidreg.model.Incident;
 
+
 public enum IncidentFeature implements Feature {
     LIST(R.string.incidents, IncidentListFragment.class),
     ADD_MINI(R.string.new_incident, IncidentMiniFormFragment.class),

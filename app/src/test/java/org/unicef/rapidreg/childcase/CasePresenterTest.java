@@ -5,24 +5,19 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.powermock.api.easymock.PowerMock;
-import org.powermock.api.mockito.PowerMockito;
-import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
-import org.robolectric.util.Scheduler;
 import org.unicef.rapidreg.forms.CaseTemplateForm;
 import org.unicef.rapidreg.forms.Section;
 import org.unicef.rapidreg.model.CaseForm;
 import org.unicef.rapidreg.network.AuthService;
 import org.unicef.rapidreg.service.CaseFormService;
+
 import edu.emory.mathcs.backport.java.util.Arrays;
 import rx.Observable;
 
 import static junit.framework.Assert.assertFalse;
 import static junit.framework.Assert.assertTrue;
 import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -58,7 +53,8 @@ public class CasePresenterTest {
     public void should_load_case_form_when_give_cookie_and_module_id() throws Exception {
         CaseTemplateForm caseTemplateForm = createCaseTemplateForm();
         Observable<CaseTemplateForm> observable = Observable.just(caseTemplateForm);
-        when(authService.getCaseForm("cookie", "English", true, "case", "primeromodule-cp")).thenReturn(observable);
+        when(authService.getCaseForm("cookie", "English", true, "case", "primeromodule-cp"))
+                .thenReturn(observable);
 
         casePresenter.loadCaseForm("English", "cookie", "primeromodule-cp");
 
@@ -69,7 +65,8 @@ public class CasePresenterTest {
     @Test
     public void should_show_error_when_sync_form_fail() throws Exception {
         Observable observable = Observable.error(new Exception());
-        when(authService.getCaseForm("cookie", "English", true, "case", "primeromodule-cp")).thenReturn(observable);
+        when(authService.getCaseForm("cookie", "English", true, "case", "primeromodule-cp"))
+                .thenReturn(observable);
 
         casePresenter.loadCaseForm("English", "cookie", "primeromodule-cp");
 
