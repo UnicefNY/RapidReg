@@ -33,4 +33,23 @@
         <item name="android:textColor">@color/primero_font_dark</item>
     </style>
     <!--row in case list end-->
+
+    <style name="ToolbarTheme" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
+        <item name="actionButtonStyle">@style/myToolbarNavigationButtonStyle</item>
+        <item name="android:gravity">center_horizontal</item>
+    </style>
+
+    <style name="myToolbarNavigationButtonStyle" parent="Widget.AppCompat.ActionButton">
+        <item name="android:layout_height">80dp</item>
+        <item name="android:layout_width">80dp</item>
+        <item name="android:width">80dp</item>
+        <item name="android:height">80dp</item>
+        <item name="android:scaleType">centerInside</item>
+    </style>
+
+    <style name="ToolbarTitleText">
+        <item name="android:textSize">50sp</item>
+        <item name="android:textColor">@android:color/white</item>
+    </style>
+
 </resources>

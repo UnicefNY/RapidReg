@@ -234,8 +234,8 @@ public abstract class RecordActivity extends BaseActivity {
     }
 
     public enum DetailState {
-        VISIBILITY(R.drawable.visible, true),
-        INVISIBILITY(R.drawable.invisible, false);
+        VISIBILITY(R.drawable.ic_visibility_white_48dp, true),
+        INVISIBILITY(R.drawable.ic_visibility_off_white_48dp, false);
 
         private final int resId;
         private final boolean isDetailShow;
