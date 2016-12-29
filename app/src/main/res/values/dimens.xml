@@ -80,5 +80,7 @@
     <dimen name="sync_button_padding_top">80dp</dimen>
     <!--sync end-->
 
+    <dimen name="detail_or_short_text_area">40dp</dimen>
+
 
 </resources>

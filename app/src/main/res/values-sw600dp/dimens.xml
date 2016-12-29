@@ -88,4 +88,6 @@
     <dimen name="navigation_height">300dp</dimen>
     <dimen name="navigation_width">600dp</dimen>
     <!--action bar end-->
+
+    <dimen name="detail_or_short_text_area">80dp</dimen>
 </resources>
