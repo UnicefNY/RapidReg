@@ -14,13 +14,14 @@
     <TextView
         android:id="@+id/form_switcher"
         android:layout_width="match_parent"
-        android:layout_height="40dp"
+        android:layout_height="@dimen/detail_or_short_text_area"
         android:layout_alignParentBottom="true"
         android:gravity="center"
         android:background="@drawable/switch_button"
         android:text=""
         android:textAllCaps="false"
         android:clickable="true"
+        android:textSize="@dimen/text_size_14"
         android:textColor="@color/primero_blue"/>
 
     <com.getbase.floatingactionbutton.FloatingActionButton
