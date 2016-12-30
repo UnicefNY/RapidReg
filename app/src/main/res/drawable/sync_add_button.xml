@@ -2,8 +2,8 @@
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
     <item>
         <shape android:shape="oval">
-            <solid android:color="@color/primero_blue"/>
-            <size android:width="100dp" android:height="100dp"/>
+            <solid android:color="@color/primero_blue" />
+            <size android:width="@dimen/sync_button_width" android:height="@dimen/sync_button_width" />
         </shape>
     </item>
 </selector>

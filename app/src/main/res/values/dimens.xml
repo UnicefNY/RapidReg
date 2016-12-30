@@ -82,6 +82,7 @@
     <dimen name="sync_padding_top_bottom">9dp</dimen>
     <dimen name="sync_value_padding_top_bottom">26dp</dimen>
     <dimen name="sync_button_padding_top">80dp</dimen>
+    <dimen name="sync_button_width">100dp</dimen>
     <!--sync end-->
 
     <dimen name="detail_or_short_text_area">40dp</dimen>
