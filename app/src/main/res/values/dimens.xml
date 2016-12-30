@@ -5,8 +5,10 @@
     <dimen name="activity_top_margin">40dp</dimen>
     <!--Text size-->
 
+    <dimen name="size_1">1dp</dimen>
     <dimen name="size_2">2dp</dimen>
     <dimen name="size_5">5dp</dimen>
+    <dimen name="size_10">10dp</dimen>
     <dimen name="size_15">15dp</dimen>
     <dimen name="text_size_12">12sp</dimen>
     <dimen name="text_size_14">14sp</dimen>
