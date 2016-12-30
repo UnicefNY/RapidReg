@@ -35,7 +35,6 @@ public class SingleLineRadioViewHolder extends BaseViewHolder<Field> {
 
     private String result;
 
-
     public SingleLineRadioViewHolder(Context context, View itemView, ItemValuesMap itemValues) {
         super(context, itemView, itemValues);
         ButterKnife.bind(this, itemView);
@@ -49,8 +48,14 @@ public class SingleLineRadioViewHolder extends BaseViewHolder<Field> {
             labelText += " (Required)";
         }
         options = field.getSelectOptions();
-        firstOption.setText(options.get(0));
-        secondOption.setText(options.get(1));
+
+        if (options.size() == 1) {
+            firstOption.setText(options.get(0));
+            secondOption.setVisibility(View.INVISIBLE);
+        } else if (options.size() == 2) {
+            firstOption.setText(options.get(0));
+            secondOption.setText(options.get(1));
+        }
 
         labelView.setHint(labelText);
         disableUneditableField(isEditable(field), firstOption);
