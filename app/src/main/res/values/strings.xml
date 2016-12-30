@@ -68,7 +68,7 @@
     <string name="no_photo_promote_info">No photo file exists.</string>
     <string name="delete">Delete</string>
     <string name="add">Add</string>
-    <string name="required_field_is_not_filled">Some required field is not filled, please fill them</string>
+    <string name="required_field_is_not_filled">Sorry, please make sure all required information are entered</string>
     <string name="show_hide">Show/Hide</string>
     <string name="save">Save</string>
     <string name="new_case">New case</string>
