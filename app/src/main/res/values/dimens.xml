@@ -10,6 +10,8 @@
     <dimen name="size_5">5dp</dimen>
     <dimen name="size_10">10dp</dimen>
     <dimen name="size_15">15dp</dimen>
+    <dimen name="size_24">24dp</dimen>
+    <dimen name="size_48">48dp</dimen>
     <dimen name="text_size_12">12sp</dimen>
     <dimen name="text_size_14">14sp</dimen>
     <dimen name="text_size_16">16sp</dimen>
