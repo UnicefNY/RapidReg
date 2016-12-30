@@ -1,43 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/case_spinner_height_closed">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center_vertical"
+    android:padding="@dimen/size_10"
+    android:weightSum="10">
 
     <ImageView
         android:id="@+id/indicator"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
-        android:layout_marginLeft="@dimen/case_spinner_indicator_left_margin"
-        android:layout_marginStart="@dimen/case_spinner_indicator_left_margin"/>
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:gravity="center" />
 
     <TextView
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
-        android:layout_marginLeft="@dimen/case_spinner_order_left_margin"
-        android:layout_marginStart="@dimen/case_spinner_order_left_margin"
+        android:layout_weight="3"
+        android:gravity="center"
         android:text="@string/order_by"
         android:textColor="@color/primero_font_medium"
-        android:textSize="@dimen/text_size_16"/>
+        android:textSize="@dimen/text_size_16" />
 
     <TextView
         android:id="@+id/order_name"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
-        android:layout_marginLeft="@dimen/case_spinner_order_name_left_margin"
-        android:layout_marginStart="@dimen/case_spinner_order_name_left_margin"
+        android:layout_weight="5"
         android:textColor="@color/primero_blue"
-        android:textSize="@dimen/text_size_16"/>
+        android:textSize="@dimen/text_size_16" />
 
     <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:layout_centerVertical="true"
-        android:layout_marginEnd="@dimen/case_spinner_arrow_right_margin"
-        android:layout_marginRight="@dimen/case_spinner_arrow_right_margin"
-        android:src="@drawable/list_button_down"/>
-</RelativeLayout>
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:src="@drawable/list_button_down" />
+</LinearLayout>

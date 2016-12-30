@@ -1,29 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/case_spinner_height_opened">
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_alignParentBottom="true"
-        android:background="@color/lighter_gray"/>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/rectangle_with_border"
+    android:padding="@dimen/size_10"
+    android:weightSum="10">
 
     <ImageView
         android:id="@+id/indicator"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
-        android:layout_marginLeft="@dimen/case_spinner_indicator_left_margin"
-        android:layout_marginStart="@dimen/case_spinner_indicator_left_margin"/>
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:gravity="center" />
 
     <TextView
         android:id="@+id/order_name"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
-        android:layout_marginLeft="@dimen/case_spinner_order_left_margin"
-        android:layout_marginStart="@dimen/case_spinner_order_left_margin"
+        android:layout_weight="9"
+        android:paddingLeft="@dimen/size_5"
         android:textColor="@color/primero_font_dark"
-        android:textSize="@dimen/text_size_16"/>
-</RelativeLayout>
+        android:textSize="@dimen/text_size_16" />
+</LinearLayout>
