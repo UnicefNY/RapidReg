@@ -6,7 +6,7 @@
 
     <View
         android:layout_width="match_parent"
-        android:layout_height="10dp"
+        android:layout_height="@dimen/size_10"
         android:background="@color/primero_lighter_white" />
 
     <Button
@@ -14,6 +14,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/white"
+        android:paddingBottom="@dimen/size_5"
+        android:paddingTop="@dimen/size_5"
         android:text="@string/add"
         android:textAllCaps="false"
         android:textColor="@color/primero_blue"
