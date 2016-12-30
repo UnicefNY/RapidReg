@@ -85,6 +85,8 @@
     <dimen name="sync_padding_top_bottom">18dp</dimen>
     <dimen name="sync_value_padding_top_bottom">52dp</dimen>
     <dimen name="sync_button_padding_top">160dp</dimen>
+    <dimen name="sync_button_width">300dp</dimen>
+
     <!--sync end-->
 
     <!--action bar start-->
