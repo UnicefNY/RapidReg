@@ -25,7 +25,7 @@ public abstract class BaseTextViewHolder extends BaseViewHolder<Field> {
             return;
         }
         if (field.isNumericField()) {
-            itemValues.addItem(field.getName(), Integer.valueOf(getResult()));
+            itemValues.addItem(field.getName(), String.valueOf(getResult()));
         } else {
             itemValues.addItem(field.getName(), getResult());
         }
