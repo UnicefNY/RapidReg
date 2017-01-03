@@ -1,7 +1,6 @@
 package org.unicef.rapidreg.sync;
 
 import android.app.AlertDialog;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
@@ -25,6 +24,7 @@ import com.hannesdorfmann.mosby.mvp.MvpFragment;
 
 import org.unicef.rapidreg.PrimeroApplication;
 import org.unicef.rapidreg.R;
+import org.unicef.rapidreg.base.BaseProgressDialog;
 import org.unicef.rapidreg.injection.component.ActivityComponent;
 import org.unicef.rapidreg.injection.component.DaggerFragmentComponent;
 import org.unicef.rapidreg.injection.component.FragmentComponent;
@@ -38,7 +38,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class SyncFragment extends MvpFragment<SyncView, SyncPresenter> implements SyncView {
-    private ProgressDialog syncProgressDialog;
+    private BaseProgressDialog syncProgressDialog;
 
     @BindView(R.id.btn_sync)
     Button syncButton;
@@ -163,8 +163,8 @@ public class SyncFragment extends MvpFragment<SyncView, SyncPresenter> implement
 
     @Override
     public void showSyncProgressDialog(String title) {
-        syncProgressDialog = new ProgressDialog(getActivity());
-        syncProgressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+        syncProgressDialog = new BaseProgressDialog(getActivity());
+        syncProgressDialog.setProgressStyle(BaseProgressDialog.STYLE_HORIZONTAL);
         syncProgressDialog.setMessage(title);
         syncProgressDialog.setCancelable(false);
         syncProgressDialog.setButton(DialogInterface.BUTTON_NEGATIVE,

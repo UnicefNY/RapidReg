@@ -102,5 +102,8 @@
     <dimen name="record_delete_button_size">24dp</dimen>
     <!--camera & record end-->
 
+    <!--dialog text size-->
+    <dimen name="dialog_text_relativ_size">0.35sp</dimen>
+    <!---->
 
 </resources>
