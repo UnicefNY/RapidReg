@@ -24,7 +24,7 @@ import java.io.IOException;
 
 import javax.inject.Inject;
 
-import static org.unicef.rapidreg.db.impl.TracingDaoImpl.TRACING_PRIMARY_ID;
+import static org.unicef.rapidreg.service.TracingService.TRACING_PRIMARY_ID;
 import static org.unicef.rapidreg.service.RecordService.AUDIO_FILE_PATH;
 
 public class TracingListAdapter extends RecordListAdapter {

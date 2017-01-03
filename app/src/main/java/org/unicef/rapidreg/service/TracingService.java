@@ -11,6 +11,8 @@ import com.raizlabs.android.dbflow.sql.language.NameAlias;
 import org.unicef.rapidreg.PrimeroConfiguration;
 import org.unicef.rapidreg.db.TracingDao;
 import org.unicef.rapidreg.db.TracingPhotoDao;
+import org.unicef.rapidreg.db.impl.TracingDaoImpl;
+import org.unicef.rapidreg.db.impl.TracingPhotoDaoImpl;
 import org.unicef.rapidreg.model.RecordModel;
 import org.unicef.rapidreg.model.Tracing;
 import org.unicef.rapidreg.service.cache.ItemValuesMap;
@@ -22,15 +24,16 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
-import static org.unicef.rapidreg.db.impl.TracingDaoImpl.TRACING_DISPLAY_ID;
-import static org.unicef.rapidreg.db.impl.TracingDaoImpl.TRACING_ID;
 import static org.unicef.rapidreg.utils.Utils.getRegisterDate;
 
 public class TracingService extends RecordService {
     public static final String TAG = TracingService.class.getSimpleName();
+    public static final String TRACING_DISPLAY_ID = "tracing_request_id_display";
+    public static final String TRACING_ID = "tracing_request_id";
+    public static final String TRACING_PRIMARY_ID = "tracing_primary_id";
 
-    private final TracingDao tracingDao;
-    private final TracingPhotoDao tracingPhotoDao;
+    private TracingDao tracingDao = new TracingDaoImpl();
+    private TracingPhotoDao tracingPhotoDao = new TracingPhotoDaoImpl();
 
     public TracingService(TracingDao tracingDao, TracingPhotoDao tracingPhotoDao) {
         this.tracingDao = tracingDao;

@@ -19,7 +19,6 @@ import org.unicef.rapidreg.base.record.recordregister.RecordRegisterFragment;
 import org.unicef.rapidreg.event.SaveTracingEvent;
 import org.unicef.rapidreg.forms.Field;
 import org.unicef.rapidreg.service.RecordService;
-import org.unicef.rapidreg.service.TracingService;
 import org.unicef.rapidreg.tracing.TracingActivity;
 import org.unicef.rapidreg.tracing.TracingFeature;
 import org.unicef.rapidreg.tracing.tracingphoto.TracingPhotoAdapter;
@@ -31,7 +30,7 @@ import javax.inject.Inject;
 
 import butterknife.OnClick;
 
-import static org.unicef.rapidreg.db.impl.TracingDaoImpl.TRACING_PRIMARY_ID;
+import static org.unicef.rapidreg.service.TracingService.TRACING_PRIMARY_ID;
 
 public class TracingMiniFormFragment extends RecordRegisterFragment {
 

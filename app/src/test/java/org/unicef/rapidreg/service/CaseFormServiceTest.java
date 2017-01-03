@@ -3,14 +3,12 @@ package org.unicef.rapidreg.service;
 import com.raizlabs.android.dbflow.data.Blob;
 
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.unicef.rapidreg.db.CaseFormDao;
-import org.unicef.rapidreg.db.impl.CaseFormDaoImpl;
 import org.unicef.rapidreg.forms.CaseTemplateForm;
 import org.unicef.rapidreg.forms.Field;
 import org.unicef.rapidreg.forms.Section;

@@ -12,8 +12,6 @@ public interface TracingDao {
 
     Tracing update(Tracing tracing);
 
-    Tracing delete();
-
     Tracing getTracingByUniqueId(String id);
 
     List<Tracing> getAllTracingsOrderByDate(boolean isASC);

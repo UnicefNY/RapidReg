@@ -21,18 +21,12 @@ import org.unicef.rapidreg.service.cache.ItemValuesMap;
 import org.unicef.rapidreg.utils.JsonUtils;
 
 import java.io.IOException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
-
 import javax.inject.Inject;
 
-import id.zelory.compressor.Compressor;
-
-import static org.unicef.rapidreg.db.impl.TracingDaoImpl.TRACING_ID;
-import static org.unicef.rapidreg.db.impl.TracingDaoImpl.TRACING_PRIMARY_ID;
+import static org.unicef.rapidreg.service.TracingService.TRACING_ID;
+import static org.unicef.rapidreg.service.TracingService.TRACING_PRIMARY_ID;
 
 public class TracingRegisterPresenter extends RecordRegisterPresenter {
 

@@ -22,8 +22,6 @@ import org.unicef.rapidreg.model.User;
 import org.unicef.rapidreg.service.cache.ItemValuesMap;
 import org.unicef.rapidreg.utils.Utils;
 
-import java.sql.Date;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
@@ -85,7 +83,7 @@ public class CaseServiceTest {
         fields.add(makeCaseField("name", false));
 
         List<String> requiredFiledNames = caseService.fetchRequiredFiledNames(fields);
-           assertThat(requiredFiledNames, hasSize(0));
+        assertThat(requiredFiledNames, hasSize(0));
     }
 
     @Test
@@ -128,7 +126,8 @@ public class CaseServiceTest {
 
         assertFalse("Sync status should be false", actual.isSynced());
         assertThat("Age should be 18", actual.getAge(), is(18));
-        assertThat("Registration date should be 25/12/2016", actual.getRegistrationDate(), is(Utils.getRegisterDate("25/12/2016")));
+        assertThat("Registration date should be 25/12/2016", actual.getRegistrationDate(), is
+                (Utils.getRegisterDate("25/12/2016")));
     }
 
     @Test
@@ -142,11 +141,14 @@ public class CaseServiceTest {
                 searchCaseTwo,
                 searchCaseThree,
                 searchCaseFour});
-        when(caseDao.getCaseListByConditionGroup(any(ConditionGroup.class))).thenReturn(searchResult);
+        when(caseDao.getCaseListByConditionGroup(any(ConditionGroup.class))).thenReturn
+                (searchResult);
 
-        List<Long> actual = caseService.getSearchResult("shortId", "name", 0, 10, "caregiver", null);
+        List<Long> actual = caseService.getSearchResult("shortId", "name", 0, 10, "caregiver",
+                null);
 
-        assertThat("Should return id list", actual, is(Arrays.asList(new Long[]{10000L, 10001L, 10002L, 10003L})));
+        assertThat("Should return id list", actual, is(Arrays.asList(new Long[]{10000L, 10001L,
+                10002L, 10003L})));
     }
 
     private Field makeCaseField(String name, boolean required) {

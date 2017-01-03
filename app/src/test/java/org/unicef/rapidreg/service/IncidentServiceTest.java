@@ -25,7 +25,6 @@ import java.io.IOException;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 import edu.emory.mathcs.backport.java.util.Arrays;
 
@@ -43,11 +42,10 @@ import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
 import static org.unicef.rapidreg.service.IncidentService.INCIDENT_ID;
 import static org.unicef.rapidreg.service.RecordService.AGE;
-import static org.unicef.rapidreg.service.RecordService.INQUIRY_DATE;
 import static org.unicef.rapidreg.service.RecordService.REGISTRATION_DATE;
 
 @RunWith(PowerMockRunner.class)
-@PrepareForTest({UUID.class, PrimeroConfiguration.class})
+@PrepareForTest({PrimeroConfiguration.class})
 public class IncidentServiceTest {
 
     private IncidentDao incidentDao = mock(IncidentDaoImpl.class);
@@ -56,7 +54,6 @@ public class IncidentServiceTest {
     @Before
     public void setUp() throws Exception {
         initMocks(this);
-        PowerMockito.mockStatic(UUID.class);
         PowerMockito.mockStatic(PrimeroConfiguration.class);
     }
 
@@ -139,7 +136,7 @@ public class IncidentServiceTest {
         IncidentService incidentServiceSpy = spy(incidentService);
         when(incidentServiceSpy.generateUniqueId()).thenReturn(uniqueId);
         User user = new User("userName");
-        Mockito.when(PrimeroConfiguration.getCurrentUser()).thenReturn(user);
+        when(PrimeroConfiguration.getCurrentUser()).thenReturn(user);
         ItemValuesMap itemValuesMap = new ItemValuesMap();
         itemValuesMap.addStringItem(REGISTRATION_DATE, "11/11/1111");
 
