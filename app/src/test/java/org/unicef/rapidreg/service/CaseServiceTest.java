@@ -61,6 +61,13 @@ public class CaseServiceTest {
         initMocks(this);
         PowerMockito.mockStatic(UUID.class);
         PowerMockito.mockStatic(PrimeroConfiguration.class);
+
+        UUID uuid = mock(UUID.class);
+        when(uuid.toString()).thenReturn("anuuidwhichlengthis21");
+        when(UUID.randomUUID()).thenReturn(uuid);
+
+        User user = new User("primero");
+        Mockito.when(PrimeroConfiguration.getCurrentUser()).thenReturn(user);
     }
 
     @Test
@@ -88,21 +95,14 @@ public class CaseServiceTest {
 
     @Test
     public void should_save_case_when_give_item_values() throws Exception {
-        UUID uuid = mock(UUID.class);
-        when(uuid.toString()).thenReturn("anuuidwhichlengthis21");
-        when(UUID.randomUUID()).thenReturn(uuid);
-
-        User user = new User("primero");
-        Mockito.when(PrimeroConfiguration.getCurrentUser()).thenReturn(user);
-
         Case expected = new Case();
-        expected.setUniqueId(uuid.toString());
+        expected.setUniqueId(UUID.randomUUID().toString());
 
         when(caseDao.save(any(Case.class))).thenReturn(expected);
         ItemValuesMap itemValues = new ItemValuesMap();
         Case actual = caseService.save(itemValues, Collections.EMPTY_LIST);
 
-        assertThat("Should have same uuid.", actual.getUniqueId(), is(uuid.toString()));
+        assertThat("Should have same uuid.", actual.getUniqueId(), is(UUID.randomUUID().toString()));
         assertThat("Should return default age value.", actual.getAge(), is(0));
     }
 

@@ -55,6 +55,9 @@ public class IncidentServiceTest {
     public void setUp() throws Exception {
         initMocks(this);
         PowerMockito.mockStatic(PrimeroConfiguration.class);
+
+        User user = new User("primero");
+        Mockito.when(PrimeroConfiguration.getCurrentUser()).thenReturn(user);
     }
 
     @Test
