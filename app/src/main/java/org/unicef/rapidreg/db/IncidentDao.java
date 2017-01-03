@@ -2,7 +2,6 @@ package org.unicef.rapidreg.db;
 
 import com.raizlabs.android.dbflow.sql.language.ConditionGroup;
 
-import org.unicef.rapidreg.model.Case;
 import org.unicef.rapidreg.model.Incident;
 
 import java.util.List;
@@ -11,9 +10,9 @@ public interface IncidentDao {
 
     Incident getIncidentByUniqueId(String id);
 
-    List<Incident> getAllIncidentsOrderByDate(boolean isASC);
+    List<Incident> getAllIncidentsOrderByDate(boolean isASC, String createdBy);
 
-    List<Incident> getAllIncidentsOrderByAge(boolean isASC);
+    List<Incident> getAllIncidentsOrderByAge(boolean isASC, String createdBy);
 
     List<Incident> getIncidentListByConditionGroup(ConditionGroup conditionGroup);
 
@@ -23,7 +22,7 @@ public interface IncidentDao {
 
     Incident getFirst();
 
-    List<Long> getAllIds();
+    List<Long> getAllIds(String createdBy);
 
     Incident save(Incident incident);
 

@@ -47,27 +47,27 @@ public class IncidentService extends RecordService {
     }
 
     public List<Incident> getAll() {
-        return incidentDao.getAllIncidentsOrderByDate(false);
+        return incidentDao.getAllIncidentsOrderByDate(false, PrimeroConfiguration.getCurrentUser().getUsername());
     }
 
     public List<Long> getAllIds() {
-        return incidentDao.getAllIds();
+        return incidentDao.getAllIds(PrimeroConfiguration.getCurrentUser().getUsername());
     }
 
     public List<Long> getAllOrderByDateASC() {
-        return extractIds(incidentDao.getAllIncidentsOrderByDate(true));
+        return extractIds(incidentDao.getAllIncidentsOrderByDate(true, PrimeroConfiguration.getCurrentUser().getUsername()));
     }
 
     public List<Long> getAllOrderByDateDES() {
-        return extractIds(incidentDao.getAllIncidentsOrderByDate(false));
+        return extractIds(incidentDao.getAllIncidentsOrderByDate(false, PrimeroConfiguration.getCurrentUser().getUsername()));
     }
 
     public List<Long> getAllOrderByAgeASC() {
-        return extractIds(incidentDao.getAllIncidentsOrderByAge(true));
+        return extractIds(incidentDao.getAllIncidentsOrderByAge(true, PrimeroConfiguration.getCurrentUser().getUsername()));
     }
 
     public List<Long> getAllOrderByAgeDES() {
-        return extractIds(incidentDao.getAllIncidentsOrderByAge(false));
+        return extractIds(incidentDao.getAllIncidentsOrderByAge(false, PrimeroConfiguration.getCurrentUser().getUsername()));
     }
 
     public List<Long> getSearchResult(String uniqueId, String name, int ageFrom,
@@ -93,6 +93,8 @@ public class IncidentService extends RecordService {
                 .like(getWrappedCondition(name)));
         conditionGroup.and(Condition.column(NameAlias.builder(RecordModel.COLUMN_AGE).build())
                 .between(ageFrom).and(ageTo));
+        conditionGroup.and(Condition.column(NameAlias.builder(RecordModel.COLUMN_CREATED_BY).build())
+                .eq(PrimeroConfiguration.getCurrentUser().getUsername()));
 
         if (date != null) {
             conditionGroup.and(Condition.column(
