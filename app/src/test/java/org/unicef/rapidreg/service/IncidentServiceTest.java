@@ -80,7 +80,7 @@ public class IncidentServiceTest {
         Incident incident = new Incident();
         List<Incident> incidentList = new ArrayList<Incident>();
         incidentList.add(incident);
-        when(incidentDao.getAllIncidentsOrderByDate(false)).thenReturn(incidentList);
+        when(incidentDao.getAllIncidentsOrderByDate(false, PrimeroConfiguration.getCurrentUser().getUsername())).thenReturn(incidentList);
         assertThat(incidentService.getAll(), is(incidentList));
     }
 
@@ -89,7 +89,7 @@ public class IncidentServiceTest {
         Long l = 1L;
         List<Long> list = new ArrayList<>();
         list.add(l);
-        when(incidentDao.getAllIds()).thenReturn(list);
+        when(incidentDao.getAllIds(PrimeroConfiguration.getCurrentUser().getUsername())).thenReturn(list);
         assertThat(incidentService.getAllIds(), is(list));
     }
 
@@ -97,7 +97,7 @@ public class IncidentServiceTest {
     public void should_return_all_order_ids_sorted_by_age_ascending() {
         Incident[] orders = new Incident[]{new Incident(1), new Incident(2), new Incident(3)};
         List<Incident> orderList = Arrays.asList(orders);
-        when(incidentDao.getAllIncidentsOrderByAge(true)).thenReturn(orderList);
+        when(incidentDao.getAllIncidentsOrderByAge(true, PrimeroConfiguration.getCurrentUser().getUsername())).thenReturn(orderList);
         assertThat(incidentService.getAllOrderByAgeASC(), is(Arrays.asList(new Long[]{1L, 2L,
                 3L})));
     }
@@ -106,7 +106,7 @@ public class IncidentServiceTest {
     public void should_return_all_order_ids_sorted_by_age_descending() {
         Incident[] orders = new Incident[]{new Incident(1), new Incident(2), new Incident(3)};
         List<Incident> orderList = Arrays.asList(orders);
-        when(incidentDao.getAllIncidentsOrderByAge(false)).thenReturn(orderList);
+        when(incidentDao.getAllIncidentsOrderByAge(false, PrimeroConfiguration.getCurrentUser().getUsername())).thenReturn(orderList);
         assertThat(incidentService.getAllOrderByAgeDES(), is(Arrays.asList(new Long[]{1L, 2L,
                 3L})));
     }
@@ -115,7 +115,7 @@ public class IncidentServiceTest {
     public void should_return_all_order_ids_sorted_by_date_ascending() throws Exception {
         Incident[] orders = new Incident[]{new Incident(1), new Incident(2), new Incident(3)};
         List<Incident> orderList = Arrays.asList(orders);
-        when(incidentDao.getAllIncidentsOrderByDate(true)).thenReturn(orderList);
+        when(incidentDao.getAllIncidentsOrderByDate(true, PrimeroConfiguration.getCurrentUser().getUsername())).thenReturn(orderList);
         assertThat("When call getAllOrdersByDateAsc() should return orders sorted by date.",
                 incidentService.getAllOrderByDateASC(), is(Arrays.asList(new Long[]{1L, 2L, 3L})));
     }
@@ -124,7 +124,7 @@ public class IncidentServiceTest {
     public void should_return_all_order_ids_sorted_by_date_descending() throws Exception {
         Incident[] orders = new Incident[]{new Incident(3), new Incident(2), new Incident(1)};
         List<Incident> orderList = Arrays.asList(orders);
-        when(incidentDao.getAllIncidentsOrderByDate(false)).thenReturn(orderList);
+        when(incidentDao.getAllIncidentsOrderByDate(false, PrimeroConfiguration.getCurrentUser().getUsername())).thenReturn(orderList);
         assertThat("When call getAllOrderByDateDES() should return orders sorted by date.",
                 incidentService.getAllOrderByDateDES(), is(Arrays.asList(new Long[]{3L, 2L, 1L})));
     }
