@@ -13,10 +13,6 @@ import java.util.List;
 
 public class TracingDaoImpl implements TracingDao {
 
-    public static final String TRACING_DISPLAY_ID = "tracing_request_id_display";
-    public static final String TRACING_ID = "tracing_request_id";
-    public static final String TRACING_PRIMARY_ID = "tracing_primary_id";
-
     @Override
     public Tracing save(Tracing tracing) {
         tracing.save();
@@ -29,11 +25,6 @@ public class TracingDaoImpl implements TracingDao {
         tracing.update();
 
         return tracing;
-    }
-
-    @Override
-    public Tracing delete() {
-        return null;
     }
 
     @Override

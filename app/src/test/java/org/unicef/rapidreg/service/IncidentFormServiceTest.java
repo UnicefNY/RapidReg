@@ -37,7 +37,7 @@ public class IncidentFormServiceTest {
             "      \"order\": 10,\n" +
             "      \"fields\": [\n" +
             "        {\n" +
-            "          \"name\": \"caseworker_name\",\n" +
+            "          \"name\": \"incidentworker_name\",\n" +
             "          \"type\": \"text_field\",\n" +
             "          \"editable\": true,\n" +
             "          \"multi_select\": false,\n" +
@@ -45,7 +45,7 @@ public class IncidentFormServiceTest {
             "          \"show_on_minify_form\":true,\n" +
             "          \"required\":false,\n" +
             "          \"display_name\": {\n" +
-            "            \"en\": \"Field/Case/Social Worker\"\n" +
+            "            \"en\": \"Field/Incident/Social Worker\"\n" +
             "          },\n" +
             "          \"help_text\": {\n" +
             "            \"en\": \"\"\n" +
@@ -116,8 +116,8 @@ public class IncidentFormServiceTest {
         assertThat(section.getBaseLanguage(), is("en"));
 
         Field field = section.getFields().get(0);
-        assertThat(field.getName(), is("caseworker_name"));
-        assertThat(field.getDisplayName().get("en"), is("Field/Case/Social Worker"));
+        assertThat(field.getName(), is("incidentworker_name"));
+        assertThat(field.getDisplayName().get("en"), is("Field/Incident/Social Worker"));
         assertThat(field.getHelpText().get("en"), is(""));
         assertThat(field.getType(), is("text_field"));
         assertThat(field.getOptionStringsText().get("en").size(), is(0));

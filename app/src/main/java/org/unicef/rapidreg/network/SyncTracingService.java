@@ -32,7 +32,7 @@ import rx.Observable;
 import rx.Subscriber;
 import rx.functions.Func1;
 
-import static org.unicef.rapidreg.db.impl.TracingDaoImpl.TRACING_ID;
+import static org.unicef.rapidreg.service.TracingService.TRACING_ID;
 
 
 public class SyncTracingService extends BaseRetrofitService {

@@ -18,7 +18,7 @@ import org.unicef.rapidreg.service.cache.ItemValuesMap;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-import static org.unicef.rapidreg.db.impl.TracingDaoImpl.TRACING_ID;
+import static org.unicef.rapidreg.service.TracingService.TRACING_ID;
 
 public class MiniFormProfileViewHolder extends BaseViewHolder<Field> {
 

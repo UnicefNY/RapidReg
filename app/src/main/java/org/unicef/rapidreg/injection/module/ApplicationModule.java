@@ -6,8 +6,8 @@ import android.content.Context;
 import org.unicef.rapidreg.db.impl.CaseDaoImpl;
 import org.unicef.rapidreg.db.impl.CaseFormDaoImpl;
 import org.unicef.rapidreg.db.impl.CasePhotoDaoImpl;
-import org.unicef.rapidreg.db.impl.TracingDaoImpl;
 import org.unicef.rapidreg.db.impl.IncidentFormDaoImpl;
+import org.unicef.rapidreg.db.impl.TracingDaoImpl;
 import org.unicef.rapidreg.db.impl.TracingFormDaoImpl;
 import org.unicef.rapidreg.db.impl.TracingPhotoDaoImpl;
 import org.unicef.rapidreg.db.impl.UserDaoImpl;
@@ -122,7 +122,8 @@ public class ApplicationModule {
     }
 
     @Provides
-    public SyncService provideSyncService(@ApplicationContext Context context, RecordService recordService, CasePhotoService casePhotoService) {
+    public SyncService provideSyncService(@ApplicationContext Context context, RecordService
+            recordService, CasePhotoService casePhotoService) {
         return new SyncService(context, casePhotoService, recordService);
     }
 
