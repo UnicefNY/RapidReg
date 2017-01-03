@@ -18,16 +18,16 @@
 
         <ImageView
             android:id="@+id/record_button"
-            android:layout_width="90dp"
-            android:layout_height="90dp"
+            android:layout_width="@dimen/camera_photo_size"
+            android:layout_height="@dimen/camera_photo_size"
             android:paddingLeft="@dimen/case_register_label_padding_left_right"
             android:paddingRight="@dimen/case_register_label_padding_left_right"
             android:src="@drawable/mic_rec_210"/>
 
         <ImageView
             android:id="@+id/play_button"
-            android:layout_width="90dp"
-            android:layout_height="90dp"
+            android:layout_width="@dimen/camera_photo_size"
+            android:layout_height="@dimen/camera_photo_size"
             android:paddingLeft="@dimen/case_register_label_padding_left_right"
             android:paddingRight="@dimen/case_register_label_padding_left_right"
             android:src="@drawable/play_210"
@@ -48,10 +48,10 @@
 
         <ImageView
             android:id="@+id/delete_button"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
+            android:layout_width="@dimen/record_delete_button_size"
+            android:layout_height="@dimen/record_delete_button_size"
             android:layout_gravity="center_vertical"
-            android:layout_marginRight="15dp"
+            android:layout_marginRight="@dimen/case_register_field_padding_left_right"
             android:src="@drawable/recycle_bin"
             android:visibility="gone"/>
 
@@ -59,7 +59,7 @@
 
     <View
         android:layout_width="match_parent"
-        android:layout_height="10dp"
+        android:layout_height="@dimen/size_10"
         android:background="@color/primero_lighter_white"/>
 
 </LinearLayout>

@@ -12,6 +12,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -84,7 +85,7 @@ public abstract class BaseActivity extends MvpActivity<BaseView, BasePresenter> 
             String organisation = currentUser.getOrganisation();
             organizationView.setText(organisation);
         }
-        TextView textViewLogoutLabel = (TextView) headerView.findViewById(R.id.logout_label);
+        ImageView textViewLogoutLabel = (ImageView) headerView.findViewById(R.id.logout_label);
         textViewLogoutLabel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

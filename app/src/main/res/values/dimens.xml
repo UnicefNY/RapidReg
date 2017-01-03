@@ -2,7 +2,7 @@
     <!-- Default screen margins, per the Android Design guidelines. -->
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
-    <dimen name="activity_top_margin">40dp</dimen>
+    <dimen name="activity_top_margin">35dp</dimen>
     <!--Text size-->
 
     <dimen name="size_1">1dp</dimen>
@@ -86,6 +86,21 @@
     <!--sync end-->
 
     <dimen name="detail_or_short_text_area">40dp</dimen>
+
+    <!--navigation start-->
+    <dimen name="navigator_width">280dp</dimen>
+    <dimen name="navigator_header_height">150dp</dimen>
+    <!--navigation end-->
+
+    <!--toolbar start-->
+    <dimen name="toolbar_height">40dp</dimen>
+    <dimen name="toolbar_button_width">20dp</dimen>
+    <!--toolbar end-->
+
+    <!--camera & record start-->
+    <dimen name="camera_photo_size">100dp</dimen>
+    <dimen name="record_delete_button_size">24dp</dimen>
+    <!--camera & record end-->
 
 
 </resources>
