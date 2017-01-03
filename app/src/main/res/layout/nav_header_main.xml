@@ -1,23 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-             android:layout_width="match_parent"
-             android:layout_height="150dp">
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/navigator_header_height">
+
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scaleType="centerCrop"
-        android:src="@mipmap/bg_navigation_header"/>
+        android:src="@mipmap/bg_navigation_header" />
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                  android:layout_width="match_parent"
-                  android:layout_height="wrap_content"
-                  android:orientation="vertical"
-                  android:paddingBottom="@dimen/activity_vertical_margin"
-                  android:paddingLeft="@dimen/activity_horizontal_margin"
-                  android:paddingRight="@dimen/activity_horizontal_margin"
-                  android:paddingTop="@dimen/activity_top_margin"
-                  android:theme="@style/ThemeOverlay.AppCompat.Dark">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingTop="@dimen/activity_top_margin"
+        android:paddingBottom="@dimen/activity_vertical_margin"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -25,9 +25,9 @@
 
             <ImageView
                 android:id="@+id/imageView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@mipmap/icon"/>
+                android:layout_width="@dimen/size_48"
+                android:layout_height="@dimen/size_48"
+                android:src="@mipmap/icon" />
 
             <TextView
                 android:id="@+id/login_user_label"
@@ -36,19 +36,17 @@
                 android:layout_below="@id/imageView"
                 android:text="Current user"
                 android:textColor="@color/white"
-                android:textSize="18sp"/>
+                android:textSize="@dimen/text_size_18" />
 
-            <TextView
+            <ImageView
                 android:id="@+id/logout_label"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="@dimen/size_48"
+                android:layout_height="@dimen/size_48"
                 android:layout_alignParentRight="true"
                 android:layout_below="@id/imageView"
-                android:layout_toRightOf="@id/login_user_label"
-                android:clickable="true"
-                android:drawableRight="@drawable/ic_exit_to_app_white_24dp"
-                android:paddingTop="15dp"
-                />
+                android:src="@drawable/ic_exit_to_app_white_24dp"
+                android:paddingTop="@dimen/size_15"
+                android:clickable="true"/>
 
             <TextView
                 android:id="@+id/organization"
@@ -56,7 +54,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/login_user_label"
                 android:textColor="@color/snow"
-                android:textSize="18sp"/>
+                android:textSize="@dimen/text_size_18" />
 
         </RelativeLayout>
 

@@ -65,7 +65,9 @@ public abstract class RecordPhotoAdapter extends BaseAdapter {
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View itemView = inflater.inflate(R.layout.form_photo_item, null);
         ImageView imageView = (ImageView) itemView.findViewById(R.id.photo_item);
-        int width = 80;
+        int width = (int) context.getResources().getDimension(R.dimen.camera_photo_size);
+        imageView.getLayoutParams().height = width;
+        imageView.getLayoutParams().width = width;
         if (paths.size() == 0) {
             Glide.with(context).load(R.drawable.photo_camera).override(width, width).centerCrop().into(imageView);
             return itemView;
