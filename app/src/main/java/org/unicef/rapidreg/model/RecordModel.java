@@ -20,6 +20,7 @@ public class RecordModel extends BaseModel {
     public static final String COLUMN_AGE = "age";
     public static final String COLUMN_CAREGIVER = "caregiver";
     public static final String COLUMN_REGISTRATION_DATE = "registration_date";
+    public static final String COLUMN_CREATED_BY = "created_by";
 
     @PrimaryKey(autoincrement = true)
     public long id;

@@ -1,12 +1,16 @@
 package org.unicef.rapidreg.db.impl;
 
 import com.raizlabs.android.dbflow.list.FlowQueryList;
+import com.raizlabs.android.dbflow.sql.language.Condition;
 import com.raizlabs.android.dbflow.sql.language.ConditionGroup;
+import com.raizlabs.android.dbflow.sql.language.NameAlias;
 import com.raizlabs.android.dbflow.sql.language.SQLite;
 
+import org.unicef.rapidreg.PrimeroConfiguration;
 import org.unicef.rapidreg.db.CaseDao;
 import org.unicef.rapidreg.model.Case;
 import org.unicef.rapidreg.model.Case_Table;
+import org.unicef.rapidreg.model.RecordModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,13 +23,13 @@ public class CaseDaoImpl implements CaseDao {
     }
 
     @Override
-    public List<Case> getAllCasesOrderByDate(boolean isASC) {
-        return isASC ? getCasesByDateASC() : getCasesByDateDES();
+    public List<Case> getAllCasesOrderByDate(boolean isASC, String createdBy) {
+        return isASC ? getCasesByDateASC(createdBy) : getCasesByDateDES(createdBy);
     }
 
     @Override
-    public List<Case> getAllCasesOrderByAge(boolean isASC) {
-        return isASC ? getCasesByAgeASC() : getCasesByAgeDES();
+    public List<Case> getAllCasesOrderByAge(boolean isASC, String createdBy) {
+        return isASC ? getCasesByAgeASC(createdBy) : getCasesByAgeDES(createdBy);
 
     }
 
@@ -74,20 +78,43 @@ public class CaseDaoImpl implements CaseDao {
         return childCase;
     }
 
-    private List<Case> getCasesByAgeASC() {
-        return SQLite.select().from(Case.class).orderBy(Case_Table.age, true).queryList();
+    private List<Case> getCasesByAgeASC(String createdBy) {
+        return SQLite
+                .select()
+                .from(Case.class)
+                .where(ConditionGroup.clause().and(Condition.column(NameAlias.builder(RecordModel.COLUMN_CREATED_BY).build())
+                        .eq(createdBy)))
+                .orderBy(Case_Table.age, true)
+                .queryList();
     }
 
-    private List<Case> getCasesByAgeDES() {
-        return SQLite.select().from(Case.class).orderBy(Case_Table.age, false).queryList();
+    private List<Case> getCasesByAgeDES(String createdBy) {
+        return SQLite
+                .select()
+                .from(Case.class)
+                .where(ConditionGroup.clause().and(Condition.column(NameAlias.builder(RecordModel.COLUMN_CREATED_BY).build())
+                        .eq(createdBy)))
+                .orderBy(Case_Table.age, false)
+                .queryList();
     }
 
-    private List<Case> getCasesByDateASC() {
-        return SQLite.select().from(Case.class)
-                .orderBy(Case_Table.registration_date, true).queryList();
+    private List<Case> getCasesByDateASC(String createdBy) {
+        return SQLite
+                .select()
+                .from(Case.class)
+                .where(ConditionGroup.clause().and(Condition.column(NameAlias.builder(RecordModel.COLUMN_CREATED_BY).build())
+                        .eq(createdBy)))
+                .orderBy(Case_Table.registration_date, true)
+                .queryList();
     }
 
-    private List<Case> getCasesByDateDES() {
-        return SQLite.select().from(Case.class).orderBy(Case_Table.registration_date, false).queryList();
+    private List<Case> getCasesByDateDES(String createdBy) {
+        return SQLite
+                .select()
+                .from(Case.class)
+                .where(ConditionGroup.clause().and(Condition.column(NameAlias.builder(RecordModel.COLUMN_CREATED_BY).build())
+                        .eq(createdBy)))
+                .orderBy(Case_Table.registration_date, false)
+                .queryList();
     }
 }
