@@ -9,9 +9,9 @@ import java.util.List;
 public interface CaseDao {
     Case getCaseByUniqueId(String id);
 
-    List<Case> getAllCasesOrderByDate(boolean isASC);
+    List<Case> getAllCasesOrderByDate(boolean isASC, String createdBy);
 
-    List<Case> getAllCasesOrderByAge(boolean isASC);
+    List<Case> getAllCasesOrderByAge(boolean isASC, String createdBy);
 
     List<Case> getCaseListByConditionGroup(ConditionGroup conditionGroup);
 

@@ -44,7 +44,7 @@ public class CaseService extends RecordService {
     }
 
     public List<Case> getAll() {
-        return caseDao.getAllCasesOrderByDate(false);
+        return caseDao.getAllCasesOrderByDate(false, PrimeroConfiguration.getCurrentUser().getUsername());
     }
 
     public Case getFirst() {
@@ -56,19 +56,19 @@ public class CaseService extends RecordService {
     }
 
     public List<Long> getAllOrderByDateASC() {
-        return extractIds(caseDao.getAllCasesOrderByDate(true));
+        return extractIds(caseDao.getAllCasesOrderByDate(true, PrimeroConfiguration.getCurrentUser().getUsername()));
     }
 
     public List<Long> getAllOrderByDateDES() {
-        return extractIds(caseDao.getAllCasesOrderByDate(false));
+        return extractIds(caseDao.getAllCasesOrderByDate(false, PrimeroConfiguration.getCurrentUser().getUsername()));
     }
 
     public List<Long> getAllOrderByAgeASC() {
-        return extractIds(caseDao.getAllCasesOrderByAge(true));
+        return extractIds(caseDao.getAllCasesOrderByAge(true, PrimeroConfiguration.getCurrentUser().getUsername()));
     }
 
     public List<Long> getAllOrderByAgeDES() {
-        return extractIds(caseDao.getAllCasesOrderByAge(false));
+        return extractIds(caseDao.getAllCasesOrderByAge(false, PrimeroConfiguration.getCurrentUser().getUsername()));
     }
 
     public List<Long> extractIds(List<Case> cases) {
@@ -94,6 +94,8 @@ public class CaseService extends RecordService {
                 .between(ageFrom).and(ageTo));
         conditionGroup.and(Condition.column(NameAlias.builder(RecordModel.COLUMN_CAREGIVER).build())
                 .like(getWrappedCondition(caregiver)));
+        conditionGroup.and(Condition.column(NameAlias.builder(RecordModel.COLUMN_CREATED_BY).build())
+                .eq(PrimeroConfiguration.getCurrentUser().getUsername()));
 
         if (date != null) {
             conditionGroup.and(Condition.column(NameAlias.builder(Case.COLUMN_REGISTRATION_DATE)
