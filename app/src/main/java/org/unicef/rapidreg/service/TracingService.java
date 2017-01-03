@@ -49,19 +49,19 @@ public class TracingService extends RecordService {
     }
 
     public List<Tracing> getAll() {
-        return tracingDao.getAllTracingsOrderByDate(false);
+        return tracingDao.getAllTracingsOrderByDate(false, PrimeroConfiguration.getCurrentUser().getUsername());
     }
 
     public List<Long> getAllIds() {
-        return tracingDao.getAllIds();
+        return tracingDao.getAllIds(PrimeroConfiguration.getCurrentUser().getUsername());
     }
 
     public List<Long> getAllOrderByDateASC() {
-        return extractIds(tracingDao.getAllTracingsOrderByDate(true));
+        return extractIds(tracingDao.getAllTracingsOrderByDate(true, PrimeroConfiguration.getCurrentUser().getUsername()));
     }
 
     public List<Long> getAllOrderByDateDES() {
-        return extractIds(tracingDao.getAllTracingsOrderByDate(false));
+        return extractIds(tracingDao.getAllTracingsOrderByDate(false, PrimeroConfiguration.getCurrentUser().getUsername()));
     }
 
     public List<Long> getSearchResult(String uniqueId, String name, int ageFrom, int ageTo, Date
@@ -87,6 +87,8 @@ public class TracingService extends RecordService {
                 .like(getWrappedCondition(name)));
         conditionGroup.and(Condition.column(NameAlias.builder(RecordModel.COLUMN_AGE).build())
                 .between(ageFrom).and(ageTo));
+        conditionGroup.and(Condition.column(NameAlias.builder(RecordModel.COLUMN_CREATED_BY).build())
+                .eq(PrimeroConfiguration.getCurrentUser().getUsername()));
 
         if (date != null) {
             conditionGroup.and(Condition.column(

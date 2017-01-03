@@ -1,10 +1,13 @@
 package org.unicef.rapidreg.db.impl;
 
 import com.raizlabs.android.dbflow.list.FlowQueryList;
+import com.raizlabs.android.dbflow.sql.language.Condition;
 import com.raizlabs.android.dbflow.sql.language.ConditionGroup;
+import com.raizlabs.android.dbflow.sql.language.NameAlias;
 import com.raizlabs.android.dbflow.sql.language.SQLite;
 
 import org.unicef.rapidreg.db.TracingDao;
+import org.unicef.rapidreg.model.RecordModel;
 import org.unicef.rapidreg.model.Tracing;
 import org.unicef.rapidreg.model.Tracing_Table;
 
@@ -35,8 +38,8 @@ public class TracingDaoImpl implements TracingDao {
     }
 
     @Override
-    public List<Tracing> getAllTracingsOrderByDate(boolean isASC) {
-        return isASC ? getTracingsByDateASC() : getTracingsByDateDES();
+    public List<Tracing> getAllTracingsOrderByDate(boolean isASC, String createdBy) {
+        return isASC ? getTracingsByDateASC(createdBy) : getTracingsByDateDES(createdBy);
     }
 
     @Override
@@ -58,22 +61,37 @@ public class TracingDaoImpl implements TracingDao {
     }
 
     @Override
-    public List<Long> getAllIds() {
+    public List<Long> getAllIds(String createdBy) {
         List<Long> result = new ArrayList<>();
-        FlowQueryList<Tracing> cases = SQLite.select().from(Tracing.class).flowQueryList();
+        FlowQueryList<Tracing> cases = SQLite
+                .select()
+                .from(Tracing.class)
+                .where(ConditionGroup.clause().and(Condition.column(NameAlias.builder(RecordModel.COLUMN_CREATED_BY).build())
+                        .eq(createdBy)))
+                .flowQueryList();
         for (Tracing tracing : cases) {
             result.add(tracing.getId());
         }
         return result;
     }
 
-    private List<Tracing> getTracingsByDateASC() {
-        return SQLite.select().from(Tracing.class)
-                .orderBy(Tracing_Table.registration_date, true).queryList();
+    private List<Tracing> getTracingsByDateASC(String createdBy) {
+        return SQLite
+                .select()
+                .from(Tracing.class)
+                .where(ConditionGroup.clause().and(Condition.column(NameAlias.builder(RecordModel.COLUMN_CREATED_BY).build())
+                        .eq(createdBy)))
+                .orderBy(Tracing_Table.registration_date, true)
+                .queryList();
     }
 
-    private List<Tracing> getTracingsByDateDES() {
-        return SQLite.select().from(Tracing.class)
-                .orderBy(Tracing_Table.registration_date, false).queryList();
+    private List<Tracing> getTracingsByDateDES(String createdBy) {
+        return SQLite
+                .select()
+                .from(Tracing.class)
+                .where(ConditionGroup.clause().and(Condition.column(NameAlias.builder(RecordModel.COLUMN_CREATED_BY).build())
+                        .eq(createdBy)))
+                .orderBy(Tracing_Table.registration_date, false)
+                .queryList();
     }
 }
