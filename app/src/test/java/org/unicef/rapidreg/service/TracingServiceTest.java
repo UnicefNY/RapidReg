@@ -104,7 +104,7 @@ public class TracingServiceTest {
     public void should_return_all_order_ids_sorted_by_ascending() throws Exception {
         Tracing[] orders = new Tracing[]{new Tracing(1), new Tracing(2), new Tracing(3)};
         List<Tracing> orderList = Arrays.asList(orders);
-        when(tracingDao.getAllTracingsOrderByDate(true)).thenReturn(orderList);
+        when(tracingDao.getAllTracingsOrderByDate(true, PrimeroConfiguration.getCurrentUser().getUsername())).thenReturn(orderList);
         assertThat("When call getAllOrderByDateASC() should return orders sorted by date.",
                 tracingService.getAllOrderByDateASC(), is(Arrays.asList(new Long[]{1L, 2L, 3L})));
     }
@@ -113,7 +113,7 @@ public class TracingServiceTest {
     public void should_return_all_order_ids_sorted_by_descending() throws Exception {
         Tracing[] orders = new Tracing[]{new Tracing(3), new Tracing(2), new Tracing(1)};
         List<Tracing> orderList = Arrays.asList(orders);
-        when(tracingDao.getAllTracingsOrderByDate(false)).thenReturn(orderList);
+        when(tracingDao.getAllTracingsOrderByDate(false, PrimeroConfiguration.getCurrentUser().getUsername())).thenReturn(orderList);
         assertThat("When call getAllOrderByDateDES() should return orders sorted by date.",
                 tracingService.getAllOrderByDateDES(), is(Arrays.asList(new Long[]{3L, 2L, 1L})));
     }
