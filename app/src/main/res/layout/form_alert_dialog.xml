@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
 
-              android:orientation="vertical">
+    android:orientation="vertical">
+
     <android.support.design.widget.TextInputLayout
         android:id="@+id/usernameWrapper"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="10dp">
+        android:padding="@dimen/size_5">
 
         <EditText
             android:id="@+id/EditBox"
@@ -16,9 +17,9 @@
             android:layout_height="wrap_content"
             android:gravity="start"
             android:hint="@string/filter"
-            android:textColor="@color/primero_blue"
             android:maxLines="1"
-            android:textSize="20sp"/>
+            android:textColor="@color/primero_blue"
+            android:textSize="@dimen/text_size_12" />
 
     </android.support.design.widget.TextInputLayout>
 
@@ -28,7 +29,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:choiceMode="singleChoice"/>
+        android:choiceMode="singleChoice" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -43,7 +44,8 @@
             android:layout_weight="5"
             android:focusable="false"
             android:focusableInTouchMode="false"
-            android:text="Clear" />
+            android:text="Clear"
+            android:textSize="@dimen/text_size_12" />
 
         <Button
             android:id="@+id/cancelButton"
@@ -53,7 +55,8 @@
             android:layout_weight="5"
             android:focusable="false"
             android:focusableInTouchMode="false"
-            android:text="@string/cancel"/>
+            android:text="@string/cancel"
+            android:textSize="@dimen/text_size_12" />
 
         <Button
             android:id="@+id/okButton"
@@ -63,7 +66,8 @@
             android:layout_weight="5"
             android:focusable="false"
             android:focusableInTouchMode="false"
-            android:text="@string/ok"/>
+            android:text="@string/ok"
+            android:textSize="@dimen/text_size_12" />
 
     </LinearLayout>
 
