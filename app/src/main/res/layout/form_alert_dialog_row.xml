@@ -11,8 +11,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="9"
-        android:paddingLeft="10dp"
-        android:paddingRight="10dp"
+        android:padding="@dimen/size_10"
         android:singleLine="false"
         android:textSize="@dimen/text_size_14"
         tools:text="text" />

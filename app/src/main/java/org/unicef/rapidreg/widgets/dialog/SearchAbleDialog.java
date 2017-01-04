@@ -4,7 +4,9 @@ package org.unicef.rapidreg.widgets.dialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.text.Editable;
+import android.text.SpannableString;
 import android.text.TextWatcher;
+import android.text.style.RelativeSizeSpan;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -51,8 +53,10 @@ public class SearchAbleDialog extends Dialog {
         setContentView(R.layout.form_alert_dialog);
         ButterKnife.bind(this);
 
-        this.setTitle(title);
-
+        SpannableString spannableString = new SpannableString(title);
+        spannableString.setSpan(new RelativeSizeSpan(context.getResources()
+                .getDimension(R.dimen.dialog_text_relativ_size)), 0, spannableString.length(), 0);
+        this.setTitle(spannableString);
 
         filterText.addTextChangedListener(filterTextWatcher);
 
