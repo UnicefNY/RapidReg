@@ -20,5 +20,5 @@
         android:layout_weight="9"
         android:paddingLeft="@dimen/size_5"
         android:textColor="@color/primero_font_dark"
-        android:textSize="@dimen/text_size_16" />
+        android:textSize="@dimen/text_size_14" />
 </LinearLayout>
