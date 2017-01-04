@@ -21,6 +21,7 @@ import com.getbase.floatingactionbutton.FloatingActionsMenu;
 import com.hannesdorfmann.mosby.mvp.MvpFragment;
 import org.unicef.rapidreg.PrimeroApplication;
 import org.unicef.rapidreg.R;
+import org.unicef.rapidreg.base.BaseAlertDialog;
 import org.unicef.rapidreg.base.record.RecordActivity;
 import org.unicef.rapidreg.base.record.recordlist.spinner.SpinnerAdapter;
 import org.unicef.rapidreg.base.record.recordlist.spinner.SpinnerState;
@@ -142,7 +143,7 @@ public abstract class RecordListFragment extends MvpFragment<RecordListView, Rec
                     .show();
             return;
         }
-        AlertDialog dialog = new AlertDialog.Builder(getActivity())
+        AlertDialog dialog = new BaseAlertDialog.Builder(getActivity())
                 .setTitle(R.string.sync_forms)
                 .setMessage(String.format("%s %s", message, getResources().getString(R.string
                         .sync_forms_message)))

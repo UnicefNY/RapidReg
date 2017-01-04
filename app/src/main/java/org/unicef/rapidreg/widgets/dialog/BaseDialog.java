@@ -9,6 +9,7 @@ import android.widget.TextView;
 import android.widget.ViewSwitcher;
 
 import org.unicef.rapidreg.R;
+import org.unicef.rapidreg.base.BaseAlertDialog;
 import org.unicef.rapidreg.forms.Field;
 import org.unicef.rapidreg.service.cache.ItemValuesMap;
 import org.unicef.rapidreg.utils.Utils;
@@ -25,7 +26,7 @@ public abstract class BaseDialog {
     protected ViewSwitcher viewSwitcher;
     protected ItemValuesMap itemValues;
 
-    private AlertDialog.Builder builder;
+    private BaseAlertDialog.Builder builder;
     protected Context context;
 
     public BaseDialog(final Context context, final Field field, final ItemValuesMap itemValues,
@@ -36,7 +37,7 @@ public abstract class BaseDialog {
         this.context = context;
         this.itemValues = itemValues;
 
-        builder = new AlertDialog.Builder(context);
+        builder = new BaseAlertDialog.Builder(context);
         builder.setTitle(field.getDisplayName().get(Locale.getDefault().getLanguage()));
 
         builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
@@ -85,7 +86,7 @@ public abstract class BaseDialog {
         return items.toArray(new String[0]);
     }
 
-    protected AlertDialog.Builder getBuilder() {
+    protected BaseAlertDialog.Builder getBuilder() {
         return builder;
     }
 

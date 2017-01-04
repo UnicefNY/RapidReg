@@ -14,6 +14,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import org.unicef.rapidreg.R;
+import org.unicef.rapidreg.base.BaseAlertDialog;
 import org.unicef.rapidreg.base.record.RecordActivity;
 import org.unicef.rapidreg.base.record.recordregister.RecordRegisterAdapter;
 import org.unicef.rapidreg.forms.Field;
@@ -80,7 +81,7 @@ public class SubFormViewHolder extends BaseViewHolder<Field> {
         deleteBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
-                new AlertDialog.Builder(activity)
+                new BaseAlertDialog.Builder(activity)
                         .setTitle(R.string.delete)
                         .setMessage(R.string.delete_subform)
                         .setPositiveButton(R.string.delete, new DialogInterface.OnClickListener() {
