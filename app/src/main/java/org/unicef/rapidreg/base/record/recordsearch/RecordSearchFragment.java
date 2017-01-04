@@ -19,6 +19,7 @@ import com.hannesdorfmann.mosby.mvp.MvpFragment;
 
 import org.unicef.rapidreg.PrimeroApplication;
 import org.unicef.rapidreg.R;
+import org.unicef.rapidreg.base.BaseAlertDialog;
 import org.unicef.rapidreg.base.record.recordlist.RecordListAdapter;
 import org.unicef.rapidreg.base.record.recordlist.RecordListView;
 import org.unicef.rapidreg.injection.component.DaggerFragmentComponent;
@@ -117,7 +118,7 @@ public abstract class RecordSearchFragment extends MvpFragment<RecordListView, R
         final DatePicker datePicker = new DatePicker(getActivity());
         datePicker.setCalendarViewShown(false);
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        BaseAlertDialog.Builder builder = new BaseAlertDialog.Builder(getActivity());
         builder.setTitle(getResources().getString(R.string.date));
         builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
             @Override

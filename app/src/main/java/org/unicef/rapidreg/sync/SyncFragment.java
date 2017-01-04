@@ -24,6 +24,7 @@ import com.hannesdorfmann.mosby.mvp.MvpFragment;
 
 import org.unicef.rapidreg.PrimeroApplication;
 import org.unicef.rapidreg.R;
+import org.unicef.rapidreg.base.BaseAlertDialog;
 import org.unicef.rapidreg.base.BaseProgressDialog;
 import org.unicef.rapidreg.injection.component.ActivityComponent;
 import org.unicef.rapidreg.injection.component.DaggerFragmentComponent;
@@ -148,7 +149,7 @@ public class SyncFragment extends MvpFragment<SyncView, SyncPresenter> implement
         tvNumber.setInputType(InputType.TYPE_CLASS_NUMBER);
         tvNumber.setRawInputType(Configuration.KEYBOARD_12KEY);
         tvNumber.setText("100");
-        new AlertDialog.Builder(getActivity())
+        new BaseAlertDialog.Builder(getActivity())
                 .setView(tvNumber)
                 .setMessage("Please enter the number.")
                 .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
@@ -187,7 +188,7 @@ public class SyncFragment extends MvpFragment<SyncView, SyncPresenter> implement
 
     @Override
     public void showSyncCancelConfirmDialog() {
-        new AlertDialog.Builder(getActivity())
+        new BaseAlertDialog.Builder(getActivity())
                 .setMessage(confirmCancelSyncMessage)
                 .setCancelable(false)
                 .setNegativeButton(continueSyncButtonText, new DialogInterface.OnClickListener() {
@@ -234,7 +235,7 @@ public class SyncFragment extends MvpFragment<SyncView, SyncPresenter> implement
 
     @Override
     public void showAttemptSyncDialog() {
-        new AlertDialog.Builder(getActivity())
+        new BaseAlertDialog.Builder(getActivity())
                 .setMessage(tryToSyncMessage)
                 .setCancelable(false)
                 .setNegativeButton(notNowButtonText, new DialogInterface.OnClickListener() {

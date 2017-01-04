@@ -12,6 +12,7 @@ import android.widget.GridView;
 import android.widget.TextView;
 
 import org.unicef.rapidreg.R;
+import org.unicef.rapidreg.base.BaseAlertDialog;
 import org.unicef.rapidreg.base.record.recordphoto.PhotoConfig;
 import org.unicef.rapidreg.base.record.RecordActivity;
 import org.unicef.rapidreg.base.record.recordphoto.RecordPhotoAdapter;
@@ -120,7 +121,7 @@ public class PhotoUploadViewHolder extends BaseViewHolder<Field> {
         final String cancelItem = "Cancel";
         final String[] items = {fromCameraItem, fromGalleryItem, cancelItem};
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        BaseAlertDialog.Builder builder = new BaseAlertDialog.Builder(context);
         builder.setItems(items, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int item) {
@@ -141,7 +142,7 @@ public class PhotoUploadViewHolder extends BaseViewHolder<Field> {
     }
 
     private void showDeletionConfirmDialog(final int position) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        BaseAlertDialog.Builder builder = new BaseAlertDialog.Builder(context);
         builder.setMessage(R.string.remove_photo_confirmation);
         builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
             @Override
