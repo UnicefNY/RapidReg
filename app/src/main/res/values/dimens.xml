@@ -47,6 +47,7 @@
     <dimen name="case_spinner_arrow_right_margin">12dp</dimen>
     <dimen name="case_avatar_width">68dp</dimen>
     <dimen name="case_avatar_height">68dp</dimen>
+    <dimen name="list_icon_width">20dp</dimen>
     <!--row in list end-->
 
     <!--search start-->
