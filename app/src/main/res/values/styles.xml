@@ -39,16 +39,13 @@
         <item name="android:gravity">center_horizontal</item>
     </style>
 
-    <style name="myToolbarNavigationButtonStyle" parent="Widget.AppCompat.ActionButton">
-        <item name="android:layout_height">@dimen/toolbar_button_width</item>
-        <item name="android:layout_width">@dimen/toolbar_button_width</item>
-        <item name="android:width">@dimen/toolbar_button_width</item>
-        <item name="android:height">@dimen/toolbar_button_width</item>
-        <item name="android:scaleType">centerInside</item>
+    <style name="NavigationViewStyle">
+        <item name="android:textSize">@dimen/text_size_16</item> <!-- menu item text size-->
+        <item name="android:listPreferredItemHeight">@dimen/size_48</item>
     </style>
 
-    <style name="ToolbarTitleText">
-        <item name="android:textSize">@dimen/text_size_18</item>
+    <style name="Toolbar.TitleText" parent="TextAppearance.Widget.AppCompat.Toolbar.Title">
+        <!--<item name="android:textSize">@dimen/text_size_24</item>-->
         <item name="android:textColor">@android:color/white</item>
     </style>
 
