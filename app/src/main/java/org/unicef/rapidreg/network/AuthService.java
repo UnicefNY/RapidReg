@@ -25,9 +25,8 @@ public class AuthService extends BaseRetrofitService {
         return PrimeroConfiguration.getApiBaseUrl();
     }
 
-    public void init() throws Exception {
-        createRetrofit();
-        serviceInterface = getRetrofit().create(AuthServiceInterface.class);
+    public void init() {
+        serviceInterface = createRetrofit().create(AuthServiceInterface.class);
     }
 
     public Observable<Response<LoginResponse>> loginRx(LoginRequestBody body) {
