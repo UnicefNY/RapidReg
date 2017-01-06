@@ -121,19 +121,17 @@ public class LoginServiceImpl implements org.unicef.rapidreg.service.LoginServic
     }
 
     @Override
-    public int validate(String username, String password, String url) {
-        if (!userService.isNameValid(username)) {
-            return INVALID_USERNAME;
-        }
+    public boolean isUsernameValid(String username) {
+        return userService.isNameValid(username);
+    }
 
-        if (!userService.isPasswordValid(password)) {
-            return INVALID_PASSWORD;
-        }
+    @Override
+    public boolean isPasswordValid(String password) {
+        return userService.isPasswordValid(password);
+    }
 
-        if (!userService.isUrlValid(url)) {
-            return INVALID_URL;
-        }
-
-        return VALID;
+    @Override
+    public boolean isUrlValid(String url) {
+        return userService.isUrlValid(url);
     }
 }
