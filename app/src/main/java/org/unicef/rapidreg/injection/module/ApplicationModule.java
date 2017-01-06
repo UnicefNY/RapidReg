@@ -2,6 +2,8 @@ package org.unicef.rapidreg.injection.module;
 
 import android.app.Application;
 import android.content.Context;
+import android.net.ConnectivityManager;
+import android.telephony.TelephonyManager;
 
 import org.unicef.rapidreg.db.impl.CaseDaoImpl;
 import org.unicef.rapidreg.db.impl.CaseFormDaoImpl;
@@ -35,7 +37,7 @@ import javax.inject.Singleton;
 import dagger.Module;
 import dagger.Provides;
 
-@Module
+@Module(includes = {AndroidServiceModule.class})
 public class ApplicationModule {
 
     protected Application application;
