@@ -45,18 +45,12 @@ public class LoginPresenter extends MvpBasePresenter<LoginView> {
 
     private CompositeSubscription subscriptions;
 
-    Context context;
-    private IntentSender intentSender;
-
     @Inject
-    public LoginPresenter(@ActivityContext Context context, UserService userService, AuthService authService) {
-        this.context = context;
+    public LoginPresenter(UserService userService, AuthService authService) {
         this.userService = userService;
         this.authService = authService;
-        intentSender = new IntentSender();
         subscriptions = new CompositeSubscription();
     }
-
 
     public String fetchURL() {
         try {
@@ -146,7 +140,7 @@ public class LoginPresenter extends MvpBasePresenter<LoginView> {
                                 PrimeroConfiguration.setCurrentUser(user);
                                 userService.saveOrUpdateUser(user);
 
-                                goToLoginSuccessScreen();
+                                getView().goToLoginSuccessScreen();
 
                                 EventBus.getDefault().postSticky(new LoadGBVIncidentFormEvent(PrimeroConfiguration
                                         .getCookie()));
@@ -189,12 +183,8 @@ public class LoginPresenter extends MvpBasePresenter<LoginView> {
 
         if (verifiedCode == UserService.VerifiedCode.OK) {
             PrimeroConfiguration.setCurrentUser(userService.getUser(username));
-            goToLoginSuccessScreen();
+            getView().goToLoginSuccessScreen();
         }
-    }
-
-    private void goToLoginSuccessScreen() {
-        intentSender.showCasesActivity((Activity) context, true);
     }
 
     private void showLoadingIndicator(boolean active) {
