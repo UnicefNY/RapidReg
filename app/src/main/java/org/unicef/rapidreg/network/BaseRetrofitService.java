@@ -34,11 +34,11 @@ public abstract class BaseRetrofitService {
 
     private Retrofit retrofit;
 
-    private OkHttpClient getClient(Context context) {
+    private OkHttpClient getClient() {
         OkHttpClient.Builder builder = new OkHttpClient.Builder();
         builder.readTimeout(90, TimeUnit.SECONDS);
         builder.writeTimeout(90, TimeUnit.SECONDS);
-        builder.sslSocketFactory(getSSLContext(context).getSocketFactory());
+        builder.sslSocketFactory(getSSLContext().getSocketFactory());
         builder.hostnameVerifier(new HostnameVerifier() {
             @Override
             public boolean verify(String hostname, SSLSession session) {
@@ -52,12 +52,12 @@ public abstract class BaseRetrofitService {
         return builder.build();
     }
 
-    protected void createRetrofit(Context context) {
+    protected void createRetrofit() {
         retrofit = new Retrofit.Builder()
                 .baseUrl(getBaseUrl())
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                 .addConverterFactory(GsonConverterFactory.create())
-                .client(getClient(context))
+                .client(getClient())
                 .build();
     }
 
@@ -66,7 +66,7 @@ public abstract class BaseRetrofitService {
         return retrofit;
     }
 
-    private SSLContext getSSLContext(Context context) {
+    private SSLContext getSSLContext() {
 
         try {
             KeyStore ks = KeyStore.getInstance("AndroidCAStore");

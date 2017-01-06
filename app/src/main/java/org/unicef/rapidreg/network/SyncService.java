@@ -1,7 +1,5 @@
 package org.unicef.rapidreg.network;
 
-
-import android.content.Context;
 import android.support.v4.util.Pair;
 import android.text.TextUtils;
 
@@ -10,7 +8,6 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.raizlabs.android.dbflow.data.Blob;
-
 import org.unicef.rapidreg.PrimeroConfiguration;
 import org.unicef.rapidreg.base.record.recordphoto.PhotoConfig;
 import org.unicef.rapidreg.db.impl.CasePhotoDaoImpl;
@@ -19,9 +16,7 @@ import org.unicef.rapidreg.model.RecordModel;
 import org.unicef.rapidreg.service.CasePhotoService;
 import org.unicef.rapidreg.service.RecordService;
 import org.unicef.rapidreg.service.cache.ItemValuesMap;
-
 import java.util.List;
-
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
@@ -45,9 +40,9 @@ public class SyncService extends BaseRetrofitService {
         return PrimeroConfiguration.getApiBaseUrl();
     }
 
-    public SyncService(Context context, CasePhotoService casePhotoService, RecordService
+    public SyncService(CasePhotoService casePhotoService, RecordService
             recordService) {
-        createRetrofit(context);
+        createRetrofit();
         this.casePhotoService = casePhotoService;
         this.recordService = recordService;
         serviceInterface = getRetrofit().create(SyncServiceInterface.class);

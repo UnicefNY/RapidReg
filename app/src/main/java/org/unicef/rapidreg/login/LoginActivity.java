@@ -53,7 +53,6 @@ public class LoginActivity extends MvpActivity<LoginView, LoginPresenter> implem
     LoginPresenter loginPresenter;
 
     private BaseProgressDialog loginProgressDialog;
-
     private ActivityComponent activityComponent;
 
     @Override
@@ -72,14 +71,13 @@ public class LoginActivity extends MvpActivity<LoginView, LoginPresenter> implem
         hideUrlInputIfUserEverLoginSuccessfully();
         loginProgressDialog = new BaseProgressDialog(this);
 
-
         usernameEditView.requestFocus();
 
     }
 
     @OnClick(R.id.login)
     public void onLoginButtonClicked() {
-        presenter.doLogin(this,
+        presenter.doLogin(
                 usernameEditView.getText().toString().trim(),
                 passwordEditView.getText().toString().trim(),
                 urlEditView.getText().toString().trim());
@@ -88,7 +86,7 @@ public class LoginActivity extends MvpActivity<LoginView, LoginPresenter> implem
     @OnClick(R.id.change_url)
     public void onChangeUrlTextClicked() {
 
-        if (!NetworkStatusManager.isOnline(this)) {
+        if (!NetworkStatusManager.isOnline()) {
             Toast.makeText(this, "Network is not accessible!", Toast.LENGTH_LONG).show();
             return;
         }
@@ -158,8 +156,8 @@ public class LoginActivity extends MvpActivity<LoginView, LoginPresenter> implem
     }
 
     @Override
-    public void showLoginResult(String message) {
-        Toast.makeText(LoginActivity.this, message, Toast.LENGTH_SHORT).show();
+    public void showLoginResultByResId(int resId) {
+        Toast.makeText(LoginActivity.this, getResources().getString(resId), Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -175,18 +173,23 @@ public class LoginActivity extends MvpActivity<LoginView, LoginPresenter> implem
     }
 
     @Override
-    public void showUserNameError(String e) {
-        usernameEditView.setError(e);
+    public void showErrorByToast(String message) {
+        Toast.makeText(LoginActivity.this, message, Toast.LENGTH_SHORT).show();
     }
 
     @Override
-    public void showPasswordError(String e) {
-        passwordEditView.setError(e);
+    public void showUserNameInvalid() {
+        usernameEditView.setError(getResources().getString(R.string.login_username_invalid_text));
     }
 
     @Override
-    public void showUrlError(String e) {
-        urlEditView.setError(e);
+    public void showPasswordInvalid() {
+        passwordEditView.setError(getResources().getString(R.string.login_password_invalid_text));
+    }
+
+    @Override
+    public void showUrlInvalid() {
+        urlEditView.setError(getResources().getString(R.string.login_url_invalid_text));
     }
 
     @Override

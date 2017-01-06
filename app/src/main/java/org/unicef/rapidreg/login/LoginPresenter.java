@@ -1,6 +1,5 @@
 package org.unicef.rapidreg.login;
 
-import android.app.Activity;
 import android.content.Context;
 import android.provider.Settings;
 import android.telephony.TelephonyManager;
@@ -9,14 +8,13 @@ import android.util.Log;
 import com.hannesdorfmann.mosby.mvp.MvpBasePresenter;
 
 import org.greenrobot.eventbus.EventBus;
-import org.unicef.rapidreg.IntentSender;
+import org.unicef.rapidreg.PrimeroApplication;
 import org.unicef.rapidreg.PrimeroConfiguration;
 import org.unicef.rapidreg.R;
 import org.unicef.rapidreg.event.LoadCPCaseFormEvent;
 import org.unicef.rapidreg.event.LoadGBVCaseFormEvent;
 import org.unicef.rapidreg.event.LoadGBVIncidentFormEvent;
 import org.unicef.rapidreg.event.LoadTracingFormEvent;
-import org.unicef.rapidreg.injection.ActivityContext;
 import org.unicef.rapidreg.model.LoginRequestBody;
 import org.unicef.rapidreg.model.LoginResponse;
 import org.unicef.rapidreg.model.User;
@@ -32,9 +30,7 @@ import javax.inject.Inject;
 
 import okhttp3.Headers;
 import retrofit2.Response;
-import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
-import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
 
 public class LoginPresenter extends MvpBasePresenter<LoginView> {
@@ -62,39 +58,43 @@ public class LoginPresenter extends MvpBasePresenter<LoginView> {
         }
     }
 
-    public void doLogin(Context context, String username, String password, String url) {
-        if (!validate(context, username, password, url)) {
+    public void doLogin(String username, String password, String url) {
+        if (!validate(username, password, url)) {
             return;
         }
 
         PrimeroConfiguration.setApiBaseUrl(url.endsWith("/") ? url : String.format("%s/", url));
         try {
-            authService.init(context);
+            authService.init();
         } catch (Exception e) {
-            showLoginResultMessage(e.getMessage());
+            getView().showErrorByToast(e.getMessage());
         }
 
         showLoadingIndicator(true);
-        if (NetworkStatusManager.isOnline(context)) {
-            doLoginOnline(context, username, password, url);
+        if (NetworkStatusManager.isOnline()) {
+            doLoginOnline(username, password, url);
         } else {
-            doLoginOffline(context, username, password);
+            doLoginOffline(username, password);
         }
     }
 
-    public boolean validate(Context context, String username, String password, String url) {
-        boolean nameValid = userService.isNameValid(username);
-        boolean passwordValid = userService.isPasswordValid(password);
-        boolean urlValid = userService.isUrlValid(url);
+    public boolean validate(String username, String password, String url) {
+        if (!userService.isNameValid(username)) {
+            getView().showUserNameInvalid();
+            return false;
+        }
 
-        getView().showUserNameError(nameValid ?
-                null : context.getResources().getString(R.string.login_username_invalid_text));
-        getView().showPasswordError(passwordValid ?
-                null : context.getResources().getString(R.string.login_password_invalid_text));
-        getView().showUrlError(urlValid ?
-                null : context.getResources().getString(R.string.login_url_invalid_text));
+        if (!userService.isPasswordValid(password)) {
+            getView().showPasswordInvalid();
+            return false;
+        }
 
-        return nameValid && passwordValid && urlValid;
+        if (!userService.isUrlValid(url)) {
+            getView().showUrlInvalid();
+            return false;
+        }
+
+        return true;
     }
 
     @Override
@@ -109,18 +109,16 @@ public class LoginPresenter extends MvpBasePresenter<LoginView> {
         subscriptions.clear();
     }
 
-    private void doLoginOnline(final Context context, final String username,
+    private void doLoginOnline(final String username,
                                final String password, final String url) {
         TelephonyManager tm =
-                (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
-        String androidId = Settings.Secure.getString(context.getContentResolver(),
-                Settings.Secure.ANDROID_ID);
+                (TelephonyManager) PrimeroApplication.getAppContext().getSystemService(Context.TELEPHONY_SERVICE);
 
         subscriptions.add(authService.loginRx(new LoginRequestBody(
                 username,
                 password,
                 tm.getLine1Number(),
-                androidId))
+                PrimeroConfiguration.getAndroidId()))
                 .subscribe(new Action1<Response<LoginResponse>>() {
                     @Override
                     public void call(Response<LoginResponse> response) {
@@ -151,13 +149,12 @@ public class LoginPresenter extends MvpBasePresenter<LoginView> {
                                 EventBus.getDefault().postSticky(new LoadTracingFormEvent(PrimeroConfiguration
                                         .getCookie()));
 
-                                showLoginResultMessage(context.getResources().getString(R.string
-                                        .login_success_message));
+                                getView().showLoginResultByResId(R.string.login_success_message);
                                 Log.d(TAG, "login successful");
                             } else {
-                                showLoginResultMessage(context.getResources().getString(HttpStatusCodeHandler
-                                        .getHttpStatusMessage(response.code())));
-                                doLoginOffline(context, username, password);
+                                getView().showLoginResultByResId(HttpStatusCodeHandler
+                                        .getHttpStatusMessage(response.code()));
+                                doLoginOffline(username, password);
 
                                 Log.d(TAG, "login failed");
                             }
@@ -169,17 +166,17 @@ public class LoginPresenter extends MvpBasePresenter<LoginView> {
                         if (isViewAttached()) {
                             showNetworkErrorMessage(throwable, false);
                             showLoadingIndicator(false);
-                            doLoginOffline(context, username, password);
+                            doLoginOffline(username, password);
                         }
                     }
                 }));
     }
 
-    private void doLoginOffline(Context context, String username, String password) {
+    private void doLoginOffline(String username, String password) {
         UserService.VerifiedCode verifiedCode = userService.verify(username, password);
 
         showLoadingIndicator(false);
-        showLoginResultMessage(context.getResources().getString(verifiedCode.getResId()));
+        getView().showLoginResultByResId(verifiedCode.getResId());
 
         if (verifiedCode == UserService.VerifiedCode.OK) {
             PrimeroConfiguration.setCurrentUser(userService.getUser(username));
@@ -189,10 +186,6 @@ public class LoginPresenter extends MvpBasePresenter<LoginView> {
 
     private void showLoadingIndicator(boolean active) {
         getView().showLoading(active);
-    }
-
-    private void showLoginResultMessage(String message) {
-        getView().showLoginResult(message);
     }
 
     private void showNetworkErrorMessage(Throwable t, boolean pullToRefresh) {

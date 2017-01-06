@@ -122,15 +122,14 @@ public class ApplicationModule {
     }
 
     @Provides
-    public SyncService provideSyncService(@ApplicationContext Context context, RecordService
+    public SyncService provideSyncService(RecordService
             recordService, CasePhotoService casePhotoService) {
-        return new SyncService(context, casePhotoService, recordService);
+        return new SyncService(casePhotoService, recordService);
     }
 
     @Provides
-    public SyncTracingService provideSyncTracingService(@ApplicationContext Context context,
-                                                        RecordService recordService,
+    public SyncTracingService provideSyncTracingService(RecordService recordService,
                                                         TracingPhotoService tracingPhotoService) {
-        return new SyncTracingService(context, recordService, tracingPhotoService);
+        return new SyncTracingService(recordService, tracingPhotoService);
     }
 }
