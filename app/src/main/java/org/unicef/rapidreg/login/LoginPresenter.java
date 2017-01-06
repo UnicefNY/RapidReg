@@ -13,15 +13,8 @@ import org.unicef.rapidreg.event.LoadTracingFormEvent;
 import org.unicef.rapidreg.model.User;
 import org.unicef.rapidreg.network.HttpStatusCodeHandler;
 import org.unicef.rapidreg.service.LoginService;
-import org.unicef.rapidreg.service.UserService;
-import org.unicef.rapidreg.service.UserService.VerifiedCode;
 
 import javax.inject.Inject;
-
-import static org.unicef.rapidreg.service.LoginService.INVALID_PASSWORD;
-import static org.unicef.rapidreg.service.LoginService.INVALID_URL;
-import static org.unicef.rapidreg.service.LoginService.INVALID_USERNAME;
-import static org.unicef.rapidreg.service.LoginService.VALID;
 
 public class LoginPresenter extends MvpBasePresenter<LoginView> {
     public static final String TAG = LoginPresenter.class.getSimpleName();
@@ -56,14 +49,22 @@ public class LoginPresenter extends MvpBasePresenter<LoginView> {
     }
 
     public boolean validate(String username, String password, String url) {
-        int validateCode = loginService.validate(username, password, url);
-        switch (validateCode) {
-            case VALID: return true;
-            case INVALID_USERNAME: getView().showUserNameInvalid(); return false;
-            case INVALID_PASSWORD: getView().showPasswordInvalid(); return false;
-            case INVALID_URL: getView().showUrlInvalid(); return false;
-            default: return false;
+        boolean isValid = true;
+        if (!loginService.isUsernameValid(username)) {
+            getView().showUserNameInvalid();
+            isValid = false;
         }
+        if (!loginService.isUsernameValid(password)) {
+            getView().showPasswordInvalid();
+            isValid = false;
+        }
+
+        if (!loginService.isUrlValid(url)) {
+            getView().showUrlInvalid();
+            isValid = false;
+        }
+
+        return isValid;
     }
 
     @Override

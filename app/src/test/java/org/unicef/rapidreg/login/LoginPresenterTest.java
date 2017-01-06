@@ -45,26 +45,24 @@ public class LoginPresenterTest {
         loginPresenter.attachView(loginView);
     }
 
-//    @Test
-//    public void should_show_error_when_validate_empty_password_and_passord() {
-//        when(userService.isNameValid("")).thenReturn(false);
-//        when(userService.isPasswordValid("")).thenReturn(false);
-//        when(userService.isUrlValid("http://10.29.3.184:3000")).thenReturn(true);
-//
-//        boolean valid = loginPresenter.validate("", "", "http://10.29.3.184:3000");
-//        verify(loginView).showUserNameInvalid();
-//        verify(loginView).showPasswordInvalid();
-//        assertEquals(valid, false);
-//    }
-//
-//    @Test
-//    public void should_show_error_when_invalid_user_format() {
-//        when(userService.isNameValid("pri mero")).thenReturn(false);
-//        when(userService.isPasswordValid("password")).thenReturn(true);
-//        when(userService.isUrlValid("http://10.29.3.184:3000")).thenReturn(true);
-//
-//        boolean valid = loginPresenter.validate("pri mero", "password", "http://10.29.3.184:3000");
-//        verify(loginView).showUserNameInvalid();
-//        assertEquals(valid, false);
-//    }
+    @Test
+    public void should_show_error_when_validate_empty_password_and_passord() {
+        when(loginService.isUsernameValid("")).thenReturn(false);
+        when(loginService.isPasswordValid("")).thenReturn(false);
+        when(loginService.isUrlValid("http://10.29.3.184:3000")).thenReturn(true);
+
+        boolean valid = loginPresenter.validate("", "", "http://10.29.3.184:3000");
+        assertEquals(valid, false);
+    }
+
+    @Test
+    public void should_show_error_when_invalid_user_format() {
+        when(loginService.isUsernameValid("pri mero")).thenReturn(false);
+        when(loginService.isPasswordValid("password")).thenReturn(true);
+        when(loginService.isUrlValid("http://10.29.3.184:3000")).thenReturn(true);
+
+        boolean valid = loginPresenter.validate("pri mero", "password", "http://10.29.3.184:3000");
+        verify(loginView).showUserNameInvalid();
+        assertEquals(valid, false);
+    }
 }
