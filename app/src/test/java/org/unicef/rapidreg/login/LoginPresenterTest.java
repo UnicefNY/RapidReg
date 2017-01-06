@@ -32,6 +32,9 @@ public class LoginPresenterTest {
     private Context context;
 
     @Mock
+    private LoginService loginService;
+
+    @Mock
     private LoginView loginView;
 
     @Mock
@@ -44,7 +47,7 @@ public class LoginPresenterTest {
     public void setUp() throws Exception {
         initMocks(this);
 
-        loginPresenter = new LoginPresenter(userService, authService);
+        loginPresenter = new LoginPresenter(loginService, userService, authService);
         loginPresenter.attachView(loginView);
     }
 

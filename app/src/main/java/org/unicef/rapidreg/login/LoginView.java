@@ -7,13 +7,15 @@ import org.unicef.rapidreg.model.LoginResponse;
 import retrofit2.Call;
 
 public interface LoginView extends MvpLceView<Call<LoginResponse>> {
-    void showLoginResultByResId(int resId);
+    void showLoginSuccessful();
 
     void showProgressDialog();
 
     void dismissProgressDialog();
 
     void showErrorByToast(String message);
+
+    void showErrorByResId(int resId);
 
     void showUserNameInvalid();
 

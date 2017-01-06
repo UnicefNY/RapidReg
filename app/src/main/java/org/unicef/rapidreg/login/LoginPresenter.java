@@ -169,7 +169,7 @@ public class LoginPresenter extends MvpBasePresenter<LoginView> {
         getView().showLoading(active);
     }
 
-    private void showNetworkErrorMessage(Throwable t, boolean pullToRefresh) {
+    private void showNetworkErrorMessage(Throwable t) {
         getView().showError(t, false);
     }
 
