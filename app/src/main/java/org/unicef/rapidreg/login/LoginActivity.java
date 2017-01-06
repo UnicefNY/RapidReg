@@ -156,8 +156,13 @@ public class LoginActivity extends MvpActivity<LoginView, LoginPresenter> implem
     }
 
     @Override
-    public void showLoginResultByResId(int resId) {
-        Toast.makeText(LoginActivity.this, getResources().getString(resId), Toast.LENGTH_SHORT).show();
+    public void showLoginSuccessful() {
+        Toast.makeText(this, getResources().getString(R.string.login_success_message), Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void showErrorByResId(int resId) {
+        Toast.makeText(this, getResources().getString(resId), Toast.LENGTH_SHORT).show();
     }
 
     @Override
