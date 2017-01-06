@@ -1,61 +1,40 @@
 package org.unicef.rapidreg.login;
 
-import android.content.Context;
-import android.telephony.TelephonyManager;
 import android.util.Log;
 
 import com.hannesdorfmann.mosby.mvp.MvpBasePresenter;
 
 import org.greenrobot.eventbus.EventBus;
-import org.unicef.rapidreg.PrimeroApplication;
 import org.unicef.rapidreg.PrimeroConfiguration;
 import org.unicef.rapidreg.event.LoadCPCaseFormEvent;
 import org.unicef.rapidreg.event.LoadGBVCaseFormEvent;
 import org.unicef.rapidreg.event.LoadGBVIncidentFormEvent;
 import org.unicef.rapidreg.event.LoadTracingFormEvent;
-import org.unicef.rapidreg.model.LoginRequestBody;
-import org.unicef.rapidreg.model.LoginResponse;
 import org.unicef.rapidreg.model.User;
-import org.unicef.rapidreg.network.AuthService;
 import org.unicef.rapidreg.network.HttpStatusCodeHandler;
-import org.unicef.rapidreg.network.NetworkStatusManager;
+import org.unicef.rapidreg.service.LoginService;
 import org.unicef.rapidreg.service.UserService;
-import org.unicef.rapidreg.utils.EncryptHelper;
-
-import java.util.List;
+import org.unicef.rapidreg.service.UserService.VerifiedCode;
 
 import javax.inject.Inject;
 
-import okhttp3.Headers;
-import retrofit2.Response;
-import rx.functions.Action1;
-import rx.subscriptions.CompositeSubscription;
+import static org.unicef.rapidreg.service.LoginService.INVALID_PASSWORD;
+import static org.unicef.rapidreg.service.LoginService.INVALID_URL;
+import static org.unicef.rapidreg.service.LoginService.INVALID_USERNAME;
+import static org.unicef.rapidreg.service.LoginService.VALID;
 
 public class LoginPresenter extends MvpBasePresenter<LoginView> {
     public static final String TAG = LoginPresenter.class.getSimpleName();
 
     private LoginService loginService;
-    private UserService userService;
-    private AuthService authService;
-
-    private CompositeSubscription subscriptions;
 
     @Inject
-    public LoginPresenter(LoginService loginService, UserService userService, AuthService authService) {
+    public LoginPresenter(LoginService loginService) {
         this.loginService = loginService;
-        this.userService = userService;
-        this.authService = authService;
-        subscriptions = new CompositeSubscription();
     }
 
     public String fetchURL() {
-        try {
-            User user = userService.getAllUsers().get(0);
-            return user.getServerUrl();
-        } catch (Exception e) {
-            Log.w("user login", "No user ever log in successfully, so url doesn't exist!");
-            return "";
-        }
+        return loginService.getServerUrl();
     }
 
     public void doLogin(String username, String password, String url) {
@@ -65,36 +44,26 @@ public class LoginPresenter extends MvpBasePresenter<LoginView> {
 
         PrimeroConfiguration.setApiBaseUrl(url.endsWith("/") ? url : String.format("%s/", url));
         try {
-            authService.init();
+            getView().showLoading(true);
+            if (loginService.isOnline()) {
+                doLoginOnline(username, password, url);
+            } else {
+                doLoginOffline(username, password);
+            }
         } catch (Exception e) {
-            getView().showErrorByToast(e.getMessage());
-        }
-
-        showLoadingIndicator(true);
-        if (loginService.isOnline()) {
-            doLoginOnline(username, password, url);
-        } else {
-            doLoginOffline(username, password);
+            getView().showLoginErrorByToast(e.getMessage());
         }
     }
 
     public boolean validate(String username, String password, String url) {
-        if (!userService.isNameValid(username)) {
-            getView().showUserNameInvalid();
-            return false;
+        int validateCode = loginService.validate(username, password, url);
+        switch (validateCode) {
+            case VALID: return true;
+            case INVALID_USERNAME: getView().showUserNameInvalid(); return false;
+            case INVALID_PASSWORD: getView().showPasswordInvalid(); return false;
+            case INVALID_URL: getView().showUrlInvalid(); return false;
+            default: return false;
         }
-
-        if (!userService.isPasswordValid(password)) {
-            getView().showPasswordInvalid();
-            return false;
-        }
-
-        if (!userService.isUrlValid(url)) {
-            getView().showUrlInvalid();
-            return false;
-        }
-
-        return true;
     }
 
     @Override
@@ -105,23 +74,22 @@ public class LoginPresenter extends MvpBasePresenter<LoginView> {
     @Override
     public void detachView(boolean retainInstance) {
         super.detachView(retainInstance);
-
-        subscriptions.clear();
+        loginService.destroy();
     }
 
     private void doLoginOnline(final String username,
                              final String password, final String url) {
-        loginService.doLoginOnline(username, password, url, PrimeroConfiguration.getAndroidId(), new LoginService.LoginCallback() {
+        loginService.doLoginOnline(username, password, url, PrimeroConfiguration.getAndroidId(), new LoginServiceImpl.LoginCallback() {
             @Override
             public void onLoginSuccessful(String cookie, User user) {
                 if (isViewAttached()) {
                     PrimeroConfiguration.setCookie(cookie);
                     PrimeroConfiguration.setCurrentUser(user);
-                    userService.saveOrUpdateUser(user);
 
                     sendLoadFormEvent(cookie);
 
-                    showLoadingIndicator(false);
+                    getView().showLoading(false);
+                    getView().showLoginSuccessful();
                     getView().goToLoginSuccessScreen();
                 }
             }
@@ -129,15 +97,15 @@ public class LoginPresenter extends MvpBasePresenter<LoginView> {
             @Override
             public void onLoginFailed(Throwable error) {
                 if (isViewAttached()) {
-                    showNetworkErrorMessage(error);
-                    showLoadingIndicator(false);
+                    getView().showError(error, false);
+                    getView().showLoading(false);
                     doLoginOffline(username, password);
                 }
             }
 
             @Override
             public void onLoginError(int code) {
-                getView().showErrorByResId(HttpStatusCodeHandler
+                getView().showLoginErrorByResId(HttpStatusCodeHandler
                         .getHttpStatusMessage(code));
                 doLoginOffline(username, password);
 
@@ -154,33 +122,30 @@ public class LoginPresenter extends MvpBasePresenter<LoginView> {
     }
 
     private void doLoginOffline(String username, String password) {
-        UserService.VerifiedCode verifiedCode = userService.verify(username, password);
-
-        showLoadingIndicator(false);
-        getView().showErrorByResId(verifiedCode.getResId());
-
-        if (verifiedCode == UserService.VerifiedCode.OK) {
-            PrimeroConfiguration.setCurrentUser(userService.getUser(username));
-            getView().goToLoginSuccessScreen();
-        }
-    }
-
-    private void showLoadingIndicator(boolean active) {
-        getView().showLoading(active);
-    }
-
-    private void showNetworkErrorMessage(Throwable t) {
-        getView().showError(t, false);
-    }
-
-    private String getSessionId(Headers headers) {
-        List<String> cookies = headers.values("Set-Cookie");
-        for (String cookie : cookies) {
-            if (cookie.contains("session_id")) {
-                return cookie;
+        loginService.doLoginOffline(username, password, new LoginService.LoginCallback() {
+            @Override
+            public void onLoginSuccessful(String cookie, User user) {
+                PrimeroConfiguration.setCurrentUser(user);
+                getView().showLoading(false);
+                getView().showLoginSuccessful();
+                getView().goToLoginSuccessScreen();
             }
-        }
-        Log.e(TAG, "Can not get session id");
-        return null;
+
+            @Override
+            public void onLoginFailed(Throwable error) {
+                getView().showLoading(false);
+                getView().showLoginErrorByToast(error.getMessage());
+            }
+
+            @Override
+            public void onLoginError(int code) {
+                getView().showLoading(false);
+                getView().showLoginErrorByResId(code);
+            }
+        });
+    }
+
+    public boolean isOnline() {
+        return loginService.isOnline();
     }
 }

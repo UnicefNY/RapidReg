@@ -9,6 +9,7 @@ import org.unicef.rapidreg.model.LoginRequestBody;
 import org.unicef.rapidreg.model.LoginResponse;
 import org.unicef.rapidreg.model.User;
 import org.unicef.rapidreg.network.AuthService;
+import org.unicef.rapidreg.service.UserService;
 import org.unicef.rapidreg.utils.EncryptHelper;
 
 import java.util.List;
@@ -19,42 +20,47 @@ import rx.Subscription;
 import rx.functions.Action1;
 import rx.subscriptions.CompositeSubscription;
 
-public class LoginService {
-    private static final String TAG = LoginService.class.getSimpleName();
+public class LoginServiceImpl implements org.unicef.rapidreg.service.LoginService {
+    private static final String TAG = LoginServiceImpl.class.getSimpleName();
 
     private ConnectivityManager connectivityManager;
     private TelephonyManager telephonyManager;
 
+    private UserService userService;
     private AuthService authService;
 
     private CompositeSubscription compositeSubscription;
 
-    public LoginService(ConnectivityManager connectivityManager,
-                        TelephonyManager telephonyManager,
-                        AuthService authService) {
+    public LoginServiceImpl(ConnectivityManager connectivityManager,
+                            TelephonyManager telephonyManager,
+                            UserService userService,
+                            AuthService authService) {
         this.connectivityManager = connectivityManager;
         this.telephonyManager = telephonyManager;
+        this.userService = userService;
         this.authService = authService;
 
         this.compositeSubscription = new CompositeSubscription();
     }
 
+    @Override
     public boolean isOnline() {
         NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
         return networkInfo != null && networkInfo.isAvailable() && networkInfo.isConnected();
     }
 
+    @Override
     public void doLoginOnline(final String username,
                               final String password,
                               final String url,
                               String imei,
                               final LoginCallback callback) {
+        authService.init();
         final LoginRequestBody loginRequestBody = new LoginRequestBody(username, password, telephonyManager.getLine1Number(), imei);
         Subscription subscription = authService.loginRx(loginRequestBody).subscribe(new Action1<Response<LoginResponse>>() {
             @Override
             public void call(Response<LoginResponse> response) {
                 if (response.isSuccessful()) {
-
                     LoginResponse responseBody = response.body();
                     User user = new User(username, EncryptHelper.encrypt(password), true, url);
                     user.setDbKey(responseBody.getDb_key());
@@ -62,6 +68,7 @@ public class LoginService {
                     user.setLanguage(responseBody.getLanguage());
                     user.setVerified(responseBody.getVerified());
 
+                    userService.saveOrUpdateUser(user);
                     callback.onLoginSuccessful(getSessionId(response.headers()), user);
                 } else {
                     callback.onLoginError(response.code());
@@ -77,6 +84,17 @@ public class LoginService {
         compositeSubscription.add(subscription);
     }
 
+    @Override
+    public void doLoginOffline(String username, String password, LoginCallback callback) {
+        UserService.VerifiedCode verifiedCode = userService.verify(username, password);
+
+        if (UserService.VerifiedCode.OK == verifiedCode) {
+            callback.onLoginSuccessful("", userService.getUserByUserName(username));
+        } else {
+            callback.onLoginError(verifiedCode.getResId());
+        }
+    }
+
     private String getSessionId(Headers headers) {
         List<String> cookies = headers.values("Set-Cookie");
         for (String cookie : cookies) {
@@ -88,9 +106,34 @@ public class LoginService {
         return null;
     }
 
-    interface LoginCallback {
-        void onLoginSuccessful(String cookie, User user);
-        void onLoginFailed(Throwable error);
-        void onLoginError(int code);
+    @Override
+    public void destroy() {
+        compositeSubscription.clear();
+    }
+
+    @Override
+    public String getServerUrl() {
+        List<User> users = userService.getAllUsers();
+        if (users.isEmpty()) {
+            return "";
+        }
+        return users.get(0).getServerUrl();
+    }
+
+    @Override
+    public int validate(String username, String password, String url) {
+        if (!userService.isNameValid(username)) {
+            return INVALID_USERNAME;
+        }
+
+        if (!userService.isPasswordValid(password)) {
+            return INVALID_PASSWORD;
+        }
+
+        if (!userService.isUrlValid(url)) {
+            return INVALID_URL;
+        }
+
+        return VALID;
     }
 }

@@ -85,8 +85,7 @@ public class LoginActivity extends MvpActivity<LoginView, LoginPresenter> implem
 
     @OnClick(R.id.change_url)
     public void onChangeUrlTextClicked() {
-
-        if (!NetworkStatusManager.isOnline()) {
+        if (!presenter.isOnline()) {
             Toast.makeText(this, "Network is not accessible!", Toast.LENGTH_LONG).show();
             return;
         }
@@ -161,7 +160,7 @@ public class LoginActivity extends MvpActivity<LoginView, LoginPresenter> implem
     }
 
     @Override
-    public void showErrorByResId(int resId) {
+    public void showLoginErrorByResId(int resId) {
         Toast.makeText(this, getResources().getString(resId), Toast.LENGTH_SHORT).show();
     }
 
@@ -178,7 +177,7 @@ public class LoginActivity extends MvpActivity<LoginView, LoginPresenter> implem
     }
 
     @Override
-    public void showErrorByToast(String message) {
+    public void showLoginErrorByToast(String message) {
         Toast.makeText(LoginActivity.this, message, Toast.LENGTH_SHORT).show();
     }
 

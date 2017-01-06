@@ -52,13 +52,14 @@ public abstract class BaseRetrofitService {
         return builder.build();
     }
 
-    protected void createRetrofit() {
+    protected Retrofit createRetrofit() {
         retrofit = new Retrofit.Builder()
                 .baseUrl(getBaseUrl())
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                 .addConverterFactory(GsonConverterFactory.create())
                 .client(getClient())
                 .build();
+        return retrofit;
     }
 
 

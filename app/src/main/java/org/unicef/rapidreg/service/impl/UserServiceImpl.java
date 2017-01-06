@@ -72,7 +72,7 @@ public class UserServiceImpl implements UserService {
         }
     }
 
-    public User getUser(String username) {
+    public User getUserByUserName(String username) {
         return userDao.getUser(username);
     }
 }

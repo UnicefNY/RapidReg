@@ -23,7 +23,6 @@ public interface UserService {
         }
     }
 
-
     boolean isUserEverLoginSuccessfully();
 
     VerifiedCode verify(String username, String password);
@@ -38,5 +37,5 @@ public interface UserService {
 
     void saveOrUpdateUser(User user);
 
-    User getUser(String username);
+    User getUserByUserName(String username);
 }

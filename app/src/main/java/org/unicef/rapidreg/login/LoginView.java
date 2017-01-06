@@ -9,13 +9,13 @@ import retrofit2.Call;
 public interface LoginView extends MvpLceView<Call<LoginResponse>> {
     void showLoginSuccessful();
 
+    void showLoginErrorByToast(String message);
+
+    void showLoginErrorByResId(int resId);
+
     void showProgressDialog();
 
     void dismissProgressDialog();
-
-    void showErrorByToast(String message);
-
-    void showErrorByResId(int resId);
 
     void showUserNameInvalid();
 
