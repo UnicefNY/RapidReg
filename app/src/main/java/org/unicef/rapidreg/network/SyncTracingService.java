@@ -48,9 +48,9 @@ public class SyncTracingService extends BaseRetrofitService {
         return PrimeroConfiguration.getApiBaseUrl();
     }
 
-    public SyncTracingService(Context context, RecordService recordService, TracingPhotoService
+    public SyncTracingService(RecordService recordService, TracingPhotoService
             tracingPhotoService) {
-        createRetrofit(context);
+        createRetrofit();
         this.recordService = recordService;
         this.tracingPhotoService = tracingPhotoService;
         serviceInterface = getRetrofit().create(SyncTracingsServiceInterface.class);

@@ -44,7 +44,7 @@ public class LoginPresenterTest {
     public void setUp() throws Exception {
         initMocks(this);
 
-        loginPresenter = new LoginPresenter(context, userService, authService);
+        loginPresenter = new LoginPresenter(userService, authService);
         loginPresenter.attachView(loginView);
     }
 
@@ -54,9 +54,9 @@ public class LoginPresenterTest {
         when(userService.isPasswordValid("")).thenReturn(false);
         when(userService.isUrlValid("http://10.29.3.184:3000")).thenReturn(true);
 
-        boolean valid = loginPresenter.validate(RuntimeEnvironment.application, "", "", "http://10.29.3.184:3000");
-        verify(loginView).showUserNameError("Enter a valid username!");
-        verify(loginView).showPasswordError("Enter a valid password!");
+        boolean valid = loginPresenter.validate("", "", "http://10.29.3.184:3000");
+        verify(loginView).showUserNameInvalid();
+        verify(loginView).showPasswordInvalid();
         assertEquals(valid, false);
     }
 
@@ -66,8 +66,8 @@ public class LoginPresenterTest {
         when(userService.isPasswordValid("password")).thenReturn(true);
         when(userService.isUrlValid("http://10.29.3.184:3000")).thenReturn(true);
 
-        boolean valid = loginPresenter.validate(RuntimeEnvironment.application, "pri mero", "password", "http://10.29.3.184:3000");
-        verify(loginView).showUserNameError("Enter a valid username!");
+        boolean valid = loginPresenter.validate("pri mero", "password", "http://10.29.3.184:3000");
+        verify(loginView).showUserNameInvalid();
         assertEquals(valid, false);
     }
 }

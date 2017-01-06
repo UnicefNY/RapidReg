@@ -1,8 +1,5 @@
 package org.unicef.rapidreg.network;
 
-
-import android.content.Context;
-
 import org.unicef.rapidreg.PrimeroConfiguration;
 import org.unicef.rapidreg.forms.CaseTemplateForm;
 import org.unicef.rapidreg.forms.IncidentTemplateForm;
@@ -28,8 +25,8 @@ public class AuthService extends BaseRetrofitService {
         return PrimeroConfiguration.getApiBaseUrl();
     }
 
-    public void init(Context context) throws Exception {
-        createRetrofit(context);
+    public void init() throws Exception {
+        createRetrofit();
         serviceInterface = getRetrofit().create(AuthServiceInterface.class);
     }
 

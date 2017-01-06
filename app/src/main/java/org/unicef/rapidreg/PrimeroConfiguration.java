@@ -1,5 +1,7 @@
 package org.unicef.rapidreg;
 
+import android.provider.Settings;
+
 import org.unicef.rapidreg.model.User;
 
 import java.util.Locale;
@@ -49,5 +51,10 @@ public class PrimeroConfiguration {
 
     public static String getDefaultLanguage() {
         return Locale.getDefault().getLanguage();
+    }
+
+    public static String getAndroidId() {
+        return Settings.Secure.getString(PrimeroApplication.getAppContext().getContentResolver(),
+                Settings.Secure.ANDROID_ID);
     }
 }
