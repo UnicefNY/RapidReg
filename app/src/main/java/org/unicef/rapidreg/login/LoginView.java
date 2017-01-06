@@ -18,4 +18,6 @@ public interface LoginView extends MvpLceView<Call<LoginResponse>> {
     void showPasswordError(String e);
 
     void showUrlError(String e);
+
+    void goToLoginSuccessScreen();
 }

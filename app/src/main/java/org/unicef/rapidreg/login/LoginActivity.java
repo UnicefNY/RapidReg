@@ -1,5 +1,6 @@
 package org.unicef.rapidreg.login;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -12,6 +13,7 @@ import android.widget.Toast;
 
 import com.hannesdorfmann.mosby.mvp.MvpActivity;
 
+import org.unicef.rapidreg.IntentSender;
 import org.unicef.rapidreg.PrimeroApplication;
 import org.unicef.rapidreg.R;
 import org.unicef.rapidreg.base.BaseProgressDialog;
@@ -52,7 +54,7 @@ public class LoginActivity extends MvpActivity<LoginView, LoginPresenter> implem
 
     private BaseProgressDialog loginProgressDialog;
 
-    ActivityComponent activityComponent;
+    private ActivityComponent activityComponent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -185,6 +187,11 @@ public class LoginActivity extends MvpActivity<LoginView, LoginPresenter> implem
     @Override
     public void showUrlError(String e) {
         urlEditView.setError(e);
+    }
+
+    @Override
+    public void goToLoginSuccessScreen() {
+        new IntentSender().showCasesActivity(this, true);
     }
 
 }
