@@ -1,7 +1,6 @@
 package org.unicef.rapidreg.login;
 
 import android.content.Context;
-import android.provider.Settings;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 
@@ -10,7 +9,6 @@ import com.hannesdorfmann.mosby.mvp.MvpBasePresenter;
 import org.greenrobot.eventbus.EventBus;
 import org.unicef.rapidreg.PrimeroApplication;
 import org.unicef.rapidreg.PrimeroConfiguration;
-import org.unicef.rapidreg.R;
 import org.unicef.rapidreg.event.LoadCPCaseFormEvent;
 import org.unicef.rapidreg.event.LoadGBVCaseFormEvent;
 import org.unicef.rapidreg.event.LoadGBVIncidentFormEvent;
@@ -36,13 +34,15 @@ import rx.subscriptions.CompositeSubscription;
 public class LoginPresenter extends MvpBasePresenter<LoginView> {
     public static final String TAG = LoginPresenter.class.getSimpleName();
 
+    private LoginService loginService;
     private UserService userService;
     private AuthService authService;
 
     private CompositeSubscription subscriptions;
 
     @Inject
-    public LoginPresenter(UserService userService, AuthService authService) {
+    public LoginPresenter(LoginService loginService, UserService userService, AuthService authService) {
+        this.loginService = loginService;
         this.userService = userService;
         this.authService = authService;
         subscriptions = new CompositeSubscription();
@@ -71,7 +71,7 @@ public class LoginPresenter extends MvpBasePresenter<LoginView> {
         }
 
         showLoadingIndicator(true);
-        if (NetworkStatusManager.isOnline()) {
+        if (loginService.isOnline()) {
             doLoginOnline(username, password, url);
         } else {
             doLoginOffline(username, password);
@@ -110,73 +110,54 @@ public class LoginPresenter extends MvpBasePresenter<LoginView> {
     }
 
     private void doLoginOnline(final String username,
-                               final String password, final String url) {
-        TelephonyManager tm =
-                (TelephonyManager) PrimeroApplication.getAppContext().getSystemService(Context.TELEPHONY_SERVICE);
+                             final String password, final String url) {
+        loginService.doLoginOnline(username, password, url, PrimeroConfiguration.getAndroidId(), new LoginService.LoginCallback() {
+            @Override
+            public void onLoginSuccessful(String cookie, User user) {
+                if (isViewAttached()) {
+                    PrimeroConfiguration.setCookie(cookie);
+                    PrimeroConfiguration.setCurrentUser(user);
+                    userService.saveOrUpdateUser(user);
 
-        subscriptions.add(authService.loginRx(new LoginRequestBody(
-                username,
-                password,
-                tm.getLine1Number(),
-                PrimeroConfiguration.getAndroidId()))
-                .subscribe(new Action1<Response<LoginResponse>>() {
-                    @Override
-                    public void call(Response<LoginResponse> response) {
-                        if (isViewAttached()) {
-                            showLoadingIndicator(false);
-                            if (response.isSuccessful()) {
-                                LoginResponse loginResponse = response.body();
+                    sendLoadFormEvent(cookie);
 
-                                PrimeroConfiguration.setCookie(getSessionId(response.headers()));
+                    showLoadingIndicator(false);
+                    getView().goToLoginSuccessScreen();
+                }
+            }
 
-                                User user = new User(username, EncryptHelper.encrypt(password), true, url);
-                                user.setDbKey(loginResponse.getDb_key());
-                                user.setOrganisation(loginResponse.getOrganization());
-                                user.setLanguage(loginResponse.getLanguage());
-                                user.setVerified(loginResponse.getVerified());
+            @Override
+            public void onLoginFailed(Throwable error) {
+                if (isViewAttached()) {
+                    showNetworkErrorMessage(error);
+                    showLoadingIndicator(false);
+                    doLoginOffline(username, password);
+                }
+            }
 
-                                PrimeroConfiguration.setCurrentUser(user);
-                                userService.saveOrUpdateUser(user);
+            @Override
+            public void onLoginError(int code) {
+                getView().showErrorByResId(HttpStatusCodeHandler
+                        .getHttpStatusMessage(code));
+                doLoginOffline(username, password);
 
-                                getView().goToLoginSuccessScreen();
+                Log.d(TAG, "login failed");
+            }
+        });
+    }
 
-                                EventBus.getDefault().postSticky(new LoadGBVIncidentFormEvent(PrimeroConfiguration
-                                        .getCookie()));
-                                EventBus.getDefault().postSticky(new LoadGBVCaseFormEvent(PrimeroConfiguration
-                                        .getCookie()));
-                                EventBus.getDefault().postSticky(new LoadCPCaseFormEvent(PrimeroConfiguration
-                                        .getCookie()));
-                                EventBus.getDefault().postSticky(new LoadTracingFormEvent(PrimeroConfiguration
-                                        .getCookie()));
-
-                                getView().showLoginResultByResId(R.string.login_success_message);
-                                Log.d(TAG, "login successful");
-                            } else {
-                                getView().showLoginResultByResId(HttpStatusCodeHandler
-                                        .getHttpStatusMessage(response.code()));
-                                doLoginOffline(username, password);
-
-                                Log.d(TAG, "login failed");
-                            }
-                        }
-                    }
-                }, new Action1<Throwable>() {
-                    @Override
-                    public void call(Throwable throwable) {
-                        if (isViewAttached()) {
-                            showNetworkErrorMessage(throwable, false);
-                            showLoadingIndicator(false);
-                            doLoginOffline(username, password);
-                        }
-                    }
-                }));
+    private void sendLoadFormEvent(String cookie) {
+        EventBus.getDefault().postSticky(new LoadGBVIncidentFormEvent(cookie));
+        EventBus.getDefault().postSticky(new LoadGBVCaseFormEvent(cookie));
+        EventBus.getDefault().postSticky(new LoadCPCaseFormEvent(cookie));
+        EventBus.getDefault().postSticky(new LoadTracingFormEvent(cookie));
     }
 
     private void doLoginOffline(String username, String password) {
         UserService.VerifiedCode verifiedCode = userService.verify(username, password);
 
         showLoadingIndicator(false);
-        getView().showLoginResultByResId(verifiedCode.getResId());
+        getView().showErrorByResId(verifiedCode.getResId());
 
         if (verifiedCode == UserService.VerifiedCode.OK) {
             PrimeroConfiguration.setCurrentUser(userService.getUser(username));

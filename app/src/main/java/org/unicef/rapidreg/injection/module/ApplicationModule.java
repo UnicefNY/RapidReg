@@ -14,6 +14,7 @@ import org.unicef.rapidreg.db.impl.TracingFormDaoImpl;
 import org.unicef.rapidreg.db.impl.TracingPhotoDaoImpl;
 import org.unicef.rapidreg.db.impl.UserDaoImpl;
 import org.unicef.rapidreg.injection.ApplicationContext;
+import org.unicef.rapidreg.login.LoginService;
 import org.unicef.rapidreg.network.AuthService;
 import org.unicef.rapidreg.network.SyncService;
 import org.unicef.rapidreg.network.SyncTracingService;
@@ -124,14 +125,24 @@ public class ApplicationModule {
     }
 
     @Provides
+    @Singleton
     public SyncService provideSyncService(RecordService
             recordService, CasePhotoService casePhotoService) {
         return new SyncService(casePhotoService, recordService);
     }
 
     @Provides
+    @Singleton
     public SyncTracingService provideSyncTracingService(RecordService recordService,
                                                         TracingPhotoService tracingPhotoService) {
         return new SyncTracingService(recordService, tracingPhotoService);
+    }
+
+    @Provides
+    @Singleton
+    public LoginService provideLoginService(ConnectivityManager connectivityManager,
+                                            TelephonyManager telephonyManager,
+                                            AuthService authService) {
+        return new LoginService(connectivityManager, telephonyManager, authService);
     }
 }

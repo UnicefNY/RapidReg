@@ -2,10 +2,13 @@ package org.unicef.rapidreg.injection.component;
 
 import android.app.Application;
 import android.content.Context;
+import android.net.ConnectivityManager;
+import android.telephony.TelephonyManager;
 
 import org.unicef.rapidreg.PrimeroGlideModule;
 import org.unicef.rapidreg.injection.ApplicationContext;
 import org.unicef.rapidreg.injection.module.ApplicationModule;
+import org.unicef.rapidreg.login.LoginService;
 import org.unicef.rapidreg.network.AuthService;
 import org.unicef.rapidreg.network.SyncService;
 import org.unicef.rapidreg.network.SyncTracingService;
@@ -32,32 +35,20 @@ public interface ApplicationComponent {
 
     @ApplicationContext
     Context context();
-
     Application application();
 
     UserService userService();
-
     CaseFormService caseFormService();
-
     CasePhotoService casePhotoService();
-
     CaseService caseService();
-
     RecordService recordService();
-
     TracingFormService tracingFormService();
-
     TracingPhotoService tracingPhotoService();
-
     TracingService tracingService();
-
     IncidentService incidentService();
-
     IncidentFormService incidentFormService();
-
     AuthService authService();
-
     SyncService syncService();
-
     SyncTracingService syncTracingService();
+    LoginService loginService();
 }
