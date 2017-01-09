@@ -20,11 +20,14 @@ import org.unicef.rapidreg.childcase.CaseFeature;
 import org.unicef.rapidreg.childcase.caseregister.CaseRegisterPresenter;
 import org.unicef.rapidreg.event.LoadCPCaseFormEvent;
 import org.unicef.rapidreg.event.LoadGBVCaseFormEvent;
+import org.unicef.rapidreg.model.User;
 
 import java.util.Arrays;
 import java.util.HashMap;
 
 import javax.inject.Inject;
+
+import butterknife.OnClick;
 
 import static android.view.View.*;
 import static org.unicef.rapidreg.base.record.recordregister.RecordRegisterBtnType.CASE_CP;
@@ -71,32 +74,6 @@ public class CaseListFragment extends RecordListFragment {
     }
 
     @Override
-    protected HashMap<RecordRegisterBtnType, OnClickListener> getCreateEvents() {
-        HashMap<RecordRegisterBtnType, OnClickListener> events = new HashMap<>();
-        events.put(CASE_CP, createOnClickListener(CASE_CP));
-        events.put(CASE_GBV, createOnClickListener(CASE_GBV));
-        return events;
-    }
-
-    private OnClickListener createOnClickListener(RecordRegisterBtnType eventType) {
-        switch (eventType) {
-            case CASE_CP: return new OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    onCPCaseAddClicked();
-                }
-            };
-            case CASE_GBV:return new OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    onGBVCaseAddClicked();
-                }
-            };
-            default: return null;
-        }
-    }
-
-    @Override
     protected void sendSyncFormEvent() {
         EventBus.getDefault().postSticky(new LoadCPCaseFormEvent(PrimeroConfiguration.getCookie()));
         EventBus.getDefault().postSticky(new LoadGBVCaseFormEvent(PrimeroConfiguration.getCookie()));
@@ -133,6 +110,16 @@ public class CaseListFragment extends RecordListFragment {
         Bundle bundle = new Bundle();
         bundle.putString(MODULE, MODULE_CASE_GBV);
         activity.turnToFeature(CaseFeature.ADD_GBV_MINI, bundle, null);
+    }
+
+    @OnClick(R.id.add)
+    public void onCaseAddClicked() {
+        User.Role role = PrimeroConfiguration.getCurrentUser().getRoleType();
+        switch (role) {
+            case CP_CASE_WORKER: onCPCaseAddClicked(); break;
+            case GBV_CASE_WORKER: onGBVCaseAddClicked(); break;
+            default: break;
+        }
     }
 
 }
