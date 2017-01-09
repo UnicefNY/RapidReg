@@ -6,6 +6,7 @@ import com.raizlabs.android.dbflow.annotation.Table;
 import com.raizlabs.android.dbflow.annotation.Unique;
 import com.raizlabs.android.dbflow.structure.BaseModel;
 
+import org.unicef.rapidreg.R;
 import org.unicef.rapidreg.db.PrimeroDB;
 
 @Table(database = PrimeroDB.class)
@@ -26,6 +27,8 @@ public class User extends BaseModel {
     private String dbKey;
     @Column(name = "organisation")
     private String organisation;
+    @Column(name = "role")
+    private String role;
     @Column(name = "full_name")
     private String fullName;
     @Column(name = "unauthenticated_password")
@@ -37,23 +40,23 @@ public class User extends BaseModel {
     }
 
     public User(String username) {
-        this(username, null, false, null, null, null, null, null, null);
+        this(username, null, false, null, null, null, null, null, null, null);
     }
 
     public User(String username, String password) {
-        this(username, password, false, null, null, null, null, null, null);
+        this(username, password, false, null, null, null, null, null, null, null);
     }
 
     public User(String username, String password, boolean verified) {
-        this(username, password, verified, null, null, null, null, null, null);
+        this(username, password, verified, null, null, null, null, null, null, null);
     }
 
     public User(String username, String password, boolean verified, String serverUrl) {
-        this(username, password, verified, serverUrl, null, null, null, null, null);
+        this(username, password, verified, serverUrl, null, null, null, null, null, null);
     }
 
     public User(String username, String password, boolean verified, String serverUrl,
-                String dbKey, String organisation, String fullName, String unauthenticatedPassword,
+                String dbKey, String organisation, String role, String fullName, String unauthenticatedPassword,
                 String language) {
         this.username = username;
         this.password = password;
@@ -61,6 +64,7 @@ public class User extends BaseModel {
         this.serverUrl = serverUrl;
         this.dbKey = dbKey;
         this.organisation = organisation;
+        this.role = role;
         this.fullName = fullName;
         this.unauthenticatedPassword = unauthenticatedPassword;
         this.language = language;
@@ -122,6 +126,18 @@ public class User extends BaseModel {
         this.organisation = organisation;
     }
 
+    public String getRole() {
+        return role;
+    }
+
+    public Role getRoleType() {
+        return Role.getRoleByValue(role);
+    }
+
+    public void setRole(String role) {
+        this.role = role;
+    }
+
     public String getFullName() {
         return fullName;
     }
@@ -147,14 +163,15 @@ public class User extends BaseModel {
     }
 
     public void updateFields(User user) {
-        this.password = user.getPassword();
-        this.verified = user.isVerified();
-        this.serverUrl = user.getServerUrl();
-        this.dbKey = user.getDbKey();
-        this.language = user.getLanguage();
-        this.organisation = user.getOrganisation();
-        this.fullName = user.getFullName();
-        this.unauthenticatedPassword = user.getUnauthenticatedPassword();
+        this.password = user.password;
+        this.verified = user.verified;
+        this.serverUrl = user.serverUrl;
+        this.dbKey = user.dbKey;
+        this.language = user.language;
+        this.organisation = user.organisation;
+        this.role = user.role;
+        this.fullName = user.fullName;
+        this.unauthenticatedPassword = user.unauthenticatedPassword;
     }
 
     @Override
@@ -162,11 +179,44 @@ public class User extends BaseModel {
         StringBuilder sb = new StringBuilder("<User>").append("\n");
         sb.append("name:").append(username).append("\n");
         sb.append("password:").append(password).append("\n");
+        sb.append("role:").append(role).append("\n");
         sb.append("verified:").append(verified).append("\n");
         sb.append("serverUrl:").append(serverUrl).append("\n");
         sb.append("dbKey:").append(dbKey).append("\n");
         sb.append("language:").append(language).append("\n");
 
         return sb.toString();
+    }
+
+    public enum Role {
+        EMPTY_ROLE(""),
+        SUPERUSER("Superuser", R.menu.activity_main_drawer),
+        CP_CASE_WORKER("CP Case Worker", R.menu.activity_main_cp_drawer, R.menu.activity_main_tracing_drawer, R.menu.activity_main_sync_drawer),
+        GBV_CASE_WORKER("GBV Case Worker", R.menu.activity_main_gbv_drawer, R.menu.activity_main_incident_drawer, R.menu.activity_main_sync_drawer);
+
+        private String value;
+        private int[] resIds;
+
+        Role(String value, int... resIds) {
+            this.value = value;
+            this.resIds = resIds;
+        }
+
+        public String getValue() {
+            return value;
+        }
+
+        public int[] getResIds() {
+            return resIds;
+        }
+
+        public static Role getRoleByValue(String value) {
+            for (Role role: Role.values()) {
+                if (role.getValue().equals(value)) {
+                    return role;
+                }
+            }
+            return EMPTY_ROLE;
+        }
     }
 }
