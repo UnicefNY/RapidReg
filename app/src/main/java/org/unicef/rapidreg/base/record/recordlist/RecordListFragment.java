@@ -58,9 +58,6 @@ public abstract class RecordListFragment extends MvpFragment<RecordListView, Rec
     @BindView(R.id.add)
     protected FloatingActionButton addButton;
 
-    @BindView(R.id.add_menu)
-    protected FloatingActionsMenu addMenu;
-
     @BindView(R.id.container)
     protected LinearLayout container;
 
@@ -89,40 +86,6 @@ public abstract class RecordListFragment extends MvpFragment<RecordListView, Rec
 
         initListContainer(recordListAdapter);
         initOrderSpinner(recordListAdapter);
-
-        initCreateEventView(getCreateEvents());
-    }
-
-    private void initCreateEventView(HashMap<RecordRegisterBtnType, OnClickListener> events) {
-        if (events == null || events.size() <= 1) {
-            initFloatingActionButton();
-        } else {
-            initFloatingActionMenu(events);
-        }
-    }
-
-    private void initFloatingActionMenu(HashMap<RecordRegisterBtnType, OnClickListener> events) {
-        addMenu.setVisibility(VISIBLE);
-        addButton.setVisibility(INVISIBLE);
-        for(Entry<RecordRegisterBtnType, OnClickListener> entry : events.entrySet()) {
-            addMenu.addButton(createFloatingActionButton(entry.getKey(), entry.getValue()));
-        }
-    }
-
-    private void initFloatingActionButton() {
-        addButton.setVisibility(VISIBLE);
-        addMenu.setVisibility(INVISIBLE);
-    }
-
-    private FloatingActionButton createFloatingActionButton(RecordRegisterBtnType type, OnClickListener listener) {
-        FloatingActionButton button = new FloatingActionButton(getActivity());
-        button.setTitle(type.getBtnTitle());
-        button.setIcon(type.getResId());
-        button.setColorNormalResId(R.color.primero_green);
-        button.setColorPressedResId(R.color.primero_green);
-        button.setOnClickListener(listener);
-
-        return button;
     }
 
     protected FragmentComponent getComponent() {
@@ -188,10 +151,6 @@ public abstract class RecordListFragment extends MvpFragment<RecordListView, Rec
 
             }
         });
-    }
-
-    protected HashMap<RecordRegisterBtnType, OnClickListener> getCreateEvents() {
-        return null;
     }
 
     protected abstract RecordListAdapter createRecordListAdapter();
