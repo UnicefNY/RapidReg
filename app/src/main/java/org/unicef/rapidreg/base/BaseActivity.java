@@ -20,6 +20,7 @@ import com.hannesdorfmann.mosby.mvp.MvpActivity;
 
 import org.unicef.rapidreg.IntentSender;
 import org.unicef.rapidreg.PrimeroApplication;
+import org.unicef.rapidreg.PrimeroConfiguration;
 import org.unicef.rapidreg.R;
 import org.unicef.rapidreg.injection.component.ActivityComponent;
 import org.unicef.rapidreg.injection.component.DaggerActivityComponent;
@@ -67,6 +68,8 @@ public abstract class BaseActivity extends MvpActivity<BaseView, BasePresenter> 
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
+        initNavigationItemMenu();
+
         navigationView.setItemIconTintList(null);
         caseColor = generateColors(R.color.primero_green);
         tracingColor = generateColors(R.color.primero_red);
@@ -104,6 +107,16 @@ public abstract class BaseActivity extends MvpActivity<BaseView, BasePresenter> 
             drawer.openDrawer(GravityCompat.START);
         } else {
             drawer.closeDrawer(GravityCompat.START);
+        }
+    }
+
+    protected void initNavigationItemMenu() {
+        User user = PrimeroConfiguration.getCurrentUser();
+        if (user != null) {
+            User.Role role = user.getRoleType();
+            for (int resId: role.getResIds()) {
+                navigationView.inflateMenu(resId);
+            }
         }
     }
 

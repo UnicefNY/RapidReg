@@ -66,13 +66,6 @@ public class TracingListFragment extends RecordListFragment {
     }
 
     @Override
-    protected HashMap<RecordRegisterBtnType, View.OnClickListener> getCreateEvents() {
-        HashMap<RecordRegisterBtnType, View.OnClickListener> events = new HashMap<>();
-        events.put(RecordRegisterBtnType.TRACING, null);
-        return events;
-    }
-
-    @Override
     protected void sendSyncFormEvent() {
         EventBus.getDefault().postSticky(new LoadTracingFormEvent(PrimeroConfiguration.getCookie()));
     }
