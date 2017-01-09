@@ -7,6 +7,8 @@ public class LoginResponse {
 
     private String organization;
 
+    private String roles;
+
     private String language;
 
     private boolean verified;
@@ -33,6 +35,14 @@ public class LoginResponse {
 
     public String getOrganization() {
         return this.organization;
+    }
+
+    public String getRoles() {
+        return roles;
+    }
+
+    public void setRoles(String roles) {
+        this.roles = roles;
     }
 
     public void setLanguage(String language) {
