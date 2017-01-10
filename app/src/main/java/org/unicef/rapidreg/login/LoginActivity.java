@@ -145,9 +145,7 @@ public class LoginActivity extends MvpActivity<LoginView, LoginPresenter> implem
     }
 
     @Override
-    public void setData(Call<LoginResponse> data) {
-
-    }
+    public void setData(Call<LoginResponse> data) {}
 
     @Override
     public void loadData(boolean pullToRefresh) {
