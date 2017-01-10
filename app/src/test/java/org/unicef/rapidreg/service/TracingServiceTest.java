@@ -62,6 +62,9 @@ public class TracingServiceTest {
     public void setUp() throws Exception {
         initMocks(this);
         PowerMockito.mockStatic(PrimeroConfiguration.class);
+
+        User user = new User("userName");
+        when(PrimeroConfiguration.getCurrentUser()).thenReturn(user);
     }
 
     @Test
@@ -87,7 +90,7 @@ public class TracingServiceTest {
         Tracing tracing = new Tracing();
         List<Tracing> tracingList = new ArrayList<Tracing>();
         tracingList.add(tracing);
-        when(tracingDao.getAllTracingsOrderByDate(false)).thenReturn(tracingList);
+        when(tracingDao.getAllTracingsOrderByDate(false, "userName")).thenReturn(tracingList);
         assertThat(tracingService.getAll(), is(tracingList));
     }
 
@@ -96,7 +99,7 @@ public class TracingServiceTest {
         Long l = 1L;
         List<Long> list = new ArrayList<>();
         list.add(l);
-        when(tracingDao.getAllIds()).thenReturn(list);
+        when(tracingDao.getAllIds("userName")).thenReturn(list);
         assertThat(tracingService.getAllIds(), is(list));
     }
 
@@ -142,8 +145,6 @@ public class TracingServiceTest {
         itemValuesMap.addStringItem(CAREGIVER_NAME, "100");
         itemValuesMap.addStringItem(INQUIRY_DATE, "1/1/2000");
         List<String> photoPaths = Collections.EMPTY_LIST;
-        User user = new User("userName");
-        when(PrimeroConfiguration.getCurrentUser()).thenReturn(user);
 
         TracingService tracingServiceSpy = spy(tracingService);
         when(tracingServiceSpy.generateUniqueId()).thenReturn(uniqueId);
