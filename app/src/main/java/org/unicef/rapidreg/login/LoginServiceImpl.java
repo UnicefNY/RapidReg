@@ -65,7 +65,7 @@ public class LoginServiceImpl implements org.unicef.rapidreg.service.LoginServic
                     User user = new User(username, EncryptHelper.encrypt(password), true, url);
                     user.setDbKey(responseBody.getDb_key());
                     user.setOrganisation(responseBody.getOrganization());
-                    user.setRole(responseBody.getRoles());
+                    user.setRole(responseBody.getRole());
                     user.setLanguage(responseBody.getLanguage());
                     user.setVerified(responseBody.getVerified());
 

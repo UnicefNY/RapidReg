@@ -5,7 +5,6 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import org.greenrobot.eventbus.EventBus;
 import org.unicef.rapidreg.PrimeroConfiguration;
@@ -15,23 +14,17 @@ import org.unicef.rapidreg.base.record.recordlist.RecordListAdapter;
 import org.unicef.rapidreg.base.record.recordlist.RecordListFragment;
 import org.unicef.rapidreg.base.record.recordlist.RecordListPresenter;
 import org.unicef.rapidreg.base.record.recordlist.spinner.SpinnerState;
-import org.unicef.rapidreg.base.record.recordregister.RecordRegisterBtnType;
 import org.unicef.rapidreg.childcase.CaseFeature;
-import org.unicef.rapidreg.childcase.caseregister.CaseRegisterPresenter;
 import org.unicef.rapidreg.event.LoadCPCaseFormEvent;
 import org.unicef.rapidreg.event.LoadGBVCaseFormEvent;
 import org.unicef.rapidreg.model.User;
 
 import java.util.Arrays;
-import java.util.HashMap;
 
 import javax.inject.Inject;
 
 import butterknife.OnClick;
 
-import static android.view.View.*;
-import static org.unicef.rapidreg.base.record.recordregister.RecordRegisterBtnType.CASE_CP;
-import static org.unicef.rapidreg.base.record.recordregister.RecordRegisterBtnType.CASE_GBV;
 import static org.unicef.rapidreg.childcase.caseregister.CaseRegisterPresenter.MODULE_CASE_CP;
 import static org.unicef.rapidreg.childcase.caseregister.CaseRegisterPresenter.MODULE_CASE_GBV;
 import static org.unicef.rapidreg.service.RecordService.MODULE;
@@ -116,8 +109,8 @@ public class CaseListFragment extends RecordListFragment {
     public void onCaseAddClicked() {
         User.Role role = PrimeroConfiguration.getCurrentUser().getRoleType();
         switch (role) {
-            case CP_CASE_WORKER: onCPCaseAddClicked(); break;
-            case GBV_CASE_WORKER: onGBVCaseAddClicked(); break;
+            case CP: onCPCaseAddClicked(); break;
+            case GBV: onGBVCaseAddClicked(); break;
             default: break;
         }
     }

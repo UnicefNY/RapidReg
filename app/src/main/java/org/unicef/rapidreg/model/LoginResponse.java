@@ -7,7 +7,7 @@ public class LoginResponse {
 
     private String organization;
 
-    private String roles;
+    private String role;
 
     private String language;
 
@@ -37,12 +37,12 @@ public class LoginResponse {
         return this.organization;
     }
 
-    public String getRoles() {
-        return roles;
+    public String getRole() {
+        return role;
     }
 
-    public void setRoles(String roles) {
-        this.roles = roles;
+    public void setRole(String role) {
+        this.role = role;
     }
 
     public void setLanguage(String language) {
