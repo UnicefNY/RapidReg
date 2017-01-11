@@ -25,7 +25,7 @@ public interface UserService {
 
     boolean isUserEverLoginSuccessfully();
 
-    VerifiedCode verify(String username, String password);
+    VerifiedCode verify(String username, String password, boolean isOnline);
 
     boolean isNameValid(String username);
 

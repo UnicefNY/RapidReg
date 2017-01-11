@@ -50,49 +50,51 @@ public class LoginServiceImpl implements org.unicef.rapidreg.service.LoginServic
     }
 
     @Override
-    public void doLoginOnline(final String username,
-                              final String password,
-                              final String url,
-                              String imei,
-                              final LoginCallback callback) {
+    public void loginOnline(final String username,
+                            final String password,
+                            final String url,
+                            String imei,
+                            final LoginCallback callback) {
         authService.init();
         final LoginRequestBody loginRequestBody = new LoginRequestBody(username, password, "15555215554", "8fd2274a590497e9");
-        Subscription subscription = authService.loginRx(loginRequestBody).subscribe(new Action1<Response<LoginResponse>>() {
-            @Override
-            public void call(Response<LoginResponse> response) {
-                if (response.isSuccessful()) {
-                    LoginResponse responseBody = response.body();
-                    User user = new User(username, EncryptHelper.encrypt(password), true, url);
-                    user.setDbKey(responseBody.getDb_key());
-                    user.setOrganisation(responseBody.getOrganization());
-                    user.setRole(responseBody.getRole());
-                    user.setLanguage(responseBody.getLanguage());
-                    user.setVerified(responseBody.getVerified());
+        Subscription subscription = authService
+                .loginRx(loginRequestBody)
+                .subscribe(new Action1<Response<LoginResponse>>() {
+                    @Override
+                    public void call(Response<LoginResponse> response) {
+                        if (response.isSuccessful()) {
+                            LoginResponse responseBody = response.body();
+                            User user = new User(username, EncryptHelper.encrypt(password), true, url);
+                            user.setDbKey(responseBody.getDb_key());
+                            user.setOrganisation(responseBody.getOrganization());
+                            user.setRole(responseBody.getRole());
+                            user.setLanguage(responseBody.getLanguage());
+                            user.setVerified(responseBody.getVerified());
 
-                    userService.saveOrUpdateUser(user);
-                    callback.onLoginSuccessful(getSessionId(response.headers()), user);
-                } else {
-                    callback.onLoginError(response.code());
-                }
-            }
-        }, new Action1<Throwable>() {
-            @Override
-            public void call(Throwable throwable) {
-                callback.onLoginFailed(throwable);
-            }
-        });
+                            userService.saveOrUpdateUser(user);
+                            callback.onSuccessful(getSessionId(response.headers()), user);
+                        } else {
+                            callback.onError(response.code());
+                        }
+                    }
+                }, new Action1<Throwable>() {
+                    @Override
+                    public void call(Throwable throwable) {
+                        callback.onFailed(throwable);
+                    }
+                });
 
         compositeSubscription.add(subscription);
     }
 
     @Override
-    public void doLoginOffline(String username, String password, LoginCallback callback) {
-        UserService.VerifiedCode verifiedCode = userService.verify(username, password);
+    public void loginOffline(String username, String password, LoginCallback callback) {
+        UserService.VerifiedCode verifiedCode = userService.verify(username, password, isOnline());
 
         if (UserService.VerifiedCode.OK == verifiedCode) {
-            callback.onLoginSuccessful("", userService.getUserByUserName(username));
+            callback.onSuccessful("", userService.getUserByUserName(username));
         } else {
-            callback.onLoginError(verifiedCode.getResId());
+            callback.onError(verifiedCode.getResId());
         }
     }
 
