@@ -87,7 +87,7 @@ public class LoginPresenter extends MvpBasePresenter<LoginView> {
                     PrimeroConfiguration.setCookie(cookie);
                     PrimeroConfiguration.setCurrentUser(user);
 
-                    sendLoadFormEvent(cookie);
+                    sendLoadFormEvent(user.getRoleType(), cookie);
 
                     getView().showLoading(false);
                     getView().showLoginSuccessful();
@@ -108,18 +108,26 @@ public class LoginPresenter extends MvpBasePresenter<LoginView> {
             public void onLoginError(int code) {
                 getView().showLoginErrorByResId(HttpStatusCodeHandler
                         .getHttpStatusMessage(code));
-                doLoginOffline(username, password);
 
+                getView().showLoading(false);
                 Log.d(TAG, "login failed");
             }
         });
     }
 
-    private void sendLoadFormEvent(String cookie) {
-        EventBus.getDefault().postSticky(new LoadGBVIncidentFormEvent(cookie));
-        EventBus.getDefault().postSticky(new LoadGBVCaseFormEvent(cookie));
-        EventBus.getDefault().postSticky(new LoadCPCaseFormEvent(cookie));
-        EventBus.getDefault().postSticky(new LoadTracingFormEvent(cookie));
+    private void sendLoadFormEvent(User.Role roleType, String cookie) {
+        switch (roleType) {
+            case CP:
+                EventBus.getDefault().postSticky(new LoadCPCaseFormEvent(cookie));
+                EventBus.getDefault().postSticky(new LoadTracingFormEvent(cookie));
+                break;
+            case GBV:
+                EventBus.getDefault().postSticky(new LoadGBVIncidentFormEvent(cookie));
+                EventBus.getDefault().postSticky(new LoadGBVCaseFormEvent(cookie));
+                break;
+            default:
+                break;
+        }
     }
 
     private void doLoginOffline(String username, String password) {
