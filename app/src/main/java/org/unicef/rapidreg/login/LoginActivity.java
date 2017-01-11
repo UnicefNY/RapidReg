@@ -154,7 +154,11 @@ public class LoginActivity extends MvpActivity<LoginView, LoginPresenter> implem
 
     @Override
     public void showLoginSuccessful() {
-        Toast.makeText(this, getResources().getString(R.string.login_success_message), Toast.LENGTH_SHORT).show();
+        if (loginPresenter.isOnline()) {
+            Toast.makeText(this, getResources().getString(R.string.login_success_message), Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(this, getResources().getString(R.string.login_offline_success_text), Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override
