@@ -51,7 +51,7 @@ public class UserServiceTest {
     public void should_verify_when_user_does_not_exist() {
         when(userDao.getUser(anyString())).thenReturn(null);
 
-        UserService.VerifiedCode verifiedCode = userService.verify(username, password);
+        UserService.VerifiedCode verifiedCode = userService.verify(username, password, false);
 
         assertThat(verifiedCode, is(UserService.VerifiedCode.USER_DOES_NOT_EXIST));
     }
@@ -60,7 +60,7 @@ public class UserServiceTest {
     public void should_verify_when_user_password_is_incorrect() {
         when(userDao.getUser(username)).thenReturn(jack);
 
-        UserService.VerifiedCode verifiedCode = userService.verify(username, "654321");
+        UserService.VerifiedCode verifiedCode = userService.verify(username, "654321", false);
 
         assertThat(verifiedCode, is(UserService.VerifiedCode.PASSWORD_INCORRECT));
     }
@@ -69,7 +69,7 @@ public class UserServiceTest {
     public void should_verify_when_both_username_and_password_are_correct() {
         when(userDao.getUser(username)).thenReturn(jack);
 
-        UserService.VerifiedCode verifiedCode = userService.verify(username, password);
+        UserService.VerifiedCode verifiedCode = userService.verify(username, password, false);
 
         assertThat(verifiedCode, is(UserService.VerifiedCode.OK));
     }

@@ -80,9 +80,9 @@ public class LoginPresenter extends MvpBasePresenter<LoginView> {
 
     private void doLoginOnline(final String username,
                              final String password, final String url) {
-        loginService.doLoginOnline(username, password, url, PrimeroConfiguration.getAndroidId(), new LoginServiceImpl.LoginCallback() {
+        loginService.loginOnline(username, password, url, PrimeroConfiguration.getAndroidId(), new LoginServiceImpl.LoginCallback() {
             @Override
-            public void onLoginSuccessful(String cookie, User user) {
+            public void onSuccessful(String cookie, User user) {
                 if (isViewAttached()) {
                     PrimeroConfiguration.setCookie(cookie);
                     PrimeroConfiguration.setCurrentUser(user);
@@ -96,7 +96,7 @@ public class LoginPresenter extends MvpBasePresenter<LoginView> {
             }
 
             @Override
-            public void onLoginFailed(Throwable error) {
+            public void onFailed(Throwable error) {
                 if (isViewAttached()) {
                     getView().showError(error, false);
                     getView().showLoading(false);
@@ -105,7 +105,7 @@ public class LoginPresenter extends MvpBasePresenter<LoginView> {
             }
 
             @Override
-            public void onLoginError(int code) {
+            public void onError(int code) {
                 getView().showLoginErrorByResId(HttpStatusCodeHandler
                         .getHttpStatusMessage(code));
 
@@ -131,9 +131,9 @@ public class LoginPresenter extends MvpBasePresenter<LoginView> {
     }
 
     private void doLoginOffline(String username, String password) {
-        loginService.doLoginOffline(username, password, new LoginService.LoginCallback() {
+        loginService.loginOffline(username, password, new LoginService.LoginCallback() {
             @Override
-            public void onLoginSuccessful(String cookie, User user) {
+            public void onSuccessful(String cookie, User user) {
                 PrimeroConfiguration.setCurrentUser(user);
                 getView().showLoading(false);
                 getView().showLoginSuccessful();
@@ -141,13 +141,13 @@ public class LoginPresenter extends MvpBasePresenter<LoginView> {
             }
 
             @Override
-            public void onLoginFailed(Throwable error) {
+            public void onFailed(Throwable error) {
                 getView().showLoading(false);
                 getView().showLoginErrorByToast(error.getMessage());
             }
 
             @Override
-            public void onLoginError(int code) {
+            public void onError(int code) {
                 getView().showLoading(false);
                 getView().showLoginErrorByResId(code);
             }

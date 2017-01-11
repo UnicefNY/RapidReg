@@ -25,11 +25,11 @@ public class UserServiceImpl implements UserService {
         return userDao.countUser() > 0;
     }
 
-    public VerifiedCode verify(String username, String password) {
+    public VerifiedCode verify(String username, String password, boolean isOnline) {
         User user = userDao.getUser(username);
 
         if (user == null) {
-            return VerifiedCode.USER_DOES_NOT_EXIST;
+            return isOnline ? VerifiedCode.PASSWORD_INCORRECT : VerifiedCode.USER_DOES_NOT_EXIST;
         }
 
         if (EncryptHelper.isMatched(password, user.getPassword())) {
