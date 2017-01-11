@@ -30,7 +30,7 @@ public class LoginPresenter extends MvpBasePresenter<LoginView> {
         return loginService.getServerUrl();
     }
 
-    public void doLogin(String username, String password, String url) {
+    public void doLogin(String username, String password, String url, String imei) {
         if (!validate(username, password, url)) {
             return;
         }
@@ -39,7 +39,7 @@ public class LoginPresenter extends MvpBasePresenter<LoginView> {
         try {
             getView().showLoading(true);
             if (loginService.isOnline()) {
-                doLoginOnline(username, password, url);
+                doLoginOnline(username, password, url, imei);
             } else {
                 doLoginOffline(username, password);
             }
@@ -79,8 +79,10 @@ public class LoginPresenter extends MvpBasePresenter<LoginView> {
     }
 
     private void doLoginOnline(final String username,
-                             final String password, final String url) {
-        loginService.loginOnline(username, password, url, PrimeroConfiguration.getAndroidId(), new LoginServiceImpl.LoginCallback() {
+                               final String password,
+                               final String url,
+                               String imei) {
+        loginService.loginOnline(username, password, url, imei, new LoginServiceImpl.LoginCallback() {
             @Override
             public void onSuccessful(String cookie, User user) {
                 if (isViewAttached()) {

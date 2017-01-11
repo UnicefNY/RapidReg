@@ -15,6 +15,7 @@ import com.hannesdorfmann.mosby.mvp.MvpActivity;
 
 import org.unicef.rapidreg.IntentSender;
 import org.unicef.rapidreg.PrimeroApplication;
+import org.unicef.rapidreg.PrimeroConfiguration;
 import org.unicef.rapidreg.R;
 import org.unicef.rapidreg.base.BaseProgressDialog;
 import org.unicef.rapidreg.injection.component.ActivityComponent;
@@ -80,7 +81,8 @@ public class LoginActivity extends MvpActivity<LoginView, LoginPresenter> implem
         presenter.doLogin(
                 usernameEditView.getText().toString().trim(),
                 passwordEditView.getText().toString().trim(),
-                urlEditView.getText().toString().trim());
+                urlEditView.getText().toString().trim(),
+                PrimeroConfiguration.getAndroidId());
     }
 
     @OnClick(R.id.change_url)
