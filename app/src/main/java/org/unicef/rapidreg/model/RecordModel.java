@@ -13,7 +13,7 @@ public class RecordModel extends BaseModel {
     public static final int TRACING = 1;
 
     public static final int MIN_AGE = 0;
-    public static final int MAX_AGE = 100;
+    public static final int MAX_AGE = 999;
     public static final String COLUMN_UNIQUE_ID = "unique_id";
     public static final String COLUMN_SHORT_ID = "short_id";
     public static final String COLUMN_NAME = "name";

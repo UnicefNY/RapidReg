@@ -43,7 +43,7 @@
             android:layout_weight="1"
             android:hint="@string/age_from"
             android:inputType="numberDecimal"
-            android:maxLength="2"
+            android:maxLength="3"
             android:singleLine="true"/>
 
         <View
@@ -58,7 +58,7 @@
             android:layout_weight="1"
             android:hint="@string/age_to"
             android:inputType="numberDecimal"
-            android:maxLength="2"/>
+            android:maxLength="3"/>
     </LinearLayout>
 
     <View
