@@ -91,7 +91,11 @@ public class CaseService extends RecordService {
                 .like(getWrappedCondition(shortId)));
         conditionGroup.and(Condition.column(NameAlias.builder(RecordModel.COLUMN_NAME).build())
                 .like(getWrappedCondition(name)));
-        conditionGroup.and(generateAgeSearchCondition(ageFrom, ageTo));
+        Condition ageSearchCondition = generateAgeSearchCondition(ageFrom, ageTo);
+        if (ageSearchCondition != null) {
+            conditionGroup.and(ageSearchCondition);
+        }
+
         conditionGroup.and(Condition.column(NameAlias.builder(RecordModel.COLUMN_CAREGIVER).build())
                 .like(getWrappedCondition(caregiver)));
         conditionGroup.and(Condition.column(NameAlias.builder(RecordModel.COLUMN_CREATED_BY).build())
