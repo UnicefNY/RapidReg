@@ -3,7 +3,6 @@ package org.unicef.rapidreg.base.record.recordsearch;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -159,8 +158,8 @@ public abstract class RecordSearchFragment extends MvpFragment<RecordListView, R
 
         List<Long> searchResult = presenter.getSearchResult(id.getText(),
                 name.getText(),
-                TextUtils.isEmpty(from) ? RecordModel.MIN_AGE : Integer.valueOf(from),
-                TextUtils.isEmpty(to) ? RecordModel.MAX_AGE : Integer.valueOf(to),
+                TextUtils.isEmpty(from) ? RecordModel.EMPTY_AGE : Integer.valueOf(from),
+                TextUtils.isEmpty(to) ? RecordModel.EMPTY_AGE : Integer.valueOf(to),
                 caregiver.getText(),
                 registrationDate.getText().toString());
 

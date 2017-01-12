@@ -8,6 +8,7 @@ import com.raizlabs.android.dbflow.data.Blob;
 import com.raizlabs.android.dbflow.sql.language.Condition;
 import com.raizlabs.android.dbflow.sql.language.ConditionGroup;
 import com.raizlabs.android.dbflow.sql.language.NameAlias;
+import com.raizlabs.android.dbflow.sql.language.SQLCondition;
 
 import org.unicef.rapidreg.PrimeroConfiguration;
 import org.unicef.rapidreg.db.CaseDao;
@@ -90,8 +91,7 @@ public class CaseService extends RecordService {
                 .like(getWrappedCondition(shortId)));
         conditionGroup.and(Condition.column(NameAlias.builder(RecordModel.COLUMN_NAME).build())
                 .like(getWrappedCondition(name)));
-        conditionGroup.and(Condition.column(NameAlias.builder(RecordModel.COLUMN_AGE).build())
-                .between(ageFrom).and(ageTo));
+        conditionGroup.and(generateAgeSearchCondition(ageFrom, ageTo));
         conditionGroup.and(Condition.column(NameAlias.builder(RecordModel.COLUMN_CAREGIVER).build())
                 .like(getWrappedCondition(caregiver)));
         conditionGroup.and(Condition.column(NameAlias.builder(RecordModel.COLUMN_CREATED_BY).build())
