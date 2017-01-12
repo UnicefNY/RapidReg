@@ -1,5 +1,9 @@
 package org.unicef.rapidreg.service;
 
+import com.raizlabs.android.dbflow.sql.language.Condition;
+import com.raizlabs.android.dbflow.sql.language.NameAlias;
+import com.raizlabs.android.dbflow.sql.language.SQLCondition;
+
 import org.unicef.rapidreg.PrimeroConfiguration;
 import org.unicef.rapidreg.forms.Field;
 import org.unicef.rapidreg.forms.RecordForm;
@@ -12,6 +16,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
+
+import static org.unicef.rapidreg.model.RecordModel.EMPTY_AGE;
 
 public class RecordService {
     public static final String RECORD_ID = "record_id";
@@ -82,6 +88,25 @@ public class RecordService {
             }
         }
         return true;
+    }
+
+    protected SQLCondition generateAgeSearchCondition(int ageFrom, int ageTo) {
+        if (ageFrom == EMPTY_AGE && ageTo == EMPTY_AGE) {
+            return Condition.column(NameAlias.builder(RecordModel.COLUMN_AGE).build());
+        }
+
+        if (ageFrom == EMPTY_AGE && ageTo != EMPTY_AGE) {
+            return Condition.column(NameAlias.builder(RecordModel.COLUMN_AGE).build())
+                    .lessThan(ageTo + 1);
+        }
+
+        if (ageFrom != EMPTY_AGE && ageTo == EMPTY_AGE) {
+            return Condition.column(NameAlias.builder(RecordModel.COLUMN_AGE).build())
+                    .greaterThan(ageFrom - 1);
+        }
+
+        return Condition.column(NameAlias.builder(RecordModel.COLUMN_AGE).build())
+                .between(ageFrom).and(ageTo);
     }
 
     protected void setSyncedStatus(RecordModel record) {
