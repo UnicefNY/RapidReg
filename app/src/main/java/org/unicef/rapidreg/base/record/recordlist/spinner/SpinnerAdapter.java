@@ -44,7 +44,7 @@ public class SpinnerAdapter extends ArrayAdapter<SpinnerState> {
         TextView orderName = (TextView) view.findViewById(R.id.order_name);
 
         indicator.setImageResource(state.getResId());
-        orderName.setText(isDropDownView ? state.getLongName() : state.getShortName());
+        orderName.setText(state.getLongName());
 
         return view;
     }
