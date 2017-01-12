@@ -56,6 +56,7 @@ public class LoginServiceImpl implements org.unicef.rapidreg.service.LoginServic
                             String imei,
                             final LoginCallback callback) {
         authService.init();
+        //TODO change hard code to be value from param
         final LoginRequestBody loginRequestBody = new LoginRequestBody(username, password, "15555215554", "8fd2274a590497e9");
         Subscription subscription = authService
                 .loginRx(loginRequestBody)
