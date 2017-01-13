@@ -78,14 +78,6 @@ public abstract class RecordActivity extends BaseActivity {
     }
 
     @Override
-    protected void onResume() {
-        Toast.makeText(this, "on resume....", Toast.LENGTH_SHORT).show();
-        showHideMenu.setIcon(DetailState.VISIBILITY.getResId());
-        super.onResume();
-    }
-
-
-    @Override
     protected void onDestroy() {
         super.onDestroy();
 
