@@ -15,6 +15,7 @@ import org.unicef.rapidreg.base.record.recordlist.RecordListFragment;
 import org.unicef.rapidreg.base.record.recordlist.RecordListPresenter;
 import org.unicef.rapidreg.base.record.recordlist.spinner.SpinnerState;
 import org.unicef.rapidreg.event.LoadGBVIncidentFormEvent;
+import org.unicef.rapidreg.incident.IncidentActivity;
 import org.unicef.rapidreg.incident.IncidentFeature;
 
 import java.util.Arrays;
@@ -48,6 +49,7 @@ public class IncidentListFragment extends RecordListFragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable
             Bundle savedInstanceState) {
         getComponent().inject(this);
+        ((IncidentActivity)getActivity()).enableShowHideSwitcher();
         return super.onCreateView(inflater, container, savedInstanceState);
     }
 

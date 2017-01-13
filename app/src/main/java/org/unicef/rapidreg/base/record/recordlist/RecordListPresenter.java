@@ -1,6 +1,7 @@
 package org.unicef.rapidreg.base.record.recordlist;
 
 import com.hannesdorfmann.mosby.mvp.MvpBasePresenter;
+
 import org.unicef.rapidreg.base.record.recordlist.spinner.SpinnerState;
 import org.unicef.rapidreg.service.RecordService;
 import org.unicef.rapidreg.utils.Utils;

@@ -14,6 +14,7 @@ import org.unicef.rapidreg.base.record.recordlist.RecordListAdapter;
 import org.unicef.rapidreg.base.record.recordlist.RecordListFragment;
 import org.unicef.rapidreg.base.record.recordlist.RecordListPresenter;
 import org.unicef.rapidreg.base.record.recordlist.spinner.SpinnerState;
+import org.unicef.rapidreg.childcase.CaseActivity;
 import org.unicef.rapidreg.childcase.CaseFeature;
 import org.unicef.rapidreg.event.LoadCPCaseFormEvent;
 import org.unicef.rapidreg.event.LoadGBVCaseFormEvent;
@@ -49,10 +50,12 @@ public class CaseListFragment extends RecordListFragment {
         return caseListPresenter;
     }
 
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         getComponent().inject(this);
+        enableShowHideSwitcherForCPUser();
         return super.onCreateView(inflater, container, savedInstanceState);
     }
 
@@ -105,13 +108,25 @@ public class CaseListFragment extends RecordListFragment {
         activity.turnToFeature(CaseFeature.ADD_GBV_MINI, bundle, null);
     }
 
+    public void enableShowHideSwitcherForCPUser() {
+        User.Role role = PrimeroConfiguration.getCurrentUser().getRoleType();
+        if (User.Role.CP == role) {
+            ((CaseActivity) getActivity()).enableShowHideSwitcher();
+        }
+    }
+
     @OnClick(R.id.add)
     public void onCaseAddClicked() {
         User.Role role = PrimeroConfiguration.getCurrentUser().getRoleType();
         switch (role) {
-            case CP: onCPCaseAddClicked(); break;
-            case GBV: onGBVCaseAddClicked(); break;
-            default: break;
+            case CP:
+                onCPCaseAddClicked();
+                break;
+            case GBV:
+                onGBVCaseAddClicked();
+                break;
+            default:
+                break;
         }
     }
 

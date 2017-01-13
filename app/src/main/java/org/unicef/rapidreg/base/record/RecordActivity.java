@@ -16,11 +16,14 @@ import android.text.TextUtils;
 import android.view.MenuItem;
 
 import org.greenrobot.eventbus.EventBus;
+import org.unicef.rapidreg.PrimeroConfiguration;
 import org.unicef.rapidreg.R;
 import org.unicef.rapidreg.base.BaseActivity;
 import org.unicef.rapidreg.base.Feature;
 import org.unicef.rapidreg.base.record.recordphoto.PhotoConfig;
+import org.unicef.rapidreg.childcase.CaseActivity;
 import org.unicef.rapidreg.event.UpdateImageEvent;
+import org.unicef.rapidreg.model.User;
 import org.unicef.rapidreg.utils.ImageCompressUtil;
 import org.unicef.rapidreg.utils.Utils;
 import org.unicef.rapidreg.widgets.viewholder.PhotoUploadViewHolder;
@@ -46,7 +49,6 @@ public abstract class RecordActivity extends BaseActivity {
 
     private String imagePath;
     private CompositeSubscription subscriptions;
-
 
     @Inject
     RecordPresenter recordPresenter;
@@ -132,11 +134,15 @@ public abstract class RecordActivity extends BaseActivity {
         hideAllToolbarIcons();
 
         if (feature.isListMode()) {
-            showHideMenu.setVisible(true);
+            showHideMenu.setVisible(false);
             searchMenu.setVisible(true);
         } else if (feature.isEditMode()) {
             saveMenu.setVisible(true);
         }
+    }
+
+    public void enableShowHideSwitcher(){
+        showHideMenu.setVisible(true);
     }
 
     private void onSelectFromGalleryResult(Intent data) {
