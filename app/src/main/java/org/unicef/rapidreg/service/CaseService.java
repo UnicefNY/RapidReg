@@ -91,7 +91,7 @@ public class CaseService extends RecordService {
                 .like(getWrappedCondition(shortId)));
         conditionGroup.and(Condition.column(NameAlias.builder(RecordModel.COLUMN_NAME).build())
                 .like(getWrappedCondition(name)));
-        Condition ageSearchCondition = generateAgeSearchCondition(ageFrom, ageTo);
+        SQLCondition ageSearchCondition = generateAgeSearchCondition(ageFrom, ageTo);
         if (ageSearchCondition != null) {
             conditionGroup.and(ageSearchCondition);
         }
