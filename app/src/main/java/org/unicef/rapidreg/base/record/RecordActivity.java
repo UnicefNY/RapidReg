@@ -14,16 +14,15 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import org.greenrobot.eventbus.EventBus;
-import org.unicef.rapidreg.PrimeroConfiguration;
 import org.unicef.rapidreg.R;
 import org.unicef.rapidreg.base.BaseActivity;
 import org.unicef.rapidreg.base.Feature;
+import org.unicef.rapidreg.base.record.recordlist.RecordListFragment;
 import org.unicef.rapidreg.base.record.recordphoto.PhotoConfig;
-import org.unicef.rapidreg.childcase.CaseActivity;
 import org.unicef.rapidreg.event.UpdateImageEvent;
-import org.unicef.rapidreg.model.User;
 import org.unicef.rapidreg.utils.ImageCompressUtil;
 import org.unicef.rapidreg.utils.Utils;
 import org.unicef.rapidreg.widgets.viewholder.PhotoUploadViewHolder;
@@ -40,7 +39,7 @@ import static org.unicef.rapidreg.service.RecordService.AUDIO_FILE_PATH;
 public abstract class RecordActivity extends BaseActivity {
     public static final String TAG = RecordActivity.class.getSimpleName();
 
-    protected DetailState textAreaState = DetailState.VISIBILITY;
+    protected DetailState detailState = DetailState.VISIBILITY;
     protected Feature currentFeature;
 
     protected MenuItem showHideMenu;
@@ -63,6 +62,11 @@ public abstract class RecordActivity extends BaseActivity {
         return recordPresenter.isFormSyncFail();
     }
 
+    public void setShowHideSwitcherToShowState() {
+        detailState = DetailState.VISIBILITY;
+        showHideMenu.setIcon(detailState.getResId());
+    }
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         getComponent().inject(this);
@@ -72,6 +76,14 @@ public abstract class RecordActivity extends BaseActivity {
         initToolbar();
         EventBus.getDefault().register(this);
     }
+
+    @Override
+    protected void onResume() {
+        Toast.makeText(this, "on resume....", Toast.LENGTH_SHORT).show();
+        showHideMenu.setIcon(DetailState.VISIBILITY.getResId());
+        super.onResume();
+    }
+
 
     @Override
     protected void onDestroy() {
@@ -141,7 +153,7 @@ public abstract class RecordActivity extends BaseActivity {
         }
     }
 
-    public void enableShowHideSwitcher(){
+    public void enableShowHideSwitcher() {
         showHideMenu.setVisible(true);
     }
 
@@ -169,7 +181,7 @@ public abstract class RecordActivity extends BaseActivity {
     private void onCaptureImageResult() {
         try {
             Bitmap compressedImage = ImageCompressUtil.compressImage(PhotoConfig
-                    .MEDIA_PATH_FOR_CAMERA,
+                            .MEDIA_PATH_FOR_CAMERA,
                     PhotoConfig.MAX_COMPRESS_WIDTH, PhotoConfig.MAX_COMPRESS_HEIGHT);
             imagePath = getOutputMediaFilePath();
             ImageCompressUtil.storeImage(compressedImage, imagePath);
@@ -212,7 +224,14 @@ public abstract class RecordActivity extends BaseActivity {
         }
     }
 
-    protected abstract void showHideDetail();
+    protected void showHideDetail() {
+        detailState = detailState.getNextState();
+        showHideMenu.setIcon(detailState.getResId());
+        RecordListFragment listFragment = getRecordListFragment();
+        listFragment.toggleMode(detailState.isDetailShow());
+    }
+
+    protected abstract RecordListFragment getRecordListFragment();
 
     protected abstract void search();
 

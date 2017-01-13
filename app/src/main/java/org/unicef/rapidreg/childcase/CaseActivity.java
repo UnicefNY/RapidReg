@@ -16,10 +16,12 @@ import org.unicef.rapidreg.base.BaseAlertDialog;
 import org.unicef.rapidreg.base.BaseView;
 import org.unicef.rapidreg.base.RecordConfiguration;
 import org.unicef.rapidreg.base.record.RecordActivity;
+import org.unicef.rapidreg.base.record.recordlist.RecordListFragment;
 import org.unicef.rapidreg.childcase.caselist.CaseListFragment;
 import org.unicef.rapidreg.event.LoadCPCaseFormEvent;
 import org.unicef.rapidreg.event.LoadGBVCaseFormEvent;
 import org.unicef.rapidreg.event.SaveCaseEvent;
+import org.unicef.rapidreg.incident.incidentlist.IncidentListFragment;
 import org.unicef.rapidreg.utils.Utils;
 
 import javax.inject.Inject;
@@ -47,6 +49,13 @@ public class CaseActivity extends RecordActivity implements BaseView {
         navigationView.setItemTextColor(caseColor);
 
         turnToFeature(CaseFeature.LIST, null, null);
+    }
+
+    @Override
+    protected RecordListFragment getRecordListFragment() {
+        return (CaseListFragment) getSupportFragmentManager()
+                .findFragmentByTag(CaseListFragment.class.getSimpleName());
+
     }
 
     @Override
@@ -122,16 +131,6 @@ public class CaseActivity extends RecordActivity implements BaseView {
                 .show();
 
         Utils.changeDialogDividerColor(this, dialog);
-    }
-
-    @Override
-    protected void showHideDetail() {
-        textAreaState = textAreaState.getNextState();
-
-        showHideMenu.setIcon(textAreaState.getResId());
-        CaseListFragment listFragment = (CaseListFragment) getSupportFragmentManager()
-                .findFragmentByTag(CaseListFragment.class.getSimpleName());
-        listFragment.toggleMode(textAreaState.isDetailShow());
     }
 
     @Override
