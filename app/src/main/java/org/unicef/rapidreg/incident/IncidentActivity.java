@@ -15,10 +15,10 @@ import org.unicef.rapidreg.base.BaseAlertDialog;
 import org.unicef.rapidreg.base.BaseView;
 import org.unicef.rapidreg.base.RecordConfiguration;
 import org.unicef.rapidreg.base.record.RecordActivity;
+import org.unicef.rapidreg.base.record.recordlist.RecordListFragment;
 import org.unicef.rapidreg.event.LoadGBVIncidentFormEvent;
 import org.unicef.rapidreg.event.SaveIncidentEvent;
 import org.unicef.rapidreg.incident.incidentlist.IncidentListFragment;
-import org.unicef.rapidreg.service.IncidentService;
 import org.unicef.rapidreg.utils.Utils;
 
 import javax.inject.Inject;
@@ -123,15 +123,6 @@ public class IncidentActivity extends RecordActivity implements BaseView {
         Utils.changeDialogDividerColor(this, dialog);
     }
 
-    @Override
-    protected void showHideDetail() {
-        textAreaState = textAreaState.getNextState();
-
-        showHideMenu.setIcon(textAreaState.getResId());
-        IncidentListFragment listFragment = (IncidentListFragment) getSupportFragmentManager()
-                .findFragmentByTag(IncidentListFragment.class.getSimpleName());
-        listFragment.toggleMode(textAreaState.isDetailShow());
-    }
 
     @Override
     protected void search() {
@@ -147,6 +138,12 @@ public class IncidentActivity extends RecordActivity implements BaseView {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+    }
+
+    @Override
+    protected RecordListFragment getRecordListFragment() {
+        return (IncidentListFragment) getSupportFragmentManager()
+                .findFragmentByTag(IncidentListFragment.class.getSimpleName());
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN, sticky = true, priority = 1)

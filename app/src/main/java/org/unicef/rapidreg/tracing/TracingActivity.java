@@ -14,9 +14,9 @@ import org.unicef.rapidreg.R;
 import org.unicef.rapidreg.base.BaseAlertDialog;
 import org.unicef.rapidreg.base.BaseView;
 import org.unicef.rapidreg.base.record.RecordActivity;
+import org.unicef.rapidreg.base.record.recordlist.RecordListFragment;
 import org.unicef.rapidreg.event.LoadTracingFormEvent;
 import org.unicef.rapidreg.event.SaveTracingEvent;
-import org.unicef.rapidreg.service.TracingService;
 import org.unicef.rapidreg.tracing.tracinglist.TracingListFragment;
 import org.unicef.rapidreg.utils.Utils;
 
@@ -45,6 +45,13 @@ public class TracingActivity extends RecordActivity implements BaseView {
         navigationView.setItemTextColor(tracingColor);
 
         turnToFeature(TracingFeature.LIST, null, null);
+    }
+
+    @Override
+    protected RecordListFragment getRecordListFragment() {
+        return (TracingListFragment) getSupportFragmentManager()
+                .findFragmentByTag(TracingListFragment.class.getSimpleName());
+
     }
 
     @Override
@@ -120,16 +127,6 @@ public class TracingActivity extends RecordActivity implements BaseView {
                 .show();
 
         Utils.changeDialogDividerColor(this, dialog);
-    }
-
-    @Override
-    protected void showHideDetail() {
-        textAreaState = textAreaState.getNextState();
-
-        showHideMenu.setIcon(textAreaState.getResId());
-        TracingListFragment listFragment = (TracingListFragment) getSupportFragmentManager()
-                .findFragmentByTag(TracingListFragment.class.getSimpleName());
-        listFragment.toggleMode(textAreaState.isDetailShow());
     }
 
     @Override

@@ -19,6 +19,7 @@ import com.hannesdorfmann.mosby.mvp.MvpFragment;
 import org.unicef.rapidreg.PrimeroApplication;
 import org.unicef.rapidreg.R;
 import org.unicef.rapidreg.base.BaseAlertDialog;
+import org.unicef.rapidreg.base.record.RecordActivity;
 import org.unicef.rapidreg.base.record.recordlist.RecordListAdapter;
 import org.unicef.rapidreg.base.record.recordlist.RecordListView;
 import org.unicef.rapidreg.injection.component.DaggerFragmentComponent;
@@ -95,6 +96,7 @@ public abstract class RecordSearchFragment extends MvpFragment<RecordListView, R
         super.onViewCreated(view, savedInstanceState);
         ButterKnife.bind(this, view);
         onInitViewContent();
+        ((RecordActivity)getActivity()).setShowHideSwitcherToShowState();
     }
 
     @Override
