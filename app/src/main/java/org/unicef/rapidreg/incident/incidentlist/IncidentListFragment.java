@@ -49,7 +49,6 @@ public class IncidentListFragment extends RecordListFragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable
             Bundle savedInstanceState) {
         getComponent().inject(this);
-        ((IncidentActivity)getActivity()).enableShowHideSwitcher();
         return super.onCreateView(inflater, container, savedInstanceState);
     }
 
