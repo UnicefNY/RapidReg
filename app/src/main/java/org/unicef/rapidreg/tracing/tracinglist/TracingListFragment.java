@@ -16,6 +16,7 @@ import org.unicef.rapidreg.base.record.recordlist.RecordListPresenter;
 import org.unicef.rapidreg.base.record.recordlist.spinner.SpinnerState;
 import org.unicef.rapidreg.base.record.recordregister.RecordRegisterBtnType;
 import org.unicef.rapidreg.event.LoadTracingFormEvent;
+import org.unicef.rapidreg.incident.IncidentActivity;
 import org.unicef.rapidreg.tracing.TracingActivity;
 import org.unicef.rapidreg.tracing.TracingFeature;
 
@@ -47,6 +48,7 @@ public class TracingListFragment extends RecordListFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         getComponent().inject(this);
+        ((TracingActivity)getActivity()).enableShowHideSwitcher();
         return super.onCreateView(inflater, container, savedInstanceState);
     }
 

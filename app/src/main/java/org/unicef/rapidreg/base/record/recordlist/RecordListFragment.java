@@ -8,7 +8,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.LinearLayout;
@@ -17,31 +16,24 @@ import android.widget.Toast;
 import android.widget.ViewSwitcher;
 
 import com.getbase.floatingactionbutton.FloatingActionButton;
-import com.getbase.floatingactionbutton.FloatingActionsMenu;
 import com.hannesdorfmann.mosby.mvp.MvpFragment;
+
 import org.unicef.rapidreg.PrimeroApplication;
 import org.unicef.rapidreg.R;
 import org.unicef.rapidreg.base.BaseAlertDialog;
 import org.unicef.rapidreg.base.record.RecordActivity;
 import org.unicef.rapidreg.base.record.recordlist.spinner.SpinnerAdapter;
 import org.unicef.rapidreg.base.record.recordlist.spinner.SpinnerState;
-import org.unicef.rapidreg.base.record.recordregister.RecordRegisterBtnType;
 import org.unicef.rapidreg.injection.component.DaggerFragmentComponent;
 import org.unicef.rapidreg.injection.component.FragmentComponent;
 import org.unicef.rapidreg.injection.module.FragmentModule;
 import org.unicef.rapidreg.utils.Utils;
 
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-
-import static android.view.View.*;
-import static android.view.View.INVISIBLE;
 
 public abstract class RecordListFragment extends MvpFragment<RecordListView, RecordListPresenter>
         implements RecordListView {
