@@ -90,22 +90,23 @@ public class RecordService {
         return true;
     }
 
-    protected Condition generateAgeSearchCondition(int ageFrom, int ageTo) {
+    protected SQLCondition generateAgeSearchCondition(int ageFrom, int ageTo) {
         if (ageFrom == EMPTY_AGE && ageTo == EMPTY_AGE) {
             return null;
         }
 
-        Condition ageCondition = Condition.column(NameAlias.builder(RecordModel.COLUMN_AGE).build());
-
-        if (ageTo != EMPTY_AGE) {
-            ageCondition = ageCondition.lessThan(ageTo + 1);
+        if (ageFrom == EMPTY_AGE && ageTo != EMPTY_AGE) {
+            return Condition.column(NameAlias.builder(RecordModel.COLUMN_AGE).build())
+                    .lessThan(ageTo + 1);
         }
 
-        if (ageFrom != EMPTY_AGE) {
-            ageCondition = ageCondition.greaterThan(ageFrom - 1);
+        if (ageFrom != EMPTY_AGE && ageTo == EMPTY_AGE) {
+            return Condition.column(NameAlias.builder(RecordModel.COLUMN_AGE).build())
+                    .greaterThan(ageFrom - 1);
         }
 
-        return ageCondition;
+        return Condition.column(NameAlias.builder(RecordModel.COLUMN_AGE).build())
+                .between(ageFrom).and(ageTo);
     }
 
     protected void setSyncedStatus(RecordModel record) {

@@ -7,6 +7,7 @@ import com.raizlabs.android.dbflow.data.Blob;
 import com.raizlabs.android.dbflow.sql.language.Condition;
 import com.raizlabs.android.dbflow.sql.language.ConditionGroup;
 import com.raizlabs.android.dbflow.sql.language.NameAlias;
+import com.raizlabs.android.dbflow.sql.language.SQLCondition;
 
 import org.unicef.rapidreg.PrimeroConfiguration;
 import org.unicef.rapidreg.db.TracingDao;
@@ -86,7 +87,7 @@ public class TracingService extends RecordService {
         conditionGroup.and(Condition.column(NameAlias.builder(RecordModel.COLUMN_NAME).build())
                 .like(getWrappedCondition(name)));
 
-        Condition ageSearchCondition = generateAgeSearchCondition(ageFrom, ageTo);
+        SQLCondition ageSearchCondition = generateAgeSearchCondition(ageFrom, ageTo);
         if (ageSearchCondition != null) {
             conditionGroup.and(ageSearchCondition);
         }
