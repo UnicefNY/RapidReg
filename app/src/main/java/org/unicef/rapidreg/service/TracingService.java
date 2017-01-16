@@ -25,6 +25,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
+import static org.unicef.rapidreg.model.RecordModel.EMPTY_AGE;
 import static org.unicef.rapidreg.utils.Utils.getRegisterDate;
 
 public class TracingService extends RecordService {
@@ -140,7 +141,7 @@ public class TracingService extends RecordService {
 
         tracing.setName(getName(itemValues));
 
-        int age = itemValues.getAsInt(RELATION_AGE) != null ? itemValues.getAsInt(RELATION_AGE) : 0;
+        int age = itemValues.getAsInt(RELATION_AGE) != null ? itemValues.getAsInt(RELATION_AGE) : EMPTY_AGE;
         tracing.setAge(age);
 
         tracing.setCaregiver(getCaregiverName(itemValues));
@@ -176,7 +177,7 @@ public class TracingService extends RecordService {
     private Blob generateTracingBlob(ItemValuesMap itemValues, String uniqueId, String username) {
         itemValues.addStringItem(TRACING_DISPLAY_ID, getShortUUID(uniqueId));
         itemValues.addStringItem(TRACING_ID, uniqueId);
-        itemValues.addStringItem(MODULE, "primeromodule-cp");
+        itemValues.addStringItem(MODULE, MODULE_CP_CASE);
         itemValues.addStringItem(CASEWORKER_CODE, username);
         itemValues.addStringItem(RECORD_CREATED_BY, username);
         itemValues.addStringItem(PREVIOUS_OWNER, username);

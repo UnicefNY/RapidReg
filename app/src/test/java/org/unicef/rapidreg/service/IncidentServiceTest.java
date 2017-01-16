@@ -146,7 +146,7 @@ public class IncidentServiceTest {
         Incident incident = incidentServiceSpy.save(itemValuesMap);
         when(incidentDao.save(any(Incident.class))).thenReturn(incident);
 
-        assertThat(incident.getAge(), is(0));
+        assertThat(incident.getAge(), is(-1));
         assertThat(incident.getUniqueId(), is(uniqueId));
         assertThat(incident.getRegistrationDate(), is(Utils.getRegisterDate("11/11/1111")));
     }
@@ -165,7 +165,7 @@ public class IncidentServiceTest {
         Incident incident = incidentServiceSpy.save(itemValuesMap);
         when(incidentDao.save(any(Incident.class))).thenReturn(incident);
 
-        assertThat(incident.getAge(), is(0));
+        assertThat(incident.getAge(), is(-1));
         assertThat(incident.getUniqueId(), is(uniqueId));
     }
 

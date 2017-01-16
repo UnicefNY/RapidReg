@@ -51,7 +51,8 @@ public class IncidentListAdapter extends RecordListAdapter {
             gender = Gender.PLACEHOLDER;
         }
         final String shortUUID = incidentService.getShortUUID(record.getUniqueId());
-        holder.setValues(gender, shortUUID, String.valueOf(0), record);
+        String age = itemValues.getAsString(RecordService.AGE);
+        holder.setValues(gender, shortUUID, age, record);
         holder.setViewOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

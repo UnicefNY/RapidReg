@@ -30,6 +30,8 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.UUID;
 
+import static org.unicef.rapidreg.model.RecordModel.EMPTY_AGE;
+
 public class CaseService extends RecordService {
     public static final String TAG = CaseService.class.getSimpleName();
     public static final String CASE_DISPLAY_ID = "case_id_display";
@@ -147,7 +149,7 @@ public class CaseService extends RecordService {
         child.setLastUpdatedDate(date);
         child.setContent(blob);
         child.setName(getName(itemValues));
-        int age = itemValues.getAsInt(AGE) != null ? itemValues.getAsInt(AGE) : 0;
+        int age = itemValues.getAsInt(AGE) != null ? itemValues.getAsInt(AGE) : EMPTY_AGE;
         child.setAge(age);
         child.setCaregiver(getCaregiverName(itemValues));
         child.setRegistrationDate(Utils.getRegisterDate(itemValues.getAsString(REGISTRATION_DATE)));
