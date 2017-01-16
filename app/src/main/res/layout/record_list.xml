@@ -3,22 +3,27 @@
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/row_height">
 
-    <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
-                                                  android:id="@+id/record_image"
-                                                  style="@style/Avatar"
-                                                  android:src="@drawable/avatar_placeholder"
-                                                  app:civ_border_color="#00000000"
-                                                  app:civ_border_width="0dp"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/record_image"
+            style="@style/Avatar"
+            android:src="@drawable/avatar_placeholder"
+            app:civ_border_color="#00000000"
+            app:civ_border_width="0dp"/>
 
-    <ViewSwitcher
-        android:id="@+id/view_switcher"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+        <ViewSwitcher
+            android:id="@+id/view_switcher"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
-        <include layout="@layout/case_list_text_area_normal_state"/>
+            <include layout="@layout/case_list_text_area_normal_state"/>
 
-        <include layout="@layout/case_list_text_area_hidden_state"/>
-    </ViewSwitcher>
+            <include layout="@layout/case_list_text_area_hidden_state"/>
+        </ViewSwitcher>
+    </LinearLayout>
 
     <include layout="@layout/list_item_border"/>
 
