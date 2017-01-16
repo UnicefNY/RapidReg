@@ -103,7 +103,6 @@ public class CaseServiceTest {
         Case actual = caseService.save(itemValues, Collections.EMPTY_LIST);
 
         assertThat("Should have same uuid.", actual.getUniqueId(), is(UUID.randomUUID().toString()));
-        assertThat("Should return default age value.", actual.getAge(), is(0));
     }
 
     @Test

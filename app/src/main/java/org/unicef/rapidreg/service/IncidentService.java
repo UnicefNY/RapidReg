@@ -23,6 +23,8 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
+import static org.unicef.rapidreg.model.RecordModel.EMPTY_AGE;
+
 public class IncidentService extends RecordService {
     public static final String TAG = IncidentService.class.getSimpleName();
     public static final String INCIDENT_DISPLAY_ID = "incident_id_display";
@@ -122,7 +124,7 @@ public class IncidentService extends RecordService {
         itemValues.addStringItem(INCIDENT_DISPLAY_ID, getShortUUID(uniqueId));
         itemValues.addStringItem(INCIDENT_ID, uniqueId);
         String username = PrimeroConfiguration.getCurrentUser().getUsername();
-        itemValues.addStringItem(MODULE, "primeromodule-gbv");
+        itemValues.addStringItem(MODULE, MODULE_GBV_CASE);
         itemValues.addStringItem(CASEWORKER_CODE, username);
         itemValues.addStringItem(RECORD_CREATED_BY, username);
         itemValues.addStringItem(PREVIOUS_OWNER, username);
@@ -141,7 +143,7 @@ public class IncidentService extends RecordService {
         incident.setLastUpdatedDate(date);
         incident.setContent(tracingBlob);
         incident.setName(getName(itemValues));
-        int age = itemValues.getAsInt(RELATION_AGE) != null ? itemValues.getAsInt(RELATION_AGE) : 0;
+        int age = itemValues.has(RELATION_AGE) ? itemValues.getAsInt(RELATION_AGE) : EMPTY_AGE;
         incident.setAge(age);
         incident.setCaregiver(getCaregiverName(itemValues));
         incident.setRegistrationDate(Utils.getRegisterDate(itemValues.getAsString(REGISTRATION_DATE)));
