@@ -7,6 +7,8 @@ import android.view.View;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
+import org.unicef.rapidreg.PrimeroApplication;
+import org.unicef.rapidreg.PrimeroConfiguration;
 import org.unicef.rapidreg.base.Feature;
 import org.unicef.rapidreg.base.record.RecordActivity;
 import org.unicef.rapidreg.base.record.recordlist.RecordListAdapter;
@@ -26,6 +28,7 @@ import java.io.IOException;
 import javax.inject.Inject;
 
 import static org.unicef.rapidreg.childcase.caseregister.CaseRegisterPresenter.MODULE_CASE_CP;
+import static org.unicef.rapidreg.model.User.Role.GBV;
 import static org.unicef.rapidreg.service.RecordService.AUDIO_FILE_PATH;
 import static org.unicef.rapidreg.service.RecordService.MODULE;
 
@@ -55,6 +58,9 @@ public class CaseListAdapter extends RecordListAdapter {
         }
         final String shortUUID = caseService.getShortUUID(record.getUniqueId());
 
+        if (GBV == PrimeroConfiguration.getCurrentUser().getRoleType()) {
+            holder.disableRecordImageView();
+        }
         String age = itemValues.getAsString(RecordService.AGE);
         holder.setValues(gender, shortUUID, age, record);
         holder.setViewOnClickListener(new View.OnClickListener() {

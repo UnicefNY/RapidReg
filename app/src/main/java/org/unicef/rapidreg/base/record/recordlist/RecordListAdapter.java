@@ -142,5 +142,8 @@ public abstract class RecordListAdapter extends RecyclerView.Adapter<RecordListA
             itemView.setOnClickListener(listener);
         }
 
+        public void disableRecordImageView() {
+            image.setVisibility(View.GONE);
+        }
     }
 }
