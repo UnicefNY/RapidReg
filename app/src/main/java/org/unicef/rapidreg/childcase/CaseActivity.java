@@ -72,6 +72,7 @@ public class CaseActivity extends RecordActivity implements BaseView {
 
     @Override
     protected void navCaseAction() {
+        setShowHideSwitcherToShowState();
         if (currentFeature.isEditMode()) {
             showQuitDialog(R.id.nav_cases);
         } else {
