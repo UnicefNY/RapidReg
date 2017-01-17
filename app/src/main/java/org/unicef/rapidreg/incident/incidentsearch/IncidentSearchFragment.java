@@ -35,6 +35,11 @@ public class IncidentSearchFragment extends RecordSearchFragment {
     }
 
     @Override
+    protected void onInitSearchFields() {
+
+    }
+
+    @Override
     protected RecordListAdapter createRecordListAdapter() {
         return incidentListAdapter;
     }
