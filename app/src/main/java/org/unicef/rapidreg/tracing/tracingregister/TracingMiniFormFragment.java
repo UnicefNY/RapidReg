@@ -58,6 +58,12 @@ public class TracingMiniFormFragment extends RecordRegisterFragment {
     }
 
     @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        ((RecordActivity)getActivity()).setShowHideSwitcherToShowState();
+    }
+
+    @Override
     protected RecordRegisterAdapter createRecordRegisterAdapter() {
         List<Field> fields = tracingRegisterPresenter.getValidFields();
         addProfileFieldForDetailsPage(1, fields);

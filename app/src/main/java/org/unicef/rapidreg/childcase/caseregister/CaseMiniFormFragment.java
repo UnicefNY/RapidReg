@@ -71,6 +71,12 @@ public class CaseMiniFormFragment extends RecordRegisterFragment {
     }
 
     @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        ((RecordActivity)getActivity()).setShowHideSwitcherToShowState();
+    }
+
+    @Override
     public void onInitViewContent() {
         super.onInitViewContent();
         formSwitcher.setText(R.string.show_more_details);
