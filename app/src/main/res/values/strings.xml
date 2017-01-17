@@ -41,6 +41,7 @@
     <string name="registration_date">Registration date</string>
     <string name="inquiry_date">Date of Inquiry</string>
     <string name="date">Date</string>
+    <string name="location">Location</string>
 
     <!-- Title -->
     <string name="search">Search</string>

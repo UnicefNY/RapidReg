@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.DatePicker;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.ViewSwitcher;
 
@@ -79,8 +80,29 @@ public abstract class RecordSearchFragment extends MvpFragment<RecordListView, R
     @BindView(R.id.registration_date_clear)
     protected ImageButton registrationDateClear;
 
+    @BindView(R.id.location)
+    protected ClearableEditText location;
+
     @BindView(R.id.search_result)
     protected ViewSwitcher searchResultSwitcher;
+
+    @BindView(R.id.id_field)
+    protected LinearLayout idField;
+
+    @BindView(R.id.name_field)
+    protected LinearLayout nameField;
+
+    @BindView(R.id.age_field)
+    protected LinearLayout ageField;
+
+    @BindView(R.id.caregiver_field)
+    protected LinearLayout caregiverField;
+
+    @BindView(R.id.registration_date_field)
+    protected LinearLayout registrationDateField;
+
+    @BindView(R.id.location_field)
+    protected LinearLayout locationField;
 
     private RecordListAdapter adapter;
 
@@ -96,6 +118,7 @@ public abstract class RecordSearchFragment extends MvpFragment<RecordListView, R
         super.onViewCreated(view, savedInstanceState);
         ButterKnife.bind(this, view);
         onInitViewContent();
+        onInitSearchFields();
         ((RecordActivity)getActivity()).setShowHideSwitcherToShowState();
     }
 
@@ -202,6 +225,7 @@ public abstract class RecordSearchFragment extends MvpFragment<RecordListView, R
         return getResources().getString(R.string.click_to_search);
     }
 
+    protected abstract void onInitSearchFields();
     protected abstract RecordListAdapter createRecordListAdapter();
 }
 

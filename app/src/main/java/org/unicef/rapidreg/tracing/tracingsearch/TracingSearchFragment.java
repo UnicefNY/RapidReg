@@ -51,6 +51,11 @@ public class TracingSearchFragment extends RecordSearchFragment {
     }
 
     @Override
+    protected void onInitSearchFields() {
+
+    }
+
+    @Override
     protected RecordListAdapter createRecordListAdapter() {
         return tracingListAdapter;
     }
