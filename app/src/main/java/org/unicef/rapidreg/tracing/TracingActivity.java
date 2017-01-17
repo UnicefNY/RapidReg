@@ -78,6 +78,7 @@ public class TracingActivity extends RecordActivity implements BaseView {
 
     @Override
     protected void navTracingAction() {
+        setShowHideSwitcherToShowState();
         if (currentFeature.isEditMode()) {
             showQuitDialog(R.id.nav_tracing);
         } else {
