@@ -129,10 +129,6 @@ public class IncidentService extends RecordService {
         itemValues.addStringItem(RECORD_CREATED_BY, username);
         itemValues.addStringItem(PREVIOUS_OWNER, username);
 
-        if (!itemValues.has(REGISTRATION_DATE)) {
-            itemValues.addStringItem(REGISTRATION_DATE, getCurrentRegistrationDateAsString());
-        }
-
         Gson gson = new Gson();
         Date date = new Date(Calendar.getInstance().getTimeInMillis());
         Blob tracingBlob = new Blob(gson.toJson(itemValues.getValues()).getBytes());
@@ -146,7 +142,9 @@ public class IncidentService extends RecordService {
         int age = itemValues.has(RELATION_AGE) ? itemValues.getAsInt(RELATION_AGE) : EMPTY_AGE;
         incident.setAge(age);
         incident.setCaregiver(getCaregiverName(itemValues));
-        incident.setRegistrationDate(Utils.getRegisterDate(itemValues.getAsString(REGISTRATION_DATE)));
+        if (itemValues.has(REGISTRATION_DATE)) {
+            incident.setRegistrationDate(Utils.getRegisterDate(itemValues.getAsString(REGISTRATION_DATE)));
+        }
         incident.setCreatedBy(username);
         incidentDao.save(incident);
         return incident;

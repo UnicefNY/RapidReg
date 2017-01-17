@@ -84,6 +84,13 @@ public abstract class RecordListAdapter extends RecyclerView.Adapter<RecordListA
         return Double.valueOf(value).intValue() >= 0;
     }
 
+    protected boolean isValidDate(Date date) {
+        if (date == null) {
+            return false;
+        }
+        return true;
+    }
+
     public class RecordListViewHolder extends RecyclerView.ViewHolder {
 
         @BindView(R.id.id_normal_state)
@@ -135,7 +142,7 @@ public abstract class RecordListAdapter extends RecyclerView.Adapter<RecordListA
             age.setText(isValidAge(ageContent) ? ageContent : "---");
 
             Date registrationDateText = record.getRegistrationDate();
-            registrationDate.setText(dateFormat.format(registrationDateText));
+            registrationDate.setText(isValidDate(registrationDateText) ? dateFormat.format(registrationDateText) : "---");
         }
 
         public void setViewOnClickListener(View.OnClickListener listener) {
