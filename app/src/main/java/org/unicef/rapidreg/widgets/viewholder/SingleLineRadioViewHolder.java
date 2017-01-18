@@ -3,7 +3,8 @@ package org.unicef.rapidreg.widgets.viewholder;
 import android.content.Context;
 import android.text.TextUtils;
 import android.view.View;
-import android.widget.RadioButton;
+import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
@@ -19,17 +20,13 @@ import butterknife.ButterKnife;
 
 public class SingleLineRadioViewHolder extends BaseViewHolder<Field> {
 
+    private static final int MAX_HORIZONAL_SIZE = 2;
+
     @BindView(R.id.label)
     TextView labelView;
 
     @BindView(R.id.option_group)
     RadioGroup optionGroup;
-
-    @BindView(R.id.first_option)
-    ToggleableRadioButton firstOption;
-
-    @BindView(R.id.second_option)
-    ToggleableRadioButton secondOption;
 
     private List<String> options;
 
@@ -48,18 +45,9 @@ public class SingleLineRadioViewHolder extends BaseViewHolder<Field> {
             labelText += " (Required)";
         }
         options = field.getSelectOptions();
-
-        if (options.size() == 1) {
-            firstOption.setText(options.get(0));
-            secondOption.setVisibility(View.INVISIBLE);
-        } else if (options.size() == 2) {
-            firstOption.setText(options.get(0));
-            secondOption.setText(options.get(1));
-        }
+        initRadioGroupView(options, isEditable(field));
 
         labelView.setHint(labelText);
-        disableUneditableField(isEditable(field), firstOption);
-        disableUneditableField(isEditable(field), secondOption);
         setEditableBackgroundStyle(isEditable(field));
 
         if (isSubFormField(field)) {
@@ -73,20 +61,45 @@ public class SingleLineRadioViewHolder extends BaseViewHolder<Field> {
         }
     }
 
+    private void initRadioGroupView(List<String> options, boolean editable) {
+        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                options.size());
+        optionGroup.setLayoutParams(layoutParams);
+
+        RadioGroup.LayoutParams radioButtonLayoutParams = new RadioGroup.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1);
+        if (options.size() > MAX_HORIZONAL_SIZE) {
+            optionGroup.setOrientation(LinearLayout.VERTICAL);
+            radioButtonLayoutParams = new RadioGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        }
+
+        for (int index = 0; index < options.size(); index ++) {
+            addRadioButtonToGroup(options.get(index), index, editable, radioButtonLayoutParams);
+        }
+    }
+
+    private void addRadioButtonToGroup(String option, int index, boolean editable, RadioGroup.LayoutParams radioButtonLayoutParams) {
+        ToggleableRadioButton radioButton = new ToggleableRadioButton(context);
+        radioButton.setText(option);
+        radioButton.setTextColor(context.getResources().getColor(R.color.primero_font_medium));
+        disableUneditableField(editable, radioButton);
+        optionGroup.addView(radioButton, index, radioButtonLayoutParams);
+    }
+
     @Override
     public void setOnClickListener(final Field field) {
         optionGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
-                if (firstOption.getId() == checkedId) {
-                    result = options.get(0);
-                    itemValues.addStringItem(field.getName(), getResult());
-                } else if (secondOption.getId() == checkedId) {
-                    result = options.get(1);
-                    itemValues.addStringItem(field.getName(), getResult());
-                } else {
-                    itemValues.addStringItem(field.getName(), null);
+                for (int index = 0; index < optionGroup.getChildCount(); index ++) {
+                    if (checkedId == optionGroup.getChildAt(index).getId()) {
+                        result = options.get(index);
+                        itemValues.addStringItem(field.getName(), getResult());
+                        return;
+                    }
                 }
+                itemValues.addStringItem(field.getName(), null);
             }
         });
     }
@@ -98,20 +111,17 @@ public class SingleLineRadioViewHolder extends BaseViewHolder<Field> {
 
     @Override
     public void setFieldEditable(boolean editable) {
-        disableUneditableField(editable, firstOption);
-        disableUneditableField(editable, secondOption);
+        disableUneditableField(editable, optionGroup);
     }
 
     public void setSelectedRadio(String selectedRadio) {
-        if (selectedRadio.equals(options.get(0))) {
-            firstOption.setChecked(true);
-            secondOption.setChecked(false);
-        } else if (selectedRadio.equals(options.get(1))) {
-            firstOption.setChecked(false);
-            secondOption.setChecked(true);
-        } else {
-            firstOption.setChecked(false);
-            secondOption.setChecked(false);
+        for (int index = 0; index < optionGroup.getChildCount(); index ++) {
+            ToggleableRadioButton radioButton = (ToggleableRadioButton) optionGroup.getChildAt(index);
+            if (selectedRadio.equals(radioButton.getText())) {
+                radioButton.setChecked(true);
+            } else {
+                radioButton.setChecked(false);
+            }
         }
     }
 }
