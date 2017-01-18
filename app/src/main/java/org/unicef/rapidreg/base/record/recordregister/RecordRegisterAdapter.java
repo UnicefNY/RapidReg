@@ -15,6 +15,7 @@ import org.unicef.rapidreg.widgets.viewholder.AudioUploadViewHolder;
 import org.unicef.rapidreg.widgets.viewholder.BaseViewHolder;
 import org.unicef.rapidreg.widgets.viewholder.DefaultViewHolder;
 import org.unicef.rapidreg.widgets.viewholder.GenericViewHolder;
+import org.unicef.rapidreg.widgets.viewholder.IncidentMiniFormProfileViewHolder;
 import org.unicef.rapidreg.widgets.viewholder.MiniFormProfileViewHolder;
 import org.unicef.rapidreg.widgets.viewholder.PhotoUploadMiniFormViewHolder;
 import org.unicef.rapidreg.widgets.viewholder.PhotoUploadViewHolder;
@@ -40,6 +41,7 @@ public class RecordRegisterAdapter extends RecyclerView.Adapter<BaseViewHolder> 
     private static final int VIEW_HOLDER_RADIO_SINGLE_LINE = 8;
     private static final int VIEW_HOLDER_PHOTO_UPLOAD_BOX_MINI_FORM = 9;
     private static final int VIEW_HOLDER_MINI_FORM_PROFILE = 10;
+    private static final int VIEW_HOLDER_INCIDENT_MINI_FORM_PROFILE = 11;
 
     private boolean isMiniForm;
 
@@ -124,6 +126,10 @@ public class RecordRegisterAdapter extends RecyclerView.Adapter<BaseViewHolder> 
                 return new MiniFormProfileViewHolder(activity, inflater.inflate(resources
                                 .getIdentifier(PREFIX + Field.TYPE_MINI_FORM_PROFILE, LAYOUT, packageName),
                         parent, false), itemValues);
+            case VIEW_HOLDER_INCIDENT_MINI_FORM_PROFILE:
+                return new IncidentMiniFormProfileViewHolder(activity, inflater.inflate(resources
+                                .getIdentifier(PREFIX + Field.TYPE_MINI_FORM_PROFILE, LAYOUT, packageName),
+                        parent, false), itemValues);
             default:
                 return new DefaultViewHolder(activity, new View(activity));
         }
@@ -174,6 +180,9 @@ public class RecordRegisterAdapter extends RecyclerView.Adapter<BaseViewHolder> 
         }
         if (field.isSubform()) {
             return VIEW_HOLDER_SUBFORM;
+        }
+        if (field.isIncidentMiniFormProfile()) {
+            return VIEW_HOLDER_INCIDENT_MINI_FORM_PROFILE;
         }
         if (field.isMiniFormProfile()) {
             return VIEW_HOLDER_MINI_FORM_PROFILE;

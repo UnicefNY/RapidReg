@@ -34,6 +34,7 @@ public class Field {
     public static final String TYPE_PHOTO_VIEW_SLIDER = "record_photo_view_slider";
 
     public static final String TYPE_MINI_FORM_PROFILE = "mini_form_profile";
+    public static final String TYPE_INCIDENT_MINI_FORM_PROFILE = "incident_mini_form_profile";
 
     private static final int INVALID_INDEX = -1;
 
@@ -217,6 +218,10 @@ public class Field {
 
     public boolean isMiniFormProfile() {
         return TYPE_MINI_FORM_PROFILE.equals(type);
+    }
+
+    public boolean isIncidentMiniFormProfile() {
+        return TYPE_INCIDENT_MINI_FORM_PROFILE.equals(type);
     }
 
     public boolean isManyOptions() {
