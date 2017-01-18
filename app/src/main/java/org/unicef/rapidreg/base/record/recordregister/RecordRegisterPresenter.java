@@ -71,9 +71,12 @@ public abstract class RecordRegisterPresenter extends MvpBasePresenter<RecordReg
         String shortUUID = recordService.getShortUUID(uniqueId);
         DateFormat dateFormat = SimpleDateFormat.getDateInstance(DateFormat.MEDIUM, Locale.US);
         itemValues.addStringItem(ItemValuesMap.RecordProfile.ID_NORMAL_STATE, shortUUID);
-        itemValues.addStringItem(ItemValuesMap.RecordProfile.REGISTRATION_DATE,
-                dateFormat.format(registrationDate));
         itemValues.addNumberItem(ItemValuesMap.RecordProfile.ID, recordId);
+
+        if (registrationDate != null) {
+            itemValues.addStringItem(ItemValuesMap.RecordProfile.REGISTRATION_DATE,
+                    dateFormat.format(registrationDate));
+        }
     }
 
     public void clearProfileItems(ItemValuesMap itemValues) {
