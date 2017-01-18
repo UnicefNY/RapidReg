@@ -17,9 +17,6 @@ import rx.Observable;
 
 
 public interface FormRepository {
-    @POST("/api/login")
-    Observable<Response<LoginResponse>> login(@Body LoginRequestBody body);
-
     @GET("/api/form_sections")
     Observable<CaseTemplateForm> getCaseForm(
             @Header("Cookie") String cookie,
