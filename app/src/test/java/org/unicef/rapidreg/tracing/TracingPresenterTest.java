@@ -7,7 +7,7 @@ import org.mockito.Mock;
 import org.unicef.rapidreg.forms.Section;
 import org.unicef.rapidreg.forms.TracingTemplateForm;
 import org.unicef.rapidreg.model.TracingForm;
-import org.unicef.rapidreg.service.AuthService;
+import org.unicef.rapidreg.service.FormRemoteService;
 import org.unicef.rapidreg.service.TracingFormService;
 
 import edu.emory.mathcs.backport.java.util.Arrays;
@@ -26,7 +26,7 @@ public class TracingPresenterTest {
     TracingFormService tracingFormService;
 
     @Mock
-    AuthService authService;
+    FormRemoteService authService;
 
     @InjectMocks
     TracingPresenter tracingPresenter;

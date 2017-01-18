@@ -7,7 +7,7 @@ import org.unicef.rapidreg.base.record.RecordPresenter;
 import org.unicef.rapidreg.forms.RecordForm;
 import org.unicef.rapidreg.forms.TracingTemplateForm;
 import org.unicef.rapidreg.model.TracingForm;
-import org.unicef.rapidreg.service.AuthService;
+import org.unicef.rapidreg.service.FormRemoteService;
 import org.unicef.rapidreg.service.TracingFormService;
 
 import java.util.Locale;
@@ -19,10 +19,10 @@ import rx.functions.Action1;
 public class TracingPresenter extends RecordPresenter {
 
     private TracingFormService tracingFormService;
-    private AuthService authService;
+    private FormRemoteService authService;
 
     @Inject
-    public TracingPresenter(AuthService authService, TracingFormService tracingFormService) {
+    public TracingPresenter(FormRemoteService authService, TracingFormService tracingFormService) {
         this.authService = authService;
         this.tracingFormService = tracingFormService;
     }

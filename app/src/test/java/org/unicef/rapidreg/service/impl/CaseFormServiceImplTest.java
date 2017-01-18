@@ -7,7 +7,14 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
+import org.powermock.api.mockito.PowerMockito;
+import org.powermock.core.classloader.annotations.PrepareForTest;
+import org.powermock.modules.junit4.PowerMockRunner;
+import org.unicef.rapidreg.PrimeroAppConfiguration;
+import org.unicef.rapidreg.base.RecordConfiguration;
+import org.unicef.rapidreg.model.User;
 import org.unicef.rapidreg.repository.CaseFormDao;
 import org.unicef.rapidreg.forms.CaseTemplateForm;
 import org.unicef.rapidreg.forms.Field;
@@ -16,6 +23,7 @@ import org.unicef.rapidreg.model.CaseForm;
 import org.unicef.rapidreg.service.impl.CaseFormServiceImpl;
 
 import java.io.IOException;
+import java.util.UUID;
 
 import static junit.framework.Assert.assertFalse;
 import static junit.framework.Assert.assertTrue;
@@ -29,7 +37,8 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
 
-@RunWith(MockitoJUnitRunner.class)
+@RunWith(PowerMockRunner.class)
+@PrepareForTest({PrimeroAppConfiguration.class})
 public class CaseFormServiceImplTest {
     private static final int MAX_RETRY_NUM = 3;
 
@@ -74,22 +83,27 @@ public class CaseFormServiceImplTest {
     @Before
     public void setUp() throws Exception {
         initMocks(this);
+        PowerMockito.mockStatic(PrimeroAppConfiguration.class);
     }
 
     @Test
     public void should_return_true_if_form_is_ready() throws Exception {
+        User user = new User();
+        user.setRole(User.Role.CP.name());
+        Mockito.when(PrimeroAppConfiguration.getCurrentUser()).thenReturn(user);
+
         CaseForm cpCaseForm = createCPCaseForm();
-        CaseForm gbvCaseForm = createGBVCaseForm();
-        when(caseFormDao.getCaseForm("primeromodule-cp")).thenReturn(cpCaseForm);
-        when(caseFormDao.getCaseForm("primeromodule-gbv")).thenReturn(gbvCaseForm);
+        when(caseFormDao.getCaseForm(RecordConfiguration.MODULE_ID_CP)).thenReturn(cpCaseForm);
 
         assertTrue(caseFormService.isReady());
     }
 
     @Test
     public void should_return_false_if_form_is_not_ready() throws Exception {
-        when(caseFormDao.getCaseForm("primeromodule-cp")).thenReturn(createCPCaseForm());
-        when(caseFormDao.getCaseForm("primeromodule-gbv")).thenReturn(null);
+        User user = new User();
+        user.setRole(User.Role.CP.name());
+        Mockito.when(PrimeroAppConfiguration.getCurrentUser()).thenReturn(user);
+        when(caseFormDao.getCaseForm(RecordConfiguration.MODULE_ID_CP)).thenReturn(null);
 
         assertFalse(caseFormService.isReady());
     }

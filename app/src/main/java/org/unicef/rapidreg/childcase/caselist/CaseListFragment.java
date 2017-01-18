@@ -71,8 +71,12 @@ public class CaseListFragment extends RecordListFragment {
 
     @Override
     protected void sendSyncFormEvent() {
-        EventBus.getDefault().postSticky(new LoadCPCaseFormEvent(PrimeroAppConfiguration.getCookie()));
-        EventBus.getDefault().postSticky(new LoadGBVCaseFormEvent(PrimeroAppConfiguration.getCookie()));
+        User.Role roleType = PrimeroAppConfiguration.getCurrentUser().getRoleType();
+        if (roleType == User.Role.CP) {
+            EventBus.getDefault().postSticky(new LoadCPCaseFormEvent(PrimeroAppConfiguration.getCookie()));
+        }else{
+            EventBus.getDefault().postSticky(new LoadGBVCaseFormEvent(PrimeroAppConfiguration.getCookie()));
+        }
     }
 
     @Override

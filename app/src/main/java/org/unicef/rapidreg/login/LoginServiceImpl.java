@@ -11,7 +11,7 @@ import org.unicef.rapidreg.model.LoginRequestBody;
 import org.unicef.rapidreg.model.LoginResponse;
 import org.unicef.rapidreg.model.User;
 import org.unicef.rapidreg.repository.UserDao;
-import org.unicef.rapidreg.service.AuthService;
+import org.unicef.rapidreg.repository.remote.LoginRepository;
 import org.unicef.rapidreg.service.BaseRetrofitService;
 import org.unicef.rapidreg.service.LoginService;
 import org.unicef.rapidreg.utils.EncryptHelper;
@@ -22,7 +22,9 @@ import java.util.List;
 import okhttp3.Headers;
 import retrofit2.Response;
 import rx.Subscription;
+import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
+import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
 
 public class LoginServiceImpl extends BaseRetrofitService implements org.unicef.rapidreg.service.LoginService {
@@ -32,19 +34,16 @@ public class LoginServiceImpl extends BaseRetrofitService implements org.unicef.
     private TelephonyManager telephonyManager;
 
     private UserDao userDao;
-    private AuthService authService;
+    private LoginRepository loginRepository;
 
     private CompositeSubscription compositeSubscription;
 
     public LoginServiceImpl(ConnectivityManager connectivityManager,
                             TelephonyManager telephonyManager,
-                            UserDao userDao,
-                            AuthService authService) {
+                            UserDao userDao) {
         this.connectivityManager = connectivityManager;
         this.telephonyManager = telephonyManager;
         this.userDao = userDao;
-        this.authService = authService;
-
         this.compositeSubscription = new CompositeSubscription();
     }
 
@@ -60,12 +59,14 @@ public class LoginServiceImpl extends BaseRetrofitService implements org.unicef.
                             final String url,
                             String imei,
                             final LoginCallback callback) {
-        authService.init();
         //TODO change hard code to be value from param
+        loginRepository = createRetrofit().create(LoginRepository.class);
         final LoginRequestBody loginRequestBody = new LoginRequestBody(username, password, "15555215554",
                 "8fd2274a590497e9");
-        Subscription subscription = authService
-                .loginRx(loginRequestBody)
+        Subscription subscription = loginRepository
+                .login(loginRequestBody)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Action1<Response<LoginResponse>>() {
                     @Override
                     public void call(Response<LoginResponse> response) {

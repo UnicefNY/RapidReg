@@ -23,7 +23,7 @@ import org.unicef.rapidreg.repository.impl.TracingDaoImpl;
 import org.unicef.rapidreg.repository.impl.TracingFormDaoImpl;
 import org.unicef.rapidreg.repository.impl.TracingPhotoDaoImpl;
 import org.unicef.rapidreg.repository.impl.UserDaoImpl;
-import org.unicef.rapidreg.service.AuthService;
+import org.unicef.rapidreg.service.FormRemoteService;
 import org.unicef.rapidreg.service.CaseFormService;
 import org.unicef.rapidreg.service.CasePhotoService;
 import org.unicef.rapidreg.service.CaseService;
@@ -37,7 +37,7 @@ import org.unicef.rapidreg.service.TracingFormService;
 import org.unicef.rapidreg.service.TracingPhotoService;
 import org.unicef.rapidreg.service.TracingService;
 import org.unicef.rapidreg.service.UserService;
-import org.unicef.rapidreg.service.impl.AuthServiceImpl;
+import org.unicef.rapidreg.service.impl.FormRemoteServiceImpl;
 import org.unicef.rapidreg.service.impl.CaseFormServiceImpl;
 import org.unicef.rapidreg.service.impl.IncidentFormServiceImpl;
 import org.unicef.rapidreg.service.impl.SyncCaseServiceImpl;
@@ -133,8 +133,8 @@ public class ApplicationModule {
 
     @Provides
     @Singleton
-    public AuthService provideAuthService() {
-        return new AuthServiceImpl();
+    public FormRemoteService provideAuthService() {
+        return new FormRemoteServiceImpl();
     }
 
     @Provides
@@ -155,9 +155,8 @@ public class ApplicationModule {
     @Singleton
     public LoginService provideLoginService(ConnectivityManager connectivityManager,
                                             TelephonyManager telephonyManager,
-                                            UserDao userDao,
-                                            AuthService authService) {
-        return new LoginServiceImpl(connectivityManager, telephonyManager, userDao, authService);
+                                            UserDao userDao) {
+        return new LoginServiceImpl(connectivityManager, telephonyManager, userDao);
     }
 
     @Provides

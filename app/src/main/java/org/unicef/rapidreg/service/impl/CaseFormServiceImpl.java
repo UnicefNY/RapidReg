@@ -3,10 +3,12 @@ package org.unicef.rapidreg.service.impl;
 import com.google.gson.Gson;
 import com.raizlabs.android.dbflow.data.Blob;
 
+import org.unicef.rapidreg.PrimeroAppConfiguration;
 import org.unicef.rapidreg.base.RecordConfiguration;
-import org.unicef.rapidreg.repository.CaseFormDao;
 import org.unicef.rapidreg.forms.CaseTemplateForm;
 import org.unicef.rapidreg.model.CaseForm;
+import org.unicef.rapidreg.model.User;
+import org.unicef.rapidreg.repository.CaseFormDao;
 import org.unicef.rapidreg.service.CaseFormService;
 
 public class CaseFormServiceImpl implements CaseFormService {
@@ -18,10 +20,14 @@ public class CaseFormServiceImpl implements CaseFormService {
     }
 
     public boolean isReady() {
-        return caseFormDao.getCaseForm(RecordConfiguration.MODULE_ID_CP) != null && caseFormDao
-                .getCaseForm(RecordConfiguration.MODULE_ID_CP).getForm() != null
-                && caseFormDao.getCaseForm(RecordConfiguration.MODULE_ID_GBV) != null &&
+        User.Role roleType = PrimeroAppConfiguration.getCurrentUser().getRoleType();
+        if (roleType == User.Role.CP) {
+            return caseFormDao.getCaseForm(RecordConfiguration.MODULE_ID_CP) != null && caseFormDao
+                    .getCaseForm(RecordConfiguration.MODULE_ID_CP).getForm() != null;
+        }
+        return caseFormDao.getCaseForm(RecordConfiguration.MODULE_ID_GBV) != null &&
                 caseFormDao.getCaseForm(RecordConfiguration.MODULE_ID_GBV).getForm() != null;
+
     }
 
     public CaseTemplateForm getCPTemplate() {

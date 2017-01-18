@@ -16,7 +16,7 @@ import retrofit2.http.Query;
 import rx.Observable;
 
 
-public interface AuthRepository {
+public interface FormRepository {
     @POST("/api/login")
     Observable<Response<LoginResponse>> login(@Body LoginRequestBody body);
 

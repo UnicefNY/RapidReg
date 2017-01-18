@@ -6,7 +6,7 @@ import android.content.Context;
 import org.unicef.rapidreg.PrimeroGlideModule;
 import org.unicef.rapidreg.injection.ApplicationContext;
 import org.unicef.rapidreg.injection.module.ApplicationModule;
-import org.unicef.rapidreg.service.AuthService;
+import org.unicef.rapidreg.service.FormRemoteService;
 import org.unicef.rapidreg.service.SyncCaseService;
 import org.unicef.rapidreg.service.SyncTracingService;
 import org.unicef.rapidreg.service.CaseFormService;
@@ -45,7 +45,7 @@ public interface ApplicationComponent {
     TracingService tracingService();
     IncidentService incidentService();
     IncidentFormService incidentFormService();
-    AuthService authService();
+    FormRemoteService authService();
     SyncCaseService syncService();
     SyncTracingService syncTracingService();
     LoginService loginService();

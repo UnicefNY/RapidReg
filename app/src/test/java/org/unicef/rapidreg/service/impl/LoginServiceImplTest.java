@@ -9,12 +9,11 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.powermock.modules.junit4.PowerMockRunner;
 import org.robolectric.RobolectricTestRunner;
 import org.unicef.rapidreg.login.LoginServiceImpl;
 import org.unicef.rapidreg.model.User;
 import org.unicef.rapidreg.repository.UserDao;
-import org.unicef.rapidreg.service.AuthService;
+import org.unicef.rapidreg.service.FormRemoteService;
 import org.unicef.rapidreg.service.LoginService;
 import org.unicef.rapidreg.utils.EncryptHelper;
 
@@ -39,7 +38,7 @@ public class LoginServiceImplTest {
     UserDao userDao;
 
     @Mock
-    AuthService authService;
+    FormRemoteService authService;
 
     @InjectMocks
     LoginServiceImpl loginService;
