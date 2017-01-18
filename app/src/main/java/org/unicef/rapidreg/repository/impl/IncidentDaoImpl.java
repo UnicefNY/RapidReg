@@ -22,13 +22,13 @@ public class IncidentDaoImpl implements IncidentDao {
     }
 
     @Override
-    public List<Incident> getAllIncidentsOrderByDate(boolean isASC, String createdBy) {
-        return isASC ? getIncidentsByDateASC(createdBy) : getIncidentsByDateDES(createdBy);
+    public List<Incident> getAllIncidentsOrderByDate(boolean isASC, String ownedBy) {
+        return isASC ? getIncidentsByDateASC(ownedBy) : getIncidentsByDateDES(ownedBy);
     }
 
     @Override
-    public List<Incident> getAllIncidentsOrderByAge(boolean isASC, String createdBy) {
-        return isASC ? getIncidentsByAgeASC(createdBy) : getIncidentsByAgeDES(createdBy);
+    public List<Incident> getAllIncidentsOrderByAge(boolean isASC, String ownedBy) {
+        return isASC ? getIncidentsByAgeASC(ownedBy) : getIncidentsByAgeDES(ownedBy);
 
     }
 
@@ -57,7 +57,7 @@ public class IncidentDaoImpl implements IncidentDao {
     }
 
     @Override
-    public List<Long> getAllIds(String createdBy) {
+    public List<Long> getAllIds(String ownedBy) {
         List<Long> result = new ArrayList<>();
         FlowQueryList<Incident> incidents = SQLite.select().from(Incident.class).flowQueryList();
         for (Incident aIncident : incidents) {
@@ -78,42 +78,38 @@ public class IncidentDaoImpl implements IncidentDao {
         return incident;
     }
 
-    private List<Incident> getIncidentsByAgeASC(String createdBy) {
+    private List<Incident> getIncidentsByAgeASC(String ownedBy) {
         return SQLite
                 .select()
                 .from(Incident.class)
-                .where(ConditionGroup.clause().and(Condition.column(NameAlias.builder(RecordModel.COLUMN_CREATED_BY).build())
-                        .eq(createdBy)))
+                .where(ConditionGroup.clause().and(Incident_Table.owned_by.eq(ownedBy)))
                 .orderBy(Incident_Table.age, true)
                 .queryList();
     }
 
-    private List<Incident> getIncidentsByAgeDES(String createdBy) {
+    private List<Incident> getIncidentsByAgeDES(String ownedBy) {
         return SQLite
                 .select()
                 .from(Incident.class)
-                .where(ConditionGroup.clause().and(Condition.column(NameAlias.builder(RecordModel.COLUMN_CREATED_BY).build())
-                        .eq(createdBy)))
+                .where(Incident_Table.owned_by.eq(ownedBy))
                 .orderBy(Incident_Table.age, false)
                 .queryList();
     }
 
-    private List<Incident> getIncidentsByDateASC(String createdBy) {
+    private List<Incident> getIncidentsByDateASC(String ownedBy) {
         return SQLite
                 .select()
                 .from(Incident.class)
-                .where(ConditionGroup.clause().and(Condition.column(NameAlias.builder(RecordModel.COLUMN_CREATED_BY).build())
-                        .eq(createdBy)))
+                .where(Incident_Table.owned_by.eq(ownedBy))
                 .orderBy(Incident_Table.registration_date, true)
                 .queryList();
     }
 
-    private List<Incident> getIncidentsByDateDES(String createdBy) {
+    private List<Incident> getIncidentsByDateDES(String ownedBy) {
         return SQLite
                 .select()
                 .from(Incident.class)
-                .where(ConditionGroup.clause().and(Condition.column(NameAlias.builder(RecordModel.COLUMN_CREATED_BY).build())
-                        .eq(createdBy)))
+                .where(Incident_Table.owned_by.eq(ownedBy))
                 .orderBy(Incident_Table.registration_date, false)
                 .queryList();
     }

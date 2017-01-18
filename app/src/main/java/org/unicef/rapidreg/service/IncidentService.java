@@ -125,7 +125,7 @@ public class IncidentService extends RecordService {
         itemValues.addStringItem(INCIDENT_ID, uniqueId);
         String username = PrimeroAppConfiguration.getCurrentUser().getUsername();
         itemValues.addStringItem(MODULE, MODULE_GBV_CASE);
-        itemValues.addStringItem(CASEWORKER_CODE, username);
+        itemValues.addStringItem(RECORD_OWNED_BY, username);
         itemValues.addStringItem(RECORD_CREATED_BY, username);
         itemValues.addStringItem(PREVIOUS_OWNER, username);
 
@@ -146,6 +146,7 @@ public class IncidentService extends RecordService {
             incident.setRegistrationDate(Utils.getRegisterDate(itemValues.getAsString(DATE_OF_INTERVIEW)));
         }
         incident.setCreatedBy(username);
+        incident.setOwnedBy(username);
         incidentDao.save(incident);
         return incident;
     }

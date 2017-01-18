@@ -1,7 +1,6 @@
 package org.unicef.rapidreg.service.impl;
 
 import android.support.v4.util.Pair;
-import android.text.TextUtils;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
@@ -17,9 +16,9 @@ import org.unicef.rapidreg.repository.CasePhotoDao;
 import org.unicef.rapidreg.repository.impl.CasePhotoDaoImpl;
 import org.unicef.rapidreg.repository.remote.SyncCaseRepository;
 import org.unicef.rapidreg.service.BaseRetrofitService;
-import org.unicef.rapidreg.service.RecordService;
 import org.unicef.rapidreg.service.SyncCaseService;
 import org.unicef.rapidreg.service.cache.ItemValuesMap;
+import org.unicef.rapidreg.utils.TextUtils;
 
 import java.util.List;
 
@@ -34,23 +33,20 @@ import rx.Subscriber;
 import rx.functions.Func1;
 
 
+
+
 public class SyncCaseServiceImpl extends BaseRetrofitService implements SyncCaseService {
     private SyncCaseRepository syncCaseRepository;
-
     private CasePhotoDao casePhotoDao;
-
-    private RecordService recordService;
 
     @Override
     protected String getBaseUrl() {
         return PrimeroAppConfiguration.getApiBaseUrl();
     }
 
-    public SyncCaseServiceImpl(CasePhotoDao casePhotoDao, RecordService
-            recordService) {
+    public SyncCaseServiceImpl(CasePhotoDao casePhotoDao) {
         createRetrofit();
         this.casePhotoDao = casePhotoDao;
-        this.recordService = recordService;
         syncCaseRepository = getRetrofit().create(SyncCaseRepository.class);
     }
 
@@ -75,7 +71,8 @@ public class SyncCaseServiceImpl extends BaseRetrofitService implements SyncCase
     public Response<JsonElement> uploadCaseJsonProfile(RecordModel item) {
         ItemValuesMap itemValuesMap = ItemValuesMap.fromJson(new String(item.getContent().getBlob
                 ()));
-        String shortUUID = recordService.getShortUUID(item.getUniqueId());
+        String shortUUID = TextUtils.getLastSevenNumbers(item.getUniqueId());
+
         itemValuesMap.addStringItem("short_id", shortUUID);
         itemValuesMap.removeItem("_attachments");
 

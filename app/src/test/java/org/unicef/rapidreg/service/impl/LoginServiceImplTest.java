@@ -10,7 +10,6 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.robolectric.RobolectricTestRunner;
-import org.unicef.rapidreg.login.LoginServiceImpl;
 import org.unicef.rapidreg.model.User;
 import org.unicef.rapidreg.repository.UserDao;
 import org.unicef.rapidreg.service.FormRemoteService;

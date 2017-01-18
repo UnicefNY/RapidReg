@@ -20,6 +20,7 @@ public class RecordModel extends BaseModel {
     public static final String COLUMN_CAREGIVER = "caregiver";
     public static final String COLUMN_REGISTRATION_DATE = "registration_date";
     public static final String COLUMN_CREATED_BY = "created_by";
+    public static final String COLUMN_OWNED_BY = "owned_by";
 
     @PrimaryKey(autoincrement = true)
     public long id;
@@ -49,6 +50,9 @@ public class RecordModel extends BaseModel {
     private Date registrationDate;
     @Column(name = "created_by")
     private String createdBy;
+
+    @Column(name = "owned_by")
+    private String ownedBy;
     @Column(name = "created_date")
     private Date createDate;
     @Column(name = "last_updated_date")
@@ -76,6 +80,14 @@ public class RecordModel extends BaseModel {
 
     public void setId(long id) {
         this.id = id;
+    }
+
+    public String getOwnedBy() {
+        return ownedBy;
+    }
+
+    public void setOwnedBy(String ownedBy) {
+        this.ownedBy = ownedBy;
     }
 
     public String getName() {

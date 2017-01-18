@@ -1,35 +1,32 @@
 package org.unicef.rapidreg.sync;
 
-import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
-import android.content.res.Configuration;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
-import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.hannesdorfmann.mosby.mvp.MvpFragment;
 
+import org.unicef.rapidreg.PrimeroAppConfiguration;
 import org.unicef.rapidreg.PrimeroApplication;
 import org.unicef.rapidreg.R;
 import org.unicef.rapidreg.base.BaseAlertDialog;
 import org.unicef.rapidreg.base.BaseProgressDialog;
-import org.unicef.rapidreg.injection.component.ActivityComponent;
 import org.unicef.rapidreg.injection.component.DaggerFragmentComponent;
 import org.unicef.rapidreg.injection.component.FragmentComponent;
 import org.unicef.rapidreg.injection.module.FragmentModule;
+import org.unicef.rapidreg.model.User;
 
 import javax.inject.Inject;
 
@@ -38,7 +35,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class SyncFragment extends MvpFragment<SyncView, SyncPresenter> implements SyncView {
+public class SyncFragment extends MvpFragment<SyncView, BaseSyncPresenter> implements SyncView {
     private BaseProgressDialog syncProgressDialog;
 
     @BindView(R.id.btn_sync)
@@ -83,7 +80,10 @@ public class SyncFragment extends MvpFragment<SyncView, SyncPresenter> implement
     String continueSyncButtonText;
 
     @Inject
-    SyncPresenter syncPresenter;
+    CPSyncPresenter cpSyncPresenter;
+
+    @Inject
+    GBVSyncPresenter gbvSyncPresenter;
 
     @Nullable
     @Override
@@ -134,32 +134,17 @@ public class SyncFragment extends MvpFragment<SyncView, SyncPresenter> implement
     }
 
     @Override
-    public SyncPresenter createPresenter() {
-        return syncPresenter;
+    public BaseSyncPresenter createPresenter() {
+        User.Role roleType = PrimeroAppConfiguration.getCurrentUser().getRoleType();
+        if (roleType == User.Role.CP) {
+            return cpSyncPresenter;
+        }
+        return gbvSyncPresenter;
     }
 
     @OnClick(R.id.btn_sync)
     public void onSyncClick() {
         presenter.tryToSync();
-    }
-
-    @OnClick(R.id.tv_produce_cases)
-    public void onProduceCasesBtnClick() {
-        final EditText tvNumber = new EditText(getActivity());
-        tvNumber.setInputType(InputType.TYPE_CLASS_NUMBER);
-        tvNumber.setRawInputType(Configuration.KEYBOARD_12KEY);
-        tvNumber.setText("100");
-        new BaseAlertDialog.Builder(getActivity())
-                .setView(tvNumber)
-                .setMessage("Please enter the number.")
-                .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        presenter.produceCases(Integer.valueOf(tvNumber.getText().toString()));
-                    }
-                })
-                .setNegativeButton(R.string.cancel, null)
-                .show();
     }
 
     @Override
