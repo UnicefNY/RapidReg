@@ -6,19 +6,19 @@ import org.unicef.rapidreg.base.record.RecordPresenter;
 import org.unicef.rapidreg.forms.CaseTemplateForm;
 import org.unicef.rapidreg.forms.RecordForm;
 import org.unicef.rapidreg.model.CaseForm;
-import org.unicef.rapidreg.service.AuthService;
+import org.unicef.rapidreg.service.FormRemoteService;
 import org.unicef.rapidreg.service.CaseFormService;
 import javax.inject.Inject;
 import rx.functions.Action1;
 
 public class CasePresenter extends RecordPresenter {
     private CaseFormService caseFormService;
-    private AuthService authService;
+    private FormRemoteService formRemoteService;
 
     @Inject
-    public CasePresenter(AuthService authService, CaseFormService caseFormService) {
+    public CasePresenter(FormRemoteService authService, CaseFormService caseFormService) {
         this.caseFormService = caseFormService;
-        this.authService = authService;
+        this.formRemoteService = authService;
     }
 
     @Override
@@ -30,7 +30,7 @@ public class CasePresenter extends RecordPresenter {
     }
 
     public void loadCaseForm(String language, String cookie, final String moduleId) {
-        authService.getCaseForm(cookie, language, true, "case", moduleId)
+        formRemoteService.getCaseForm(cookie, language, true, "case", moduleId)
                 .subscribe(new Action1<CaseTemplateForm>() {
                     @Override
                     public void call(CaseTemplateForm caseForm) {

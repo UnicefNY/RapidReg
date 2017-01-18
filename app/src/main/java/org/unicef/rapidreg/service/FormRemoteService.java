@@ -10,12 +10,7 @@ import retrofit2.Response;
 import rx.Observable;
 
 
-public interface AuthService {
-    void init();
-
-    Observable<Response<LoginResponse>> loginRx(LoginRequestBody body);
-
-
+public interface FormRemoteService {
     Observable<CaseTemplateForm> getCaseForm(String cookie, String locale,
                                              Boolean isMobile, String parentForm, String moduleId);
 

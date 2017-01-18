@@ -15,7 +15,6 @@ import javax.inject.Inject;
 import static org.unicef.rapidreg.base.record.recordlist.RecordListFragment.*;
 
 public class CaseListPresenter extends RecordListPresenter {
-
     private CaseService caseService;
     private CaseFormService caseFormService;
 

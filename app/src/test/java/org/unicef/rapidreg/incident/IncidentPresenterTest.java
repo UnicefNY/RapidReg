@@ -9,7 +9,7 @@ import org.powermock.modules.junit4.PowerMockRunner;
 import org.unicef.rapidreg.forms.IncidentTemplateForm;
 import org.unicef.rapidreg.forms.Section;
 import org.unicef.rapidreg.model.IncidentForm;
-import org.unicef.rapidreg.service.AuthService;
+import org.unicef.rapidreg.service.FormRemoteService;
 import org.unicef.rapidreg.service.IncidentFormService;
 
 import edu.emory.mathcs.backport.java.util.Arrays;
@@ -30,7 +30,7 @@ public class IncidentPresenterTest {
     IncidentFormService incidentFormService;
 
     @Mock
-    AuthService authService;
+    FormRemoteService authService;
 
     @InjectMocks
     IncidentPresenter incidentPresenter;

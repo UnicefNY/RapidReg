@@ -6,7 +6,7 @@ import org.unicef.rapidreg.base.record.RecordPresenter;
 import org.unicef.rapidreg.forms.IncidentTemplateForm;
 import org.unicef.rapidreg.forms.RecordForm;
 import org.unicef.rapidreg.model.IncidentForm;
-import org.unicef.rapidreg.service.AuthService;
+import org.unicef.rapidreg.service.FormRemoteService;
 import org.unicef.rapidreg.service.IncidentFormService;
 
 import java.util.Locale;
@@ -17,10 +17,10 @@ import rx.functions.Action1;
 
 public class IncidentPresenter extends RecordPresenter {
     private IncidentFormService incidentFormService;
-    private AuthService authService;
+    private FormRemoteService authService;
 
     @Inject
-    public IncidentPresenter(AuthService authService,
+    public IncidentPresenter(FormRemoteService authService,
                              IncidentFormService incidentFormService) {
         this.incidentFormService = incidentFormService;
         this.authService = authService;
