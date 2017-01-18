@@ -32,6 +32,7 @@ public class RecordService {
     public static final String OTHER_NAME = "name_other";
     public static final String CAREGIVER_NAME = "name_caregiver";
     public static final String REGISTRATION_DATE = "registration_date";
+    public static final String DATE_OF_INTERVIEW = "date_of_first_report";
     public static final String CASEWORKER_CODE = "owned_by";
     public static final String RECORD_CREATED_BY = "created_by";
     public static final String PREVIOUS_OWNER = "previously_owned_by";
