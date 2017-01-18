@@ -7,7 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import org.greenrobot.eventbus.EventBus;
-import org.unicef.rapidreg.PrimeroConfiguration;
+import org.unicef.rapidreg.PrimeroAppConfiguration;
 import org.unicef.rapidreg.R;
 import org.unicef.rapidreg.base.record.RecordActivity;
 import org.unicef.rapidreg.base.record.recordlist.RecordListAdapter;
@@ -15,11 +15,9 @@ import org.unicef.rapidreg.base.record.recordlist.RecordListFragment;
 import org.unicef.rapidreg.base.record.recordlist.RecordListPresenter;
 import org.unicef.rapidreg.base.record.recordlist.spinner.SpinnerState;
 import org.unicef.rapidreg.event.LoadGBVIncidentFormEvent;
-import org.unicef.rapidreg.incident.IncidentActivity;
 import org.unicef.rapidreg.incident.IncidentFeature;
 
 import java.util.Arrays;
-import java.util.HashMap;
 
 import javax.inject.Inject;
 
@@ -64,7 +62,7 @@ public class IncidentListFragment extends RecordListFragment {
 
     @Override
     protected void sendSyncFormEvent() {
-        EventBus.getDefault().postSticky(new LoadGBVIncidentFormEvent(PrimeroConfiguration
+        EventBus.getDefault().postSticky(new LoadGBVIncidentFormEvent(PrimeroAppConfiguration
                 .getCookie()));
     }
 

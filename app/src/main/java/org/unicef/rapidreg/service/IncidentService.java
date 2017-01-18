@@ -9,9 +9,9 @@ import com.raizlabs.android.dbflow.sql.language.ConditionGroup;
 import com.raizlabs.android.dbflow.sql.language.NameAlias;
 import com.raizlabs.android.dbflow.sql.language.SQLCondition;
 
-import org.unicef.rapidreg.PrimeroConfiguration;
-import org.unicef.rapidreg.db.IncidentDao;
-import org.unicef.rapidreg.db.impl.IncidentDaoImpl;
+import org.unicef.rapidreg.PrimeroAppConfiguration;
+import org.unicef.rapidreg.repository.IncidentDao;
+import org.unicef.rapidreg.repository.impl.IncidentDaoImpl;
 import org.unicef.rapidreg.model.Incident;
 import org.unicef.rapidreg.model.RecordModel;
 import org.unicef.rapidreg.service.cache.ItemValuesMap;
@@ -50,27 +50,27 @@ public class IncidentService extends RecordService {
     }
 
     public List<Incident> getAll() {
-        return incidentDao.getAllIncidentsOrderByDate(false, PrimeroConfiguration.getCurrentUser().getUsername());
+        return incidentDao.getAllIncidentsOrderByDate(false, PrimeroAppConfiguration.getCurrentUser().getUsername());
     }
 
     public List<Long> getAllIds() {
-        return incidentDao.getAllIds(PrimeroConfiguration.getCurrentUser().getUsername());
+        return incidentDao.getAllIds(PrimeroAppConfiguration.getCurrentUser().getUsername());
     }
 
     public List<Long> getAllOrderByDateASC() {
-        return extractIds(incidentDao.getAllIncidentsOrderByDate(true, PrimeroConfiguration.getCurrentUser().getUsername()));
+        return extractIds(incidentDao.getAllIncidentsOrderByDate(true, PrimeroAppConfiguration.getCurrentUser().getUsername()));
     }
 
     public List<Long> getAllOrderByDateDES() {
-        return extractIds(incidentDao.getAllIncidentsOrderByDate(false, PrimeroConfiguration.getCurrentUser().getUsername()));
+        return extractIds(incidentDao.getAllIncidentsOrderByDate(false, PrimeroAppConfiguration.getCurrentUser().getUsername()));
     }
 
     public List<Long> getAllOrderByAgeASC() {
-        return extractIds(incidentDao.getAllIncidentsOrderByAge(true, PrimeroConfiguration.getCurrentUser().getUsername()));
+        return extractIds(incidentDao.getAllIncidentsOrderByAge(true, PrimeroAppConfiguration.getCurrentUser().getUsername()));
     }
 
     public List<Long> getAllOrderByAgeDES() {
-        return extractIds(incidentDao.getAllIncidentsOrderByAge(false, PrimeroConfiguration.getCurrentUser().getUsername()));
+        return extractIds(incidentDao.getAllIncidentsOrderByAge(false, PrimeroAppConfiguration.getCurrentUser().getUsername()));
     }
 
     public List<Long> getSearchResult(String uniqueId, String name, int ageFrom,
@@ -100,7 +100,7 @@ public class IncidentService extends RecordService {
             conditionGroup.and(ageSearchCondition);
         }
         conditionGroup.and(Condition.column(NameAlias.builder(RecordModel.COLUMN_CREATED_BY).build())
-                .eq(PrimeroConfiguration.getCurrentUser().getUsername()));
+                .eq(PrimeroAppConfiguration.getCurrentUser().getUsername()));
 
         if (date != null) {
             conditionGroup.and(Condition.column(
@@ -123,7 +123,7 @@ public class IncidentService extends RecordService {
         String uniqueId = generateUniqueId();
         itemValues.addStringItem(INCIDENT_DISPLAY_ID, getShortUUID(uniqueId));
         itemValues.addStringItem(INCIDENT_ID, uniqueId);
-        String username = PrimeroConfiguration.getCurrentUser().getUsername();
+        String username = PrimeroAppConfiguration.getCurrentUser().getUsername();
         itemValues.addStringItem(MODULE, MODULE_GBV_CASE);
         itemValues.addStringItem(CASEWORKER_CODE, username);
         itemValues.addStringItem(RECORD_CREATED_BY, username);

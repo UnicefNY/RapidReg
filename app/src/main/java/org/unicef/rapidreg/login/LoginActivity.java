@@ -1,10 +1,7 @@
 package org.unicef.rapidreg.login;
 
-import android.app.Activity;
-import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -15,14 +12,13 @@ import com.hannesdorfmann.mosby.mvp.MvpActivity;
 
 import org.unicef.rapidreg.IntentSender;
 import org.unicef.rapidreg.PrimeroApplication;
-import org.unicef.rapidreg.PrimeroConfiguration;
+import org.unicef.rapidreg.PrimeroAppConfiguration;
 import org.unicef.rapidreg.R;
 import org.unicef.rapidreg.base.BaseProgressDialog;
 import org.unicef.rapidreg.injection.component.ActivityComponent;
 import org.unicef.rapidreg.injection.component.DaggerActivityComponent;
 import org.unicef.rapidreg.injection.module.ActivityModule;
 import org.unicef.rapidreg.model.LoginResponse;
-import org.unicef.rapidreg.network.NetworkStatusManager;
 
 import javax.inject.Inject;
 
@@ -82,7 +78,7 @@ public class LoginActivity extends MvpActivity<LoginView, LoginPresenter> implem
                 usernameEditView.getText().toString().trim(),
                 passwordEditView.getText().toString().trim(),
                 urlEditView.getText().toString().trim(),
-                PrimeroConfiguration.getAndroidId());
+                PrimeroAppConfiguration.getAndroidId());
     }
 
     @OnClick(R.id.change_url)
@@ -147,7 +143,8 @@ public class LoginActivity extends MvpActivity<LoginView, LoginPresenter> implem
     }
 
     @Override
-    public void setData(Call<LoginResponse> data) {}
+    public void setData(Call<LoginResponse> data) {
+    }
 
     @Override
     public void loadData(boolean pullToRefresh) {
@@ -159,7 +156,8 @@ public class LoginActivity extends MvpActivity<LoginView, LoginPresenter> implem
         if (loginPresenter.isOnline()) {
             Toast.makeText(this, getResources().getString(R.string.login_success_message), Toast.LENGTH_SHORT).show();
         } else {
-            Toast.makeText(this, getResources().getString(R.string.login_offline_success_text), Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getResources().getString(R.string.login_offline_success_text), Toast.LENGTH_SHORT)
+                    .show();
         }
     }
 

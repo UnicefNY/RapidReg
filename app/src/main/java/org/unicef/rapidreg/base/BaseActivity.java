@@ -20,7 +20,7 @@ import com.hannesdorfmann.mosby.mvp.MvpActivity;
 
 import org.unicef.rapidreg.IntentSender;
 import org.unicef.rapidreg.PrimeroApplication;
-import org.unicef.rapidreg.PrimeroConfiguration;
+import org.unicef.rapidreg.PrimeroAppConfiguration;
 import org.unicef.rapidreg.R;
 import org.unicef.rapidreg.injection.component.ActivityComponent;
 import org.unicef.rapidreg.injection.component.DaggerActivityComponent;
@@ -111,7 +111,7 @@ public abstract class BaseActivity extends MvpActivity<BaseView, BasePresenter> 
     }
 
     protected void initNavigationItemMenu() {
-        User user = PrimeroConfiguration.getCurrentUser();
+        User user = PrimeroAppConfiguration.getCurrentUser();
         if (user != null) {
             User.Role role = user.getRoleType();
             for (int resId: role.getResIds()) {

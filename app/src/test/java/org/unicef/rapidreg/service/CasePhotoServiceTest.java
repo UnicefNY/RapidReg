@@ -4,7 +4,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.unicef.rapidreg.db.CasePhotoDao;
+import org.unicef.rapidreg.repository.CasePhotoDao;
 import org.unicef.rapidreg.model.CasePhoto;
 
 import java.util.Collections;

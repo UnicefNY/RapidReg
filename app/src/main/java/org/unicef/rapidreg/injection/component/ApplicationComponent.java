@@ -6,10 +6,9 @@ import android.content.Context;
 import org.unicef.rapidreg.PrimeroGlideModule;
 import org.unicef.rapidreg.injection.ApplicationContext;
 import org.unicef.rapidreg.injection.module.ApplicationModule;
-import org.unicef.rapidreg.login.LoginServiceImpl;
-import org.unicef.rapidreg.network.AuthService;
-import org.unicef.rapidreg.network.SyncService;
-import org.unicef.rapidreg.network.SyncTracingService;
+import org.unicef.rapidreg.service.AuthService;
+import org.unicef.rapidreg.service.SyncCaseService;
+import org.unicef.rapidreg.service.SyncTracingService;
 import org.unicef.rapidreg.service.CaseFormService;
 import org.unicef.rapidreg.service.CasePhotoService;
 import org.unicef.rapidreg.service.CaseService;
@@ -47,7 +46,7 @@ public interface ApplicationComponent {
     IncidentService incidentService();
     IncidentFormService incidentFormService();
     AuthService authService();
-    SyncService syncService();
+    SyncCaseService syncService();
     SyncTracingService syncTracingService();
     LoginService loginService();
 }

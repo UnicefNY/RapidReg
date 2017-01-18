@@ -5,23 +5,19 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import org.greenrobot.eventbus.EventBus;
-import org.unicef.rapidreg.PrimeroConfiguration;
+import org.unicef.rapidreg.PrimeroAppConfiguration;
 import org.unicef.rapidreg.R;
 import org.unicef.rapidreg.base.record.recordlist.RecordListAdapter;
 import org.unicef.rapidreg.base.record.recordlist.RecordListFragment;
 import org.unicef.rapidreg.base.record.recordlist.RecordListPresenter;
 import org.unicef.rapidreg.base.record.recordlist.spinner.SpinnerState;
-import org.unicef.rapidreg.base.record.recordregister.RecordRegisterBtnType;
 import org.unicef.rapidreg.event.LoadTracingFormEvent;
-import org.unicef.rapidreg.incident.IncidentActivity;
 import org.unicef.rapidreg.tracing.TracingActivity;
 import org.unicef.rapidreg.tracing.TracingFeature;
 
 import java.util.Arrays;
-import java.util.HashMap;
 
 import javax.inject.Inject;
 
@@ -69,7 +65,7 @@ public class TracingListFragment extends RecordListFragment {
 
     @Override
     protected void sendSyncFormEvent() {
-        EventBus.getDefault().postSticky(new LoadTracingFormEvent(PrimeroConfiguration.getCookie()));
+        EventBus.getDefault().postSticky(new LoadTracingFormEvent(PrimeroAppConfiguration.getCookie()));
     }
 
     @OnClick(R.id.add)

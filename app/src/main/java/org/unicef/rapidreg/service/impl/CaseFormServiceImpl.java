@@ -4,7 +4,7 @@ import com.google.gson.Gson;
 import com.raizlabs.android.dbflow.data.Blob;
 
 import org.unicef.rapidreg.base.RecordConfiguration;
-import org.unicef.rapidreg.db.CaseFormDao;
+import org.unicef.rapidreg.repository.CaseFormDao;
 import org.unicef.rapidreg.forms.CaseTemplateForm;
 import org.unicef.rapidreg.model.CaseForm;
 import org.unicef.rapidreg.service.CaseFormService;

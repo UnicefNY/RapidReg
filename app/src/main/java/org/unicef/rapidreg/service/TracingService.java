@@ -9,11 +9,11 @@ import com.raizlabs.android.dbflow.sql.language.ConditionGroup;
 import com.raizlabs.android.dbflow.sql.language.NameAlias;
 import com.raizlabs.android.dbflow.sql.language.SQLCondition;
 
-import org.unicef.rapidreg.PrimeroConfiguration;
-import org.unicef.rapidreg.db.TracingDao;
-import org.unicef.rapidreg.db.TracingPhotoDao;
-import org.unicef.rapidreg.db.impl.TracingDaoImpl;
-import org.unicef.rapidreg.db.impl.TracingPhotoDaoImpl;
+import org.unicef.rapidreg.PrimeroAppConfiguration;
+import org.unicef.rapidreg.repository.TracingDao;
+import org.unicef.rapidreg.repository.TracingPhotoDao;
+import org.unicef.rapidreg.repository.impl.TracingDaoImpl;
+import org.unicef.rapidreg.repository.impl.TracingPhotoDaoImpl;
 import org.unicef.rapidreg.model.RecordModel;
 import org.unicef.rapidreg.model.Tracing;
 import org.unicef.rapidreg.service.cache.ItemValuesMap;
@@ -51,19 +51,19 @@ public class TracingService extends RecordService {
     }
 
     public List<Tracing> getAll() {
-        return tracingDao.getAllTracingsOrderByDate(false, PrimeroConfiguration.getCurrentUser().getUsername());
+        return tracingDao.getAllTracingsOrderByDate(false, PrimeroAppConfiguration.getCurrentUser().getUsername());
     }
 
     public List<Long> getAllIds() {
-        return tracingDao.getAllIds(PrimeroConfiguration.getCurrentUser().getUsername());
+        return tracingDao.getAllIds(PrimeroAppConfiguration.getCurrentUser().getUsername());
     }
 
     public List<Long> getAllOrderByDateASC() {
-        return extractIds(tracingDao.getAllTracingsOrderByDate(true, PrimeroConfiguration.getCurrentUser().getUsername()));
+        return extractIds(tracingDao.getAllTracingsOrderByDate(true, PrimeroAppConfiguration.getCurrentUser().getUsername()));
     }
 
     public List<Long> getAllOrderByDateDES() {
-        return extractIds(tracingDao.getAllTracingsOrderByDate(false, PrimeroConfiguration.getCurrentUser().getUsername()));
+        return extractIds(tracingDao.getAllTracingsOrderByDate(false, PrimeroAppConfiguration.getCurrentUser().getUsername()));
     }
 
     public List<Long> getSearchResult(String uniqueId, String name, int ageFrom, int ageTo, Date
@@ -93,7 +93,7 @@ public class TracingService extends RecordService {
             conditionGroup.and(ageSearchCondition);
         }
         conditionGroup.and(Condition.column(NameAlias.builder(RecordModel.COLUMN_CREATED_BY).build())
-                .eq(PrimeroConfiguration.getCurrentUser().getUsername()));
+                .eq(PrimeroAppConfiguration.getCurrentUser().getUsername()));
 
         if (date != null) {
             conditionGroup.and(Condition.column(
@@ -130,7 +130,7 @@ public class TracingService extends RecordService {
         Tracing tracing = new Tracing();
         tracing.setUniqueId(uniqueId);
 
-        String username = PrimeroConfiguration.getCurrentUser().getUsername();
+        String username = PrimeroAppConfiguration.getCurrentUser().getUsername();
         tracing.setCreatedBy(username);
 
         tracing.setContent(generateTracingBlob(itemValues, uniqueId, username));
@@ -153,7 +153,7 @@ public class TracingService extends RecordService {
 
     private Tracing updateTracingFromItemValues(ItemValuesMap itemValues) {
         Tracing tracing = tracingDao.getTracingByUniqueId(itemValues.getAsString(TRACING_ID));
-        String username = PrimeroConfiguration.getCurrentUser().getUsername();
+        String username = PrimeroAppConfiguration.getCurrentUser().getUsername();
         tracing.setCreatedBy(username);
 
         tracing.setContent(generateTracingBlob(itemValues, tracing.getUniqueId(), username));

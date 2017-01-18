@@ -6,7 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import org.unicef.rapidreg.PrimeroConfiguration;
+import org.unicef.rapidreg.PrimeroAppConfiguration;
 import org.unicef.rapidreg.base.record.recordlist.RecordListAdapter;
 import org.unicef.rapidreg.base.record.recordsearch.RecordSearchFragment;
 import org.unicef.rapidreg.base.record.recordsearch.RecordSearchPresenter;
@@ -37,7 +37,7 @@ public class CaseSearchFragment extends RecordSearchFragment {
 
     @Override
     protected void onInitSearchFields() {
-        initSearchCondition(PrimeroConfiguration.getCurrentUser().getRoleType());
+        initSearchCondition(PrimeroAppConfiguration.getCurrentUser().getRoleType());
     }
 
     private void initSearchCondition(User.Role roleType) {

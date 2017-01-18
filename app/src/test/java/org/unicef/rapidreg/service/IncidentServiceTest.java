@@ -11,9 +11,9 @@ import org.mockito.Mockito;
 import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
-import org.unicef.rapidreg.PrimeroConfiguration;
-import org.unicef.rapidreg.db.IncidentDao;
-import org.unicef.rapidreg.db.impl.IncidentDaoImpl;
+import org.unicef.rapidreg.PrimeroAppConfiguration;
+import org.unicef.rapidreg.repository.IncidentDao;
+import org.unicef.rapidreg.repository.impl.IncidentDaoImpl;
 import org.unicef.rapidreg.forms.Field;
 import org.unicef.rapidreg.forms.Section;
 import org.unicef.rapidreg.model.Incident;
@@ -45,7 +45,7 @@ import static org.unicef.rapidreg.service.RecordService.AGE;
 import static org.unicef.rapidreg.service.RecordService.REGISTRATION_DATE;
 
 @RunWith(PowerMockRunner.class)
-@PrepareForTest({PrimeroConfiguration.class})
+@PrepareForTest({PrimeroAppConfiguration.class})
 public class IncidentServiceTest {
 
     private IncidentDao incidentDao = mock(IncidentDaoImpl.class);
@@ -54,10 +54,10 @@ public class IncidentServiceTest {
     @Before
     public void setUp() throws Exception {
         initMocks(this);
-        PowerMockito.mockStatic(PrimeroConfiguration.class);
+        PowerMockito.mockStatic(PrimeroAppConfiguration.class);
 
         User user = new User("primero");
-        Mockito.when(PrimeroConfiguration.getCurrentUser()).thenReturn(user);
+        Mockito.when(PrimeroAppConfiguration.getCurrentUser()).thenReturn(user);
     }
 
     @Test
@@ -83,7 +83,7 @@ public class IncidentServiceTest {
         Incident incident = new Incident();
         List<Incident> incidentList = new ArrayList<Incident>();
         incidentList.add(incident);
-        when(incidentDao.getAllIncidentsOrderByDate(false, PrimeroConfiguration.getCurrentUser().getUsername())).thenReturn(incidentList);
+        when(incidentDao.getAllIncidentsOrderByDate(false, PrimeroAppConfiguration.getCurrentUser().getUsername())).thenReturn(incidentList);
         assertThat(incidentService.getAll(), is(incidentList));
     }
 
@@ -92,7 +92,7 @@ public class IncidentServiceTest {
         Long l = 1L;
         List<Long> list = new ArrayList<>();
         list.add(l);
-        when(incidentDao.getAllIds(PrimeroConfiguration.getCurrentUser().getUsername())).thenReturn(list);
+        when(incidentDao.getAllIds(PrimeroAppConfiguration.getCurrentUser().getUsername())).thenReturn(list);
         assertThat(incidentService.getAllIds(), is(list));
     }
 
@@ -100,7 +100,7 @@ public class IncidentServiceTest {
     public void should_return_all_order_ids_sorted_by_age_ascending() {
         Incident[] orders = new Incident[]{new Incident(1), new Incident(2), new Incident(3)};
         List<Incident> orderList = Arrays.asList(orders);
-        when(incidentDao.getAllIncidentsOrderByAge(true, PrimeroConfiguration.getCurrentUser().getUsername())).thenReturn(orderList);
+        when(incidentDao.getAllIncidentsOrderByAge(true, PrimeroAppConfiguration.getCurrentUser().getUsername())).thenReturn(orderList);
         assertThat(incidentService.getAllOrderByAgeASC(), is(Arrays.asList(new Long[]{1L, 2L,
                 3L})));
     }
@@ -109,7 +109,7 @@ public class IncidentServiceTest {
     public void should_return_all_order_ids_sorted_by_age_descending() {
         Incident[] orders = new Incident[]{new Incident(1), new Incident(2), new Incident(3)};
         List<Incident> orderList = Arrays.asList(orders);
-        when(incidentDao.getAllIncidentsOrderByAge(false, PrimeroConfiguration.getCurrentUser().getUsername())).thenReturn(orderList);
+        when(incidentDao.getAllIncidentsOrderByAge(false, PrimeroAppConfiguration.getCurrentUser().getUsername())).thenReturn(orderList);
         assertThat(incidentService.getAllOrderByAgeDES(), is(Arrays.asList(new Long[]{1L, 2L,
                 3L})));
     }
@@ -118,7 +118,7 @@ public class IncidentServiceTest {
     public void should_return_all_order_ids_sorted_by_date_ascending() throws Exception {
         Incident[] orders = new Incident[]{new Incident(1), new Incident(2), new Incident(3)};
         List<Incident> orderList = Arrays.asList(orders);
-        when(incidentDao.getAllIncidentsOrderByDate(true, PrimeroConfiguration.getCurrentUser().getUsername())).thenReturn(orderList);
+        when(incidentDao.getAllIncidentsOrderByDate(true, PrimeroAppConfiguration.getCurrentUser().getUsername())).thenReturn(orderList);
         assertThat("When call getAllOrdersByDateAsc() should return orders sorted by date.",
                 incidentService.getAllOrderByDateASC(), is(Arrays.asList(new Long[]{1L, 2L, 3L})));
     }
@@ -127,7 +127,7 @@ public class IncidentServiceTest {
     public void should_return_all_order_ids_sorted_by_date_descending() throws Exception {
         Incident[] orders = new Incident[]{new Incident(3), new Incident(2), new Incident(1)};
         List<Incident> orderList = Arrays.asList(orders);
-        when(incidentDao.getAllIncidentsOrderByDate(false, PrimeroConfiguration.getCurrentUser().getUsername())).thenReturn(orderList);
+        when(incidentDao.getAllIncidentsOrderByDate(false, PrimeroAppConfiguration.getCurrentUser().getUsername())).thenReturn(orderList);
         assertThat("When call getAllOrderByDateDES() should return orders sorted by date.",
                 incidentService.getAllOrderByDateDES(), is(Arrays.asList(new Long[]{3L, 2L, 1L})));
     }
@@ -139,7 +139,7 @@ public class IncidentServiceTest {
         IncidentService incidentServiceSpy = spy(incidentService);
         when(incidentServiceSpy.generateUniqueId()).thenReturn(uniqueId);
         User user = new User("userName");
-        when(PrimeroConfiguration.getCurrentUser()).thenReturn(user);
+        when(PrimeroAppConfiguration.getCurrentUser()).thenReturn(user);
         ItemValuesMap itemValuesMap = new ItemValuesMap();
         itemValuesMap.addStringItem(REGISTRATION_DATE, "11/11/1111");
 
@@ -159,7 +159,7 @@ public class IncidentServiceTest {
         IncidentService incidentServiceSpy = spy(incidentService);
         when(incidentServiceSpy.generateUniqueId()).thenReturn(uniqueId);
         User user = new User("userName");
-        Mockito.when(PrimeroConfiguration.getCurrentUser()).thenReturn(user);
+        Mockito.when(PrimeroAppConfiguration.getCurrentUser()).thenReturn(user);
         ItemValuesMap itemValuesMap = new ItemValuesMap();
 
         Incident incident = incidentServiceSpy.save(itemValuesMap);

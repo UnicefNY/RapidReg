@@ -11,9 +11,9 @@ import org.mockito.Mock;
 import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
-import org.unicef.rapidreg.PrimeroConfiguration;
-import org.unicef.rapidreg.db.TracingDao;
-import org.unicef.rapidreg.db.TracingPhotoDao;
+import org.unicef.rapidreg.PrimeroAppConfiguration;
+import org.unicef.rapidreg.repository.TracingDao;
+import org.unicef.rapidreg.repository.TracingPhotoDao;
 import org.unicef.rapidreg.forms.Field;
 import org.unicef.rapidreg.forms.Section;
 import org.unicef.rapidreg.model.Tracing;
@@ -46,7 +46,7 @@ import static org.unicef.rapidreg.service.RecordService.RELATION_AGE;
 import static org.unicef.rapidreg.service.TracingService.TRACING_ID;
 
 @RunWith(PowerMockRunner.class)
-@PrepareForTest({PrimeroConfiguration.class})
+@PrepareForTest({PrimeroAppConfiguration.class})
 public class TracingServiceTest {
 
     @Mock
@@ -61,10 +61,10 @@ public class TracingServiceTest {
     @Before
     public void setUp() throws Exception {
         initMocks(this);
-        PowerMockito.mockStatic(PrimeroConfiguration.class);
+        PowerMockito.mockStatic(PrimeroAppConfiguration.class);
 
         User user = new User("userName");
-        when(PrimeroConfiguration.getCurrentUser()).thenReturn(user);
+        when(PrimeroAppConfiguration.getCurrentUser()).thenReturn(user);
     }
 
     @Test
@@ -107,7 +107,7 @@ public class TracingServiceTest {
     public void should_return_all_order_ids_sorted_by_ascending() throws Exception {
         Tracing[] orders = new Tracing[]{new Tracing(1), new Tracing(2), new Tracing(3)};
         List<Tracing> orderList = Arrays.asList(orders);
-        when(tracingDao.getAllTracingsOrderByDate(true, PrimeroConfiguration.getCurrentUser().getUsername())).thenReturn(orderList);
+        when(tracingDao.getAllTracingsOrderByDate(true, PrimeroAppConfiguration.getCurrentUser().getUsername())).thenReturn(orderList);
         assertThat("When call getAllOrderByDateASC() should return orders sorted by date.",
                 tracingService.getAllOrderByDateASC(), is(Arrays.asList(new Long[]{1L, 2L, 3L})));
     }
@@ -116,7 +116,7 @@ public class TracingServiceTest {
     public void should_return_all_order_ids_sorted_by_descending() throws Exception {
         Tracing[] orders = new Tracing[]{new Tracing(3), new Tracing(2), new Tracing(1)};
         List<Tracing> orderList = Arrays.asList(orders);
-        when(tracingDao.getAllTracingsOrderByDate(false, PrimeroConfiguration.getCurrentUser().getUsername())).thenReturn(orderList);
+        when(tracingDao.getAllTracingsOrderByDate(false, PrimeroAppConfiguration.getCurrentUser().getUsername())).thenReturn(orderList);
         assertThat("When call getAllOrderByDateDES() should return orders sorted by date.",
                 tracingService.getAllOrderByDateDES(), is(Arrays.asList(new Long[]{3L, 2L, 1L})));
     }
@@ -173,7 +173,7 @@ public class TracingServiceTest {
         List<String> photoBitPaths = Collections.EMPTY_LIST;
 
         User user = new User("userName");
-        when(PrimeroConfiguration.getCurrentUser()).thenReturn(user);
+        when(PrimeroAppConfiguration.getCurrentUser()).thenReturn(user);
 
         Tracing tracing = new Tracing();
         when(tracingDao.getTracingByUniqueId(anyString())).thenReturn(tracing);
