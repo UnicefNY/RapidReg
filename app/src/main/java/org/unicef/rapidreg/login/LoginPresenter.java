@@ -11,6 +11,7 @@ import org.unicef.rapidreg.event.LoadGBVCaseFormEvent;
 import org.unicef.rapidreg.event.LoadGBVIncidentFormEvent;
 import org.unicef.rapidreg.event.LoadTracingFormEvent;
 import org.unicef.rapidreg.model.User;
+import org.unicef.rapidreg.service.impl.LoginServiceImpl;
 import org.unicef.rapidreg.utils.HttpStatusCodeHandler;
 import org.unicef.rapidreg.service.LoginService;
 

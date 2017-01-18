@@ -6,7 +6,6 @@ import android.net.ConnectivityManager;
 import android.telephony.TelephonyManager;
 
 import org.unicef.rapidreg.injection.ApplicationContext;
-import org.unicef.rapidreg.service.impl.LoginServiceImpl;
 import org.unicef.rapidreg.repository.CaseDao;
 import org.unicef.rapidreg.repository.CaseFormDao;
 import org.unicef.rapidreg.repository.CasePhotoDao;
@@ -15,18 +14,10 @@ import org.unicef.rapidreg.repository.TracingDao;
 import org.unicef.rapidreg.repository.TracingFormDao;
 import org.unicef.rapidreg.repository.TracingPhotoDao;
 import org.unicef.rapidreg.repository.UserDao;
-import org.unicef.rapidreg.repository.impl.CaseDaoImpl;
-import org.unicef.rapidreg.repository.impl.CaseFormDaoImpl;
-import org.unicef.rapidreg.repository.impl.CasePhotoDaoImpl;
-import org.unicef.rapidreg.repository.impl.IncidentFormDaoImpl;
-import org.unicef.rapidreg.repository.impl.TracingDaoImpl;
-import org.unicef.rapidreg.repository.impl.TracingFormDaoImpl;
-import org.unicef.rapidreg.repository.impl.TracingPhotoDaoImpl;
-import org.unicef.rapidreg.repository.impl.UserDaoImpl;
-import org.unicef.rapidreg.service.FormRemoteService;
 import org.unicef.rapidreg.service.CaseFormService;
 import org.unicef.rapidreg.service.CasePhotoService;
 import org.unicef.rapidreg.service.CaseService;
+import org.unicef.rapidreg.service.FormRemoteService;
 import org.unicef.rapidreg.service.IncidentFormService;
 import org.unicef.rapidreg.service.IncidentService;
 import org.unicef.rapidreg.service.LoginService;
@@ -37,9 +28,10 @@ import org.unicef.rapidreg.service.TracingFormService;
 import org.unicef.rapidreg.service.TracingPhotoService;
 import org.unicef.rapidreg.service.TracingService;
 import org.unicef.rapidreg.service.UserService;
-import org.unicef.rapidreg.service.impl.FormRemoteServiceImpl;
 import org.unicef.rapidreg.service.impl.CaseFormServiceImpl;
+import org.unicef.rapidreg.service.impl.FormRemoteServiceImpl;
 import org.unicef.rapidreg.service.impl.IncidentFormServiceImpl;
+import org.unicef.rapidreg.service.impl.LoginServiceImpl;
 import org.unicef.rapidreg.service.impl.SyncCaseServiceImpl;
 import org.unicef.rapidreg.service.impl.SyncTracingServiceImpl;
 import org.unicef.rapidreg.service.impl.TracingFormServiceImpl;
@@ -50,26 +42,8 @@ import javax.inject.Singleton;
 import dagger.Module;
 import dagger.Provides;
 
-@Module(includes = {AndroidServiceModule.class})
-public class ApplicationModule {
-
-    protected Application application;
-
-    public ApplicationModule(Application application) {
-        this.application = application;
-    }
-
-    @Provides
-    public Application provideApplication() {
-        return application;
-    }
-
-    @Provides
-    @ApplicationContext
-    public Context provideContext() {
-        return application;
-    }
-
+@Module(includes = {AndroidServiceModule.class, ApplicationDaoModule.class})
+public class ApplicationServiceModule {
     @Provides
     @Singleton
     public UserService provideUserService(UserDao userDao) {
@@ -87,7 +61,6 @@ public class ApplicationModule {
     public CaseFormService provideCaseFormService(CaseFormDao caseFormDao) {
         return new CaseFormServiceImpl(caseFormDao);
     }
-
 
     @Provides
     @Singleton
@@ -145,9 +118,8 @@ public class ApplicationModule {
 
     @Provides
     @Singleton
-    public SyncTracingService provideSyncTracingService(RecordService recordService,
-                                                        TracingPhotoDao tracingPhotoDao) {
-        return new SyncTracingServiceImpl(recordService, tracingPhotoDao);
+    public SyncTracingService provideSyncTracingService(TracingPhotoDao tracingPhotoDao) {
+        return new SyncTracingServiceImpl(tracingPhotoDao);
     }
 
     @Provides
@@ -157,53 +129,4 @@ public class ApplicationModule {
                                             UserDao userDao) {
         return new LoginServiceImpl(connectivityManager, telephonyManager, userDao);
     }
-
-    @Provides
-    @Singleton
-    public UserDao provideUserDao() {
-        return new UserDaoImpl();
-    }
-
-    @Provides
-    @Singleton
-    public CaseFormDao provideCaseFormDao() {
-        return new CaseFormDaoImpl();
-    }
-
-    @Provides
-    @Singleton
-    public CaseDao provideCaseDao() {
-        return new CaseDaoImpl();
-    }
-
-    @Provides
-    @Singleton
-    public CasePhotoDao provideCasePhotoDao() {
-        return new CasePhotoDaoImpl();
-    }
-
-    @Provides
-    @Singleton
-    public IncidentFormDao provideIncidentFormDao() {
-        return new IncidentFormDaoImpl();
-    }
-
-    @Provides
-    @Singleton
-    public TracingPhotoDao provideTracingPhotoDao() {
-        return new TracingPhotoDaoImpl();
-    }
-
-    @Provides
-    @Singleton
-    public TracingDao provideTracingDao() {
-        return new TracingDaoImpl();
-    }
-
-    @Provides
-    @Singleton
-    public TracingFormDao provideTracingFormDao() {
-        return new TracingFormDaoImpl();
-    }
-
 }

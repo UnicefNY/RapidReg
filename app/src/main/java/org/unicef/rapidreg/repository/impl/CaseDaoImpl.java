@@ -22,13 +22,13 @@ public class CaseDaoImpl implements CaseDao {
     }
 
     @Override
-    public List<Case> getAllCasesOrderByDate(boolean isASC, String createdBy) {
-        return isASC ? getCasesByDateASC(createdBy) : getCasesByDateDES(createdBy);
+    public List<Case> getAllCasesOrderByDate(boolean isASC, String ownedBy) {
+        return isASC ? getCasesByDateASC(ownedBy) : getCasesByDateDES(ownedBy);
     }
 
     @Override
-    public List<Case> getAllCasesOrderByAge(boolean isASC, String createdBy) {
-        return isASC ? getCasesByAgeASC(createdBy) : getCasesByAgeDES(createdBy);
+    public List<Case> getAllCasesOrderByAge(boolean isASC, String ownedBy) {
+        return isASC ? getCasesByAgeASC(ownedBy) : getCasesByAgeDES(ownedBy);
 
     }
 
@@ -77,42 +77,38 @@ public class CaseDaoImpl implements CaseDao {
         return childCase;
     }
 
-    private List<Case> getCasesByAgeASC(String createdBy) {
+    private List<Case> getCasesByAgeASC(String ownedBy) {
         return SQLite
                 .select()
                 .from(Case.class)
-                .where(ConditionGroup.clause().and(Condition.column(NameAlias.builder(RecordModel.COLUMN_CREATED_BY).build())
-                        .eq(createdBy)))
+                .where(Case_Table.owned_by.eq(ownedBy))
                 .orderBy(Case_Table.age, true)
                 .queryList();
     }
 
-    private List<Case> getCasesByAgeDES(String createdBy) {
+    private List<Case> getCasesByAgeDES(String ownedBy) {
         return SQLite
                 .select()
                 .from(Case.class)
-                .where(ConditionGroup.clause().and(Condition.column(NameAlias.builder(RecordModel.COLUMN_CREATED_BY).build())
-                        .eq(createdBy)))
+                .where(Case_Table.owned_by.eq(ownedBy))
                 .orderBy(Case_Table.age, false)
                 .queryList();
     }
 
-    private List<Case> getCasesByDateASC(String createdBy) {
+    private List<Case> getCasesByDateASC(String ownedBy) {
         return SQLite
                 .select()
                 .from(Case.class)
-                .where(ConditionGroup.clause().and(Condition.column(NameAlias.builder(RecordModel.COLUMN_CREATED_BY).build())
-                        .eq(createdBy)))
+                .where(Case_Table.owned_by.eq(ownedBy))
                 .orderBy(Case_Table.registration_date, true)
                 .queryList();
     }
 
-    private List<Case> getCasesByDateDES(String createdBy) {
+    private List<Case> getCasesByDateDES(String ownedBy) {
         return SQLite
                 .select()
                 .from(Case.class)
-                .where(ConditionGroup.clause().and(Condition.column(NameAlias.builder(RecordModel.COLUMN_CREATED_BY).build())
-                        .eq(createdBy)))
+                .where(Case_Table.owned_by.eq(ownedBy))
                 .orderBy(Case_Table.registration_date, false)
                 .queryList();
     }

@@ -1,4 +1,4 @@
-package org.unicef.rapidreg.login;
+package org.unicef.rapidreg.service.impl;
 
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;

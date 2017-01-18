@@ -10,9 +10,9 @@ public interface IncidentDao {
 
     Incident getIncidentByUniqueId(String id);
 
-    List<Incident> getAllIncidentsOrderByDate(boolean isASC, String createdBy);
+    List<Incident> getAllIncidentsOrderByDate(boolean isASC, String ownedBy);
 
-    List<Incident> getAllIncidentsOrderByAge(boolean isASC, String createdBy);
+    List<Incident> getAllIncidentsOrderByAge(boolean isASC, String ownedBy);
 
     List<Incident> getIncidentListByConditionGroup(ConditionGroup conditionGroup);
 
@@ -22,7 +22,7 @@ public interface IncidentDao {
 
     Incident getFirst();
 
-    List<Long> getAllIds(String createdBy);
+    List<Long> getAllIds(String ownedBy);
 
     Incident save(Incident incident);
 

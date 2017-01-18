@@ -132,6 +132,7 @@ public class TracingService extends RecordService {
 
         String username = PrimeroAppConfiguration.getCurrentUser().getUsername();
         tracing.setCreatedBy(username);
+        tracing.setOwnedBy(username);
 
         tracing.setContent(generateTracingBlob(itemValues, uniqueId, username));
 
@@ -178,7 +179,7 @@ public class TracingService extends RecordService {
         itemValues.addStringItem(TRACING_DISPLAY_ID, getShortUUID(uniqueId));
         itemValues.addStringItem(TRACING_ID, uniqueId);
         itemValues.addStringItem(MODULE, MODULE_CP_CASE);
-        itemValues.addStringItem(CASEWORKER_CODE, username);
+        itemValues.addStringItem(RECORD_OWNED_BY, username);
         itemValues.addStringItem(RECORD_CREATED_BY, username);
         itemValues.addStringItem(PREVIOUS_OWNER, username);
 

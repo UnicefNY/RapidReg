@@ -38,8 +38,8 @@ public class TracingDaoImpl implements TracingDao {
     }
 
     @Override
-    public List<Tracing> getAllTracingsOrderByDate(boolean isASC, String createdBy) {
-        return isASC ? getTracingsByDateASC(createdBy) : getTracingsByDateDES(createdBy);
+    public List<Tracing> getAllTracingsOrderByDate(boolean isASC, String ownedBy) {
+        return isASC ? getTracingsByDateASC(ownedBy) : getTracingsByDateDES(ownedBy);
     }
 
     @Override
@@ -61,13 +61,12 @@ public class TracingDaoImpl implements TracingDao {
     }
 
     @Override
-    public List<Long> getAllIds(String createdBy) {
+    public List<Long> getAllIds(String ownedBy) {
         List<Long> result = new ArrayList<>();
         FlowQueryList<Tracing> cases = SQLite
                 .select()
                 .from(Tracing.class)
-                .where(ConditionGroup.clause().and(Condition.column(NameAlias.builder(RecordModel.COLUMN_CREATED_BY).build())
-                        .eq(createdBy)))
+                .where(Tracing_Table.owned_by.eq(ownedBy))
                 .flowQueryList();
         for (Tracing tracing : cases) {
             result.add(tracing.getId());
@@ -75,22 +74,20 @@ public class TracingDaoImpl implements TracingDao {
         return result;
     }
 
-    private List<Tracing> getTracingsByDateASC(String createdBy) {
+    private List<Tracing> getTracingsByDateASC(String ownedBy) {
         return SQLite
                 .select()
                 .from(Tracing.class)
-                .where(ConditionGroup.clause().and(Condition.column(NameAlias.builder(RecordModel.COLUMN_CREATED_BY).build())
-                        .eq(createdBy)))
+                .where(Tracing_Table.owned_by.eq(ownedBy))
                 .orderBy(Tracing_Table.registration_date, true)
                 .queryList();
     }
 
-    private List<Tracing> getTracingsByDateDES(String createdBy) {
+    private List<Tracing> getTracingsByDateDES(String ownedBy) {
         return SQLite
                 .select()
                 .from(Tracing.class)
-                .where(ConditionGroup.clause().and(Condition.column(NameAlias.builder(RecordModel.COLUMN_CREATED_BY).build())
-                        .eq(createdBy)))
+                .where(Tracing_Table.owned_by.eq(ownedBy))
                 .orderBy(Tracing_Table.registration_date, false)
                 .queryList();
     }
