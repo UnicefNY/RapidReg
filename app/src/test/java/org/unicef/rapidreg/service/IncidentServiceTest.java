@@ -42,6 +42,7 @@ import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
 import static org.unicef.rapidreg.service.IncidentService.INCIDENT_ID;
 import static org.unicef.rapidreg.service.RecordService.AGE;
+import static org.unicef.rapidreg.service.RecordService.DATE_OF_INTERVIEW;
 import static org.unicef.rapidreg.service.RecordService.REGISTRATION_DATE;
 
 @RunWith(PowerMockRunner.class)
@@ -141,7 +142,7 @@ public class IncidentServiceTest {
         User user = new User("userName");
         when(PrimeroAppConfiguration.getCurrentUser()).thenReturn(user);
         ItemValuesMap itemValuesMap = new ItemValuesMap();
-        itemValuesMap.addStringItem(REGISTRATION_DATE, "11/11/1111");
+        itemValuesMap.addStringItem(DATE_OF_INTERVIEW, "11/11/1111");
 
         Incident incident = incidentServiceSpy.save(itemValuesMap);
         when(incidentDao.save(any(Incident.class))).thenReturn(incident);
@@ -175,7 +176,7 @@ public class IncidentServiceTest {
         ItemValuesMap itemValues = new ItemValuesMap();
         itemValues.addStringItem(INCIDENT_ID, "existedUniqueId");
         itemValues.addNumberItem(AGE, 18);
-        itemValues.addStringItem(REGISTRATION_DATE, "25/12/2016");
+        itemValues.addStringItem(DATE_OF_INTERVIEW, "25/12/2016");
 
         Incident expected = new Incident();
         PowerMockito.when(incidentDao.getIncidentByUniqueId("existedUniqueId")).thenReturn
