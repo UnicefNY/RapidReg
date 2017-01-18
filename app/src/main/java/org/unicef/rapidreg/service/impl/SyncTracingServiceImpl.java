@@ -41,8 +41,6 @@ public class SyncTracingServiceImpl extends BaseRetrofitService implements SyncT
 
     private SyncTracingsRepository syncTracingsRepository;
 
-    private RecordService recordService;
-
     private TracingPhotoDao tracingPhotoDao;
 
     @Override
@@ -50,10 +48,9 @@ public class SyncTracingServiceImpl extends BaseRetrofitService implements SyncT
         return PrimeroAppConfiguration.getApiBaseUrl();
     }
 
-    public SyncTracingServiceImpl(RecordService recordService, TracingPhotoDao
+    public SyncTracingServiceImpl(TracingPhotoDao
             tracingPhotoDao) {
         createRetrofit();
-        this.recordService = recordService;
         this.tracingPhotoDao = tracingPhotoDao;
         syncTracingsRepository = getRetrofit().create(SyncTracingsRepository.class);
     }
@@ -77,7 +74,7 @@ public class SyncTracingServiceImpl extends BaseRetrofitService implements SyncT
 
     public Response<JsonElement> uploadJsonProfile(RecordModel item) {
         ItemValuesMap values = ItemValuesMap.fromJson(new String(item.getContent().getBlob()));
-        String shortUUID = recordService.getShortUUID(item.getUniqueId());
+        String shortUUID = org.unicef.rapidreg.utils.TextUtils.getLastSevenNumbers(item.getUniqueId());
         values.addStringItem("short_id", shortUUID);
         values.addStringItem(TRACING_ID, shortUUID);
         values.addStringItem("tracing_request_id", item.getUniqueId());
