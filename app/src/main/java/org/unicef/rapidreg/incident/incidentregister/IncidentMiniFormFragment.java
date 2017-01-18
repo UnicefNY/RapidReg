@@ -29,6 +29,8 @@ import javax.inject.Inject;
 
 import butterknife.OnClick;
 
+import static org.unicef.rapidreg.forms.Field.TYPE_INCIDENT_MINI_FORM_PROFILE;
+
 public class IncidentMiniFormFragment extends RecordRegisterFragment {
 
     public static final String TAG = IncidentMiniFormFragment.class.getSimpleName();
@@ -75,7 +77,7 @@ public class IncidentMiniFormFragment extends RecordRegisterFragment {
     @Override
     protected RecordRegisterAdapter createRecordRegisterAdapter() {
         List<Field> fields = incidentRegisterPresenter.getValidFields();
-        addProfileFieldForDetailsPage(0, fields);
+        addProfileFieldForDetailsPage(0, TYPE_INCIDENT_MINI_FORM_PROFILE, fields);
 
         RecordRegisterAdapter recordRegisterAdapter = new RecordRegisterAdapter(getActivity(),
                 fields,

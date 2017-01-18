@@ -106,13 +106,17 @@ public abstract class RecordRegisterFragment extends MvpFragment<RecordRegisterV
     }
 
     public void addProfileFieldForDetailsPage(int position, List<Field> fields) {
+        addProfileFieldForDetailsPage(position, Field.TYPE_MINI_FORM_PROFILE, fields);
+    }
+
+    protected void addProfileFieldForDetailsPage(int position, String miniFormType, List<Field> fields) {
         if (fields.isEmpty()) {
             return;
         }
 
         if (((RecordActivity) getActivity()).getCurrentFeature().isDetailMode()) {
             Field field = new Field();
-            field.setType(Field.TYPE_MINI_FORM_PROFILE);
+            field.setType(miniFormType);
             try {
                 fields.add(position, field);
             } catch (Exception e) {

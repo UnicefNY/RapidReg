@@ -18,6 +18,7 @@ import org.unicef.rapidreg.service.cache.ItemValuesMap;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+import static android.view.View.GONE;
 import static org.unicef.rapidreg.service.TracingService.TRACING_ID;
 
 public class MiniFormProfileViewHolder extends BaseViewHolder<Field> {
@@ -80,5 +81,10 @@ public class MiniFormProfileViewHolder extends BaseViewHolder<Field> {
     @Override
     public void setFieldEditable(boolean editable) {
 
+    }
+
+    public void disableRecordGenderView() {
+        genderBadge.setVisibility(GONE);
+        genderName.setVisibility(GONE);
     }
 }
