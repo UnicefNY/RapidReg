@@ -152,5 +152,14 @@ public abstract class RecordListAdapter extends RecyclerView.Adapter<RecordListA
         public void disableRecordImageView() {
             image.setVisibility(View.GONE);
         }
+
+        public void disableRecordAgeView() {
+            age.setVisibility(View.GONE);
+        }
+
+        public void disableRecordGenderView() {
+            genderBadge.setVisibility(View.GONE);
+            genderName.setVisibility(View.GONE);
+        }
     }
 }

@@ -70,6 +70,7 @@ public class IncidentListAdapter extends RecordListAdapter {
                 }
             }
         });
+        holder.disableRecordGenderView();
         toggleTextArea(holder);
     }
 
