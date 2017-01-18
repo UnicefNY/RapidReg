@@ -7,8 +7,7 @@ import android.view.View;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
-import org.unicef.rapidreg.PrimeroApplication;
-import org.unicef.rapidreg.PrimeroConfiguration;
+import org.unicef.rapidreg.PrimeroAppConfiguration;
 import org.unicef.rapidreg.base.Feature;
 import org.unicef.rapidreg.base.record.RecordActivity;
 import org.unicef.rapidreg.base.record.recordlist.RecordListAdapter;
@@ -58,7 +57,7 @@ public class CaseListAdapter extends RecordListAdapter {
         }
         final String shortUUID = caseService.getShortUUID(record.getUniqueId());
 
-        if (GBV == PrimeroConfiguration.getCurrentUser().getRoleType()) {
+        if (GBV == PrimeroAppConfiguration.getCurrentUser().getRoleType()) {
             holder.disableRecordImageView();
         }
         String age = itemValues.getAsString(RecordService.AGE);

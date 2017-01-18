@@ -11,8 +11,7 @@ import com.raizlabs.android.dbflow.config.FlowManager;
 import com.raizlabs.android.dbflow.structure.database.DatabaseHelperListener;
 import com.raizlabs.android.dbflow.structure.database.OpenHelper;
 
-import org.unicef.rapidreg.db.PrimeroDB;
-import org.unicef.rapidreg.db.impl.SQLCipherHelperImpl;
+import org.unicef.rapidreg.repository.impl.SQLCipherHelperImpl;
 import org.unicef.rapidreg.injection.component.ApplicationComponent;
 import org.unicef.rapidreg.injection.component.DaggerApplicationComponent;
 import org.unicef.rapidreg.injection.module.ApplicationModule;
@@ -36,7 +35,7 @@ public class PrimeroApplication extends Application {
             Stetho.initializeWithDefaults(context);
         }
 
-        PrimeroConfiguration.setInternalFilePath(context.getFilesDir().getPath() );
+        PrimeroAppConfiguration.setInternalFilePath(context.getFilesDir().getPath() );
         initDB();
     }
 
@@ -47,7 +46,7 @@ public class PrimeroApplication extends Application {
 
     private void initDB() {
         FlowManager.init(new FlowConfig.Builder(this)
-                .addDatabaseConfig(new DatabaseConfig.Builder(PrimeroDB.class)
+                .addDatabaseConfig(new DatabaseConfig.Builder(PrimeroDatabaseConfiguration.class)
                         .openHelper(new DatabaseConfig.OpenHelperCreator() {
                             @Override
                             public OpenHelper createHelper(DatabaseDefinition databaseDefinition,

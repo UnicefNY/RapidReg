@@ -10,11 +10,11 @@ import com.raizlabs.android.dbflow.sql.language.ConditionGroup;
 import com.raizlabs.android.dbflow.sql.language.NameAlias;
 import com.raizlabs.android.dbflow.sql.language.SQLCondition;
 
-import org.unicef.rapidreg.PrimeroConfiguration;
-import org.unicef.rapidreg.db.CaseDao;
-import org.unicef.rapidreg.db.CasePhotoDao;
-import org.unicef.rapidreg.db.impl.CaseDaoImpl;
-import org.unicef.rapidreg.db.impl.CasePhotoDaoImpl;
+import org.unicef.rapidreg.PrimeroAppConfiguration;
+import org.unicef.rapidreg.repository.CaseDao;
+import org.unicef.rapidreg.repository.CasePhotoDao;
+import org.unicef.rapidreg.repository.impl.CaseDaoImpl;
+import org.unicef.rapidreg.repository.impl.CasePhotoDaoImpl;
 import org.unicef.rapidreg.model.Case;
 import org.unicef.rapidreg.model.CasePhoto;
 import org.unicef.rapidreg.model.RecordModel;
@@ -47,7 +47,7 @@ public class CaseService extends RecordService {
     }
 
     public List<Case> getAll() {
-        return caseDao.getAllCasesOrderByDate(false, PrimeroConfiguration.getCurrentUser().getUsername());
+        return caseDao.getAllCasesOrderByDate(false, PrimeroAppConfiguration.getCurrentUser().getUsername());
     }
 
     public Case getFirst() {
@@ -59,19 +59,19 @@ public class CaseService extends RecordService {
     }
 
     public List<Long> getAllOrderByDateASC() {
-        return extractIds(caseDao.getAllCasesOrderByDate(true, PrimeroConfiguration.getCurrentUser().getUsername()));
+        return extractIds(caseDao.getAllCasesOrderByDate(true, PrimeroAppConfiguration.getCurrentUser().getUsername()));
     }
 
     public List<Long> getAllOrderByDateDES() {
-        return extractIds(caseDao.getAllCasesOrderByDate(false, PrimeroConfiguration.getCurrentUser().getUsername()));
+        return extractIds(caseDao.getAllCasesOrderByDate(false, PrimeroAppConfiguration.getCurrentUser().getUsername()));
     }
 
     public List<Long> getAllOrderByAgeASC() {
-        return extractIds(caseDao.getAllCasesOrderByAge(true, PrimeroConfiguration.getCurrentUser().getUsername()));
+        return extractIds(caseDao.getAllCasesOrderByAge(true, PrimeroAppConfiguration.getCurrentUser().getUsername()));
     }
 
     public List<Long> getAllOrderByAgeDES() {
-        return extractIds(caseDao.getAllCasesOrderByAge(false, PrimeroConfiguration.getCurrentUser().getUsername()));
+        return extractIds(caseDao.getAllCasesOrderByAge(false, PrimeroAppConfiguration.getCurrentUser().getUsername()));
     }
 
     public List<Long> extractIds(List<Case> cases) {
@@ -101,7 +101,7 @@ public class CaseService extends RecordService {
         conditionGroup.and(Condition.column(NameAlias.builder(RecordModel.COLUMN_CAREGIVER).build())
                 .like(getWrappedCondition(caregiver)));
         conditionGroup.and(Condition.column(NameAlias.builder(RecordModel.COLUMN_CREATED_BY).build())
-                .eq(PrimeroConfiguration.getCurrentUser().getUsername()));
+                .eq(PrimeroAppConfiguration.getCurrentUser().getUsername()));
 
         if (date != null) {
             conditionGroup.and(Condition.column(NameAlias.builder(Case.COLUMN_REGISTRATION_DATE)
@@ -126,7 +126,7 @@ public class CaseService extends RecordService {
 
     public Case save(ItemValuesMap itemValues, List<String> photoPaths) throws IOException {
         String uniqueId = generateUniqueId();
-        String username = PrimeroConfiguration.getCurrentUser().getUsername();
+        String username = PrimeroAppConfiguration.getCurrentUser().getUsername();
         itemValues.addStringItem(CASE_DISPLAY_ID, getShortUUID(uniqueId));
         itemValues.addStringItem(CASE_ID, uniqueId);
         itemValues.addStringItem(CASEWORKER_CODE, username);

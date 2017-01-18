@@ -12,9 +12,9 @@ import org.mockito.Mockito;
 import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
-import org.unicef.rapidreg.PrimeroConfiguration;
-import org.unicef.rapidreg.db.CaseDao;
-import org.unicef.rapidreg.db.CasePhotoDao;
+import org.unicef.rapidreg.PrimeroAppConfiguration;
+import org.unicef.rapidreg.repository.CaseDao;
+import org.unicef.rapidreg.repository.CasePhotoDao;
 import org.unicef.rapidreg.forms.Field;
 import org.unicef.rapidreg.forms.Section;
 import org.unicef.rapidreg.model.Case;
@@ -44,7 +44,7 @@ import static org.unicef.rapidreg.service.RecordService.AGE;
 import static org.unicef.rapidreg.service.RecordService.REGISTRATION_DATE;
 
 @RunWith(PowerMockRunner.class)
-@PrepareForTest({UUID.class, PrimeroConfiguration.class})
+@PrepareForTest({UUID.class, PrimeroAppConfiguration.class})
 public class CaseServiceTest {
 
     @Mock
@@ -60,14 +60,14 @@ public class CaseServiceTest {
     public void setUp() throws Exception {
         initMocks(this);
         PowerMockito.mockStatic(UUID.class);
-        PowerMockito.mockStatic(PrimeroConfiguration.class);
+        PowerMockito.mockStatic(PrimeroAppConfiguration.class);
 
         UUID uuid = mock(UUID.class);
         when(uuid.toString()).thenReturn("anuuidwhichlengthis21");
         when(UUID.randomUUID()).thenReturn(uuid);
 
         User user = new User("primero");
-        Mockito.when(PrimeroConfiguration.getCurrentUser()).thenReturn(user);
+        Mockito.when(PrimeroAppConfiguration.getCurrentUser()).thenReturn(user);
     }
 
     @Test

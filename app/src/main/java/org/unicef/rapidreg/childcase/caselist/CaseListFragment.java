@@ -7,7 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import org.greenrobot.eventbus.EventBus;
-import org.unicef.rapidreg.PrimeroConfiguration;
+import org.unicef.rapidreg.PrimeroAppConfiguration;
 import org.unicef.rapidreg.R;
 import org.unicef.rapidreg.base.record.RecordActivity;
 import org.unicef.rapidreg.base.record.recordlist.RecordListAdapter;
@@ -71,8 +71,8 @@ public class CaseListFragment extends RecordListFragment {
 
     @Override
     protected void sendSyncFormEvent() {
-        EventBus.getDefault().postSticky(new LoadCPCaseFormEvent(PrimeroConfiguration.getCookie()));
-        EventBus.getDefault().postSticky(new LoadGBVCaseFormEvent(PrimeroConfiguration.getCookie()));
+        EventBus.getDefault().postSticky(new LoadCPCaseFormEvent(PrimeroAppConfiguration.getCookie()));
+        EventBus.getDefault().postSticky(new LoadGBVCaseFormEvent(PrimeroAppConfiguration.getCookie()));
     }
 
     @Override
@@ -109,7 +109,7 @@ public class CaseListFragment extends RecordListFragment {
     }
 
     public void enableShowHideSwitcherForCPUser() {
-        User.Role role = PrimeroConfiguration.getCurrentUser().getRoleType();
+        User.Role role = PrimeroAppConfiguration.getCurrentUser().getRoleType();
         if (User.Role.CP == role) {
             ((CaseActivity) getActivity()).enableShowHideSwitcher();
         }
@@ -117,7 +117,7 @@ public class CaseListFragment extends RecordListFragment {
 
     @OnClick(R.id.add)
     public void onCaseAddClicked() {
-        User.Role role = PrimeroConfiguration.getCurrentUser().getRoleType();
+        User.Role role = PrimeroAppConfiguration.getCurrentUser().getRoleType();
         switch (role) {
             case CP:
                 onCPCaseAddClicked();

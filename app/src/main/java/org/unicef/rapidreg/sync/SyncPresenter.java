@@ -21,8 +21,8 @@ import org.unicef.rapidreg.model.CasePhoto;
 import org.unicef.rapidreg.model.RecordModel;
 import org.unicef.rapidreg.model.Tracing;
 import org.unicef.rapidreg.model.TracingPhoto;
-import org.unicef.rapidreg.network.SyncService;
-import org.unicef.rapidreg.network.SyncTracingService;
+import org.unicef.rapidreg.service.SyncCaseService;
+import org.unicef.rapidreg.service.SyncTracingService;
 import org.unicef.rapidreg.service.CasePhotoService;
 import org.unicef.rapidreg.service.CaseService;
 import org.unicef.rapidreg.service.TracingPhotoService;
@@ -58,7 +58,7 @@ public class SyncPresenter extends MvpBasePresenter<SyncView> {
     private static final String TAG = SyncPresenter.class.getSimpleName();
 
     private Context context;
-    private SyncService syncService;
+    private SyncCaseService syncService;
     private SyncTracingService syncTracingService;
     private TracingService tracingService;
     private CaseService caseService;
@@ -83,7 +83,7 @@ public class SyncPresenter extends MvpBasePresenter<SyncView> {
 
     @Inject
     public SyncPresenter(@ActivityContext Context context,
-                         SyncService syncService,
+                         SyncCaseService syncService,
                          SyncTracingService syncTracingService,
                          CaseService caseService,
                          CasePhotoService casePhotoService,

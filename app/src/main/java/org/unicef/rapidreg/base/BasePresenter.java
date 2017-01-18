@@ -2,9 +2,8 @@ package org.unicef.rapidreg.base;
 
 import com.hannesdorfmann.mosby.mvp.MvpBasePresenter;
 
-import org.unicef.rapidreg.PrimeroConfiguration;
+import org.unicef.rapidreg.PrimeroAppConfiguration;
 import org.unicef.rapidreg.model.User;
-import org.unicef.rapidreg.service.UserService;
 
 import javax.inject.Inject;
 
@@ -13,11 +12,11 @@ public class BasePresenter extends MvpBasePresenter<BaseView> {
     public BasePresenter() {}
 
     public User getCurrentUser() {
-        return PrimeroConfiguration.getCurrentUser();
+        return PrimeroAppConfiguration.getCurrentUser();
     }
 
     public void logOut() {
-        PrimeroConfiguration.setCurrentUser(null);
+        PrimeroAppConfiguration.setCurrentUser(null);
     }
 
 }

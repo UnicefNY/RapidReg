@@ -3,9 +3,9 @@ package org.unicef.rapidreg.model;
 import com.raizlabs.android.dbflow.annotation.Table;
 import com.raizlabs.android.dbflow.data.Blob;
 
-import org.unicef.rapidreg.db.PrimeroDB;
+import org.unicef.rapidreg.PrimeroDatabaseConfiguration;
 
-@Table(database = PrimeroDB.class)
+@Table(database = PrimeroDatabaseConfiguration.class)
 public class TracingForm extends BaseForm {
     public TracingForm() {
     }

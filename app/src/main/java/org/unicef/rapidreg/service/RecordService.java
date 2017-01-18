@@ -4,7 +4,7 @@ import com.raizlabs.android.dbflow.sql.language.Condition;
 import com.raizlabs.android.dbflow.sql.language.NameAlias;
 import com.raizlabs.android.dbflow.sql.language.SQLCondition;
 
-import org.unicef.rapidreg.PrimeroConfiguration;
+import org.unicef.rapidreg.PrimeroAppConfiguration;
 import org.unicef.rapidreg.forms.Field;
 import org.unicef.rapidreg.forms.RecordForm;
 import org.unicef.rapidreg.forms.Section;
@@ -45,7 +45,7 @@ public class RecordService {
     public static final String MODULE_GBV_CASE = "primeromodule-gbv";
     public static final String MODULE_CP_CASE = "primeromodule-cp";
 
-    public static final String AUDIO_FILE_PATH = PrimeroConfiguration.getInternalFilePath() + "/audioFile.amr";
+    public static final String AUDIO_FILE_PATH = PrimeroAppConfiguration.getInternalFilePath() + "/audioFile.amr";
     private static final String TAG = RecordService.class.getSimpleName();
 
     public String getShortUUID(String uuid) {

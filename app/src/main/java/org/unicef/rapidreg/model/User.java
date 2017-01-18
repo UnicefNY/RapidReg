@@ -7,9 +7,9 @@ import com.raizlabs.android.dbflow.annotation.Unique;
 import com.raizlabs.android.dbflow.structure.BaseModel;
 
 import org.unicef.rapidreg.R;
-import org.unicef.rapidreg.db.PrimeroDB;
+import org.unicef.rapidreg.PrimeroDatabaseConfiguration;
 
-@Table(database = PrimeroDB.class)
+@Table(database = PrimeroDatabaseConfiguration.class)
 public class User extends BaseModel {
     @PrimaryKey(autoincrement = true)
     @Column

@@ -1,7 +1,7 @@
 package org.unicef.rapidreg.service;
 
-import org.unicef.rapidreg.db.TracingPhotoDao;
-import org.unicef.rapidreg.db.impl.TracingPhotoDaoImpl;
+import org.unicef.rapidreg.repository.TracingPhotoDao;
+import org.unicef.rapidreg.repository.impl.TracingPhotoDaoImpl;
 import org.unicef.rapidreg.model.TracingPhoto;
 
 import java.util.List;

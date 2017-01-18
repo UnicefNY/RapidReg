@@ -9,7 +9,7 @@ import org.powermock.modules.junit4.PowerMockRunner;
 import org.unicef.rapidreg.forms.CaseTemplateForm;
 import org.unicef.rapidreg.forms.Section;
 import org.unicef.rapidreg.model.CaseForm;
-import org.unicef.rapidreg.network.AuthService;
+import org.unicef.rapidreg.service.AuthService;
 import org.unicef.rapidreg.service.CaseFormService;
 
 import edu.emory.mathcs.backport.java.util.Arrays;

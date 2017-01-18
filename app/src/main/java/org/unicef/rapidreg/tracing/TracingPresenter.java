@@ -7,19 +7,14 @@ import org.unicef.rapidreg.base.record.RecordPresenter;
 import org.unicef.rapidreg.forms.RecordForm;
 import org.unicef.rapidreg.forms.TracingTemplateForm;
 import org.unicef.rapidreg.model.TracingForm;
-import org.unicef.rapidreg.network.AuthService;
+import org.unicef.rapidreg.service.AuthService;
 import org.unicef.rapidreg.service.TracingFormService;
 
 import java.util.Locale;
-import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 
-import rx.Observable;
-import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
-import rx.functions.Func1;
-import rx.schedulers.Schedulers;
 
 public class TracingPresenter extends RecordPresenter {
 

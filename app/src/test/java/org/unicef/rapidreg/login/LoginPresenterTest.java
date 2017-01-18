@@ -10,9 +10,7 @@ import org.mockito.Mock;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
 import org.unicef.rapidreg.BuildConfig;
-import org.unicef.rapidreg.network.AuthService;
 import org.unicef.rapidreg.service.LoginService;
-import org.unicef.rapidreg.service.UserService;
 
 import javax.inject.Inject;
 

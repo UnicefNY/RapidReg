@@ -5,13 +5,13 @@ import android.util.Log;
 import com.hannesdorfmann.mosby.mvp.MvpBasePresenter;
 
 import org.greenrobot.eventbus.EventBus;
-import org.unicef.rapidreg.PrimeroConfiguration;
+import org.unicef.rapidreg.PrimeroAppConfiguration;
 import org.unicef.rapidreg.event.LoadCPCaseFormEvent;
 import org.unicef.rapidreg.event.LoadGBVCaseFormEvent;
 import org.unicef.rapidreg.event.LoadGBVIncidentFormEvent;
 import org.unicef.rapidreg.event.LoadTracingFormEvent;
 import org.unicef.rapidreg.model.User;
-import org.unicef.rapidreg.network.HttpStatusCodeHandler;
+import org.unicef.rapidreg.utils.HttpStatusCodeHandler;
 import org.unicef.rapidreg.service.LoginService;
 
 import javax.inject.Inject;
@@ -35,7 +35,7 @@ public class LoginPresenter extends MvpBasePresenter<LoginView> {
             return;
         }
 
-        PrimeroConfiguration.setApiBaseUrl(url.endsWith("/") ? url : String.format("%s/", url));
+        PrimeroAppConfiguration.setApiBaseUrl(url.endsWith("/") ? url : String.format("%s/", url));
         try {
             getView().showLoading(true);
             if (loginService.isOnline()) {
@@ -86,8 +86,8 @@ public class LoginPresenter extends MvpBasePresenter<LoginView> {
             @Override
             public void onSuccessful(String cookie, User user) {
                 if (isViewAttached()) {
-                    PrimeroConfiguration.setCookie(cookie);
-                    PrimeroConfiguration.setCurrentUser(user);
+                    PrimeroAppConfiguration.setCookie(cookie);
+                    PrimeroAppConfiguration.setCurrentUser(user);
 
                     sendLoadFormEvent(user.getRoleType(), cookie);
 
@@ -136,7 +136,7 @@ public class LoginPresenter extends MvpBasePresenter<LoginView> {
         loginService.loginOffline(username, password, new LoginService.LoginCallback() {
             @Override
             public void onSuccessful(String cookie, User user) {
-                PrimeroConfiguration.setCurrentUser(user);
+                PrimeroAppConfiguration.setCurrentUser(user);
                 getView().showLoading(false);
                 getView().showLoginSuccessful();
                 getView().goToLoginSuccessScreen();

@@ -2,9 +2,9 @@ package org.unicef.rapidreg.model;
 
 import com.raizlabs.android.dbflow.annotation.Table;
 
-import org.unicef.rapidreg.db.PrimeroDB;
+import org.unicef.rapidreg.PrimeroDatabaseConfiguration;
 
-@Table(database = PrimeroDB.class)
+@Table(database = PrimeroDatabaseConfiguration.class)
 public class Incident extends RecordModel {
 
     public Incident() {

@@ -6,9 +6,9 @@ import com.raizlabs.android.dbflow.annotation.IndexGroup;
 import com.raizlabs.android.dbflow.annotation.ModelContainer;
 import com.raizlabs.android.dbflow.annotation.Table;
 
-import org.unicef.rapidreg.db.PrimeroDB;
+import org.unicef.rapidreg.PrimeroDatabaseConfiguration;
 
-@Table(database = PrimeroDB.class, indexGroups = {
+@Table(database = PrimeroDatabaseConfiguration.class, indexGroups = {
         @IndexGroup(number = 1, name = "indexCaseId")
 })
 @ModelContainer

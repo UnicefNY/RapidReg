@@ -6,7 +6,7 @@ import org.unicef.rapidreg.base.record.RecordPresenter;
 import org.unicef.rapidreg.forms.CaseTemplateForm;
 import org.unicef.rapidreg.forms.RecordForm;
 import org.unicef.rapidreg.model.CaseForm;
-import org.unicef.rapidreg.network.AuthService;
+import org.unicef.rapidreg.service.AuthService;
 import org.unicef.rapidreg.service.CaseFormService;
 import javax.inject.Inject;
 import rx.functions.Action1;

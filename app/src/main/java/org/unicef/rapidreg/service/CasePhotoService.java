@@ -1,7 +1,7 @@
 package org.unicef.rapidreg.service;
 
-import org.unicef.rapidreg.db.CasePhotoDao;
-import org.unicef.rapidreg.db.impl.CasePhotoDaoImpl;
+import org.unicef.rapidreg.repository.CasePhotoDao;
+import org.unicef.rapidreg.repository.impl.CasePhotoDaoImpl;
 import org.unicef.rapidreg.model.CasePhoto;
 
 import java.util.List;

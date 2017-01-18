@@ -5,7 +5,7 @@ import android.util.Log;
 import com.google.gson.Gson;
 import com.raizlabs.android.dbflow.data.Blob;
 
-import org.unicef.rapidreg.db.TracingFormDao;
+import org.unicef.rapidreg.repository.TracingFormDao;
 import org.unicef.rapidreg.forms.TracingTemplateForm;
 import org.unicef.rapidreg.model.TracingForm;
 import org.unicef.rapidreg.service.TracingFormService;

@@ -4,13 +4,18 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.telephony.TelephonyManager;
 import android.util.Log;
+import android.util.Patterns;
 
+import org.unicef.rapidreg.PrimeroAppConfiguration;
 import org.unicef.rapidreg.model.LoginRequestBody;
 import org.unicef.rapidreg.model.LoginResponse;
 import org.unicef.rapidreg.model.User;
-import org.unicef.rapidreg.network.AuthService;
-import org.unicef.rapidreg.service.UserService;
+import org.unicef.rapidreg.repository.UserDao;
+import org.unicef.rapidreg.service.AuthService;
+import org.unicef.rapidreg.service.BaseRetrofitService;
+import org.unicef.rapidreg.service.LoginService;
 import org.unicef.rapidreg.utils.EncryptHelper;
+import org.unicef.rapidreg.utils.TextUtils;
 
 import java.util.List;
 
@@ -20,24 +25,24 @@ import rx.Subscription;
 import rx.functions.Action1;
 import rx.subscriptions.CompositeSubscription;
 
-public class LoginServiceImpl implements org.unicef.rapidreg.service.LoginService {
+public class LoginServiceImpl extends BaseRetrofitService implements org.unicef.rapidreg.service.LoginService {
     private static final String TAG = LoginServiceImpl.class.getSimpleName();
 
     private ConnectivityManager connectivityManager;
     private TelephonyManager telephonyManager;
 
-    private UserService userService;
+    private UserDao userDao;
     private AuthService authService;
 
     private CompositeSubscription compositeSubscription;
 
     public LoginServiceImpl(ConnectivityManager connectivityManager,
                             TelephonyManager telephonyManager,
-                            UserService userService,
+                            UserDao userDao,
                             AuthService authService) {
         this.connectivityManager = connectivityManager;
         this.telephonyManager = telephonyManager;
-        this.userService = userService;
+        this.userDao = userDao;
         this.authService = authService;
 
         this.compositeSubscription = new CompositeSubscription();
@@ -57,7 +62,8 @@ public class LoginServiceImpl implements org.unicef.rapidreg.service.LoginServic
                             final LoginCallback callback) {
         authService.init();
         //TODO change hard code to be value from param
-        final LoginRequestBody loginRequestBody = new LoginRequestBody(username, password, "15555215554", "8fd2274a590497e9");
+        final LoginRequestBody loginRequestBody = new LoginRequestBody(username, password, "15555215554",
+                "8fd2274a590497e9");
         Subscription subscription = authService
                 .loginRx(loginRequestBody)
                 .subscribe(new Action1<Response<LoginResponse>>() {
@@ -72,7 +78,7 @@ public class LoginServiceImpl implements org.unicef.rapidreg.service.LoginServic
                             user.setLanguage(responseBody.getLanguage());
                             user.setVerified(responseBody.getVerified());
 
-                            userService.saveOrUpdateUser(user);
+                            userDao.saveOrUpdateUser(user);
                             callback.onSuccessful(getSessionId(response.headers()), user);
                         } else {
                             callback.onError(response.code());
@@ -90,12 +96,27 @@ public class LoginServiceImpl implements org.unicef.rapidreg.service.LoginServic
 
     @Override
     public void loginOffline(String username, String password, LoginCallback callback) {
-        UserService.VerifiedCode verifiedCode = userService.verify(username, password, isOnline());
+        VerifiedCode verifiedCode = verify(username, password, isOnline());
 
-        if (UserService.VerifiedCode.OK == verifiedCode) {
-            callback.onSuccessful("", userService.getUserByUserName(username));
+        if (LoginService.VerifiedCode.OK == verifiedCode) {
+            callback.onSuccessful("", userDao.getUser(username));
         } else {
             callback.onError(verifiedCode.getResId());
+        }
+    }
+
+    public VerifiedCode verify(String username, String password, boolean isOnline) {
+        User user = userDao.getUser(username);
+
+        if (user == null) {
+            return isOnline ? LoginService.VerifiedCode.PASSWORD_INCORRECT : LoginService.VerifiedCode
+                    .USER_DOES_NOT_EXIST;
+        }
+
+        if (EncryptHelper.isMatched(password, user.getPassword())) {
+            return LoginService.VerifiedCode.OK;
+        } else {
+            return LoginService.VerifiedCode.PASSWORD_INCORRECT;
         }
     }
 
@@ -117,7 +138,7 @@ public class LoginServiceImpl implements org.unicef.rapidreg.service.LoginServic
 
     @Override
     public String getServerUrl() {
-        List<User> users = userService.getAllUsers();
+        List<User> users = userDao.getAllUsers();
         if (users.isEmpty()) {
             return "";
         }
@@ -126,16 +147,21 @@ public class LoginServiceImpl implements org.unicef.rapidreg.service.LoginServic
 
     @Override
     public boolean isUsernameValid(String username) {
-        return userService.isNameValid(username);
+        return username != null && username.matches("\\A[^ ]+\\z");
     }
 
     @Override
     public boolean isPasswordValid(String password) {
-        return userService.isPasswordValid(password);
+        return password != null && password.matches("\\A(?=.*[a-zA-Z])(?=.*[0-9]).{8,}\\z");
     }
 
     @Override
     public boolean isUrlValid(String url) {
-        return userService.isUrlValid(url);
+        return !TextUtils.isEmpty(url) && Patterns.WEB_URL.matcher(url).matches();
+    }
+
+    @Override
+    protected String getBaseUrl() {
+        return PrimeroAppConfiguration.getApiBaseUrl();
     }
 }

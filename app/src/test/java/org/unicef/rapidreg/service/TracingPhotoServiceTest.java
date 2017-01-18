@@ -4,7 +4,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.unicef.rapidreg.db.TracingPhotoDao;
+import org.unicef.rapidreg.repository.TracingPhotoDao;
 import org.unicef.rapidreg.model.TracingPhoto;
 
 import java.util.Collections;
