@@ -33,8 +33,6 @@ import rx.Subscriber;
 import rx.functions.Func1;
 
 
-
-
 public class SyncCaseServiceImpl extends BaseRetrofitService implements SyncCaseService {
     private SyncCaseRepository syncCaseRepository;
     private CasePhotoDao casePhotoDao;

@@ -13,7 +13,6 @@ import com.google.gson.JsonObject;
 import com.raizlabs.android.dbflow.data.Blob;
 
 import org.unicef.rapidreg.R;
-import org.unicef.rapidreg.base.record.recordphoto.PhotoConfig;
 import org.unicef.rapidreg.injection.ActivityContext;
 import org.unicef.rapidreg.model.Case;
 import org.unicef.rapidreg.model.Incident;
@@ -37,7 +36,6 @@ import java.util.Locale;
 
 import javax.inject.Inject;
 
-import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Response;
 import rx.Observable;
@@ -381,58 +379,6 @@ public class GBVSyncPresenter extends BaseSyncPresenter {
                         return response;
                     }
                 })
-                .map(new Func1<Response<JsonElement>, Response<JsonElement>>() {
-                    @Override
-                    public Response<JsonElement> call(Response<JsonElement> response) {
-                        JsonObject responseJsonObject = response.body().getAsJsonObject();
-                        if (responseJsonObject.has("recorded_audio")) {
-                            String id = responseJsonObject.get("_id").getAsString();
-                            Response<ResponseBody> audioResponse = syncCaseService.getCaseAudio(id)
-                                    .toBlocking().first();
-                            if (!audioResponse.isSuccessful()) {
-                                throw new RuntimeException();
-                            }
-                        }
-                        return response;
-                    }
-                })
-                .map(new Func1<Response<JsonElement>, List<JsonObject>>() {
-                    @Override
-                    public List<JsonObject> call(Response<JsonElement> response) {
-                        JsonObject responseJsonObject = response.body().getAsJsonObject();
-                        List<JsonObject> photoKeys = new ArrayList<>();
-                        if (responseJsonObject.has("photo_keys")) {
-                            JsonArray jsonArray = responseJsonObject.get("photo_keys")
-                                    .getAsJsonArray();
-                            for (JsonElement element : jsonArray) {
-                                JsonObject jsonObject = new JsonObject();
-                                jsonObject.addProperty("photo_key", element.getAsString());
-                                jsonObject.addProperty("_id", responseJsonObject.get("_id")
-                                        .getAsString());
-                                photoKeys.add(jsonObject);
-                            }
-                        }
-                        return photoKeys;
-                    }
-                })
-                .flatMap(new Func1<List<JsonObject>, Observable<JsonObject>>() {
-                    @Override
-                    public Observable<JsonObject> call(List<JsonObject> jsonObjects) {
-                        return Observable.from(jsonObjects);
-                    }
-                })
-                .map(new Func1<JsonObject, Object>() {
-                    @Override
-                    public Object call(JsonObject jsonObject) {
-                        String id = jsonObject.get("_id").getAsString();
-                        String photoKey = jsonObject.get("photo_key").getAsString();
-                        Response<ResponseBody> response = syncCaseService.getCasePhoto(id, photoKey,
-                                PhotoConfig.RESIZE_FOR_WEB)
-                                .toBlocking()
-                                .first();
-                        return null;
-                    }
-                })
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Action1<Object>() {
@@ -458,6 +404,44 @@ public class GBVSyncPresenter extends BaseSyncPresenter {
                         }
                     }
                 });
+    }
+
+    private void postPullCases(JsonObject casesJsonObject) {
+        String internalId = casesJsonObject.get("_id").getAsString();
+        Case item = caseService.getByInternalId(internalId);
+        String newRev = casesJsonObject.get("_rev").getAsString();
+        if (item != null) {
+            item.setInternalRev(newRev);
+            item.setSynced(true);
+            item.setContent(new Blob(casesJsonObject.toString().getBytes()));
+            item.setName(casesJsonObject.get("name").getAsString());
+            item.setAge(casesJsonObject.get("age").getAsInt());
+            //TODO set caregiver
+            if (casesJsonObject.get("caregiver") != null) {
+                item.setCaregiver(casesJsonObject.get("caregiver").getAsString());
+            }
+            item.update();
+        } else {
+            item = new Case();
+            item.setUniqueId(casesJsonObject.get("case_id").getAsString());
+            item.setShortId(casesJsonObject.get("short_id").getAsString());
+            item.setInternalId(casesJsonObject.get("_id").getAsString());
+            item.setInternalRev(newRev);
+            item.setRegistrationDate(
+                    Utils.getRegisterDate(casesJsonObject.get("registration_date").getAsString()));
+            item.setCreatedBy(casesJsonObject.get("created_by").getAsString());
+            item.setLastSyncedDate(Calendar.getInstance().getTime());
+            item.setLastUpdatedDate(Calendar.getInstance().getTime());
+            item.setSynced(true);
+            item.setContent(new Blob(casesJsonObject.toString().getBytes()));
+            item.setName(casesJsonObject.get("name").getAsString());
+            item.setAge(casesJsonObject.get("age").getAsInt());
+            //TODO set caregiver
+            if (casesJsonObject.get("caregiver") != null) {
+                item.setCaregiver(casesJsonObject.get("caregiver").getAsString());
+            }
+            item.save();
+        }
     }
 
     public void pullIncidents() {
@@ -516,13 +500,12 @@ public class GBVSyncPresenter extends BaseSyncPresenter {
                 }, new Action0() {
                     @Override
                     public void call() {
-                        downloadTracings(objects);
+                        downloadIncidents(objects);
                     }
                 });
     }
 
-
-    private void downloadTracings(List<JsonObject> objects) {
+    private void downloadIncidents(List<JsonObject> objects) {
         Observable.from(objects)
                 .filter(new Func1<JsonObject, Boolean>() {
                     @Override
@@ -542,56 +525,8 @@ public class GBVSyncPresenter extends BaseSyncPresenter {
                             throw new RuntimeException();
                         }
                         JsonObject responseJsonObject = response.body().getAsJsonObject();
-                        postPullTracings(responseJsonObject);
+                        postPullIncidents(responseJsonObject);
                         return response;
-                    }
-                })
-                .map(new Func1<Response<JsonElement>, Response<JsonElement>>() {
-                    @Override
-                    public Response<JsonElement> call(Response<JsonElement> response) {
-                        JsonObject responseJsonObject = response.body().getAsJsonObject();
-                        if (responseJsonObject.has("recorded_audio")) {
-                            String id = responseJsonObject.get("_id").getAsString();
-                            Response<ResponseBody> audioResponse = syncTracingService.getAudio
-                                    (id).toBlocking().first();
-                            if (!audioResponse.isSuccessful()) {
-                                throw new RuntimeException();
-                            }
-                        }
-                        return response;
-                    }
-                })
-                .map(new Func1<Response<JsonElement>, List<JsonObject>>() {
-                    @Override
-                    public List<JsonObject> call(Response<JsonElement> response) {
-                        JsonObject responseJsonObject = response.body().getAsJsonObject();
-                        List<JsonObject> photoKeys = new ArrayList<>();
-                        if (responseJsonObject.has("photo_keys")) {
-                            JsonArray jsonArray = responseJsonObject.get("photo_keys")
-                                    .getAsJsonArray();
-                            for (JsonElement element : jsonArray) {
-                                JsonObject jsonObject = new JsonObject();
-                                jsonObject.addProperty("photo_key", element.getAsString());
-                                jsonObject.addProperty("_id", responseJsonObject.get("_id")
-                                        .getAsString());
-                                photoKeys.add(jsonObject);
-                            }
-                        }
-                        return photoKeys;
-                    }
-                })
-                .flatMap(new Func1<List<JsonObject>, Observable<JsonObject>>() {
-                    @Override
-                    public Observable<JsonObject> call(List<JsonObject> jsonObjects) {
-                        return Observable.from(jsonObjects);
-                    }
-                })
-                .map(new Func1<JsonObject, Object>() {
-                    @Override
-                    public Object call(JsonObject jsonObject) {
-                        String id = jsonObject.get("_id").getAsString();
-                        String photoKey = jsonObject.get("photo_key").getAsString();
-                        return null;
                     }
                 })
                 .subscribeOn(Schedulers.io())
@@ -625,46 +560,7 @@ public class GBVSyncPresenter extends BaseSyncPresenter {
         }
     }
 
-
-    private void postPullCases(JsonObject casesJsonObject) {
-        String internalId = casesJsonObject.get("_id").getAsString();
-        Case item = caseService.getByInternalId(internalId);
-        String newRev = casesJsonObject.get("_rev").getAsString();
-        if (item != null) {
-            item.setInternalRev(newRev);
-            item.setSynced(true);
-            item.setContent(new Blob(casesJsonObject.toString().getBytes()));
-            item.setName(casesJsonObject.get("name").getAsString());
-            item.setAge(casesJsonObject.get("age").getAsInt());
-            //TODO set caregiver
-            if (casesJsonObject.get("caregiver") != null) {
-                item.setCaregiver(casesJsonObject.get("caregiver").getAsString());
-            }
-            item.update();
-        } else {
-            item = new Case();
-            item.setUniqueId(casesJsonObject.get("case_id").getAsString());
-            item.setShortId(casesJsonObject.get("short_id").getAsString());
-            item.setInternalId(casesJsonObject.get("_id").getAsString());
-            item.setInternalRev(newRev);
-            item.setRegistrationDate(
-                    Utils.getRegisterDate(casesJsonObject.get("registration_date").getAsString()));
-            item.setCreatedBy(casesJsonObject.get("created_by").getAsString());
-            item.setLastSyncedDate(Calendar.getInstance().getTime());
-            item.setLastUpdatedDate(Calendar.getInstance().getTime());
-            item.setSynced(true);
-            item.setContent(new Blob(casesJsonObject.toString().getBytes()));
-            item.setName(casesJsonObject.get("name").getAsString());
-            item.setAge(casesJsonObject.get("age").getAsInt());
-            //TODO set caregiver
-            if (casesJsonObject.get("caregiver") != null) {
-                item.setCaregiver(casesJsonObject.get("caregiver").getAsString());
-            }
-            item.save();
-        }
-    }
-
-    private void postPullTracings(JsonObject incidentJsonObject) {
+    private void postPullIncidents(JsonObject incidentJsonObject) {
         String internalId = incidentJsonObject.get("_id").getAsString();
         Incident item = incidentService.getByInternalId(internalId);
         String newRev = incidentJsonObject.get("_rev").getAsString();

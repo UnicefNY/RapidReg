@@ -557,7 +557,6 @@ public class CPSyncPresenter extends BaseSyncPresenter {
                 .map(new Func1<JsonObject, Response<JsonElement>>() {
                     @Override
                     public Response<JsonElement> call(JsonObject jsonObject) {
-
                         Observable<Response<JsonElement>> responseObservable = syncTracingService
                                 .get(jsonObject.get("_id")
                                         .getAsString(), "en", true);
