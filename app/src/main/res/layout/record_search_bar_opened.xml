@@ -8,6 +8,7 @@
         android:id="@+id/id_field"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:visibility="gone"
         android:orientation="vertical">
 
         <org.unicef.rapidreg.widgets.ClearableEditText
@@ -25,9 +26,31 @@
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/survivor_code_field"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:orientation="vertical">
+
+        <org.unicef.rapidreg.widgets.ClearableEditText
+            android:id="@+id/survivor_code"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/survivor_code"
+            android:maxLength="30"
+            android:singleLine="true" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/lighter_gray" />
+    </LinearLayout>
+
+    <LinearLayout
         android:id="@+id/name_field"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:visibility="gone"
         android:orientation="vertical">
 
         <org.unicef.rapidreg.widgets.ClearableEditText
@@ -46,9 +69,31 @@
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/type_of_violence_field"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:orientation="vertical">
+
+        <android.support.v7.widget.AppCompatSpinner
+            android:id="@+id/type_of_violence"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:prompt="@string/type_of_violence"
+            android:maxLength="30"
+            android:singleLine="true" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/lighter_gray" />
+    </LinearLayout>
+
+    <LinearLayout
         android:id="@+id/age_field"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:visibility="gone"
         android:orientation="vertical">
 
         <LinearLayout
@@ -92,6 +137,7 @@
         android:id="@+id/caregiver_field"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:visibility="gone"
         android:orientation="vertical">
 
         <org.unicef.rapidreg.widgets.ClearableEditText
@@ -113,6 +159,7 @@
         android:id="@+id/registration_date_field"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:visibility="gone"
         android:orientation="vertical">
         <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
             android:id="@+id/registration_date_container"
@@ -151,9 +198,52 @@
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/date_of_inquiry_field"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:orientation="vertical">
+        <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/date_of_inquiry_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="@dimen/search_bar_left_padding"
+            android:paddingRight="@dimen/search_bar_right_padding">
+
+            <TextView
+                android:id="@+id/date_of_inquiry"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/search_bar_item_height"
+                android:background="@drawable/edit_view_shape"
+                android:gravity="center_vertical"
+                android:hint="@string/date_of_inquiry"
+                android:textColor="@color/primero_font_dark"
+                android:textCursorDrawable="@null"
+                android:textSize="@dimen/text_size_16" />
+
+            <ImageButton
+                android:id="@+id/date_of_inquiry_clear"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:background="@null"
+                android:src="@drawable/clear_black"
+                android:visibility="invisible" />
+        </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/lighter_gray" />
+    </LinearLayout>
+
+    <LinearLayout
         android:id="@+id/location_field"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:visibility="gone"
         android:orientation="vertical">
         <org.unicef.rapidreg.widgets.ClearableEditText
             android:id="@+id/location"

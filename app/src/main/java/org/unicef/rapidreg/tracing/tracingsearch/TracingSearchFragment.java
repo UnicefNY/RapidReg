@@ -52,7 +52,10 @@ public class TracingSearchFragment extends RecordSearchFragment {
 
     @Override
     protected void onInitSearchFields() {
-
+        idField.setVisibility(View.VISIBLE);
+        nameField.setVisibility(View.VISIBLE);
+        ageField.setVisibility(View.VISIBLE);
+        dateOfInquiryField.setVisibility(View.VISIBLE);
     }
 
     @Override

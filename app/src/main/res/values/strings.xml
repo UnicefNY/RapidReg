@@ -122,6 +122,9 @@
     <string name="new_gbv_case">New GBV case</string>
     <string name="cp_case_details">CP case details</string>
     <string name="gbv_case_details">GBV case details</string>
+    <string name="survivor_code">Survivor Code</string>
+    <string name="type_of_violence">Type of Violence</string>
+    <string name="date_of_inquiry">Date of Inquiry</string>
     <!--Sync-->
 
     <!--Transparent theme-->
