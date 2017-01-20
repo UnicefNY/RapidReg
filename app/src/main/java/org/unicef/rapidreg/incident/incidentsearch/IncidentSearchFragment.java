@@ -36,7 +36,12 @@ public class IncidentSearchFragment extends RecordSearchFragment {
 
     @Override
     protected void onInitSearchFields() {
-
+        idField.setVisibility(View.VISIBLE);
+        survivorCodeField.setVisibility(View.VISIBLE);
+        nameField.setVisibility(View.VISIBLE);
+        ageField.setVisibility(View.VISIBLE);
+        typeOfViolenceField.setVisibility(View.VISIBLE);
+        locationField.setVisibility(View.VISIBLE);
     }
 
     @Override

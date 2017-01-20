@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.DatePicker;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.ViewSwitcher;
 
@@ -56,53 +57,61 @@ public abstract class RecordSearchFragment extends MvpFragment<RecordListView, R
     @BindView(R.id.search_bar_title)
     protected TextView searchBarTitle;
 
+    @BindView(R.id.id_field)
+    protected LinearLayout idField;
     @BindView(R.id.id)
     protected ClearableEditText id;
 
+    @BindView(R.id.name_field)
+    protected LinearLayout nameField;
     @BindView(R.id.name)
     protected ClearableEditText name;
 
+    @BindView(R.id.age_field)
+    protected LinearLayout ageField;
     @BindView(R.id.age_from)
     protected ClearableEditText ageFrom;
-
     @BindView(R.id.age_to)
     protected ClearableEditText ageTo;
 
+    @BindView(R.id.caregiver_field)
+    protected LinearLayout caregiverField;
     @BindView(R.id.caregiver)
     protected ClearableEditText caregiver;
-
     @BindView(R.id.caregiver_separator)
     protected View caregiverSeparator;
 
+    @BindView(R.id.registration_date_field)
+    protected LinearLayout registrationDateField;
     @BindView(R.id.registration_date)
     protected TextView registrationDate;
-
     @BindView(R.id.registration_date_clear)
     protected ImageButton registrationDateClear;
 
+    @BindView(R.id.location_field)
+    protected LinearLayout locationField;
     @BindView(R.id.location)
     protected ClearableEditText location;
 
     @BindView(R.id.search_result)
     protected ViewSwitcher searchResultSwitcher;
 
-    @BindView(R.id.id_field)
-    protected LinearLayout idField;
+    @BindView(R.id.date_of_inquiry_field)
+    protected LinearLayout dateOfInquiryField;
+    @BindView(R.id.date_of_inquiry)
+    protected TextView dateOfInquiry;
+    @BindView(R.id.date_of_inquiry_clear)
+    protected ImageButton dateOfInquiryClear;
 
-    @BindView(R.id.name_field)
-    protected LinearLayout nameField;
+    @BindView(R.id.survivor_code_field)
+    protected LinearLayout survivorCodeField;
+    @BindView(R.id.survivor_code)
+    protected ClearableEditText survivorCode;
 
-    @BindView(R.id.age_field)
-    protected LinearLayout ageField;
-
-    @BindView(R.id.caregiver_field)
-    protected LinearLayout caregiverField;
-
-    @BindView(R.id.registration_date_field)
-    protected LinearLayout registrationDateField;
-
-    @BindView(R.id.location_field)
-    protected LinearLayout locationField;
+    @BindView(R.id.type_of_violence_field)
+    protected LinearLayout typeOfViolenceField;
+    @BindView(R.id.type_of_violence)
+    protected Spinner typeOfViolence;
 
     private RecordListAdapter adapter;
 
@@ -169,6 +178,41 @@ public abstract class RecordSearchFragment extends MvpFragment<RecordListView, R
 
     @OnClick(R.id.registration_date_clear)
     public void onRegistrationDateClear() {
+        registrationDate.setText("");
+    }
+
+    @OnClick(R.id.date_of_inquiry_container)
+    public void onDateOfInquiryContainerClicked() {
+        final DatePicker datePicker = new DatePicker(getActivity());
+        datePicker.setCalendarViewShown(false);
+
+        BaseAlertDialog.Builder builder = new BaseAlertDialog.Builder(getActivity());
+        builder.setTitle(getResources().getString(R.string.date));
+        builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                String date = String.format("%s/%s/%s", datePicker.getMonth() + 1,
+                        datePicker.getDayOfMonth(), datePicker.getYear());
+                registrationDate.setText(date);
+                dialog.dismiss();
+            }
+        });
+        builder.setNegativeButton(R.string.cancel, null);
+        builder.setView(datePicker);
+        builder.create().show();
+    }
+
+    @OnTextChanged(R.id.date_of_inquiry)
+    public void onDateOfInquiryTextChanged(CharSequence s) {
+        if (s.length() > 0) {
+            registrationDateClear.setVisibility(View.VISIBLE);
+        } else {
+            registrationDateClear.setVisibility(View.INVISIBLE);
+        }
+    }
+
+    @OnClick(R.id.date_of_inquiry_clear)
+    public void onDateOfInquiryClear() {
         registrationDate.setText("");
     }
 
