@@ -223,15 +223,7 @@ public abstract class RecordSearchFragment extends MvpFragment<RecordListView, R
         Map<String, String> values = getFilterValues();
         searchBarTitle.setText(getFirstValidValue(values));
 
-        String from = ageFrom.getText();
-        String to = ageTo.getText();
-
-        List<Long> searchResult = presenter.getSearchResult(id.getText(),
-                name.getText(),
-                TextUtils.isEmpty(from) ? RecordModel.EMPTY_AGE : Integer.valueOf(from),
-                TextUtils.isEmpty(to) ? RecordModel.EMPTY_AGE : Integer.valueOf(to),
-                caregiver.getText(),
-                registrationDate.getText().toString());
+        List<Long> searchResult = presenter.getSearchResult(values);
 
         int resultIndex = searchResult.isEmpty() ? HAVE_NO_RESULT : HAVE_RESULT_LIST;
         searchResultSwitcher.setDisplayedChild(resultIndex);
@@ -247,22 +239,15 @@ public abstract class RecordSearchFragment extends MvpFragment<RecordListView, R
                 .build();
     }
 
-    private Map<String, String> getFilterValues() {
-        Map<String, String> values = new LinkedHashMap<>();
-        values.put(ID, id.getText());
-        values.put(NAME, name.getText());
-        values.put(AGE_FROM, ageFrom.getText());
-        values.put(AGE_TO, ageTo.getText());
-        values.put(CAREGIVER, caregiver.getText());
-        values.put(REGISTRATION_DATE, registrationDate.getText().toString());
-
-        return values;
-    }
-
     private String getFirstValidValue(Map<String, String> values) {
         for (String key : values.keySet()) {
             String value = values.get(key);
             if (!TextUtils.isEmpty(value)) {
+                if (AGE_FROM.equals(key) || AGE_TO.equals(key)) {
+                    if (EMPTY_AGE == Integer.valueOf(value)) {
+                        continue;
+                    }
+                }
                 return value;
             }
         }
@@ -270,6 +255,7 @@ public abstract class RecordSearchFragment extends MvpFragment<RecordListView, R
         return getResources().getString(R.string.click_to_search);
     }
 
+    protected abstract Map<String, String> getFilterValues();
     protected abstract void onInitSearchFields();
     protected abstract RecordListAdapter createRecordListAdapter();
 }
