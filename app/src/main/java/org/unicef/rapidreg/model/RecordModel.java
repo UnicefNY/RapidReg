@@ -21,6 +21,7 @@ public class RecordModel extends BaseModel {
     public static final String COLUMN_REGISTRATION_DATE = "registration_date";
     public static final String COLUMN_CREATED_BY = "created_by";
     public static final String COLUMN_OWNED_BY = "owned_by";
+    public static final String COLUMN_LOCATION = "location";
 
     @PrimaryKey(autoincrement = true)
     public long id;
