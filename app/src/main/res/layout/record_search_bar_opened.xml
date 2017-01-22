@@ -75,13 +75,11 @@
         android:visibility="gone"
         android:orientation="vertical">
 
-        <android.support.v7.widget.AppCompatSpinner
+        <Spinner
             android:id="@+id/type_of_violence"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:prompt="@string/type_of_violence"
-            android:maxLength="30"
-            android:singleLine="true" />
+            android:drawSelectorOnTop="true"/>
 
         <View
             android:layout_width="match_parent"
