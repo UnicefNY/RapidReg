@@ -23,10 +23,10 @@ import java.util.Map;
 
 import javax.inject.Inject;
 
-import static org.unicef.rapidreg.base.record.recordsearch.RecordSearchPresenter.ID;
-import static org.unicef.rapidreg.base.record.recordsearch.RecordSearchPresenter.LOCATION;
-import static org.unicef.rapidreg.base.record.recordsearch.RecordSearchPresenter.NAME;
-import static org.unicef.rapidreg.base.record.recordsearch.RecordSearchPresenter.REGISTRATION_DATE;
+import static org.unicef.rapidreg.base.record.recordsearch.RecordSearchPresenter.*;
+import static org.unicef.rapidreg.base.record.recordsearch.RecordSearchPresenter.CONSTANT.AGE_FROM;
+import static org.unicef.rapidreg.base.record.recordsearch.RecordSearchPresenter.CONSTANT.AGE_TO;
+import static org.unicef.rapidreg.model.RecordModel.EMPTY_AGE;
 
 public class TracingSearchFragment extends RecordSearchFragment {
 
@@ -61,10 +61,11 @@ public class TracingSearchFragment extends RecordSearchFragment {
     @Override
     protected Map<String, String> getFilterValues() {
         Map<String, String> searchValues = new LinkedHashMap<>();
-        searchValues.put(ID, id.getText());
-        searchValues.put(NAME, name.getText());
-        searchValues.put(REGISTRATION_DATE, registrationDate.getText().toString());
-        searchValues.put(LOCATION, location.getText());
+        searchValues.put(CONSTANT.ID, id.getText());
+        searchValues.put(CONSTANT.NAME, name.getText());
+        searchValues.put(CONSTANT.DATE_OF_INQUIRY, dateOfInquiry.getText().toString());
+        searchValues.put(AGE_FROM, ageFrom.getText().isEmpty() ? String.valueOf(EMPTY_AGE) : ageFrom.getText());
+        searchValues.put(AGE_TO, ageTo.getText().isEmpty() ? String.valueOf(EMPTY_AGE) : ageTo.getText());
 
         return searchValues;
     }
