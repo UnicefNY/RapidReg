@@ -13,7 +13,20 @@ import org.unicef.rapidreg.base.record.recordsearch.RecordSearchPresenter;
 import org.unicef.rapidreg.childcase.caselist.CaseListAdapter;
 import org.unicef.rapidreg.model.User;
 
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.Map;
+
 import javax.inject.Inject;
+
+import static org.unicef.rapidreg.base.record.recordsearch.RecordSearchPresenter.AGE_FROM;
+import static org.unicef.rapidreg.base.record.recordsearch.RecordSearchPresenter.AGE_TO;
+import static org.unicef.rapidreg.base.record.recordsearch.RecordSearchPresenter.CAREGIVER;
+import static org.unicef.rapidreg.base.record.recordsearch.RecordSearchPresenter.ID;
+import static org.unicef.rapidreg.base.record.recordsearch.RecordSearchPresenter.LOCATION;
+import static org.unicef.rapidreg.base.record.recordsearch.RecordSearchPresenter.NAME;
+import static org.unicef.rapidreg.base.record.recordsearch.RecordSearchPresenter.REGISTRATION_DATE;
+import static org.unicef.rapidreg.model.RecordModel.EMPTY_AGE;
 
 public class CaseSearchFragment extends RecordSearchFragment {
 
@@ -33,6 +46,32 @@ public class CaseSearchFragment extends RecordSearchFragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         getComponent().inject(this);
         return super.onCreateView(inflater, container, savedInstanceState);
+    }
+
+    @Override
+    protected Map<String, String> getFilterValues() {
+        return getSearchValues(PrimeroAppConfiguration.getCurrentUser().getRoleType());
+    }
+
+    private HashMap<String, String> getSearchValues(User.Role roleType) {
+        HashMap<String, String> searchValues = new LinkedHashMap<>();
+        searchValues.put(ID, id.getText());
+        searchValues.put(NAME, name.getText());
+        searchValues.put(REGISTRATION_DATE, registrationDate.getText().toString());
+
+        switch (roleType) {
+            case CP: {
+                searchValues.put(AGE_FROM, ageFrom.getText().isEmpty() ? String.valueOf(EMPTY_AGE) : ageFrom.getText());
+                searchValues.put(AGE_TO, ageTo.getText().isEmpty() ? String.valueOf(EMPTY_AGE) : ageTo.getText());
+                searchValues.put(CAREGIVER, caregiver.getText());
+                break;
+            }
+            case GBV: {
+                searchValues.put(LOCATION, location.getText());
+                break;
+            }
+        }
+        return searchValues;
     }
 
     @Override

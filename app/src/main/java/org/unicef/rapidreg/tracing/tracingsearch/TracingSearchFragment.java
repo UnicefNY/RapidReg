@@ -15,11 +15,18 @@ import org.unicef.rapidreg.base.record.recordsearch.RecordSearchFragment;
 import org.unicef.rapidreg.base.record.recordsearch.RecordSearchPresenter;
 import org.unicef.rapidreg.model.RecordModel;
 import org.unicef.rapidreg.tracing.tracinglist.TracingListAdapter;
+import org.unicef.rapidreg.utils.StreamUtil;
 
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.inject.Inject;
+
+import static org.unicef.rapidreg.base.record.recordsearch.RecordSearchPresenter.ID;
+import static org.unicef.rapidreg.base.record.recordsearch.RecordSearchPresenter.LOCATION;
+import static org.unicef.rapidreg.base.record.recordsearch.RecordSearchPresenter.NAME;
+import static org.unicef.rapidreg.base.record.recordsearch.RecordSearchPresenter.REGISTRATION_DATE;
 
 public class TracingSearchFragment extends RecordSearchFragment {
 
@@ -49,6 +56,17 @@ public class TracingSearchFragment extends RecordSearchFragment {
         caregiverSeparator.setVisibility(View.GONE);
 
         registrationDate.setHint(R.string.inquiry_date);
+    }
+
+    @Override
+    protected Map<String, String> getFilterValues() {
+        Map<String, String> searchValues = new LinkedHashMap<>();
+        searchValues.put(ID, id.getText());
+        searchValues.put(NAME, name.getText());
+        searchValues.put(REGISTRATION_DATE, registrationDate.getText().toString());
+        searchValues.put(LOCATION, location.getText());
+
+        return searchValues;
     }
 
     @Override
