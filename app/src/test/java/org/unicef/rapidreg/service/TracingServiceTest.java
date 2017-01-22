@@ -130,7 +130,7 @@ public class TracingServiceTest {
         when(tracingDao.getAllTracingsByConditionGroup(any(ConditionGroup.class))).thenReturn
                 (orderList);
 
-        assertThat("When call getSearchResult() should return search result depends on search " +
+        assertThat("When call getCPSearchResult() should return search result depends on search " +
                         "condition",
                 tracingService.getSearchResult("uniqueId", "name", 1, 20, new Date(20161108)),
                 is(Arrays.asList(new Long[]{3L, 2L, 1L})));

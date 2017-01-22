@@ -12,8 +12,7 @@ import javax.inject.Inject;
 
 public class UserDaoImpl implements UserDao {
     @Inject
-    public UserDaoImpl() {
-    }
+    public UserDaoImpl() {}
 
     @Override
     public User getUser(String username) {

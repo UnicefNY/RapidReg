@@ -42,6 +42,9 @@ public class RecordService {
     public static final String RELATION_NICKNAME = "relation_nickname";
     public static final String SEX = "sex";
     public static final String INQUIRY_DATE = "inquiry_date";
+    public static final String SURVIVOR_CODE = "survivor_code";
+    public static final String TYPE_OF_VIOLENCE = "type_of_incident_violence";
+    public static final String LOCATION = "location";
 
     public static final String MODULE_GBV_CASE = "primeromodule-gbv";
     public static final String MODULE_CP_CASE = "primeromodule-cp";
@@ -74,6 +77,18 @@ public class RecordService {
 
     public String getCurrentRegistrationDateAsString() {
         return new SimpleDateFormat("dd/MM/yyyy").format(new java.util.Date());
+    }
+
+    public String getSurvivorCode(ItemValuesMap itemValues) {
+        return "" + itemValues.getAsString(SURVIVOR_CODE);
+    }
+
+    public String getTypeOfViolence(ItemValuesMap itemValues) {
+        return "" + itemValues.getAsString(TYPE_OF_VIOLENCE);
+    }
+
+    public String getLocation(ItemValuesMap itemValues) {
+        return "" + itemValues.getAsString(LOCATION);
     }
 
     public  String generateUniqueId() {
