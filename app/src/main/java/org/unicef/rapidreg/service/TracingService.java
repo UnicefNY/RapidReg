@@ -134,8 +134,6 @@ public class TracingService extends RecordService {
         tracing.setCreatedBy(username);
         tracing.setOwnedBy(username);
 
-        tracing.setContent(generateTracingBlob(itemValues, uniqueId, username));
-
         Date date = new Date(Calendar.getInstance().getTimeInMillis());
         tracing.setCreateDate(date);
         tracing.setLastUpdatedDate(date);
@@ -149,20 +147,18 @@ public class TracingService extends RecordService {
         tracing.setRegistrationDate(getRegisterDate(itemValues.getAsString(INQUIRY_DATE)));
         tracing.setAudio(getAudioBlob());
 
+        tracing.setContent(generateTracingBlob(itemValues, uniqueId, username));
+
         return tracing;
     }
 
     private Tracing updateTracingFromItemValues(ItemValuesMap itemValues) {
         Tracing tracing = tracingDao.getTracingByUniqueId(itemValues.getAsString(TRACING_ID));
         String username = PrimeroAppConfiguration.getCurrentUser().getUsername();
-        tracing.setCreatedBy(username);
-
-        tracing.setContent(generateTracingBlob(itemValues, tracing.getUniqueId(), username));
 
         Date date = new Date(Calendar.getInstance().getTimeInMillis());
         tracing.setCreateDate(date);
         tracing.setLastUpdatedDate(date);
-
         tracing.setName(getName(itemValues));
 
         int age = itemValues.getAsInt(RELATION_AGE) != null ? itemValues.getAsInt(RELATION_AGE) : 0;
@@ -171,6 +167,8 @@ public class TracingService extends RecordService {
         tracing.setCaregiver(getCaregiverName(itemValues));
         tracing.setRegistrationDate(getRegisterDate(itemValues.getAsString(INQUIRY_DATE)));
         tracing.setAudio(getAudioBlob());
+
+        tracing.setContent(generateTracingBlob(itemValues, tracing.getUniqueId(), username));
 
         return tracing;
     }
