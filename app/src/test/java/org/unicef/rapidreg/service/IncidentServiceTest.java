@@ -217,10 +217,10 @@ public class IncidentServiceTest {
         when(incidentDao.getIncidentListByConditionGroup(any(ConditionGroup.class))).thenReturn
                 (orderList);
 
-        Assert.assertThat("When call getSearchResult() should return search result depends on " +
+        Assert.assertThat("When call getCPSearchResult() should return search result depends on " +
                         "search " +
                         "condition",
-                incidentService.getSearchResult("uniqueId", "name", 1, 20, new Date(20161108)),
+                incidentService.getSearchResult("uniqueId", "survivor_code", "name", 1, 20, "type_of_violence ", "location"),
                 is(Arrays.asList(new Long[]{3L, 2L, 1L})));
     }
 

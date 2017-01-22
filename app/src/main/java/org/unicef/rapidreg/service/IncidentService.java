@@ -74,10 +74,33 @@ public class IncidentService extends RecordService {
         return extractIds(incidentDao.getAllIncidentsOrderByAge(false, PrimeroAppConfiguration.getCurrentUser().getUsername()));
     }
 
-    public List<Long> getSearchResult(String uniqueId, String name, int ageFrom,
-                                      int ageTo, Date date) {
-        ConditionGroup searchCondition = getSearchCondition(uniqueId, name, ageFrom, ageTo, date);
+    public List<Long> getSearchResult(String uniqueId, String survivorCode, String name, int ageFrom, int ageTo, String typeOfViolence, String location) {
+        ConditionGroup searchCondition = getSearchCondition(uniqueId, survivorCode, name, ageFrom, ageTo, typeOfViolence, location);
         return extractIds(incidentDao.getIncidentListByConditionGroup(searchCondition));
+    }
+
+    private ConditionGroup getSearchCondition(String uniqueId, String survivorCode, String name, int ageFrom, int ageTo, String typeOfViolence, String location) {
+        ConditionGroup conditionGroup = ConditionGroup.clause();
+        conditionGroup.and(Condition.column(NameAlias.builder(RecordModel.COLUMN_UNIQUE_ID).build())
+                .like(getWrappedCondition(uniqueId)));
+        conditionGroup.and(Condition.column(NameAlias.builder(RecordModel.COLUMN_NAME).build())
+                .like(getWrappedCondition(name)));
+        conditionGroup.and(Condition.column(NameAlias.builder(Incident.COLUMN_SURVIVOR_CODE).build())
+                .like(getWrappedCondition(survivorCode)));
+        SQLCondition ageSearchCondition = generateAgeSearchCondition(ageFrom, ageTo);
+        if (ageSearchCondition != null) {
+            conditionGroup.and(ageSearchCondition);
+        }
+        conditionGroup.and(Condition.column(NameAlias.builder(Incident.COLUMN_SURVIVOR_CODE).build())
+                .like(getWrappedCondition(survivorCode)));
+        conditionGroup.and(Condition.column(NameAlias.builder(Incident.COLUMN_TYPE_OF_VIOLENCE).build())
+                .like(getWrappedCondition(typeOfViolence)));
+        conditionGroup.and(Condition.column(NameAlias.builder(Incident.COLUMN_LOCATION).build())
+                .like(getWrappedCondition(location)));
+        conditionGroup.and(Condition.column(NameAlias.builder(RecordModel.COLUMN_CREATED_BY).build())
+                .eq(PrimeroAppConfiguration.getCurrentUser().getUsername()));
+
+        return conditionGroup;
     }
 
     private List<Long> extractIds(List<Incident> incidents) {
@@ -86,28 +109,6 @@ public class IncidentService extends RecordService {
             result.add(incident.getId());
         }
         return result;
-    }
-
-    private ConditionGroup getSearchCondition(String uniqueId, String name, int ageFrom,
-                                              int ageTo, Date date) {
-        ConditionGroup conditionGroup = ConditionGroup.clause();
-        conditionGroup.and(Condition.column(NameAlias.builder(RecordModel.COLUMN_UNIQUE_ID).build())
-                .like(getWrappedCondition(uniqueId)));
-        conditionGroup.and(Condition.column(NameAlias.builder(RecordModel.COLUMN_NAME).build())
-                .like(getWrappedCondition(name)));
-
-        SQLCondition ageSearchCondition = generateAgeSearchCondition(ageFrom, ageTo);
-        if (ageSearchCondition != null) {
-            conditionGroup.and(ageSearchCondition);
-        }
-        conditionGroup.and(Condition.column(NameAlias.builder(RecordModel.COLUMN_CREATED_BY).build())
-                .eq(PrimeroAppConfiguration.getCurrentUser().getUsername()));
-
-        if (date != null) {
-            conditionGroup.and(Condition.column(
-                    NameAlias.builder(RecordModel.COLUMN_REGISTRATION_DATE).build()).eq(date));
-        }
-        return conditionGroup;
     }
 
     public Incident saveOrUpdate(ItemValuesMap itemValues) throws IOException {
@@ -140,6 +141,9 @@ public class IncidentService extends RecordService {
         incident.setLastUpdatedDate(date);
         incident.setContent(tracingBlob);
         incident.setName(getName(itemValues));
+        incident.setSurvivorCode(getSurvivorCode(itemValues));
+        incident.setTypeOfViolence(getTypeOfViolence(itemValues));
+        incident.setLocation(getLocation(itemValues));
         int age = itemValues.has(RELATION_AGE) ? itemValues.getAsInt(RELATION_AGE) : EMPTY_AGE;
         incident.setAge(age);
         incident.setCaregiver(getCaregiverName(itemValues));
@@ -161,6 +165,10 @@ public class IncidentService extends RecordService {
         incident.setLastUpdatedDate(new Date(Calendar.getInstance().getTimeInMillis()));
         incident.setContent(blob);
         incident.setName(getName(itemValues));
+        incident.setName(getName(itemValues));
+        incident.setSurvivorCode(getSurvivorCode(itemValues));
+        incident.setTypeOfViolence(getTypeOfViolence(itemValues));
+        incident.setLocation(getLocation(itemValues));
         int age = itemValues.getAsInt(AGE) != null ? itemValues.getAsInt(AGE) : 0;
         incident.setAge(age);
         incident.setCaregiver(getCaregiverName(itemValues));
@@ -190,4 +198,5 @@ public class IncidentService extends RecordService {
         Incident incident = incidentDao.getByInternalId(id);
         return incident != null && rev.equals(incident.getInternalRev());
     }
+
 }
