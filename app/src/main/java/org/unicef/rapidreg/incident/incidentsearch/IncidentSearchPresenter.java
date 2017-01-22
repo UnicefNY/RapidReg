@@ -5,11 +5,12 @@ import org.unicef.rapidreg.injection.PerFragment;
 import org.unicef.rapidreg.service.IncidentFormService;
 import org.unicef.rapidreg.service.IncidentService;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.inject.Inject;
+
+import static org.unicef.rapidreg.base.record.recordsearch.RecordSearchPresenter.CONSTANT.*;
 
 @PerFragment
 public class IncidentSearchPresenter extends RecordSearchPresenter {

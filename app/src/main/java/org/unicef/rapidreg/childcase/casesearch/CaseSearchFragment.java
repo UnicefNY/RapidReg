@@ -19,13 +19,7 @@ import java.util.Map;
 
 import javax.inject.Inject;
 
-import static org.unicef.rapidreg.base.record.recordsearch.RecordSearchPresenter.AGE_FROM;
-import static org.unicef.rapidreg.base.record.recordsearch.RecordSearchPresenter.AGE_TO;
-import static org.unicef.rapidreg.base.record.recordsearch.RecordSearchPresenter.CAREGIVER;
-import static org.unicef.rapidreg.base.record.recordsearch.RecordSearchPresenter.ID;
-import static org.unicef.rapidreg.base.record.recordsearch.RecordSearchPresenter.LOCATION;
-import static org.unicef.rapidreg.base.record.recordsearch.RecordSearchPresenter.NAME;
-import static org.unicef.rapidreg.base.record.recordsearch.RecordSearchPresenter.REGISTRATION_DATE;
+import static org.unicef.rapidreg.base.record.recordsearch.RecordSearchPresenter.CONSTANT.*;
 import static org.unicef.rapidreg.model.RecordModel.EMPTY_AGE;
 
 public class CaseSearchFragment extends RecordSearchFragment {

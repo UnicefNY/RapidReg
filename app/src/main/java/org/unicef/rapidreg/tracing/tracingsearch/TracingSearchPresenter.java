@@ -8,6 +8,8 @@ import java.util.Map;
 
 import javax.inject.Inject;
 
+import static org.unicef.rapidreg.base.record.recordsearch.RecordSearchPresenter.CONSTANT.*;
+
 public class TracingSearchPresenter extends RecordSearchPresenter {
     private TracingService tracingService;
 
