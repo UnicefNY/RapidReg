@@ -195,7 +195,7 @@ public abstract class RecordSearchFragment extends MvpFragment<RecordListView, R
             public void onClick(DialogInterface dialog, int which) {
                 String date = String.format("%s/%s/%s", datePicker.getMonth() + 1,
                         datePicker.getDayOfMonth(), datePicker.getYear());
-                registrationDate.setText(date);
+                dateOfInquiry.setText(date);
                 dialog.dismiss();
             }
         });
@@ -207,15 +207,15 @@ public abstract class RecordSearchFragment extends MvpFragment<RecordListView, R
     @OnTextChanged(R.id.date_of_inquiry)
     public void onDateOfInquiryTextChanged(CharSequence s) {
         if (s.length() > 0) {
-            registrationDateClear.setVisibility(View.VISIBLE);
+            dateOfInquiryClear.setVisibility(View.VISIBLE);
         } else {
-            registrationDateClear.setVisibility(View.INVISIBLE);
+            dateOfInquiryClear.setVisibility(View.INVISIBLE);
         }
     }
 
     @OnClick(R.id.date_of_inquiry_clear)
     public void onDateOfInquiryClear() {
-        registrationDate.setText("");
+        dateOfInquiry.setText("");
     }
 
     @OnClick(R.id.done)
