@@ -62,7 +62,6 @@ public class IncidentSearchFragment extends RecordSearchFragment {
         Map<String, String> searchValues = new LinkedHashMap<>();
         searchValues.put(ID, id.getText());
         searchValues.put(SURVIVOR_CODE, survivorCode.getText());
-        searchValues.put(NAME, name.getText());
         searchValues.put(AGE_FROM, ageFrom.getText().isEmpty() ? String.valueOf(EMPTY_AGE) : ageFrom.getText());
         searchValues.put(AGE_TO, ageTo.getText().isEmpty() ? String.valueOf(EMPTY_AGE) : ageTo.getText());
         searchValues.put(TYPE_OF_VIOLENCE, typeOfViolenceVal);
@@ -75,7 +74,6 @@ public class IncidentSearchFragment extends RecordSearchFragment {
     protected void onInitSearchFields() {
         idField.setVisibility(View.VISIBLE);
         survivorCodeField.setVisibility(View.VISIBLE);
-        nameField.setVisibility(View.VISIBLE);
         ageField.setVisibility(View.VISIBLE);
         typeOfViolenceField.setVisibility(View.VISIBLE);
         locationField.setVisibility(View.VISIBLE);

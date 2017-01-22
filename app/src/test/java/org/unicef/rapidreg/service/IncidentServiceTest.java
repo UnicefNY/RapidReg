@@ -220,7 +220,7 @@ public class IncidentServiceTest {
         Assert.assertThat("When call getCPSearchResult() should return search result depends on " +
                         "search " +
                         "condition",
-                incidentService.getSearchResult("uniqueId", "survivor_code", "name", 1, 20, "type_of_violence ", "location"),
+                incidentService.getSearchResult("uniqueId", "survivor_code", 1, 20, "type_of_violence ", "location"),
                 is(Arrays.asList(new Long[]{3L, 2L, 1L})));
     }
 

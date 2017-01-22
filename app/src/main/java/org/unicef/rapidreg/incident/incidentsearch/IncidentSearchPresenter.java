@@ -27,11 +27,10 @@ public class IncidentSearchPresenter extends RecordSearchPresenter {
     protected List<Long> getSearchResult(Map<String, String> searchConditions) {
         String id = searchConditions.get(ID);
         String survivorCode = searchConditions.get(SURVIVOR_CODE);
-        String name = searchConditions.get(NAME);
         int ageFrom = Integer.valueOf(searchConditions.get(AGE_FROM));
         int ageTo = Integer.valueOf(searchConditions.get(AGE_TO));
         String typeOfViolence = searchConditions.get(TYPE_OF_VIOLENCE);
-        return incidentService.getSearchResult(id, survivorCode, name, ageFrom, ageTo, typeOfViolence, "");
+        return incidentService.getSearchResult(id, survivorCode, ageFrom, ageTo, typeOfViolence, "");
     }
 
     public List<String> getViolenceTypeList() {

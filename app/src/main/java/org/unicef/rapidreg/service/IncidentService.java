@@ -74,17 +74,15 @@ public class IncidentService extends RecordService {
         return extractIds(incidentDao.getAllIncidentsOrderByAge(false, PrimeroAppConfiguration.getCurrentUser().getUsername()));
     }
 
-    public List<Long> getSearchResult(String uniqueId, String survivorCode, String name, int ageFrom, int ageTo, String typeOfViolence, String location) {
-        ConditionGroup searchCondition = getSearchCondition(uniqueId, survivorCode, name, ageFrom, ageTo, typeOfViolence, location);
+    public List<Long> getSearchResult(String uniqueId, String survivorCode, int ageFrom, int ageTo, String typeOfViolence, String location) {
+        ConditionGroup searchCondition = getSearchCondition(uniqueId, survivorCode, ageFrom, ageTo, typeOfViolence, location);
         return extractIds(incidentDao.getIncidentListByConditionGroup(searchCondition));
     }
 
-    private ConditionGroup getSearchCondition(String uniqueId, String survivorCode, String name, int ageFrom, int ageTo, String typeOfViolence, String location) {
+    private ConditionGroup getSearchCondition(String uniqueId, String survivorCode, int ageFrom, int ageTo, String typeOfViolence, String location) {
         ConditionGroup conditionGroup = ConditionGroup.clause();
         conditionGroup.and(Condition.column(NameAlias.builder(RecordModel.COLUMN_UNIQUE_ID).build())
                 .like(getWrappedCondition(uniqueId)));
-        conditionGroup.and(Condition.column(NameAlias.builder(RecordModel.COLUMN_NAME).build())
-                .like(getWrappedCondition(name)));
         conditionGroup.and(Condition.column(NameAlias.builder(Incident.COLUMN_SURVIVOR_CODE).build())
                 .like(getWrappedCondition(survivorCode)));
         SQLCondition ageSearchCondition = generateAgeSearchCondition(ageFrom, ageTo);
