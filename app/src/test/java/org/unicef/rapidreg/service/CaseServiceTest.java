@@ -143,7 +143,7 @@ public class CaseServiceTest {
         when(caseDao.getCaseListByConditionGroup(any(ConditionGroup.class))).thenReturn
                 (searchResult);
 
-        List<Long> actual = caseService.getSearchResult("shortId", "name", 0, 10, "caregiver",
+        List<Long> actual = caseService.getCPSearchResult("shortId", "name", 0, 10, "caregiver",
                 null);
 
         assertThat("Should return id list", actual, is(Arrays.asList(new Long[]{10000L, 10001L,

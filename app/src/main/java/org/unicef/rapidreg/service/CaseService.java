@@ -28,6 +28,7 @@ import java.sql.Date;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import static org.unicef.rapidreg.model.RecordModel.EMPTY_AGE;
@@ -86,8 +87,8 @@ public class CaseService extends RecordService {
         return caseDao.getCaseByUniqueId(uniqueId);
     }
 
-    public List<Long> getSearchResult(String shortId, String name, int ageFrom, int ageTo,
-                                      String caregiver, Date date) {
+    public List<Long> getCPSearchResult(String shortId, String name, int ageFrom, int ageTo,
+                                        String caregiver, Date date) {
         ConditionGroup conditionGroup = ConditionGroup.clause();
         conditionGroup.and(Condition.column(NameAlias.builder(RecordModel.COLUMN_SHORT_ID).build())
                 .like(getWrappedCondition(shortId)));
@@ -106,6 +107,23 @@ public class CaseService extends RecordService {
         if (date != null) {
             conditionGroup.and(Condition.column(NameAlias.builder(Case.COLUMN_REGISTRATION_DATE)
                     .build()).eq(date));
+        }
+
+        return extractIds(caseDao.getCaseListByConditionGroup(conditionGroup));
+    }
+
+    public List<Long> getGBVSearchResult(String shortId, String name, String location, Date registrationDate) {
+        ConditionGroup conditionGroup = ConditionGroup.clause();
+        conditionGroup.and(Condition.column(NameAlias.builder(RecordModel.COLUMN_SHORT_ID).build())
+                .like(getWrappedCondition(shortId)));
+        conditionGroup.and(Condition.column(NameAlias.builder(RecordModel.COLUMN_NAME).build())
+                .like(getWrappedCondition(name)));
+        conditionGroup.and(Condition.column(NameAlias.builder(RecordModel.COLUMN_LOCATION).build())
+                .like(getWrappedCondition(location)));
+
+        if (registrationDate != null) {
+            conditionGroup.and(Condition.column(NameAlias.builder(Case.COLUMN_REGISTRATION_DATE)
+                    .build()).eq(registrationDate));
         }
 
         return extractIds(caseDao.getCaseListByConditionGroup(conditionGroup));
@@ -157,6 +175,8 @@ public class CaseService extends RecordService {
         child.setCreatedBy(username);
         child.setOwnedBy(username);
         child.setModuleId(itemValues.getAsString(MODULE));
+        String location = itemValues.has(LOCATION) ? "" : itemValues.getAsString(LOCATION);
+        child.setLocation(location);
 
         Case savedCase = caseDao.save(child);
         savePhoto(savedCase, photoPaths);
@@ -181,12 +201,14 @@ public class CaseService extends RecordService {
         child.setLastUpdatedDate(new Date(Calendar.getInstance().getTimeInMillis()));
         child.setContent(caseBlob);
         child.setName(getName(itemValues));
-        setSyncedStatus(child);
+        String location = itemValues.has(LOCATION) ? "" : itemValues.getAsString(LOCATION);
+        child.setLocation(location);
         int age = itemValues.getAsInt(AGE) != null ? itemValues.getAsInt(AGE) : 0;
         child.setAge(age);
         child.setCaregiver(getCaregiverName(itemValues));
         child.setRegistrationDate(Utils.getRegisterDate(itemValues.getAsString(REGISTRATION_DATE)));
         child.setAudio(audioFileDefault);
+        setSyncedStatus(child);
 
         child = caseDao.update(child);
 
