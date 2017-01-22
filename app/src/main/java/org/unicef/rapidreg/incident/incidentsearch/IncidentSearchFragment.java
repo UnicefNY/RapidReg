@@ -42,6 +42,30 @@ public class IncidentSearchFragment extends RecordSearchFragment {
         ageField.setVisibility(View.VISIBLE);
         typeOfViolenceField.setVisibility(View.VISIBLE);
         locationField.setVisibility(View.VISIBLE);
+
+        initTypeOfViolenceField();
+    }
+
+    private void initTypeOfViolenceField() {
+        final List<String> typeOfViolenceVals = incidentSearchPresenter.getViolenceTypeList();
+        typeOfViolence.setAdapter(generateTypeOfViolenceListAdapter(typeOfViolenceVals));
+
+        typeOfViolence.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                typeOfViolenceVal = typeOfViolenceVals.get(position);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                typeOfViolenceVal = "";
+            }
+        });
+    }
+
+    private SpinnerAdapter generateTypeOfViolenceListAdapter(List<String> violenceTypeList) {
+        StringSpinnerAdapter adapter = new StringSpinnerAdapter(getActivity(), R.layout.string_list_spinner_opened, violenceTypeList);
+        return adapter;
     }
 
     @Override

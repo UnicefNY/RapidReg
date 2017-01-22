@@ -91,7 +91,7 @@ public abstract class RecordListFragment extends MvpFragment<RecordListView, Rec
         recordListAdapter.toggleViews(isShow);
     }
 
-    protected void showSyncFormDialog(String message) {
+    public void showSyncFormDialog(String message) {
         RecordActivity activity = (RecordActivity) getActivity();
         if (activity.isFormSyncFail()) {
             Toast.makeText(activity, R.string.forms_is_syncing_msg, Toast.LENGTH_SHORT)
