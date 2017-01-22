@@ -39,10 +39,16 @@ public class StringSpinnerAdapter extends ArrayAdapter<String> {
         int layoutId = isDropDownView ? R.layout.string_list_spinner_opened : R.layout.string_list_spinner_closed;
         View view = inflater.inflate(layoutId, parent, false);
 
-        TextView orderName = (TextView) view.findViewById(R.id.string_value);
-
-        orderName.setText(resource);
+        if (isDropDownView) {
+            TextView orderName = (TextView) view.findViewById(R.id.string_value);
+            orderName.setText(resource);
+        }
 
         return view;
+    }
+
+    public void setValue(View view, String value) {
+        TextView orderName = (TextView) view.findViewById(R.id.string_value);
+        orderName.setText(value);
     }
 }

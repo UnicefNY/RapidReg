@@ -83,12 +83,15 @@ public class IncidentSearchFragment extends RecordSearchFragment {
 
     private void initTypeOfViolenceField() {
         final List<String> typeOfViolenceVals = incidentSearchPresenter.getViolenceTypeList();
-        typeOfViolence.setAdapter(generateTypeOfViolenceListAdapter(typeOfViolenceVals));
+        typeOfViolenceVals.add(0, null);
+        final StringSpinnerAdapter adapter = generateTypeOfViolenceListAdapter(typeOfViolenceVals);
+        typeOfViolence.setAdapter(adapter);
 
         typeOfViolence.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 typeOfViolenceVal = typeOfViolenceVals.get(position);
+                adapter.setValue(view, typeOfViolenceVal);
             }
 
             @Override
@@ -98,7 +101,7 @@ public class IncidentSearchFragment extends RecordSearchFragment {
         });
     }
 
-    private SpinnerAdapter generateTypeOfViolenceListAdapter(List<String> violenceTypeList) {
+    private StringSpinnerAdapter generateTypeOfViolenceListAdapter(List<String> violenceTypeList) {
         StringSpinnerAdapter adapter = new StringSpinnerAdapter(getActivity(), R.layout.string_list_spinner_opened, violenceTypeList);
         return adapter;
     }
