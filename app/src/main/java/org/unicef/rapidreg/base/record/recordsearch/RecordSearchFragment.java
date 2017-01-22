@@ -40,6 +40,7 @@ import butterknife.OnClick;
 import butterknife.OnTextChanged;
 
 import static org.unicef.rapidreg.base.record.recordsearch.RecordSearchPresenter.*;
+import static org.unicef.rapidreg.model.RecordModel.EMPTY_AGE;
 
 public abstract class RecordSearchFragment extends MvpFragment<RecordListView, RecordSearchPresenter>
         implements RecordListView {

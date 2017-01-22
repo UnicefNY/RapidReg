@@ -34,6 +34,9 @@ public class IncidentPresenter extends RecordPresenter {
         incidentFormService.saveOrUpdate(incidentForm);
     }
 
+    public boolean isFormReady() {
+        return incidentFormService.isReady();
+    }
 
     public void loadIncidentForm(String cookie, final String moduleId) {
         authService.getIncidentForm(cookie,

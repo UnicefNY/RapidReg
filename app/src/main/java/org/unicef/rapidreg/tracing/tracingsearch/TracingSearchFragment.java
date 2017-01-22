@@ -7,6 +7,7 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Spinner;
 
 import org.unicef.rapidreg.R;
 import org.unicef.rapidreg.base.record.recordlist.RecordListAdapter;
