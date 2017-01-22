@@ -8,7 +8,7 @@ import retrofit2.Response;
 import rx.Observable;
 
 public interface SyncIncidentService {
-    Response<JsonElement> uploadJsonProfile(Incident qitem);
+    Response<JsonElement> uploadJsonProfile(Incident item);
 
     Observable<Response<JsonElement>> getIds(String lastUpdate, boolean isMobile);
 

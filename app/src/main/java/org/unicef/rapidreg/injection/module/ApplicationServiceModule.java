@@ -1,11 +1,8 @@
 package org.unicef.rapidreg.injection.module;
 
-import android.app.Application;
-import android.content.Context;
 import android.net.ConnectivityManager;
 import android.telephony.TelephonyManager;
 
-import org.unicef.rapidreg.injection.ApplicationContext;
 import org.unicef.rapidreg.repository.CaseDao;
 import org.unicef.rapidreg.repository.CaseFormDao;
 import org.unicef.rapidreg.repository.CasePhotoDao;
@@ -23,6 +20,7 @@ import org.unicef.rapidreg.service.IncidentService;
 import org.unicef.rapidreg.service.LoginService;
 import org.unicef.rapidreg.service.RecordService;
 import org.unicef.rapidreg.service.SyncCaseService;
+import org.unicef.rapidreg.service.SyncIncidentService;
 import org.unicef.rapidreg.service.SyncTracingService;
 import org.unicef.rapidreg.service.TracingFormService;
 import org.unicef.rapidreg.service.TracingPhotoService;
@@ -33,6 +31,7 @@ import org.unicef.rapidreg.service.impl.FormRemoteServiceImpl;
 import org.unicef.rapidreg.service.impl.IncidentFormServiceImpl;
 import org.unicef.rapidreg.service.impl.LoginServiceImpl;
 import org.unicef.rapidreg.service.impl.SyncCaseServiceImpl;
+import org.unicef.rapidreg.service.impl.SyncIncidentServiceImpl;
 import org.unicef.rapidreg.service.impl.SyncTracingServiceImpl;
 import org.unicef.rapidreg.service.impl.TracingFormServiceImpl;
 import org.unicef.rapidreg.service.impl.UserServiceImpl;
@@ -112,7 +111,7 @@ public class ApplicationServiceModule {
 
     @Provides
     @Singleton
-    public SyncCaseService provideSyncService(CasePhotoDao casePhotoDao) {
+    public SyncCaseService provideSyncCaseService(CasePhotoDao casePhotoDao) {
         return new SyncCaseServiceImpl(casePhotoDao);
     }
 
@@ -120,6 +119,12 @@ public class ApplicationServiceModule {
     @Singleton
     public SyncTracingService provideSyncTracingService(TracingPhotoDao tracingPhotoDao) {
         return new SyncTracingServiceImpl(tracingPhotoDao);
+    }
+
+    @Provides
+    @Singleton
+    public SyncIncidentService provideSyncIncidentService() {
+        return new SyncIncidentServiceImpl();
     }
 
     @Provides
