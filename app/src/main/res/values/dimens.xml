@@ -105,6 +105,7 @@
 
     <!--dialog text size-->
     <dimen name="dialog_text_relativ_size">0.35sp</dimen>
+    <dimen name="text_view_height">25dp</dimen>
     <!---->
 
 </resources>
