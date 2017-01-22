@@ -25,13 +25,7 @@ import java.util.Map;
 
 import javax.inject.Inject;
 
-import static org.unicef.rapidreg.base.record.recordsearch.RecordSearchPresenter.AGE_FROM;
-import static org.unicef.rapidreg.base.record.recordsearch.RecordSearchPresenter.AGE_TO;
-import static org.unicef.rapidreg.base.record.recordsearch.RecordSearchPresenter.ID;
-import static org.unicef.rapidreg.base.record.recordsearch.RecordSearchPresenter.LOCATION;
-import static org.unicef.rapidreg.base.record.recordsearch.RecordSearchPresenter.NAME;
-import static org.unicef.rapidreg.base.record.recordsearch.RecordSearchPresenter.SURVIVOR_CODE;
-import static org.unicef.rapidreg.base.record.recordsearch.RecordSearchPresenter.TYPE_OF_VIOLENCE;
+import static org.unicef.rapidreg.base.record.recordsearch.RecordSearchPresenter.CONSTANT.*;
 import static org.unicef.rapidreg.model.RecordModel.EMPTY_AGE;
 
 public class IncidentSearchFragment extends RecordSearchFragment {
