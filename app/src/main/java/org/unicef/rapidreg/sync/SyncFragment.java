@@ -134,7 +134,7 @@ public class SyncFragment extends MvpFragment<SyncView, BaseSyncPresenter> imple
     }
 
     @Override
-    public BaseSyncPresenter createPresenter() {
+    public BaseSyncPresenter createPresenter() {        ///////////TODO
         User.Role roleType = PrimeroAppConfiguration.getCurrentUser().getRoleType();
         if (roleType == User.Role.CP) {
             return cpSyncPresenter;

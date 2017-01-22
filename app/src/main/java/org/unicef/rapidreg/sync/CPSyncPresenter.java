@@ -316,7 +316,7 @@ public class CPSyncPresenter extends BaseSyncPresenter {
         GregorianCalendar cal = new GregorianCalendar(2015, 1, 1);
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.US);
         final String time = sdf.format(cal.getTime());
-        final List<JsonObject> objects = new ArrayList<>();
+        final List<JsonObject> downList = new ArrayList<>();
         final ProgressDialog loadingDialog = ProgressDialog.show(context, "", "Fetching case " +
                 "amount from web " +
                 "server...", true);
@@ -334,11 +334,11 @@ public class CPSyncPresenter extends BaseSyncPresenter {
                                                 .getAsString(),
                                         jsonObject.get("_rev").getAsString());
                                 if (!hasSameRev) {
-                                    objects.add(jsonObject);
+                                    downList.add(jsonObject);
                                 }
                             }
                         }
-                        return objects;
+                        return downList;
                     }
                 })
                 .subscribeOn(Schedulers.io())
@@ -367,7 +367,7 @@ public class CPSyncPresenter extends BaseSyncPresenter {
                 }, new Action0() {
                     @Override
                     public void call() {
-                        downloadCases(objects);
+                        downloadCases(downList);
                     }
                 });
     }
@@ -420,6 +420,7 @@ public class CPSyncPresenter extends BaseSyncPresenter {
                     public List<JsonObject> call(Response<JsonElement> response) {
                         JsonObject responseJsonObject = response.body().getAsJsonObject();
                         List<JsonObject> photoKeys = new ArrayList<>();
+
                         if (responseJsonObject.has("photo_keys")) {
                             JsonArray jsonArray = responseJsonObject.get("photo_keys")
                                     .getAsJsonArray();
@@ -663,14 +664,16 @@ public class CPSyncPresenter extends BaseSyncPresenter {
 
     private void postPullCases(JsonObject casesJsonObject) {
         String internalId = casesJsonObject.get("_id").getAsString();
-        Case item = caseService.getByInternalId(internalId);
         String newRev = casesJsonObject.get("_rev").getAsString();
+
+        Case item = caseService.getByInternalId(internalId);
         if (item != null) {
             item.setInternalRev(newRev);
             item.setSynced(true);
             item.setContent(new Blob(casesJsonObject.toString().getBytes()));
             item.setName(casesJsonObject.get("name").getAsString());
             item.setAge(casesJsonObject.get("age").getAsInt());
+            item.setOwnedBy(casesJsonObject.get("owned_by").getAsString());
             //TODO set caregiver
             if (casesJsonObject.get("caregiver") != null) {
                 item.setCaregiver(casesJsonObject.get("caregiver").getAsString());
@@ -686,10 +689,14 @@ public class CPSyncPresenter extends BaseSyncPresenter {
             item.setRegistrationDate(
                     Utils.getRegisterDate(casesJsonObject.get("registration_date").getAsString()));
             item.setCreatedBy(casesJsonObject.get("created_by").getAsString());
+            item.setOwnedBy(casesJsonObject.get("owned_by").getAsString());
+
             item.setLastSyncedDate(Calendar.getInstance().getTime());
             item.setLastUpdatedDate(Calendar.getInstance().getTime());
             item.setSynced(true);
+
             item.setContent(new Blob(casesJsonObject.toString().getBytes()));
+
             item.setName(casesJsonObject.get("name").getAsString());
             item.setAge(casesJsonObject.get("age").getAsInt());
             //TODO set caregiver

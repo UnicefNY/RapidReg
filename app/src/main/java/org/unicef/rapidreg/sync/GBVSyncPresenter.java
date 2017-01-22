@@ -13,6 +13,7 @@ import com.google.gson.JsonObject;
 import com.raizlabs.android.dbflow.data.Blob;
 
 import org.unicef.rapidreg.R;
+import org.unicef.rapidreg.service.SyncIncidentService;
 import org.unicef.rapidreg.injection.ActivityContext;
 import org.unicef.rapidreg.model.Case;
 import org.unicef.rapidreg.model.Incident;
@@ -50,7 +51,8 @@ public class GBVSyncPresenter extends BaseSyncPresenter {
 
     private Context context;
     private SyncCaseService syncCaseService;
-    private SyncTracingService syncTracingService;
+    private SyncIncidentService syncIncidentService;
+
     private IncidentService incidentService;
     private CaseService caseService;
 
@@ -71,12 +73,12 @@ public class GBVSyncPresenter extends BaseSyncPresenter {
     }
 
     @Inject
-    public GBVSyncPresenter(@ActivityContext Context context, SyncCaseService syncService, SyncTracingService
-            syncTracingService, CaseService caseService, IncidentService incidentService) {
+    public GBVSyncPresenter(@ActivityContext Context context, SyncCaseService syncService, SyncIncidentService
+            syncIncidentService, CaseService caseService, IncidentService incidentService) {
         this.context = context;
         this.syncCaseService = syncService;
         this.caseService = caseService;
-        this.syncTracingService = syncTracingService;
+        this.syncIncidentService = syncIncidentService;
         this.incidentService = incidentService;
 
         cases = caseService.getAll();
@@ -138,44 +140,6 @@ public class GBVSyncPresenter extends BaseSyncPresenter {
                         return new Pair<>(item, syncCaseService.uploadCaseJsonProfile(item));
                     }
                 })
-                .map(new Func1<Pair<Case, Response<JsonElement>>, Pair<Case,
-                        Response<JsonElement>>>() {
-                    @Override
-                    public Pair<Case, Response<JsonElement>> call(Pair<Case,
-                            Response<JsonElement>> pair) {
-                        syncCaseService.uploadAudio(pair.first);
-                        return pair;
-                    }
-                })
-                .map(new Func1<Pair<Case, Response<JsonElement>>, Pair<Case,
-                        Response<JsonElement>>>() {
-                    @Override
-                    public Pair<Case, Response<JsonElement>> call(Pair<Case,
-                            Response<JsonElement>> caseResponsePair) {
-                        try {
-                            Response<JsonElement> jsonElementResponse = caseResponsePair.second;
-                            JsonArray photoKeys = jsonElementResponse.body().getAsJsonObject()
-                                    .get("photo_keys")
-                                    .getAsJsonArray();
-                            String id = jsonElementResponse.body().getAsJsonObject().get("_id")
-                                    .getAsString();
-                            okhttp3.Response response = null;
-                            if (photoKeys.size() != 0) {
-                                Call<Response<JsonElement>> call = syncCaseService.deleteCasePhotos
-                                        (id, photoKeys);
-                                response = call.execute().raw();
-                            }
-
-                            if (response == null || response.isSuccessful()) {
-                                syncCaseService.uploadCasePhotos(caseResponsePair.first);
-                            }
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                            throw new RuntimeException(e);
-                        }
-                        return caseResponsePair;
-                    }
-                })
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Action1<Pair<Case, Response<JsonElement>>>() {
@@ -217,45 +181,7 @@ public class GBVSyncPresenter extends BaseSyncPresenter {
                 .map(new Func1<Incident, Pair<Incident, Response<JsonElement>>>() {
                     @Override
                     public Pair<Incident, Response<JsonElement>> call(Incident item) {
-                        return new Pair<>(item, syncTracingService.uploadJsonProfile(item));
-                    }
-                })
-                .map(new Func1<Pair<Incident, Response<JsonElement>>, Pair<Incident,
-                        Response<JsonElement>>>() {
-                    @Override
-                    public Pair<Incident, Response<JsonElement>> call(Pair<Incident,
-                            Response<JsonElement>> pair) {
-                        syncTracingService.uploadAudio(pair.first);
-                        return pair;
-                    }
-                })
-                .map(new Func1<Pair<Incident, Response<JsonElement>>, Pair<Incident,
-                        Response<JsonElement>>>() {
-                    @Override
-                    public Pair<Incident, Response<JsonElement>> call(Pair<Incident,
-                            Response<JsonElement>> tracingResponsePair) {
-                        try {
-                            Response<JsonElement> jsonElementResponse = tracingResponsePair.second;
-                            JsonArray photoKeys = jsonElementResponse.body().getAsJsonObject()
-                                    .get("photo_keys")
-                                    .getAsJsonArray();
-                            String id = jsonElementResponse.body().getAsJsonObject().get("_id")
-                                    .getAsString();
-                            okhttp3.Response response = null;
-                            if (photoKeys.size() != 0) {
-                                Call<Response<JsonElement>> call = syncTracingService
-                                        .deletePhotos(id, photoKeys);
-                                response = call.execute().raw();
-                            }
-
-                            if (response == null || response.isSuccessful()) {
-                                syncTracingService.uploadPhotos(tracingResponsePair.first);
-                            }
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                            throw new RuntimeException(e);
-                        }
-                        return tracingResponsePair;
+                        return new Pair<>(item, syncIncidentService.uploadJsonProfile(item));
                     }
                 })
                 .subscribeOn(Schedulers.io())
@@ -453,7 +379,7 @@ public class GBVSyncPresenter extends BaseSyncPresenter {
         final ProgressDialog loadingDialog = ProgressDialog.show(context, "", "Fetching tracing " +
                 "amount from web " +
                 "server...", true);
-        syncTracingService.getIds(time, true)
+        syncIncidentService.getIds(time, true)
                 .map(new Func1<Response<JsonElement>, List<JsonObject>>() {
                     @Override
                     public List<JsonObject> call(Response<JsonElement> jsonElementResponse) {
@@ -517,7 +443,7 @@ public class GBVSyncPresenter extends BaseSyncPresenter {
                     @Override
                     public Response<JsonElement> call(JsonObject jsonObject) {
 
-                        Observable<Response<JsonElement>> responseObservable = syncTracingService
+                        Observable<Response<JsonElement>> responseObservable = syncIncidentService
                                 .get(jsonObject.get("_id")
                                         .getAsString(), "en", true);
                         Response<JsonElement> response = responseObservable.toBlocking().first();
