@@ -2,16 +2,11 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:gravity="center_horizontal"
-    android:padding="@dimen/size_10"
-    android:weightSum="20">
+    android:gravity="center_horizontal">
 
-    <TextView
-        android:id="@+id/string_value"
-        android:layout_width="0dp"
+    <org.unicef.rapidreg.widgets.ClearableEditText
+        android:id="@+id/string_value_closed"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="19"
-        android:textColor="@color/primero_font_dark"
-        android:textSize="@dimen/text_size_16" />
-
+        android:background="@color/white" />
 </LinearLayout>

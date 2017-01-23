@@ -102,6 +102,18 @@ public class ClearableEditText extends RelativeLayout {
         }
     }
 
+    public void setHint(String hint) {
+        editView.setHint(hint);
+    }
+
+    public void setText(String content) {
+        editView.setText(content);
+    }
+
+    public void setSingleLine(boolean isSingleLine) {
+        editView.setSingleLine(isSingleLine);
+    }
+
     private void setInputType(AttributeSet attrs) {
         String inputType = attrs.getAttributeValue(NAMESPACE, INPUT_TYPE);
 
