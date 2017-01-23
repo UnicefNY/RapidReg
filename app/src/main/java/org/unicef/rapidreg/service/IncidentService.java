@@ -10,11 +10,12 @@ import com.raizlabs.android.dbflow.sql.language.NameAlias;
 import com.raizlabs.android.dbflow.sql.language.SQLCondition;
 
 import org.unicef.rapidreg.PrimeroAppConfiguration;
-import org.unicef.rapidreg.repository.IncidentDao;
-import org.unicef.rapidreg.repository.impl.IncidentDaoImpl;
 import org.unicef.rapidreg.model.Incident;
 import org.unicef.rapidreg.model.RecordModel;
+import org.unicef.rapidreg.repository.IncidentDao;
+import org.unicef.rapidreg.repository.impl.IncidentDaoImpl;
 import org.unicef.rapidreg.service.cache.ItemValuesMap;
+import org.unicef.rapidreg.utils.TextUtils;
 import org.unicef.rapidreg.utils.Utils;
 
 import java.io.IOException;
@@ -22,7 +23,6 @@ import java.sql.Date;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
-import java.util.Map;
 
 import static org.unicef.rapidreg.model.RecordModel.EMPTY_AGE;
 
@@ -51,35 +51,39 @@ public class IncidentService extends RecordService {
     }
 
     public List<Incident> getAll() {
-        return incidentDao.getAllIncidentsOrderByDate(false, PrimeroAppConfiguration.getCurrentUser().getUsername());
-    }
-
-    public List<Long> getAllIds() {
-        return incidentDao.getAllIds(PrimeroAppConfiguration.getCurrentUser().getUsername());
+        return incidentDao.getAllIncidentsOrderByDate(false, PrimeroAppConfiguration.getCurrentUsername(), TextUtils
+                .lintUrl(PrimeroAppConfiguration.getApiBaseUrl()));
     }
 
     public List<Long> getAllOrderByDateASC() {
-        return extractIds(incidentDao.getAllIncidentsOrderByDate(true, PrimeroAppConfiguration.getCurrentUser().getUsername()));
+        return extractIds(incidentDao.getAllIncidentsOrderByDate(true, PrimeroAppConfiguration.getCurrentUsername(),
+                TextUtils.lintUrl(PrimeroAppConfiguration.getApiBaseUrl())));
     }
 
     public List<Long> getAllOrderByDateDES() {
-        return extractIds(incidentDao.getAllIncidentsOrderByDate(false, PrimeroAppConfiguration.getCurrentUser().getUsername()));
+        return extractIds(incidentDao.getAllIncidentsOrderByDate(false, PrimeroAppConfiguration.getCurrentUsername(),
+                TextUtils.lintUrl(PrimeroAppConfiguration.getApiBaseUrl())));
     }
 
     public List<Long> getAllOrderByAgeASC() {
-        return extractIds(incidentDao.getAllIncidentsOrderByAge(true, PrimeroAppConfiguration.getCurrentUser().getUsername()));
+        return extractIds(incidentDao.getAllIncidentsOrderByAge(true, PrimeroAppConfiguration.getCurrentUsername(),
+                TextUtils.lintUrl(PrimeroAppConfiguration.getApiBaseUrl())));
     }
 
     public List<Long> getAllOrderByAgeDES() {
-        return extractIds(incidentDao.getAllIncidentsOrderByAge(false, PrimeroAppConfiguration.getCurrentUser().getUsername()));
+        return extractIds(incidentDao.getAllIncidentsOrderByAge(false, PrimeroAppConfiguration.getCurrentUsername(),
+                TextUtils.lintUrl(PrimeroAppConfiguration.getApiBaseUrl())));
     }
 
-    public List<Long> getSearchResult(String uniqueId, String survivorCode, int ageFrom, int ageTo, String typeOfViolence, String location) {
-        ConditionGroup searchCondition = getSearchCondition(uniqueId, survivorCode, ageFrom, ageTo, typeOfViolence, location);
+    public List<Long> getSearchResult(String uniqueId, String survivorCode, int ageFrom, int ageTo, String
+            typeOfViolence, String location) {
+        ConditionGroup searchCondition = getSearchCondition(uniqueId, survivorCode, ageFrom, ageTo, typeOfViolence,
+                location);
         return extractIds(incidentDao.getIncidentListByConditionGroup(searchCondition));
     }
 
-    private ConditionGroup getSearchCondition(String uniqueId, String survivorCode, int ageFrom, int ageTo, String typeOfViolence, String location) {
+    private ConditionGroup getSearchCondition(String uniqueId, String survivorCode, int ageFrom, int ageTo, String
+            typeOfViolence, String location) {
         ConditionGroup conditionGroup = ConditionGroup.clause();
         conditionGroup.and(Condition.column(NameAlias.builder(RecordModel.COLUMN_UNIQUE_ID).build())
                 .like(getWrappedCondition(uniqueId)));
@@ -110,7 +114,6 @@ public class IncidentService extends RecordService {
     }
 
     public Incident saveOrUpdate(ItemValuesMap itemValues) throws IOException {
-
         if (itemValues.getAsString(INCIDENT_ID) == null) {
             return save(itemValues);
         } else {
@@ -146,6 +149,7 @@ public class IncidentService extends RecordService {
         incident.setTypeOfViolence(getTypeOfViolence(itemValues));
         incident.setLocation(getLocation(itemValues));
         int age = itemValues.has(AGE) ? itemValues.getAsInt(AGE) : EMPTY_AGE;
+        incident.setUrl(TextUtils.lintUrl(PrimeroAppConfiguration.getApiBaseUrl()));
         incident.setAge(age);
         incident.setCaregiver(getCaregiverName(itemValues));
         incident.setRegistrationDate(Utils.getRegisterDate(itemValues.getAsString(DATE_OF_INTERVIEW)));

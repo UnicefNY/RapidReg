@@ -1,15 +1,12 @@
 package org.unicef.rapidreg.repository.impl;
 
 import com.raizlabs.android.dbflow.list.FlowQueryList;
-import com.raizlabs.android.dbflow.sql.language.Condition;
 import com.raizlabs.android.dbflow.sql.language.ConditionGroup;
-import com.raizlabs.android.dbflow.sql.language.NameAlias;
 import com.raizlabs.android.dbflow.sql.language.SQLite;
 
-import org.unicef.rapidreg.repository.CaseDao;
 import org.unicef.rapidreg.model.Case;
 import org.unicef.rapidreg.model.Case_Table;
-import org.unicef.rapidreg.model.RecordModel;
+import org.unicef.rapidreg.repository.CaseDao;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,14 +19,13 @@ public class CaseDaoImpl implements CaseDao {
     }
 
     @Override
-    public List<Case> getAllCasesOrderByDate(boolean isASC, String ownedBy) {
-        return isASC ? getCasesByDateASC(ownedBy) : getCasesByDateDES(ownedBy);
+    public List<Case> getAllCasesOrderByDate(boolean isASC, String ownedBy, String url) {
+        return isASC ? getCasesByDateASC(ownedBy, url) : getCasesByDateDES(ownedBy, url);
     }
 
     @Override
-    public List<Case> getAllCasesOrderByAge(boolean isASC, String ownedBy) {
-        return isASC ? getCasesByAgeASC(ownedBy) : getCasesByAgeDES(ownedBy);
-
+    public List<Case> getAllCasesOrderByAge(boolean isASC, String ownedBy, String url) {
+        return isASC ? getCasesByAgeASC(ownedBy, url) : getCasesByAgeDES(ownedBy, url);
     }
 
     @Override
@@ -56,16 +52,6 @@ public class CaseDaoImpl implements CaseDao {
     }
 
     @Override
-    public List<Long> getAllIds() {
-        List<Long> result = new ArrayList<>();
-        FlowQueryList<Case> cases = SQLite.select().from(Case.class).flowQueryList();
-        for (Case aCase : cases) {
-            result.add(aCase.getId());
-        }
-        return result;
-    }
-
-    @Override
     public Case save(Case childCase) {
         childCase.save();
         return childCase;
@@ -77,38 +63,42 @@ public class CaseDaoImpl implements CaseDao {
         return childCase;
     }
 
-    private List<Case> getCasesByAgeASC(String ownedBy) {
+    private List<Case> getCasesByAgeASC(String ownedBy, String url) {
         return SQLite
                 .select()
                 .from(Case.class)
                 .where(Case_Table.owned_by.eq(ownedBy))
+                .and(Case_Table.url.eq(url))
                 .orderBy(Case_Table.age, true)
                 .queryList();
     }
 
-    private List<Case> getCasesByAgeDES(String ownedBy) {
+    private List<Case> getCasesByAgeDES(String ownedBy, String url) {
         return SQLite
                 .select()
                 .from(Case.class)
                 .where(Case_Table.owned_by.eq(ownedBy))
+                .and(Case_Table.url.eq(url))
                 .orderBy(Case_Table.age, false)
                 .queryList();
     }
 
-    private List<Case> getCasesByDateASC(String ownedBy) {
+    private List<Case> getCasesByDateASC(String ownedBy, String url) {
         return SQLite
                 .select()
                 .from(Case.class)
                 .where(Case_Table.owned_by.eq(ownedBy))
+                .and(Case_Table.url.eq(url))
                 .orderBy(Case_Table.registration_date, true)
                 .queryList();
     }
 
-    private List<Case> getCasesByDateDES(String ownedBy) {
+    private List<Case> getCasesByDateDES(String ownedBy, String url) {
         return SQLite
                 .select()
                 .from(Case.class)
                 .where(Case_Table.owned_by.eq(ownedBy))
+                .and(Case_Table.url.eq(url))
                 .orderBy(Case_Table.registration_date, false)
                 .queryList();
     }

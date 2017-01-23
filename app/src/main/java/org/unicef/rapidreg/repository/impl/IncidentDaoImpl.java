@@ -1,17 +1,12 @@
 package org.unicef.rapidreg.repository.impl;
 
-import com.raizlabs.android.dbflow.list.FlowQueryList;
-import com.raizlabs.android.dbflow.sql.language.Condition;
 import com.raizlabs.android.dbflow.sql.language.ConditionGroup;
-import com.raizlabs.android.dbflow.sql.language.NameAlias;
 import com.raizlabs.android.dbflow.sql.language.SQLite;
 
-import org.unicef.rapidreg.repository.IncidentDao;
 import org.unicef.rapidreg.model.Incident;
 import org.unicef.rapidreg.model.Incident_Table;
-import org.unicef.rapidreg.model.RecordModel;
+import org.unicef.rapidreg.repository.IncidentDao;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class IncidentDaoImpl implements IncidentDao {
@@ -22,14 +17,13 @@ public class IncidentDaoImpl implements IncidentDao {
     }
 
     @Override
-    public List<Incident> getAllIncidentsOrderByDate(boolean isASC, String ownedBy) {
-        return isASC ? getIncidentsByDateASC(ownedBy) : getIncidentsByDateDES(ownedBy);
+    public List<Incident> getAllIncidentsOrderByDate(boolean isASC, String ownedBy, String url) {
+        return isASC ? getIncidentsByDateASC(ownedBy, url) : getIncidentsByDateDES(ownedBy, url);
     }
 
     @Override
-    public List<Incident> getAllIncidentsOrderByAge(boolean isASC, String ownedBy) {
-        return isASC ? getIncidentsByAgeASC(ownedBy) : getIncidentsByAgeDES(ownedBy);
-
+    public List<Incident> getAllIncidentsOrderByAge(boolean isASC, String ownedBy, String url) {
+        return isASC ? getIncidentsByAgeASC(ownedBy, url) : getIncidentsByAgeDES(ownedBy, url);
     }
 
     @Override
@@ -57,16 +51,6 @@ public class IncidentDaoImpl implements IncidentDao {
     }
 
     @Override
-    public List<Long> getAllIds(String ownedBy) {
-        List<Long> result = new ArrayList<>();
-        FlowQueryList<Incident> incidents = SQLite.select().from(Incident.class).flowQueryList();
-        for (Incident aIncident : incidents) {
-            result.add(aIncident.getId());
-        }
-        return result;
-    }
-
-    @Override
     public Incident save(Incident incident) {
         incident.save();
         return incident;
@@ -78,38 +62,42 @@ public class IncidentDaoImpl implements IncidentDao {
         return incident;
     }
 
-    private List<Incident> getIncidentsByAgeASC(String ownedBy) {
+    private List<Incident> getIncidentsByAgeASC(String ownedBy, String url) {
         return SQLite
                 .select()
                 .from(Incident.class)
                 .where(ConditionGroup.clause().and(Incident_Table.owned_by.eq(ownedBy)))
+                .and(Incident_Table.url.eq(url))
                 .orderBy(Incident_Table.age, true)
                 .queryList();
     }
 
-    private List<Incident> getIncidentsByAgeDES(String ownedBy) {
+    private List<Incident> getIncidentsByAgeDES(String ownedBy, String url) {
         return SQLite
                 .select()
                 .from(Incident.class)
                 .where(Incident_Table.owned_by.eq(ownedBy))
+                .and(Incident_Table.url.eq(url))
                 .orderBy(Incident_Table.age, false)
                 .queryList();
     }
 
-    private List<Incident> getIncidentsByDateASC(String ownedBy) {
+    private List<Incident> getIncidentsByDateASC(String ownedBy, String url) {
         return SQLite
                 .select()
                 .from(Incident.class)
                 .where(Incident_Table.owned_by.eq(ownedBy))
+                .and(Incident_Table.url.eq(url))
                 .orderBy(Incident_Table.registration_date, true)
                 .queryList();
     }
 
-    private List<Incident> getIncidentsByDateDES(String ownedBy) {
+    private List<Incident> getIncidentsByDateDES(String ownedBy, String url) {
         return SQLite
                 .select()
                 .from(Incident.class)
                 .where(Incident_Table.owned_by.eq(ownedBy))
+                .and(Incident_Table.url.eq(url))
                 .orderBy(Incident_Table.registration_date, false)
                 .queryList();
     }

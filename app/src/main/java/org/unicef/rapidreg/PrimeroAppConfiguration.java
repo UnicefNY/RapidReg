@@ -3,11 +3,11 @@ package org.unicef.rapidreg;
 import android.provider.Settings;
 
 import org.unicef.rapidreg.model.User;
+import org.unicef.rapidreg.utils.TextUtils;
 
 import java.util.Locale;
 
 public class PrimeroAppConfiguration {
-    //    public static final String API_BASE_URL = "http://10.29.3.184:3000";
     private static String apiBaseUrl = "https://10.29.3.184:8443";
 
     private static String cookie = null;
@@ -21,6 +21,7 @@ public class PrimeroAppConfiguration {
     }
 
     public static void setApiBaseUrl(String apiBaseUrl) {
+        apiBaseUrl = TextUtils.lintUrl(apiBaseUrl);
         PrimeroAppConfiguration.apiBaseUrl = apiBaseUrl;
     }
 
@@ -30,6 +31,10 @@ public class PrimeroAppConfiguration {
 
     public static User getCurrentUser() {
         return currentUser;
+    }
+
+    public static String getCurrentUsername() {
+        return currentUser.getUsername();
     }
 
     public static void setCurrentUser(User user) {
