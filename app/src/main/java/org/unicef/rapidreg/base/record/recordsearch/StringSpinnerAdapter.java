@@ -1,6 +1,7 @@
 package org.unicef.rapidreg.base.record.recordsearch;
 
 import android.content.Context;
+import android.support.v4.app.FragmentActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,11 +16,13 @@ public class StringSpinnerAdapter extends ArrayAdapter<String> {
 
     private final List<String> resources;
     private final Context context;
+    private final String hintVal;
 
-    public StringSpinnerAdapter(Context context, int resource, List<String> resources) {
+    public StringSpinnerAdapter(Context context, int resource, List<String> resources, String hintVal) {
         super(context, resource, resources);
         this.resources = resources;
         this.context = context;
+        this.hintVal = hintVal;
     }
 
     @Override
@@ -39,9 +42,11 @@ public class StringSpinnerAdapter extends ArrayAdapter<String> {
         int layoutId = isDropDownView ? R.layout.string_list_spinner_opened : R.layout.string_list_spinner_closed;
         View view = inflater.inflate(layoutId, parent, false);
 
+        TextView orderName = (TextView) view.findViewById(R.id.string_value);
         if (isDropDownView) {
-            TextView orderName = (TextView) view.findViewById(R.id.string_value);
             orderName.setText(resource);
+        } else {
+            orderName.setHint(hintVal);
         }
 
         return view;

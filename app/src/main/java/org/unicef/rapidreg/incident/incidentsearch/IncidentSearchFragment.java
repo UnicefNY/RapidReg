@@ -2,14 +2,10 @@ package org.unicef.rapidreg.incident.incidentsearch;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.annotation.StringDef;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.Spinner;
-import android.widget.SpinnerAdapter;
 
 import org.unicef.rapidreg.R;
 import org.unicef.rapidreg.base.record.recordlist.RecordListAdapter;
@@ -17,7 +13,6 @@ import org.unicef.rapidreg.base.record.recordsearch.RecordSearchFragment;
 import org.unicef.rapidreg.base.record.recordsearch.RecordSearchPresenter;
 import org.unicef.rapidreg.base.record.recordsearch.StringSpinnerAdapter;
 import org.unicef.rapidreg.incident.incidentlist.IncidentListAdapter;
-import org.unicef.rapidreg.utils.StreamUtil;
 
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -37,6 +32,7 @@ public class IncidentSearchFragment extends RecordSearchFragment {
     IncidentListAdapter incidentListAdapter;
 
     private String typeOfViolenceVal = "";
+    private String locationVal = "";
 
     @Override
     public RecordSearchPresenter createPresenter() {
@@ -59,7 +55,7 @@ public class IncidentSearchFragment extends RecordSearchFragment {
         searchValues.put(AGE_FROM, ageFrom.getText().isEmpty() ? String.valueOf(EMPTY_AGE) : ageFrom.getText());
         searchValues.put(AGE_TO, ageTo.getText().isEmpty() ? String.valueOf(EMPTY_AGE) : ageTo.getText());
         searchValues.put(TYPE_OF_VIOLENCE, typeOfViolenceVal);
-        searchValues.put(LOCATION, location.getText());
+        searchValues.put(LOCATION, locationVal);
 
         return searchValues;
     }
@@ -73,12 +69,33 @@ public class IncidentSearchFragment extends RecordSearchFragment {
         locationField.setVisibility(View.VISIBLE);
 
         initTypeOfViolenceField();
+        initIncidentLocationField();
+    }
+
+    private void initIncidentLocationField() {
+        final List<String> locationVals = incidentSearchPresenter.getIncidentLocationList();
+        locationVals.add(0, "");
+        final StringSpinnerAdapter adapter = generateTypeOfViolenceListAdapter(locationVals, "Incident Location");
+        location.setAdapter(adapter);
+
+        location.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                locationVal = locationVals.get(position);
+                adapter.setValue(view, locationVal);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                locationVal = "";
+            }
+        });
     }
 
     private void initTypeOfViolenceField() {
         final List<String> typeOfViolenceVals = incidentSearchPresenter.getViolenceTypeList();
-        typeOfViolenceVals.add(0, null);
-        final StringSpinnerAdapter adapter = generateTypeOfViolenceListAdapter(typeOfViolenceVals);
+        typeOfViolenceVals.add(0, "");
+        final StringSpinnerAdapter adapter = generateTypeOfViolenceListAdapter(typeOfViolenceVals, "Type of Violence");
         typeOfViolence.setAdapter(adapter);
 
         typeOfViolence.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -95,8 +112,8 @@ public class IncidentSearchFragment extends RecordSearchFragment {
         });
     }
 
-    private StringSpinnerAdapter generateTypeOfViolenceListAdapter(List<String> violenceTypeList) {
-        StringSpinnerAdapter adapter = new StringSpinnerAdapter(getActivity(), R.layout.string_list_spinner_opened, violenceTypeList);
+    private StringSpinnerAdapter generateTypeOfViolenceListAdapter(List<String> violenceTypeList, String hintVal) {
+        StringSpinnerAdapter adapter = new StringSpinnerAdapter(getActivity(), R.layout.string_list_spinner_opened, violenceTypeList, hintVal);
         return adapter;
     }
 

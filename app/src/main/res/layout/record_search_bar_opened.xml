@@ -243,13 +243,11 @@
         android:layout_height="wrap_content"
         android:visibility="gone"
         android:orientation="vertical">
-        <org.unicef.rapidreg.widgets.ClearableEditText
+        <Spinner
             android:id="@+id/location"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/location"
-            android:maxLength="30"
-            android:singleLine="true" />
+            android:drawSelectorOnTop="true"/>
 
         <View
             android:layout_width="match_parent"
