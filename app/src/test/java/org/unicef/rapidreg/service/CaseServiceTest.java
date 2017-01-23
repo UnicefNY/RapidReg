@@ -13,12 +13,12 @@ import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 import org.unicef.rapidreg.PrimeroAppConfiguration;
-import org.unicef.rapidreg.repository.CaseDao;
-import org.unicef.rapidreg.repository.CasePhotoDao;
 import org.unicef.rapidreg.forms.Field;
 import org.unicef.rapidreg.forms.Section;
 import org.unicef.rapidreg.model.Case;
 import org.unicef.rapidreg.model.User;
+import org.unicef.rapidreg.repository.CaseDao;
+import org.unicef.rapidreg.repository.CasePhotoDao;
 import org.unicef.rapidreg.service.cache.ItemValuesMap;
 import org.unicef.rapidreg.utils.Utils;
 
@@ -34,6 +34,7 @@ import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.core.Is.is;
 import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.MockitoAnnotations.initMocks;
@@ -95,14 +96,18 @@ public class CaseServiceTest {
 
     @Test
     public void should_save_case_when_give_item_values() throws Exception {
-        Case expected = new Case();
-        expected.setUniqueId(UUID.randomUUID().toString());
-
-        when(caseDao.save(any(Case.class))).thenReturn(expected);
+        String url = "https://35.61.56.113:8443";
+        Mockito.when(PrimeroAppConfiguration.getApiBaseUrl()).thenReturn(url);
+        CaseService caseServiceSpy = spy(caseService);
+        String uuid = UUID.randomUUID().toString();
+        when(caseServiceSpy.generateUniqueId()).thenReturn(uuid);
         ItemValuesMap itemValues = new ItemValuesMap();
-        Case actual = caseService.save(itemValues, Collections.EMPTY_LIST);
+        Case actual = caseServiceSpy.save(itemValues, Collections.EMPTY_LIST);
+        when(caseDao.save(any(Case.class))).thenReturn(actual);
 
-        assertThat("Should have same uuid.", actual.getUniqueId(), is(UUID.randomUUID().toString()));
+        assertThat("Should have save url", actual.getUrl(), is(url));
+        assertThat("Should have save uuid.", actual.getUniqueId(), is(uuid));
+        verify(caseDao, times(1)).save(any(Case.class));
     }
 
     @Test

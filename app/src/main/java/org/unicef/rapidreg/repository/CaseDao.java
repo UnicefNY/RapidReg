@@ -9,9 +9,9 @@ import java.util.List;
 public interface CaseDao {
     Case getCaseByUniqueId(String id);
 
-    List<Case> getAllCasesOrderByDate(boolean isASC, String ownedBy);
+    List<Case> getAllCasesOrderByDate(boolean isASC, String ownedBy, String url);
 
-    List<Case> getAllCasesOrderByAge(boolean isASC, String ownedBy);
+    List<Case> getAllCasesOrderByAge(boolean isASC, String ownedBy, String url);
 
     List<Case> getCaseListByConditionGroup(ConditionGroup conditionGroup);
 
@@ -20,8 +20,6 @@ public interface CaseDao {
     Case getByInternalId(String id);
 
     Case getFirst();
-
-    List<Long> getAllIds();
 
     Case save(Case childCase);
 

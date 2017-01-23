@@ -10,9 +10,9 @@ public interface IncidentDao {
 
     Incident getIncidentByUniqueId(String id);
 
-    List<Incident> getAllIncidentsOrderByDate(boolean isASC, String ownedBy);
+    List<Incident> getAllIncidentsOrderByDate(boolean isASC, String ownedBy, String url);
 
-    List<Incident> getAllIncidentsOrderByAge(boolean isASC, String ownedBy);
+    List<Incident> getAllIncidentsOrderByAge(boolean isASC, String ownedBy, String url);
 
     List<Incident> getIncidentListByConditionGroup(ConditionGroup conditionGroup);
 
@@ -21,8 +21,6 @@ public interface IncidentDao {
     Incident getByInternalId(String id);
 
     Incident getFirst();
-
-    List<Long> getAllIds(String ownedBy);
 
     Incident save(Incident incident);
 

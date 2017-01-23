@@ -51,7 +51,8 @@ public class RecordModel extends BaseModel {
     private Date registrationDate;
     @Column(name = "created_by")
     private String createdBy;
-
+    @Column(name = "url")
+    private String url;
     @Column(name = "owned_by")
     private String ownedBy;
     @Column(name = "created_date")
@@ -73,6 +74,14 @@ public class RecordModel extends BaseModel {
     }
 
     public RecordModel() {
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
     }
 
     public long getId() {
@@ -246,26 +255,28 @@ public class RecordModel extends BaseModel {
     @Override
     public String toString() {
         return "RecordModel{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", age=" + age +
-                ", caregiver='" + caregiver + '\'' +
-                ", content=" + content +
-                ", audio=" + audio +
-                ", isSynced=" + isSynced +
-                ", syncLog='" + syncLog + '\'' +
-                ", internalId='" + internalId + '\'' +
-                ", internalRev='" + internalRev + '\'' +
-                ", uniqueId='" + uniqueId + '\'' +
-                ", shortId='" + shortId + '\'' +
-                ", registrationDate=" + registrationDate +
-                ", createdBy='" + createdBy + '\'' +
-                ", createDate=" + createDate +
-                ", lastUpdatedDate=" + lastUpdatedDate +
-                ", lastSyncedDate=" + lastSyncedDate +
+                "isAudioSynced=" + isAudioSynced +
+                ", moduleId='" + moduleId + '\'' +
                 ", type=" + type +
-                ", moduleId=" + moduleId +
-                ", isAudioSynced=" + isAudioSynced +
+                ", lastSyncedDate=" + lastSyncedDate +
+                ", lastUpdatedDate=" + lastUpdatedDate +
+                ", createDate=" + createDate +
+                ", ownedBy='" + ownedBy + '\'' +
+                ", url='" + url + '\'' +
+                ", createdBy='" + createdBy + '\'' +
+                ", registrationDate=" + registrationDate +
+                ", shortId='" + shortId + '\'' +
+                ", uniqueId='" + uniqueId + '\'' +
+                ", internalRev='" + internalRev + '\'' +
+                ", internalId='" + internalId + '\'' +
+                ", syncLog='" + syncLog + '\'' +
+                ", isSynced=" + isSynced +
+                ", audio=" + audio +
+                ", content=" + content +
+                ", caregiver='" + caregiver + '\'' +
+                ", age=" + age +
+                ", name='" + name + '\'' +
+                ", id=" + id +
                 '}';
     }
 }

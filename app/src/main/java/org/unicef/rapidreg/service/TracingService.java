@@ -10,14 +10,15 @@ import com.raizlabs.android.dbflow.sql.language.NameAlias;
 import com.raizlabs.android.dbflow.sql.language.SQLCondition;
 
 import org.unicef.rapidreg.PrimeroAppConfiguration;
+import org.unicef.rapidreg.model.RecordModel;
+import org.unicef.rapidreg.model.Tracing;
 import org.unicef.rapidreg.repository.TracingDao;
 import org.unicef.rapidreg.repository.TracingPhotoDao;
 import org.unicef.rapidreg.repository.impl.TracingDaoImpl;
 import org.unicef.rapidreg.repository.impl.TracingPhotoDaoImpl;
-import org.unicef.rapidreg.model.RecordModel;
-import org.unicef.rapidreg.model.Tracing;
 import org.unicef.rapidreg.service.cache.ItemValuesMap;
 import org.unicef.rapidreg.utils.StreamUtil;
+import org.unicef.rapidreg.utils.TextUtils;
 
 import java.io.IOException;
 import java.sql.Date;
@@ -51,19 +52,18 @@ public class TracingService extends RecordService {
     }
 
     public List<Tracing> getAll() {
-        return tracingDao.getAllTracingsOrderByDate(false, PrimeroAppConfiguration.getCurrentUser().getUsername());
-    }
-
-    public List<Long> getAllIds() {
-        return tracingDao.getAllIds(PrimeroAppConfiguration.getCurrentUser().getUsername());
+        return tracingDao.getAllTracingsOrderByDate(false, PrimeroAppConfiguration.getCurrentUsername(),
+                PrimeroAppConfiguration.getApiBaseUrl());
     }
 
     public List<Long> getAllOrderByDateASC() {
-        return extractIds(tracingDao.getAllTracingsOrderByDate(true, PrimeroAppConfiguration.getCurrentUser().getUsername()));
+        return extractIds(tracingDao.getAllTracingsOrderByDate(true, PrimeroAppConfiguration.getCurrentUsername(),
+                PrimeroAppConfiguration.getApiBaseUrl()));
     }
 
     public List<Long> getAllOrderByDateDES() {
-        return extractIds(tracingDao.getAllTracingsOrderByDate(false, PrimeroAppConfiguration.getCurrentUser().getUsername()));
+        return extractIds(tracingDao.getAllTracingsOrderByDate(false, PrimeroAppConfiguration.getCurrentUsername(),
+                PrimeroAppConfiguration.getApiBaseUrl()));
     }
 
     public List<Long> getSearchResult(String uniqueId, String name, int ageFrom, int ageTo, Date
@@ -114,10 +114,11 @@ public class TracingService extends RecordService {
     }
 
     public Tracing save(ItemValuesMap itemValues, List<String> photoPaths) throws IOException {
-        Tracing tracing = tracingDao.save(generateTracingFromItemValues(itemValues,
-                generateUniqueId()));
-
-        return tracingPhotoDao.save(tracing, photoPaths);
+        Tracing tracing = generateTracingFromItemValues(itemValues,
+                generateUniqueId());
+        tracingDao.save(tracing);
+        tracingPhotoDao.save(tracing, photoPaths);
+        return tracing;
     }
 
     public Tracing update(ItemValuesMap itemValues,
@@ -137,6 +138,7 @@ public class TracingService extends RecordService {
         String username = PrimeroAppConfiguration.getCurrentUser().getUsername();
         tracing.setCreatedBy(username);
         tracing.setOwnedBy(username);
+        tracing.setUrl(TextUtils.lintUrl(PrimeroAppConfiguration.getApiBaseUrl()));
 
         Date date = new Date(Calendar.getInstance().getTimeInMillis());
         tracing.setCreateDate(date);

@@ -11,24 +11,25 @@ import com.raizlabs.android.dbflow.sql.language.NameAlias;
 import com.raizlabs.android.dbflow.sql.language.SQLCondition;
 
 import org.unicef.rapidreg.PrimeroAppConfiguration;
+import org.unicef.rapidreg.model.Case;
+import org.unicef.rapidreg.model.CasePhoto;
+import org.unicef.rapidreg.model.RecordModel;
 import org.unicef.rapidreg.repository.CaseDao;
 import org.unicef.rapidreg.repository.CasePhotoDao;
 import org.unicef.rapidreg.repository.impl.CaseDaoImpl;
 import org.unicef.rapidreg.repository.impl.CasePhotoDaoImpl;
-import org.unicef.rapidreg.model.Case;
-import org.unicef.rapidreg.model.CasePhoto;
-import org.unicef.rapidreg.model.RecordModel;
 import org.unicef.rapidreg.service.cache.ItemValuesMap;
 import org.unicef.rapidreg.utils.ImageCompressUtil;
 import org.unicef.rapidreg.utils.StreamUtil;
+import org.unicef.rapidreg.utils.TextUtils;
 import org.unicef.rapidreg.utils.Utils;
+import org.w3c.dom.Text;
 
 import java.io.IOException;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 
 import static org.unicef.rapidreg.model.RecordModel.EMPTY_AGE;
@@ -48,11 +49,8 @@ public class CaseService extends RecordService {
     }
 
     public List<Case> getAll() {
-        return caseDao.getAllCasesOrderByDate(false, PrimeroAppConfiguration.getCurrentUser().getUsername());
-    }
-
-    public Case getFirst() {
-        return caseDao.getFirst();
+        return caseDao.getAllCasesOrderByDate(false, PrimeroAppConfiguration.getCurrentUsername(),
+                TextUtils.lintUrl(PrimeroAppConfiguration.getApiBaseUrl()));
     }
 
     public Case getById(long caseId) {
@@ -60,19 +58,23 @@ public class CaseService extends RecordService {
     }
 
     public List<Long> getAllOrderByDateASC() {
-        return extractIds(caseDao.getAllCasesOrderByDate(true, PrimeroAppConfiguration.getCurrentUser().getUsername()));
+        return extractIds(caseDao.getAllCasesOrderByDate(true, PrimeroAppConfiguration.getCurrentUsername(),
+                TextUtils.lintUrl(PrimeroAppConfiguration.getApiBaseUrl())));
     }
 
     public List<Long> getAllOrderByDateDES() {
-        return extractIds(caseDao.getAllCasesOrderByDate(false, PrimeroAppConfiguration.getCurrentUser().getUsername()));
+        return extractIds(caseDao.getAllCasesOrderByDate(false, PrimeroAppConfiguration.getCurrentUsername(),
+                TextUtils.lintUrl(PrimeroAppConfiguration.getApiBaseUrl())));
     }
 
     public List<Long> getAllOrderByAgeASC() {
-        return extractIds(caseDao.getAllCasesOrderByAge(true, PrimeroAppConfiguration.getCurrentUser().getUsername()));
+        return extractIds(caseDao.getAllCasesOrderByAge(true, PrimeroAppConfiguration.getCurrentUsername(),
+                TextUtils.lintUrl(PrimeroAppConfiguration.getApiBaseUrl())));
     }
 
     public List<Long> getAllOrderByAgeDES() {
-        return extractIds(caseDao.getAllCasesOrderByAge(false, PrimeroAppConfiguration.getCurrentUser().getUsername()));
+        return extractIds(caseDao.getAllCasesOrderByAge(false, PrimeroAppConfiguration.getCurrentUsername(),
+                TextUtils.lintUrl(PrimeroAppConfiguration.getApiBaseUrl())));
     }
 
     public List<Long> extractIds(List<Case> cases) {
@@ -81,10 +83,6 @@ public class CaseService extends RecordService {
             result.add(aCase.getId());
         }
         return result;
-    }
-
-    public Case getByUniqueId(String uniqueId) {
-        return caseDao.getCaseByUniqueId(uniqueId);
     }
 
     public List<Long> getCPSearchResult(String shortId, String name, int ageFrom, int ageTo,
@@ -140,10 +138,6 @@ public class CaseService extends RecordService {
         }
     }
 
-    public List<Long> getAllIds() {
-        return caseDao.getAllIds();
-    }
-
     public Case save(ItemValuesMap itemValues, List<String> photoPaths) throws IOException {
         String uniqueId = generateUniqueId();
         String username = PrimeroAppConfiguration.getCurrentUser().getUsername();
@@ -179,11 +173,10 @@ public class CaseService extends RecordService {
         child.setModuleId(itemValues.getAsString(MODULE));
         String location = itemValues.has(LOCATION) ? "" : itemValues.getAsString(LOCATION);
         child.setLocation(location);
-
-        Case savedCase = caseDao.save(child);
-        savePhoto(savedCase, photoPaths);
-
-        return savedCase;
+        child.setUrl(TextUtils.lintUrl(PrimeroAppConfiguration.getApiBaseUrl()));
+        caseDao.save(child);
+        savePhoto(child, photoPaths);
+        return child;
     }
 
     public void savePhoto(Case child, List<String> photoPaths) throws IOException {

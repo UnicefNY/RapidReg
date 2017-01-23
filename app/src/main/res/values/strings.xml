@@ -23,7 +23,6 @@
     <string name="login_not_find_code_message">Not find status code!</string>
     <string name="login_success_message">Login successful</string>
 
-
     <string name="login_user_label_key">login_user</string>
     <string name="syncing_forms_text">Syncing forms, please try it later</string>
     <string name="order_by">Order by&#160;</string>

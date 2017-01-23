@@ -8,16 +8,17 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 import org.unicef.rapidreg.PrimeroAppConfiguration;
-import org.unicef.rapidreg.repository.TracingDao;
-import org.unicef.rapidreg.repository.TracingPhotoDao;
 import org.unicef.rapidreg.forms.Field;
 import org.unicef.rapidreg.forms.Section;
 import org.unicef.rapidreg.model.Tracing;
 import org.unicef.rapidreg.model.User;
+import org.unicef.rapidreg.repository.TracingDao;
+import org.unicef.rapidreg.repository.TracingPhotoDao;
 import org.unicef.rapidreg.service.cache.ItemValuesMap;
 
 import java.io.IOException;
@@ -48,6 +49,7 @@ import static org.unicef.rapidreg.service.TracingService.TRACING_ID;
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({PrimeroAppConfiguration.class})
 public class TracingServiceTest {
+    private String url = "http://35.61.56.113:8443";
 
     @Mock
     private TracingDao tracingDao;
@@ -65,6 +67,9 @@ public class TracingServiceTest {
 
         User user = new User("userName");
         when(PrimeroAppConfiguration.getCurrentUser()).thenReturn(user);
+        when(PrimeroAppConfiguration.getCurrentUsername()).thenReturn(user.getUsername());
+
+        Mockito.when(PrimeroAppConfiguration.getApiBaseUrl()).thenReturn(url);
     }
 
     @Test
@@ -90,24 +95,17 @@ public class TracingServiceTest {
         Tracing tracing = new Tracing();
         List<Tracing> tracingList = new ArrayList<Tracing>();
         tracingList.add(tracing);
-        when(tracingDao.getAllTracingsOrderByDate(false, "userName")).thenReturn(tracingList);
+        when(tracingDao.getAllTracingsOrderByDate(false, "userName", url)).thenReturn(tracingList);
         assertThat(tracingService.getAll(), is(tracingList));
-    }
-
-    @Test
-    public void should_return_all_ids() {
-        Long l = 1L;
-        List<Long> list = new ArrayList<>();
-        list.add(l);
-        when(tracingDao.getAllIds("userName")).thenReturn(list);
-        assertThat(tracingService.getAllIds(), is(list));
+        verify(tracingDao, times(1)).getAllTracingsOrderByDate(false, "userName", url);
     }
 
     @Test
     public void should_return_all_order_ids_sorted_by_ascending() throws Exception {
         Tracing[] orders = new Tracing[]{new Tracing(1), new Tracing(2), new Tracing(3)};
         List<Tracing> orderList = Arrays.asList(orders);
-        when(tracingDao.getAllTracingsOrderByDate(true, PrimeroAppConfiguration.getCurrentUser().getUsername())).thenReturn(orderList);
+        when(tracingDao.getAllTracingsOrderByDate(true, PrimeroAppConfiguration.getCurrentUsername(), url)).thenReturn
+                (orderList);
         assertThat("When call getAllOrderByDateASC() should return orders sorted by date.",
                 tracingService.getAllOrderByDateASC(), is(Arrays.asList(new Long[]{1L, 2L, 3L})));
     }
@@ -116,14 +114,14 @@ public class TracingServiceTest {
     public void should_return_all_order_ids_sorted_by_descending() throws Exception {
         Tracing[] orders = new Tracing[]{new Tracing(3), new Tracing(2), new Tracing(1)};
         List<Tracing> orderList = Arrays.asList(orders);
-        when(tracingDao.getAllTracingsOrderByDate(false, PrimeroAppConfiguration.getCurrentUser().getUsername())).thenReturn(orderList);
+        when(tracingDao.getAllTracingsOrderByDate(false, PrimeroAppConfiguration.getCurrentUsername(), url))
+                .thenReturn(orderList);
         assertThat("When call getAllOrderByDateDES() should return orders sorted by date.",
                 tracingService.getAllOrderByDateDES(), is(Arrays.asList(new Long[]{3L, 2L, 1L})));
     }
 
     @Test
     public void should_return_search_result_when_give_search_conditions() throws Exception {
-
         Tracing[] orders = new Tracing[]{new Tracing(3), new Tracing(2), new Tracing(1)};
         List<Tracing> orderList = Arrays.asList(orders);
 
@@ -139,6 +137,9 @@ public class TracingServiceTest {
     @Test
     public void should_save_tracing_when_give_item_values_and_item_values_map_have_register_date()
             throws IOException {
+        String url = "http://35.61.65.113:8443";
+        Mockito.when(PrimeroAppConfiguration.getApiBaseUrl()).thenReturn(url);
+
         String uniqueId = "test save tracing";
         ItemValuesMap itemValuesMap = new ItemValuesMap();
         itemValuesMap.addStringItem(RELATION_AGE, "10");
@@ -155,7 +156,8 @@ public class TracingServiceTest {
         Tracing expected = new Tracing();
         when(tracingPhotoDao.save(tracingTemp, photoPaths)).thenReturn(expected);
 
-        tracingServiceSpy.save(itemValuesMap, photoPaths);
+        Tracing savedTracing = tracingServiceSpy.save(itemValuesMap, photoPaths);
+        assertThat(savedTracing.getUrl(), is(url));
         verify(tracingDao, times(1)).save(any(Tracing.class));
         verify(tracingPhotoDao, times(1)).save(any(Tracing.class), anyList());
     }
