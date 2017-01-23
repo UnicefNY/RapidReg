@@ -87,7 +87,7 @@ public class CaseSearchFragment extends RecordSearchFragment {
                 idField.setVisibility(View.VISIBLE);
                 nameField.setVisibility(View.VISIBLE);
                 registrationDateField.setVisibility(View.VISIBLE);
-                locationField.setVisibility(View.VISIBLE);
+                //TODO locationField.setVisibility(View.VISIBLE);
                 break;
         }
     }

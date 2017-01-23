@@ -127,6 +127,10 @@ public class TracingService extends RecordService {
     }
 
     private Tracing generateTracingFromItemValues(ItemValuesMap itemValues, String uniqueId) {
+        if (!itemValues.has(INQUIRY_DATE)) {
+            itemValues.addStringItem(INQUIRY_DATE, getCurrentRegistrationDateAsString());
+        }
+
         Tracing tracing = new Tracing();
         tracing.setUniqueId(uniqueId);
 
