@@ -9,7 +9,7 @@
         android:id="@+id/edit_text"
         android:layout_width="match_parent"
         android:layout_height="@dimen/search_bar_item_height"
-        android:background="@drawable/edit_view_shape"
+        android:background="@color/white"
         android:textColor="@color/primero_font_dark"
         android:textCursorDrawable="@null"
         android:textSize="@dimen/text_size_16"/>
