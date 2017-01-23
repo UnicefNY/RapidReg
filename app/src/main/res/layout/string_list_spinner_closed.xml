@@ -9,9 +9,8 @@
     <TextView
         android:id="@+id/string_value"
         android:layout_width="0dp"
-        android:layout_height="@dimen/text_view_height"
+        android:layout_height="wrap_content"
         android:layout_weight="19"
-        android:hint="@string/type_of_violence"
         android:textColor="@color/primero_font_dark"
         android:textSize="@dimen/text_size_16" />
 

@@ -37,4 +37,8 @@ public class IncidentSearchPresenter extends RecordSearchPresenter {
     public List<String> getViolenceTypeList() {
         return incidentFormService.getViolenceTypeList();
     }
+
+    public List<String> getIncidentLocationList() {
+        return incidentFormService.getLocationList();
+    }
 }

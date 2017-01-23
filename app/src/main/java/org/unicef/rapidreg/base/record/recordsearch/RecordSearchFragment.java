@@ -93,7 +93,7 @@ public abstract class RecordSearchFragment extends MvpFragment<RecordListView, R
     @BindView(R.id.location_field)
     protected LinearLayout locationField;
     @BindView(R.id.location)
-    protected ClearableEditText location;
+    protected Spinner location;
 
     @BindView(R.id.search_result)
     protected ViewSwitcher searchResultSwitcher;

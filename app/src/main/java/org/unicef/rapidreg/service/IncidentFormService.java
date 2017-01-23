@@ -14,4 +14,6 @@ public interface IncidentFormService {
     void saveOrUpdate(IncidentForm incidentForm);
 
     List<String> getViolenceTypeList();
+
+    List<String> getLocationList();
 }

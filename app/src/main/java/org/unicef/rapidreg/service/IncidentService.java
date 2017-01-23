@@ -142,7 +142,7 @@ public class IncidentService extends RecordService {
         incident.setSurvivorCode(getSurvivorCode(itemValues));
         incident.setTypeOfViolence(getTypeOfViolence(itemValues));
         incident.setLocation(getLocation(itemValues));
-        int age = itemValues.has(RELATION_AGE) ? itemValues.getAsInt(RELATION_AGE) : EMPTY_AGE;
+        int age = itemValues.has(AGE) ? itemValues.getAsInt(AGE) : EMPTY_AGE;
         incident.setAge(age);
         incident.setCaregiver(getCaregiverName(itemValues));
         if (itemValues.has(DATE_OF_INTERVIEW)) {

@@ -61,7 +61,7 @@ public class CaseSearchFragment extends RecordSearchFragment {
                 break;
             }
             case GBV: {
-                searchValues.put(LOCATION, location.getText());
+                searchValues.put(LOCATION, "");
                 break;
             }
         }
