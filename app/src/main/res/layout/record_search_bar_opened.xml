@@ -83,6 +83,7 @@
             android:id="@+id/type_of_violence"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:spinnerMode="dialog"
             android:drawSelectorOnTop="true"/>
 
         <View
@@ -250,12 +251,14 @@
         android:id="@+id/location_field"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@color/white"
         android:visibility="gone"
         android:orientation="vertical">
         <Spinner
             android:id="@+id/location"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:spinnerMode="dialog"
             android:drawSelectorOnTop="true"/>
 
         <View

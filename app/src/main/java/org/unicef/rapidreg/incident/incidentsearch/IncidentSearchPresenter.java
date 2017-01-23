@@ -1,6 +1,7 @@
 package org.unicef.rapidreg.incident.incidentsearch;
 
 import org.unicef.rapidreg.base.record.recordsearch.RecordSearchPresenter;
+import org.unicef.rapidreg.forms.Field;
 import org.unicef.rapidreg.injection.PerFragment;
 import org.unicef.rapidreg.service.IncidentFormService;
 import org.unicef.rapidreg.service.IncidentService;
