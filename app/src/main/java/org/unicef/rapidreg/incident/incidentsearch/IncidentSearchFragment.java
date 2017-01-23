@@ -6,6 +6,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.LinearLayout;
+import android.widget.Spinner;
 
 import org.unicef.rapidreg.R;
 import org.unicef.rapidreg.base.record.recordlist.RecordListAdapter;
@@ -13,6 +15,7 @@ import org.unicef.rapidreg.base.record.recordsearch.RecordSearchFragment;
 import org.unicef.rapidreg.base.record.recordsearch.RecordSearchPresenter;
 import org.unicef.rapidreg.base.record.recordsearch.StringSpinnerAdapter;
 import org.unicef.rapidreg.incident.incidentlist.IncidentListAdapter;
+import org.unicef.rapidreg.widgets.ClearableEditText;
 
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -30,9 +33,6 @@ public class IncidentSearchFragment extends RecordSearchFragment {
 
     @Inject
     IncidentListAdapter incidentListAdapter;
-
-    private String typeOfViolenceVal = "";
-    private String locationVal = "";
 
     @Override
     public RecordSearchPresenter createPresenter() {
@@ -54,8 +54,8 @@ public class IncidentSearchFragment extends RecordSearchFragment {
         searchValues.put(SURVIVOR_CODE, survivorCode.getText());
         searchValues.put(AGE_FROM, ageFrom.getText().isEmpty() ? String.valueOf(EMPTY_AGE) : ageFrom.getText());
         searchValues.put(AGE_TO, ageTo.getText().isEmpty() ? String.valueOf(EMPTY_AGE) : ageTo.getText());
-        searchValues.put(TYPE_OF_VIOLENCE, typeOfViolenceVal);
-        searchValues.put(LOCATION, locationVal);
+        searchValues.put(TYPE_OF_VIOLENCE, getValueOfSelectedView(typeOfViolence));
+        searchValues.put(LOCATION, getValueOfSelectedView(location));
 
         return searchValues;
     }
@@ -72,6 +72,11 @@ public class IncidentSearchFragment extends RecordSearchFragment {
         initIncidentLocationField();
     }
 
+    @Override
+    protected RecordListAdapter createRecordListAdapter() {
+        return incidentListAdapter;
+    }
+
     private void initIncidentLocationField() {
         final List<String> locationVals = incidentSearchPresenter.getIncidentLocationList();
         locationVals.add(0, "");
@@ -81,14 +86,11 @@ public class IncidentSearchFragment extends RecordSearchFragment {
         location.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                locationVal = locationVals.get(position);
-                adapter.setValue(view, locationVal);
+                adapter.setValue(view, locationVals.get(position));
             }
 
             @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-                locationVal = "";
-            }
+            public void onNothingSelected(AdapterView<?> parent) {}
         });
     }
 
@@ -101,25 +103,23 @@ public class IncidentSearchFragment extends RecordSearchFragment {
         typeOfViolence.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                typeOfViolenceVal = typeOfViolenceVals.get(position);
-                adapter.setValue(view, typeOfViolenceVal);
+                adapter.setValue(view, typeOfViolenceVals.get(position));
             }
 
             @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-                typeOfViolenceVal = "";
-            }
+            public void onNothingSelected(AdapterView<?> parent) {}
         });
     }
 
     private StringSpinnerAdapter generateTypeOfViolenceListAdapter(List<String> violenceTypeList, String hintVal) {
-        StringSpinnerAdapter adapter = new StringSpinnerAdapter(getActivity(), R.layout.string_list_spinner_opened, violenceTypeList, hintVal);
+        StringSpinnerAdapter adapter = new StringSpinnerAdapter(getActivity(), R.layout.string_list_spinner_closed, violenceTypeList, hintVal);
         return adapter;
     }
 
-    @Override
-    protected RecordListAdapter createRecordListAdapter() {
-        return incidentListAdapter;
+    private String getValueOfSelectedView(Spinner spinner) {
+        LinearLayout selectedView = (LinearLayout) spinner.getSelectedView();
+        ClearableEditText textField = (ClearableEditText) selectedView.findViewById(R.id.string_value_closed);
+        return textField.getText();
     }
 
 }

@@ -9,6 +9,7 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import org.unicef.rapidreg.R;
+import org.unicef.rapidreg.widgets.ClearableEditText;
 
 import java.util.List;
 
@@ -42,10 +43,11 @@ public class StringSpinnerAdapter extends ArrayAdapter<String> {
         int layoutId = isDropDownView ? R.layout.string_list_spinner_opened : R.layout.string_list_spinner_closed;
         View view = inflater.inflate(layoutId, parent, false);
 
-        TextView orderName = (TextView) view.findViewById(R.id.string_value);
         if (isDropDownView) {
+            TextView orderName = (TextView) view.findViewById(R.id.string_value_opened);
             orderName.setText(resource);
         } else {
+            ClearableEditText orderName = (ClearableEditText) view.findViewById(R.id.string_value_closed);
             orderName.setHint(hintVal);
         }
 
@@ -53,7 +55,7 @@ public class StringSpinnerAdapter extends ArrayAdapter<String> {
     }
 
     public void setValue(View view, String value) {
-        TextView orderName = (TextView) view.findViewById(R.id.string_value);
+        ClearableEditText orderName = (ClearableEditText) view.findViewById(R.id.string_value_closed);
         orderName.setText(value);
     }
 }

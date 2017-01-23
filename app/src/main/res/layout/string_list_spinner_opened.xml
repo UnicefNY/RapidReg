@@ -7,7 +7,7 @@
     android:padding="@dimen/size_10">
 
     <TextView
-        android:id="@+id/string_value"
+        android:id="@+id/string_value_opened"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textColor="@color/primero_font_dark"
