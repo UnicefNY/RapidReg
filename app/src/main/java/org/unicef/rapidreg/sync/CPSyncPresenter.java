@@ -26,7 +26,6 @@ import org.unicef.rapidreg.service.SyncCaseService;
 import org.unicef.rapidreg.service.SyncTracingService;
 import org.unicef.rapidreg.service.TracingPhotoService;
 import org.unicef.rapidreg.service.TracingService;
-import org.unicef.rapidreg.service.cache.ItemValuesMap;
 import org.unicef.rapidreg.utils.Utils;
 
 import java.io.IOException;
@@ -35,7 +34,6 @@ import java.net.SocketTimeoutException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collections;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
@@ -451,7 +449,9 @@ public class CPSyncPresenter extends BaseSyncPresenter {
                                 .toBlocking()
                                 .first();
                         try {
-                            updateCasePhotos(id, response.body().bytes());
+                            if (response.isSuccessful()) {
+                                updateCasePhotos(id, response.body().bytes());
+                            }
                         } catch (IOException e) {
                             throw new RuntimeException(e);
                         }
@@ -672,7 +672,7 @@ public class CPSyncPresenter extends BaseSyncPresenter {
             item.setSynced(true);
             item.setContent(new Blob(casesJsonObject.toString().getBytes()));
             item.setName(casesJsonObject.get("name").getAsString());
-            item.setAge(casesJsonObject.get("age").getAsInt());
+            setAgeIfExists(item, casesJsonObject);
             item.setOwnedBy(casesJsonObject.get("owned_by").getAsString());
             //TODO set caregiver
             if (casesJsonObject.get("caregiver") != null) {
@@ -698,12 +698,20 @@ public class CPSyncPresenter extends BaseSyncPresenter {
             item.setContent(new Blob(casesJsonObject.toString().getBytes()));
 
             item.setName(casesJsonObject.get("name").getAsString());
-            item.setAge(casesJsonObject.get("age").getAsInt());
+            setAgeIfExists(item, casesJsonObject);
             //TODO set caregiver
             if (casesJsonObject.get("caregiver") != null) {
                 item.setCaregiver(casesJsonObject.get("caregiver").getAsString());
             }
             item.save();
+        }
+    }
+
+    private void setAgeIfExists(Case item, JsonObject source) {
+        try {
+            item.setAge(source.get("age").getAsInt());
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
