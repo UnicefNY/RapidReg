@@ -120,6 +120,9 @@ public class IncidentService extends RecordService {
     }
 
     public Incident save(ItemValuesMap itemValues) throws IOException {
+        if (!itemValues.has(DATE_OF_INTERVIEW)) {
+            itemValues.addStringItem(DATE_OF_INTERVIEW, getCurrentRegistrationDateAsString());
+        }
         String uniqueId = generateUniqueId();
         itemValues.addStringItem(INCIDENT_DISPLAY_ID, getShortUUID(uniqueId));
         itemValues.addStringItem(INCIDENT_ID, uniqueId);
@@ -145,9 +148,7 @@ public class IncidentService extends RecordService {
         int age = itemValues.has(AGE) ? itemValues.getAsInt(AGE) : EMPTY_AGE;
         incident.setAge(age);
         incident.setCaregiver(getCaregiverName(itemValues));
-        if (itemValues.has(DATE_OF_INTERVIEW)) {
-            incident.setRegistrationDate(Utils.getRegisterDate(itemValues.getAsString(DATE_OF_INTERVIEW)));
-        }
+        incident.setRegistrationDate(Utils.getRegisterDate(itemValues.getAsString(DATE_OF_INTERVIEW)));
         incident.setCreatedBy(username);
         incident.setOwnedBy(username);
         incidentDao.save(incident);
