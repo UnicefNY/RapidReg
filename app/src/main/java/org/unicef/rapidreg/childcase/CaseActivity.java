@@ -55,6 +55,7 @@ public class CaseActivity extends RecordActivity implements BaseView {
         }
 
         turnToFeature(CaseFeature.LIST, null, null);
+
     }
 
     @Override
@@ -152,7 +153,7 @@ public class CaseActivity extends RecordActivity implements BaseView {
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN, sticky = true, priority = 1)
-    public void onNeedLoadGBVCaseFormsEvent(final LoadGBVCaseFormEvent event) {
+    public void onNeedLoadGBVCaseFormsEvent(LoadGBVCaseFormEvent event) {
         EventBus.getDefault().removeStickyEvent(event);
         String moduleId = RecordConfiguration.MODULE_ID_GBV;
         String cookie = event.getCookie();
@@ -160,7 +161,7 @@ public class CaseActivity extends RecordActivity implements BaseView {
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN, sticky = true, priority = 1)
-    public void onNeedLoadCPCaseFormsEvent(final LoadCPCaseFormEvent event) {
+    public void onNeedLoadCPCaseFormsEvent(LoadCPCaseFormEvent event) {
         EventBus.getDefault().removeStickyEvent(event);
         String moduleId = RecordConfiguration.MODULE_ID_CP;
         String cookie = event.getCookie();

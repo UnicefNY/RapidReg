@@ -74,8 +74,10 @@ public class CaseListFragment extends RecordListFragment {
         User.Role roleType = PrimeroAppConfiguration.getCurrentUser().getRoleType();
         if (roleType == User.Role.CP) {
             EventBus.getDefault().postSticky(new LoadCPCaseFormEvent(PrimeroAppConfiguration.getCookie()));
-        }else{
+        }else if(roleType == User.Role.GBV){
             EventBus.getDefault().postSticky(new LoadGBVCaseFormEvent(PrimeroAppConfiguration.getCookie()));
+        }else{
+            EventBus.getDefault().postSticky(new LoadCPCaseFormEvent(PrimeroAppConfiguration.getCookie()));
         }
     }
 
@@ -130,6 +132,7 @@ public class CaseListFragment extends RecordListFragment {
                 onGBVCaseAddClicked();
                 break;
             default:
+                onCPCaseAddClicked();
                 break;
         }
     }

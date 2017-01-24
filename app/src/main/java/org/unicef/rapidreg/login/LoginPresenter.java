@@ -129,6 +129,8 @@ public class LoginPresenter extends MvpBasePresenter<LoginView> {
                 EventBus.getDefault().postSticky(new LoadGBVCaseFormEvent(cookie));
                 break;
             default:
+                EventBus.getDefault().postSticky(new LoadCPCaseFormEvent(cookie));
+                EventBus.getDefault().postSticky(new LoadTracingFormEvent(cookie));
                 break;
         }
     }
