@@ -20,6 +20,7 @@ import org.unicef.rapidreg.model.User;
 import org.unicef.rapidreg.repository.CaseDao;
 import org.unicef.rapidreg.repository.CasePhotoDao;
 import org.unicef.rapidreg.service.cache.ItemValuesMap;
+import org.unicef.rapidreg.utils.TextUtils;
 import org.unicef.rapidreg.utils.Utils;
 
 import java.util.Collections;
@@ -105,7 +106,7 @@ public class CaseServiceTest {
         Case actual = caseServiceSpy.save(itemValues, Collections.EMPTY_LIST);
         when(caseDao.save(any(Case.class))).thenReturn(actual);
 
-        assertThat("Should have save url", actual.getUrl(), is(url));
+        assertThat("Should have save url", actual.getUrl(), is(TextUtils.lintUrl(url)));
         assertThat("Should have save uuid.", actual.getUniqueId(), is(uuid));
         verify(caseDao, times(1)).save(any(Case.class));
     }

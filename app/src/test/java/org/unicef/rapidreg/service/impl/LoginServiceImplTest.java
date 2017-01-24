@@ -44,6 +44,7 @@ public class LoginServiceImplTest {
 
     private String username = "Jack";
     private String password = "123456";
+    private String expectedUrl = "http://35.61.65.113:8443/";
     private User jack = new User(username, EncryptHelper.encrypt(password));
 
     @Before
@@ -97,27 +98,27 @@ public class LoginServiceImplTest {
 
     @Test
     public void should_verify_when_user_does_not_exist() {
-        when(userDao.getUser(anyString())).thenReturn(null);
+        when(userDao.getUser(anyString(), anyString())).thenReturn(null);
 
-        LoginService.VerifiedCode verifiedCode = loginService.verify(username, password, false);
+        LoginService.VerifiedCode verifiedCode = loginService.verify(username, password, expectedUrl, false);
 
         assertThat(verifiedCode, is(LoginService.VerifiedCode.USER_DOES_NOT_EXIST));
     }
 
     @Test
     public void should_verify_when_user_password_is_incorrect() {
-        when(userDao.getUser(username)).thenReturn(jack);
+        when(userDao.getUser(username, expectedUrl)).thenReturn(jack);
 
-        LoginService.VerifiedCode verifiedCode = loginService.verify(username, "654321", false);
+        LoginService.VerifiedCode verifiedCode = loginService.verify(username, "654321", expectedUrl, false);
 
         assertThat(verifiedCode, is(LoginService.VerifiedCode.PASSWORD_INCORRECT));
     }
 
     @Test
     public void should_verify_when_both_username_and_password_are_correct() {
-        when(userDao.getUser(username)).thenReturn(jack);
+        when(userDao.getUser(username, expectedUrl)).thenReturn(jack);
 
-        LoginService.VerifiedCode verifiedCode = loginService.verify(username, password, false);
+        LoginService.VerifiedCode verifiedCode = loginService.verify(username, password, expectedUrl, false);
 
         assertThat(verifiedCode, is(LoginService.VerifiedCode.OK));
     }

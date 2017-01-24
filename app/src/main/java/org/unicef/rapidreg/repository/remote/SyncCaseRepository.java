@@ -3,8 +3,6 @@ package org.unicef.rapidreg.repository.remote;
 
 import com.google.gson.JsonElement;
 
-import java.util.List;
-
 import okhttp3.MultipartBody;
 import okhttp3.ResponseBody;
 import retrofit2.Call;

@@ -12,11 +12,14 @@ import javax.inject.Inject;
 
 public class UserDaoImpl implements UserDao {
     @Inject
-    public UserDaoImpl() {}
+    public UserDaoImpl() {
+    }
 
     @Override
-    public User getUser(String username) {
-        return SQLite.select().from(User.class).where(User_Table.user_name.eq(username))
+    public User getUser(String username, String url) {
+        return SQLite.select().from(User.class)
+                .where(User_Table.user_name.eq(username))
+                .and(User_Table.server_url.eq(url))
                 .querySingle();
     }
 
@@ -32,8 +35,7 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public void saveOrUpdateUser(User user) {
-        User existingUser = getUser(user.getUsername());
-
+        User existingUser = getUser(user.getUsername(), user.getServerUrl());
         if (existingUser == null) {
             user.save();
         } else {
