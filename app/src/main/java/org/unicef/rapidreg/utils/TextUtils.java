@@ -17,11 +17,8 @@ public class TextUtils {
 
     @NonNull
     public static String lintUrl(String url) {
-        if (url.endsWith("/")) {
-            url = url.substring(0, url.length() - 1);
-        }
-        if (url.endsWith("login")) {
-            url = url.substring(0, url.indexOf("login") - 1);
+        if (!url.endsWith("/")) {
+            return String.format("%s/", url);
         }
         return url;
     }

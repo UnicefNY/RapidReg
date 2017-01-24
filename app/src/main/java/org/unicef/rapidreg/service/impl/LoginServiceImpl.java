@@ -60,7 +60,7 @@ public class LoginServiceImpl extends BaseRetrofitService implements org.unicef.
                             String imei,
                             final LoginCallback callback) {
         //TODO change hard code to be value from param
-        loginRepository = createRetrofit().create(LoginRepository.class);
+         loginRepository = createRetrofit().create(LoginRepository.class);
         final LoginRequestBody loginRequestBody = new LoginRequestBody(username, password, "15555215554",
                 "8fd2274a590497e9");
         Subscription subscription = loginRepository
@@ -72,8 +72,9 @@ public class LoginServiceImpl extends BaseRetrofitService implements org.unicef.
                     public void call(Response<LoginResponse> response) {
                         if (response.isSuccessful()) {
                             LoginResponse responseBody = response.body();
-                            User user = new User(username, EncryptHelper.encrypt(password), true, url);
-                            user.setDbKey(responseBody.getDb_key());
+                            User user = new User(username, EncryptHelper.encrypt(password), true, TextUtils.lintUrl
+                                    (url));
+                            user.setDbKey(responseBody.getDbKey());
                             user.setOrganisation(responseBody.getOrganization());
                             user.setRole(responseBody.getRole());
                             user.setLanguage(responseBody.getLanguage());
@@ -96,19 +97,18 @@ public class LoginServiceImpl extends BaseRetrofitService implements org.unicef.
     }
 
     @Override
-    public void loginOffline(String username, String password, LoginCallback callback) {
-        VerifiedCode verifiedCode = verify(username, password, isOnline());
+    public void loginOffline(String username, String password, String url, LoginCallback callback) {
+        VerifiedCode verifiedCode = verify(username, password, url, isOnline());
 
         if (LoginService.VerifiedCode.OK == verifiedCode) {
-            callback.onSuccessful("", userDao.getUser(username));
+            callback.onSuccessful("", userDao.getUser(username, url));
         } else {
             callback.onError(verifiedCode.getResId());
         }
     }
 
-    public VerifiedCode verify(String username, String password, boolean isOnline) {
-        User user = userDao.getUser(username);
-
+    public VerifiedCode verify(String username, String password, String url, boolean isOnline) {
+        User user = userDao.getUser(username, url);
         if (user == null) {
             return isOnline ? LoginService.VerifiedCode.PASSWORD_INCORRECT : LoginService.VerifiedCode
                     .USER_DOES_NOT_EXIST;
@@ -116,9 +116,8 @@ public class LoginServiceImpl extends BaseRetrofitService implements org.unicef.
 
         if (EncryptHelper.isMatched(password, user.getPassword())) {
             return LoginService.VerifiedCode.OK;
-        } else {
-            return LoginService.VerifiedCode.PASSWORD_INCORRECT;
         }
+        return LoginService.VerifiedCode.PASSWORD_INCORRECT;
     }
 
     private String getSessionId(Headers headers) {

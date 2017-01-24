@@ -89,7 +89,7 @@ public class CaseFormServiceImplTest {
     @Test
     public void should_return_true_if_form_is_ready() throws Exception {
         User user = new User();
-        user.setRole(User.Role.CP.name());
+        user.setRole(User.Role.CP.getValue());
         Mockito.when(PrimeroAppConfiguration.getCurrentUser()).thenReturn(user);
 
         CaseForm cpCaseForm = createCPCaseForm();
@@ -101,7 +101,7 @@ public class CaseFormServiceImplTest {
     @Test
     public void should_return_false_if_form_is_not_ready() throws Exception {
         User user = new User();
-        user.setRole(User.Role.CP.name());
+        user.setRole(User.Role.CP.getValue());
         Mockito.when(PrimeroAppConfiguration.getCurrentUser()).thenReturn(user);
         when(caseFormDao.getCaseForm(RecordConfiguration.MODULE_ID_CP)).thenReturn(null);
 

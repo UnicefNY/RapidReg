@@ -3,11 +3,10 @@ package org.unicef.rapidreg.model;
 import com.raizlabs.android.dbflow.annotation.Column;
 import com.raizlabs.android.dbflow.annotation.PrimaryKey;
 import com.raizlabs.android.dbflow.annotation.Table;
-import com.raizlabs.android.dbflow.annotation.Unique;
 import com.raizlabs.android.dbflow.structure.BaseModel;
 
-import org.unicef.rapidreg.R;
 import org.unicef.rapidreg.PrimeroDatabaseConfiguration;
+import org.unicef.rapidreg.R;
 
 @Table(database = PrimeroDatabaseConfiguration.class)
 public class User extends BaseModel {
@@ -15,7 +14,6 @@ public class User extends BaseModel {
     @Column
     private int id;
     @Column(name = "user_name")
-    @Unique
     private String username;
     @Column(name = "user_password")
     private String password;
@@ -195,11 +193,11 @@ public class User extends BaseModel {
                 R.menu.activity_main_tracing_drawer,
                 R.menu.activity_main_incident_drawer,
                 R.menu.activity_main_sync_drawer),
-        CP("CP",
+        CP("primeromodule-cp",
                 R.menu.activity_main_cp_drawer,
                 R.menu.activity_main_tracing_drawer,
                 R.menu.activity_main_sync_drawer),
-        GBV("GBV",
+        GBV("primeromodule-gbv",
                 R.menu.activity_main_gbv_drawer,
                 R.menu.activity_main_incident_drawer,
                 R.menu.activity_main_sync_drawer);
@@ -221,7 +219,7 @@ public class User extends BaseModel {
         }
 
         public static Role getRoleByValue(String value) {
-            for (Role role: Role.values()) {
+            for (Role role : Role.values()) {
                 if (role.getValue().equals(value)) {
                     return role;
                 }

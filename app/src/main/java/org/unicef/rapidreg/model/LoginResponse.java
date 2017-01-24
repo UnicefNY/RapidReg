@@ -1,13 +1,19 @@
 package org.unicef.rapidreg.model;
 
+import com.google.gson.annotations.SerializedName;
+
+import java.util.List;
+
 public class LoginResponse {
     private Session session;
 
-    private String db_key;
+    @SerializedName("db_key")
+    private String dbKey;
 
     private String organization;
 
-    private String role;
+    @SerializedName("module_ids")
+    private List<String> moduleIds;
 
     private String language;
 
@@ -21,12 +27,12 @@ public class LoginResponse {
         return this.session;
     }
 
-    public void setDb_key(String db_key) {
-        this.db_key = db_key;
+    public void setDbKey(String dbKey) {
+        this.dbKey = dbKey;
     }
 
-    public String getDb_key() {
-        return this.db_key;
+    public String getDbKey() {
+        return this.dbKey;
     }
 
     public void setOrganization(String organization) {
@@ -37,12 +43,19 @@ public class LoginResponse {
         return this.organization;
     }
 
-    public String getRole() {
-        return role;
+    public List<String> getModuleIds() {
+        return moduleIds;
     }
 
-    public void setRole(String role) {
-        this.role = role;
+    public void setModuleIds(List<String> moduleIds) {
+        this.moduleIds = moduleIds;
+    }
+
+    public String getRole() {
+        if (moduleIds == null || moduleIds.isEmpty()) {
+            return null;
+        }
+        return moduleIds.get(0);
     }
 
     public void setLanguage(String language) {

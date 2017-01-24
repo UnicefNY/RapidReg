@@ -24,12 +24,13 @@ public class CaseFormServiceImpl implements CaseFormService {
         if (roleType == User.Role.CP) {
             return caseFormDao.getCaseForm(RecordConfiguration.MODULE_ID_CP) != null && caseFormDao
                     .getCaseForm(RecordConfiguration.MODULE_ID_CP).getForm() != null;
-        }else if(roleType == User.Role.GBV) {
+        }
+        if (roleType == User.Role.GBV) {
             return caseFormDao.getCaseForm(RecordConfiguration.MODULE_ID_GBV) != null &&
                     caseFormDao.getCaseForm(RecordConfiguration.MODULE_ID_GBV).getForm() != null;
-        }else
-            return caseFormDao.getCaseForm(RecordConfiguration.MODULE_ID_CP) != null && caseFormDao
-                    .getCaseForm(RecordConfiguration.MODULE_ID_CP).getForm() != null;
+        }
+        return caseFormDao.getCaseForm(RecordConfiguration.MODULE_ID_CP) != null && caseFormDao
+                .getCaseForm(RecordConfiguration.MODULE_ID_CP).getForm() != null;
     }
 
     public CaseTemplateForm getCPTemplate() {

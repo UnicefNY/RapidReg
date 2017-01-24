@@ -5,12 +5,19 @@ import org.unicef.rapidreg.model.User;
 
 public interface LoginService {
     boolean isOnline();
+
     void loginOnline(String username, String password, String url, String imei, LoginCallback callback);
-    void loginOffline(String username, String password, LoginCallback callback);
+
+    void loginOffline(String username, String password, String url, LoginCallback callback);
+
     void destroy();
+
     String getServerUrl();
+
     boolean isUsernameValid(String username);
+
     boolean isPasswordValid(String password);
+
     boolean isUrlValid(String url);
 
     enum VerifiedCode {
@@ -31,7 +38,9 @@ public interface LoginService {
 
     interface LoginCallback {
         void onSuccessful(String cookie, User user);
+
         void onFailed(Throwable error);
+
         void onError(int code);
     }
 }

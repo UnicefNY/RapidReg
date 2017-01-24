@@ -20,6 +20,7 @@ import org.unicef.rapidreg.model.User;
 import org.unicef.rapidreg.repository.TracingDao;
 import org.unicef.rapidreg.repository.TracingPhotoDao;
 import org.unicef.rapidreg.service.cache.ItemValuesMap;
+import org.unicef.rapidreg.utils.TextUtils;
 
 import java.io.IOException;
 import java.sql.Date;
@@ -69,7 +70,7 @@ public class TracingServiceTest {
         when(PrimeroAppConfiguration.getCurrentUser()).thenReturn(user);
         when(PrimeroAppConfiguration.getCurrentUsername()).thenReturn(user.getUsername());
 
-        Mockito.when(PrimeroAppConfiguration.getApiBaseUrl()).thenReturn(url);
+        Mockito.when(PrimeroAppConfiguration.getApiBaseUrl()).thenReturn(TextUtils.lintUrl(url));
     }
 
     @Test
@@ -95,16 +96,17 @@ public class TracingServiceTest {
         Tracing tracing = new Tracing();
         List<Tracing> tracingList = new ArrayList<Tracing>();
         tracingList.add(tracing);
-        when(tracingDao.getAllTracingsOrderByDate(false, "userName", url)).thenReturn(tracingList);
+        when(tracingDao.getAllTracingsOrderByDate(false, "userName", TextUtils.lintUrl(url))).thenReturn(tracingList);
         assertThat(tracingService.getAll(), is(tracingList));
-        verify(tracingDao, times(1)).getAllTracingsOrderByDate(false, "userName", url);
+        verify(tracingDao, times(1)).getAllTracingsOrderByDate(false, "userName", TextUtils.lintUrl(url));
     }
 
     @Test
     public void should_return_all_order_ids_sorted_by_ascending() throws Exception {
         Tracing[] orders = new Tracing[]{new Tracing(1), new Tracing(2), new Tracing(3)};
         List<Tracing> orderList = Arrays.asList(orders);
-        when(tracingDao.getAllTracingsOrderByDate(true, PrimeroAppConfiguration.getCurrentUsername(), url)).thenReturn
+        when(tracingDao.getAllTracingsOrderByDate(true, PrimeroAppConfiguration.getCurrentUsername(), TextUtils
+                .lintUrl(url))).thenReturn
                 (orderList);
         assertThat("When call getAllOrderByDateASC() should return orders sorted by date.",
                 tracingService.getAllOrderByDateASC(), is(Arrays.asList(new Long[]{1L, 2L, 3L})));
@@ -114,7 +116,8 @@ public class TracingServiceTest {
     public void should_return_all_order_ids_sorted_by_descending() throws Exception {
         Tracing[] orders = new Tracing[]{new Tracing(3), new Tracing(2), new Tracing(1)};
         List<Tracing> orderList = Arrays.asList(orders);
-        when(tracingDao.getAllTracingsOrderByDate(false, PrimeroAppConfiguration.getCurrentUsername(), url))
+        when(tracingDao.getAllTracingsOrderByDate(false, PrimeroAppConfiguration.getCurrentUsername(), TextUtils
+                .lintUrl(url)))
                 .thenReturn(orderList);
         assertThat("When call getAllOrderByDateDES() should return orders sorted by date.",
                 tracingService.getAllOrderByDateDES(), is(Arrays.asList(new Long[]{3L, 2L, 1L})));
@@ -157,7 +160,7 @@ public class TracingServiceTest {
         when(tracingPhotoDao.save(tracingTemp, photoPaths)).thenReturn(expected);
 
         Tracing savedTracing = tracingServiceSpy.save(itemValuesMap, photoPaths);
-        assertThat(savedTracing.getUrl(), is(url));
+        assertThat(savedTracing.getUrl(), is(TextUtils.lintUrl(url)));
         verify(tracingDao, times(1)).save(any(Tracing.class));
         verify(tracingPhotoDao, times(1)).save(any(Tracing.class), anyList());
     }

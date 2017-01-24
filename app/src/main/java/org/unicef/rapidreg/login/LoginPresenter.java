@@ -11,9 +11,10 @@ import org.unicef.rapidreg.event.LoadGBVCaseFormEvent;
 import org.unicef.rapidreg.event.LoadGBVIncidentFormEvent;
 import org.unicef.rapidreg.event.LoadTracingFormEvent;
 import org.unicef.rapidreg.model.User;
+import org.unicef.rapidreg.service.LoginService;
 import org.unicef.rapidreg.service.impl.LoginServiceImpl;
 import org.unicef.rapidreg.utils.HttpStatusCodeHandler;
-import org.unicef.rapidreg.service.LoginService;
+import org.unicef.rapidreg.utils.TextUtils;
 
 import javax.inject.Inject;
 
@@ -36,13 +37,13 @@ public class LoginPresenter extends MvpBasePresenter<LoginView> {
             return;
         }
 
-        PrimeroAppConfiguration.setApiBaseUrl(url.endsWith("/") ? url : String.format("%s/", url));
+        PrimeroAppConfiguration.setApiBaseUrl(TextUtils.lintUrl(url));
         try {
             getView().showLoading(true);
             if (loginService.isOnline()) {
                 doLoginOnline(username, password, url, imei);
             } else {
-                doLoginOffline(username, password);
+                doLoginOffline(username, password, url);
             }
         } catch (Exception e) {
             getView().showLoginErrorByToast(e.getMessage());
@@ -103,7 +104,7 @@ public class LoginPresenter extends MvpBasePresenter<LoginView> {
                 if (isViewAttached()) {
                     getView().showError(error, false);
                     getView().showLoading(false);
-                    doLoginOffline(username, password);
+                    doLoginOffline(username, password, url);
                 }
             }
 
@@ -135,8 +136,8 @@ public class LoginPresenter extends MvpBasePresenter<LoginView> {
         }
     }
 
-    private void doLoginOffline(String username, String password) {
-        loginService.loginOffline(username, password, new LoginService.LoginCallback() {
+    private void doLoginOffline(String username, String password, String url) {
+        loginService.loginOffline(username, password, url, new LoginService.LoginCallback() {
             @Override
             public void onSuccessful(String cookie, User user) {
                 PrimeroAppConfiguration.setCurrentUser(user);

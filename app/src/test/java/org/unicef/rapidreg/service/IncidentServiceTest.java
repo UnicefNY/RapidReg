@@ -19,6 +19,7 @@ import org.unicef.rapidreg.model.User;
 import org.unicef.rapidreg.repository.IncidentDao;
 import org.unicef.rapidreg.repository.impl.IncidentDaoImpl;
 import org.unicef.rapidreg.service.cache.ItemValuesMap;
+import org.unicef.rapidreg.utils.TextUtils;
 import org.unicef.rapidreg.utils.Utils;
 
 import java.io.IOException;
@@ -86,11 +87,11 @@ public class IncidentServiceTest {
         List<Incident> incidentList = new ArrayList<Incident>();
         incidentList.add(incident);
         when(incidentDao.getAllIncidentsOrderByDate(false, PrimeroAppConfiguration.getCurrentUser().getUsername(),
-                url))
+                TextUtils.lintUrl(url)))
                 .thenReturn(incidentList);
         assertThat(incidentService.getAll(), is(incidentList));
         verify(incidentDao, times(1)).getAllIncidentsOrderByDate(false, PrimeroAppConfiguration.getCurrentUser()
-                .getUsername(), url);
+                .getUsername(), TextUtils.lintUrl(url));
     }
 
     @Test
@@ -98,11 +99,11 @@ public class IncidentServiceTest {
         Incident[] orders = new Incident[]{new Incident(1), new Incident(2), new Incident(3)};
         List<Incident> orderList = Arrays.asList(orders);
         when(incidentDao.getAllIncidentsOrderByAge(true, PrimeroAppConfiguration.getCurrentUser().getUsername(),
-                url)).thenReturn(orderList);
+                TextUtils.lintUrl(url))).thenReturn(orderList);
         assertThat(incidentService.getAllOrderByAgeASC(), is(Arrays.asList(new Long[]{1L, 2L,
                 3L})));
         verify(incidentDao, times(1)).getAllIncidentsOrderByAge(true, PrimeroAppConfiguration.getCurrentUser()
-                .getUsername(), url);
+                .getUsername(), TextUtils.lintUrl(url));
     }
 
     @Test
@@ -110,11 +111,11 @@ public class IncidentServiceTest {
         Incident[] orders = new Incident[]{new Incident(1), new Incident(2), new Incident(3)};
         List<Incident> orderList = Arrays.asList(orders);
         when(incidentDao.getAllIncidentsOrderByAge(false, PrimeroAppConfiguration.getCurrentUser().getUsername(),
-                url)).thenReturn(orderList);
+                TextUtils.lintUrl(url))).thenReturn(orderList);
         assertThat(incidentService.getAllOrderByAgeDES(), is(Arrays.asList(new Long[]{1L, 2L,
                 3L})));
         verify(incidentDao, times(1)).getAllIncidentsOrderByAge(false, PrimeroAppConfiguration.getCurrentUser()
-                .getUsername(), url);
+                .getUsername(), TextUtils.lintUrl(url));
     }
 
     @Test
@@ -122,11 +123,11 @@ public class IncidentServiceTest {
         Incident[] orders = new Incident[]{new Incident(1), new Incident(2), new Incident(3)};
         List<Incident> orderList = Arrays.asList(orders);
         when(incidentDao.getAllIncidentsOrderByDate(true, PrimeroAppConfiguration.getCurrentUser().getUsername(),
-                url)).thenReturn(orderList);
+                TextUtils.lintUrl(url))).thenReturn(orderList);
         assertThat("When call getAllOrdersByDateAsc() should return orders sorted by date.",
                 incidentService.getAllOrderByDateASC(), is(Arrays.asList(new Long[]{1L, 2L, 3L})));
         verify(incidentDao, times(1)).getAllIncidentsOrderByDate(true, PrimeroAppConfiguration.getCurrentUser()
-                .getUsername(), url);
+                .getUsername(), TextUtils.lintUrl(url));
     }
 
     @Test
@@ -134,11 +135,11 @@ public class IncidentServiceTest {
         Incident[] orders = new Incident[]{new Incident(3), new Incident(2), new Incident(1)};
         List<Incident> orderList = Arrays.asList(orders);
         when(incidentDao.getAllIncidentsOrderByDate(false, PrimeroAppConfiguration.getCurrentUser().getUsername(),
-                url)).thenReturn(orderList);
+                TextUtils.lintUrl(url))).thenReturn(orderList);
         assertThat("When call getAllOrderByDateDES() should return orders sorted by date.",
                 incidentService.getAllOrderByDateDES(), is(Arrays.asList(new Long[]{3L, 2L, 1L})));
         verify(incidentDao, times(1)).getAllIncidentsOrderByDate(false, PrimeroAppConfiguration.getCurrentUser()
-                .getUsername(), url);
+                .getUsername(), TextUtils.lintUrl(url));
     }
 
     @Test
@@ -160,7 +161,7 @@ public class IncidentServiceTest {
 
         assertThat(incident.getAge(), is(-1));
         assertThat(incident.getUniqueId(), is(uniqueId));
-        assertThat(incident.getUrl(), is(url));
+        assertThat(incident.getUrl(), is(TextUtils.lintUrl(url)));
         assertThat(incident.getRegistrationDate(), is(Utils.getRegisterDate("11/11/1111")));
         assertThat(incident.getRegistrationDate(), is(Utils.getRegisterDate("11/11/1111")));
 
@@ -184,7 +185,7 @@ public class IncidentServiceTest {
         when(incidentDao.save(any(Incident.class))).thenReturn(incident);
 
         assertThat(incident.getAge(), is(-1));
-        assertThat(incident.getUrl(), is(url));
+        assertThat(incident.getUrl(), is(TextUtils.lintUrl(url)));
         assertThat(incident.getUniqueId(), is(uniqueId));
     }
 

@@ -11,8 +11,8 @@ import android.widget.Toast;
 import com.hannesdorfmann.mosby.mvp.MvpActivity;
 
 import org.unicef.rapidreg.IntentSender;
-import org.unicef.rapidreg.PrimeroApplication;
 import org.unicef.rapidreg.PrimeroAppConfiguration;
+import org.unicef.rapidreg.PrimeroApplication;
 import org.unicef.rapidreg.R;
 import org.unicef.rapidreg.base.BaseProgressDialog;
 import org.unicef.rapidreg.injection.component.ActivityComponent;
@@ -139,7 +139,9 @@ public class LoginActivity extends MvpActivity<LoginView, LoginPresenter> implem
 
     @Override
     public void showError(Throwable e, boolean pullToRefresh) {
-        Toast.makeText(LoginActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+        Toast.makeText(LoginActivity.this, getResources().getString(R.string.login_failed_to_connect_prefix) + PrimeroAppConfiguration.getApiBaseUrl(), Toast.LENGTH_SHORT).show();
+        Toast.makeText(LoginActivity.this, getResources().getString(R.string.login_failed_check_network_and_url),
+                Toast.LENGTH_SHORT).show();
     }
 
     @Override
