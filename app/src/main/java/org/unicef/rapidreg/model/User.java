@@ -189,9 +189,20 @@ public class User extends BaseModel {
     }
 
     public enum Role {
-        EMPTY_ROLE(""),
-        CP("CP", R.menu.activity_main_cp_drawer, R.menu.activity_main_tracing_drawer, R.menu.activity_main_sync_drawer),
-        GBV("GBV", R.menu.activity_main_gbv_drawer, R.menu.activity_main_incident_drawer, R.menu.activity_main_sync_drawer);
+        EMPTY_ROLE("",
+                R.menu.activity_main_cp_drawer,
+                R.menu.activity_main_gbv_drawer,
+                R.menu.activity_main_tracing_drawer,
+                R.menu.activity_main_incident_drawer,
+                R.menu.activity_main_sync_drawer),
+        CP("CP",
+                R.menu.activity_main_cp_drawer,
+                R.menu.activity_main_tracing_drawer,
+                R.menu.activity_main_sync_drawer),
+        GBV("GBV",
+                R.menu.activity_main_gbv_drawer,
+                R.menu.activity_main_incident_drawer,
+                R.menu.activity_main_sync_drawer);
 
         private String value;
         private int[] resIds;
