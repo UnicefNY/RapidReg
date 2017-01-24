@@ -99,6 +99,7 @@
     <string name="continue_sync_button_text">Continue sync</string>
     <string name="sync_upload_success_message">Congrats! Your upload request is completed.</string>
     <string name="sync_download_success_message">Congrats! Your download request is completed.</string>
+    <string name="sync_pull_form_success_message">"Congrats! Your synchronisation request is completed."</string>
     <string name="sync_error_message">Sorry, the synchronization request can not proceed, please contact the support team.</string>
     <string name="sync_request_time_out_error_message">The network is not stable, please check your internet connection and try again.</string>
     <string name="sync_server_not_reachable_error_message">Web server is not available, please contact your admin.</string>
