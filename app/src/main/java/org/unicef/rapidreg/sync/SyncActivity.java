@@ -15,11 +15,11 @@ public class SyncActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.fragment_content, new SyncFragment(), null).commit();
-        drawer.closeDrawer(GravityCompat.START);
-
-        toolbar.setTitle(R.string.sync);
+        hideAllToolbarIcons();
+        toolbarTitle.setText(R.string.sync);
         navigationView.setCheckedItem(R.id.nav_sync);
         navigationView.setItemTextColor(syncColor);
+        drawer.closeDrawer(GravityCompat.START);
     }
 
     @Override
@@ -29,21 +29,36 @@ public class SyncActivity extends BaseActivity {
 
     @Override
     protected void navCaseAction() {
-        intentSender.showCasesActivity(this, false);
+        intentSender.showCasesActivity(this, true, false);
     }
 
     @Override
     protected void navTracingAction() {
-        intentSender.showTracingActivity(this);
+        intentSender.showTracingActivity(this, true);
     }
 
     @Override
     protected void navIncidentAction() {
-        intentSender.showIncidentActivity(this);
+        intentSender.showIncidentActivity(this, true);
     }
 
     @Override
     protected void processBackButton() {
-        intentSender.showCasesActivity(this, true);
+        intentSender.showCasesActivity(this, true, false);
+    }
+
+    @Override
+    protected void search() {
+
+    }
+
+    @Override
+    protected void save() {
+
+    }
+
+    @Override
+    protected void showHideDetail() {
+
     }
 }

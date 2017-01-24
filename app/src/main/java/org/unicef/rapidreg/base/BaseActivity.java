@@ -1,5 +1,6 @@
 package org.unicef.rapidreg.base;
 
+import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -12,6 +13,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -22,6 +24,7 @@ import org.unicef.rapidreg.IntentSender;
 import org.unicef.rapidreg.PrimeroApplication;
 import org.unicef.rapidreg.PrimeroAppConfiguration;
 import org.unicef.rapidreg.R;
+import org.unicef.rapidreg.base.record.recordlist.RecordListFragment;
 import org.unicef.rapidreg.injection.component.ActivityComponent;
 import org.unicef.rapidreg.injection.component.DaggerActivityComponent;
 import org.unicef.rapidreg.injection.module.ActivityModule;
@@ -37,19 +40,37 @@ public abstract class BaseActivity extends MvpActivity<BaseView, BasePresenter> 
             new int[]{android.R.attr.state_checked},
             new int[]{-android.R.attr.state_checked},};
 
-    @BindView(R.id.toolbar)
-    protected Toolbar toolbar;
     @BindView(R.id.nav_view)
     protected NavigationView navigationView;
+
     @BindView(R.id.drawer_layout)
     protected DrawerLayout drawer;
 
+    @BindView(R.id.menu)
+    protected ImageButton menu;
+
+    @BindView(R.id.toolbar_title)
+    protected TextView toolbarTitle;
+
+    @BindView(R.id.toggle)
+    protected ImageButton showHideMenu;
+
+    @BindView(R.id.save)
+    protected TextView saveMenu;
+
+    @BindView(R.id.search)
+    protected ImageButton searchMenu;
+
     protected IntentSender intentSender = new IntentSender();
+
+    protected DetailState detailState = DetailState.VISIBILITY;
 
     protected ColorStateList caseColor;
     protected ColorStateList tracingColor;
     protected ColorStateList incidentColor;
     protected ColorStateList syncColor;
+
+    protected boolean isMenuOpen;
 
     @Inject
     BasePresenter basePresenter;
@@ -68,6 +89,9 @@ public abstract class BaseActivity extends MvpActivity<BaseView, BasePresenter> 
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
+        isMenuOpen = getIntent().getBooleanExtra(IntentSender.IS_OPEN_MENU, false);
+
+        initToolbar();
         initNavigationItemMenu();
 
         navigationView.setItemIconTintList(null);
@@ -98,23 +122,15 @@ public abstract class BaseActivity extends MvpActivity<BaseView, BasePresenter> 
             }
         });
 
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.setDrawerListener(toggle);
-        toggle.syncState();
+        drawer.openDrawer(GravityCompat.START);
         navigationView.setNavigationItemSelectedListener(this);
-        if (getIntent().getBooleanExtra(IntentSender.IS_OPEN_MENU, false)) {
-            drawer.openDrawer(GravityCompat.START);
-        } else {
-            drawer.closeDrawer(GravityCompat.START);
-        }
     }
 
     protected void initNavigationItemMenu() {
         User user = PrimeroAppConfiguration.getCurrentUser();
         if (user != null) {
             User.Role role = user.getRoleType();
-            for (int resId: role.getResIds()) {
+            for (int resId : role.getResIds()) {
                 navigationView.inflateMenu(resId);
             }
         }
@@ -185,6 +201,67 @@ public abstract class BaseActivity extends MvpActivity<BaseView, BasePresenter> 
         return new ColorStateList(COLOR_STATES, color);
     }
 
+    private void initToolbar() {
+        menu.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (getIntent().getBooleanExtra(IntentSender.IS_OPEN_MENU, false)) {
+                    drawer.openDrawer(GravityCompat.START);
+                } else {
+                    drawer.closeDrawer(GravityCompat.START);
+                }
+            }
+        });
+        showHideMenu.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showHideDetail();
+            }
+        });
+        saveMenu.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                save();
+            }
+        });
+        searchMenu.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                search();
+            }
+        });
+    }
+
+    protected void changeToolbarTitle(int resId) {
+        toolbarTitle.setText(resId);
+    }
+
+    protected void changeToolbarIcon(Feature feature) {
+        hideAllToolbarIcons();
+
+        if (feature.isListMode()) {
+            showHideMenu.setVisibility(View.GONE);
+            searchMenu.setVisibility(View.VISIBLE);
+        } else if (feature.isEditMode()) {
+            saveMenu.setVisibility(View.VISIBLE);
+        }
+    }
+
+    public void enableShowHideSwitcher() {
+        showHideMenu.setVisibility(View.VISIBLE);
+    }
+
+    public void setShowHideSwitcherToShowState() {
+        detailState = DetailState.VISIBILITY;
+        showHideMenu.setBackgroundResource(detailState.getResId());
+    }
+
+    protected void hideAllToolbarIcons() {
+        showHideMenu.setVisibility(View.GONE);
+        searchMenu.setVisibility(View.GONE);
+        saveMenu.setVisibility(View.GONE);
+    }
+
     protected abstract void navSyncAction();
 
     protected abstract void navCaseAction();
@@ -194,5 +271,36 @@ public abstract class BaseActivity extends MvpActivity<BaseView, BasePresenter> 
     protected abstract void navIncidentAction();
 
     protected abstract void processBackButton();
+
+    protected abstract void search();
+
+    protected abstract void save();
+
+    protected abstract void showHideDetail();
+
+    public enum DetailState {
+        VISIBILITY(R.drawable.ic_visibility_white_24dp, true),
+        INVISIBILITY(R.drawable.ic_visibility_off_white_24dp, false);
+
+        private final int resId;
+        private final boolean isDetailShow;
+
+        DetailState(int resId, boolean isDetailShow) {
+            this.resId = resId;
+            this.isDetailShow = isDetailShow;
+        }
+
+        public DetailState getNextState() {
+            return this == VISIBILITY ? INVISIBILITY : VISIBILITY;
+        }
+
+        public int getResId() {
+            return resId;
+        }
+
+        public boolean isDetailShow() {
+            return isDetailShow;
+        }
+    }
 
 }

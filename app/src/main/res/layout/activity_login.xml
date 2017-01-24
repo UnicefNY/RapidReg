@@ -36,7 +36,7 @@
             android:layout_height="wrap_content"
             android:hint="@string/username_hint_text"
             android:imeOptions="actionDone"
-            android:text="primero"
+            android:text="primero_gbv"
             android:singleLine="true"
             android:textColor="@color/primero_font_dark"
             android:textSize="@dimen/text_size_18" />

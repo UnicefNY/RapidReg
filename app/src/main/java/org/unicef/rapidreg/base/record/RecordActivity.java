@@ -11,12 +11,17 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.view.GravityCompat;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ImageButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import org.greenrobot.eventbus.EventBus;
+import org.unicef.rapidreg.IntentSender;
 import org.unicef.rapidreg.R;
 import org.unicef.rapidreg.base.BaseActivity;
 import org.unicef.rapidreg.base.Feature;
@@ -39,12 +44,7 @@ import static org.unicef.rapidreg.service.RecordService.AUDIO_FILE_PATH;
 public abstract class RecordActivity extends BaseActivity {
     public static final String TAG = RecordActivity.class.getSimpleName();
 
-    protected DetailState detailState = DetailState.VISIBILITY;
     protected Feature currentFeature;
-
-    protected MenuItem showHideMenu;
-    protected MenuItem saveMenu;
-    protected MenuItem searchMenu;
 
     private String imagePath;
     private CompositeSubscription subscriptions;
@@ -62,18 +62,11 @@ public abstract class RecordActivity extends BaseActivity {
         return recordPresenter.isFormSyncFail();
     }
 
-    public void setShowHideSwitcherToShowState() {
-        detailState = DetailState.VISIBILITY;
-        showHideMenu.setIcon(detailState.getResId());
-    }
-
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         getComponent().inject(this);
         super.onCreate(savedInstanceState);
         subscriptions = new CompositeSubscription();
-
-        initToolbar();
         EventBus.getDefault().register(this);
     }
 
@@ -107,8 +100,15 @@ public abstract class RecordActivity extends BaseActivity {
             showQuitDialog(R.id.nav_sync);
         } else {
             Utils.clearAudioFile(AUDIO_FILE_PATH);
-            intentSender.showSyncActivity(this);
+            intentSender.showSyncActivity(this, true);
         }
+    }
+
+    protected void showHideDetail() {
+        detailState = detailState.getNextState();
+        showHideMenu.setBackgroundResource(detailState.getResId());
+        RecordListFragment listFragment = getRecordListFragment();
+        listFragment.toggleMode(detailState.isDetailShow());
     }
 
     public Feature getCurrentFeature() {
@@ -128,25 +128,6 @@ public abstract class RecordActivity extends BaseActivity {
         } catch (Exception e) {
             throw new RuntimeException("Fragment navigation error", e);
         }
-    }
-
-    protected void changeToolbarTitle(int resId) {
-        toolbar.setTitle(resId);
-    }
-
-    protected void changeToolbarIcon(Feature feature) {
-        hideAllToolbarIcons();
-
-        if (feature.isListMode()) {
-            showHideMenu.setVisible(false);
-            searchMenu.setVisible(true);
-        } else if (feature.isEditMode()) {
-            saveMenu.setVisible(true);
-        }
-    }
-
-    public void enableShowHideSwitcher() {
-        showHideMenu.setVisible(true);
     }
 
     private void onSelectFromGalleryResult(Intent data) {
@@ -190,21 +171,6 @@ public abstract class RecordActivity extends BaseActivity {
         EventBus.getDefault().postSticky(event);
     }
 
-    private void initToolbar() {
-        toolbar.inflateMenu(R.menu.toolbar_main);
-        toolbar.setOnMenuItemClickListener(new MenuItemListener());
-
-        saveMenu = toolbar.getMenu().findItem(R.id.save);
-        searchMenu = toolbar.getMenu().findItem(R.id.search);
-        showHideMenu = toolbar.getMenu().findItem(R.id.toggle);
-    }
-
-    private void hideAllToolbarIcons() {
-        showHideMenu.setVisible(false);
-        searchMenu.setVisible(false);
-        saveMenu.setVisible(false);
-    }
-
     private void navToFragment(Fragment target, int[] animIds) {
         if (target != null) {
             String tag = target.getClass().getSimpleName();
@@ -216,62 +182,8 @@ public abstract class RecordActivity extends BaseActivity {
         }
     }
 
-    protected void showHideDetail() {
-        detailState = detailState.getNextState();
-        showHideMenu.setIcon(detailState.getResId());
-        RecordListFragment listFragment = getRecordListFragment();
-        listFragment.toggleMode(detailState.isDetailShow());
-    }
-
     protected abstract RecordListFragment getRecordListFragment();
-
-    protected abstract void search();
-
-    protected abstract void save();
 
     protected abstract void showQuitDialog(int resId);
 
-    private class MenuItemListener implements Toolbar.OnMenuItemClickListener {
-        @Override
-        public boolean onMenuItemClick(MenuItem menuItem) {
-            switch (menuItem.getItemId()) {
-                case R.id.toggle:
-                    showHideDetail();
-                    return true;
-                case R.id.search:
-                    search();
-                    return true;
-                case R.id.save:
-                    save();
-                    return true;
-                default:
-                    return false;
-            }
-        }
-    }
-
-    public enum DetailState {
-        VISIBILITY(R.drawable.ic_visibility_white_48dp, true),
-        INVISIBILITY(R.drawable.ic_visibility_off_white_48dp, false);
-
-        private final int resId;
-        private final boolean isDetailShow;
-
-        DetailState(int resId, boolean isDetailShow) {
-            this.resId = resId;
-            this.isDetailShow = isDetailShow;
-        }
-
-        public DetailState getNextState() {
-            return this == VISIBILITY ? INVISIBILITY : VISIBILITY;
-        }
-
-        public int getResId() {
-            return resId;
-        }
-
-        public boolean isDetailShow() {
-            return isDetailShow;
-        }
-    }
 }
