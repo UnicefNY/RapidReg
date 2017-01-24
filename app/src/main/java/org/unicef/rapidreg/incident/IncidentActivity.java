@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.view.GravityCompat;
 import android.widget.Toast;
 
 import org.greenrobot.eventbus.EventBus;
@@ -45,6 +46,7 @@ public class IncidentActivity extends RecordActivity implements BaseView {
 
         navigationView.setCheckedItem(R.id.nav_incident);
         navigationView.setItemTextColor(incidentColor);
+        drawer.closeDrawer(GravityCompat.START);
 
         turnToFeature(IncidentFeature.LIST, null, null);
     }
@@ -77,7 +79,7 @@ public class IncidentActivity extends RecordActivity implements BaseView {
             showQuitDialog(R.id.nav_tracing);
         } else {
             Utils.clearAudioFile(AUDIO_FILE_PATH);
-            intentSender.showTracingActivity(this);
+            intentSender.showTracingActivity(this, true);
         }
     }
 
@@ -86,7 +88,7 @@ public class IncidentActivity extends RecordActivity implements BaseView {
             showQuitDialog(R.id.nav_cases);
         } else {
             Utils.clearAudioFile(AUDIO_FILE_PATH);
-            intentSender.showCasesActivity(this, false);
+            intentSender.showCasesActivity(this, true, false);
         }
     }
 
@@ -104,13 +106,13 @@ public class IncidentActivity extends RecordActivity implements BaseView {
                                 turnToFeature(IncidentFeature.LIST, null, null);
                                 break;
                             case R.id.nav_cases:
-                                intentSender.showCasesActivity(IncidentActivity.this, false);
+                                intentSender.showCasesActivity(IncidentActivity.this, true, false);
                                 break;
                             case R.id.nav_tracing:
-                                intentSender.showTracingActivity(IncidentActivity.this);
+                                intentSender.showTracingActivity(IncidentActivity.this, true);
                                 break;
                             case R.id.nav_sync:
-                                intentSender.showSyncActivity(IncidentActivity.this);
+                                intentSender.showSyncActivity(IncidentActivity.this, true);
                                 break;
                             default:
                                 break;

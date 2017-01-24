@@ -125,6 +125,7 @@
     <string name="survivor_code">Survivor Code</string>
     <string name="type_of_violence">Type of Violence</string>
     <string name="date_of_inquiry">Date of Inquiry</string>
+    <string name="toolbar_title_text_placeholder">Tool Bar Text Placeholder</string>
     <!--Sync-->
 
     <!--Transparent theme-->

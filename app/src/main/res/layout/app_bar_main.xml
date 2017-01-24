@@ -12,12 +12,61 @@
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="?attr/colorPrimary"
-        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-        app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-        app:titleTextAppearance="@style/Toolbar.TitleText">
+        android:background="?attr/colorPrimary">
 
-        </android.support.v7.widget.Toolbar>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:paddingBottom="@dimen/size_10"
+            android:paddingRight="@dimen/size_10"
+            android:paddingTop="@dimen/size_10">
+
+            <ImageButton
+                android:id="@+id/menu"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/ic_menu_white_24dp" />
+
+            <TextView
+                android:id="@+id/toolbar_title"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/size_10"
+                android:layout_marginRight="@dimen/size_10"
+                android:layout_weight="5"
+                android:singleLine="true"
+                android:text="@string/toolbar_title_text_placeholder"
+                android:textColor="@android:color/white"
+                android:textSize="@dimen/text_size_18"
+                android:textStyle="bold" />
+
+            <ImageButton
+                android:id="@+id/toggle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="@dimen/size_10"
+                android:background="@drawable/ic_visibility_white_24dp" />
+
+            <TextView
+                android:id="@+id/save"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="@dimen/size_10"
+                android:clickable="true"
+                android:text="SAVE"
+                android:textColor="@android:color/white"
+                android:textSize="@dimen/text_size_14"
+                android:textStyle="bold" />
+
+            <ImageButton
+                android:id="@+id/search"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/ic_search_white_24dp" />
+        </LinearLayout>
+
+    </android.support.v7.widget.Toolbar>
 
     <include layout="@layout/content_main" />
 

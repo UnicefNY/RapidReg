@@ -200,7 +200,7 @@ public class LoginActivity extends MvpActivity<LoginView, LoginPresenter> implem
 
     @Override
     public void goToLoginSuccessScreen() {
-        new IntentSender().showCasesActivity(this, true);
+        new IntentSender().showCasesActivity(this, true, true);
     }
 
 }

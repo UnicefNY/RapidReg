@@ -5,11 +5,13 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.view.GravityCompat;
 import android.widget.Toast;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
+import org.unicef.rapidreg.IntentSender;
 import org.unicef.rapidreg.PrimeroAppConfiguration;
 import org.unicef.rapidreg.R;
 import org.unicef.rapidreg.base.BaseAlertDialog;
@@ -46,6 +48,11 @@ public class CaseActivity extends RecordActivity implements BaseView {
 
         navigationView.setCheckedItem(R.id.nav_cases);
         navigationView.setItemTextColor(caseColor);
+        if (getIntent().getBooleanExtra(IntentSender.IS_FROM_LOGIN, false)) {
+            drawer.openDrawer(GravityCompat.START);
+        } else {
+            drawer.closeDrawer(GravityCompat.START);
+        }
 
         turnToFeature(CaseFeature.LIST, null, null);
     }
@@ -86,7 +93,7 @@ public class CaseActivity extends RecordActivity implements BaseView {
             showQuitDialog(R.id.nav_tracing);
         } else {
             Utils.clearAudioFile(AUDIO_FILE_PATH);
-            intentSender.showTracingActivity(this);
+            intentSender.showTracingActivity(this, true);
         }
     }
 
@@ -96,7 +103,7 @@ public class CaseActivity extends RecordActivity implements BaseView {
             showQuitDialog(R.id.nav_incident);
         } else {
             Utils.clearAudioFile(AUDIO_FILE_PATH);
-            intentSender.showIncidentActivity(this);
+            intentSender.showIncidentActivity(this, true);
         }
     }
 
@@ -114,13 +121,13 @@ public class CaseActivity extends RecordActivity implements BaseView {
                                 turnToFeature(CaseFeature.LIST, null, null);
                                 break;
                             case R.id.nav_tracing:
-                                intentSender.showTracingActivity(CaseActivity.this);
+                                intentSender.showTracingActivity(CaseActivity.this, true);
                                 break;
                             case R.id.nav_incident:
-                                intentSender.showIncidentActivity(CaseActivity.this);
+                                intentSender.showIncidentActivity(CaseActivity.this, true);
                                 break;
                             case R.id.nav_sync:
-                                intentSender.showSyncActivity(CaseActivity.this);
+                                intentSender.showSyncActivity(CaseActivity.this, true);
                                 break;
                             default:
                                 break;
