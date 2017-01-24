@@ -139,7 +139,8 @@ public class LoginActivity extends MvpActivity<LoginView, LoginPresenter> implem
 
     @Override
     public void showError(Throwable e, boolean pullToRefresh) {
-        Toast.makeText(LoginActivity.this, getResources().getString(R.string.login_failed_to_connect_prefix) + PrimeroAppConfiguration.getApiBaseUrl(), Toast.LENGTH_SHORT).show();
+        Toast.makeText(LoginActivity.this, getResources().getString(R.string.login_failed_to_connect_prefix) +
+                PrimeroAppConfiguration.getApiBaseUrl(), Toast.LENGTH_SHORT).show();
         Toast.makeText(LoginActivity.this, getResources().getString(R.string.login_failed_check_network_and_url),
                 Toast.LENGTH_SHORT).show();
     }
@@ -154,18 +155,14 @@ public class LoginActivity extends MvpActivity<LoginView, LoginPresenter> implem
     }
 
     @Override
-    public void showLoginSuccessful() {
-        if (loginPresenter.isOnline()) {
-            Toast.makeText(this, getResources().getString(R.string.login_success_message), Toast.LENGTH_SHORT).show();
-        } else {
-            Toast.makeText(this, getResources().getString(R.string.login_offline_success_text), Toast.LENGTH_SHORT)
-                    .show();
-        }
+    public void showOnlineLoginSuccessful() {
+        Toast.makeText(this, getResources().getString(R.string.login_success_message), Toast.LENGTH_SHORT).show();
     }
 
     @Override
-    public void showLoginErrorByResId(int resId) {
-        Toast.makeText(this, getResources().getString(resId), Toast.LENGTH_SHORT).show();
+    public void showOfflineLoginSuccessful() {
+        Toast.makeText(this, getResources().getString(R.string.login_offline_success_text), Toast.LENGTH_SHORT)
+                .show();
     }
 
     @Override
@@ -201,8 +198,22 @@ public class LoginActivity extends MvpActivity<LoginView, LoginPresenter> implem
     }
 
     @Override
-    public void goToLoginSuccessScreen() {
-        new IntentSender().showCasesActivity(this, true, true);
+    public void navigateToLoginSucceedPage() {
+        new IntentSender().showCasesActivity(this, true,true);
+    }
+
+    @Override
+    public void showCredentialErrorMsg() {
+        Toast.makeText(this, getResources().getString(R.string.login_failed_credential), Toast.LENGTH_LONG)
+                .show();
+    }
+
+    @Override
+    public void showServerConnectionErrorMsg() {
+        Toast.makeText(LoginActivity.this, getResources().getString(R.string.login_failed_to_connect_prefix) +
+                PrimeroAppConfiguration.getApiBaseUrl(), Toast.LENGTH_SHORT).show();
+        Toast.makeText(LoginActivity.this, getResources().getString(R.string.login_failed_check_network_and_url),
+                Toast.LENGTH_SHORT).show();
     }
 
 }

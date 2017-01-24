@@ -98,26 +98,27 @@ public class LoginServiceImpl extends BaseRetrofitService implements org.unicef.
 
     @Override
     public void loginOffline(String username, String password, String url, LoginCallback callback) {
-        VerifiedCode verifiedCode = verify(username, password, url, isOnline());
+        VerifiedCode verifiedCode = verify(username, password, url);
 
         if (LoginService.VerifiedCode.OK == verifiedCode) {
             callback.onSuccessful("", userDao.getUser(username, url));
-        } else {
-            callback.onError(verifiedCode.getResId());
+        } else if (VerifiedCode.OFFLINE_PASSWORD_INCORRECT == verifiedCode){
+            callback.onError(verifiedCode.ordinal());
+        }else{
+            callback.onFailed(null);
         }
     }
 
-    public VerifiedCode verify(String username, String password, String url, boolean isOnline) {
+    public VerifiedCode verify(String username, String password, String url) {
         User user = userDao.getUser(username, url);
         if (user == null) {
-            return isOnline ? LoginService.VerifiedCode.PASSWORD_INCORRECT : LoginService.VerifiedCode
-                    .USER_DOES_NOT_EXIST;
+            return LoginService.VerifiedCode.OFFLINE_USER_DOES_NOT_EXIST;
         }
 
         if (EncryptHelper.isMatched(password, user.getPassword())) {
             return LoginService.VerifiedCode.OK;
         }
-        return LoginService.VerifiedCode.PASSWORD_INCORRECT;
+        return LoginService.VerifiedCode.OFFLINE_PASSWORD_INCORRECT;
     }
 
     private String getSessionId(Headers headers) {

@@ -21,19 +21,9 @@ public interface LoginService {
     boolean isUrlValid(String url);
 
     enum VerifiedCode {
-        USER_DOES_NOT_EXIST(R.string.login_offline_no_user_text),
-        PASSWORD_INCORRECT(R.string.login_failed_text),
-        OK(R.string.login_offline_success_text);
-
-        private int resId;
-
-        VerifiedCode(int resId) {
-            this.resId = resId;
-        }
-
-        public int getResId() {
-            return resId;
-        }
+        OFFLINE_USER_DOES_NOT_EXIST,
+        OFFLINE_PASSWORD_INCORRECT,
+        OK
     }
 
     interface LoginCallback {

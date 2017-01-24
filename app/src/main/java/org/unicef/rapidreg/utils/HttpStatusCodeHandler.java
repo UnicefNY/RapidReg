@@ -9,7 +9,7 @@ public class HttpStatusCodeHandler {
         Log.e("TAG", "getHttpStatusMessage: " + statusCode + "");
         switch (statusCode) {
             case 401:
-                return R.string.login_failed_text;
+                return R.string.login_failed_credential;
             case 503:
                 return R.string.login_service_unavailable_message;
             default:
