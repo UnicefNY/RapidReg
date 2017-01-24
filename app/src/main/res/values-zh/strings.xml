@@ -16,7 +16,7 @@
     <string name="login_username_invalid_text">请输入有效用户名!</string>
     <string name="login_password_invalid_text">请输入有效密码!</string>
     <string name="login_url_invalid_text">请输入有效网址!</string>
-    <string name="login_failed_text">检查用户名,密码或网址!</string>
+    <string name="login_failed_credential">检查用户名,密码或网址!</string>
     <string name="login_out_successful_text">退出</string>
 
     <string name="login_user_label_key">用户</string>

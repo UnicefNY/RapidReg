@@ -1,7 +1,5 @@
 package org.unicef.rapidreg.login;
 
-import android.util.Log;
-
 import com.hannesdorfmann.mosby.mvp.MvpBasePresenter;
 
 import org.greenrobot.eventbus.EventBus;
@@ -13,7 +11,6 @@ import org.unicef.rapidreg.event.LoadTracingFormEvent;
 import org.unicef.rapidreg.model.User;
 import org.unicef.rapidreg.service.LoginService;
 import org.unicef.rapidreg.service.impl.LoginServiceImpl;
-import org.unicef.rapidreg.utils.HttpStatusCodeHandler;
 import org.unicef.rapidreg.utils.TextUtils;
 
 import javax.inject.Inject;
@@ -41,9 +38,9 @@ public class LoginPresenter extends MvpBasePresenter<LoginView> {
         try {
             getView().showLoading(true);
             if (loginService.isOnline()) {
-                doLoginOnline(username, password, url, imei);
+                doLoginOnline(username, password, PrimeroAppConfiguration.getApiBaseUrl(), imei);
             } else {
-                doLoginOffline(username, password, url);
+                doLoginOffline(username, password, PrimeroAppConfiguration.getApiBaseUrl());
             }
         } catch (Exception e) {
             getView().showLoginErrorByToast(e.getMessage());
@@ -65,7 +62,6 @@ public class LoginPresenter extends MvpBasePresenter<LoginView> {
             getView().showUrlInvalid();
             isValid = false;
         }
-
         return isValid;
     }
 
@@ -94,27 +90,22 @@ public class LoginPresenter extends MvpBasePresenter<LoginView> {
                     sendLoadFormEvent(user.getRoleType(), cookie);
 
                     getView().showLoading(false);
-                    getView().showLoginSuccessful();
-                    getView().goToLoginSuccessScreen();
+                    getView().showOnlineLoginSuccessful();
+                    getView().navigateToLoginSucceedPage();
                 }
             }
 
             @Override
             public void onFailed(Throwable error) {
                 if (isViewAttached()) {
-                    getView().showError(error, false);
-                    getView().showLoading(false);
                     doLoginOffline(username, password, url);
                 }
             }
 
             @Override
             public void onError(int code) {
-                getView().showLoginErrorByResId(HttpStatusCodeHandler
-                        .getHttpStatusMessage(code));
-
                 getView().showLoading(false);
-                Log.d(TAG, "login failed");
+                getView().showCredentialErrorMsg();
             }
         });
     }
@@ -142,20 +133,20 @@ public class LoginPresenter extends MvpBasePresenter<LoginView> {
             public void onSuccessful(String cookie, User user) {
                 PrimeroAppConfiguration.setCurrentUser(user);
                 getView().showLoading(false);
-                getView().showLoginSuccessful();
-                getView().goToLoginSuccessScreen();
+                getView().showOfflineLoginSuccessful();
+                getView().navigateToLoginSucceedPage();
             }
 
             @Override
             public void onFailed(Throwable error) {
                 getView().showLoading(false);
-                getView().showLoginErrorByToast(error.getMessage());
+                getView().showServerConnectionErrorMsg();
             }
 
             @Override
             public void onError(int code) {
                 getView().showLoading(false);
-                getView().showLoginErrorByResId(code);
+                getView().showCredentialErrorMsg();
             }
         });
     }

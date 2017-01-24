@@ -100,25 +100,25 @@ public class LoginServiceImplTest {
     public void should_verify_when_user_does_not_exist() {
         when(userDao.getUser(anyString(), anyString())).thenReturn(null);
 
-        LoginService.VerifiedCode verifiedCode = loginService.verify(username, password, expectedUrl, false);
+        LoginService.VerifiedCode verifiedCode = loginService.verify(username, password, expectedUrl);
 
-        assertThat(verifiedCode, is(LoginService.VerifiedCode.USER_DOES_NOT_EXIST));
+        assertThat(verifiedCode, is(LoginService.VerifiedCode.OFFLINE_USER_DOES_NOT_EXIST));
     }
 
     @Test
     public void should_verify_when_user_password_is_incorrect() {
         when(userDao.getUser(username, expectedUrl)).thenReturn(jack);
 
-        LoginService.VerifiedCode verifiedCode = loginService.verify(username, "654321", expectedUrl, false);
+        LoginService.VerifiedCode verifiedCode = loginService.verify(username, "654321", expectedUrl);
 
-        assertThat(verifiedCode, is(LoginService.VerifiedCode.PASSWORD_INCORRECT));
+        assertThat(verifiedCode, is(LoginService.VerifiedCode.OFFLINE_PASSWORD_INCORRECT));
     }
 
     @Test
     public void should_verify_when_both_username_and_password_are_correct() {
         when(userDao.getUser(username, expectedUrl)).thenReturn(jack);
 
-        LoginService.VerifiedCode verifiedCode = loginService.verify(username, password, expectedUrl, false);
+        LoginService.VerifiedCode verifiedCode = loginService.verify(username, password, expectedUrl);
 
         assertThat(verifiedCode, is(LoginService.VerifiedCode.OK));
     }
