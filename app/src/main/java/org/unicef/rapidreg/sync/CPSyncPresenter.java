@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.support.v4.util.Pair;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
@@ -12,8 +13,13 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.raizlabs.android.dbflow.data.Blob;
 
+import org.unicef.rapidreg.PrimeroAppConfiguration;
 import org.unicef.rapidreg.R;
+import org.unicef.rapidreg.base.RecordConfiguration;
+import org.unicef.rapidreg.base.record.RecordActivity;
+import org.unicef.rapidreg.base.record.RecordPresenter;
 import org.unicef.rapidreg.base.record.recordphoto.PhotoConfig;
+import org.unicef.rapidreg.childcase.CasePresenter;
 import org.unicef.rapidreg.injection.ActivityContext;
 import org.unicef.rapidreg.model.Case;
 import org.unicef.rapidreg.model.CasePhoto;
@@ -26,6 +32,7 @@ import org.unicef.rapidreg.service.SyncCaseService;
 import org.unicef.rapidreg.service.SyncTracingService;
 import org.unicef.rapidreg.service.TracingPhotoService;
 import org.unicef.rapidreg.service.TracingService;
+import org.unicef.rapidreg.tracing.TracingPresenter;
 import org.unicef.rapidreg.utils.Utils;
 
 import java.io.IOException;
@@ -69,6 +76,13 @@ public class CPSyncPresenter extends BaseSyncPresenter {
     private int totalNumberOfUploadRecords;
 
     private boolean isSyncing;
+
+    @Inject
+    CasePresenter casePresenter;
+    @Inject
+    RecordPresenter recordPresenter;
+    @Inject
+    TracingPresenter tracingPresenter;
 
     @Override
     public void attachView(SyncView view) {
@@ -651,8 +665,22 @@ public class CPSyncPresenter extends BaseSyncPresenter {
                     @Override
                     public void call() {
                         syncDownloadSuccessfully();
+                        pullForm();
                     }
                 });
+    }
+
+    private void pullForm() {
+        String moduleId = RecordConfiguration.MODULE_ID_CP;
+        String cookie = PrimeroAppConfiguration.getCookie();
+        casePresenter.loadCaseForm(PrimeroAppConfiguration.getDefaultLanguage(), cookie, moduleId);
+        tracingPresenter.loadTracingForm(cookie);
+
+        if(!recordPresenter.isFormSyncFail()){
+            syncPullFormSuccessfully();
+        }else{
+            //TODO fail infomation
+        }
     }
 
     private void setProgressIncrease() {
@@ -788,6 +816,13 @@ public class CPSyncPresenter extends BaseSyncPresenter {
         if (getView() != null) {
             updateDataViews();
             getView().showSyncDownloadSuccessMessage();
+            getView().hideSyncProgressDialog();
+        }
+    }
+
+    private void syncPullFormSuccessfully() {
+        if (getView() != null) {
+            getView().showSyncPullFormSuccessMessage();
             getView().hideSyncProgressDialog();
             getView().enableSyncButton();
         }
