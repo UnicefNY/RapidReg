@@ -17,9 +17,9 @@ import java.util.List;
 public class IncidentFormServiceImpl implements IncidentFormService {
     public static final String TAG = IncidentFormService.class.getSimpleName();
     private static final String ENG_VALUE = "en";
-    private static final String FIELD_INCIDENT_TYPE_OF_VIOLENCE = "type_of_incident_violence";
     public static final String SECTION_TYPE_OF_VIOLENCE = "Type of Violence";
     public static final String SECTION_GBV_INCIDENT = "GBV Incident";
+    private static final String FIELD_INCIDENT_TYPE_OF_VIOLENCE = "type_of_incident_violence";
     private static final String FIELD_LOCATION_INCIDENT = "location_incident";
     private IncidentFormDao incidentFormDao;
 

@@ -129,12 +129,7 @@ public class SyncCaseServiceImpl extends BaseRetrofitService implements SyncCase
     public void uploadCasePhotos(final RecordModel record) {
         List<Long> casePhotosIds = new CasePhotoDaoImpl().getIdsByCaseId(record.getId());
         Observable.from(casePhotosIds)
-                .filter(new Func1<Long, Boolean>() {
-                    @Override
-                    public Boolean call(Long casePhotoId) {
-                        return true;
-                    }
-                })
+                .filter(casePhotoId -> true)
                 .flatMap(new Func1<Long, Observable<Pair<CasePhoto, Response<JsonElement>>>>() {
                     @Override
                     public Observable<Pair<CasePhoto, Response<JsonElement>>> call(final Long
@@ -163,17 +158,13 @@ public class SyncCaseServiceImpl extends BaseRetrofitService implements SyncCase
                         });
                     }
                 })
-                .map(new Func1<Pair<CasePhoto, Response<JsonElement>>, Object>() {
-                    @Override
-                    public Object call(Pair<CasePhoto, Response<JsonElement>>
-                                               casePhotoResponsePair) {
-                        Response<JsonElement> response = casePhotoResponsePair.second;
-                        CasePhoto casePhoto = casePhotoResponsePair.first;
-                        updateRecordRev(record, response.body().getAsJsonObject().get("_rev")
-                                .getAsString());
-                        updateCasePhotoSyncStatus(casePhoto, true);
-                        return null;
-                    }
+                .map(casePhotoResponsePair -> {
+                    Response<JsonElement> response = casePhotoResponsePair.second;
+                    CasePhoto casePhoto = casePhotoResponsePair.first;
+                    updateRecordRev(record, response.body().getAsJsonObject().get("_rev")
+                            .getAsString());
+                    updateCasePhotoSyncStatus(casePhoto, true);
+                    return null;
                 }).toList().toBlocking().first();
     }
 
