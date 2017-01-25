@@ -34,9 +34,7 @@ public class IncidentService extends RecordService {
 
     private IncidentDao incidentDao = new IncidentDaoImpl();
 
-    public IncidentService() {
-
-    }
+    public IncidentService() {}
 
     public IncidentService(IncidentDao incidentDao) {
         this.incidentDao = incidentDao;

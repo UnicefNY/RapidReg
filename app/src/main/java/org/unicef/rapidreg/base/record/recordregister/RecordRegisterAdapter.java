@@ -24,7 +24,11 @@ import org.unicef.rapidreg.widgets.viewholder.SubFormViewHolder;
 import org.unicef.rapidreg.widgets.viewholder.TextViewHolder;
 import org.unicef.rapidreg.widgets.viewholder.TickBoxViewHolder;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import static java.util.Collections.EMPTY_LIST;
 
 public class RecordRegisterAdapter extends RecyclerView.Adapter<BaseViewHolder> {
 
@@ -53,6 +57,8 @@ public class RecordRegisterAdapter extends RecyclerView.Adapter<BaseViewHolder> 
     private RecordPhotoAdapter adapter;
 
     private ItemValuesMap itemValues;
+
+    private Map<Integer, List<Boolean>> subformDropDownStatus = new HashMap<>();
 
     public RecordRegisterAdapter(Context context, List<Field> fields, ItemValuesMap itemValues, boolean isMiniForm) {
         this.fields = fields;
@@ -140,6 +146,15 @@ public class RecordRegisterAdapter extends RecyclerView.Adapter<BaseViewHolder> 
         Field field = fields.get(position);
         holder.setValue(field);
         holder.setIsRecyclable(false);
+        holder.setCurrentPosition(position);
+
+        if (holder instanceof SubFormViewHolder) {
+            if (subformDropDownStatus.get(position) == null) {
+                ((SubFormViewHolder)holder).setSubformVisible(EMPTY_LIST);
+            } else {
+                ((SubFormViewHolder)holder).setSubformVisible(subformDropDownStatus.get(position));
+            }
+        }
 
         if (!activity.getCurrentFeature().isDetailMode()) {
             holder.setOnClickListener(field);
@@ -193,6 +208,14 @@ public class RecordRegisterAdapter extends RecyclerView.Adapter<BaseViewHolder> 
     @Override
     public int getItemCount() {
         return fields.size();
+    }
+
+    @Override
+    public void onViewDetachedFromWindow(BaseViewHolder holder) {
+        super.onViewDetachedFromWindow(holder);
+        if (holder instanceof SubFormViewHolder) {
+            subformDropDownStatus.put(holder.getCurrentPosition(), ((SubFormViewHolder) holder).getSubformStatusList());
+        }
     }
 
     public List<Field> getFields() {
