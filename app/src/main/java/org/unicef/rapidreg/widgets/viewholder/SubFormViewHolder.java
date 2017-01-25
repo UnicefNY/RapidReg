@@ -33,6 +33,8 @@ import butterknife.ButterKnife;
 import static android.view.View.GONE;
 
 public class SubFormViewHolder extends BaseViewHolder<Field> {
+    private static final String TAG = SubFormViewHolder.class.getSimpleName();
+
     @BindView(R.id.add_subform)
     Button addSubFormBtn;
 
