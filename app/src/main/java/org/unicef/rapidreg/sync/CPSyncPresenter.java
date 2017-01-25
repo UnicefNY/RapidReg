@@ -5,7 +5,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.support.v4.util.Pair;
-import android.widget.Toast;
+import android.util.Log;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
@@ -154,166 +154,114 @@ public class CPSyncPresenter extends BaseSyncPresenter {
         }
         isSyncing = true;
         Observable.from(caseList)
-                .filter(new Func1<Case, Boolean>() {
-                    @Override
-                    public Boolean call(Case item) {
-                        return isSyncing && !item.isSynced();
-                    }
+                .filter(item -> isSyncing && !item.isSynced())
+                .map(item -> new Pair<>(item, syncService.uploadCaseJsonProfile(item)))
+                .map(pair -> {
+                    Log.d(TAG, "Upload Cases 1 ------ " + Thread.currentThread().getName());
+                    syncService.uploadAudio(pair.first);
+                    return pair;
                 })
-                .map(new Func1<Case, Pair<Case, Response<JsonElement>>>() {
-                    @Override
-                    public Pair<Case, Response<JsonElement>> call(Case item) {
-                        return new Pair<>(item, syncService.uploadCaseJsonProfile(item));
-                    }
-                })
-                .map(new Func1<Pair<Case, Response<JsonElement>>, Pair<Case,
-                        Response<JsonElement>>>() {
-                    @Override
-                    public Pair<Case, Response<JsonElement>> call(Pair<Case,
-                            Response<JsonElement>> pair) {
-                        syncService.uploadAudio(pair.first);
-                        return pair;
-                    }
-                })
-                .map(new Func1<Pair<Case, Response<JsonElement>>, Pair<Case,
-                        Response<JsonElement>>>() {
-                    @Override
-                    public Pair<Case, Response<JsonElement>> call(Pair<Case,
-                            Response<JsonElement>> caseResponsePair) {
-                        try {
-                            Response<JsonElement> jsonElementResponse = caseResponsePair.second;
-                            JsonArray photoKeys = jsonElementResponse.body().getAsJsonObject()
-                                    .get("photo_keys")
-                                    .getAsJsonArray();
-                            String id = jsonElementResponse.body().getAsJsonObject().get("_id")
-                                    .getAsString();
-                            okhttp3.Response response = null;
-                            if (photoKeys.size() != 0) {
-                                Call<Response<JsonElement>> call = syncService.deleteCasePhotos
-                                        (id, photoKeys);
-                                response = call.execute().raw();
-                            }
-
-                            if (response == null || response.isSuccessful()) {
-                                syncService.uploadCasePhotos(caseResponsePair.first);
-                            }
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                            throw new RuntimeException(e);
+                .map(caseResponsePair -> {
+                    Log.d(TAG, "Upload Cases 2 ------ " + Thread.currentThread().getName());
+                    try {
+                        Response<JsonElement> jsonElementResponse = caseResponsePair.second;
+                        JsonArray photoKeys = jsonElementResponse.body().getAsJsonObject()
+                                .get("photo_keys")
+                                .getAsJsonArray();
+                        String id = jsonElementResponse.body().getAsJsonObject().get("_id")
+                                .getAsString();
+                        okhttp3.Response response = null;
+                        if (photoKeys.size() != 0) {
+                            Call<Response<JsonElement>> call = syncService.deleteCasePhotos
+                                    (id, photoKeys);
+                            response = call.execute().raw();
                         }
-                        return caseResponsePair;
+
+                        if (response == null || response.isSuccessful()) {
+                            syncService.uploadCasePhotos(caseResponsePair.first);
+                        }
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                        throw new RuntimeException(e);
                     }
+                    return caseResponsePair;
                 })
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Action1<Pair<Case, Response<JsonElement>>>() {
-                    @Override
-                    public void call(Pair<Case, Response<JsonElement>> pair) {
-                        if (getView() != null) {
-                            getView().setProgressIncrease();
-                            increaseSyncNumber();
-                            updateRecordSynced(pair.first, true);
-                        }
+                .subscribe(pair -> {
+                    if (getView() != null) {
+                        getView().setProgressIncrease();
+                        increaseSyncNumber();
+                        updateRecordSynced(pair.first, true);
                     }
-                }, new Action1<Throwable>() {
-                    @Override
-                    public void call(Throwable throwable) {
-                        try {
-                            throwable.printStackTrace();
-                            syncFail(throwable);
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
+                }, throwable -> {
+                    try {
+                        throwable.printStackTrace();
+                        syncFail(throwable);
+                    } catch (Exception e) {
+                        e.printStackTrace();
                     }
-                }, new Action0() {
-                    @Override
-                    public void call() {
-                        upLoadTracing(tracings);
-                    }
-                });
+                }, () -> upLoadTracing(tracings));
     }
 
     private void upLoadTracing(List<Tracing> tracingList) {
         isSyncing = true;
+        long startTime = System.currentTimeMillis();
         Observable.from(tracingList)
-                .filter(new Func1<Tracing, Boolean>() {
-                    @Override
-                    public Boolean call(Tracing item) {
-                        return isSyncing && !item.isSynced();
-                    }
+                .filter(item -> isSyncing && !item.isSynced())
+                .map(item -> new Pair<>(item, syncTracingService.uploadJsonProfile(item)))
+                .map(pair -> {
+                    Log.d(TAG, "Upload Tracing 1 ------ " + Thread.currentThread().getName());
+                    syncTracingService.uploadAudio(pair.first);
+                    return pair;
                 })
-                .map(new Func1<Tracing, Pair<Tracing, Response<JsonElement>>>() {
-                    @Override
-                    public Pair<Tracing, Response<JsonElement>> call(Tracing item) {
-                        return new Pair<>(item, syncTracingService.uploadJsonProfile(item));
-                    }
-                })
-                .map(new Func1<Pair<Tracing, Response<JsonElement>>, Pair<Tracing,
-                        Response<JsonElement>>>() {
-                    @Override
-                    public Pair<Tracing, Response<JsonElement>> call(Pair<Tracing,
-                            Response<JsonElement>> pair) {
-                        syncTracingService.uploadAudio(pair.first);
-                        return pair;
-                    }
-                })
-                .map(new Func1<Pair<Tracing, Response<JsonElement>>, Pair<Tracing,
-                        Response<JsonElement>>>() {
-                    @Override
-                    public Pair<Tracing, Response<JsonElement>> call(Pair<Tracing,
-                            Response<JsonElement>> tracingResponsePair) {
-                        try {
-                            Response<JsonElement> jsonElementResponse = tracingResponsePair.second;
-                            JsonArray photoKeys = jsonElementResponse.body().getAsJsonObject()
-                                    .get("photo_keys")
-                                    .getAsJsonArray();
-                            String id = jsonElementResponse.body().getAsJsonObject().get("_id")
-                                    .getAsString();
-                            okhttp3.Response response = null;
-                            if (photoKeys.size() != 0) {
-                                Call<Response<JsonElement>> call = syncTracingService
-                                        .deletePhotos(id, photoKeys);
-                                response = call.execute().raw();
-                            }
-
-                            if (response == null || response.isSuccessful()) {
-                                syncTracingService.uploadPhotos(tracingResponsePair.first);
-                            }
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                            throw new RuntimeException(e);
+                .buffer(4)
+                .flatMap(pairs -> Observable.from(pairs))
+                .map(tracingResponsePair -> {
+                    Log.d(TAG, "Upload Tracing 2 ------ " + Thread.currentThread().getName());
+                    try {
+                        Response<JsonElement> jsonElementResponse = tracingResponsePair.second;
+                        JsonArray photoKeys = jsonElementResponse.body().getAsJsonObject()
+                                .get("photo_keys")
+                                .getAsJsonArray();
+                        String id = jsonElementResponse.body().getAsJsonObject().get("_id")
+                                .getAsString();
+                        okhttp3.Response response = null;
+                        if (photoKeys.size() != 0) {
+                            Call<Response<JsonElement>> call = syncTracingService
+                                    .deletePhotos(id, photoKeys);
+                            response = call.execute().raw();
                         }
-                        return tracingResponsePair;
+
+                        if (response == null || response.isSuccessful()) {
+                            syncTracingService.uploadPhotos(tracingResponsePair.first);
+                        }
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                        throw new RuntimeException(e);
                     }
+                    return tracingResponsePair;
                 })
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Action1<Pair<Tracing, Response<JsonElement>>>() {
-                    @Override
-                    public void call(Pair<Tracing, Response<JsonElement>> pair) {
-                        if (getView() != null) {
-                            getView().setProgressIncrease();
-                            increaseSyncNumber();
-                            updateRecordSynced(pair.first, true);
-                        }
+                .subscribe(pair -> {
+                    Log.d(TAG, "Upload Tracing cost: ----" + (System.currentTimeMillis() - startTime));
+                    if (getView() != null) {
+                        getView().setProgressIncrease();
+                        increaseSyncNumber();
+                        updateRecordSynced(pair.first, true);
                     }
-                }, new Action1<Throwable>() {
-                    @Override
-                    public void call(Throwable throwable) {
-                        try {
-                            throwable.printStackTrace();
-                            syncFail(throwable);
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
+                }, throwable -> {
+                    try {
+                        throwable.printStackTrace();
+                        syncFail(throwable);
+                    } catch (Exception e) {
+                        e.printStackTrace();
                     }
-                }, new Action0() {
-                    @Override
-                    public void call() {
-                        if (getView() != null) {
-                            syncUploadSuccessfully();
-                            pullCases();
-                        }
+                }, () -> {
+                    if (getView() != null) {
+                        syncUploadSuccessfully();
+                        pullCases();
                     }
                 });
     }
@@ -333,48 +281,39 @@ public class CPSyncPresenter extends BaseSyncPresenter {
                 "amount from web " +
                 "server...", true);
         syncService.getCasesIds(time, true)
-                .map(new Func1<Response<JsonElement>, List<JsonObject>>() {
-                    @Override
-                    public List<JsonObject> call(Response<JsonElement> jsonElementResponse) {
-                        if (jsonElementResponse.isSuccessful()) {
-                            JsonElement jsonElement = jsonElementResponse.body();
-                            JsonArray jsonArray = jsonElement.getAsJsonArray();
+                .map(jsonElementResponse -> {
+                    if (jsonElementResponse.isSuccessful()) {
+                        JsonElement jsonElement = jsonElementResponse.body();
+                        JsonArray jsonArray = jsonElement.getAsJsonArray();
 
-                            for (JsonElement element : jsonArray) {
-                                JsonObject jsonObject = element.getAsJsonObject();
-                                boolean hasSameRev = caseService.hasSameRev(jsonObject.get("_id")
-                                                .getAsString(),
-                                        jsonObject.get("_rev").getAsString());
-                                if (!hasSameRev) {
-                                    downList.add(jsonObject);
-                                }
+                        for (JsonElement element : jsonArray) {
+                            JsonObject jsonObject = element.getAsJsonObject();
+                            boolean hasSameRev = caseService.hasSameRev(jsonObject.get("_id")
+                                            .getAsString(),
+                                    jsonObject.get("_rev").getAsString());
+                            if (!hasSameRev) {
+                                downList.add(jsonObject);
                             }
                         }
-                        return downList;
                     }
+                    return downList;
                 })
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Action1<List<JsonObject>>() {
-                    @Override
-                    public void call(List<JsonObject> jsonObjects) {
-                        loadingDialog.dismiss();
-                        if (jsonObjects.size() != 0 && getView() != null) {
-                            getView().showSyncProgressDialog("Downloading Cases...Please wait a " +
-                                    "moment.");
-                            getView().setProgressMax(jsonObjects.size());
-                        }
+                .subscribe(jsonObjects -> {
+                    loadingDialog.dismiss();
+                    if (jsonObjects.size() != 0 && getView() != null) {
+                        getView().showSyncProgressDialog("Downloading Cases...Please wait a " +
+                                "moment.");
+                        getView().setProgressMax(jsonObjects.size());
                     }
-                }, new Action1<Throwable>() {
-                    @Override
-                    public void call(Throwable throwable) {
-                        throwable.printStackTrace();
-                        try {
-                            loadingDialog.dismiss();
-                            syncFail(throwable);
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
+                }, throwable -> {
+                    throwable.printStackTrace();
+                    try {
+                        loadingDialog.dismiss();
+                        syncFail(throwable);
+                    } catch (Exception e) {
+                        e.printStackTrace();
                     }
                 }, new Action0() {
                     @Override
@@ -386,66 +325,52 @@ public class CPSyncPresenter extends BaseSyncPresenter {
 
     private void downloadCases(List<JsonObject> objects) {
         Observable.from(objects)
-                .filter(new Func1<JsonObject, Boolean>() {
-                    @Override
-                    public Boolean call(JsonObject jsonObject) {
-                        return isSyncing;
+                .filter(jsonObject -> isSyncing)
+                .map(jsonObject -> {
+                    Observable<Response<JsonElement>> responseObservable = syncService
+                            .getCase(jsonObject.get("_id")
+                                    .getAsString(), "en", true);
+                    Response<JsonElement> response = responseObservable.toBlocking().first();
+                    if (!response.isSuccessful()) {
+                        throw new RuntimeException();
                     }
+                    JsonObject responseJsonObject = response.body().getAsJsonObject();
+                    postPullCases(responseJsonObject);
+                    return response;
                 })
-                .map(new Func1<JsonObject, Response<JsonElement>>() {
-                    @Override
-                    public Response<JsonElement> call(JsonObject jsonObject) {
-                        Observable<Response<JsonElement>> responseObservable = syncService
-                                .getCase(jsonObject.get("_id")
-                                        .getAsString(), "en", true);
-                        Response<JsonElement> response = responseObservable.toBlocking().first();
-                        if (!response.isSuccessful()) {
+                .map(response -> {
+                    JsonObject responseJsonObject = response.body().getAsJsonObject();
+                    if (responseJsonObject.has("recorded_audio")) {
+                        String id = responseJsonObject.get("_id").getAsString();
+                        Response<ResponseBody> audioResponse = syncService.getCaseAudio(id)
+                                .toBlocking().first();
+                        if (!audioResponse.isSuccessful()) {
                             throw new RuntimeException();
                         }
-                        JsonObject responseJsonObject = response.body().getAsJsonObject();
-                        postPullCases(responseJsonObject);
-                        return response;
-                    }
-                })
-                .map(new Func1<Response<JsonElement>, Response<JsonElement>>() {
-                    @Override
-                    public Response<JsonElement> call(Response<JsonElement> response) {
-                        JsonObject responseJsonObject = response.body().getAsJsonObject();
-                        if (responseJsonObject.has("recorded_audio")) {
-                            String id = responseJsonObject.get("_id").getAsString();
-                            Response<ResponseBody> audioResponse = syncService.getCaseAudio(id)
-                                    .toBlocking().first();
-                            if (!audioResponse.isSuccessful()) {
-                                throw new RuntimeException();
-                            }
-                            try {
-                                updateAudio(id, audioResponse.body().bytes());
-                            } catch (IOException e) {
-                                throw new RuntimeException(e);
-                            }
+                        try {
+                            updateAudio(id, audioResponse.body().bytes());
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
                         }
-                        return response;
                     }
+                    return response;
                 })
-                .map(new Func1<Response<JsonElement>, List<JsonObject>>() {
-                    @Override
-                    public List<JsonObject> call(Response<JsonElement> response) {
-                        JsonObject responseJsonObject = response.body().getAsJsonObject();
-                        List<JsonObject> photoKeys = new ArrayList<>();
+                .map(response -> {
+                    JsonObject responseJsonObject = response.body().getAsJsonObject();
+                    List<JsonObject> photoKeys = new ArrayList<>();
 
-                        if (responseJsonObject.has("photo_keys")) {
-                            JsonArray jsonArray = responseJsonObject.get("photo_keys")
-                                    .getAsJsonArray();
-                            for (JsonElement element : jsonArray) {
-                                JsonObject jsonObject = new JsonObject();
-                                jsonObject.addProperty("photo_key", element.getAsString());
-                                jsonObject.addProperty("_id", responseJsonObject.get("_id")
-                                        .getAsString());
-                                photoKeys.add(jsonObject);
-                            }
+                    if (responseJsonObject.has("photo_keys")) {
+                        JsonArray jsonArray = responseJsonObject.get("photo_keys")
+                                .getAsJsonArray();
+                        for (JsonElement element : jsonArray) {
+                            JsonObject jsonObject = new JsonObject();
+                            jsonObject.addProperty("photo_key", element.getAsString());
+                            jsonObject.addProperty("_id", responseJsonObject.get("_id")
+                                    .getAsString());
+                            photoKeys.add(jsonObject);
                         }
-                        return photoKeys;
                     }
+                    return photoKeys;
                 })
                 .flatMap(new Func1<List<JsonObject>, Observable<JsonObject>>() {
                     @Override
@@ -453,50 +378,37 @@ public class CPSyncPresenter extends BaseSyncPresenter {
                         return Observable.from(jsonObjects);
                     }
                 })
-                .map(new Func1<JsonObject, Object>() {
-                    @Override
-                    public Object call(JsonObject jsonObject) {
-                        String id = jsonObject.get("_id").getAsString();
-                        String photoKey = jsonObject.get("photo_key").getAsString();
-                        Response<ResponseBody> response = syncService.getCasePhoto(id, photoKey,
-                                PhotoConfig.RESIZE_FOR_WEB)
-                                .toBlocking()
-                                .first();
-                        try {
-                            if (response.isSuccessful()) {
-                                updateCasePhotos(id, response.body().bytes());
-                            }
-                        } catch (IOException e) {
-                            throw new RuntimeException(e);
+                .map(jsonObject -> {
+                    String id = jsonObject.get("_id").getAsString();
+                    String photoKey = jsonObject.get("photo_key").getAsString();
+                    Response<ResponseBody> response = syncService.getCasePhoto(id, photoKey,
+                            PhotoConfig.RESIZE_FOR_WEB)
+                            .toBlocking()
+                            .first();
+                    try {
+                        if (response.isSuccessful()) {
+                            updateCasePhotos(id, response.body().bytes());
                         }
-                        return null;
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
                     }
+                    return null;
                 })
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Action1<Object>() {
-                    @Override
-                    public void call(Object responseBodyResponse) {
-                        setProgressIncrease();
-                    }
-                }, new Action1<Throwable>() {
-                    @Override
-                    public void call(Throwable throwable) {
-                        try {
-                            syncFail(throwable);
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }, new Action0() {
-                    @Override
-                    public void call() {
-                        if (getView() != null) {
-                            getView().hideSyncProgressDialog();
-                            pullTracings();
-                        }
-                    }
-                });
+                .subscribe(responseBodyResponse -> setProgressIncrease(),
+                        throwable -> {
+                            try {
+                                syncFail(throwable);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        }, () -> {
+                            if (getView() != null) {
+                                getView().hideSyncProgressDialog();
+                                pullTracings();
+                            }
+                        });
     }
 
     public void pullTracings() {
@@ -509,119 +421,91 @@ public class CPSyncPresenter extends BaseSyncPresenter {
                 "amount from web " +
                 "server...", true);
         syncTracingService.getIds(time, true)
-                .map(new Func1<Response<JsonElement>, List<JsonObject>>() {
-                    @Override
-                    public List<JsonObject> call(Response<JsonElement> jsonElementResponse) {
-                        if (jsonElementResponse.isSuccessful()) {
-                            JsonElement jsonElement = jsonElementResponse.body();
-                            JsonArray jsonArray = jsonElement.getAsJsonArray();
+                .map(jsonElementResponse -> {
+                    if (jsonElementResponse.isSuccessful()) {
+                        JsonElement jsonElement = jsonElementResponse.body();
+                        JsonArray jsonArray = jsonElement.getAsJsonArray();
 
-                            for (JsonElement element : jsonArray) {
-                                JsonObject jsonObject = element.getAsJsonObject();
-                                boolean hasSameRev = tracingService.hasSameRev(jsonObject.get
-                                                ("_id").getAsString(),
-                                        jsonObject.get("_rev").getAsString());
-                                if (!hasSameRev) {
-                                    objects.add(jsonObject);
-                                }
+                        for (JsonElement element : jsonArray) {
+                            JsonObject jsonObject = element.getAsJsonObject();
+                            boolean hasSameRev = tracingService.hasSameRev(jsonObject.get
+                                            ("_id").getAsString(),
+                                    jsonObject.get("_rev").getAsString());
+                            if (!hasSameRev) {
+                                objects.add(jsonObject);
                             }
                         }
-                        return objects;
                     }
+                    return objects;
                 })
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Action1<List<JsonObject>>() {
-                    @Override
-                    public void call(List<JsonObject> jsonObjects) {
+                .subscribe(jsonObjects -> {
+                    loadingDialog.dismiss();
+                    if (jsonObjects.size() != 0 && getView() != null) {
+                        getView().showSyncProgressDialog("Downloading Tracing " +
+                                "Request...Please wait a moment.");
+                        getView().setProgressMax(jsonObjects.size());
+                    }
+                }, throwable -> {
+                    try {
+                        throwable.printStackTrace();
                         loadingDialog.dismiss();
-                        if (jsonObjects.size() != 0 && getView() != null) {
-                            getView().showSyncProgressDialog("Downloading Tracing " +
-                                    "Request...Please wait a moment.");
-                            getView().setProgressMax(jsonObjects.size());
-                        }
+                        syncFail(throwable);
+                    } catch (Exception e) {
+                        e.printStackTrace();
                     }
-                }, new Action1<Throwable>() {
-                    @Override
-                    public void call(Throwable throwable) {
-                        try {
-                            throwable.printStackTrace();
-                            loadingDialog.dismiss();
-                            syncFail(throwable);
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }, new Action0() {
-                    @Override
-                    public void call() {
-                        downloadTracings(objects);
-                    }
-                });
+                }, () -> downloadTracings(objects));
     }
 
 
     private void downloadTracings(List<JsonObject> objects) {
         Observable.from(objects)
-                .filter(new Func1<JsonObject, Boolean>() {
-                    @Override
-                    public Boolean call(JsonObject jsonObject) {
-                        return isSyncing;
+                .filter(jsonObject -> isSyncing)
+                .map(jsonObject -> {
+                    Observable<Response<JsonElement>> responseObservable = syncTracingService
+                            .get(jsonObject.get("_id")
+                                    .getAsString(), "en", true);
+                    Response<JsonElement> response = responseObservable.toBlocking().first();
+                    if (!response.isSuccessful()) {
+                        throw new RuntimeException();
                     }
+                    JsonObject responseJsonObject = response.body().getAsJsonObject();
+                    postPullTracings(responseJsonObject);
+                    return response;
                 })
-                .map(new Func1<JsonObject, Response<JsonElement>>() {
-                    @Override
-                    public Response<JsonElement> call(JsonObject jsonObject) {
-                        Observable<Response<JsonElement>> responseObservable = syncTracingService
-                                .get(jsonObject.get("_id")
-                                        .getAsString(), "en", true);
-                        Response<JsonElement> response = responseObservable.toBlocking().first();
-                        if (!response.isSuccessful()) {
+                .map(response -> {
+                    JsonObject responseJsonObject = response.body().getAsJsonObject();
+                    if (responseJsonObject.has("recorded_audio")) {
+                        String id = responseJsonObject.get("_id").getAsString();
+                        Response<ResponseBody> audioResponse = syncTracingService.getAudio
+                                (id).toBlocking().first();
+                        if (!audioResponse.isSuccessful()) {
                             throw new RuntimeException();
                         }
-                        JsonObject responseJsonObject = response.body().getAsJsonObject();
-                        postPullTracings(responseJsonObject);
-                        return response;
-                    }
-                })
-                .map(new Func1<Response<JsonElement>, Response<JsonElement>>() {
-                    @Override
-                    public Response<JsonElement> call(Response<JsonElement> response) {
-                        JsonObject responseJsonObject = response.body().getAsJsonObject();
-                        if (responseJsonObject.has("recorded_audio")) {
-                            String id = responseJsonObject.get("_id").getAsString();
-                            Response<ResponseBody> audioResponse = syncTracingService.getAudio
-                                    (id).toBlocking().first();
-                            if (!audioResponse.isSuccessful()) {
-                                throw new RuntimeException();
-                            }
-                            try {
-                                updateTracingAudio(id, audioResponse.body().bytes());
-                            } catch (IOException e) {
-                                throw new RuntimeException(e);
-                            }
+                        try {
+                            updateTracingAudio(id, audioResponse.body().bytes());
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
                         }
-                        return response;
                     }
+                    return response;
                 })
-                .map(new Func1<Response<JsonElement>, List<JsonObject>>() {
-                    @Override
-                    public List<JsonObject> call(Response<JsonElement> response) {
-                        JsonObject responseJsonObject = response.body().getAsJsonObject();
-                        List<JsonObject> photoKeys = new ArrayList<>();
-                        if (responseJsonObject.has("photo_keys")) {
-                            JsonArray jsonArray = responseJsonObject.get("photo_keys")
-                                    .getAsJsonArray();
-                            for (JsonElement element : jsonArray) {
-                                JsonObject jsonObject = new JsonObject();
-                                jsonObject.addProperty("photo_key", element.getAsString());
-                                jsonObject.addProperty("_id", responseJsonObject.get("_id")
-                                        .getAsString());
-                                photoKeys.add(jsonObject);
-                            }
+                .map(response -> {
+                    JsonObject responseJsonObject = response.body().getAsJsonObject();
+                    List<JsonObject> photoKeys = new ArrayList<>();
+                    if (responseJsonObject.has("photo_keys")) {
+                        JsonArray jsonArray = responseJsonObject.get("photo_keys")
+                                .getAsJsonArray();
+                        for (JsonElement element : jsonArray) {
+                            JsonObject jsonObject = new JsonObject();
+                            jsonObject.addProperty("photo_key", element.getAsString());
+                            jsonObject.addProperty("_id", responseJsonObject.get("_id")
+                                    .getAsString());
+                            photoKeys.add(jsonObject);
                         }
-                        return photoKeys;
                     }
+                    return photoKeys;
                 })
                 .flatMap(new Func1<List<JsonObject>, Observable<JsonObject>>() {
                     @Override
@@ -629,44 +513,31 @@ public class CPSyncPresenter extends BaseSyncPresenter {
                         return Observable.from(jsonObjects);
                     }
                 })
-                .map(new Func1<JsonObject, Object>() {
-                    @Override
-                    public Object call(JsonObject jsonObject) {
-                        String id = jsonObject.get("_id").getAsString();
-                        String photoKey = jsonObject.get("photo_key").getAsString();
-                        Response<ResponseBody> response = syncTracingService.getPhoto(id,
-                                photoKey, "1080").toBlocking().first();
-                        try {
-                            updateTracingPhotos(id, response.body().bytes());
-                        } catch (IOException e) {
-                            throw new RuntimeException(e);
-                        }
-                        return null;
+                .map(jsonObject -> {
+                    String id = jsonObject.get("_id").getAsString();
+                    String photoKey = jsonObject.get("photo_key").getAsString();
+                    Response<ResponseBody> response = syncTracingService.getPhoto(id,
+                            photoKey, "1080").toBlocking().first();
+                    try {
+                        updateTracingPhotos(id, response.body().bytes());
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
                     }
+                    return null;
                 })
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Action1<Object>() {
-                    @Override
-                    public void call(Object responseBodyResponse) {
-                        setProgressIncrease();
-                    }
-                }, new Action1<Throwable>() {
-                    @Override
-                    public void call(Throwable throwable) {
-                        try {
-                            throwable.printStackTrace();
-                            syncFail(throwable);
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }, new Action0() {
-                    @Override
-                    public void call() {
-                        syncDownloadSuccessfully();
-                        pullForm();
-                    }
+                .subscribe(responseBodyResponse -> setProgressIncrease(),
+                        throwable -> {
+                            try {
+                                throwable.printStackTrace();
+                                syncFail(throwable);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        }, () -> {
+                    syncDownloadSuccessfully();
+                    pullForm();
                 });
     }
 
