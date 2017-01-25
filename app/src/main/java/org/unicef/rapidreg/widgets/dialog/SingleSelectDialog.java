@@ -39,9 +39,6 @@ public class SingleSelectDialog extends BaseDialog {
         } else {
             result = optionItems[selectIndex];
         }
-        //selectIndex = selectIndex == -1 ? 0 : selectIndex;
-
-
         dialog = new SearchAbleDialog(context, field.getDisplayName().get(Locale.getDefault()
                 .getLanguage()), optionItems, selectIndex);
 

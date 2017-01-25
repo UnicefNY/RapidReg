@@ -75,6 +75,14 @@ public class ClearableEditText extends RelativeLayout {
         setAttributes(attrs);
     }
 
+    @Override
+    public void setOnClickListener(OnClickListener l) {
+        editView.setFocusable(false);
+        editView.setClickable(true);
+        editView.setOnClickListener(l);
+        super.setOnClickListener(l);
+    }
+
     private void initClearView(View container) {
         clearView = (ImageButton) container.findViewById(R.id.clear_text);
         clearView.setOnClickListener(new OnClickListener() {
@@ -108,10 +116,6 @@ public class ClearableEditText extends RelativeLayout {
 
     public void setText(String content) {
         editView.setText(content);
-    }
-
-    public void setSingleLine(boolean isSingleLine) {
-        editView.setSingleLine(isSingleLine);
     }
 
     private void setInputType(AttributeSet attrs) {

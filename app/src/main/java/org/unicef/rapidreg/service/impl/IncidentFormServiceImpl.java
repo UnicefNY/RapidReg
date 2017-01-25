@@ -20,7 +20,7 @@ public class IncidentFormServiceImpl implements IncidentFormService {
     public static final String SECTION_TYPE_OF_VIOLENCE = "Type of Violence";
     public static final String SECTION_GBV_INCIDENT = "GBV Incident";
     private static final String FIELD_INCIDENT_TYPE_OF_VIOLENCE = "type_of_incident_violence";
-    private static final String FIELD_LOCATION_INCIDENT = "location_incident";
+    private static final String FIELD_LOCATION_INCIDENT = "location";
     private IncidentFormDao incidentFormDao;
 
     public IncidentFormServiceImpl(IncidentFormDao incidentFormDao) {
