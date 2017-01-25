@@ -88,7 +88,7 @@ public class RecordService {
     }
 
     public String getLocation(ItemValuesMap itemValues) {
-        return "" + itemValues.getAsString(LOCATION);
+        return itemValues.getAsString(LOCATION);
     }
 
     public  String generateUniqueId() {

@@ -85,6 +85,7 @@ public abstract class RecordSearchFragment extends MvpFragment<RecordListView, R
 
     @BindView(R.id.registration_date_field)
     protected LinearLayout registrationDateField;
+
     @BindView(R.id.registration_date)
     protected TextView registrationDate;
     @BindView(R.id.registration_date_clear)
@@ -93,7 +94,7 @@ public abstract class RecordSearchFragment extends MvpFragment<RecordListView, R
     @BindView(R.id.location_field)
     protected LinearLayout locationField;
     @BindView(R.id.location)
-    protected Spinner location;
+    protected ClearableEditText location;
 
     @BindView(R.id.search_result)
     protected ViewSwitcher searchResultSwitcher;
@@ -113,7 +114,7 @@ public abstract class RecordSearchFragment extends MvpFragment<RecordListView, R
     @BindView(R.id.type_of_violence_field)
     protected LinearLayout typeOfViolenceField;
     @BindView(R.id.type_of_violence)
-    protected Spinner typeOfViolence;
+    protected ClearableEditText typeOfViolence;
 
     private RecordListAdapter adapter;
 

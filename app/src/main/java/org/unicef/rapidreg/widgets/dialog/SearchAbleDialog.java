@@ -71,7 +71,6 @@ public class SearchAbleDialog extends Dialog {
         });
 
         adapter.index = selectIndex;
-        //adapter.listener.onClick(adapter.arrayList.get(adapter.index));
         adapter.notifyDataSetChanged();
     }
 
@@ -83,7 +82,6 @@ public class SearchAbleDialog extends Dialog {
     }
 
     public void setOkButton(final View.OnClickListener listener) {
-
         okButton.setOnClickListener(listener);
     }
 
@@ -92,15 +90,11 @@ public class SearchAbleDialog extends Dialog {
         cancelButton.setOnClickListener(listener);
     }
 
-    public int getCurrentSelectIndex() {
-        return adapter.index;
-    }
-
     public void setOnClick(SearchAbleDialogOnClickListener listener) {
         adapter.listener = listener;
     }
 
-    interface SearchAbleDialogOnClickListener {
+    public interface SearchAbleDialogOnClickListener {
         void onClick(String result);
     }
 
@@ -189,7 +183,6 @@ public class SearchAbleDialog extends Dialog {
                         public void onCheckedChanged(CompoundButton buttonView,
                                                      boolean isChecked) {
                             if (isChecked) {
-
                                 index = position;
                                 listener.onClick(arrayList.get(index));
                                 notifyDataSetChanged();

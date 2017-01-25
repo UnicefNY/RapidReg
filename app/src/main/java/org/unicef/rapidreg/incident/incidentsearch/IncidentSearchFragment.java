@@ -5,17 +5,14 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.LinearLayout;
-import android.widget.Spinner;
 
 import org.unicef.rapidreg.R;
 import org.unicef.rapidreg.base.record.recordlist.RecordListAdapter;
 import org.unicef.rapidreg.base.record.recordsearch.RecordSearchFragment;
 import org.unicef.rapidreg.base.record.recordsearch.RecordSearchPresenter;
-import org.unicef.rapidreg.base.record.recordsearch.StringSpinnerAdapter;
 import org.unicef.rapidreg.incident.incidentlist.IncidentListAdapter;
 import org.unicef.rapidreg.widgets.ClearableEditText;
+import org.unicef.rapidreg.widgets.dialog.SearchAbleDialog;
 
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -23,10 +20,16 @@ import java.util.Map;
 
 import javax.inject.Inject;
 
-import static org.unicef.rapidreg.base.record.recordsearch.RecordSearchPresenter.CONSTANT.*;
+import static org.unicef.rapidreg.base.record.recordsearch.RecordSearchPresenter.CONSTANT.AGE_FROM;
+import static org.unicef.rapidreg.base.record.recordsearch.RecordSearchPresenter.CONSTANT.AGE_TO;
+import static org.unicef.rapidreg.base.record.recordsearch.RecordSearchPresenter.CONSTANT.ID;
+import static org.unicef.rapidreg.base.record.recordsearch.RecordSearchPresenter.CONSTANT.LOCATION;
+import static org.unicef.rapidreg.base.record.recordsearch.RecordSearchPresenter.CONSTANT.SURVIVOR_CODE;
+import static org.unicef.rapidreg.base.record.recordsearch.RecordSearchPresenter.CONSTANT.TYPE_OF_VIOLENCE;
 import static org.unicef.rapidreg.model.RecordModel.EMPTY_AGE;
 
 public class IncidentSearchFragment extends RecordSearchFragment {
+    private SearchAbleDialog dialog;
 
     @Inject
     IncidentSearchPresenter incidentSearchPresenter;
@@ -54,8 +57,8 @@ public class IncidentSearchFragment extends RecordSearchFragment {
         searchValues.put(SURVIVOR_CODE, survivorCode.getText());
         searchValues.put(AGE_FROM, ageFrom.getText().isEmpty() ? String.valueOf(EMPTY_AGE) : ageFrom.getText());
         searchValues.put(AGE_TO, ageTo.getText().isEmpty() ? String.valueOf(EMPTY_AGE) : ageTo.getText());
-        searchValues.put(TYPE_OF_VIOLENCE, getValueOfSelectedView(typeOfViolence));
-        searchValues.put(LOCATION, getValueOfSelectedView(location));
+        searchValues.put(TYPE_OF_VIOLENCE, typeOfViolence.getText());
+        searchValues.put(LOCATION, location.getText());
 
         return searchValues;
     }
@@ -78,48 +81,47 @@ public class IncidentSearchFragment extends RecordSearchFragment {
     }
 
     private void initIncidentLocationField() {
-        final List<String> locationVals = incidentSearchPresenter.getIncidentLocationList();
-        locationVals.add(0, "");
-        final StringSpinnerAdapter adapter = generateTypeOfViolenceListAdapter(locationVals, "Incident Location");
-        location.setAdapter(adapter);
-
-        location.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                adapter.setValue(view, locationVals.get(position));
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {}
-        });
+        List<String> locationValues = incidentSearchPresenter.getIncidentLocationList();
+        setMultipleSelectionOnClickListener(location, locationValues, getResources().getString(R.string
+                .location));
     }
 
     private void initTypeOfViolenceField() {
-        final List<String> typeOfViolenceVals = incidentSearchPresenter.getViolenceTypeList();
-        typeOfViolenceVals.add(0, "");
-        final StringSpinnerAdapter adapter = generateTypeOfViolenceListAdapter(typeOfViolenceVals, "Type of Violence");
-        typeOfViolence.setAdapter(adapter);
+        final List<String> typeOfViolenceValues = incidentSearchPresenter.getViolenceTypeList();
+        setMultipleSelectionOnClickListener(typeOfViolence, typeOfViolenceValues, getResources().getString(R.string
+                .type_of_violence));
+    }
 
-        typeOfViolence.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+    private void setMultipleSelectionOnClickListener(final ClearableEditText target, final List<String> items, final
+    String title) {
+        target.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                adapter.setValue(view, typeOfViolenceVals.get(position));
+            public void onClick(View view) {
+                final String originalValue = target.getText();
+                int originalIndex = items.contains(originalValue) ? items.indexOf(originalValue) : -1;
+                dialog = new SearchAbleDialog(IncidentSearchFragment.this.getContext(), title,
+                        items.toArray(new String[0]), originalIndex);
+                dialog.setOnClick(new SearchAbleDialog.SearchAbleDialogOnClickListener() {
+                    @Override
+                    public void onClick(String result) {
+                        target.setText(result);
+                    }
+                });
+                dialog.setCancelButton(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        target.setText(originalValue);
+                        dialog.dismiss();
+                    }
+                });
+                dialog.setOkButton(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        dialog.dismiss();
+                    }
+                });
+                dialog.show();
             }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {}
         });
     }
-
-    private StringSpinnerAdapter generateTypeOfViolenceListAdapter(List<String> violenceTypeList, String hintVal) {
-        StringSpinnerAdapter adapter = new StringSpinnerAdapter(getActivity(), R.layout.string_list_spinner_closed, violenceTypeList, hintVal);
-        return adapter;
-    }
-
-    private String getValueOfSelectedView(Spinner spinner) {
-        LinearLayout selectedView = (LinearLayout) spinner.getSelectedView();
-        ClearableEditText textField = (ClearableEditText) selectedView.findViewById(R.id.string_value_closed);
-        return textField.getText();
-    }
-
 }

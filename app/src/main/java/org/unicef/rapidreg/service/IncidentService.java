@@ -83,7 +83,7 @@ public class IncidentService extends RecordService {
     private ConditionGroup getSearchCondition(String uniqueId, String survivorCode, int ageFrom, int ageTo, String
             typeOfViolence, String location) {
         ConditionGroup conditionGroup = ConditionGroup.clause();
-        conditionGroup.and(Condition.column(NameAlias.builder(RecordModel.COLUMN_UNIQUE_ID).build())
+        conditionGroup.and(Condition.column(NameAlias.builder(RecordModel.COLUMN_SHORT_ID).build())
                 .like(getWrappedCondition(uniqueId)));
         conditionGroup.and(Condition.column(NameAlias.builder(Incident.COLUMN_SURVIVOR_CODE).build())
                 .like(getWrappedCondition(survivorCode)));
@@ -91,15 +91,16 @@ public class IncidentService extends RecordService {
         if (ageSearchCondition != null) {
             conditionGroup.and(ageSearchCondition);
         }
-        conditionGroup.and(Condition.column(NameAlias.builder(Incident.COLUMN_SURVIVOR_CODE).build())
-                .like(getWrappedCondition(survivorCode)));
-        conditionGroup.and(Condition.column(NameAlias.builder(Incident.COLUMN_TYPE_OF_VIOLENCE).build())
-                .like(getWrappedCondition(typeOfViolence)));
-        conditionGroup.and(Condition.column(NameAlias.builder(Incident.COLUMN_LOCATION).build())
-                .like(getWrappedCondition(location)));
-        conditionGroup.and(Condition.column(NameAlias.builder(RecordModel.COLUMN_CREATED_BY).build())
+        if (!TextUtils.isEmpty(typeOfViolence)) {
+            conditionGroup.and(Condition.column(NameAlias.builder(Incident.COLUMN_TYPE_OF_VIOLENCE).build())
+                    .eq(typeOfViolence));
+        }
+        if (!TextUtils.isEmpty(location)) {
+            conditionGroup.and(Condition.column(NameAlias.builder(Incident.COLUMN_LOCATION).build())
+                    .eq(location));
+        }
+        conditionGroup.and(Condition.column(NameAlias.builder(RecordModel.COLUMN_OWNED_BY).build())
                 .eq(PrimeroAppConfiguration.getCurrentUser().getUsername()));
-
         return conditionGroup;
     }
 
@@ -139,6 +140,7 @@ public class IncidentService extends RecordService {
 
         Incident incident = new Incident();
         incident.setUniqueId(uniqueId);
+        incident.setShortId(getShortUUID(uniqueId));
         incident.setCreateDate(date);
         incident.setLastUpdatedDate(date);
         incident.setContent(tracingBlob);

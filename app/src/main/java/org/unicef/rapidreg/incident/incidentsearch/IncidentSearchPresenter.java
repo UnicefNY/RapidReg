@@ -32,7 +32,8 @@ public class IncidentSearchPresenter extends RecordSearchPresenter {
         int ageFrom = Integer.valueOf(searchConditions.get(AGE_FROM));
         int ageTo = Integer.valueOf(searchConditions.get(AGE_TO));
         String typeOfViolence = searchConditions.get(TYPE_OF_VIOLENCE);
-        return incidentService.getSearchResult(id, survivorCode, ageFrom, ageTo, typeOfViolence, "");
+        String location = searchConditions.get(LOCATION);
+        return incidentService.getSearchResult(id, survivorCode, ageFrom, ageTo, typeOfViolence, location);
     }
 
     public List<String> getViolenceTypeList() {

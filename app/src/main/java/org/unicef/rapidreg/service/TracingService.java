@@ -83,7 +83,7 @@ public class TracingService extends RecordService {
     private ConditionGroup getSearchCondition(String uniqueId, String name, int ageFrom, int
             ageTo, Date date) {
         ConditionGroup conditionGroup = ConditionGroup.clause();
-        conditionGroup.and(Condition.column(NameAlias.builder(RecordModel.COLUMN_UNIQUE_ID).build())
+        conditionGroup.and(Condition.column(NameAlias.builder(RecordModel.COLUMN_SHORT_ID).build())
                 .like(getWrappedCondition(uniqueId)));
         conditionGroup.and(Condition.column(NameAlias.builder(RecordModel.COLUMN_NAME).build())
                 .like(getWrappedCondition(name)));
@@ -134,6 +134,7 @@ public class TracingService extends RecordService {
 
         Tracing tracing = new Tracing();
         tracing.setUniqueId(uniqueId);
+        tracing.setShortId(getShortUUID(uniqueId));
 
         String username = PrimeroAppConfiguration.getCurrentUser().getUsername();
         tracing.setCreatedBy(username);
