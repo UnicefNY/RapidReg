@@ -18,6 +18,7 @@ public abstract class BaseViewHolder<T> extends RecyclerView.ViewHolder {
     protected View itemView;
     protected Context context;
     protected ItemValuesMap itemValues;
+    private int currentPosition;
 
     public BaseViewHolder(Context context, View itemView, ItemValuesMap itemValues) {
         super(itemView);
@@ -79,6 +80,14 @@ public abstract class BaseViewHolder<T> extends RecyclerView.ViewHolder {
             return res instanceof List ? Utils.toStringResult((List<String>) res) : res.toString();
         }
         return null;
+    }
+
+    public int getCurrentPosition() {
+        return currentPosition;
+    }
+
+    public void setCurrentPosition(int currentPosition) {
+        this.currentPosition = currentPosition;
     }
 
     protected Object getResult() {

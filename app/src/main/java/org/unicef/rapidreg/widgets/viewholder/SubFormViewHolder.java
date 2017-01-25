@@ -30,6 +30,8 @@ import java.util.Map;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+import static android.view.View.GONE;
+
 public class SubFormViewHolder extends BaseViewHolder<Field> {
     @BindView(R.id.add_subform)
     Button addSubFormBtn;
@@ -39,12 +41,14 @@ public class SubFormViewHolder extends BaseViewHolder<Field> {
     private List<Field> fields;
     private String fieldParent;
     private String displayParent;
+    private List<Boolean> subformDropDownStatus;
 
     public SubFormViewHolder(Context context, View itemView, ItemValuesMap itemValues) {
         super(context, itemView, itemValues);
         ButterKnife.bind(this, itemView);
         activity = (RecordActivity) context;
         parent = (ViewGroup) itemView;
+        subformDropDownStatus = new ArrayList<>(parent.getChildCount());
     }
 
     @Override
@@ -56,7 +60,7 @@ public class SubFormViewHolder extends BaseViewHolder<Field> {
         attachParentToFields(fields, fieldParent);
         addSubFormBtn.setText(String.format("%s %s", context.getString(R.string.add), displayParent));
         addSubFormBtn.setVisibility(activity.getCurrentFeature().isEditMode() ?
-                View.VISIBLE : View.GONE);
+                View.VISIBLE : GONE);
         restoreSubForms();
     }
 
@@ -95,7 +99,7 @@ public class SubFormViewHolder extends BaseViewHolder<Field> {
             }
         });
         deleteBtn.setVisibility(activity.getCurrentFeature().isEditMode() ?
-                View.VISIBLE : View.GONE);
+                View.VISIBLE : GONE);
     }
 
     private void deleteSubForm(View v) {
@@ -117,6 +121,13 @@ public class SubFormViewHolder extends BaseViewHolder<Field> {
                 itemValues.getChildAsItemValues(fieldParent, index), false);
 
         fieldList.setAdapter(adapter);
+
+        boolean visibleStatus = subformDropDownStatus.get(index);
+        if (visibleStatus) {
+            enableContainer(container);
+        } else {
+            disableContainer(container);
+        }
     }
 
     private void attachParentToFields(List<Field> fields, String parent) {
@@ -159,39 +170,59 @@ public class SubFormViewHolder extends BaseViewHolder<Field> {
     }
 
     private void addSubForm(int index) {
+        subformDropDownStatus.add(index, true);
         LayoutInflater inflater = LayoutInflater.from(activity);
         ViewGroup container = (LinearLayout) inflater
                 .inflate(R.layout.form_subform, parent, false);
         initDeleteBtn(container);
         initFieldList(container, index);
+
         parent.addView(container, index);
-        setSubFormTitleClickEvent(container);
+        setSubFormTitleClickEvent(container, index);
     }
 
-    private void setSubFormTitleClickEvent(ViewGroup container) {
+    private void setSubFormTitleClickEvent(ViewGroup container, int index) {
         LinearLayout subFormTitleLayout = (LinearLayout) container.findViewById(R.id.sub_form_title_layout);
         TextView subFormTitle = (TextView) container.findViewById(R.id.sub_form_title);
         subFormTitle.setText(displayParent);
         final View fieldList = container.findViewById(R.id.field_list);
-        final Button deleteBtn = (Button) container.findViewById(R.id.delete_subform);
-        final ImageView arrow = (ImageView) container.findViewById(R.id.sub_form_title_arrow);
 
         subFormTitleLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (View.GONE == fieldList.getVisibility()) {
-                    fieldList.setVisibility(View.VISIBLE);
-                    if (activity.getCurrentFeature().isEditMode()) {
-                        deleteBtn.setVisibility(View.VISIBLE);
-                    }
-                    arrow.setImageResource(R.drawable.arrow_down_blue);
+                if (GONE == fieldList.getVisibility()) {
+                    enableContainer(container);
+                    subformDropDownStatus.remove(index);
+                    subformDropDownStatus.add(index, true);
                 } else {
-                    fieldList.setVisibility(View.GONE);
-                    deleteBtn.setVisibility(View.GONE);
-                    arrow.setImageResource(R.drawable.arrow_up_blue);
+                    disableContainer(container);
+                    subformDropDownStatus.remove(index);
+                    subformDropDownStatus.add(index, false);
                 }
             }
         });
+    }
+
+    private void enableContainer(View container) {
+        final View fieldList = container.findViewById(R.id.field_list);
+        final Button deleteBtn = (Button) container.findViewById(R.id.delete_subform);
+        final ImageView arrow = (ImageView) container.findViewById(R.id.sub_form_title_arrow);
+
+        fieldList.setVisibility(View.VISIBLE);
+        if (activity.getCurrentFeature().isEditMode()) {
+            deleteBtn.setVisibility(View.VISIBLE);
+        }
+        arrow.setImageResource(R.drawable.arrow_down_blue);
+    }
+
+    private void disableContainer(View container) {
+        final View fieldList = container.findViewById(R.id.field_list);
+        final Button deleteBtn = (Button) container.findViewById(R.id.delete_subform);
+        final ImageView arrow = (ImageView) container.findViewById(R.id.sub_form_title_arrow);
+
+        fieldList.setVisibility(GONE);
+        deleteBtn.setVisibility(GONE);
+        arrow.setImageResource(R.drawable.arrow_up_blue);
     }
 
     private void restoreSubForms() {
@@ -215,5 +246,27 @@ public class SubFormViewHolder extends BaseViewHolder<Field> {
         }
 
         return fields;
+    }
+
+    public void setSubformVisible(List<Boolean> visibleStatus) {
+        if (visibleStatus.isEmpty()) {
+            return;
+        }
+
+        for (int index = 0; index < visibleStatus.size(); index ++) {
+            boolean status = visibleStatus.get(index);
+            subformDropDownStatus.remove(index);
+            subformDropDownStatus.add(index, status);
+
+            if (status) {
+                enableContainer(parent.getChildAt(index));
+            } else {
+                disableContainer(parent.getChildAt(index));
+            }
+        }
+    }
+
+    public List<Boolean> getSubformStatusList() {
+        return subformDropDownStatus;
     }
 }
