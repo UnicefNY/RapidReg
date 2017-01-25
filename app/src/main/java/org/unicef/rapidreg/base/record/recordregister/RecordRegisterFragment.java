@@ -4,7 +4,9 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -26,6 +28,7 @@ import org.unicef.rapidreg.injection.module.FragmentModule;
 import org.unicef.rapidreg.service.cache.ItemValuesMap;
 
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 
 import butterknife.BindView;
@@ -41,6 +44,8 @@ public abstract class RecordRegisterFragment extends MvpFragment<RecordRegisterV
     protected static final int[] ANIM_TO_MINI = {android.R.anim.slide_in_left, android.R.anim
             .slide_out_right};
     public static final int INVALID_RECORD_ID = -100;
+    private static final String SUBFORM_STATE = "subform_state";
+    private static final String SAVED_STATE_ID = "internalSavedViewState8954201239547";
 
     @BindView(R.id.register_forms_content)
     RecyclerView fieldList;
@@ -55,6 +60,8 @@ public abstract class RecordRegisterFragment extends MvpFragment<RecordRegisterV
 
     protected long recordId;
 
+    Bundle savedState;
+
     public FragmentComponent getComponent() {
         return DaggerFragmentComponent.builder()
                 .applicationComponent(PrimeroApplication.get(getActivity()).getComponent())
@@ -67,6 +74,10 @@ public abstract class RecordRegisterFragment extends MvpFragment<RecordRegisterV
         super.onViewCreated(view, savedInstanceState);
         ButterKnife.bind(this, view);
         onInitViewContent();
+
+        if (!restoreStateFromArguments()) {
+            onFirstTimeLaunched();
+        }
     }
 
     @Override
@@ -145,6 +156,59 @@ public abstract class RecordRegisterFragment extends MvpFragment<RecordRegisterV
 
     public RecordPhotoAdapter getPhotoAdapter() {
         return recordRegisterAdapter.getPhotoAdapter();
+    }
+
+    protected void onFirstTimeLaunched() {}
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        saveStateToArguments();
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        saveStateToArguments();
+    }
+
+    private void saveStateToArguments() {
+        if (getView() != null)
+            savedState = saveState();
+        if (savedState != null) {
+            Bundle b = getArguments();
+            b.putBundle(SAVED_STATE_ID, savedState);
+        }
+    }
+
+    private boolean restoreStateFromArguments() {
+        Bundle b = getArguments();
+        savedState = b.getBundle(SAVED_STATE_ID);
+        if (savedState != null) {
+            restoreState();
+            return true;
+        }
+        return false;
+    }
+
+    private void restoreState() {
+        if (savedState != null) {
+            onRestoreState(savedState);
+        }
+    }
+
+    protected void onRestoreState(Bundle savedInstanceState) {
+        recordRegisterAdapter.setSubformDropDownStatus((HashMap<Integer, List<Boolean>>) savedInstanceState.getSerializable(SUBFORM_STATE));
+    }
+
+    private Bundle saveState() {
+        Bundle state = new Bundle();
+        onSaveState(state);
+        return state;
+    }
+
+    protected void onSaveState(Bundle outState) {
+        outState.putSerializable(SUBFORM_STATE, recordRegisterAdapter.getSubformDropDownStatus());
     }
 
     protected abstract RecordRegisterAdapter createRecordRegisterAdapter();

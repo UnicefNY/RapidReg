@@ -168,7 +168,6 @@ public class IncidentService extends RecordService {
         incident.setLastUpdatedDate(new Date(Calendar.getInstance().getTimeInMillis()));
         incident.setContent(blob);
         incident.setName(getName(itemValues));
-        incident.setName(getName(itemValues));
         incident.setSurvivorCode(getSurvivorCode(itemValues));
         incident.setTypeOfViolence(getTypeOfViolence(itemValues));
         incident.setLocation(getLocation(itemValues));
