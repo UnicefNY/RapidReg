@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import org.unicef.rapidreg.R;
 import org.unicef.rapidreg.base.record.RecordActivity;
 import org.unicef.rapidreg.base.record.recordphoto.RecordPhotoAdapter;
 import org.unicef.rapidreg.forms.Field;
@@ -214,6 +215,14 @@ public class RecordRegisterAdapter extends RecyclerView.Adapter<BaseViewHolder> 
     @Override
     public void onViewDetachedFromWindow(BaseViewHolder holder) {
         super.onViewDetachedFromWindow(holder);
+        if (holder instanceof SubFormViewHolder) {
+            subformDropDownStatus.put(holder.getCurrentPosition(), ((SubFormViewHolder) holder).getSubformStatusList());
+        }
+    }
+
+    @Override
+    public void onViewAttachedToWindow(BaseViewHolder holder) {
+        super.onViewAttachedToWindow(holder);
         if (holder instanceof SubFormViewHolder) {
             subformDropDownStatus.put(holder.getCurrentPosition(), ((SubFormViewHolder) holder).getSubformStatusList());
         }
