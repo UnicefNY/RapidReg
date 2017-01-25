@@ -32,7 +32,7 @@ public class TracingDaoImpl implements TracingDao {
 
     @Override
     public List<Tracing> getAllTracingsOrderByDate(boolean isASC, String ownedBy, String url) {
-        return isASC ? getTracingsByDateASC(ownedBy) : getTracingsByDateDES(ownedBy);
+        return isASC ? getTracingsByDateASC(ownedBy, url) : getTracingsByDateDES(ownedBy, url);
     }
 
     @Override
@@ -53,20 +53,22 @@ public class TracingDaoImpl implements TracingDao {
         return SQLite.select().from(Tracing.class).where(Tracing_Table._id.eq(id)).querySingle();
     }
 
-    private List<Tracing> getTracingsByDateASC(String ownedBy) {
+    private List<Tracing> getTracingsByDateASC(String ownedBy, String url) {
         return SQLite
                 .select()
                 .from(Tracing.class)
                 .where(Tracing_Table.owned_by.eq(ownedBy))
+                .and(Tracing_Table.url.eq(url))
                 .orderBy(Tracing_Table.registration_date, true)
                 .queryList();
     }
 
-    private List<Tracing> getTracingsByDateDES(String ownedBy) {
+    private List<Tracing> getTracingsByDateDES(String ownedBy, String url) {
         return SQLite
                 .select()
                 .from(Tracing.class)
                 .where(Tracing_Table.owned_by.eq(ownedBy))
+                .and(Tracing_Table.url.eq(url))
                 .orderBy(Tracing_Table.registration_date, false)
                 .queryList();
     }

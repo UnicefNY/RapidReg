@@ -28,7 +28,6 @@ import butterknife.OnClick;
 import retrofit2.Call;
 
 public class LoginActivity extends MvpActivity<LoginView, LoginPresenter> implements LoginView {
-
     public static final String TAG = LoginActivity.class.getSimpleName();
 
     @BindView(R.id.login)
@@ -69,7 +68,6 @@ public class LoginActivity extends MvpActivity<LoginView, LoginPresenter> implem
         loginProgressDialog = new BaseProgressDialog(this);
 
         usernameEditView.requestFocus();
-
     }
 
     @OnClick(R.id.login)
@@ -83,10 +81,6 @@ public class LoginActivity extends MvpActivity<LoginView, LoginPresenter> implem
 
     @OnClick(R.id.change_url)
     public void onChangeUrlTextClicked() {
-        if (!presenter.isOnline()) {
-            Toast.makeText(this, "Network is not accessible!", Toast.LENGTH_LONG).show();
-            return;
-        }
         changeUrlTextView.setVisibility(View.INVISIBLE);
         urlEditView.setVisibility(View.VISIBLE);
         urlEditView.requestFocus();
@@ -215,5 +209,4 @@ public class LoginActivity extends MvpActivity<LoginView, LoginPresenter> implem
         Toast.makeText(LoginActivity.this, getResources().getString(R.string.login_failed_check_network_and_url),
                 Toast.LENGTH_SHORT).show();
     }
-
 }
