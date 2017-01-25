@@ -74,6 +74,11 @@ public abstract class RecordRegisterFragment extends MvpFragment<RecordRegisterV
         super.onViewCreated(view, savedInstanceState);
         ButterKnife.bind(this, view);
         onInitViewContent();
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
 
         if (!restoreStateFromArguments()) {
             onFirstTimeLaunched();
@@ -183,6 +188,9 @@ public abstract class RecordRegisterFragment extends MvpFragment<RecordRegisterV
 
     private boolean restoreStateFromArguments() {
         Bundle b = getArguments();
+        if (getArguments() == null) {
+            return false;
+        }
         savedState = b.getBundle(SAVED_STATE_ID);
         if (savedState != null) {
             restoreState();
