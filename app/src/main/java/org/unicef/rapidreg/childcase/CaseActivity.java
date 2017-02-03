@@ -46,8 +46,8 @@ public class CaseActivity extends RecordActivity implements BaseView {
         getComponent().inject(this);
         super.onCreate(savedInstanceState);
 
-        navigationView.setCheckedItem(R.id.nav_cases);
-        navigationView.setItemTextColor(caseColor);
+        setNavSelectedMenu(R.id.nav_cases, caseColor);
+
         if (getIntent().getBooleanExtra(IntentSender.IS_FROM_LOGIN, false)) {
             drawer.openDrawer(GravityCompat.START);
         } else {

@@ -39,14 +39,22 @@
         <item name="android:gravity">center_horizontal</item>
     </style>
 
-    <style name="NavigationViewStyle">
-        <item name="android:textSize">@dimen/text_size_16</item> <!-- menu item text size-->
-        <item name="android:listPreferredItemHeight">@dimen/size_48</item>
-    </style>
-
     <style name="Toolbar.TitleText" parent="TextAppearance.Widget.AppCompat.Toolbar.Title">
         <!--<item name="android:textSize">@dimen/text_size_24</item>-->
         <item name="android:textColor">@android:color/white</item>
+    </style>
+
+    <style name="NavigationItemTextViewStyle">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginBottom">@dimen/size_15</item>
+        <item name="android:textSize">@dimen/text_size_18</item>
+        <item name="android:drawablePadding">@dimen/size_24</item>
+        <item name="android:paddingLeft">@dimen/size_15</item>
+        <item name="android:paddingRight">@dimen/size_15</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/primero_font_medium</item>
     </style>
 
 </resources>

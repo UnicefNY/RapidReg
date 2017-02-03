@@ -42,8 +42,7 @@ public class TracingActivity extends RecordActivity implements BaseView {
         getComponent().inject(this);
         super.onCreate(savedInstanceState);
 
-        navigationView.setCheckedItem(R.id.nav_tracing);
-        navigationView.setItemTextColor(tracingColor);
+        setNavSelectedMenu(R.id.nav_tracing, tracingColor);
         drawer.closeDrawer(GravityCompat.START);
 
         turnToFeature(TracingFeature.LIST, null, null);

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:paddingTop="@dimen/size_15">
+
+    <TextView
+        android:id="@+id/nav_cases"
+        style="@style/NavigationItemTextViewStyle"
+        android:drawableLeft="@drawable/cases"
+        android:text="@string/cp_case" />
+
+    <TextView
+        android:id="@+id/nav_tracing"
+        style="@style/NavigationItemTextViewStyle"
+        android:drawableLeft="@drawable/tracing"
+        android:text="@string/tracing" />
+
+    <TextView
+        android:id="@+id/nav_incident"
+        style="@style/NavigationItemTextViewStyle"
+        android:drawableLeft="@drawable/connect_big"
+        android:text="@string/incidents" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/size_2"
+        android:layout_marginBottom="@dimen/size_15"
+        android:background="@android:color/darker_gray" />
+
+    <TextView
+        android:id="@+id/nav_sync"
+        style="@style/NavigationItemTextViewStyle"
+        android:drawableLeft="@drawable/ic_autorenew_black_24dp"
+        android:text="@string/sync" />
+
+</LinearLayout>

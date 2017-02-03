@@ -17,9 +17,18 @@
         android:layout_width="@dimen/navigator_width"
         android:layout_height="match_parent"
         android:layout_gravity="start"
-        android:fitsSystemWindows="true"
-        app:headerLayout="@layout/nav_header_main"
-        android:theme="@style/NavigationViewStyle">
+        android:fitsSystemWindows="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <include layout="@layout/nav_header_main" />
+
+            <include layout="@layout/nav_body_main" />
+
+        </LinearLayout>
 
     </android.support.design.widget.NavigationView>
 
