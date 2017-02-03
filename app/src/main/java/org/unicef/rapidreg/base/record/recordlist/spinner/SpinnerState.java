@@ -8,7 +8,9 @@ public enum SpinnerState {
     REG_DATE_ASC(R.drawable.date_up, "Registration date ascending order", "Registration date"),
     REG_DATE_DES(R.drawable.date_down, "Registration date descending order", "Registration date"),
     INQUIRY_DATE_ASC(R.drawable.date_up, "Date of inquiry ascending order", "Date of inquiry"),
-    INQUIRY_DATE_DES(R.drawable.date_down, "Date of inquiry descending order", "Date of inquiry");
+    INQUIRY_DATE_DES(R.drawable.date_down, "Date of inquiry descending order", "Date of inquiry"),
+    INTERVIEW_DATE_ASC(R.drawable.date_up, "Interview Date ascending order", "Date of interview"),
+    INTERVIEW_DATE_DES(R.drawable.date_down, "Interview Date descending order", "Date of interview");
 
     private int resId;
     private String longName;

@@ -6,6 +6,6 @@
         <item
             android:id="@+id/nav_tracing"
             android:icon="@drawable/tracing"
-            android:title="Tracing Request" />
+            android:title="Tracing Requests" />
     </group>
 </menu>
