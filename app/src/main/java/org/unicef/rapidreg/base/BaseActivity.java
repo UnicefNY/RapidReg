@@ -64,16 +64,16 @@ public abstract class BaseActivity extends MvpActivity<BaseView, BasePresenter> 
     protected ImageView textViewLogoutLabel;
 
     @BindView(R.id.nav_cases)
-    protected TextView NavCasesTV;
+    protected TextView navCasesTV;
 
     @BindView(R.id.nav_tracing)
-    protected TextView NavTracingTV;
+    protected TextView navTracingTV;
 
     @BindView(R.id.nav_incident)
-    protected TextView NavIncidentTV;
+    protected TextView navIncidentTV;
 
     @BindView(R.id.nav_sync)
-    protected TextView NavSyncTV;
+    protected TextView navSyncTV;
 
     @BindColor(R.color.primero_green)
     protected ColorStateList caseColor;
@@ -135,23 +135,23 @@ public abstract class BaseActivity extends MvpActivity<BaseView, BasePresenter> 
     }
 
     protected void initNavigationItemMenu() {
-        NavCasesTV.setVisibility(View.GONE);
-        NavTracingTV.setVisibility(View.GONE);
-        NavIncidentTV.setVisibility(View.GONE);
-        NavSyncTV.setVisibility(View.GONE);
+        navCasesTV.setVisibility(View.GONE);
+        navTracingTV.setVisibility(View.GONE);
+        navIncidentTV.setVisibility(View.GONE);
+        navSyncTV.setVisibility(View.GONE);
 
         User user = PrimeroAppConfiguration.getCurrentUser();
         if (user != null) {
             User.Role role = user.getRoleType();
             switch (role.getValue()) {
-                case "CP":
-                    NavCasesTV.setText(R.string.cp_case);
+                case User.ROLE_CP:
+                    navCasesTV.setText(R.string.cp_case);
                     break;
-                case "GBV":
-                    NavCasesTV.setText(R.string.gbv_case);
+                case User.ROLE_GBV:
+                    navCasesTV.setText(R.string.gbv_case);
                     break;
                 default:
-                    NavCasesTV.setText(R.string.cases);
+                    navCasesTV.setText(R.string.cases);
                     break;
             }
             for (int resId : role.getResIds()) {
