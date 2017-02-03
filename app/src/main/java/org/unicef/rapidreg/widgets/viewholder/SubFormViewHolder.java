@@ -33,6 +33,8 @@ import butterknife.ButterKnife;
 import static android.view.View.GONE;
 
 public class SubFormViewHolder extends BaseViewHolder<Field> {
+    private static final String TAG = SubFormViewHolder.class.getSimpleName();
+
     @BindView(R.id.add_subform)
     Button addSubFormBtn;
 
@@ -70,7 +72,7 @@ public class SubFormViewHolder extends BaseViewHolder<Field> {
             @Override
             public void onClick(View v) {
                 itemValues.addChild(fieldParent, new HashMap<String, Object>());
-                addSubForm(itemValues.getChildrenSize(fieldParent) - 1);
+                addSubForm(itemValues.getChildrenSize(fieldParent) - 1, true);
             }
         });
     }
@@ -169,8 +171,8 @@ public class SubFormViewHolder extends BaseViewHolder<Field> {
         }
     }
 
-    private void addSubForm(int index) {
-        subformDropDownStatus.add(index, true);
+    private void addSubForm(int index, boolean isDropDown) {
+        subformDropDownStatus.add(index, isDropDown);
         LayoutInflater inflater = LayoutInflater.from(activity);
         ViewGroup container = (LinearLayout) inflater
                 .inflate(R.layout.form_subform, parent, false);
@@ -181,7 +183,7 @@ public class SubFormViewHolder extends BaseViewHolder<Field> {
         setSubFormTitleClickEvent(container, index);
     }
 
-    private void setSubFormTitleClickEvent(ViewGroup container, int index) {
+    private void setSubFormTitleClickEvent(final ViewGroup container, final int index) {
         LinearLayout subFormTitleLayout = (LinearLayout) container.findViewById(R.id.sub_form_title_layout);
         TextView subFormTitle = (TextView) container.findViewById(R.id.sub_form_title);
         subFormTitle.setText(displayParent);
@@ -231,7 +233,7 @@ public class SubFormViewHolder extends BaseViewHolder<Field> {
             return;
         }
         for (int i = 0; i < childrenArray.size(); i++) {
-            addSubForm(i);
+            addSubForm(i, false);
         }
     }
 
