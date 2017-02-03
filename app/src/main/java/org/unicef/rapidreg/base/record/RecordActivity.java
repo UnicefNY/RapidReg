@@ -123,6 +123,8 @@ public abstract class RecordActivity extends BaseActivity {
             Fragment fragment = feature.getFragment();
             if (args != null) {
                 fragment.setArguments(args);
+            } else {
+                fragment.setArguments(new Bundle());
             }
             navToFragment(fragment, animIds);
         } catch (Exception e) {

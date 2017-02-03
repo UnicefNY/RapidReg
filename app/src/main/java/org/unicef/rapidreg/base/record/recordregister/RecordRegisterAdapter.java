@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import org.unicef.rapidreg.R;
 import org.unicef.rapidreg.base.record.RecordActivity;
 import org.unicef.rapidreg.base.record.recordphoto.RecordPhotoAdapter;
 import org.unicef.rapidreg.forms.Field;
@@ -24,6 +25,7 @@ import org.unicef.rapidreg.widgets.viewholder.SubFormViewHolder;
 import org.unicef.rapidreg.widgets.viewholder.TextViewHolder;
 import org.unicef.rapidreg.widgets.viewholder.TickBoxViewHolder;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -58,7 +60,7 @@ public class RecordRegisterAdapter extends RecyclerView.Adapter<BaseViewHolder> 
 
     private ItemValuesMap itemValues;
 
-    private Map<Integer, List<Boolean>> subformDropDownStatus = new HashMap<>();
+    private HashMap<Integer, List<Boolean>> subformDropDownStatus = new HashMap<>();
 
     public RecordRegisterAdapter(Context context, List<Field> fields, ItemValuesMap itemValues, boolean isMiniForm) {
         this.fields = fields;
@@ -218,11 +220,27 @@ public class RecordRegisterAdapter extends RecyclerView.Adapter<BaseViewHolder> 
         }
     }
 
+    @Override
+    public void onViewAttachedToWindow(BaseViewHolder holder) {
+        super.onViewAttachedToWindow(holder);
+        if (holder instanceof SubFormViewHolder) {
+            subformDropDownStatus.put(holder.getCurrentPosition(), ((SubFormViewHolder) holder).getSubformStatusList());
+        }
+    }
+
     public List<Field> getFields() {
         return fields;
     }
 
     public ItemValuesMap getItemValues() {
         return itemValues;
+    }
+
+    public void setSubformDropDownStatus(HashMap<Integer, List<Boolean>> subformDropDownStatus) {
+        this.subformDropDownStatus = subformDropDownStatus;
+    }
+
+    public HashMap<Integer, List<Boolean>> getSubformDropDownStatus() {
+        return subformDropDownStatus;
     }
 }
