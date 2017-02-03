@@ -148,7 +148,9 @@ public class CaseService extends RecordService {
         itemValues.addStringItem(PREVIOUS_OWNER, username);
 
         if (!itemValues.has(REGISTRATION_DATE)) {
-            itemValues.addStringItem(REGISTRATION_DATE, getCurrentRegistrationDateAsString());
+            String registrationDateVal = getCurrentRegistrationDateAsString();
+            itemValues.addStringItem(REGISTRATION_DATE, registrationDateVal);
+            itemValues.addStringItem(CASE_OPENING_DATE, registrationDateVal);
         }
 
         Gson gson = new Gson();

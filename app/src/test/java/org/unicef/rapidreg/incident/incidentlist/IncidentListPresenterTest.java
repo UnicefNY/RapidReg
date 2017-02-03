@@ -80,7 +80,7 @@ public class IncidentListPresenterTest {
 
     @Test
     public void should_return_records_by_registration_date_DES_filter() throws Exception {
-        SpinnerState spinnerState = SpinnerState.REG_DATE_DES;
+        SpinnerState spinnerState = SpinnerState.INTERVIEW_DATE_DES;
 
         List<Long> expected = new ArrayList<>();
         when(incidentService.getAllOrderByDateDES()).thenReturn(expected);
@@ -92,7 +92,7 @@ public class IncidentListPresenterTest {
 
     @Test
     public void should_return_records_by_registration_date_ASC_filter() throws Exception {
-        SpinnerState spinnerState = SpinnerState.REG_DATE_ASC;
+        SpinnerState spinnerState = SpinnerState.INQUIRY_DATE_ASC;
 
         List<Long> expected = new ArrayList<>();
         when(incidentService.getAllOrderByDateASC()).thenReturn(expected);

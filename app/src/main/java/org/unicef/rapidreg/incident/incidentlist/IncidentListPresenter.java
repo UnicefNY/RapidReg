@@ -39,9 +39,9 @@ public class IncidentListPresenter extends RecordListPresenter {
                 return incidentService.getAllOrderByAgeASC();
             case AGE_DES:
                 return incidentService.getAllOrderByAgeDES();
-            case REG_DATE_ASC:
+            case INTERVIEW_DATE_ASC:
                 return incidentService.getAllOrderByDateASC();
-            case REG_DATE_DES:
+            case INTERVIEW_DATE_DES:
                 return incidentService.getAllOrderByDateDES();
             default:
                 return new ArrayList<>();

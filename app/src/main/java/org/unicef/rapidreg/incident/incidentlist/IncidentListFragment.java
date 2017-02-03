@@ -28,8 +28,8 @@ public class IncidentListFragment extends RecordListFragment {
     private static final SpinnerState[] SPINNER_STATES = {
             SpinnerState.AGE_ASC,
             SpinnerState.AGE_DES,
-            SpinnerState.REG_DATE_ASC,
-            SpinnerState.REG_DATE_DES};
+            SpinnerState.INTERVIEW_DATE_ASC,
+            SpinnerState.INTERVIEW_DATE_DES};
 
     @Inject
     IncidentListPresenter incidentListPresenter;
@@ -52,7 +52,7 @@ public class IncidentListFragment extends RecordListFragment {
 
     @Override
     protected int getDefaultSpinnerStatePosition() {
-        return Arrays.asList(SPINNER_STATES).indexOf(SpinnerState.REG_DATE_DES);
+        return Arrays.asList(SPINNER_STATES).indexOf(SpinnerState.INTERVIEW_DATE_DES);
     }
 
     @Override
