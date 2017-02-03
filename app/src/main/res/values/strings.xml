@@ -47,9 +47,11 @@
     <!-- Title -->
     <string name="search">Search</string>
     <string name="cases">Cases</string>
-    <string name="child_case">Case</string>
+    <string name="child_case">Cases</string>
+    <string name="cp_case">CP Cases</string>
+    <string name="gbv_case">GBV Cases</string>
     <string name="edit">Edit</string>
-    <string name="case_details">Case details</string>
+    <string name="case_details">Case Details</string>
     <string name="incidents">Incidents</string>
     <string name="child_incident">Incident</string>
     <string name="incident_details">Incident details</string>

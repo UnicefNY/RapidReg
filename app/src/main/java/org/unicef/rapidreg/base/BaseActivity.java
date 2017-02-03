@@ -1,17 +1,12 @@
 package org.unicef.rapidreg.base;
 
-import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.widget.Toolbar;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -24,7 +19,6 @@ import org.unicef.rapidreg.IntentSender;
 import org.unicef.rapidreg.PrimeroApplication;
 import org.unicef.rapidreg.PrimeroAppConfiguration;
 import org.unicef.rapidreg.R;
-import org.unicef.rapidreg.base.record.recordlist.RecordListFragment;
 import org.unicef.rapidreg.injection.component.ActivityComponent;
 import org.unicef.rapidreg.injection.component.DaggerActivityComponent;
 import org.unicef.rapidreg.injection.module.ActivityModule;
@@ -32,13 +26,12 @@ import org.unicef.rapidreg.model.User;
 
 import javax.inject.Inject;
 
+import butterknife.BindColor;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
-public abstract class BaseActivity extends MvpActivity<BaseView, BasePresenter> implements NavigationView.OnNavigationItemSelectedListener {
-    private static final int[][] COLOR_STATES = new int[][]{
-            new int[]{android.R.attr.state_checked},
-            new int[]{-android.R.attr.state_checked},};
+public abstract class BaseActivity extends MvpActivity<BaseView, BasePresenter> {
 
     @BindView(R.id.nav_view)
     protected NavigationView navigationView;
@@ -61,16 +54,42 @@ public abstract class BaseActivity extends MvpActivity<BaseView, BasePresenter> 
     @BindView(R.id.search)
     protected ImageButton searchMenu;
 
+    @BindView(R.id.login_user_label)
+    protected TextView textViewLoginUserLabel;
+
+    @BindView(R.id.organization)
+    protected TextView organizationView;
+
+    @BindView(R.id.logout_label)
+    protected ImageView textViewLogoutLabel;
+
+    @BindView(R.id.nav_cases)
+    protected TextView NavCasesTV;
+
+    @BindView(R.id.nav_tracing)
+    protected TextView NavTracingTV;
+
+    @BindView(R.id.nav_incident)
+    protected TextView NavIncidentTV;
+
+    @BindView(R.id.nav_sync)
+    protected TextView NavSyncTV;
+
+    @BindColor(R.color.primero_green)
+    protected ColorStateList caseColor;
+
+    @BindColor(R.color.primero_red)
+    protected ColorStateList tracingColor;
+
+    @BindColor(R.color.black)
+    protected ColorStateList incidentColor;
+
+    @BindColor(R.color.primero_blue)
+    protected ColorStateList syncColor;
+
     protected IntentSender intentSender = new IntentSender();
 
     protected DetailState detailState = DetailState.VISIBILITY;
-
-    protected ColorStateList caseColor;
-    protected ColorStateList tracingColor;
-    protected ColorStateList incidentColor;
-    protected ColorStateList syncColor;
-
-    protected boolean isMenuOpen;
 
     @Inject
     BasePresenter basePresenter;
@@ -89,21 +108,13 @@ public abstract class BaseActivity extends MvpActivity<BaseView, BasePresenter> 
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
-        isMenuOpen = getIntent().getBooleanExtra(IntentSender.IS_OPEN_MENU, false);
-
         initToolbar();
+        initNavigationHeader();
         initNavigationItemMenu();
+        drawer.openDrawer(GravityCompat.START);
+    }
 
-        navigationView.setItemIconTintList(null);
-        caseColor = generateColors(R.color.primero_green);
-        tracingColor = generateColors(R.color.primero_red);
-        incidentColor = generateColors(R.color.black);
-        syncColor = generateColors(R.color.primero_blue);
-        navigationView.setItemTextColor(caseColor);
-
-        View headerView = navigationView.getHeaderView(0);
-        TextView textViewLoginUserLabel = (TextView) headerView.findViewById(R.id.login_user_label);
-        TextView organizationView = (TextView) headerView.findViewById(R.id.organization);
+    private void initNavigationHeader() {
         User currentUser = basePresenter.getCurrentUser();
         if (currentUser != null) {
             String username = currentUser.getUsername();
@@ -112,7 +123,7 @@ public abstract class BaseActivity extends MvpActivity<BaseView, BasePresenter> 
             String organisation = currentUser.getOrganisation();
             organizationView.setText(organisation);
         }
-        ImageView textViewLogoutLabel = (ImageView) headerView.findViewById(R.id.logout_label);
+
         textViewLogoutLabel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -121,17 +132,30 @@ public abstract class BaseActivity extends MvpActivity<BaseView, BasePresenter> 
                 }
             }
         });
-
-        drawer.openDrawer(GravityCompat.START);
-        navigationView.setNavigationItemSelectedListener(this);
     }
 
     protected void initNavigationItemMenu() {
+        NavCasesTV.setVisibility(View.GONE);
+        NavTracingTV.setVisibility(View.GONE);
+        NavIncidentTV.setVisibility(View.GONE);
+        NavSyncTV.setVisibility(View.GONE);
+
         User user = PrimeroAppConfiguration.getCurrentUser();
         if (user != null) {
             User.Role role = user.getRoleType();
+            switch (role.getValue()) {
+                case "CP":
+                    NavCasesTV.setText(R.string.cp_case);
+                    break;
+                case "GBV":
+                    NavCasesTV.setText(R.string.gbv_case);
+                    break;
+                default:
+                    NavCasesTV.setText(R.string.cases);
+                    break;
+            }
             for (int resId : role.getResIds()) {
-                navigationView.inflateMenu(resId);
+                findViewById(resId).setVisibility(View.VISIBLE);
             }
         }
     }
@@ -152,34 +176,29 @@ public abstract class BaseActivity extends MvpActivity<BaseView, BasePresenter> 
         }
     }
 
-    @SuppressWarnings("StatementWithEmptyBody")
-    @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
+    @OnClick(R.id.nav_cases)
+    public void onNavCasesTVClick() {
         drawer.closeDrawer(GravityCompat.START);
-        switch (item.getItemId()) {
-            case R.id.nav_cases:
-                navCaseAction();
-                navigationView.setItemTextColor(caseColor);
-                break;
-            case R.id.nav_tracing:
-                navTracingAction();
-                navigationView.setItemTextColor(tracingColor);
-                break;
-            case R.id.nav_incident:
-                navIncidentAction();
-                navigationView.setItemTextColor(incidentColor);
-                break;
-            case R.id.nav_sync:
-                navigationView.setItemTextColor(syncColor);
-                navSyncAction();
-                break;
-            default:
-                break;
-        }
-        navigationView.getMenu().findItem(item.getItemId()).setChecked(true);
-        return true;
+        navCaseAction();
     }
 
+    @OnClick(R.id.nav_tracing)
+    public void onNavTracingButtonClick() {
+        drawer.closeDrawer(GravityCompat.START);
+        navTracingAction();
+    }
+
+    @OnClick(R.id.nav_incident)
+    public void onNavIncidentButtonClick() {
+        drawer.closeDrawer(GravityCompat.START);
+        navIncidentAction();
+    }
+
+    @OnClick(R.id.nav_sync)
+    public void onNavSyncButtonClick() {
+        drawer.closeDrawer(GravityCompat.START);
+        navSyncAction();
+    }
 
     public PrimeroApplication getContext() {
         return (PrimeroApplication) getApplication();
@@ -190,15 +209,6 @@ public abstract class BaseActivity extends MvpActivity<BaseView, BasePresenter> 
         String message = getContext().getResources().getString(R.string.login_out_successful_text);
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
         intentSender.showLoginActivity(this);
-    }
-
-    private ColorStateList generateColors(int resId) {
-        int[] color = new int[]{
-                ContextCompat.getColor(this, resId),
-                ContextCompat.getColor(this, R.color.primero_font_medium),
-        };
-
-        return new ColorStateList(COLOR_STATES, color);
     }
 
     private void initToolbar() {
@@ -260,6 +270,12 @@ public abstract class BaseActivity extends MvpActivity<BaseView, BasePresenter> 
         showHideMenu.setVisibility(View.GONE);
         searchMenu.setVisibility(View.GONE);
         saveMenu.setVisibility(View.GONE);
+    }
+
+    protected void setNavSelectedMenu(int resId, ColorStateList color) {
+        TextView view = (TextView) findViewById(resId);
+        view.setTextColor(color);
+        view.setBackgroundColor(getResources().getColor(R.color.lighter_gray));
     }
 
     protected abstract void navSyncAction();

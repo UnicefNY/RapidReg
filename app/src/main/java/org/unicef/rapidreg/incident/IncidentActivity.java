@@ -44,8 +44,7 @@ public class IncidentActivity extends RecordActivity implements BaseView {
         getComponent().inject(this);
         super.onCreate(savedInstanceState);
 
-        navigationView.setCheckedItem(R.id.nav_incident);
-        navigationView.setItemTextColor(incidentColor);
+        setNavSelectedMenu(R.id.nav_incident, incidentColor);
         drawer.closeDrawer(GravityCompat.START);
 
         turnToFeature(IncidentFeature.LIST, null, null);
