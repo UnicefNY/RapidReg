@@ -10,6 +10,10 @@ import org.unicef.rapidreg.R;
 
 @Table(database = PrimeroDatabaseConfiguration.class)
 public class User extends BaseModel {
+    public static final String ROLE_EMPTY = "";
+    public static final String ROLE_CP = "primeromodule-cp";
+    public static final String ROLE_GBV = "primeromodule-gbv";
+
     @PrimaryKey(autoincrement = true)
     @Column
     private int id;
@@ -187,16 +191,16 @@ public class User extends BaseModel {
     }
 
     public enum Role {
-        EMPTY_ROLE("",
+        EMPTY_ROLE(ROLE_EMPTY,
                 R.id.nav_cases,
                 R.id.nav_tracing,
                 R.id.nav_incident,
                 R.id.nav_sync),
-        CP("CP",
+        CP(ROLE_CP,
                 R.id.nav_cases,
                 R.id.nav_tracing,
                 R.id.nav_sync),
-        GBV("GBV",
+        GBV(ROLE_GBV,
                 R.id.nav_cases,
                 R.id.nav_incident,
                 R.id.nav_sync);
