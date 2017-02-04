@@ -145,7 +145,7 @@ public class TracingActivity extends RecordActivity implements BaseView {
     @Subscribe(threadMode = ThreadMode.MAIN, sticky = true, priority = 1)
     public void onNeedLoadFormsEvent(final LoadTracingFormEvent event) {
         EventBus.getDefault().removeStickyEvent(event);
-        tracingPresenter.loadTracingForm(event.getCookie());
+        tracingPresenter.loadTracingForm();
     }
 
     @Override

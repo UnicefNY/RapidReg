@@ -13,7 +13,6 @@ import dagger.Provides;
 
 @Module
 public class AndroidServiceModule {
-
     @Provides
     @Singleton
     TelephonyManager provideTelephonyManager(@ApplicationContext Context context) {

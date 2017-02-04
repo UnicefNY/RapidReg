@@ -1,5 +1,6 @@
 package org.unicef.rapidreg.sync;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
@@ -69,7 +70,7 @@ public class SyncFragment extends MvpFragment<SyncView, BaseSyncPresenter> imple
     @BindString(R.string.sync_download_success_message)
     String syncDownloadSuccessMessage;
     @BindString(R.string.sync_pull_form_success_message)
-    String syncPullFormSuccessMessage;
+    String syncDownloadFormSuccessMessage;
     @BindString(R.string.try_to_sync_message)
     String tryToSyncMessage;
     @BindString(R.string.not_now_button_text)
@@ -81,6 +82,10 @@ public class SyncFragment extends MvpFragment<SyncView, BaseSyncPresenter> imple
 
     @Inject
     CPSyncPresenter cpSyncPresenter;
+
+    @Inject
+    GBVSyncPresenter gbvSyncPresenter;
+
 
     @Nullable
     @Override
@@ -140,22 +145,6 @@ public class SyncFragment extends MvpFragment<SyncView, BaseSyncPresenter> imple
         presenter.tryToSync();
     }
 
-    @Override
-    public void showSyncProgressDialog(String title) {
-        syncProgressDialog = new BaseProgressDialog(getActivity());
-        syncProgressDialog.setProgressStyle(BaseProgressDialog.STYLE_HORIZONTAL);
-        syncProgressDialog.setMessage(title);
-        syncProgressDialog.setCancelable(false);
-        syncProgressDialog.setButton(DialogInterface.BUTTON_NEGATIVE,
-                cancelButtonText,
-                new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        presenter.attemptCancelSync();
-                    }
-                });
-        syncProgressDialog.show();
-    }
 
     @Override
     public void hideSyncProgressDialog() {
@@ -169,18 +158,8 @@ public class SyncFragment extends MvpFragment<SyncView, BaseSyncPresenter> imple
         new BaseAlertDialog.Builder(getActivity())
                 .setMessage(confirmCancelSyncMessage)
                 .setCancelable(false)
-                .setNegativeButton(continueSyncButtonText, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        syncProgressDialog.show();
-                    }
-                })
-                .setPositiveButton(stopSyncButtonText, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        presenter.cancelSync();
-                    }
-                })
+                .setNegativeButton(continueSyncButtonText, (dialog, which) -> syncProgressDialog.show())
+                .setPositiveButton(stopSyncButtonText, (dialog, which) -> presenter.cancelSync())
                 .show();
     }
 
@@ -216,18 +195,9 @@ public class SyncFragment extends MvpFragment<SyncView, BaseSyncPresenter> imple
         new BaseAlertDialog.Builder(getActivity())
                 .setMessage(tryToSyncMessage)
                 .setCancelable(false)
-                .setNegativeButton(notNowButtonText, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-
-                    }
+                .setNegativeButton(notNowButtonText, (dialog, which) -> {
                 })
-                .setPositiveButton(confirmButtonText, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        presenter.execSync();
-                    }
-                })
+                .setPositiveButton(confirmButtonText, (dialog, which) -> presenter.execSync())
                 .show();
     }
 
@@ -238,7 +208,52 @@ public class SyncFragment extends MvpFragment<SyncView, BaseSyncPresenter> imple
 
     @Override
     public void showSyncPullFormSuccessMessage() {
-        Toast.makeText(getActivity(), syncPullFormSuccessMessage, Toast.LENGTH_SHORT).show();
+        Toast.makeText(getActivity(), syncDownloadFormSuccessMessage, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void showRequestTimeoutSyncErrorMessage() {
+        Toast.makeText(getActivity(), getResources().getString(R.string.sync_request_time_out_error_message), Toast
+                .LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void showServerNotAvailableSyncErrorMessage() {
+        Toast.makeText(getActivity(), getResources().getString(R.string.sync_server_not_available_error_message), Toast
+                .LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void showDownloadingCasesSyncProgressDialog() {
+        showSyncProgressDialog(getResources().getString(R.string.downloading_cases_sync_progress_msg));
+    }
+
+    @Override
+    public void showDownloadingTracingsSyncProgressDialog() {
+        showSyncProgressDialog(getResources().getString(R.string.downloading_tracings_sync_progress_msg));
+    }
+
+    @Override
+    public ProgressDialog showFetchingCaseAmountLoadingDialog() {
+        return ProgressDialog.show(getActivity(), "", getResources().getString(R.string.fetching_case_amount_msg),
+                true);
+    }
+
+    @Override
+    public ProgressDialog showFetchingTracingAmountLoadingDialog() {
+        return ProgressDialog.show(getActivity(), "", getResources().getString(R.string.fetching_tracing_amount_msg),
+                true);
+    }
+
+    @Override
+    public ProgressDialog showFetchingFormLoadingDialog() {
+        return ProgressDialog.show(getActivity(), "", getResources().getString(R.string.fetching_form_msg),
+                true);
+    }
+
+    @Override
+    public void showUploadCasesSyncProgressDialog() {
+        showSyncProgressDialog(getResources().getString(R.string.uploading_sync_progress_msg));
     }
 
     @Override
@@ -246,11 +261,9 @@ public class SyncFragment extends MvpFragment<SyncView, BaseSyncPresenter> imple
         Toast.makeText(getActivity(), syncDownloadSuccessMessage, Toast.LENGTH_SHORT).show();
     }
 
-
-
     @Override
-    public void showSyncErrorMessage(int errorMsgId) {
-        Toast.makeText(getActivity(), getResources().getString(errorMsgId), Toast.LENGTH_LONG).show();
+    public void showSyncErrorMessage() {
+        Toast.makeText(getActivity(), getResources().getString(R.string.sync_error_message), Toast.LENGTH_LONG).show();
     }
 
     public FragmentComponent getComponent() {
@@ -258,5 +271,18 @@ public class SyncFragment extends MvpFragment<SyncView, BaseSyncPresenter> imple
                 .applicationComponent(PrimeroApplication.get(getActivity()).getComponent())
                 .fragmentModule(new FragmentModule(this))
                 .build();
+    }
+
+    private void showSyncProgressDialog(String title) {
+        syncProgressDialog = new BaseProgressDialog(getActivity());
+        syncProgressDialog.setProgressStyle(BaseProgressDialog.STYLE_HORIZONTAL);
+        syncProgressDialog.setMessage(title);
+        syncProgressDialog.setCancelable(false);
+        syncProgressDialog.setButton(DialogInterface.BUTTON_NEGATIVE,
+                cancelButtonText,
+                (dialog, which) -> {
+                    presenter.attemptCancelSync();
+                });
+        syncProgressDialog.show();
     }
 }

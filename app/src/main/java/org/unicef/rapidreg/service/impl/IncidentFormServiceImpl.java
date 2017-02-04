@@ -4,7 +4,6 @@ import com.google.gson.Gson;
 import com.raizlabs.android.dbflow.data.Blob;
 
 import org.unicef.rapidreg.PrimeroAppConfiguration;
-import org.unicef.rapidreg.base.RecordConfiguration;
 import org.unicef.rapidreg.forms.Field;
 import org.unicef.rapidreg.forms.Section;
 import org.unicef.rapidreg.repository.IncidentFormDao;
@@ -28,14 +27,15 @@ public class IncidentFormServiceImpl implements IncidentFormService {
     }
 
     public boolean isReady() {
-        IncidentForm incidentForm = incidentFormDao.getIncidentForm(RecordConfiguration
-                .MODULE_ID_GBV);
+        IncidentForm incidentForm = incidentFormDao.getIncidentForm(PrimeroAppConfiguration
+                .MODULE_ID_GBV, PrimeroAppConfiguration.getApiBaseUrl());
         return incidentForm != null && incidentForm.getForm() != null;
     }
 
     @Override
     public IncidentTemplateForm getGBVTemplate() {
-        Blob form = incidentFormDao.getIncidentForm(RecordConfiguration.MODULE_ID_GBV).getForm();
+        Blob form = incidentFormDao.getIncidentForm(PrimeroAppConfiguration.MODULE_ID_GBV, PrimeroAppConfiguration
+                .getApiBaseUrl()).getForm();
         return getIncidentTemplateForm(form);
     }
 
@@ -49,8 +49,9 @@ public class IncidentFormServiceImpl implements IncidentFormService {
 
     public void saveOrUpdate(IncidentForm incidentForm) {
         IncidentForm existingIncidentForm = incidentFormDao.getIncidentForm(incidentForm.
-                getModuleId());
+                getModuleId(),PrimeroAppConfiguration.getApiBaseUrl());
         if (existingIncidentForm == null) {
+            incidentForm.setUrl(PrimeroAppConfiguration.getApiBaseUrl());
             incidentForm.save();
         } else {
             existingIncidentForm.setForm(incidentForm.getForm());

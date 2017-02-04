@@ -5,12 +5,16 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.powermock.api.mockito.PowerMockito;
+import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
+import org.unicef.rapidreg.PrimeroAppConfiguration;
 import org.unicef.rapidreg.forms.CaseTemplateForm;
 import org.unicef.rapidreg.forms.Section;
 import org.unicef.rapidreg.model.CaseForm;
-import org.unicef.rapidreg.service.FormRemoteService;
 import org.unicef.rapidreg.service.CaseFormService;
+import org.unicef.rapidreg.service.FormRemoteService;
 
 import edu.emory.mathcs.backport.java.util.Arrays;
 import rx.Observable;
@@ -24,6 +28,7 @@ import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
 
 @RunWith(PowerMockRunner.class)
+@PrepareForTest({PrimeroAppConfiguration.class})
 public class CasePresenterTest {
 
     @Mock
@@ -38,6 +43,7 @@ public class CasePresenterTest {
     @Before
     public void setUp() throws Exception {
         initMocks(this);
+        PowerMockito.mockStatic(PrimeroAppConfiguration.class);
     }
 
     @Test
@@ -53,10 +59,11 @@ public class CasePresenterTest {
     public void should_load_case_form_when_give_cookie_and_module_id() throws Exception {
         CaseTemplateForm caseTemplateForm = createCaseTemplateForm();
         Observable<CaseTemplateForm> observable = Observable.just(caseTemplateForm);
-        when(authService.getCaseForm("cookie", "English", true, "case", "primeromodule-cp"))
+        when(authService.getCaseForm("cookie", "en", true, "case", PrimeroAppConfiguration.MODULE_ID_CP))
                 .thenReturn(observable);
-
-        casePresenter.loadCaseForm("English", "cookie", "primeromodule-cp");
+        Mockito.when(PrimeroAppConfiguration.getCookie()).thenReturn("cookie");
+        Mockito.when(PrimeroAppConfiguration.getDefaultLanguage()).thenReturn("en");
+        casePresenter.loadCaseForm(PrimeroAppConfiguration.MODULE_ID_CP);
 
         verify(caseFormService, times(1)).saveOrUpdate(any(CaseForm.class));
         assertFalse("Should mark sync successful.", casePresenter.isFormSyncFail());
@@ -65,10 +72,13 @@ public class CasePresenterTest {
     @Test
     public void should_show_error_when_sync_form_fail() throws Exception {
         Observable observable = Observable.error(new Exception());
-        when(authService.getCaseForm("cookie", "English", true, "case", "primeromodule-cp"))
+        when(authService.getCaseForm("cookie", "en", true, "case", "primeromodule-cp"))
                 .thenReturn(observable);
 
-        casePresenter.loadCaseForm("English", "cookie", "primeromodule-cp");
+        Mockito.when(PrimeroAppConfiguration.getCookie()).thenReturn("cookie");
+        Mockito.when(PrimeroAppConfiguration.getDefaultLanguage()).thenReturn("en");
+
+        casePresenter.loadCaseForm("primeromodule-cp");
 
         assertTrue("Should mark sync fail.", casePresenter.isFormSyncFail());
     }

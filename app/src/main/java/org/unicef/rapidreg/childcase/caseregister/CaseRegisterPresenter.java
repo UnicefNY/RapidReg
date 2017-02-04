@@ -143,7 +143,7 @@ public class CaseRegisterPresenter extends RecordRegisterPresenter {
             case MODULE_CASE_GBV:
                 return caseFormService.getGBVTemplate();
             default:
-                return new CaseTemplateForm();
+                return caseFormService.getCPTemplate();
         }
     }
 

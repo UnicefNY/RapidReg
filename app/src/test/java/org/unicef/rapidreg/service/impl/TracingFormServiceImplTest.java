@@ -6,6 +6,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
+import org.unicef.rapidreg.PrimeroAppConfiguration;
 import org.unicef.rapidreg.repository.TracingFormDao;
 import org.unicef.rapidreg.repository.impl.TracingFormDaoImpl;
 import org.unicef.rapidreg.forms.Field;
@@ -13,13 +14,13 @@ import org.unicef.rapidreg.forms.Section;
 import org.unicef.rapidreg.forms.TracingTemplateForm;
 import org.unicef.rapidreg.model.TracingForm;
 import org.unicef.rapidreg.service.TracingFormService;
-import org.unicef.rapidreg.service.impl.TracingFormServiceImpl;
 
 import java.io.IOException;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
+import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -76,32 +77,32 @@ public class TracingFormServiceImplTest {
     public void should_be_true_when_form_is_ready() {
         TracingForm tracingForm = new TracingForm();
         tracingForm.setForm(new Blob());
-        when(tracingFormDao.getTracingForm()).thenReturn(tracingForm);
+        when(tracingFormDao.getTracingForm(PrimeroAppConfiguration.getApiBaseUrl())).thenReturn(tracingForm);
         boolean result = tracingFormService.isReady();
         assertThat(result, is(true));
-        verify(tracingFormDao, times(2)).getTracingForm();
+        verify(tracingFormDao, times(2)).getTracingForm(PrimeroAppConfiguration.getApiBaseUrl());
     }
 
     @Test
     public void should_be_false_when_form_is_not_exist_in_db() {
-        when(tracingFormDao.getTracingForm()).thenReturn(null);
+        when(tracingFormDao.getTracingForm(PrimeroAppConfiguration.getApiBaseUrl())).thenReturn(null);
         assertThat(tracingFormService.isReady(), is(false));
-        verify(tracingFormDao, times(1)).getTracingForm();
+        verify(tracingFormDao, times(1)).getTracingForm(PrimeroAppConfiguration.getApiBaseUrl());
     }
 
     @Test
     public void should_be_false_when_tracing_form_can_not_get_form() {
         TracingForm tracingForm = new TracingForm();
-        when(tracingFormDao.getTracingForm()).thenReturn(tracingForm);
+        when(tracingFormDao.getTracingForm(PrimeroAppConfiguration.getApiBaseUrl())).thenReturn(tracingForm);
         assertThat(tracingFormService.isReady(), is(false));
-        verify(tracingFormDao, times(2)).getTracingForm();
+        verify(tracingFormDao, times(2)).getTracingForm(PrimeroAppConfiguration.getApiBaseUrl());
     }
 
     @Test
     public void should_get_tracing_form() throws IOException {
         TracingForm tracingForm = new TracingForm();
         tracingForm.setForm(new Blob(formForm.getBytes()));
-        when(tracingFormDao.getTracingForm()).thenReturn(tracingForm);
+        when(tracingFormDao.getTracingForm(PrimeroAppConfiguration.getApiBaseUrl())).thenReturn(tracingForm);
         TracingTemplateForm form = tracingFormService.getCPTemplate();
 
         assertThat(form.getSections().size(), is(1));
@@ -127,18 +128,18 @@ public class TracingFormServiceImplTest {
 
     @Test
     public void should_save_when_existing_tracing_form_is_null() {
-        when(tracingFormDao.getTracingForm()).thenReturn(null);
+        when(tracingFormDao.getTracingForm(anyString())).thenReturn(null);
         TracingForm tracingForm = mock(TracingForm.class);
-        tracingFormService.saveOrUpdateForm(tracingForm);
+        tracingFormService.saveOrUpdate(tracingForm);
         verify(tracingForm, times(1)).save();
     }
 
     @Test
     public void should_update_when_existing_tracing_form_is_not_null() {
         TracingForm existingTracingForm = mock(TracingForm.class);
-        when(tracingFormDao.getTracingForm()).thenReturn(existingTracingForm);
+        when(tracingFormDao.getTracingForm(PrimeroAppConfiguration.getApiBaseUrl())).thenReturn(existingTracingForm);
         TracingForm tracingForm = mock(TracingForm.class);
-        tracingFormService.saveOrUpdateForm(tracingForm);
+        tracingFormService.saveOrUpdate(tracingForm);
         verify(existingTracingForm, times(1)).setForm(tracingForm.getForm());
         verify(existingTracingForm, times(1)).update();
     }

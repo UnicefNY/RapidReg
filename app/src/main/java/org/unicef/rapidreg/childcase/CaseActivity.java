@@ -16,7 +16,6 @@ import org.unicef.rapidreg.PrimeroAppConfiguration;
 import org.unicef.rapidreg.R;
 import org.unicef.rapidreg.base.BaseAlertDialog;
 import org.unicef.rapidreg.base.BaseView;
-import org.unicef.rapidreg.base.RecordConfiguration;
 import org.unicef.rapidreg.base.record.RecordActivity;
 import org.unicef.rapidreg.base.record.recordlist.RecordListFragment;
 import org.unicef.rapidreg.childcase.caselist.CaseListFragment;
@@ -155,17 +154,13 @@ public class CaseActivity extends RecordActivity implements BaseView {
     @Subscribe(threadMode = ThreadMode.MAIN, sticky = true, priority = 1)
     public void onNeedLoadGBVCaseFormsEvent(LoadGBVCaseFormEvent event) {
         EventBus.getDefault().removeStickyEvent(event);
-        String moduleId = RecordConfiguration.MODULE_ID_GBV;
-        String cookie = event.getCookie();
-        casePresenter.loadCaseForm(PrimeroAppConfiguration.getDefaultLanguage(), cookie, moduleId);
+        casePresenter.loadCaseForm(PrimeroAppConfiguration.MODULE_ID_GBV);
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN, sticky = true, priority = 1)
     public void onNeedLoadCPCaseFormsEvent(LoadCPCaseFormEvent event) {
         EventBus.getDefault().removeStickyEvent(event);
-        String moduleId = RecordConfiguration.MODULE_ID_CP;
-        String cookie = event.getCookie();
-        casePresenter.loadCaseForm(PrimeroAppConfiguration.getDefaultLanguage(), cookie, moduleId);
+        casePresenter.loadCaseForm(PrimeroAppConfiguration.MODULE_ID_CP);
     }
 
     @Override

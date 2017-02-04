@@ -8,5 +8,5 @@ public interface TracingFormService {
 
     TracingTemplateForm getCPTemplate();
 
-    void saveOrUpdateForm(TracingForm tracingForm);
+    void saveOrUpdate(TracingForm tracingForm);
 }

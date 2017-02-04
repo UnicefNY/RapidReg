@@ -105,7 +105,7 @@
     <string name="sync_pull_form_success_message">"Congrats! Your synchronisation request is completed."</string>
     <string name="sync_error_message">Sorry, the synchronization request can not proceed, please contact the support team.</string>
     <string name="sync_request_time_out_error_message">The network is not stable, please check your internet connection and try again.</string>
-    <string name="sync_server_not_reachable_error_message">Web server is not available, please contact your admin.</string>
+    <string name="sync_server_not_available_error_message">Web server is not available, please contact your admin.</string>
     <string name="try_to_sync_message">Are you sure you want to sync records?</string>
     <string name="remove_photo_confirmation">Are you sure you want to remove this photo?</string>
     <string name="save_success">Record saved</string>
@@ -130,6 +130,12 @@
     <string name="type_of_violence">Type of Violence</string>
     <string name="date_of_inquiry">Date of Inquiry</string>
     <string name="toolbar_title_text_placeholder">Tool Bar Text Placeholder</string>
+    <string name="fetching_case_amount_msg">Fetching case amount from web server...</string>
+    <string name="fetching_tracing_amount_msg">Fetching tracing amount from web server...</string>
+    <string name="downloading_cases_sync_progress_msg">Downloading Cases...Please wait a moment.</string>
+    <string name="downloading_tracings_sync_progress_msg">Downloading Tracing Request...Please wait a moment.</string>
+    <string name="fetching_form_msg">Fetching forms from web server...</string>
+    <string name="uploading_sync_progress_msg">"Uploading...Please wait a moment."</string>
     <!--Sync-->
 
     <!--Transparent theme-->

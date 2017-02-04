@@ -4,7 +4,6 @@ import com.google.gson.Gson;
 import com.raizlabs.android.dbflow.data.Blob;
 
 import org.unicef.rapidreg.PrimeroAppConfiguration;
-import org.unicef.rapidreg.base.RecordConfiguration;
 import org.unicef.rapidreg.forms.CaseTemplateForm;
 import org.unicef.rapidreg.model.CaseForm;
 import org.unicef.rapidreg.model.User;
@@ -22,25 +21,32 @@ public class CaseFormServiceImpl implements CaseFormService {
     public boolean isReady() {
         User.Role roleType = PrimeroAppConfiguration.getCurrentUser().getRoleType();
         if (roleType == User.Role.CP) {
-            return caseFormDao.getCaseForm(RecordConfiguration.MODULE_ID_CP) != null && caseFormDao
-                    .getCaseForm(RecordConfiguration.MODULE_ID_CP).getForm() != null;
+            return caseFormDao.getCaseForm(PrimeroAppConfiguration.MODULE_ID_CP, PrimeroAppConfiguration
+                    .getApiBaseUrl()) != null && caseFormDao
+                    .getCaseForm(PrimeroAppConfiguration.MODULE_ID_CP, PrimeroAppConfiguration.getApiBaseUrl())
+                    .getForm() != null;
         }
         if (roleType == User.Role.GBV) {
-            return caseFormDao.getCaseForm(RecordConfiguration.MODULE_ID_GBV) != null &&
-                    caseFormDao.getCaseForm(RecordConfiguration.MODULE_ID_GBV).getForm() != null;
+            return caseFormDao.getCaseForm(PrimeroAppConfiguration.MODULE_ID_GBV, PrimeroAppConfiguration
+                    .getApiBaseUrl()) != null &&
+                    caseFormDao.getCaseForm(PrimeroAppConfiguration.MODULE_ID_GBV, PrimeroAppConfiguration
+                            .getApiBaseUrl()).getForm() != null;
         }
-        return caseFormDao.getCaseForm(RecordConfiguration.MODULE_ID_CP) != null && caseFormDao
-                .getCaseForm(RecordConfiguration.MODULE_ID_CP).getForm() != null;
+        return caseFormDao.getCaseForm(PrimeroAppConfiguration.MODULE_ID_CP, PrimeroAppConfiguration.getApiBaseUrl()) != null && caseFormDao
+                .getCaseForm(PrimeroAppConfiguration.MODULE_ID_CP, PrimeroAppConfiguration.getApiBaseUrl()).getForm() != null;
     }
 
     public CaseTemplateForm getCPTemplate() {
-        Blob form = caseFormDao.getCaseForm(RecordConfiguration.MODULE_ID_CP).getForm();
+        Blob form = caseFormDao.getCaseForm(PrimeroAppConfiguration.MODULE_ID_CP, PrimeroAppConfiguration
+                .getApiBaseUrl()).getForm();
         return getCaseTemplateForm(form);
     }
 
     @Override
     public CaseTemplateForm getGBVTemplate() {
-        Blob form = caseFormDao.getCaseForm(RecordConfiguration.MODULE_ID_GBV).getForm();
+        Blob form = caseFormDao.getCaseForm(PrimeroAppConfiguration.MODULE_ID_GBV, PrimeroAppConfiguration
+                .getApiBaseUrl())
+                .getForm();
         return getCaseTemplateForm(form);
     }
 
@@ -52,9 +58,11 @@ public class CaseFormServiceImpl implements CaseFormService {
         return new Gson().fromJson(formJson, CaseTemplateForm.class);
     }
 
-    public void saveOrUpdate(org.unicef.rapidreg.model.CaseForm caseForm) {
-        CaseForm existingCaseForm = caseFormDao.getCaseForm(caseForm.getModuleId());
+    public void saveOrUpdate(CaseForm caseForm) {
+        CaseForm existingCaseForm = caseFormDao.getCaseForm(caseForm.getModuleId(), PrimeroAppConfiguration
+                .getApiBaseUrl());
         if (existingCaseForm == null) {
+            caseForm.setUrl(PrimeroAppConfiguration.getApiBaseUrl());
             caseForm.save();
         } else {
             existingCaseForm.setForm(caseForm.getForm());
