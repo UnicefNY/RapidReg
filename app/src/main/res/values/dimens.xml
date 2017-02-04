@@ -28,6 +28,8 @@
     <dimen name="row_height">90dp</dimen>
     <dimen name="img_left_margin">18.7dp</dimen>
     <dimen name="img_vertical_margin">10.7dp</dimen>
+    <dimen name="icon_width">20dp</dimen>
+    <dimen name="text_area_padding">20dp</dimen>
     <dimen name="text_area_left_margin">18.3dp</dimen>
     <dimen name="text_area_bottom_margin">24dp</dimen>
     <dimen name="text_area_right_margin">18.3dp</dimen>

@@ -2,57 +2,51 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/mini_form_profile"
     android:layout_width="match_parent"
-    android:layout_height="@dimen/row_height">
+    android:layout_height="@dimen/row_height"
+    android:padding="@dimen/case_register_label_padding_left_right">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/case_register_label_padding_left_right"
-        android:layout_marginTop="@dimen/case_register_label_padding_left_right"
+        android:gravity="center_vertical"
         android:orientation="horizontal"
         android:weightSum="10">
 
         <TextView
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:text="@string/case_id"
             android:textColor="@color/primero_font_dark"
-            android:textSize="@dimen/text_size_12" />
+            android:textSize="@dimen/text_size_16" />
 
         <TextView
             android:id="@+id/id_normal_state"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="5"
+            android:paddingLeft="@dimen/size_5"
             android:textColor="@color/primero_font_dark"
-            android:textSize="@dimen/text_size_12" />
+            android:textSize="@dimen/text_size_16" />
 
         <ImageView
             android:id="@+id/connected"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_marginLeft="@dimen/matching_badge_left_margin"
-            android:layout_marginStart="@dimen/matching_badge_left_margin"
+            android:layout_width="@dimen/icon_width"
+            android:layout_height="@dimen/icon_width"
             android:background="@drawable/connected"
-            android:visibility="invisible" />
+            android:visibility="gone" />
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_marginBottom="@dimen/case_register_label_padding_left_right"
-        android:layout_marginLeft="@dimen/case_register_label_padding_left_right"
-        android:orientation="horizontal"
-        android:weightSum="10">
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
 
         <ImageView
             android:id="@+id/gender_badge"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical" />
+            android:layout_width="@dimen/icon_width"
+            android:layout_height="@dimen/icon_width" />
 
         <TextView
             android:id="@+id/gender_name"
@@ -60,12 +54,11 @@
             android:layout_height="wrap_content"
             android:layout_weight="2"
             android:paddingLeft="@dimen/size_5"
-            android:textSize="@dimen/text_size_12" />
+            android:textSize="@dimen/text_size_14" />
 
         <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
+            android:layout_width="@dimen/icon_width"
+            android:layout_height="@dimen/icon_width"
             android:background="@drawable/age_little" />
 
         <TextView
@@ -75,7 +68,7 @@
             android:layout_weight="2"
             android:paddingLeft="@dimen/size_5"
             android:textColor="@color/primero_font_medium"
-            android:textSize="@dimen/text_size_12" />
+            android:textSize="@dimen/text_size_14" />
 
         <TextView
             android:id="@+id/registration_date"
@@ -84,19 +77,8 @@
             android:layout_weight="4"
             android:gravity="right"
             android:textColor="@color/primero_font_light"
-            android:textSize="@dimen/text_size_12" />
+            android:textSize="@dimen/text_size_14" />
 
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true">
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/size_1"
-            android:background="@color/lighter_gray" />
     </LinearLayout>
 
 </RelativeLayout>

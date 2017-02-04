@@ -28,9 +28,11 @@
     <dimen name="field_padding_left">30dp</dimen>
 
     <!--row in list start-->
-    <dimen name="row_height">180dp</dimen>
+    <dimen name="row_height">200dp</dimen>
     <dimen name="img_left_margin">40dp</dimen>
     <dimen name="img_vertical_margin">22dp</dimen>
+    <dimen name="icon_width">40dp</dimen>
+    <dimen name="text_area_padding">32dp</dimen>
     <dimen name="text_area_left_margin">210dp</dimen>
     <dimen name="text_area_bottom_margin">48dp</dimen>
     <dimen name="text_area_right_margin">40dp</dimen>
