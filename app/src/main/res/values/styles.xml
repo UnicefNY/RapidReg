@@ -22,10 +22,7 @@
     <style name="TextAreaOfCaseRow">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">match_parent</item>
-        <item name="android:layout_marginLeft">@dimen/text_area_left_margin</item>
-        <item name="android:layout_marginRight">@dimen/text_area_right_margin</item>
-        <item name="android:layout_marginTop">@dimen/text_area_top_margin</item>
-        <item name="android:layout_marginBottom">@dimen/text_area_bottom_margin</item>
+        <item name="android:orientation">vertical</item>
     </style>
 
     <style name="menu_labels_style">
