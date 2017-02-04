@@ -3,8 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:gravity="center_vertical"
-    android:padding="@dimen/size_10"
-    android:weightSum="10">
+    android:padding="@dimen/size_10">
 
     <ImageView
         android:id="@+id/indicator"
@@ -17,13 +16,13 @@
         android:id="@+id/order_name"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_weight="8"
+        android:layout_weight="9"
         android:textColor="@color/primero_blue"
         android:textSize="@dimen/text_size_16" />
 
     <ImageView
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
+        android:layout_width="@dimen/icon_width"
+        android:layout_height="@dimen/icon_width"
+        android:gravity="center"
         android:src="@drawable/list_button_down" />
 </LinearLayout>
