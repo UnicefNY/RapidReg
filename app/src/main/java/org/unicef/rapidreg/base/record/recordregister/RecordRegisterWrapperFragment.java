@@ -2,14 +2,13 @@ package org.unicef.rapidreg.base.record.recordregister;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.hannesdorfmann.mosby.mvp.MvpFragment;
 import com.ogaclejapan.smarttablayout.SmartTabLayout;
 import com.ogaclejapan.smarttablayout.utils.v4.FragmentPagerItems;
@@ -103,7 +102,7 @@ public abstract class RecordRegisterWrapperFragment extends MvpFragment<RecordRe
 
     @Override
     public List<String> getPhotoPathsData() {
-        if(recordPhotoAdapter == null) {
+        if (recordPhotoAdapter == null) {
             return Collections.EMPTY_LIST;
         }
         return recordPhotoAdapter.getAllItems();

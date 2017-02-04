@@ -109,6 +109,10 @@
     <dimen name="toolbar_button_width">120dp</dimen>
     <!--toolbar end-->
 
+    <!--floating action button start-->
+    <dimen name="fa_button_width">120dp</dimen>
+    <!--floating action button end-->
+
     <!--camera & record start-->
     <dimen name="camera_photo_size">200dp</dimen>
     <dimen name="record_delete_button_size">70dp</dimen>
