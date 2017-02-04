@@ -1,58 +1,61 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:app="http://schemas.android.com/apk/res-auto"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
-    <com.ogaclejapan.smarttablayout.SmartTabLayout
-        android:id="@+id/viewpagertab"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/size_48"
-        app:stl_clickable="true"
-        app:stl_defaultTabBackground="?attr/selectableItemBackground"
-        app:stl_defaultTabTextAllCaps="false"
-        app:stl_defaultTabTextColor="@color/primero_font_dark"
-        app:stl_defaultTabTextHorizontalPadding="16dp"
-        app:stl_defaultTabTextMinWidth="0dp"
-        app:stl_defaultTabTextSize="@dimen/text_size_14"
-        app:stl_distributeEvenly="false"
-        app:stl_dividerColor="#4D000000"
-        app:stl_dividerThickness="0dp"
-        app:stl_drawDecorationAfterTab="false"
-        app:stl_indicatorAlwaysInCenter="false"
-        app:stl_indicatorColor="@color/primero_blue"
-        app:stl_indicatorCornerRadius="@dimen/size_1"
-        app:stl_indicatorGravity="bottom"
-        app:stl_indicatorInFront="false"
-        app:stl_indicatorInterpolation="smart"
-        app:stl_indicatorThickness="@dimen/size_1"
-        app:stl_indicatorWidth="auto"
-        app:stl_indicatorWithoutPadding="false"
-        app:stl_overlineColor="#4D000000"
-        app:stl_overlineThickness="0dp"
-        app:stl_titleOffset="24dp"
-        app:stl_underlineColor="#4D000000"
-        app:stl_underlineThickness="@dimen/size_1"/>
+        android:layout_height="match_parent">
 
+        <com.ogaclejapan.smarttablayout.SmartTabLayout
+            android:id="@+id/viewpagertab"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/size_48"
+            app:stl_clickable="true"
+            app:stl_defaultTabBackground="?attr/selectableItemBackground"
+            app:stl_defaultTabTextAllCaps="false"
+            app:stl_defaultTabTextColor="@color/primero_font_dark"
+            app:stl_defaultTabTextHorizontalPadding="16dp"
+            app:stl_defaultTabTextMinWidth="0dp"
+            app:stl_defaultTabTextSize="@dimen/text_size_14"
+            app:stl_distributeEvenly="false"
+            app:stl_dividerColor="#4D000000"
+            app:stl_dividerThickness="0dp"
+            app:stl_drawDecorationAfterTab="false"
+            app:stl_indicatorAlwaysInCenter="false"
+            app:stl_indicatorColor="@color/primero_blue"
+            app:stl_indicatorCornerRadius="@dimen/size_1"
+            app:stl_indicatorGravity="bottom"
+            app:stl_indicatorInFront="false"
+            app:stl_indicatorInterpolation="smart"
+            app:stl_indicatorThickness="@dimen/size_1"
+            app:stl_indicatorWidth="auto"
+            app:stl_indicatorWithoutPadding="false"
+            app:stl_overlineColor="#4D000000"
+            app:stl_overlineThickness="0dp"
+            app:stl_titleOffset="24dp"
+            app:stl_underlineColor="#4D000000"
+            app:stl_underlineThickness="@dimen/size_1" />
 
-    <android.support.v4.view.ViewPager
-        android:id="@+id/viewpager"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@id/viewpagertab"
-        android:background="@color/white"/>
+        <android.support.v4.view.ViewPager
+            android:id="@+id/viewpager"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@id/viewpagertab"
+            android:background="@color/white" />
 
-    <com.getbase.floatingactionbutton.FloatingActionButton
+    </RelativeLayout>
+
+    <android.support.design.widget.FloatingActionButton
         android:id="@+id/edit"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:scrollY="3dp"
+        android:layout_width="@dimen/fa_button_width"
+        android:layout_height="@dimen/fa_button_width"
+        android:layout_margin="@dimen/fab_margin"
         android:src="@drawable/edit_white"
-        app:fab_colorNormal="@color/primero_blue"
-        app:fab_colorPressed="@color/primero_blue"/>
+        app:layout_anchor="@id/viewpager"
+        app:layout_anchorGravity="bottom|right|end" />
 
-</RelativeLayout>
+
+</android.support.design.widget.CoordinatorLayout>

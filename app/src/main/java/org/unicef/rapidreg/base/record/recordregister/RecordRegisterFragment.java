@@ -2,15 +2,13 @@ package org.unicef.rapidreg.base.record.recordregister;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.hannesdorfmann.mosby.mvp.MvpFragment;
 
 import org.greenrobot.eventbus.EventBus;
@@ -110,7 +108,7 @@ public abstract class RecordRegisterFragment extends MvpFragment<RecordRegisterV
 
     @Override
     public List<String> getPhotoPathsData() {
-        if(recordRegisterAdapter.getPhotoAdapter() == null) {
+        if (recordRegisterAdapter.getPhotoAdapter() == null) {
             return Collections.EMPTY_LIST;
         }
         return recordRegisterAdapter.getPhotoAdapter().getAllItems();
@@ -163,7 +161,8 @@ public abstract class RecordRegisterFragment extends MvpFragment<RecordRegisterV
         return recordRegisterAdapter.getPhotoAdapter();
     }
 
-    protected void onFirstTimeLaunched() {}
+    protected void onFirstTimeLaunched() {
+    }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {

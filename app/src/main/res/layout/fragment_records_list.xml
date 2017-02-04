@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                                                 xmlns:app="http://schemas.android.com/apk/res-auto"
-                                                 xmlns:tools="http://schemas.android.com/tools"
-                                                 android:layout_width="match_parent"
-                                                 android:layout_height="match_parent"
-                                                 tools:context=".childcase.CaseActivity">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".childcase.CaseActivity">
 
     <LinearLayout
         android:id="@+id/container"
@@ -17,7 +17,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/primero_lighter_white"
-            android:drawSelectorOnTop="true"/>
+            android:drawSelectorOnTop="true" />
 
         <ViewSwitcher
             android:id="@+id/list_result"
@@ -27,7 +27,7 @@
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/list_container"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"/>
+                android:layout_height="match_parent" />
 
             <TextView
                 android:layout_width="match_parent"
@@ -35,19 +35,17 @@
                 android:gravity="center"
                 android:text="@string/no_records"
                 android:textColor="@color/primero_font_dark"
-                android:textSize="@dimen/text_size_14"/>
+                android:textSize="@dimen/text_size_14" />
         </ViewSwitcher>
     </LinearLayout>
 
-    <com.getbase.floatingactionbutton.FloatingActionButton
+    <android.support.design.widget.FloatingActionButton
         android:id="@+id/add"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:scrollY="3dp"
+        android:layout_width="@dimen/fa_button_width"
+        android:layout_height="@dimen/fa_button_width"
+        android:layout_margin="@dimen/fab_margin"
         android:src="@drawable/add"
-        app:fab_colorNormal="@color/primero_blue"
-        app:fab_colorPressed="@color/primero_blue"
-        android:visibility="visible"/>
+        app:layout_anchor="@id/container"
+        app:layout_anchorGravity="bottom|right|end" />
 
 </android.support.design.widget.CoordinatorLayout>
