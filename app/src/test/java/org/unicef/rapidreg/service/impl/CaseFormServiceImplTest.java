@@ -8,22 +8,18 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.runners.MockitoJUnitRunner;
 import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 import org.unicef.rapidreg.PrimeroAppConfiguration;
-import org.unicef.rapidreg.base.RecordConfiguration;
-import org.unicef.rapidreg.model.User;
-import org.unicef.rapidreg.repository.CaseFormDao;
 import org.unicef.rapidreg.forms.CaseTemplateForm;
 import org.unicef.rapidreg.forms.Field;
 import org.unicef.rapidreg.forms.Section;
 import org.unicef.rapidreg.model.CaseForm;
-import org.unicef.rapidreg.service.impl.CaseFormServiceImpl;
+import org.unicef.rapidreg.model.User;
+import org.unicef.rapidreg.repository.CaseFormDao;
 
 import java.io.IOException;
-import java.util.UUID;
 
 import static junit.framework.Assert.assertFalse;
 import static junit.framework.Assert.assertTrue;
@@ -93,7 +89,8 @@ public class CaseFormServiceImplTest {
         Mockito.when(PrimeroAppConfiguration.getCurrentUser()).thenReturn(user);
 
         CaseForm cpCaseForm = createCPCaseForm();
-        when(caseFormDao.getCaseForm(RecordConfiguration.MODULE_ID_CP)).thenReturn(cpCaseForm);
+        when(caseFormDao.getCaseForm(PrimeroAppConfiguration.MODULE_ID_CP, PrimeroAppConfiguration.getApiBaseUrl()))
+                .thenReturn(cpCaseForm);
 
         assertTrue(caseFormService.isReady());
     }
@@ -103,7 +100,8 @@ public class CaseFormServiceImplTest {
         User user = new User();
         user.setRole(User.Role.CP.getValue());
         Mockito.when(PrimeroAppConfiguration.getCurrentUser()).thenReturn(user);
-        when(caseFormDao.getCaseForm(RecordConfiguration.MODULE_ID_CP)).thenReturn(null);
+        when(caseFormDao.getCaseForm(PrimeroAppConfiguration.MODULE_ID_CP, PrimeroAppConfiguration.getApiBaseUrl()))
+                .thenReturn(null);
 
         assertFalse(caseFormService.isReady());
     }
@@ -111,7 +109,7 @@ public class CaseFormServiceImplTest {
     @Test
     public void should_save_case_form_if_not_exist() throws Exception {
         CaseForm caseForm = mock(CaseForm.class);
-        when(caseFormDao.getCaseForm("primeromodule-cp")).thenReturn(null);
+        when(caseFormDao.getCaseForm("primeromodule-cp", PrimeroAppConfiguration.getApiBaseUrl())).thenReturn(null);
 
         caseFormService.saveOrUpdate(caseForm);
 
@@ -124,7 +122,7 @@ public class CaseFormServiceImplTest {
         when(caseForm.getModuleId()).thenReturn("primeromodule-cp");
         Blob formBlob = mock(Blob.class);
         when(caseForm.getForm()).thenReturn(formBlob);
-        when(caseFormDao.getCaseForm("primeromodule-cp")).thenReturn(caseForm);
+        when(caseFormDao.getCaseForm("primeromodule-cp", PrimeroAppConfiguration.getApiBaseUrl())).thenReturn(caseForm);
 
         caseFormService.saveOrUpdate(caseForm);
 
@@ -136,7 +134,7 @@ public class CaseFormServiceImplTest {
     public void should_get_case_form() throws IOException {
         CaseForm caseForm = new CaseForm();
         caseForm.setForm(new Blob(formForm.getBytes()));
-        when(caseFormDao.getCaseForm(anyString())).thenReturn(caseForm);
+        when(caseFormDao.getCaseForm(anyString(), anyString())).thenReturn(caseForm);
         CaseTemplateForm form = caseFormService.getCPTemplate();
 
         assertThat(form.getSections().size(), is(1));

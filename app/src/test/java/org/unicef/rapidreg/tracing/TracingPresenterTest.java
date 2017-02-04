@@ -2,8 +2,14 @@ package org.unicef.rapidreg.tracing;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.powermock.api.mockito.PowerMockito;
+import org.powermock.core.classloader.annotations.PrepareForTest;
+import org.powermock.modules.junit4.PowerMockRunner;
+import org.unicef.rapidreg.PrimeroAppConfiguration;
 import org.unicef.rapidreg.forms.Section;
 import org.unicef.rapidreg.forms.TracingTemplateForm;
 import org.unicef.rapidreg.model.TracingForm;
@@ -21,6 +27,8 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
 
+@RunWith(PowerMockRunner.class)
+@PrepareForTest({PrimeroAppConfiguration.class})
 public class TracingPresenterTest {
     @Mock
     TracingFormService tracingFormService;
@@ -34,6 +42,7 @@ public class TracingPresenterTest {
     @Before
     public void setUp() throws Exception {
         initMocks(this);
+        PowerMockito.mockStatic(PrimeroAppConfiguration.class);
     }
 
     @Test
@@ -42,7 +51,7 @@ public class TracingPresenterTest {
         String moduleId = "primeromodule-cp";
         tracingPresenter.saveForm(tracingTemplateForm, moduleId);
 
-        verify(tracingFormService, times(1)).saveOrUpdateForm(any(TracingForm.class));
+        verify(tracingFormService, times(1)).saveOrUpdate(any(TracingForm.class));
     }
 
     @Test
@@ -51,10 +60,12 @@ public class TracingPresenterTest {
         Observable<TracingTemplateForm> observable = Observable.just(tracingTemplateForm);
         when(authService.getTracingForm("cookie", "en", true, "tracing_request", "primeromodule-cp"))
                 .thenReturn(observable);
+        Mockito.when(PrimeroAppConfiguration.getCookie()).thenReturn("cookie");
+        Mockito.when(PrimeroAppConfiguration.getDefaultLanguage()).thenReturn("en");
 
-        tracingPresenter.loadTracingForm("cookie");
+        tracingPresenter.loadTracingForm();
 
-        verify(tracingFormService, times(1)).saveOrUpdateForm(any(TracingForm.class));
+        verify(tracingFormService, times(1)).saveOrUpdate(any(TracingForm.class));
         assertFalse("Should mark sync successful.", tracingPresenter.isFormSyncFail());
     }
 
@@ -64,7 +75,10 @@ public class TracingPresenterTest {
         when(authService.getTracingForm("cookie", "en", true, "tracing_request", "primeromodule-cp"))
                 .thenReturn(observable);
 
-        tracingPresenter.loadTracingForm("cookie");
+        Mockito.when(PrimeroAppConfiguration.getCookie()).thenReturn("cookie");
+        Mockito.when(PrimeroAppConfiguration.getDefaultLanguage()).thenReturn("en");
+
+        tracingPresenter.loadTracingForm();
 
         assertTrue("Should mark sync fail.", tracingPresenter.isFormSyncFail());
     }

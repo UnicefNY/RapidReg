@@ -38,7 +38,6 @@ import static org.unicef.rapidreg.service.TracingService.TRACING_ID;
 
 
 public class SyncTracingServiceImpl extends BaseRetrofitService implements SyncTracingService{
-
     private SyncTracingsRepository syncTracingsRepository;
 
     private TracingPhotoDao tracingPhotoDao;

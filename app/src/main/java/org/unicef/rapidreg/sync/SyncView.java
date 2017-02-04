@@ -1,16 +1,15 @@
 package org.unicef.rapidreg.sync;
 
+import android.app.ProgressDialog;
+
 import com.hannesdorfmann.mosby.mvp.MvpView;
 
 public interface SyncView extends MvpView {
-
-    void showSyncProgressDialog(String title);
-
     void hideSyncProgressDialog();
 
     void showSyncCancelConfirmDialog();
 
-    void showSyncErrorMessage(int errorMsgId);
+    void showSyncErrorMessage();
 
     void showSyncDownloadSuccessMessage();
 
@@ -31,4 +30,21 @@ public interface SyncView extends MvpView {
     void showSyncUploadSuccessMessage();
 
     void showSyncPullFormSuccessMessage();
+
+    void showRequestTimeoutSyncErrorMessage();
+
+    void showServerNotAvailableSyncErrorMessage();
+
+    void showDownloadingCasesSyncProgressDialog();
+
+    void showDownloadingTracingsSyncProgressDialog();
+
+    void showUploadCasesSyncProgressDialog();
+
+    ProgressDialog showFetchingCaseAmountLoadingDialog();
+
+    ProgressDialog showFetchingTracingAmountLoadingDialog();
+
+    ProgressDialog showFetchingFormLoadingDialog();
+
 }

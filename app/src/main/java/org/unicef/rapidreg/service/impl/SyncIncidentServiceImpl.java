@@ -11,7 +11,6 @@ import retrofit2.Response;
 import rx.Observable;
 
 public class SyncIncidentServiceImpl extends BaseRetrofitService implements SyncIncidentService {
-
     public SyncIncidentServiceImpl() {
         createRetrofit();
     }

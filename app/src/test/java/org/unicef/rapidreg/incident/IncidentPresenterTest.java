@@ -5,7 +5,11 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.powermock.api.mockito.PowerMockito;
+import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
+import org.unicef.rapidreg.PrimeroAppConfiguration;
 import org.unicef.rapidreg.forms.IncidentTemplateForm;
 import org.unicef.rapidreg.forms.Section;
 import org.unicef.rapidreg.model.IncidentForm;
@@ -24,6 +28,7 @@ import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
 
 @RunWith(PowerMockRunner.class)
+@PrepareForTest({PrimeroAppConfiguration.class})
 public class IncidentPresenterTest {
 
     @Mock
@@ -38,6 +43,7 @@ public class IncidentPresenterTest {
     @Before
     public void setUp() throws Exception {
         initMocks(this);
+        PowerMockito.mockStatic(PrimeroAppConfiguration.class);
     }
 
     @Test
@@ -55,7 +61,11 @@ public class IncidentPresenterTest {
         Observable<IncidentTemplateForm> observable = Observable.just(incidentTemplateForm);
         when(authService.getIncidentForm("cookie", "en", true, "incident",
                 "primeromodule-gbv")).thenReturn(observable);
-        incidentPresenter.loadIncidentForm("cookie", moduleId);
+        Mockito.when(PrimeroAppConfiguration.getCookie()).thenReturn("cookie");
+        Mockito.when(PrimeroAppConfiguration.getDefaultLanguage()).thenReturn("en");
+
+        incidentPresenter.loadIncidentForm( moduleId);
+
         verify(incidentFormService, times(1)).saveOrUpdate(any(IncidentForm.class));
         assertFalse("Should mark sync successful.", incidentPresenter.isFormSyncFail());
     }
@@ -65,8 +75,10 @@ public class IncidentPresenterTest {
         Observable observable = Observable.error(new Exception());
         when(authService.getIncidentForm("cookie", "en", true, "incident", "primeromodule-gbv"))
                 .thenReturn(observable);
+        Mockito.when(PrimeroAppConfiguration.getCookie()).thenReturn("cookie");
+        Mockito.when(PrimeroAppConfiguration.getDefaultLanguage()).thenReturn("en");
 
-        incidentPresenter.loadIncidentForm("cookie", "primeromodule-gbv");
+        incidentPresenter.loadIncidentForm(PrimeroAppConfiguration.MODULE_ID_GBV);
 
         assertTrue("Should mark sync fail.", incidentPresenter.isFormSyncFail());
     }
@@ -84,5 +96,4 @@ public class IncidentPresenterTest {
         section.setOrder(12);
         return section;
     }
-
 }

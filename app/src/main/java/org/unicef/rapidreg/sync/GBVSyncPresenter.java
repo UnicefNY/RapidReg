@@ -2,8 +2,6 @@ package org.unicef.rapidreg.sync;
 
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
 import android.support.v4.util.Pair;
 
 import com.google.gson.Gson;
@@ -12,337 +10,214 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.raizlabs.android.dbflow.data.Blob;
 
-import org.unicef.rapidreg.R;
-import org.unicef.rapidreg.service.SyncIncidentService;
+import org.unicef.rapidreg.PrimeroAppConfiguration;
 import org.unicef.rapidreg.injection.ActivityContext;
 import org.unicef.rapidreg.model.Case;
 import org.unicef.rapidreg.model.Incident;
-import org.unicef.rapidreg.model.RecordModel;
+import org.unicef.rapidreg.model.IncidentForm;
+import org.unicef.rapidreg.service.CaseFormService;
 import org.unicef.rapidreg.service.CaseService;
+import org.unicef.rapidreg.service.FormRemoteService;
+import org.unicef.rapidreg.service.IncidentFormService;
 import org.unicef.rapidreg.service.IncidentService;
 import org.unicef.rapidreg.service.SyncCaseService;
-import org.unicef.rapidreg.service.SyncTracingService;
+import org.unicef.rapidreg.service.SyncIncidentService;
+import org.unicef.rapidreg.utils.TextUtils;
 import org.unicef.rapidreg.utils.Utils;
 
-import java.io.IOException;
-import java.net.ConnectException;
-import java.net.SocketTimeoutException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Locale;
 
 import javax.inject.Inject;
 
-import retrofit2.Call;
 import retrofit2.Response;
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Action0;
-import rx.functions.Action1;
-import rx.functions.Func1;
 import rx.schedulers.Schedulers;
 
 public class GBVSyncPresenter extends BaseSyncPresenter {
     private static final String TAG = GBVSyncPresenter.class.getSimpleName();
 
-    private Context context;
-    private SyncCaseService syncCaseService;
+    private SyncCaseService syncService;
     private SyncIncidentService syncIncidentService;
-
     private IncidentService incidentService;
-    private CaseService caseService;
+    private IncidentFormService incidentFormService;
 
-    private List<Case> cases;
     private List<Incident> incidents;
 
-    private int numberOfSuccessfulUploadedRecords;
-    private int totalNumberOfUploadRecords;
-
-    private boolean isSyncing;
-
-    @Override
-    public void attachView(SyncView view) {
-        super.attachView(view);
-        if (isViewAttached()) {
-            getView().setNotSyncedRecordNumber(totalNumberOfUploadRecords);
-        }
-    }
-
     @Inject
-    public GBVSyncPresenter(@ActivityContext Context context, SyncCaseService syncService, SyncIncidentService
-            syncIncidentService, CaseService caseService, IncidentService incidentService) {
-        this.context = context;
-        this.syncCaseService = syncService;
-        this.caseService = caseService;
-        this.syncIncidentService = syncIncidentService;
+    public GBVSyncPresenter(@ActivityContext Context context,
+                            SyncCaseService syncService,
+                            CaseService caseService,
+                            CaseFormService caseFormService,
+                            FormRemoteService formRemoteService,
+                            IncidentService incidentService, IncidentFormService incidentFormService) {
+        super(context, caseService, caseFormService, formRemoteService);
         this.incidentService = incidentService;
-
-        cases = caseService.getAll();
-        incidents = incidentService.getAll();
-
+        this.incidentFormService = incidentFormService;
+        this.syncService = syncService;
         initSyncRecordNumber();
     }
 
-    public void tryToSync() {
-        if (isViewAttached()) {
-            getView().showAttemptSyncDialog();
-        }
+    @Override
+    public List<Incident> getIncidents() {
+        incidents = incidentService.getAll();
+        return incidents;
     }
 
-    public void execSync() {
-        if (!isViewAttached()) {
-            return;
-        }
-        try {
-            getView().disableSyncButton();
-            initSyncRecordNumber();
-            upLoadCases(cases);
-        } catch (Throwable t) {
-            syncFail(t);
-        }
-    }
-
-    private void initSyncRecordNumber() {
-        numberOfSuccessfulUploadedRecords = 0;
-        totalNumberOfUploadRecords = 0;
-        for (Incident incident : incidents) {
-            if (!incident.isSynced()) {
-                totalNumberOfUploadRecords++;
-            }
-        }
-        for (Case aCase : cases) {
-            if (!aCase.isSynced()) {
-                totalNumberOfUploadRecords++;
-            }
-        }
-    }
-
-    private void upLoadCases(List<Case> caseList) {
+    public void upLoadCases(List<Case> caseList) {
         if (totalNumberOfUploadRecords != 0) {
-            getView().showSyncProgressDialog("Uploading...Please wait a moment.");
+            getView().showUploadCasesSyncProgressDialog();
             getView().setProgressMax(totalNumberOfUploadRecords);
         }
         isSyncing = true;
         Observable.from(caseList)
-                .filter(new Func1<Case, Boolean>() {
-                    @Override
-                    public Boolean call(Case item) {
-                        return isSyncing && !item.isSynced();
-                    }
-                })
-                .map(new Func1<Case, Pair<Case, Response<JsonElement>>>() {
-                    @Override
-                    public Pair<Case, Response<JsonElement>> call(Case item) {
-                        return new Pair<>(item, syncCaseService.uploadCaseJsonProfile(item));
-                    }
+                .filter(item -> isSyncing && !item.isSynced())
+                .map(item -> new Pair<>(item, syncService.uploadCaseJsonProfile(item)))
+                .map(pair -> {
+                    syncService.uploadAudio(pair.first);
+                    return pair;
                 })
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Action1<Pair<Case, Response<JsonElement>>>() {
-                    @Override
-                    public void call(Pair<Case, Response<JsonElement>> pair) {
-                        if (getView() != null) {
-                            getView().setProgressIncrease();
-                            increaseSyncNumber();
-                            updateRecordSynced(pair.first, true);
-                        }
+                .subscribe(pair -> {
+                    if (getView() != null) {
+                        getView().setProgressIncrease();
+                        increaseSyncNumber();
+                        updateRecordSynced(pair.first, true);
                     }
-                }, new Action1<Throwable>() {
-                    @Override
-                    public void call(Throwable throwable) {
-                        try {
-                            throwable.printStackTrace();
-                            syncFail(throwable);
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
+                }, throwable -> {
+                    try {
+                        throwable.printStackTrace();
+                        syncFail(throwable);
+                    } catch (Exception e) {
+                        e.printStackTrace();
                     }
-                }, new Action0() {
-                    @Override
-                    public void call() {
-                        upLoadIncident(incidents);
-                    }
-                });
+                }, () -> upLoadTracing(incidents));
     }
 
-    private void upLoadIncident(List<Incident> incidents) {
+    private void upLoadTracing(List<Incident> incidents) {
         isSyncing = true;
         Observable.from(incidents)
-                .filter(new Func1<Incident, Boolean>() {
-                    @Override
-                    public Boolean call(Incident item) {
-                        return isSyncing && !item.isSynced();
-                    }
-                })
-                .map(new Func1<Incident, Pair<Incident, Response<JsonElement>>>() {
-                    @Override
-                    public Pair<Incident, Response<JsonElement>> call(Incident item) {
-                        return new Pair<>(item, syncIncidentService.uploadJsonProfile(item));
-                    }
-                })
+                .filter(item -> isSyncing && !item.isSynced())
+                .map(item -> new Pair<>(item, syncIncidentService.uploadJsonProfile(item)))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Action1<Pair<Incident, Response<JsonElement>>>() {
-                    @Override
-                    public void call(Pair<Incident, Response<JsonElement>> pair) {
-                        if (getView() != null) {
-                            getView().setProgressIncrease();
-                            increaseSyncNumber();
-                            updateRecordSynced(pair.first, true);
-                        }
+                .subscribe(pair -> {
+                    if (getView() != null) {
+                        getView().setProgressIncrease();
+                        increaseSyncNumber();
+                        updateRecordSynced(pair.first, true);
                     }
-                }, new Action1<Throwable>() {
-                    @Override
-                    public void call(Throwable throwable) {
-                        try {
-                            throwable.printStackTrace();
-                            syncFail(throwable);
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
+                }, throwable -> {
+                    try {
+                        throwable.printStackTrace();
+                        syncFail(throwable);
+                    } catch (Exception e) {
+                        e.printStackTrace();
                     }
-                }, new Action0() {
-                    @Override
-                    public void call() {
-                        if (getView() != null) {
-                            syncUploadSuccessfully();
-                            pullCases();
-                        }
+                }, () -> {
+                    if (getView() != null) {
+                        syncUploadSuccessfully();
+                        preDownloadCases();
                     }
                 });
     }
 
-    private void increaseSyncNumber() {
-        numberOfSuccessfulUploadedRecords += 1;
-    }
-
-
-    public void pullCases() {
+    public void preDownloadCases() {
         isSyncing = true;
         GregorianCalendar cal = new GregorianCalendar(2015, 1, 1);
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.US);
         final String time = sdf.format(cal.getTime());
-        final List<JsonObject> objects = new ArrayList<>();
-        final ProgressDialog loadingDialog = ProgressDialog.show(context, "", "Fetching case " +
-                "amount from web " +
-                "server...", true);
-        syncCaseService.getCasesIds(time, true)
-                .map(new Func1<Response<JsonElement>, List<JsonObject>>() {
-                    @Override
-                    public List<JsonObject> call(Response<JsonElement> jsonElementResponse) {
-                        if (jsonElementResponse.isSuccessful()) {
-                            JsonElement jsonElement = jsonElementResponse.body();
-                            JsonArray jsonArray = jsonElement.getAsJsonArray();
+        final List<JsonObject> downList = new ArrayList<>();
+        final ProgressDialog loadingDialog = getView().showFetchingCaseAmountLoadingDialog();
 
-                            for (JsonElement element : jsonArray) {
-                                JsonObject jsonObject = element.getAsJsonObject();
-                                boolean hasSameRev = caseService.hasSameRev(jsonObject.get("_id")
-                                                .getAsString(),
-                                        jsonObject.get("_rev").getAsString());
-                                if (!hasSameRev) {
-                                    objects.add(jsonObject);
-                                }
+        syncService.getCasesIds(time, true)
+                .map(jsonElementResponse -> {
+                    if (jsonElementResponse.isSuccessful()) {
+                        JsonElement jsonElement = jsonElementResponse.body();
+                        JsonArray jsonArray = jsonElement.getAsJsonArray();
+
+                        for (JsonElement element : jsonArray) {
+                            JsonObject jsonObject = element.getAsJsonObject();
+                            boolean hasSameRev = caseService.hasSameRev(jsonObject.get("_id")
+                                            .getAsString(),
+                                    jsonObject.get("_rev").getAsString());
+                            if (!hasSameRev) {
+                                downList.add(jsonObject);
                             }
                         }
-                        return objects;
                     }
+                    return downList;
                 })
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Action1<List<JsonObject>>() {
-                    @Override
-                    public void call(List<JsonObject> jsonObjects) {
+                .subscribe(jsonObjects -> {
+                    loadingDialog.dismiss();
+                    if (jsonObjects.size() != 0 && getView() != null) {
+                        getView().showDownloadingCasesSyncProgressDialog();
+                        getView().setProgressMax(jsonObjects.size());
+                    }
+                }, throwable -> {
+                    throwable.printStackTrace();
+                    try {
                         loadingDialog.dismiss();
-                        if (jsonObjects.size() != 0 && getView() != null) {
-                            getView().showSyncProgressDialog("Downloading Cases...Please wait a " +
-                                    "moment.");
-                            getView().setProgressMax(jsonObjects.size());
-                        }
+                        syncFail(throwable);
+                    } catch (Exception e) {
+                        e.printStackTrace();
                     }
-                }, new Action1<Throwable>() {
-                    @Override
-                    public void call(Throwable throwable) {
-                        throwable.printStackTrace();
-                        try {
-                            loadingDialog.dismiss();
-                            syncFail(throwable);
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }, new Action0() {
-                    @Override
-                    public void call() {
-                        downloadCases(objects);
-                    }
-                });
+                }, () -> downloadCases(downList));
     }
 
     private void downloadCases(List<JsonObject> objects) {
         Observable.from(objects)
-                .filter(new Func1<JsonObject, Boolean>() {
-                    @Override
-                    public Boolean call(JsonObject jsonObject) {
-                        return isSyncing;
+                .filter(jsonObject -> isSyncing)
+                .map(jsonObject -> {
+                    Observable<Response<JsonElement>> responseObservable = syncService
+                            .getCase(jsonObject.get("_id")
+                                    .getAsString(), "en", true);
+                    Response<JsonElement> response = responseObservable.toBlocking().first();
+                    if (!response.isSuccessful()) {
+                        throw new RuntimeException();
                     }
-                })
-                .map(new Func1<JsonObject, Response<JsonElement>>() {
-                    @Override
-                    public Response<JsonElement> call(JsonObject jsonObject) {
-                        Observable<Response<JsonElement>> responseObservable = syncCaseService
-                                .getCase(jsonObject.get("_id")
-                                        .getAsString(), "en", true);
-                        Response<JsonElement> response = responseObservable.toBlocking().first();
-                        if (!response.isSuccessful()) {
-                            throw new RuntimeException();
-                        }
-                        JsonObject responseJsonObject = response.body().getAsJsonObject();
-                        postPullCases(responseJsonObject);
-                        return response;
-                    }
+                    JsonObject responseJsonObject = response.body().getAsJsonObject();
+                    saveDownloadedCases(responseJsonObject);
+                    return response;
                 })
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Action1<Object>() {
-                    @Override
-                    public void call(Object responseBodyResponse) {
-                        setProgressIncrease();
-                    }
-                }, new Action1<Throwable>() {
-                    @Override
-                    public void call(Throwable throwable) {
-                        try {
-                            syncFail(throwable);
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }, new Action0() {
-                    @Override
-                    public void call() {
-                        if (getView() != null) {
-                            getView().hideSyncProgressDialog();
-                            pullIncidents();
-                        }
-                    }
-                });
+                .subscribe(responseBodyResponse -> setProgressIncrease(),
+                        throwable -> {
+                            try {
+                                syncFail(throwable);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        }, () -> {
+                            if (getView() != null) {
+                                getView().hideSyncProgressDialog();
+                                preDownloadTracings();
+                            }
+                        });
     }
 
-    private void postPullCases(JsonObject casesJsonObject) {
+    private void saveDownloadedCases(JsonObject casesJsonObject) {
         String internalId = casesJsonObject.get("_id").getAsString();
-        Case item = caseService.getByInternalId(internalId);
         String newRev = casesJsonObject.get("_rev").getAsString();
+
+        Case item = caseService.getByInternalId(internalId);
         if (item != null) {
             item.setInternalRev(newRev);
             item.setSynced(true);
             item.setContent(new Blob(casesJsonObject.toString().getBytes()));
             item.setName(casesJsonObject.get("name").getAsString());
-            item.setAge(casesJsonObject.get("age").getAsInt());
-            //TODO set caregiver
+            setAgeIfExists(item, casesJsonObject);
+            item.setOwnedBy(casesJsonObject.get("owned_by").getAsString());
+            item.setUrl(TextUtils.lintUrl(PrimeroAppConfiguration.getApiBaseUrl()));
             if (casesJsonObject.get("caregiver") != null) {
                 item.setCaregiver(casesJsonObject.get("caregiver").getAsString());
             }
@@ -356,13 +231,17 @@ public class GBVSyncPresenter extends BaseSyncPresenter {
             item.setRegistrationDate(
                     Utils.getRegisterDate(casesJsonObject.get("registration_date").getAsString()));
             item.setCreatedBy(casesJsonObject.get("created_by").getAsString());
+            item.setOwnedBy(casesJsonObject.get("owned_by").getAsString());
+            item.setUrl(TextUtils.lintUrl(PrimeroAppConfiguration.getApiBaseUrl()));
+
             item.setLastSyncedDate(Calendar.getInstance().getTime());
             item.setLastUpdatedDate(Calendar.getInstance().getTime());
             item.setSynced(true);
+
             item.setContent(new Blob(casesJsonObject.toString().getBytes()));
+
             item.setName(casesJsonObject.get("name").getAsString());
-            item.setAge(casesJsonObject.get("age").getAsInt());
-            //TODO set caregiver
+            setAgeIfExists(item, casesJsonObject);
             if (casesJsonObject.get("caregiver") != null) {
                 item.setCaregiver(casesJsonObject.get("caregiver").getAsString());
             }
@@ -370,210 +249,135 @@ public class GBVSyncPresenter extends BaseSyncPresenter {
         }
     }
 
-    public void pullIncidents() {
+    private void setAgeIfExists(Case item, JsonObject source) {
+        try {
+            item.setAge(source.get("age").getAsInt());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void preDownloadTracings() {
         isSyncing = true;
         GregorianCalendar cal = new GregorianCalendar(2015, 1, 1);
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.US);
         final String time = sdf.format(cal.getTime());
         final List<JsonObject> objects = new ArrayList<>();
-        final ProgressDialog loadingDialog = ProgressDialog.show(context, "", "Fetching tracing " +
-                "amount from web " +
-                "server...", true);
+        final ProgressDialog loadingDialog = getView().showFetchingTracingAmountLoadingDialog();
         syncIncidentService.getIds(time, true)
-                .map(new Func1<Response<JsonElement>, List<JsonObject>>() {
-                    @Override
-                    public List<JsonObject> call(Response<JsonElement> jsonElementResponse) {
-                        if (jsonElementResponse.isSuccessful()) {
-                            JsonElement jsonElement = jsonElementResponse.body();
-                            JsonArray jsonArray = jsonElement.getAsJsonArray();
+                .map(jsonElementResponse -> {
+                    if (jsonElementResponse.isSuccessful()) {
+                        JsonElement jsonElement = jsonElementResponse.body();
+                        JsonArray jsonArray = jsonElement.getAsJsonArray();
 
-                            for (JsonElement element : jsonArray) {
-                                JsonObject jsonObject = element.getAsJsonObject();
-                                boolean hasSameRev = incidentService.hasSameRev(jsonObject.get
-                                                ("_id").getAsString(),
-                                        jsonObject.get("_rev").getAsString());
-                                if (!hasSameRev) {
-                                    objects.add(jsonObject);
-                                }
+                        for (JsonElement element : jsonArray) {
+                            JsonObject jsonObject = element.getAsJsonObject();
+                            boolean hasSameRev = incidentService.hasSameRev(jsonObject.get
+                                            ("_id").getAsString(),
+                                    jsonObject.get("_rev").getAsString());
+                            if (!hasSameRev) {
+                                objects.add(jsonObject);
                             }
                         }
-                        return objects;
                     }
+                    return objects;
                 })
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Action1<List<JsonObject>>() {
-                    @Override
-                    public void call(List<JsonObject> jsonObjects) {
+                .subscribe(jsonObjects -> {
+                    loadingDialog.dismiss();
+                    if (jsonObjects.size() != 0 && getView() != null) {
+                        getView().showDownloadingTracingsSyncProgressDialog();
+                        getView().setProgressMax(jsonObjects.size());
+                    }
+                }, throwable -> {
+                    try {
+                        throwable.printStackTrace();
                         loadingDialog.dismiss();
-                        if (jsonObjects.size() != 0 && getView() != null) {
-                            getView().showSyncProgressDialog("Downloading Tracing " +
-                                    "Request...Please wait a moment.");
-                            getView().setProgressMax(jsonObjects.size());
-                        }
+                        syncFail(throwable);
+                    } catch (Exception e) {
+                        e.printStackTrace();
                     }
-                }, new Action1<Throwable>() {
-                    @Override
-                    public void call(Throwable throwable) {
-                        try {
-                            throwable.printStackTrace();
-                            loadingDialog.dismiss();
-                            syncFail(throwable);
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }, new Action0() {
-                    @Override
-                    public void call() {
-                        downloadIncidents(objects);
-                    }
-                });
+                }, () -> downloadTracings(objects));
     }
 
-    private void downloadIncidents(List<JsonObject> objects) {
-        Observable.from(objects)
-                .filter(new Func1<JsonObject, Boolean>() {
-                    @Override
-                    public Boolean call(JsonObject jsonObject) {
-                        return isSyncing;
-                    }
-                })
-                .map(new Func1<JsonObject, Response<JsonElement>>() {
-                    @Override
-                    public Response<JsonElement> call(JsonObject jsonObject) {
 
-                        Observable<Response<JsonElement>> responseObservable = syncIncidentService
-                                .get(jsonObject.get("_id")
-                                        .getAsString(), "en", true);
-                        Response<JsonElement> response = responseObservable.toBlocking().first();
-                        if (!response.isSuccessful()) {
-                            throw new RuntimeException();
-                        }
-                        JsonObject responseJsonObject = response.body().getAsJsonObject();
-                        postPullIncidents(responseJsonObject);
-                        return response;
+    private void downloadTracings(List<JsonObject> objects) {
+        Observable.from(objects)
+                .filter(jsonObject -> isSyncing)
+                .map(jsonObject -> {
+                    Observable<Response<JsonElement>> responseObservable = syncIncidentService
+                            .get(jsonObject.get("_id")
+                                    .getAsString(), "en", true);
+                    Response<JsonElement> response = responseObservable.toBlocking().first();
+                    if (!response.isSuccessful()) {
+                        throw new RuntimeException();
                     }
+                    JsonObject responseJsonObject = response.body().getAsJsonObject();
+                    saveDownloadedTracings(responseJsonObject);
+                    return response;
                 })
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Action1<Object>() {
-                    @Override
-                    public void call(Object responseBodyResponse) {
-                        setProgressIncrease();
-                    }
-                }, new Action1<Throwable>() {
-                    @Override
-                    public void call(Throwable throwable) {
-                        try {
-                            throwable.printStackTrace();
-                            syncFail(throwable);
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }, new Action0() {
-                    @Override
-                    public void call() {
-                        syncDownloadSuccessfully();
-                    }
-                });
+                .subscribe(responseBodyResponse -> setProgressIncrease(),
+                        throwable -> {
+                            try {
+                                throwable.printStackTrace();
+                                syncFail(throwable);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        }, () -> {
+                            syncDownloadSuccessfully();
+                            downloadCaseForm();
+                        });
     }
 
-    private void setProgressIncrease() {
-        if (getView() != null) {
-            getView().setProgressIncrease();
-        }
-    }
-
-    private void postPullIncidents(JsonObject incidentJsonObject) {
-        String internalId = incidentJsonObject.get("_id").getAsString();
+    private void saveDownloadedTracings(JsonObject tracingsJsonObject) {
+        String internalId = tracingsJsonObject.get("_id").getAsString();
         Incident item = incidentService.getByInternalId(internalId);
-        String newRev = incidentJsonObject.get("_rev").getAsString();
-        String registrationDate = incidentJsonObject.get("inquiry_date").getAsString();
+        String newRev = tracingsJsonObject.get("_rev").getAsString();
+        String registrationDate = tracingsJsonObject.get("inquiry_date").getAsString();
         if (item != null) {
             item.setInternalRev(newRev);
             item.setSynced(true);
-            item.setContent(new Blob(incidentJsonObject.toString().getBytes()));
+            item.setContent(new Blob(tracingsJsonObject.toString().getBytes()));
+            item.setOwnedBy(tracingsJsonObject.get("owned_by").getAsString());
+            item.setUrl(TextUtils.lintUrl(PrimeroAppConfiguration.getApiBaseUrl()));
             item.update();
         } else {
             item = new Incident();
-            item.setUniqueId(incidentJsonObject.get("tracing_request_id").getAsString());
-            item.setInternalId(incidentJsonObject.get("_id").getAsString());
+            item.setUniqueId(tracingsJsonObject.get("tracing_request_id").getAsString());
+            item.setInternalId(tracingsJsonObject.get("_id").getAsString());
             item.setInternalRev(newRev);
             item.setRegistrationDate(Utils.getRegisterDate(registrationDate));
-            item.setCreatedBy(incidentJsonObject.get("created_by").getAsString());
+            item.setCreatedBy(tracingsJsonObject.get("created_by").getAsString());
+            item.setOwnedBy(tracingsJsonObject.get("owned_by").getAsString());
+            item.setUrl(TextUtils.lintUrl(PrimeroAppConfiguration.getApiBaseUrl()));
             item.setLastSyncedDate(Calendar.getInstance().getTime());
             item.setLastUpdatedDate(Calendar.getInstance().getTime());
             item.setSynced(true);
-            item.setContent(new Blob(incidentJsonObject.toString().getBytes()));
+            item.setContent(new Blob(tracingsJsonObject.toString().getBytes()));
             item.save();
         }
     }
 
-    private void updateRecordSynced(RecordModel record, boolean synced) {
-        record.setSynced(synced);
-        record.update();
+    private void downloadCaseForm() {
+        downloadCaseForm(getView().showFetchingFormLoadingDialog(), PrimeroAppConfiguration.MODULE_ID_CP);
     }
 
-    private void syncUploadSuccessfully() {
-        if (getView() != null) {
-            updateDataViews();
-            getView().showSyncUploadSuccessMessage();
-            getView().hideSyncProgressDialog();
-        }
-    }
-
-    private void syncDownloadSuccessfully() {
-        if (getView() != null) {
-            updateDataViews();
-            getView().showSyncDownloadSuccessMessage();
-            getView().hideSyncProgressDialog();
-            getView().enableSyncButton();
-        }
-    }
-
-    private void syncFail(Throwable throwable) {
-        if (getView() == null) {
-            return;
-        }
-        Throwable cause = throwable.getCause();
-        if (throwable instanceof SocketTimeoutException || cause instanceof
-                SocketTimeoutException) {
-            getView().showSyncErrorMessage(R.string.sync_request_time_out_error_message);
-        } else if (throwable instanceof ConnectException || cause instanceof ConnectException
-                || throwable instanceof IOException || cause instanceof IOException) {
-            getView().showSyncErrorMessage(R.string.sync_server_not_reachable_error_message);
-        } else {
-            getView().showSyncErrorMessage(R.string.sync_error_message);
-        }
-        getView().hideSyncProgressDialog();
-        updateDataViews();
-        getView().enableSyncButton();
-    }
-
-    private void updateDataViews() {
-        SimpleDateFormat sdf = new SimpleDateFormat("MM-dd-yyyy HH:mm");
-        String currentDateTime = sdf.format(new Date());
-        int numberOfFailedUploadedCases = totalNumberOfUploadRecords -
-                numberOfSuccessfulUploadedRecords;
-
-        getView().setDataViews(currentDateTime, String.valueOf(numberOfSuccessfulUploadedRecords)
-                , String.valueOf
-                        (numberOfFailedUploadedCases));
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences
-                (context);
-        sharedPreferences.edit().putString("syncStatisticData", new Gson().toJson(new
-                SyncStatisticData
-                (currentDateTime, numberOfSuccessfulUploadedRecords, numberOfFailedUploadedCases)
-        )).apply();
-    }
-
-    public void attemptCancelSync() {
-        getView().showSyncCancelConfirmDialog();
-    }
-
-    public void cancelSync() {
-        isSyncing = false;
+    @Override
+    protected void downloadSecondFormByModule() {
+        formRemoteService.getIncidentForm(PrimeroAppConfiguration.getCookie(),
+                PrimeroAppConfiguration.getDefaultLanguage(), true, PrimeroAppConfiguration.PARENT_INCIDENT,
+                PrimeroAppConfiguration.MODULE_ID_GBV)
+                .subscribe(incidentFormJson -> {
+                            IncidentForm incidentForm = new IncidentForm(new Blob(new Gson().toJson(incidentFormJson)
+                                    .getBytes()));
+                            incidentForm.setModuleId(PrimeroAppConfiguration.MODULE_ID_GBV);
+                            incidentFormService.saveOrUpdate(incidentForm);
+                        },
+                        throwable -> syncFail(throwable)
+                        , () -> syncPullFormSuccessfully());
     }
 }
