@@ -1,5 +1,7 @@
 package org.unicef.rapidreg.base;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -15,14 +17,18 @@ import android.widget.Toast;
 
 import com.hannesdorfmann.mosby.mvp.MvpActivity;
 
+import org.greenrobot.eventbus.EventBus;
 import org.unicef.rapidreg.IntentSender;
 import org.unicef.rapidreg.PrimeroApplication;
 import org.unicef.rapidreg.PrimeroAppConfiguration;
 import org.unicef.rapidreg.R;
+import org.unicef.rapidreg.base.record.RecordActivity;
+import org.unicef.rapidreg.event.CreateIncidentThruGBVCaseEvent;
 import org.unicef.rapidreg.injection.component.ActivityComponent;
 import org.unicef.rapidreg.injection.component.DaggerActivityComponent;
 import org.unicef.rapidreg.injection.module.ActivityModule;
 import org.unicef.rapidreg.model.User;
+import org.unicef.rapidreg.utils.Utils;
 
 import javax.inject.Inject;
 
@@ -30,6 +36,9 @@ import butterknife.BindColor;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+
+import static android.view.View.GONE;
+import static org.unicef.rapidreg.model.User.Role.GBV;
 
 public abstract class BaseActivity extends MvpActivity<BaseView, BasePresenter> {
 
@@ -53,6 +62,9 @@ public abstract class BaseActivity extends MvpActivity<BaseView, BasePresenter> 
 
     @BindView(R.id.search)
     protected ImageButton searchMenu;
+
+    @BindView(R.id.create_incident)
+    protected ImageButton createIncidentBtn;
 
     @BindView(R.id.login_user_label)
     protected TextView textViewLoginUserLabel;
@@ -135,10 +147,10 @@ public abstract class BaseActivity extends MvpActivity<BaseView, BasePresenter> 
     }
 
     protected void initNavigationItemMenu() {
-        navCasesTV.setVisibility(View.GONE);
-        navTracingTV.setVisibility(View.GONE);
-        navIncidentTV.setVisibility(View.GONE);
-        navSyncTV.setVisibility(View.GONE);
+        navCasesTV.setVisibility(GONE);
+        navTracingTV.setVisibility(GONE);
+        navIncidentTV.setVisibility(GONE);
+        navSyncTV.setVisibility(GONE);
 
         User user = PrimeroAppConfiguration.getCurrentUser();
         if (user != null) {
@@ -231,6 +243,12 @@ public abstract class BaseActivity extends MvpActivity<BaseView, BasePresenter> 
         });
     }
 
+    @OnClick(R.id.create_incident)
+    public void onCreateIncident() {
+        CreateIncidentThruGBVCaseEvent event = new CreateIncidentThruGBVCaseEvent();
+        EventBus.getDefault().postSticky(event);
+    }
+
     protected void changeToolbarTitle(int resId) {
         toolbarTitle.setText(resId);
     }
@@ -239,10 +257,15 @@ public abstract class BaseActivity extends MvpActivity<BaseView, BasePresenter> 
         hideAllToolbarIcons();
 
         if (feature.isListMode()) {
-            showHideMenu.setVisibility(View.GONE);
+            showHideMenu.setVisibility(GONE);
             searchMenu.setVisibility(View.VISIBLE);
+            createIncidentBtn.setVisibility(GONE);
         } else if (feature.isEditMode()) {
             saveMenu.setVisibility(View.VISIBLE);
+        } else if (feature.isDetailMode()) {
+            if (GBV == PrimeroAppConfiguration.getCurrentUser().getRoleType()) {
+                createIncidentBtn.setVisibility(View.VISIBLE);
+            }
         }
     }
 
@@ -256,9 +279,10 @@ public abstract class BaseActivity extends MvpActivity<BaseView, BasePresenter> 
     }
 
     protected void hideAllToolbarIcons() {
-        showHideMenu.setVisibility(View.GONE);
-        searchMenu.setVisibility(View.GONE);
-        saveMenu.setVisibility(View.GONE);
+        showHideMenu.setVisibility(GONE);
+        searchMenu.setVisibility(GONE);
+        saveMenu.setVisibility(GONE);
+        createIncidentBtn.setVisibility(GONE);
     }
 
     protected void setNavSelectedMenu(int resId, ColorStateList color) {
