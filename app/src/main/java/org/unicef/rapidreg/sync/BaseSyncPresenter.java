@@ -132,7 +132,10 @@ public abstract class BaseSyncPresenter extends MvpBasePresenter<SyncView> {
                             loadingDialog.dismiss();
                             syncFail(throwable);
                         },
-                        () -> downloadSecondFormByModule());
+                        () -> {
+                            downloadSecondFormByModule();
+                            loadingDialog.dismiss();
+                        });
     }
 
     protected abstract void downloadSecondFormByModule();
