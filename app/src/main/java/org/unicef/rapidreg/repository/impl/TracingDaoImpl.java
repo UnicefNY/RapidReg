@@ -2,7 +2,9 @@ package org.unicef.rapidreg.repository.impl;
 
 import com.raizlabs.android.dbflow.sql.language.ConditionGroup;
 import com.raizlabs.android.dbflow.sql.language.SQLite;
+import com.raizlabs.android.dbflow.sql.language.Where;
 
+import org.unicef.rapidreg.model.Case_Table;
 import org.unicef.rapidreg.model.Tracing;
 import org.unicef.rapidreg.model.Tracing_Table;
 import org.unicef.rapidreg.repository.TracingDao;
@@ -36,9 +38,11 @@ public class TracingDaoImpl implements TracingDao {
     }
 
     @Override
-    public List<Tracing> getAllTracingsByConditionGroup(ConditionGroup conditionGroup) {
+    public List<Tracing> getAllTracingsByConditionGroup(String ownedBy, String url, ConditionGroup conditionGroup) {
         return SQLite.select().from(Tracing.class)
                 .where(conditionGroup)
+                .and(Tracing_Table.owned_by.eq(ownedBy))
+                .and(Tracing_Table.url.eq(url))
                 .orderBy(Tracing_Table.registration_date, false)
                 .queryList();
     }
@@ -54,22 +58,22 @@ public class TracingDaoImpl implements TracingDao {
     }
 
     private List<Tracing> getTracingsByDateASC(String ownedBy, String url) {
-        return SQLite
-                .select()
-                .from(Tracing.class)
-                .where(Tracing_Table.owned_by.eq(ownedBy))
-                .and(Tracing_Table.url.eq(url))
+        return getCurrentServerUserCondition(ownedBy, url)
                 .orderBy(Tracing_Table.registration_date, true)
                 .queryList();
     }
 
     private List<Tracing> getTracingsByDateDES(String ownedBy, String url) {
+        return getCurrentServerUserCondition(ownedBy, url)
+                .orderBy(Tracing_Table.registration_date, false)
+                .queryList();
+    }
+
+    private Where<Tracing> getCurrentServerUserCondition(String ownedBy, String url) {
         return SQLite
                 .select()
                 .from(Tracing.class)
                 .where(Tracing_Table.owned_by.eq(ownedBy))
-                .and(Tracing_Table.url.eq(url))
-                .orderBy(Tracing_Table.registration_date, false)
-                .queryList();
+                .and(Tracing_Table.url.eq(url));
     }
 }

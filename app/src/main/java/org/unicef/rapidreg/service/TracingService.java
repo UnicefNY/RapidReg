@@ -69,7 +69,9 @@ public class TracingService extends RecordService {
     public List<Long> getSearchResult(String uniqueId, String name, int ageFrom, int ageTo, Date
             date) {
         ConditionGroup searchCondition = getSearchCondition(uniqueId, name, ageFrom, ageTo, date);
-        return extractIds(tracingDao.getAllTracingsByConditionGroup(searchCondition));
+        return extractIds(tracingDao.getAllTracingsByConditionGroup(PrimeroAppConfiguration.getCurrentUsername(),
+                PrimeroAppConfiguration.getApiBaseUrl(),
+                searchCondition));
     }
 
     private List<Long> extractIds(List<Tracing> tracings) {

@@ -128,8 +128,8 @@ public class TracingServiceTest {
         Tracing[] orders = new Tracing[]{new Tracing(3), new Tracing(2), new Tracing(1)};
         List<Tracing> orderList = Arrays.asList(orders);
 
-        when(tracingDao.getAllTracingsByConditionGroup(any(ConditionGroup.class))).thenReturn
-                (orderList);
+        when(tracingDao.getAllTracingsByConditionGroup(anyString(), anyString(), any(ConditionGroup.class)))
+                .thenReturn(orderList);
 
         assertThat("When call getCPSearchResult() should return search result depends on search " +
                         "condition",

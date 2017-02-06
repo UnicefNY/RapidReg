@@ -35,6 +35,7 @@ import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.core.Is.is;
 import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -146,7 +147,8 @@ public class CaseServiceTest {
                 searchCaseTwo,
                 searchCaseThree,
                 searchCaseFour});
-        when(caseDao.getCaseListByConditionGroup(any(ConditionGroup.class))).thenReturn
+        when(caseDao.getCaseListByConditionGroup(anyString(), anyString(), any(ConditionGroup
+                .class))).thenReturn
                 (searchResult);
 
         List<Long> actual = caseService.getCPSearchResult("shortId", "name", 0, 10, "caregiver",

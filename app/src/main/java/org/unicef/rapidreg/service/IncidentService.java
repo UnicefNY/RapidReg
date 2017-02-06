@@ -79,7 +79,9 @@ public class IncidentService extends RecordService {
             typeOfViolence, String location) {
         ConditionGroup searchCondition = getSearchCondition(uniqueId, survivorCode, ageFrom, ageTo, typeOfViolence,
                 location);
-        return extractIds(incidentDao.getIncidentListByConditionGroup(searchCondition));
+        return extractIds(incidentDao.getIncidentListByConditionGroup(PrimeroAppConfiguration.getCurrentUsername(),
+                PrimeroAppConfiguration.getApiBaseUrl(),
+                searchCondition));
     }
 
     private ConditionGroup getSearchCondition(String uniqueId, String survivorCode, int ageFrom, int ageTo, String

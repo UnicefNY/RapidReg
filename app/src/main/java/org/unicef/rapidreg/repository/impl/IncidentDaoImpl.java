@@ -2,9 +2,11 @@ package org.unicef.rapidreg.repository.impl;
 
 import com.raizlabs.android.dbflow.sql.language.ConditionGroup;
 import com.raizlabs.android.dbflow.sql.language.SQLite;
+import com.raizlabs.android.dbflow.sql.language.Where;
 
 import org.unicef.rapidreg.model.Incident;
 import org.unicef.rapidreg.model.Incident_Table;
+import org.unicef.rapidreg.model.Tracing_Table;
 import org.unicef.rapidreg.repository.IncidentDao;
 
 import java.util.List;
@@ -27,9 +29,11 @@ public class IncidentDaoImpl implements IncidentDao {
     }
 
     @Override
-    public List<Incident> getIncidentListByConditionGroup(ConditionGroup conditionGroup) {
+    public List<Incident> getIncidentListByConditionGroup(String ownedBy, String url, ConditionGroup conditionGroup) {
         return SQLite.select().from(Incident.class)
                 .where(conditionGroup)
+                .and(Incident_Table.owned_by.eq(ownedBy))
+                .and(Incident_Table.url.eq(url))
                 .orderBy(Incident_Table.registration_date, false)
                 .queryList();
     }
@@ -63,42 +67,34 @@ public class IncidentDaoImpl implements IncidentDao {
     }
 
     private List<Incident> getIncidentsByAgeASC(String ownedBy, String url) {
-        return SQLite
-                .select()
-                .from(Incident.class)
-                .where(ConditionGroup.clause().and(Incident_Table.owned_by.eq(ownedBy)))
-                .and(Incident_Table.url.eq(url))
+        return getCurrentServerCondition(ownedBy, url)
                 .orderBy(Incident_Table.age, true)
                 .queryList();
     }
 
     private List<Incident> getIncidentsByAgeDES(String ownedBy, String url) {
-        return SQLite
-                .select()
-                .from(Incident.class)
-                .where(Incident_Table.owned_by.eq(ownedBy))
-                .and(Incident_Table.url.eq(url))
+        return getCurrentServerCondition(ownedBy, url)
                 .orderBy(Incident_Table.age, false)
                 .queryList();
     }
 
     private List<Incident> getIncidentsByDateASC(String ownedBy, String url) {
-        return SQLite
-                .select()
-                .from(Incident.class)
-                .where(Incident_Table.owned_by.eq(ownedBy))
-                .and(Incident_Table.url.eq(url))
+        return getCurrentServerCondition(ownedBy, url)
                 .orderBy(Incident_Table.registration_date, true)
                 .queryList();
     }
 
     private List<Incident> getIncidentsByDateDES(String ownedBy, String url) {
+        return getCurrentServerCondition(ownedBy, url)
+                .orderBy(Incident_Table.registration_date, false)
+                .queryList();
+    }
+
+    private Where<Incident> getCurrentServerCondition(String ownedBy, String url) {
         return SQLite
                 .select()
                 .from(Incident.class)
                 .where(Incident_Table.owned_by.eq(ownedBy))
-                .and(Incident_Table.url.eq(url))
-                .orderBy(Incident_Table.registration_date, false)
-                .queryList();
+                .and(Incident_Table.url.eq(url));
     }
 }
