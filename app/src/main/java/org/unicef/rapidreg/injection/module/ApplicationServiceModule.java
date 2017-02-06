@@ -6,6 +6,7 @@ import android.telephony.TelephonyManager;
 import org.unicef.rapidreg.repository.CaseDao;
 import org.unicef.rapidreg.repository.CaseFormDao;
 import org.unicef.rapidreg.repository.CasePhotoDao;
+import org.unicef.rapidreg.repository.IncidentDao;
 import org.unicef.rapidreg.repository.IncidentFormDao;
 import org.unicef.rapidreg.repository.TracingDao;
 import org.unicef.rapidreg.repository.TracingFormDao;
@@ -51,8 +52,8 @@ public class ApplicationServiceModule {
 
     @Provides
     @Singleton
-    public CaseService provideCaseService(CaseDao caseDao, CasePhotoDao casePhotoDao) {
-        return new CaseService(caseDao, casePhotoDao);
+    public CaseService provideCaseService(CaseDao caseDao, CasePhotoDao casePhotoDao, IncidentDao incidentDao) {
+        return new CaseService(caseDao, casePhotoDao, incidentDao);
     }
 
     @Provides

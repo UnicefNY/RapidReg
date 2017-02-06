@@ -3,6 +3,7 @@ package org.unicef.rapidreg.injection.module;
 import org.unicef.rapidreg.repository.CaseDao;
 import org.unicef.rapidreg.repository.CaseFormDao;
 import org.unicef.rapidreg.repository.CasePhotoDao;
+import org.unicef.rapidreg.repository.IncidentDao;
 import org.unicef.rapidreg.repository.IncidentFormDao;
 import org.unicef.rapidreg.repository.TracingDao;
 import org.unicef.rapidreg.repository.TracingFormDao;
@@ -11,6 +12,7 @@ import org.unicef.rapidreg.repository.UserDao;
 import org.unicef.rapidreg.repository.impl.CaseDaoImpl;
 import org.unicef.rapidreg.repository.impl.CaseFormDaoImpl;
 import org.unicef.rapidreg.repository.impl.CasePhotoDaoImpl;
+import org.unicef.rapidreg.repository.impl.IncidentDaoImpl;
 import org.unicef.rapidreg.repository.impl.IncidentFormDaoImpl;
 import org.unicef.rapidreg.repository.impl.TracingDaoImpl;
 import org.unicef.rapidreg.repository.impl.TracingFormDaoImpl;
@@ -46,6 +48,12 @@ public class ApplicationDaoModule {
     @Singleton
     public CasePhotoDao provideCasePhotoDao() {
         return new CasePhotoDaoImpl();
+    }
+
+    @Provides
+    @Singleton
+    public IncidentDao provideIncidentDao() {
+        return new IncidentDaoImpl();
     }
 
     @Provides

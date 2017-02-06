@@ -13,9 +13,11 @@ import com.raizlabs.android.dbflow.sql.language.SQLCondition;
 import org.unicef.rapidreg.PrimeroAppConfiguration;
 import org.unicef.rapidreg.model.Case;
 import org.unicef.rapidreg.model.CasePhoto;
+import org.unicef.rapidreg.model.Incident;
 import org.unicef.rapidreg.model.RecordModel;
 import org.unicef.rapidreg.repository.CaseDao;
 import org.unicef.rapidreg.repository.CasePhotoDao;
+import org.unicef.rapidreg.repository.IncidentDao;
 import org.unicef.rapidreg.repository.impl.CaseDaoImpl;
 import org.unicef.rapidreg.repository.impl.CasePhotoDaoImpl;
 import org.unicef.rapidreg.service.cache.ItemValuesMap;
@@ -40,12 +42,14 @@ public class CaseService extends RecordService {
     public static final String CASE_ID = "case_id";
     public static final String CASE_PRIMARY_ID = "case_primary_id";
 
-    private CaseDao caseDao = new CaseDaoImpl();
-    private CasePhotoDao casePhotoDao = new CasePhotoDaoImpl();
+    private CaseDao caseDao;
+    private CasePhotoDao casePhotoDao;
+    private IncidentDao incidentDao;
 
-    public CaseService(CaseDao caseDao, CasePhotoDao casePhotoDao) {
+    public CaseService(CaseDao caseDao, CasePhotoDao casePhotoDao, IncidentDao incidentDao) {
         this.caseDao = caseDao;
         this.casePhotoDao = casePhotoDao;
+        this.incidentDao = incidentDao;
     }
 
     public List<Case> getAll() {
