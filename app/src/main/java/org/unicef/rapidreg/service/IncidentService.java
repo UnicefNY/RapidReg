@@ -180,15 +180,13 @@ public class IncidentService extends RecordService {
         int age = itemValues.getAsInt(AGE) != null ? itemValues.getAsInt(AGE) : 0;
         incident.setAge(age);
         incident.setCaregiver(getCaregiverName(itemValues));
-        setSyncedStatus(incident);
+        incident.setSynced(false);
 
         if (itemValues.has(DATE_OF_INTERVIEW)) {
             incident.setRegistrationDate(Utils.getRegisterDate(itemValues.getAsString(DATE_OF_INTERVIEW)));
         }
 
-        incident = incidentDao.update(incident);
-
-        return incident;
+        return incidentDao.update(incident);
     }
 
 

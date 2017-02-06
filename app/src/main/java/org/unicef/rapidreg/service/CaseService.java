@@ -210,7 +210,7 @@ public class CaseService extends RecordService {
         child.setCaregiver(getCaregiverName(itemValues));
         child.setRegistrationDate(Utils.getRegisterDate(itemValues.getAsString(REGISTRATION_DATE)));
         child.setAudio(audioFileDefault);
-        setSyncedStatus(child);
+        child.setSynced(false);
 
         child = caseDao.update(child);
 

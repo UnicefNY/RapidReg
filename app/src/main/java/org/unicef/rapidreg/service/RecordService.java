@@ -128,8 +128,4 @@ public class RecordService {
         return Condition.column(NameAlias.builder(RecordModel.COLUMN_AGE).build())
                 .between(ageFrom).and(ageTo);
     }
-
-    protected void setSyncedStatus(RecordModel record) {
-        record.setSynced(false);
-    }
 }
