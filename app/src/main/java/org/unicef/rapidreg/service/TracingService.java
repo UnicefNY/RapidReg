@@ -106,7 +106,6 @@ public class TracingService extends RecordService {
 
     public Tracing saveOrUpdate(ItemValuesMap itemValues, List<String> photoPaths) throws
             IOException {
-
         if (itemValues.getAsString(TRACING_ID) == null) {
             return save(itemValues, photoPaths);
         } else {
@@ -125,9 +124,9 @@ public class TracingService extends RecordService {
 
     public Tracing update(ItemValuesMap itemValues,
                           List<String> photoBitPaths) throws IOException {
-        Tracing tracing = tracingDao.update(updateTracingFromItemValues(itemValues));
-        setSyncedStatus(tracing);
-        return tracingPhotoDao.update(tracing, photoBitPaths);
+        Tracing tracing = updateTracingFromItemValues(itemValues);
+        tracing.setSynced(false);
+        return tracingPhotoDao.update(tracingDao.update(tracing), photoBitPaths);
     }
 
     private Tracing generateTracingFromItemValues(ItemValuesMap itemValues, String uniqueId) {
