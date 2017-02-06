@@ -10,6 +10,7 @@ import java.util.Locale;
 public class PrimeroAppConfiguration {
     public static final String MODULE_ID_GBV = "primeromodule-gbv";
     public static final String MODULE_ID_CP = "primeromodule-cp";
+
     public static final String PARENT_CASE = "case";
     public static final String PARENT_INCIDENT = "incident";
     public static final String PARENT_TRACING_REQUEST = "tracing_request";

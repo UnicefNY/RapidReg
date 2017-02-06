@@ -10,7 +10,6 @@ import com.hannesdorfmann.mosby.mvp.MvpBasePresenter;
 import com.raizlabs.android.dbflow.data.Blob;
 
 import org.unicef.rapidreg.PrimeroAppConfiguration;
-import org.unicef.rapidreg.forms.RecordForm;
 import org.unicef.rapidreg.model.Case;
 import org.unicef.rapidreg.model.CaseForm;
 import org.unicef.rapidreg.model.Incident;
@@ -123,7 +122,7 @@ public abstract class BaseSyncPresenter extends MvpBasePresenter<SyncView> {
 
     public void downloadCaseForm(ProgressDialog loadingDialog, String moduleId) {
         formRemoteService.getCaseForm(PrimeroAppConfiguration.getCookie(), PrimeroAppConfiguration.getDefaultLanguage
-                (), true, PrimeroAppConfiguration.PARENT_CASE, PrimeroAppConfiguration.MODULE_ID_CP)
+                (), true, PrimeroAppConfiguration.PARENT_CASE, moduleId)
                 .subscribe(caseFormJson -> {
                             CaseForm caseForm = new CaseForm(new Blob(new Gson().toJson(caseFormJson).getBytes()));
                             caseForm.setModuleId(PrimeroAppConfiguration.MODULE_ID_CP);
@@ -134,7 +133,6 @@ public abstract class BaseSyncPresenter extends MvpBasePresenter<SyncView> {
                             syncFail(throwable);
                         },
                         () -> downloadSecondFormByModule());
-        loadingDialog.dismiss();
     }
 
     protected abstract void downloadSecondFormByModule();
@@ -210,5 +208,4 @@ public abstract class BaseSyncPresenter extends MvpBasePresenter<SyncView> {
             getView().hideSyncProgressDialog();
         }
     }
-
 }
