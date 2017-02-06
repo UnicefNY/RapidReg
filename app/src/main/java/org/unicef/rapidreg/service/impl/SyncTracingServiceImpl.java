@@ -138,12 +138,7 @@ public class SyncTracingServiceImpl extends BaseRetrofitService implements SyncT
     public void uploadPhotos(final RecordModel record) {
         List<Long> tracingPhotos = new TracingPhotoDaoImpl().getIdsByTracingId(record.getId());
         Observable.from(tracingPhotos)
-                .filter(new Func1<Long, Boolean>() {
-                    @Override
-                    public Boolean call(Long tracingPhotoId) {
-                        return true;
-                    }
-                })
+                .filter(tracingPhotoId -> true)
                 .flatMap(new Func1<Long, Observable<Pair<TracingPhoto, Response<JsonElement>>>>() {
                     @Override
                     public Observable<Pair<TracingPhoto, Response<JsonElement>>> call(final Long
@@ -173,17 +168,13 @@ public class SyncTracingServiceImpl extends BaseRetrofitService implements SyncT
                         });
                     }
                 })
-                .map(new Func1<Pair<TracingPhoto, Response<JsonElement>>, Object>() {
-                    @Override
-                    public Object call(Pair<TracingPhoto, Response<JsonElement>>
-                                               tracingPhotoResponsePair) {
-                        Response<JsonElement> response = tracingPhotoResponsePair.second;
-                        TracingPhoto tracingPhoto = tracingPhotoResponsePair.first;
-                        updateRecordRev(record, response.body().getAsJsonObject().get("_rev")
-                                .getAsString());
-                        updateTracingPhotoSyncStatus(tracingPhoto, true);
-                        return null;
-                    }
+                .map(tracingPhotoResponsePair -> {
+                    Response<JsonElement> response = tracingPhotoResponsePair.second;
+                    TracingPhoto tracingPhoto = tracingPhotoResponsePair.first;
+                    updateRecordRev(record, response.body().getAsJsonObject().get("_rev")
+                            .getAsString());
+                    updateTracingPhotoSyncStatus(tracingPhoto, true);
+                    return null;
                 }).toList().toBlocking().first();
     }
 
