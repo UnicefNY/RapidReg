@@ -11,6 +11,7 @@ public class Incident extends RecordModel {
     public static final String COLUMN_SURVIVOR_CODE = "survivor_code";
     public static final String COLUMN_TYPE_OF_VIOLENCE = "type_of_violence";
     public static final String COLUMN_LOCATION = "location";
+    public static final String COLUMN_CASE_UNIQUE_ID = "case_unique_id";
 
     @Column(name = COLUMN_SURVIVOR_CODE)
     private String survivorCode;
@@ -20,6 +21,9 @@ public class Incident extends RecordModel {
 
     @Column(name = COLUMN_LOCATION)
     private String location;
+
+    @Column(name = COLUMN_CASE_UNIQUE_ID)
+    private String caseUniqueId;
 
     public Incident() {
     }
@@ -50,5 +54,13 @@ public class Incident extends RecordModel {
 
     public void setLocation(String location) {
         this.location = location;
+    }
+
+    public void setCaseUniqueId(String caseUniqueId) {
+        this.caseUniqueId = caseUniqueId;
+    }
+
+    public String getCaseUniqueId() {
+        return caseUniqueId;
     }
 }

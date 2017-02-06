@@ -25,12 +25,14 @@ import java.util.Calendar;
 import java.util.List;
 
 import static org.unicef.rapidreg.model.RecordModel.EMPTY_AGE;
+import static org.unicef.rapidreg.service.CaseService.CASE_ID;
 
 public class IncidentService extends RecordService {
     public static final String TAG = IncidentService.class.getSimpleName();
     public static final String INCIDENT_DISPLAY_ID = "incident_id_display";
     public static final String INCIDENT_ID = "incident_id";
     public static final String INCIDENT_PRIMARY_ID = "incident_primary_id";
+    public static final String EMPTY_ID = "";
 
     private IncidentDao incidentDao = new IncidentDaoImpl();
 
@@ -148,13 +150,15 @@ public class IncidentService extends RecordService {
         incident.setSurvivorCode(getSurvivorCode(itemValues));
         incident.setTypeOfViolence(getTypeOfViolence(itemValues));
         incident.setLocation(getLocation(itemValues));
-        int age = itemValues.has(AGE) ? itemValues.getAsInt(AGE) : EMPTY_AGE;
         incident.setUrl(TextUtils.lintUrl(PrimeroAppConfiguration.getApiBaseUrl()));
+        int age = itemValues.has(AGE) ? itemValues.getAsInt(AGE) : EMPTY_AGE;
         incident.setAge(age);
         incident.setCaregiver(getCaregiverName(itemValues));
         incident.setRegistrationDate(Utils.getRegisterDate(itemValues.getAsString(DATE_OF_INTERVIEW)));
         incident.setCreatedBy(username);
         incident.setOwnedBy(username);
+        String caseId = itemValues.has(CASE_ID) ? itemValues.getAsString(CASE_ID) : EMPTY_ID;
+        incident.setCaseUniqueId(caseId);
         incidentDao.save(incident);
         return incident;
     }
