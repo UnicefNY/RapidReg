@@ -346,7 +346,7 @@ public class CPSyncPresenter extends BaseSyncPresenter {
             item.setName(casesJsonObject.get("name").getAsString());
             setAgeIfExists(item, casesJsonObject);
             item.setOwnedBy(casesJsonObject.get("owned_by").getAsString());
-            item.setUrl(TextUtils.lintUrl(PrimeroAppConfiguration.getApiBaseUrl()));
+            item.setUrl(PrimeroAppConfiguration.getApiBaseUrl());
             if (casesJsonObject.get("caregiver") != null) {
                 item.setCaregiver(casesJsonObject.get("caregiver").getAsString());
             }
@@ -362,7 +362,7 @@ public class CPSyncPresenter extends BaseSyncPresenter {
                     Utils.getRegisterDate(casesJsonObject.get("registration_date").getAsString()));
             item.setCreatedBy(casesJsonObject.get("created_by").getAsString());
             item.setOwnedBy(casesJsonObject.get("owned_by").getAsString());
-            item.setUrl(TextUtils.lintUrl(PrimeroAppConfiguration.getApiBaseUrl()));
+            item.setUrl(PrimeroAppConfiguration.getApiBaseUrl());
 
             item.setLastSyncedDate(Calendar.getInstance().getTime());
             item.setLastUpdatedDate(Calendar.getInstance().getTime());

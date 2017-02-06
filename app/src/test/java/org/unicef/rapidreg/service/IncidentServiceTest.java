@@ -34,6 +34,7 @@ import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.core.Is.is;
 import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.times;
@@ -233,7 +234,8 @@ public class IncidentServiceTest {
         Incident[] orders = new Incident[]{new Incident(3), new Incident(2), new Incident(1)};
         List<Incident> orderList = Arrays.asList(orders);
 
-        when(incidentDao.getIncidentListByConditionGroup(any(ConditionGroup.class))).thenReturn
+        when(incidentDao.getIncidentListByConditionGroup(anyString(), anyString(), any
+                (ConditionGroup.class))).thenReturn
                 (orderList);
 
         Assert.assertThat("When call getCPSearchResult() should return search result depends on " +

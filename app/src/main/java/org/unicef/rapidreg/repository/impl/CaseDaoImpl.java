@@ -1,14 +1,13 @@
 package org.unicef.rapidreg.repository.impl;
 
-import com.raizlabs.android.dbflow.list.FlowQueryList;
 import com.raizlabs.android.dbflow.sql.language.ConditionGroup;
 import com.raizlabs.android.dbflow.sql.language.SQLite;
+import com.raizlabs.android.dbflow.sql.language.Where;
 
 import org.unicef.rapidreg.model.Case;
 import org.unicef.rapidreg.model.Case_Table;
 import org.unicef.rapidreg.repository.CaseDao;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class CaseDaoImpl implements CaseDao {
@@ -29,9 +28,11 @@ public class CaseDaoImpl implements CaseDao {
     }
 
     @Override
-    public List<Case> getCaseListByConditionGroup(ConditionGroup conditionGroup) {
+    public List<Case> getCaseListByConditionGroup(String ownedBy, String url, ConditionGroup conditionGroup) {
         return SQLite.select().from(Case.class)
                 .where(conditionGroup)
+                .and(Case_Table.owned_by.eq(ownedBy))
+                .and(Case_Table.url.eq(url))
                 .orderBy(Case_Table.registration_date, false)
                 .queryList();
     }
@@ -64,42 +65,34 @@ public class CaseDaoImpl implements CaseDao {
     }
 
     private List<Case> getCasesByAgeASC(String ownedBy, String url) {
-        return SQLite
-                .select()
-                .from(Case.class)
-                .where(Case_Table.owned_by.eq(ownedBy))
-                .and(Case_Table.url.eq(url))
+        return getCurrentServerUserCondition(ownedBy, url)
                 .orderBy(Case_Table.age, true)
                 .queryList();
     }
 
     private List<Case> getCasesByAgeDES(String ownedBy, String url) {
-        return SQLite
-                .select()
-                .from(Case.class)
-                .where(Case_Table.owned_by.eq(ownedBy))
-                .and(Case_Table.url.eq(url))
+        return getCurrentServerUserCondition(ownedBy, url)
                 .orderBy(Case_Table.age, false)
                 .queryList();
     }
 
     private List<Case> getCasesByDateASC(String ownedBy, String url) {
-        return SQLite
-                .select()
-                .from(Case.class)
-                .where(Case_Table.owned_by.eq(ownedBy))
-                .and(Case_Table.url.eq(url))
+        return getCurrentServerUserCondition(ownedBy, url)
                 .orderBy(Case_Table.registration_date, true)
                 .queryList();
     }
 
     private List<Case> getCasesByDateDES(String ownedBy, String url) {
+        return getCurrentServerUserCondition(ownedBy, url)
+                .orderBy(Case_Table.registration_date, false)
+                .queryList();
+    }
+
+    private Where<Case> getCurrentServerUserCondition(String ownedBy, String url) {
         return SQLite
                 .select()
                 .from(Case.class)
                 .where(Case_Table.owned_by.eq(ownedBy))
-                .and(Case_Table.url.eq(url))
-                .orderBy(Case_Table.registration_date, false)
-                .queryList();
+                .and(Case_Table.url.eq(url));
     }
 }

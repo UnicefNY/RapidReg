@@ -13,7 +13,7 @@ public interface CaseDao {
 
     List<Case> getAllCasesOrderByAge(boolean isASC, String ownedBy, String url);
 
-    List<Case> getCaseListByConditionGroup(ConditionGroup conditionGroup);
+    List<Case> getCaseListByConditionGroup(String ownedBy, String url, ConditionGroup conditionGroup);
 
     Case getCaseById(long caseId);
 

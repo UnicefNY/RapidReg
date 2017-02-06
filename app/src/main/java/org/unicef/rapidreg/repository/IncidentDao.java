@@ -14,7 +14,7 @@ public interface IncidentDao {
 
     List<Incident> getAllIncidentsOrderByAge(boolean isASC, String ownedBy, String url);
 
-    List<Incident> getIncidentListByConditionGroup(ConditionGroup conditionGroup);
+    List<Incident> getIncidentListByConditionGroup(String ownedBy, String url, ConditionGroup conditionGroup);
 
     Incident getIncidentById(long incidentId);
 

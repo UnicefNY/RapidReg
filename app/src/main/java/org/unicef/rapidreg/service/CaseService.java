@@ -25,7 +25,6 @@ import org.unicef.rapidreg.utils.ImageCompressUtil;
 import org.unicef.rapidreg.utils.StreamUtil;
 import org.unicef.rapidreg.utils.TextUtils;
 import org.unicef.rapidreg.utils.Utils;
-import org.w3c.dom.Text;
 
 import java.io.IOException;
 import java.sql.Date;
@@ -111,7 +110,9 @@ public class CaseService extends RecordService {
                     .build()).eq(date));
         }
 
-        return extractIds(caseDao.getCaseListByConditionGroup(conditionGroup));
+        return extractIds(caseDao.getCaseListByConditionGroup(PrimeroAppConfiguration.getCurrentUsername(),
+                PrimeroAppConfiguration.getApiBaseUrl(),
+                conditionGroup));
     }
 
     public List<Long> getGBVSearchResult(String shortId, String name, String location, Date registrationDate) {
@@ -130,7 +131,7 @@ public class CaseService extends RecordService {
                     .build()).eq(registrationDate));
         }
 
-        return extractIds(caseDao.getCaseListByConditionGroup(conditionGroup));
+        return extractIds(caseDao.getCaseListByConditionGroup(PrimeroAppConfiguration.getCurrentUsername(), PrimeroAppConfiguration.getApiBaseUrl(), conditionGroup));
     }
 
     public Case saveOrUpdate(ItemValuesMap itemValues, List<String> photoPaths) throws IOException {

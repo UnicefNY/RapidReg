@@ -15,7 +15,7 @@ public interface TracingDao {
 
     List<Tracing> getAllTracingsOrderByDate(boolean isASC, String ownedBy, String url);
 
-    List<Tracing> getAllTracingsByConditionGroup(ConditionGroup conditionGroup);
+    List<Tracing> getAllTracingsByConditionGroup(String ownedBy, String url, ConditionGroup conditionGroup);
 
     Tracing getTracingById(long tracingId);
 
