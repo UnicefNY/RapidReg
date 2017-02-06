@@ -53,7 +53,7 @@ public class LoginResponse {
 
     public String getRole() {
         if (moduleIds == null || moduleIds.isEmpty()) {
-            return null;
+            return "";
         }
         return moduleIds.get(0);
     }
