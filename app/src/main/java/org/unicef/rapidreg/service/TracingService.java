@@ -126,6 +126,7 @@ public class TracingService extends RecordService {
     public Tracing update(ItemValuesMap itemValues,
                           List<String> photoBitPaths) throws IOException {
         Tracing tracing = tracingDao.update(updateTracingFromItemValues(itemValues));
+        setSyncedStatus(tracing);
         return tracingPhotoDao.update(tracing, photoBitPaths);
     }
 

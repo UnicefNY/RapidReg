@@ -72,37 +72,38 @@ public class GBVSyncPresenter extends BaseSyncPresenter {
     }
 
     public void upLoadCases(List<Case> caseList) {
-        if (totalNumberOfUploadRecords != 0) {
-            getView().showUploadCasesSyncProgressDialog();
-            getView().setProgressMax(totalNumberOfUploadRecords);
-        }
-        isSyncing = true;
-        Observable.from(caseList)
-                .filter(item -> isSyncing && !item.isSynced())
-                .map(item -> new Pair<>(item, syncService.uploadCaseJsonProfile(item)))
-                .map(pair -> {
-                    syncService.uploadAudio(pair.first);
-                    return pair;
-                })
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(pair -> {
-                    if (getView() != null) {
-                        getView().setProgressIncrease();
-                        increaseSyncNumber();
-                        updateRecordSynced(pair.first, true);
-                    }
-                }, throwable -> {
-                    try {
-                        throwable.printStackTrace();
-                        syncFail(throwable);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }, () -> upLoadTracing(incidents));
+//        if (totalNumberOfUploadRecords != 0) {
+//            getView().showUploadCasesSyncProgressDialog();
+//            getView().setProgressMax(totalNumberOfUploadRecords);
+//        }
+//        isSyncing = true;
+//        Observable.from(caseList)
+//                .filter(item -> isSyncing && !item.isSynced())
+//                .map(item -> new Pair<>(item, syncService.uploadCaseJsonProfile(item)))
+//                .map(pair -> {
+//                    syncService.uploadAudio(pair.first);
+//                    return pair;
+//                })
+//                .subscribeOn(Schedulers.io())
+//                .observeOn(AndroidSchedulers.mainThread())
+//                .subscribe(pair -> {
+//                    if (getView() != null) {
+//                        getView().setProgressIncrease();
+//                        increaseSyncNumber();
+//                        updateRecordSynced(pair.first, true);
+//                    }
+//                }, throwable -> {
+//                    try {
+//                        throwable.printStackTrace();
+//                        syncFail(throwable);
+//                    } catch (Exception e) {
+//                        e.printStackTrace();
+//                    }
+//                }, () -> upLoadIncidents(incidents));
+        preDownloadCases();
     }
 
-    private void upLoadTracing(List<Incident> incidents) {
+    private void upLoadIncidents(List<Incident> incidents) {
         isSyncing = true;
         Observable.from(incidents)
                 .filter(item -> isSyncing && !item.isSynced())
@@ -202,7 +203,8 @@ public class GBVSyncPresenter extends BaseSyncPresenter {
                         }, () -> {
                             if (getView() != null) {
                                 getView().hideSyncProgressDialog();
-                                preDownloadIncidents();
+//                                preDownloadIncidents();
+                                downloadCaseForm();
                             }
                         });
     }
@@ -303,7 +305,6 @@ public class GBVSyncPresenter extends BaseSyncPresenter {
                 }, () -> downloadIncidents(objects));
     }
 
-
     private void downloadIncidents(List<JsonObject> objects) {
         Observable.from(objects)
                 .filter(jsonObject -> isSyncing)
@@ -365,7 +366,7 @@ public class GBVSyncPresenter extends BaseSyncPresenter {
     }
 
     private void downloadCaseForm() {
-        downloadCaseForm(getView().showFetchingFormLoadingDialog(), PrimeroAppConfiguration.MODULE_ID_CP);
+        downloadCaseForm(getView().showFetchingFormLoadingDialog(), PrimeroAppConfiguration.MODULE_ID_GBV);
     }
 
     @Override
