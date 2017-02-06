@@ -54,9 +54,9 @@
     <string name="case_details">Case Details</string>
     <string name="incidents">Incidents</string>
     <string name="child_incident">Incident</string>
-    <string name="incident_details">Incident details</string>
-    <string name="tracing">Tracing requests</string>
-    <string name="tracing_details">Tracing request details</string>
+    <string name="incident_details">Incident Details</string>
+    <string name="tracing">Tracing Requests</string>
+    <string name="tracing_details">Tracing Request Details</string>
     <string name="sync">Synchronization</string>
     <!-- Title -->
     <string name="click_to_search">Click to search</string>
@@ -75,9 +75,9 @@
     <string name="required_field_is_not_filled">Sorry, please make sure all required information are entered</string>
     <string name="show_hide">Show/Hide</string>
     <string name="save">Save</string>
-    <string name="new_case">New case</string>
-    <string name="new_tracing">New tracing request</string>
-    <string name="new_incident">New incident</string>
+    <string name="new_case">New Case</string>
+    <string name="new_tracing">New Tracing Request</string>
+    <string name="new_incident">New Incident</string>
     <string name="quit">Quit</string>
     <string name="quit_without_saving">Are you sure you want to quit without saving?</string>
     <string name="delete_subform">Are you sure you want to delete this subform</string>
@@ -119,13 +119,13 @@
     <string name="sync_forms_error">Sync forms error, please try it later</string>
     <string name="sync_tracing_forms_error">Sync forms error, please try it later</string>
     <string name="sync_incident_forms_error">Sync forms error, please try it later</string>
-    <string name="tracing_request">Tracing request</string>
+    <string name="tracing_request">Tracing Request</string>
     <string name="not_sync_promote">Not synced yet</string>
     <string name="produce_cases_successfully_msg">Produce cases complete!</string>
-    <string name="new_cp_case">New CP case</string>
-    <string name="new_gbv_case">New GBV case</string>
-    <string name="cp_case_details">CP case details</string>
-    <string name="gbv_case_details">GBV case details</string>
+    <string name="new_cp_case">New Case</string>
+    <string name="new_gbv_case">New Case</string>
+    <string name="cp_case_details">Case Details</string>
+    <string name="gbv_case_details">Case Details</string>
     <string name="survivor_code">Survivor Code</string>
     <string name="type_of_violence">Type of Violence</string>
     <string name="date_of_inquiry">Date of Inquiry</string>
