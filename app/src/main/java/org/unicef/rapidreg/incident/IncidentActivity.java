@@ -24,6 +24,7 @@ import org.unicef.rapidreg.utils.Utils;
 
 import javax.inject.Inject;
 
+import static org.unicef.rapidreg.IntentSender.BUNDLE_EXTRA;
 import static org.unicef.rapidreg.service.RecordService.AUDIO_FILE_PATH;
 
 public class IncidentActivity extends RecordActivity implements BaseView {
@@ -48,6 +49,15 @@ public class IncidentActivity extends RecordActivity implements BaseView {
         drawer.closeDrawer(GravityCompat.START);
 
         turnToFeature(IncidentFeature.LIST, null, null);
+
+        if (getIntent() != null) {
+            if (!incidentPresenter.isFormReady()) {
+                showQuitDialog(R.id.nav_cases);
+                return;
+            }
+            Bundle extra = getIntent().getBundleExtra(BUNDLE_EXTRA);
+            turnToFeature(IncidentFeature.ADD_MINI, extra, null);
+        }
     }
 
     @Override

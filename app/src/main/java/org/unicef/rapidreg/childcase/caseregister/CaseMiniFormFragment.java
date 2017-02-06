@@ -120,9 +120,9 @@ public class CaseMiniFormFragment extends RecordRegisterFragment {
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void createIncidentThruGBVCase(CreateIncidentThruGBVCaseEvent event) {
-        Long caseId = getRecordRegisterData().getAsLong(ID);
+        String caseId = getRecordRegisterData().getAsString(CASE_ID);
         Bundle extra = new Bundle();
-        extra.putLong(CASE_ID, caseId);
+        extra.putString(CASE_ID, caseId);
 
         new IntentSender().showIncidentActivity(getActivity(), false, extra);
     }

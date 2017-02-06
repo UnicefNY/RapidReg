@@ -12,6 +12,7 @@ import com.ogaclejapan.smarttablayout.utils.v4.FragmentPagerItems;
 
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
+import org.unicef.rapidreg.IntentSender;
 import org.unicef.rapidreg.R;
 import org.unicef.rapidreg.base.Feature;
 import org.unicef.rapidreg.base.record.RecordActivity;
@@ -19,6 +20,7 @@ import org.unicef.rapidreg.base.record.recordphoto.RecordPhotoAdapter;
 import org.unicef.rapidreg.base.record.recordregister.RecordRegisterWrapperFragment;
 import org.unicef.rapidreg.childcase.CaseActivity;
 import org.unicef.rapidreg.childcase.casephoto.CasePhotoAdapter;
+import org.unicef.rapidreg.event.CreateIncidentThruGBVCaseEvent;
 import org.unicef.rapidreg.event.SaveCaseEvent;
 import org.unicef.rapidreg.forms.Section;
 import org.unicef.rapidreg.service.CaseService;
@@ -32,7 +34,9 @@ import butterknife.OnClick;
 
 import static org.unicef.rapidreg.childcase.CaseFeature.*;
 import static org.unicef.rapidreg.childcase.caseregister.CaseRegisterPresenter.MODULE_CASE_CP;
+import static org.unicef.rapidreg.service.CaseService.CASE_ID;
 import static org.unicef.rapidreg.service.RecordService.MODULE;
+import static org.unicef.rapidreg.service.cache.ItemValuesMap.RecordProfile.ID;
 
 public class CaseRegisterWrapperFragment extends RecordRegisterWrapperFragment {
     public static final String TAG = CaseRegisterWrapperFragment.class.getSimpleName();
@@ -67,6 +71,15 @@ public class CaseRegisterWrapperFragment extends RecordRegisterWrapperFragment {
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void saveCase(SaveCaseEvent event) {
        caseRegisterPresenter.saveRecord(getRecordRegisterData(), getPhotoPathsData(), this);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void createIncidentThruGBVCase(CreateIncidentThruGBVCaseEvent event) {
+        String caseId = getRecordRegisterData().getAsString(CASE_ID);
+        Bundle extra = new Bundle();
+        extra.putString(CASE_ID, caseId);
+
+        new IntentSender().showIncidentActivity(getActivity(), false, extra);
     }
 
     @OnClick(R.id.edit)
