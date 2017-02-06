@@ -9,7 +9,7 @@
         android:id="@+id/nav_cases"
         style="@style/NavigationItemTextViewStyle"
         android:drawableLeft="@drawable/cases"
-        android:text="@string/cp_case" />
+        android:text="@string/cases" />
 
     <TextView
         android:id="@+id/nav_tracing"
