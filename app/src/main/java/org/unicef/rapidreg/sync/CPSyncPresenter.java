@@ -62,7 +62,7 @@ public class CPSyncPresenter extends BaseSyncPresenter {
 
     @Inject
     public CPSyncPresenter(@ActivityContext Context context,
-                           SyncCaseService syncService,
+                           SyncCaseService syncCaseService,
                            SyncTracingService syncTracingService,
                            CaseService caseService,
                            CasePhotoService casePhotoService,
@@ -72,7 +72,7 @@ public class CPSyncPresenter extends BaseSyncPresenter {
                            TracingFormService tracingFormService,
                            FormRemoteService formRemoteService) {
         super(context, caseService, caseFormService, formRemoteService);
-        this.syncService = syncService;
+        this.syncService = syncCaseService;
         this.casePhotoService = casePhotoService;
         this.tracingService = tracingService;
         this.tracingPhotoService = tracingPhotoService;
@@ -402,6 +402,7 @@ public class CPSyncPresenter extends BaseSyncPresenter {
         }
     }
 
+
     public void preDownloadTracings() {
         isSyncing = true;
         GregorianCalendar cal = new GregorianCalendar(2015, 1, 1);
@@ -445,7 +446,6 @@ public class CPSyncPresenter extends BaseSyncPresenter {
                     }
                 }, () -> downloadTracings(objects));
     }
-
 
     private void downloadTracings(List<JsonObject> objects) {
         Observable.from(objects)

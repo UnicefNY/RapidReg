@@ -52,6 +52,7 @@ public class GBVSyncPresenter extends BaseSyncPresenter {
     @Inject
     public GBVSyncPresenter(@ActivityContext Context context,
                             SyncCaseService syncService,
+                            SyncIncidentService syncIncidentService,
                             CaseService caseService,
                             CaseFormService caseFormService,
                             FormRemoteService formRemoteService,
@@ -59,6 +60,7 @@ public class GBVSyncPresenter extends BaseSyncPresenter {
         super(context, caseService, caseFormService, formRemoteService);
         this.incidentService = incidentService;
         this.incidentFormService = incidentFormService;
+        this.syncIncidentService = syncIncidentService;
         this.syncService = syncService;
         initSyncRecordNumber();
     }
@@ -200,7 +202,7 @@ public class GBVSyncPresenter extends BaseSyncPresenter {
                         }, () -> {
                             if (getView() != null) {
                                 getView().hideSyncProgressDialog();
-                                preDownloadTracings();
+                                preDownloadIncidents();
                             }
                         });
     }
@@ -257,7 +259,7 @@ public class GBVSyncPresenter extends BaseSyncPresenter {
         }
     }
 
-    public void preDownloadTracings() {
+    public void preDownloadIncidents() {
         isSyncing = true;
         GregorianCalendar cal = new GregorianCalendar(2015, 1, 1);
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.US);
@@ -298,11 +300,11 @@ public class GBVSyncPresenter extends BaseSyncPresenter {
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
-                }, () -> downloadTracings(objects));
+                }, () -> downloadIncidents(objects));
     }
 
 
-    private void downloadTracings(List<JsonObject> objects) {
+    private void downloadIncidents(List<JsonObject> objects) {
         Observable.from(objects)
                 .filter(jsonObject -> isSyncing)
                 .map(jsonObject -> {
@@ -314,7 +316,7 @@ public class GBVSyncPresenter extends BaseSyncPresenter {
                         throw new RuntimeException();
                     }
                     JsonObject responseJsonObject = response.body().getAsJsonObject();
-                    saveDownloadedTracings(responseJsonObject);
+                    saveDownloadedIncidents(responseJsonObject);
                     return response;
                 })
                 .subscribeOn(Schedulers.io())
@@ -333,7 +335,7 @@ public class GBVSyncPresenter extends BaseSyncPresenter {
                         });
     }
 
-    private void saveDownloadedTracings(JsonObject tracingsJsonObject) {
+    private void saveDownloadedIncidents(JsonObject tracingsJsonObject) {
         String internalId = tracingsJsonObject.get("_id").getAsString();
         Incident item = incidentService.getByInternalId(internalId);
         String newRev = tracingsJsonObject.get("_rev").getAsString();
