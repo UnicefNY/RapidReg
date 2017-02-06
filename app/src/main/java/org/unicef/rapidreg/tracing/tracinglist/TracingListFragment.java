@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import org.greenrobot.eventbus.EventBus;
 import org.unicef.rapidreg.PrimeroAppConfiguration;
 import org.unicef.rapidreg.R;
+import org.unicef.rapidreg.base.record.RecordActivity;
 import org.unicef.rapidreg.base.record.recordlist.RecordListAdapter;
 import org.unicef.rapidreg.base.record.recordlist.RecordListFragment;
 import org.unicef.rapidreg.base.record.recordlist.RecordListPresenter;
@@ -63,17 +64,12 @@ public class TracingListFragment extends RecordListFragment {
         return SPINNER_STATES;
     }
 
-    @Override
-    protected void sendSyncFormEvent() {
-        EventBus.getDefault().postSticky(new LoadTracingFormEvent(PrimeroAppConfiguration.getCookie()));
-    }
-
     @OnClick(R.id.add)
     public void onTracingAddClicked() {
         tracingListPresenter.clearAudioFile();
 
         if (!tracingListPresenter.isFormReady()) {
-            showSyncFormDialog(getResources().getString(R.string.tracing_request));
+            ((RecordActivity)getActivity()).showSyncFormDialog(getResources().getString(R.string.tracing_request));
             return;
         }
 

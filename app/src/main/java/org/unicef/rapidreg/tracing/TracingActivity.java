@@ -11,6 +11,7 @@ import android.widget.Toast;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
+import org.unicef.rapidreg.PrimeroAppConfiguration;
 import org.unicef.rapidreg.R;
 import org.unicef.rapidreg.base.BaseAlertDialog;
 import org.unicef.rapidreg.base.BaseView;
@@ -46,6 +47,11 @@ public class TracingActivity extends RecordActivity implements BaseView {
         drawer.closeDrawer(GravityCompat.START);
 
         turnToFeature(TracingFeature.LIST, null, null);
+    }
+
+    @Override
+    protected void sendSyncFormEvent() {
+        EventBus.getDefault().postSticky(new LoadTracingFormEvent(PrimeroAppConfiguration.getCookie()));
     }
 
     @Override

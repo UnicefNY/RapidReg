@@ -61,12 +61,6 @@ public class IncidentListFragment extends RecordListFragment {
     }
 
     @Override
-    protected void sendSyncFormEvent() {
-        EventBus.getDefault().postSticky(new LoadGBVIncidentFormEvent(PrimeroAppConfiguration
-                .getCookie()));
-    }
-
-    @Override
     protected RecordListAdapter createRecordListAdapter() {
         return incidentListAdapter;
     }
@@ -76,7 +70,7 @@ public class IncidentListFragment extends RecordListFragment {
         incidentListPresenter.clearAudioFile();
 
         if (!incidentListPresenter.isFormReady()) {
-            showSyncFormDialog(getResources().getString(R.string.child_incident));
+            ((RecordActivity)getActivity()).showSyncFormDialog(getResources().getString(R.string.child_incident));
             return;
         }
 
