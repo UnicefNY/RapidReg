@@ -22,6 +22,7 @@ import org.unicef.rapidreg.incident.IncidentActivity;
 import org.unicef.rapidreg.incident.IncidentFeature;
 import org.unicef.rapidreg.service.IncidentService;
 import org.unicef.rapidreg.service.RecordService;
+import org.unicef.rapidreg.service.cache.ItemValuesMap;
 
 import java.util.List;
 
@@ -29,7 +30,9 @@ import javax.inject.Inject;
 
 import butterknife.OnClick;
 
+import static org.unicef.rapidreg.IntentSender.BUNDLE_EXTRA;
 import static org.unicef.rapidreg.forms.Field.TYPE_INCIDENT_MINI_FORM_PROFILE;
+import static org.unicef.rapidreg.service.CaseService.CASE_ID;
 
 public class IncidentMiniFormFragment extends RecordRegisterFragment {
 
@@ -88,7 +91,12 @@ public class IncidentMiniFormFragment extends RecordRegisterFragment {
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void saveIncident(SaveIncidentEvent event) {
-        incidentRegisterPresenter.saveRecord(getRecordRegisterData(), getPhotoPathsData(), this);
+        ItemValuesMap recordRegisterData = getRecordRegisterData();
+        String caseId = getArguments().getString(CASE_ID);
+        if (caseId != null) {
+            recordRegisterData.addStringItem(CASE_ID, caseId);
+        }
+        incidentRegisterPresenter.saveRecord(recordRegisterData, getPhotoPathsData(), this);
     }
 
     @Override
