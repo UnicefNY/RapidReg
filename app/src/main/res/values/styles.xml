@@ -44,13 +44,14 @@
     <style name="NavigationItemTextViewStyle">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_marginBottom">@dimen/size_15</item>
+        <item name="android:layout_marginBottom">@dimen/size_5</item>
         <item name="android:textSize">@dimen/text_size_18</item>
         <item name="android:drawablePadding">@dimen/size_24</item>
         <item name="android:paddingLeft">@dimen/size_15</item>
         <item name="android:paddingRight">@dimen/size_15</item>
+        <item name="android:paddingTop">@dimen/size_10</item>
+        <item name="android:paddingBottom">@dimen/size_10</item>
         <item name="android:gravity">center_vertical</item>
-        <item name="android:textStyle">bold</item>
         <item name="android:textColor">@color/primero_font_medium</item>
     </style>
 
