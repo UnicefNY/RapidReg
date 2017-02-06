@@ -68,21 +68,24 @@ public class SingleLineRadioViewHolder extends BaseViewHolder<Field> {
                 options.size());
         optionGroup.setLayoutParams(layoutParams);
 
-        RadioGroup.LayoutParams radioButtonLayoutParams = new RadioGroup.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1);
+        RadioGroup.LayoutParams radioButtonLayoutParams =
+                new RadioGroup.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1);
         if (options.size() > MAX_HORIZONAL_SIZE) {
             optionGroup.setOrientation(LinearLayout.VERTICAL);
-            radioButtonLayoutParams = new RadioGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            radioButtonLayoutParams = new RadioGroup.LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         }
 
-        for (int index = 0; index < options.size(); index ++) {
+        for (int index = 0; index < options.size(); index++) {
             addRadioButtonToGroup(options.get(index), index, editable, radioButtonLayoutParams);
         }
     }
 
-    private void addRadioButtonToGroup(String option, int index, boolean editable, RadioGroup.LayoutParams radioButtonLayoutParams) {
+    private void addRadioButtonToGroup(String option, int index, boolean editable,
+                                       RadioGroup.LayoutParams radioButtonLayoutParams) {
         ToggleableRadioButton radioButton = new ToggleableRadioButton(context);
         radioButton.setText(option);
-        radioButton.setTextColor(context.getResources().getColor(R.color.primero_font_medium));
+        radioButton.setTextAppearance(context, R.style.RadioButton);
         disableUneditableField(editable, radioButton);
         optionGroup.addView(radioButton, index, radioButtonLayoutParams);
     }
@@ -92,7 +95,7 @@ public class SingleLineRadioViewHolder extends BaseViewHolder<Field> {
         optionGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
-                for (int index = 0; index < optionGroup.getChildCount(); index ++) {
+                for (int index = 0; index < optionGroup.getChildCount(); index++) {
                     if (checkedId == optionGroup.getChildAt(index).getId()) {
                         result = options.get(index);
                         itemValues.addStringItem(field.getName(), getResult());
@@ -115,7 +118,7 @@ public class SingleLineRadioViewHolder extends BaseViewHolder<Field> {
     }
 
     public void setSelectedRadio(String selectedRadio) {
-        for (int index = 0; index < optionGroup.getChildCount(); index ++) {
+        for (int index = 0; index < optionGroup.getChildCount(); index++) {
             ToggleableRadioButton radioButton = (ToggleableRadioButton) optionGroup.getChildAt(index);
             if (selectedRadio.equals(radioButton.getText())) {
                 radioButton.setChecked(true);

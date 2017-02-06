@@ -1,25 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:minHeight="@dimen/case_register_mini_heigh">
+    android:minHeight="@dimen/case_register_mini_heigh"
+    android:orientation="vertical">
 
-    <include layout="@layout/form_label"/>
+    <include layout="@layout/form_label" />
 
     <RadioGroup
         android:id="@+id/option_group"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:paddingLeft="@dimen/case_register_field_padding_left_right"
-        android:paddingRight="@dimen/case_register_field_padding_left_right"
-        android:paddingBottom="@dimen/case_register_field_padding_top_bottom"
+        android:layout_weight="2"
         android:orientation="horizontal"
-        android:layout_weight="2">
+        android:paddingBottom="@dimen/case_register_field_padding_top_bottom"
+        android:paddingLeft="@dimen/case_register_field_padding_left_right"
+        android:paddingRight="@dimen/case_register_field_padding_left_right">
 
     </RadioGroup>
 
-    <include layout="@layout/list_item_border"/>
+    <include layout="@layout/list_item_border" />
 
 </LinearLayout>

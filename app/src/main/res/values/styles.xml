@@ -55,4 +55,9 @@
         <item name="android:textColor">@color/primero_font_medium</item>
     </style>
 
+    <style name="RadioButton">
+        <item name="android:textSize">@dimen/text_size_16</item>
+        <item name="android:textColor">@color/primero_font_medium</item>
+    </style>
+
 </resources>
