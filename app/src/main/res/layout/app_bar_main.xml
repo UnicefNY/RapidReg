@@ -34,7 +34,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/size_10"
                 android:layout_marginRight="@dimen/size_10"
-                android:layout_weight="5"
+                android:layout_weight="4"
                 android:singleLine="true"
                 android:text="@string/toolbar_title_text_placeholder"
                 android:textColor="@android:color/white"
@@ -63,7 +63,15 @@
                 android:id="@+id/search"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginRight="@dimen/size_10"
                 android:background="@drawable/ic_search_white_24dp" />
+
+            <ImageButton
+                android:id="@+id/create_incident"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                android:background="@drawable/ic_incident_drawer_18dp" />
         </LinearLayout>
 
     </android.support.v7.widget.Toolbar>

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group
+        android:id="@+id/nav_group_form"
+        android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_incident"
+            android:icon="@drawable/ic_incident_item_18dp"
+            android:title="Incidents"/>
+    </group>
+</menu>
