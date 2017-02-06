@@ -81,10 +81,10 @@ public abstract class BaseActivity extends MvpActivity<BaseView, BasePresenter> 
     @BindColor(R.color.primero_red)
     protected ColorStateList tracingColor;
 
-    @BindColor(R.color.black)
+    @BindColor(R.color.primero_blue)
     protected ColorStateList incidentColor;
 
-    @BindColor(R.color.primero_blue)
+    @BindColor(R.color.black)
     protected ColorStateList syncColor;
 
     protected IntentSender intentSender = new IntentSender();
@@ -143,17 +143,6 @@ public abstract class BaseActivity extends MvpActivity<BaseView, BasePresenter> 
         User user = PrimeroAppConfiguration.getCurrentUser();
         if (user != null) {
             User.Role role = user.getRoleType();
-            switch (role.getValue()) {
-                case User.ROLE_CP:
-                    navCasesTV.setText(R.string.cp_case);
-                    break;
-                case User.ROLE_GBV:
-                    navCasesTV.setText(R.string.gbv_case);
-                    break;
-                default:
-                    navCasesTV.setText(R.string.cases);
-                    break;
-            }
             for (int resId : role.getResIds()) {
                 findViewById(resId).setVisibility(View.VISIBLE);
             }
