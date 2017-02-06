@@ -19,6 +19,7 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 import com.hannesdorfmann.mosby.mvp.MvpFragment;
 
+import org.unicef.rapidreg.PrimeroAppConfiguration;
 import org.unicef.rapidreg.PrimeroApplication;
 import org.unicef.rapidreg.R;
 import org.unicef.rapidreg.base.BaseAlertDialog;
@@ -26,6 +27,7 @@ import org.unicef.rapidreg.base.BaseProgressDialog;
 import org.unicef.rapidreg.injection.component.DaggerFragmentComponent;
 import org.unicef.rapidreg.injection.component.FragmentComponent;
 import org.unicef.rapidreg.injection.module.FragmentModule;
+import org.unicef.rapidreg.model.User;
 
 import javax.inject.Inject;
 
@@ -137,6 +139,10 @@ public class SyncFragment extends MvpFragment<SyncView, BaseSyncPresenter> imple
 
     @Override
     public BaseSyncPresenter createPresenter() {
+        User.Role roleType = PrimeroAppConfiguration.getCurrentUser().getRoleType();
+        if (User.Role.GBV == roleType){
+            return gbvSyncPresenter;
+        }
         return cpSyncPresenter;
     }
 

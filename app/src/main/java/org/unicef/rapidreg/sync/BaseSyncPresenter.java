@@ -125,7 +125,7 @@ public abstract class BaseSyncPresenter extends MvpBasePresenter<SyncView> {
                 (), true, PrimeroAppConfiguration.PARENT_CASE, moduleId)
                 .subscribe(caseFormJson -> {
                             CaseForm caseForm = new CaseForm(new Blob(new Gson().toJson(caseFormJson).getBytes()));
-                            caseForm.setModuleId(PrimeroAppConfiguration.MODULE_ID_CP);
+                            caseForm.setModuleId(moduleId);
                             caseFormService.saveOrUpdate(caseForm);
                         },
                         throwable -> {
