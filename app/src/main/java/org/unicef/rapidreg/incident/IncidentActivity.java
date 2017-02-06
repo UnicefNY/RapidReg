@@ -50,7 +50,7 @@ public class IncidentActivity extends RecordActivity implements BaseView {
 
         turnToFeature(IncidentFeature.LIST, null, null);
 
-        if (getIntent() != null) {
+        if (getIntent() != null && getIntent().getBundleExtra(BUNDLE_EXTRA) != null) {
             if (!incidentPresenter.isFormReady()) {
                 showQuitDialog(R.id.nav_cases);
                 return;
