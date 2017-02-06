@@ -91,28 +91,6 @@ public abstract class RecordListFragment extends MvpFragment<RecordListView, Rec
         recordListAdapter.toggleViews(isShow);
     }
 
-    public void showSyncFormDialog(String message) {
-        RecordActivity activity = (RecordActivity) getActivity();
-        if (activity.isFormSyncFail()) {
-            Toast.makeText(activity, R.string.forms_is_syncing_msg, Toast.LENGTH_SHORT)
-                    .show();
-            return;
-        }
-        AlertDialog dialog = new BaseAlertDialog.Builder(getActivity())
-                .setTitle(R.string.sync_forms)
-                .setMessage(String.format("%s %s", message, getResources().getString(R.string
-                        .sync_forms_message)))
-                .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        sendSyncFormEvent();
-                    }
-                })
-                .setNegativeButton(R.string.cancel, null)
-                .show();
-        Utils.changeDialogDividerColor(getActivity(), dialog);
-    }
-
     private void initListContainer(final RecordListAdapter adapter) {
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
@@ -150,6 +128,4 @@ public abstract class RecordListFragment extends MvpFragment<RecordListView, Rec
     protected abstract int getDefaultSpinnerStatePosition();
 
     protected abstract SpinnerState[] getDefaultSpinnerStates();
-
-    protected abstract void sendSyncFormEvent();
 }

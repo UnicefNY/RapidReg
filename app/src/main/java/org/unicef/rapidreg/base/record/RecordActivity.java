@@ -1,5 +1,7 @@
 package org.unicef.rapidreg.base.record;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -24,6 +26,7 @@ import org.greenrobot.eventbus.EventBus;
 import org.unicef.rapidreg.IntentSender;
 import org.unicef.rapidreg.R;
 import org.unicef.rapidreg.base.BaseActivity;
+import org.unicef.rapidreg.base.BaseAlertDialog;
 import org.unicef.rapidreg.base.Feature;
 import org.unicef.rapidreg.base.record.recordlist.RecordListFragment;
 import org.unicef.rapidreg.base.record.recordphoto.PhotoConfig;
@@ -132,6 +135,27 @@ public abstract class RecordActivity extends BaseActivity {
         }
     }
 
+    public void showSyncFormDialog(String message) {
+        if (isFormSyncFail()) {
+            Toast.makeText(this, R.string.forms_is_syncing_msg, Toast.LENGTH_SHORT)
+                    .show();
+            return;
+        }
+        AlertDialog dialog = new BaseAlertDialog.Builder(this)
+                .setTitle(R.string.sync_forms)
+                .setMessage(String.format("%s %s", message, getResources().getString(R.string
+                        .sync_forms_message)))
+                .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        sendSyncFormEvent();
+                    }
+                })
+                .setNegativeButton(R.string.cancel, null)
+                .show();
+        Utils.changeDialogDividerColor(this, dialog);
+    }
+
     private void onSelectFromGalleryResult(Intent data) {
         Uri uri = data.getData();
         if (!TextUtils.isEmpty(uri.getAuthority())) {
@@ -183,6 +207,8 @@ public abstract class RecordActivity extends BaseActivity {
             transaction.replace(R.id.fragment_content, target, tag).commit();
         }
     }
+
+    protected abstract void sendSyncFormEvent();
 
     protected abstract RecordListFragment getRecordListFragment();
 

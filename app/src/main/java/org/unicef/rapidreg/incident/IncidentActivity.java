@@ -128,7 +128,7 @@ public class IncidentActivity extends RecordActivity implements BaseView {
     @Override
     protected void search() {
         if (!incidentPresenter.isFormReady()) {
-            getRecordListFragment().showSyncFormDialog(getResources().getString(R.string.child_incident));
+            showSyncFormDialog(getResources().getString(R.string.child_incident));
             return;
         }
         turnToFeature(IncidentFeature.SEARCH, null, null);
@@ -143,6 +143,12 @@ public class IncidentActivity extends RecordActivity implements BaseView {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+    }
+
+    @Override
+    protected void sendSyncFormEvent() {
+        EventBus.getDefault().postSticky(new LoadGBVIncidentFormEvent(PrimeroAppConfiguration
+                .getCookie()));
     }
 
     @Override

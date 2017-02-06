@@ -70,18 +70,6 @@ public class CaseListFragment extends RecordListFragment {
     }
 
     @Override
-    protected void sendSyncFormEvent() {
-        User.Role roleType = PrimeroAppConfiguration.getCurrentUser().getRoleType();
-        if (roleType == User.Role.CP) {
-            EventBus.getDefault().postSticky(new LoadCPCaseFormEvent(PrimeroAppConfiguration.getCookie()));
-        }else if(roleType == User.Role.GBV){
-            EventBus.getDefault().postSticky(new LoadGBVCaseFormEvent(PrimeroAppConfiguration.getCookie()));
-        }else{
-            EventBus.getDefault().postSticky(new LoadCPCaseFormEvent(PrimeroAppConfiguration.getCookie()));
-        }
-    }
-
-    @Override
     protected RecordListAdapter createRecordListAdapter() {
         return caseListAdapter;
     }
@@ -90,7 +78,7 @@ public class CaseListFragment extends RecordListFragment {
         caseListPresenter.clearAudioFile();
 
         if (!caseListPresenter.isFormReady()) {
-            showSyncFormDialog(getResources().getString(R.string.child_case));
+            ((RecordActivity)getActivity()).showSyncFormDialog(getResources().getString(R.string.child_case));
             return;
         }
 
@@ -104,7 +92,7 @@ public class CaseListFragment extends RecordListFragment {
         caseListPresenter.clearAudioFile();
 
         if (!caseListPresenter.isFormReady()) {
-            showSyncFormDialog(getResources().getString(R.string.child_case));
+            ((RecordActivity)getActivity()).showSyncFormDialog(getResources().getString(R.string.child_case));
             return;
         }
 

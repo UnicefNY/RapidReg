@@ -12,6 +12,7 @@ import android.widget.Toast;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
+import org.unicef.rapidreg.IntentSender;
 import org.unicef.rapidreg.R;
 import org.unicef.rapidreg.base.Feature;
 import org.unicef.rapidreg.base.record.RecordActivity;
@@ -21,6 +22,7 @@ import org.unicef.rapidreg.base.record.recordregister.RecordRegisterFragment;
 import org.unicef.rapidreg.childcase.CaseActivity;
 import org.unicef.rapidreg.childcase.CaseFeature;
 import org.unicef.rapidreg.childcase.casephoto.CasePhotoAdapter;
+import org.unicef.rapidreg.event.CreateIncidentThruGBVCaseEvent;
 import org.unicef.rapidreg.event.SaveCaseEvent;
 import org.unicef.rapidreg.forms.Field;
 import org.unicef.rapidreg.service.CaseService;
@@ -42,9 +44,11 @@ import static org.unicef.rapidreg.childcase.CaseFeature.DETAILS_GBV_MINI;
 import static org.unicef.rapidreg.childcase.CaseFeature.EDIT_FULL;
 import static org.unicef.rapidreg.childcase.caseregister.CaseRegisterPresenter.MODULE_CASE_CP;
 import static org.unicef.rapidreg.service.RecordService.MODULE;
+import static org.unicef.rapidreg.service.cache.ItemValuesMap.RecordProfile.ID;
 
 public class CaseMiniFormFragment extends RecordRegisterFragment {
     public static final String TAG = CaseMiniFormFragment.class.getSimpleName();
+    private static final String CASE_ID = "case_id";
 
     @Inject
     CaseRegisterPresenter caseRegisterPresenter;
@@ -112,6 +116,15 @@ public class CaseMiniFormFragment extends RecordRegisterFragment {
         recordRegisterAdapter.setPhotoAdapter(casePhotoAdapter);
 
         return recordRegisterAdapter;
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void createIncidentThruGBVCase(CreateIncidentThruGBVCaseEvent event) {
+        Long caseId = getRecordRegisterData().getAsLong(ID);
+        Bundle extra = new Bundle();
+        extra.putLong(CASE_ID, caseId);
+
+        new IntentSender().showIncidentActivity(getActivity(), false, extra);
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)

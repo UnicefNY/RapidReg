@@ -22,6 +22,7 @@ import org.unicef.rapidreg.childcase.caselist.CaseListFragment;
 import org.unicef.rapidreg.event.LoadCPCaseFormEvent;
 import org.unicef.rapidreg.event.LoadGBVCaseFormEvent;
 import org.unicef.rapidreg.event.SaveCaseEvent;
+import org.unicef.rapidreg.model.User;
 import org.unicef.rapidreg.utils.Utils;
 
 import javax.inject.Inject;
@@ -55,6 +56,18 @@ public class CaseActivity extends RecordActivity implements BaseView {
 
         turnToFeature(CaseFeature.LIST, null, null);
 
+    }
+
+    @Override
+    protected void sendSyncFormEvent() {
+        User.Role roleType = PrimeroAppConfiguration.getCurrentUser().getRoleType();
+        if (roleType == User.Role.CP) {
+            EventBus.getDefault().postSticky(new LoadCPCaseFormEvent(PrimeroAppConfiguration.getCookie()));
+        }else if(roleType == User.Role.GBV){
+            EventBus.getDefault().postSticky(new LoadGBVCaseFormEvent(PrimeroAppConfiguration.getCookie()));
+        }else{
+            EventBus.getDefault().postSticky(new LoadCPCaseFormEvent(PrimeroAppConfiguration.getCookie()));
+        }
     }
 
     @Override
