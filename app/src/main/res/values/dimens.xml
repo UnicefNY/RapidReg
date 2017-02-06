@@ -112,6 +112,10 @@
     <!--dialog text size-->
     <dimen name="dialog_text_relativ_size">0.35sp</dimen>
     <dimen name="text_view_height">25dp</dimen>
-    <!---->
+    <!--dialog text end-->
+
+    <!--button scale start-->
+    <item name="button_icon_scale" format="float" type="dimen">1</item>
+    <!--button scale end-->
 
 </resources>
