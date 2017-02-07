@@ -14,6 +14,7 @@ import org.unicef.rapidreg.forms.Field;
 import org.unicef.rapidreg.service.cache.ItemValuesMap;
 import org.unicef.rapidreg.widgets.viewholder.AudioUploadViewHolder;
 import org.unicef.rapidreg.widgets.viewholder.BaseViewHolder;
+import org.unicef.rapidreg.widgets.viewholder.CustomViewHolder;
 import org.unicef.rapidreg.widgets.viewholder.DefaultViewHolder;
 import org.unicef.rapidreg.widgets.viewholder.GenericViewHolder;
 import org.unicef.rapidreg.widgets.viewholder.IncidentMiniFormProfileViewHolder;
@@ -48,6 +49,7 @@ public class RecordRegisterAdapter extends RecyclerView.Adapter<BaseViewHolder> 
     private static final int VIEW_HOLDER_PHOTO_UPLOAD_BOX_MINI_FORM = 9;
     private static final int VIEW_HOLDER_MINI_FORM_PROFILE = 10;
     private static final int VIEW_HOLDER_INCIDENT_MINI_FORM_PROFILE = 11;
+    private static final int VIEW_HOLDER_CUSTOM = 12;
 
     private boolean isMiniForm;
 
@@ -138,6 +140,10 @@ public class RecordRegisterAdapter extends RecyclerView.Adapter<BaseViewHolder> 
                 return new IncidentMiniFormProfileViewHolder(activity, inflater.inflate(resources
                                 .getIdentifier(PREFIX + Field.TYPE_MINI_FORM_PROFILE, LAYOUT, packageName),
                         parent, false), itemValues);
+            case VIEW_HOLDER_CUSTOM:
+                return new CustomViewHolder(activity, inflater.inflate(resources
+                        .getIdentifier(PREFIX + Field.TYPE_CUSTOM, LAYOUT, packageName),
+                        parent, false), itemValues);
             default:
                 return new DefaultViewHolder(activity, new View(activity));
         }
@@ -203,6 +209,9 @@ public class RecordRegisterAdapter extends RecyclerView.Adapter<BaseViewHolder> 
         }
         if (field.isMiniFormProfile()) {
             return VIEW_HOLDER_MINI_FORM_PROFILE;
+        }
+        if (field.isCustom()) {
+            return VIEW_HOLDER_CUSTOM;
         }
         return VIEW_HOLDER_GENERIC;
     }

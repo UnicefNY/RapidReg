@@ -27,10 +27,6 @@ public abstract class BaseViewHolder<T> extends RecyclerView.ViewHolder {
         this.itemValues = itemValues;
     }
 
-    public abstract void setValue(T field);
-
-    public abstract void setOnClickListener(T field);
-
     protected String getLabel(Field field) {
         return field.getDisplayName().get(Locale.getDefault().getLanguage());
     }
@@ -93,6 +89,10 @@ public abstract class BaseViewHolder<T> extends RecyclerView.ViewHolder {
     protected Object getResult() {
         return null;
     }
+
+    public abstract void setValue(T field);
+
+    public abstract void setOnClickListener(T field);
 
     public abstract void setFieldEditable(boolean editable);
 }

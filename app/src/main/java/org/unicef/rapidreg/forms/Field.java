@@ -32,6 +32,7 @@ public class Field {
     public static final String TYPE_RADIO_BUTTON = "radio_button";
     public static final String TYPE_NUMERIC_FIELD = "numeric_field";
     public static final String TYPE_PHOTO_VIEW_SLIDER = "record_photo_view_slider";
+    public static final String TYPE_CUSTOM = "custom";
 
     public static final String TYPE_MINI_FORM_PROFILE = "mini_form_profile";
     public static final String TYPE_INCIDENT_MINI_FORM_PROFILE = "incident_mini_form_profile";
@@ -196,6 +197,10 @@ public class Field {
         return FieldType.SUBFORM.name().equalsIgnoreCase(type);
     }
 
+    public boolean isCustom() {
+        return FieldType.CUSTOM.name().equalsIgnoreCase(type);
+    }
+
     public boolean isTextField() {
         return FieldType.TEXT_FIELD.name().equalsIgnoreCase(type);
     }
@@ -307,6 +312,7 @@ public class Field {
         MULTI_SELECT_BOX(MultipleSelectDialog.class),
         PHOTO_UPLOAD_BOX(null),
         AUDIO_UPLOAD_BOX(null),
+        CUSTOM(null),
         SUBFORM(null), ;
 
         private Class<? extends BaseDialog> clz;
