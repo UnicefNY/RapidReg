@@ -63,6 +63,7 @@ public class GBVSyncPresenter extends BaseSyncPresenter {
         this.incidentFormService = incidentFormService.get();
         this.syncIncidentService = syncIncidentService.get();
         this.syncCaseService = syncCaseService.get();
+
         initSyncRecordNumber();
     }
 
@@ -204,8 +205,7 @@ public class GBVSyncPresenter extends BaseSyncPresenter {
                         }, () -> {
                             if (getView() != null) {
                                 getView().hideSyncProgressDialog();
-//                                preDownloadIncidents();
-                                downloadCaseForm();
+                                preDownloadIncidents();
                             }
                         });
     }
@@ -341,7 +341,7 @@ public class GBVSyncPresenter extends BaseSyncPresenter {
         String internalId = tracingsJsonObject.get("_id").getAsString();
         Incident item = incidentService.getByInternalId(internalId);
         String newRev = tracingsJsonObject.get("_rev").getAsString();
-        String registrationDate = tracingsJsonObject.get("inquiry_date").getAsString();
+        String registrationDate = tracingsJsonObject.get("registration_date").getAsString();
         if (item != null) {
             item.setInternalRev(newRev);
             item.setSynced(true);
@@ -351,7 +351,7 @@ public class GBVSyncPresenter extends BaseSyncPresenter {
             item.update();
         } else {
             item = new Incident();
-            item.setUniqueId(tracingsJsonObject.get("tracing_request_id").getAsString());
+            item.setUniqueId(tracingsJsonObject.get("incident_id").getAsString());
             item.setInternalId(tracingsJsonObject.get("_id").getAsString());
             item.setInternalRev(newRev);
             item.setRegistrationDate(Utils.getRegisterDate(registrationDate));

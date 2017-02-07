@@ -46,9 +46,10 @@ public abstract class BaseSyncPresenter extends MvpBasePresenter<SyncView> {
                              FormRemoteService formRemoteService) {
         this.context = context;
         this.caseService = caseService;
-        cases = caseService.getAll();
         this.caseFormService = caseFormService;
         this.formRemoteService = formRemoteService;
+
+        cases = caseService.getAll();
     }
 
     @Override

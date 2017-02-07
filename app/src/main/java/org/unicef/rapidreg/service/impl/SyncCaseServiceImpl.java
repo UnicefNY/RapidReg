@@ -13,9 +13,7 @@ import org.unicef.rapidreg.base.record.recordphoto.PhotoConfig;
 import org.unicef.rapidreg.model.CasePhoto;
 import org.unicef.rapidreg.model.RecordModel;
 import org.unicef.rapidreg.repository.CasePhotoDao;
-import org.unicef.rapidreg.repository.impl.CasePhotoDaoImpl;
 import org.unicef.rapidreg.repository.remote.SyncCaseRepository;
-import org.unicef.rapidreg.repository.remote.SyncTracingsRepository;
 import org.unicef.rapidreg.service.BaseRetrofitService;
 import org.unicef.rapidreg.service.SyncCaseService;
 import org.unicef.rapidreg.service.cache.ItemValuesMap;
@@ -126,7 +124,7 @@ public class SyncCaseServiceImpl extends BaseRetrofitService<SyncCaseRepository>
     }
 
     public void uploadCasePhotos(final RecordModel record) {
-        List<Long> casePhotosIds = new CasePhotoDaoImpl().getIdsByCaseId(record.getId());
+        List<Long> casePhotosIds = casePhotoDao.getIdsByCaseId(record.getId());
         Observable.from(casePhotosIds)
                 .filter(casePhotoId -> true)
                 .flatMap(new Func1<Long, Observable<Pair<CasePhoto, Response<JsonElement>>>>() {
