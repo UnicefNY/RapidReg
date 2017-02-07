@@ -1,7 +1,5 @@
 package org.unicef.rapidreg.base;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -22,13 +20,11 @@ import org.unicef.rapidreg.IntentSender;
 import org.unicef.rapidreg.PrimeroApplication;
 import org.unicef.rapidreg.PrimeroAppConfiguration;
 import org.unicef.rapidreg.R;
-import org.unicef.rapidreg.base.record.RecordActivity;
 import org.unicef.rapidreg.event.CreateIncidentThruGBVCaseEvent;
 import org.unicef.rapidreg.injection.component.ActivityComponent;
 import org.unicef.rapidreg.injection.component.DaggerActivityComponent;
 import org.unicef.rapidreg.injection.module.ActivityModule;
 import org.unicef.rapidreg.model.User;
-import org.unicef.rapidreg.utils.Utils;
 
 import javax.inject.Inject;
 
@@ -136,12 +132,9 @@ public abstract class BaseActivity extends MvpActivity<BaseView, BasePresenter> 
             organizationView.setText(organisation);
         }
 
-        textViewLogoutLabel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (getContext().getSyncTask() == null) {
-                    logOut();
-                }
+        textViewLogoutLabel.setOnClickListener(view -> {
+            if (getContext().getSyncTask() == null) {
+                logOut();
             }
         });
     }
@@ -213,34 +206,16 @@ public abstract class BaseActivity extends MvpActivity<BaseView, BasePresenter> 
     }
 
     private void initToolbar() {
-        menu.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (getIntent().getBooleanExtra(IntentSender.IS_OPEN_MENU, false)) {
-                    drawer.openDrawer(GravityCompat.START);
-                } else {
-                    drawer.closeDrawer(GravityCompat.START);
-                }
+        menu.setOnClickListener(view -> {
+            if (getIntent().getBooleanExtra(IntentSender.IS_OPEN_MENU, false)) {
+                drawer.openDrawer(GravityCompat.START);
+            } else {
+                drawer.closeDrawer(GravityCompat.START);
             }
         });
-        showHideMenu.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                showHideDetail();
-            }
-        });
-        saveMenu.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                save();
-            }
-        });
-        searchMenu.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                search();
-            }
-        });
+        showHideMenu.setOnClickListener(view -> showHideDetail());
+        saveMenu.setOnClickListener(view -> save());
+        searchMenu.setOnClickListener(view -> search());
     }
 
     @OnClick(R.id.create_incident)

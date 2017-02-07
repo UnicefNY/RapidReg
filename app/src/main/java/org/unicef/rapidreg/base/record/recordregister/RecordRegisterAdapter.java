@@ -142,7 +142,7 @@ public class RecordRegisterAdapter extends RecyclerView.Adapter<BaseViewHolder> 
                         parent, false), itemValues);
             case VIEW_HOLDER_CUSTOM:
                 return new CustomViewHolder(activity, inflater.inflate(resources
-                        .getIdentifier(PREFIX + Field.TYPE_CUSTOM, LAYOUT, packageName),
+                                .getIdentifier(PREFIX + Field.TYPE_CUSTOM, LAYOUT, packageName),
                         parent, false), itemValues);
             default:
                 return new DefaultViewHolder(activity, new View(activity));

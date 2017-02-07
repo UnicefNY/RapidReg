@@ -48,7 +48,7 @@ public class CaseListPresenter extends RecordListPresenter {
 
     @Override
     public int calculateDisplayedIndex() {
-        List<Case> cases = caseService.getAll();;
+        List<Case> cases = caseService.getAll();
         return cases.isEmpty() ? HAVE_NO_RESULT : HAVE_RESULT_LIST;
     }
 }
