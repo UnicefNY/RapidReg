@@ -8,7 +8,6 @@ import org.json.JSONException;
 import org.unicef.rapidreg.base.record.recordregister.RecordRegisterFragment;
 import org.unicef.rapidreg.base.record.recordregister.RecordRegisterPresenter;
 import org.unicef.rapidreg.base.record.recordregister.RecordRegisterView.SaveRecordCallback;
-import org.unicef.rapidreg.forms.CaseTemplateForm;
 import org.unicef.rapidreg.forms.Field;
 import org.unicef.rapidreg.forms.RecordForm;
 import org.unicef.rapidreg.forms.Section;
@@ -22,8 +21,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+
 import javax.inject.Inject;
 
+import static org.unicef.rapidreg.service.CaseService.CASE_ID;
 import static org.unicef.rapidreg.service.RecordService.MODULE;
 
 
@@ -63,6 +64,11 @@ public class CaseRegisterPresenter extends RecordRegisterPresenter {
     }
 
     @Override
+    protected String getUniqueId(Bundle bundle) {
+        return bundle.getString(CASE_ID, RecordRegisterFragment.INVALID_UNIQUE_ID);
+    }
+
+    @Override
     public void saveRecord(ItemValuesMap itemValuesMap, List<String> photoPaths,
                            SaveRecordCallback callback) {
         if (!validateRequiredField(itemValuesMap)) {
@@ -89,11 +95,25 @@ public class CaseRegisterPresenter extends RecordRegisterPresenter {
         String caseJson = new String(caseItem.getContent().getBlob());
         ItemValuesMap itemValues = new ItemValuesMap(JsonUtils.toMap(new Gson().fromJson
                 (caseJson, JsonObject.class)));
-        itemValues.addStringItem(CaseService.CASE_ID, caseItem.getUniqueId());
+        itemValues.addStringItem(CASE_ID, caseItem.getUniqueId());
 
         List<String> incidentList = caseService.getIncidentsByCaseId(caseItem.getUniqueId());
         addProfileItems(itemValues, caseItem.getRegistrationDate(), caseItem.getUniqueId(),
                 incidentList, recordId);
+        return itemValues;
+    }
+
+    @Override
+    protected ItemValuesMap getItemValuesByUniqueId(String uniqueId) throws JSONException {
+        Case caseItem = caseService.getByUniqueId(uniqueId);
+        String caseJson = new String(caseItem.getContent().getBlob());
+        ItemValuesMap itemValues = new ItemValuesMap(JsonUtils.toMap(new Gson().fromJson
+                (caseJson, JsonObject.class)));
+        itemValues.addStringItem(CASE_ID, caseItem.getUniqueId());
+
+        List<String> incidentList = caseService.getIncidentsByCaseId(caseItem.getUniqueId());
+        addProfileItems(itemValues, caseItem.getRegistrationDate(), caseItem.getUniqueId(),
+                incidentList, caseItem.getId());
         return itemValues;
     }
 

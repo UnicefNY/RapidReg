@@ -25,6 +25,7 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
 
+import static org.unicef.rapidreg.base.record.recordregister.RecordRegisterFragment.INVALID_UNIQUE_ID;
 import static org.unicef.rapidreg.service.TracingService.TRACING_ID;
 import static org.unicef.rapidreg.service.TracingService.TRACING_PRIMARY_ID;
 
@@ -48,6 +49,11 @@ public class TracingRegisterPresenter extends RecordRegisterPresenter {
     @Override
     protected Long getRecordId(Bundle bundle) {
         return bundle.getLong(TRACING_PRIMARY_ID, RecordRegisterFragment.INVALID_RECORD_ID);
+    }
+
+    @Override
+    protected String getUniqueId(Bundle bundle) {
+        return bundle.getString(TRACING_ID, RecordRegisterFragment.INVALID_UNIQUE_ID);
     }
 
     @Override
@@ -76,6 +82,18 @@ public class TracingRegisterPresenter extends RecordRegisterPresenter {
         final ItemValuesMap itemValues = new ItemValuesMap(JsonUtils.toMap(new Gson().fromJson(tracingJson, JsonObject.class)));
         itemValues.addStringItem(TRACING_ID, tracingItem.getUniqueId());
         addProfileItems(itemValues, tracingItem.getRegistrationDate(), tracingItem.getUniqueId(), null,
+                tracingItem.getId());
+
+        return itemValues;
+    }
+
+    @Override
+    protected ItemValuesMap getItemValuesByUniqueId(String uniqueId) throws JSONException {
+        Tracing tracingItem = tracingService.getByUniqueId(uniqueId);
+        String tracingJson = new String(tracingItem.getContent().getBlob());
+        final ItemValuesMap itemValues = new ItemValuesMap(JsonUtils.toMap(new Gson().fromJson(tracingJson, JsonObject.class)));
+        itemValues.addStringItem(TRACING_ID, tracingItem.getUniqueId());
+        addProfileItems(itemValues, tracingItem.getRegistrationDate(), uniqueId, null,
                 tracingItem.getId());
 
         return itemValues;

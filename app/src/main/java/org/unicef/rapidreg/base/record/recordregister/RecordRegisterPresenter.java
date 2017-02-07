@@ -8,6 +8,7 @@ import com.hannesdorfmann.mosby.mvp.MvpFragment;
 
 import org.json.JSONException;
 import org.unicef.rapidreg.base.record.recordregister.RecordRegisterView.SaveRecordCallback;
+import org.unicef.rapidreg.event.RedirectIncidentEvent;
 import org.unicef.rapidreg.forms.Field;
 import org.unicef.rapidreg.forms.RecordForm;
 import org.unicef.rapidreg.service.RecordService;
@@ -18,12 +19,15 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 
 import static org.unicef.rapidreg.base.record.recordregister.RecordRegisterFragment
         .INVALID_RECORD_ID;
+import static org.unicef.rapidreg.base.record.recordregister.RecordRegisterFragment.INVALID_UNIQUE_ID;
 import static org.unicef.rapidreg.base.record.recordregister.RecordRegisterFragment.ITEM_VALUES;
+import static org.unicef.rapidreg.service.cache.ItemValuesMap.RecordProfile.INCIDENT_LINKS;
 
 public abstract class RecordRegisterPresenter extends MvpBasePresenter<RecordRegisterView> {
 
@@ -77,8 +81,11 @@ public abstract class RecordRegisterPresenter extends MvpBasePresenter<RecordReg
         }
 
         if (incidentIds != null) {
-            itemValues.addListItem(ItemValuesMap.RecordProfile.INCIDENT_LINKS,
-                    incidentIds);
+            LinkedHashMap<String, RedirectIncidentEvent> incidentEvents = new LinkedHashMap<>();
+            for (String incidentId : incidentIds) {
+                incidentEvents.put(incidentId, new RedirectIncidentEvent(incidentId));
+            }
+            itemValues.addLinkedHashMap(INCIDENT_LINKS, incidentEvents);
         }
 
     }
@@ -97,6 +104,15 @@ public abstract class RecordRegisterPresenter extends MvpBasePresenter<RecordReg
         Bundle bundle = ((MvpFragment) getView()).getArguments();
         if (bundle == null) {
             return new ItemValuesMap();
+        }
+
+        if (!INVALID_UNIQUE_ID.equals(getUniqueId(bundle))) {
+            try {
+                return getItemValuesByUniqueId(getUniqueId(bundle));
+            } catch (JSONException e) {
+                Log.e(TAG, "Json conversion error");
+                return new ItemValuesMap();
+            }
         }
 
         if (getRecordId(bundle) == INVALID_RECORD_ID) {
@@ -142,9 +158,13 @@ public abstract class RecordRegisterPresenter extends MvpBasePresenter<RecordReg
 
     protected abstract ItemValuesMap getItemValuesByRecordId(Long recordId) throws JSONException;
 
+    protected abstract ItemValuesMap getItemValuesByUniqueId(String uniqueId) throws JSONException;
+
     protected abstract List<String> getPhotoPathsByRecordId(Long recordId);
 
     protected abstract Long getRecordId(Bundle bundle);
+
+    protected abstract String getUniqueId(Bundle bundle);
 
     protected abstract List<Field> getFields();
 

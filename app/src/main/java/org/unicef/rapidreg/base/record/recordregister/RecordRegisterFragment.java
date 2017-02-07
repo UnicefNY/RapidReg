@@ -42,6 +42,7 @@ public abstract class RecordRegisterFragment extends MvpFragment<RecordRegisterV
     protected static final int[] ANIM_TO_MINI = {android.R.anim.slide_in_left, android.R.anim
             .slide_out_right};
     public static final int INVALID_RECORD_ID = -100;
+    public static final String INVALID_UNIQUE_ID = "";
     private static final String SUBFORM_STATE = "subform_state";
     private static final String SAVED_STATE_ID = "internalSavedViewState8954201239547";
 
