@@ -4,6 +4,7 @@ import com.google.gson.JsonElement;
 
 import org.unicef.rapidreg.PrimeroAppConfiguration;
 import org.unicef.rapidreg.model.Incident;
+import org.unicef.rapidreg.repository.remote.SyncTracingsRepository;
 import org.unicef.rapidreg.service.BaseRetrofitService;
 import org.unicef.rapidreg.service.SyncIncidentService;
 
@@ -12,7 +13,7 @@ import rx.Observable;
 
 public class SyncIncidentServiceImpl extends BaseRetrofitService implements SyncIncidentService {
     public SyncIncidentServiceImpl() {
-        createRetrofit();
+        super(SyncTracingsRepository.class);
     }
 
     @Override

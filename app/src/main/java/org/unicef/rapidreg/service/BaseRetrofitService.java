@@ -4,12 +4,7 @@ import com.facebook.stetho.okhttp3.StethoInterceptor;
 
 import org.unicef.rapidreg.BuildConfig;
 
-import java.io.IOException;
-import java.security.KeyManagementException;
 import java.security.KeyStore;
-import java.security.KeyStoreException;
-import java.security.NoSuchAlgorithmException;
-import java.security.cert.CertificateException;
 import java.util.concurrent.TimeUnit;
 
 import javax.net.ssl.SSLContext;
@@ -20,10 +15,28 @@ import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public abstract class BaseRetrofitService {
-    protected abstract String getBaseUrl();
-
+public abstract class BaseRetrofitService<T> {
+    private T repository;
     private Retrofit retrofit;
+
+    public BaseRetrofitService() {
+    }
+
+    public BaseRetrofitService(Class<T> repositoryClass) {
+        repository = createRetrofit().create(repositoryClass);
+    }
+
+    protected Retrofit createRetrofit() {
+        retrofit = new Retrofit.Builder()
+                .baseUrl(getBaseUrl())
+                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
+                .addConverterFactory(GsonConverterFactory.create())
+                .client(getClient())
+                .build();
+        return retrofit;
+    }
+
+    protected abstract String getBaseUrl();
 
     private OkHttpClient getClient() {
         OkHttpClient.Builder builder = new OkHttpClient.Builder();
@@ -38,14 +51,17 @@ public abstract class BaseRetrofitService {
         return builder.build();
     }
 
-    protected Retrofit createRetrofit() {
-        retrofit = new Retrofit.Builder()
-                .baseUrl(getBaseUrl())
-                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
-                .addConverterFactory(GsonConverterFactory.create())
-                .client(getClient())
-                .build();
-        return retrofit;
+    public T getRepository() {
+        if (repository == null) {
+            throw new IllegalStateException("Repository is not specified, Repository Class<T> must be passed via " +
+                    "constructor");
+        }
+        return repository;
+    }
+
+    public T getRepository(Class<T> repositoryClass) {
+        repository = createRetrofit().create(repositoryClass);
+        return repository;
     }
 
     private SSLContext getSSLContext() {

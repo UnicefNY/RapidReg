@@ -20,21 +20,19 @@ import org.unicef.rapidreg.utils.TextUtils;
 import java.util.List;
 
 import okhttp3.Headers;
-import retrofit2.Response;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Action1;
 import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
 
-public class LoginServiceImpl extends BaseRetrofitService implements org.unicef.rapidreg.service.LoginService {
+public class LoginServiceImpl extends BaseRetrofitService<LoginRepository> implements org.unicef.rapidreg.service
+        .LoginService {
     private static final String TAG = LoginServiceImpl.class.getSimpleName();
 
     private ConnectivityManager connectivityManager;
     private TelephonyManager telephonyManager;
 
     private UserDao userDao;
-    private LoginRepository loginRepository;
 
     private CompositeSubscription compositeSubscription;
 
@@ -60,10 +58,9 @@ public class LoginServiceImpl extends BaseRetrofitService implements org.unicef.
                             String imei,
                             final LoginCallback callback) {
         //TODO change hard code to be value from param
-         loginRepository = createRetrofit().create(LoginRepository.class);
         final LoginRequestBody loginRequestBody = new LoginRequestBody(username, password, "15555215554",
                 "8fd2274a590497e9");
-        Subscription subscription = loginRepository
+        Subscription subscription = getRepository(LoginRepository.class)
                 .login(loginRequestBody)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -96,9 +93,9 @@ public class LoginServiceImpl extends BaseRetrofitService implements org.unicef.
 
         if (LoginService.VerifiedCode.OK == verifiedCode) {
             callback.onSuccessful("", userDao.getUser(username, url));
-        } else if (VerifiedCode.OFFLINE_PASSWORD_INCORRECT == verifiedCode){
+        } else if (VerifiedCode.OFFLINE_PASSWORD_INCORRECT == verifiedCode) {
             callback.onError(verifiedCode.ordinal());
-        }else{
+        } else {
             callback.onFailed(null);
         }
     }
