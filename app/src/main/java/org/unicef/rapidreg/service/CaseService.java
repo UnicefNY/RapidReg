@@ -60,6 +60,14 @@ public class CaseService extends RecordService {
         return caseDao.getCaseById(caseId);
     }
 
+    public List<String> getIncidentsByCaseId(String caseUniqueId) {
+        List<Incident> incidents = incidentDao.getAllIncidentsByCaseUniqueId(caseUniqueId);
+        if (incidents == null || incidents.isEmpty()) {
+            return null;
+        }
+        return extractUniqueIds(incidents);
+    }
+
     public List<Long> getAllOrderByDateASC() {
         return extractIds(caseDao.getAllCasesOrderByDate(true, PrimeroAppConfiguration.getCurrentUsername(),
                 TextUtils.lintUrl(PrimeroAppConfiguration.getApiBaseUrl())));
@@ -78,14 +86,6 @@ public class CaseService extends RecordService {
     public List<Long> getAllOrderByAgeDES() {
         return extractIds(caseDao.getAllCasesOrderByAge(false, PrimeroAppConfiguration.getCurrentUsername(),
                 TextUtils.lintUrl(PrimeroAppConfiguration.getApiBaseUrl())));
-    }
-
-    public List<Long> extractIds(List<Case> cases) {
-        List<Long> result = new ArrayList<>();
-        for (Case aCase : cases) {
-            result.add(aCase.getId());
-        }
-        return result;
     }
 
     public List<Long> getCPSearchResult(String shortId, String name, int ageFrom, int ageTo,
