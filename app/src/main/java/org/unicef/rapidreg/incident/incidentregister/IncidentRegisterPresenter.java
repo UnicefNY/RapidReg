@@ -61,7 +61,7 @@ public class IncidentRegisterPresenter extends RecordRegisterPresenter {
         clearProfileItems(itemValuesMap);
         try {
             Incident record = incidentService.saveOrUpdate(itemValuesMap);
-            addProfileItems(itemValuesMap, record.getRegistrationDate(), record.getUniqueId(),
+            addProfileItems(itemValuesMap, record.getRegistrationDate(), record.getUniqueId(), null,
                     record.getId());
             callback.onSaveSuccessful(record.getId());
         } catch (IOException e) {
@@ -77,8 +77,8 @@ public class IncidentRegisterPresenter extends RecordRegisterPresenter {
                 (incidentJson, JsonObject.class)));
         itemValues.addStringItem(IncidentService.INCIDENT_ID, incidentItem.getUniqueId());
 
-        addProfileItems(itemValues, incidentItem.getRegistrationDate(), incidentItem.getUniqueId
-                (), recordId);
+        addProfileItems(itemValues, incidentItem.getRegistrationDate(),
+                incidentItem.getUniqueId(), null, recordId);
 
         return itemValues;
     }

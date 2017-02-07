@@ -21,8 +21,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 
-import javax.inject.Inject;
-
 import static org.unicef.rapidreg.base.record.recordregister.RecordRegisterFragment
         .INVALID_RECORD_ID;
 import static org.unicef.rapidreg.base.record.recordregister.RecordRegisterFragment.ITEM_VALUES;
@@ -67,7 +65,7 @@ public abstract class RecordRegisterPresenter extends MvpBasePresenter<RecordReg
 
 
     public void addProfileItems(ItemValuesMap itemValues, Date registrationDate, String
-            uniqueId, long recordId) {
+            uniqueId, List<String> incidentIds, long recordId) {
         String shortUUID = recordService.getShortUUID(uniqueId);
         DateFormat dateFormat = SimpleDateFormat.getDateInstance(DateFormat.MEDIUM, Locale.US);
         itemValues.addStringItem(ItemValuesMap.RecordProfile.ID_NORMAL_STATE, shortUUID);
@@ -77,6 +75,12 @@ public abstract class RecordRegisterPresenter extends MvpBasePresenter<RecordReg
             itemValues.addStringItem(ItemValuesMap.RecordProfile.REGISTRATION_DATE,
                     dateFormat.format(registrationDate));
         }
+
+        if (incidentIds != null) {
+            itemValues.addListItem(ItemValuesMap.RecordProfile.INCIDENT_LINKS,
+                    incidentIds);
+        }
+
     }
 
     public void clearProfileItems(ItemValuesMap itemValues) {

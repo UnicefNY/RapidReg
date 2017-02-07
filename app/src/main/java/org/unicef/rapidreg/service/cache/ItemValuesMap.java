@@ -48,6 +48,9 @@ public class ItemValuesMap implements Serializable {
         values.put(itemKey, value);
     }
 
+    public void addListItem(String itemkey, List value) {
+        values.put(itemkey, value);
+    }
 
     public Boolean getAsBoolean(String key) {
         if (values.get(key) == null) {
@@ -137,6 +140,7 @@ public class ItemValuesMap implements Serializable {
         public static final String ID_NORMAL_STATE = "_id_normal_state";
         public static final String REGISTRATION_DATE = "_registration_date";
         public static final String ID = "_id";
+        public static final String INCIDENT_LINKS = "incident_links";
     }
 
     public ItemValuesMap copy() {
