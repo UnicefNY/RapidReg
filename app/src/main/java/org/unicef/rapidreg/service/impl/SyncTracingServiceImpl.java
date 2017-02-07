@@ -49,9 +49,8 @@ public class SyncTracingServiceImpl extends BaseRetrofitService implements SyncT
 
     public SyncTracingServiceImpl(TracingPhotoDao
             tracingPhotoDao) {
-        createRetrofit();
         this.tracingPhotoDao = tracingPhotoDao;
-        syncTracingsRepository = getRetrofit().create(SyncTracingsRepository.class);
+        syncTracingsRepository = createRetrofit().create(SyncTracingsRepository.class);
     }
 
     public Observable<Response<ResponseBody>> getPhoto(String id, String photoKey, String
