@@ -73,8 +73,10 @@ public class CaseRegisterPresenter extends RecordRegisterPresenter {
         clearProfileItems(itemValuesMap);
         try {
             Case record = caseService.saveOrUpdate(itemValuesMap, photoPaths);
+
+            List<String> incidentList = caseService.getIncidentsByCaseId(record.getUniqueId());
             addProfileItems(itemValuesMap, record.getRegistrationDate(), record.getUniqueId(),
-                    record.getId());
+                    incidentList, record.getId());
             callback.onSaveSuccessful(record.getId());
         } catch (IOException e) {
             callback.onSavedFail();
@@ -89,8 +91,9 @@ public class CaseRegisterPresenter extends RecordRegisterPresenter {
                 (caseJson, JsonObject.class)));
         itemValues.addStringItem(CaseService.CASE_ID, caseItem.getUniqueId());
 
+        List<String> incidentList = caseService.getIncidentsByCaseId(caseItem.getUniqueId());
         addProfileItems(itemValues, caseItem.getRegistrationDate(), caseItem.getUniqueId(),
-                recordId);
+                incidentList, recordId);
         return itemValues;
     }
 

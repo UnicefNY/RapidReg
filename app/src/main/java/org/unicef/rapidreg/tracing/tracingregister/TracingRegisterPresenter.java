@@ -61,7 +61,7 @@ public class TracingRegisterPresenter extends RecordRegisterPresenter {
         clearProfileItems(itemValuesMap);
         try {
             Tracing record = tracingService.saveOrUpdate(itemValuesMap, photoPaths);
-            addProfileItems(itemValuesMap, record.getRegistrationDate(), record.getUniqueId(),
+            addProfileItems(itemValuesMap, record.getRegistrationDate(), record.getUniqueId(), null,
                     record.getId());
             callback.onSaveSuccessful(record.getId());
         } catch (IOException e) {
@@ -75,7 +75,7 @@ public class TracingRegisterPresenter extends RecordRegisterPresenter {
         String tracingJson = new String(tracingItem.getContent().getBlob());
         final ItemValuesMap itemValues = new ItemValuesMap(JsonUtils.toMap(new Gson().fromJson(tracingJson, JsonObject.class)));
         itemValues.addStringItem(TRACING_ID, tracingItem.getUniqueId());
-        addProfileItems(itemValues, tracingItem.getRegistrationDate(), tracingItem.getUniqueId(),
+        addProfileItems(itemValues, tracingItem.getRegistrationDate(), tracingItem.getUniqueId(), null,
                 tracingItem.getId());
 
         return itemValues;
