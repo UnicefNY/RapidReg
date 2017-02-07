@@ -14,6 +14,8 @@ import org.unicef.rapidreg.service.LoginService;
 
 import javax.inject.Inject;
 
+import dagger.Lazy;
+
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -39,7 +41,7 @@ public class LoginPresenterTest {
     public void setUp() throws Exception {
         initMocks(this);
 
-        loginPresenter = new LoginPresenter(loginService);
+        loginPresenter = new LoginPresenter(() -> loginService);
         loginPresenter.attachView(loginView);
     }
 
