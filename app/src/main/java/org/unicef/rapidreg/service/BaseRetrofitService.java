@@ -1,8 +1,5 @@
 package org.unicef.rapidreg.service;
 
-import android.content.Context;
-import android.util.Log;
-
 import com.facebook.stetho.okhttp3.StethoInterceptor;
 
 import org.unicef.rapidreg.BuildConfig;
@@ -12,15 +9,10 @@ import java.security.KeyManagementException;
 import java.security.KeyStore;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
-import java.security.cert.Certificate;
 import java.security.cert.CertificateException;
-import java.security.cert.X509Certificate;
-import java.util.Enumeration;
 import java.util.concurrent.TimeUnit;
 
-import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.SSLContext;
-import javax.net.ssl.SSLSession;
 import javax.net.ssl.TrustManagerFactory;
 
 import okhttp3.OkHttpClient;
@@ -29,7 +21,6 @@ import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public abstract class BaseRetrofitService {
-
     protected abstract String getBaseUrl();
 
     private Retrofit retrofit;
@@ -57,13 +48,7 @@ public abstract class BaseRetrofitService {
         return retrofit;
     }
 
-
-    public Retrofit getRetrofit() {
-        return retrofit;
-    }
-
     private SSLContext getSSLContext() {
-
         try {
             KeyStore ks = KeyStore.getInstance("AndroidCAStore");
             if (ks != null) {
@@ -80,23 +65,10 @@ public abstract class BaseRetrofitService {
             sslContext.init(null, tmf.getTrustManagers(), null);
 
             return sslContext;
-        } catch (KeyStoreException e) {
-            e.printStackTrace();
-            return null;
-        } catch (IOException e) {
-            e.printStackTrace();
-            return null;
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-            return null;
-        } catch (CertificateException e) {
-            e.printStackTrace();
-            return null;
-        } catch (KeyManagementException e) {
+        } catch (Exception e) {
             e.printStackTrace();
             return null;
         }
-
     }
 }
 
