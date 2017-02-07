@@ -20,6 +20,7 @@ public class FormRemoteServiceImpl extends BaseRetrofitService implements FormRe
     private FormRepository formRepository;
 
     public FormRemoteServiceImpl() {
+        formRepository = createRetrofit().create(FormRepository.class);
     }
 
     @Override
@@ -27,15 +28,8 @@ public class FormRemoteServiceImpl extends BaseRetrofitService implements FormRe
         return PrimeroAppConfiguration.getApiBaseUrl();
     }
 
-    public void init() {
-        if (formRepository == null) {
-            formRepository = createRetrofit().create(FormRepository.class);
-        }
-    }
-
     public Observable<CaseTemplateForm> getCaseForm(String cookie, String locale,
                                                     Boolean isMobile, String parentForm, String moduleId) {
-        init();
         return formRepository.getCaseForm(cookie, locale, isMobile, parentForm, moduleId)
                 .flatMap(new Func1<CaseTemplateForm, Observable<CaseTemplateForm>>() {
                     @Override
@@ -54,7 +48,6 @@ public class FormRemoteServiceImpl extends BaseRetrofitService implements FormRe
 
     public Observable<TracingTemplateForm> getTracingForm(String cookie, String locale,
                                                           Boolean isMobile, String parentForm, String moduleId) {
-        init();
         return formRepository.getTracingForm(cookie, locale, isMobile, parentForm, moduleId)
                 .flatMap(new Func1<TracingTemplateForm, Observable<TracingTemplateForm>>() {
                     @Override

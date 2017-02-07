@@ -43,9 +43,8 @@ public class SyncCaseServiceImpl extends BaseRetrofitService implements SyncCase
     }
 
     public SyncCaseServiceImpl(CasePhotoDao casePhotoDao) {
-        createRetrofit();
         this.casePhotoDao = casePhotoDao;
-        syncCaseRepository = getRetrofit().create(SyncCaseRepository.class);
+        syncCaseRepository = createRetrofit().create(SyncCaseRepository.class);
     }
 
     public Observable<Response<ResponseBody>> getCasePhoto(String id, String photoKey, int

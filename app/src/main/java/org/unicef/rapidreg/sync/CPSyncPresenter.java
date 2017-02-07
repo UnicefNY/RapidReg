@@ -40,6 +40,7 @@ import java.util.Locale;
 
 import javax.inject.Inject;
 
+import dagger.Lazy;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Response;
@@ -51,7 +52,7 @@ import rx.schedulers.Schedulers;
 public class CPSyncPresenter extends BaseSyncPresenter {
     private static final String TAG = CPSyncPresenter.class.getSimpleName();
 
-    private SyncCaseService syncService;
+    private SyncCaseService syncCaseService;
     private SyncTracingService syncTracingService;
     private TracingService tracingService;
     private CasePhotoService casePhotoService;
@@ -62,21 +63,21 @@ public class CPSyncPresenter extends BaseSyncPresenter {
 
     @Inject
     public CPSyncPresenter(@ActivityContext Context context,
-                           SyncCaseService syncCaseService,
-                           SyncTracingService syncTracingService,
+                           Lazy<SyncCaseService> syncCaseService,
+                           Lazy<SyncTracingService> syncTracingService,
                            CaseService caseService,
                            CasePhotoService casePhotoService,
                            TracingPhotoService tracingPhotoService,
                            TracingService tracingService,
                            CaseFormService caseFormService,
                            TracingFormService tracingFormService,
-                           FormRemoteService formRemoteService) {
-        super(context, caseService, caseFormService, formRemoteService);
-        this.syncService = syncCaseService;
+                           Lazy<FormRemoteService> formRemoteService) {
+        super(context, caseService, caseFormService, formRemoteService.get());
+        this.syncCaseService = syncCaseService.get();
+        this.syncTracingService = syncTracingService.get();
         this.casePhotoService = casePhotoService;
         this.tracingService = tracingService;
         this.tracingPhotoService = tracingPhotoService;
-        this.syncTracingService = syncTracingService;
         this.tracingFormService = tracingFormService;
         initSyncRecordNumber();
     }
@@ -95,9 +96,9 @@ public class CPSyncPresenter extends BaseSyncPresenter {
         isSyncing = true;
         Observable.from(caseList)
                 .filter(item -> isSyncing && !item.isSynced())
-                .map(item -> new Pair<>(item, syncService.uploadCaseJsonProfile(item)))
+                .map(item -> new Pair<>(item, syncCaseService.uploadCaseJsonProfile(item)))
                 .map(pair -> {
-                    syncService.uploadAudio(pair.first);
+                    syncCaseService.uploadAudio(pair.first);
                     return pair;
                 })
                 .map(caseResponsePair -> {
@@ -110,13 +111,13 @@ public class CPSyncPresenter extends BaseSyncPresenter {
                                 .getAsString();
                         okhttp3.Response response = null;
                         if (photoKeys.size() != 0) {
-                            Call<Response<JsonElement>> call = syncService.deleteCasePhotos
+                            Call<Response<JsonElement>> call = syncCaseService.deleteCasePhotos
                                     (id, photoKeys);
                             response = call.execute().raw();
                         }
 
                         if (response == null || response.isSuccessful()) {
-                            syncService.uploadCasePhotos(caseResponsePair.first);
+                            syncCaseService.uploadCasePhotos(caseResponsePair.first);
                         }
                     } catch (IOException e) {
                         e.printStackTrace();
@@ -144,7 +145,6 @@ public class CPSyncPresenter extends BaseSyncPresenter {
 
     private void upLoadTracing(List<Tracing> tracingList) {
         isSyncing = true;
-        long startTime = System.currentTimeMillis();
         Observable.from(tracingList)
                 .filter(item -> isSyncing && !item.isSynced())
                 .map(item -> new Pair<>(item, syncTracingService.uploadJsonProfile(item)))
@@ -209,7 +209,7 @@ public class CPSyncPresenter extends BaseSyncPresenter {
         final List<JsonObject> downList = new ArrayList<>();
         final ProgressDialog loadingDialog = getView().showFetchingCaseAmountLoadingDialog();
 
-        syncService.getCasesIds(time, true)
+        syncCaseService.getCasesIds(time, true)
                 .map(jsonElementResponse -> {
                     if (jsonElementResponse.isSuccessful()) {
                         JsonElement jsonElement = jsonElementResponse.body();
@@ -250,7 +250,7 @@ public class CPSyncPresenter extends BaseSyncPresenter {
         Observable.from(objects)
                 .filter(jsonObject -> isSyncing)
                 .map(jsonObject -> {
-                    Observable<Response<JsonElement>> responseObservable = syncService
+                    Observable<Response<JsonElement>> responseObservable = syncCaseService
                             .getCase(jsonObject.get("_id")
                                     .getAsString(), "en", true);
                     Response<JsonElement> response = responseObservable.toBlocking().first();
@@ -265,7 +265,7 @@ public class CPSyncPresenter extends BaseSyncPresenter {
                     JsonObject responseJsonObject = response.body().getAsJsonObject();
                     if (responseJsonObject.has("recorded_audio")) {
                         String id = responseJsonObject.get("_id").getAsString();
-                        Response<ResponseBody> audioResponse = syncService.getCaseAudio(id)
+                        Response<ResponseBody> audioResponse = syncCaseService.getCaseAudio(id)
                                 .toBlocking().first();
                         if (!audioResponse.isSuccessful()) {
                             throw new RuntimeException();
@@ -304,7 +304,7 @@ public class CPSyncPresenter extends BaseSyncPresenter {
                 .map(jsonObject -> {
                     String id = jsonObject.get("_id").getAsString();
                     String photoKey = jsonObject.get("photo_key").getAsString();
-                    Response<ResponseBody> response = syncService.getCasePhoto(id, photoKey,
+                    Response<ResponseBody> response = syncCaseService.getCasePhoto(id, photoKey,
                             PhotoConfig.RESIZE_FOR_WEB)
                             .toBlocking()
                             .first();
