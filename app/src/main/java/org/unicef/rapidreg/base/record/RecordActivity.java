@@ -145,12 +145,7 @@ public abstract class RecordActivity extends BaseActivity {
                 .setTitle(R.string.sync_forms)
                 .setMessage(String.format("%s %s", message, getResources().getString(R.string
                         .sync_forms_message)))
-                .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        sendSyncFormEvent();
-                    }
-                })
+                .setPositiveButton(R.string.ok, (dialog1, which) -> sendSyncFormEvent())
                 .setNegativeButton(R.string.cancel, null)
                 .show();
         Utils.changeDialogDividerColor(this, dialog);

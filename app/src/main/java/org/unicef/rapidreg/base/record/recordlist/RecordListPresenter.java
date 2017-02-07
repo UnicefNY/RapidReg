@@ -18,8 +18,7 @@ public abstract class RecordListPresenter extends MvpBasePresenter<RecordListVie
         this.recordService = recordService;
     }
 
-    public void
-    clearAudioFile() {
+    public void clearAudioFile() {
         Utils.clearAudioFile(AUDIO_FILE_PATH);
     }
 
