@@ -47,6 +47,11 @@ public class IncidentRegisterPresenter extends RecordRegisterPresenter {
     }
 
     @Override
+    protected String getUniqueId(Bundle bundle) {
+        return bundle.getString(IncidentService.INCIDENT_ID, RecordRegisterFragment.INVALID_UNIQUE_ID);
+    }
+
+    @Override
     public void saveRecord(ItemValuesMap itemValuesMap, List<String> photoPaths,
                            RecordRegisterView.SaveRecordCallback callback) {
 
@@ -79,6 +84,20 @@ public class IncidentRegisterPresenter extends RecordRegisterPresenter {
 
         addProfileItems(itemValues, incidentItem.getRegistrationDate(),
                 incidentItem.getUniqueId(), null, recordId);
+
+        return itemValues;
+    }
+
+    @Override
+    protected ItemValuesMap getItemValuesByUniqueId(String uniqueId) throws JSONException {
+        Incident incidentItem = incidentService.getByUniqueId(uniqueId);
+        String incidentJson = new String(incidentItem.getContent().getBlob());
+        final ItemValuesMap itemValues = new ItemValuesMap(JsonUtils.toMap(new Gson().fromJson
+                (incidentJson, JsonObject.class)));
+        itemValues.addStringItem(IncidentService.INCIDENT_ID, incidentItem.getUniqueId());
+
+        addProfileItems(itemValues, incidentItem.getRegistrationDate(),
+                incidentItem.getUniqueId(), null, incidentItem.getId());
 
         return itemValues;
     }

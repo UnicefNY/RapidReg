@@ -60,6 +60,10 @@ public class CaseService extends RecordService {
         return caseDao.getCaseById(caseId);
     }
 
+    public Case getByUniqueId(String uniqueId) {
+        return caseDao.getCaseByUniqueId(uniqueId);
+    }
+
     public List<String> getIncidentsByCaseId(String caseUniqueId) {
         List<Incident> incidents = incidentDao.getAllIncidentsByCaseUniqueId(caseUniqueId);
         if (incidents == null || incidents.isEmpty()) {
