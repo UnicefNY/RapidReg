@@ -15,6 +15,7 @@ import org.unicef.rapidreg.PrimeroAppConfiguration;
 import org.unicef.rapidreg.R;
 import org.unicef.rapidreg.base.BaseAlertDialog;
 import org.unicef.rapidreg.base.BaseView;
+import org.unicef.rapidreg.base.Feature;
 import org.unicef.rapidreg.base.record.RecordActivity;
 import org.unicef.rapidreg.base.record.recordlist.RecordListFragment;
 import org.unicef.rapidreg.event.LoadGBVIncidentFormEvent;
@@ -25,6 +26,9 @@ import org.unicef.rapidreg.utils.Utils;
 import javax.inject.Inject;
 
 import static org.unicef.rapidreg.IntentSender.BUNDLE_EXTRA;
+import static org.unicef.rapidreg.service.CaseService.CASE_ID;
+import static org.unicef.rapidreg.service.IncidentService.INCIDENT_ID;
+import static org.unicef.rapidreg.service.IncidentService.INCIDENT_PRIMARY_ID;
 import static org.unicef.rapidreg.service.RecordService.AUDIO_FILE_PATH;
 
 public class IncidentActivity extends RecordActivity implements BaseView {
@@ -55,8 +59,12 @@ public class IncidentActivity extends RecordActivity implements BaseView {
                 showQuitDialog(R.id.nav_cases);
                 return;
             }
+
             Bundle extra = getIntent().getBundleExtra(BUNDLE_EXTRA);
-            turnToFeature(IncidentFeature.ADD_MINI, extra, null);
+            Feature turnFeature = extra.containsKey(CASE_ID) ? IncidentFeature.ADD_MINI :
+                    extra.containsKey(INCIDENT_ID) ? IncidentFeature.DETAILS_MINI : IncidentFeature.LIST;
+
+            turnToFeature(turnFeature, extra, null);
         }
     }
 

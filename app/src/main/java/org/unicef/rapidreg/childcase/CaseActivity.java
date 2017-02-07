@@ -21,12 +21,14 @@ import org.unicef.rapidreg.base.record.recordlist.RecordListFragment;
 import org.unicef.rapidreg.childcase.caselist.CaseListFragment;
 import org.unicef.rapidreg.event.LoadCPCaseFormEvent;
 import org.unicef.rapidreg.event.LoadGBVCaseFormEvent;
+import org.unicef.rapidreg.event.RedirectIncidentEvent;
 import org.unicef.rapidreg.event.SaveCaseEvent;
 import org.unicef.rapidreg.model.User;
 import org.unicef.rapidreg.utils.Utils;
 
 import javax.inject.Inject;
 
+import static org.unicef.rapidreg.service.IncidentService.INCIDENT_ID;
 import static org.unicef.rapidreg.service.RecordService.AUDIO_FILE_PATH;
 
 public class CaseActivity extends RecordActivity implements BaseView {
@@ -174,6 +176,15 @@ public class CaseActivity extends RecordActivity implements BaseView {
     public void onNeedLoadCPCaseFormsEvent(LoadCPCaseFormEvent event) {
         EventBus.getDefault().removeStickyEvent(event);
         casePresenter.loadCaseForm(PrimeroAppConfiguration.MODULE_ID_CP);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN, priority = 1)
+    public void onRedirectIncidentEvent(RedirectIncidentEvent event) {
+        String incidentId = event.getIncidentInfo();
+        Bundle extra = new Bundle();
+        extra.putString(INCIDENT_ID, incidentId);
+
+        intentSender.showIncidentActivity(this, false, extra);
     }
 
     @Override

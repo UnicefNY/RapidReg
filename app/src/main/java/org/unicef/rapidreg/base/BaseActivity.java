@@ -20,6 +20,7 @@ import org.unicef.rapidreg.IntentSender;
 import org.unicef.rapidreg.PrimeroApplication;
 import org.unicef.rapidreg.PrimeroAppConfiguration;
 import org.unicef.rapidreg.R;
+import org.unicef.rapidreg.childcase.CaseActivity;
 import org.unicef.rapidreg.event.CreateIncidentThruGBVCaseEvent;
 import org.unicef.rapidreg.injection.component.ActivityComponent;
 import org.unicef.rapidreg.injection.component.DaggerActivityComponent;
@@ -238,9 +239,14 @@ public abstract class BaseActivity extends MvpActivity<BaseView, BasePresenter> 
         } else if (feature.isEditMode()) {
             saveMenu.setVisibility(View.VISIBLE);
         } else if (feature.isDetailMode()) {
-            if (GBV == PrimeroAppConfiguration.getCurrentUser().getRoleType()) {
-                createIncidentBtn.setVisibility(View.VISIBLE);
-            }
+            enableCreateIncidentBtn();
+        }
+    }
+
+    private void enableCreateIncidentBtn() {
+        if (GBV == PrimeroAppConfiguration.getCurrentUser().getRoleType() &&
+                this instanceof CaseActivity) {
+            createIncidentBtn.setVisibility(View.VISIBLE);
         }
     }
 
