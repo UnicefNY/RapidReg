@@ -7,6 +7,7 @@ import java.io.Serializable;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -50,6 +51,10 @@ public class ItemValuesMap implements Serializable {
 
     public void addListItem(String itemkey, List value) {
         values.put(itemkey, value);
+    }
+
+    public void addLinkedHashMap(String itemKey, LinkedHashMap map) {
+        values.put(itemKey, map);
     }
 
     public Boolean getAsBoolean(String key) {
@@ -96,6 +101,13 @@ public class ItemValuesMap implements Serializable {
     public List<Map<String, Object>> getChildrenAsJsonArray(String childName) {
         if (values.containsKey(childName)) {
             return (List<Map<String, Object>>) values.get(childName);
+        }
+        return null;
+    }
+
+    public <T extends Object> LinkedHashMap<String, T> getChildrenAsLinkedHashMap(String childName) {
+        if (values.containsKey(childName)) {
+            return (LinkedHashMap<String, T>) values.get(childName);
         }
         return null;
     }
