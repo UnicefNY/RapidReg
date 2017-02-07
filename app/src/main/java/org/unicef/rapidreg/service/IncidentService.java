@@ -108,14 +108,6 @@ public class IncidentService extends RecordService {
         return conditionGroup;
     }
 
-    private List<Long> extractIds(List<Incident> incidents) {
-        List<Long> result = new ArrayList<>();
-        for (Incident incident : incidents) {
-            result.add(incident.getId());
-        }
-        return result;
-    }
-
     public Incident saveOrUpdate(ItemValuesMap itemValues) throws IOException {
         if (itemValues.getAsString(INCIDENT_ID) == null) {
             return save(itemValues);

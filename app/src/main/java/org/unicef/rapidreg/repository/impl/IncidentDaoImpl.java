@@ -66,6 +66,16 @@ public class IncidentDaoImpl implements IncidentDao {
         return incident;
     }
 
+    @Override
+    public List<Incident> getAllIncidentsByCaseUniqueId(String caseUniqueId) {
+        return SQLite
+                .select()
+                .from(Incident.class)
+                .where(ConditionGroup.clause().and(Incident_Table.case_unique_id.eq(caseUniqueId)))
+                .orderBy(Incident_Table.registration_date, false)
+                .queryList();
+    }
+
     private List<Incident> getIncidentsByAgeASC(String ownedBy, String url) {
         return getCurrentServerCondition(ownedBy, url)
                 .orderBy(Incident_Table.age, true)

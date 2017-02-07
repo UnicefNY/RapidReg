@@ -74,14 +74,6 @@ public class TracingService extends RecordService {
                 searchCondition));
     }
 
-    private List<Long> extractIds(List<Tracing> tracings) {
-        List<Long> result = new ArrayList<>();
-        for (Tracing tracing : tracings) {
-            result.add(tracing.getId());
-        }
-        return result;
-    }
-
     private ConditionGroup getSearchCondition(String uniqueId, String name, int ageFrom, int
             ageTo, Date date) {
         ConditionGroup conditionGroup = ConditionGroup.clause();

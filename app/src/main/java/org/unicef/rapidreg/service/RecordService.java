@@ -8,6 +8,7 @@ import org.unicef.rapidreg.PrimeroAppConfiguration;
 import org.unicef.rapidreg.forms.Field;
 import org.unicef.rapidreg.forms.RecordForm;
 import org.unicef.rapidreg.forms.Section;
+import org.unicef.rapidreg.model.Incident;
 import org.unicef.rapidreg.model.RecordModel;
 import org.unicef.rapidreg.service.cache.ItemValuesMap;
 
@@ -94,6 +95,22 @@ public class RecordService {
 
     public  String generateUniqueId() {
         return UUID.randomUUID().toString();
+    }
+
+    public <T extends RecordModel> List<Long> extractIds(List<T> records) {
+        List<Long> result = new ArrayList<>();
+        for (RecordModel record : records) {
+            result.add(record.getId());
+        }
+        return result;
+    }
+
+    public <T extends RecordModel> List<String> extractUniqueIds(List<T> records) {
+        List<String> result = new ArrayList<>();
+        for (RecordModel record : records) {
+            result.add(record.getUniqueId());
+        }
+        return result;
     }
 
     public boolean validateRequiredFields(RecordForm recordForm, ItemValuesMap itemValues) {

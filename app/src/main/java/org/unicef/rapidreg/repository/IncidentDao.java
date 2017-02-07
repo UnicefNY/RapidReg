@@ -26,4 +26,5 @@ public interface IncidentDao {
 
     Incident update(Incident incident);
 
+    List<Incident> getAllIncidentsByCaseUniqueId(String caseUniqueId);
 }
