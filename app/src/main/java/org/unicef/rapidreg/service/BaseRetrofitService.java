@@ -39,12 +39,7 @@ public abstract class BaseRetrofitService {
         builder.readTimeout(90, TimeUnit.SECONDS);
         builder.writeTimeout(90, TimeUnit.SECONDS);
         builder.sslSocketFactory(getSSLContext().getSocketFactory());
-        builder.hostnameVerifier(new HostnameVerifier() {
-            @Override
-            public boolean verify(String hostname, SSLSession session) {
-                return true;
-            }
-        });
+        builder.hostnameVerifier((hostname, session) -> true);
 
         if (BuildConfig.DEBUG) {
             builder.addNetworkInterceptor(new StethoInterceptor());

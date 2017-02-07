@@ -68,12 +68,9 @@ public class SubFormViewHolder extends BaseViewHolder<Field> {
 
     @Override
     public void setOnClickListener(Field field) {
-        addSubFormBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                itemValues.addChild(fieldParent, new HashMap<String, Object>());
-                addSubForm(itemValues.getChildrenSize(fieldParent) - 1, true);
-            }
+        addSubFormBtn.setOnClickListener(v -> {
+            itemValues.addChild(fieldParent, new HashMap<>());
+            addSubForm(itemValues.getChildrenSize(fieldParent) - 1, true);
         });
     }
 
@@ -84,22 +81,12 @@ public class SubFormViewHolder extends BaseViewHolder<Field> {
 
     private void initDeleteBtn(ViewGroup container) {
         final Button deleteBtn = (Button) container.findViewById(R.id.delete_subform);
-        deleteBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(final View v) {
-                new BaseAlertDialog.Builder(activity)
-                        .setTitle(R.string.delete)
-                        .setMessage(R.string.delete_subform)
-                        .setPositiveButton(R.string.delete, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                deleteSubForm(v);
-                            }
-                        })
-                        .setNegativeButton(R.string.cancel, null)
-                        .show();
-            }
-        });
+        deleteBtn.setOnClickListener(v -> new BaseAlertDialog.Builder(activity)
+                .setTitle(R.string.delete)
+                .setMessage(R.string.delete_subform)
+                .setPositiveButton(R.string.delete, (dialogInterface, i) -> deleteSubForm(v))
+                .setNegativeButton(R.string.cancel, null)
+                .show());
         deleteBtn.setVisibility(activity.getCurrentFeature().isEditMode() ?
                 View.VISIBLE : GONE);
     }

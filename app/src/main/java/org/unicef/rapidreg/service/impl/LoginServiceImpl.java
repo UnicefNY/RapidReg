@@ -67,30 +67,24 @@ public class LoginServiceImpl extends BaseRetrofitService implements org.unicef.
                 .login(loginRequestBody)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Action1<Response<LoginResponse>>() {
-                    @Override
-                    public void call(Response<LoginResponse> response) {
-                        if (response.isSuccessful()) {
-                            LoginResponse responseBody = response.body();
-                            User user = new User(username, EncryptHelper.encrypt(password), true, TextUtils.lintUrl
-                                    (url));
-                            user.setDbKey(responseBody.getDbKey());
-                            user.setOrganisation(responseBody.getOrganization());
-                            user.setRole(responseBody.getRole());
-                            user.setLanguage(responseBody.getLanguage());
-                            user.setVerified(responseBody.getVerified());
+                .subscribe(response -> {
+                    if (response.isSuccessful()) {
+                        LoginResponse responseBody = response.body();
+                        User user = new User(username, EncryptHelper.encrypt(password), true, TextUtils.lintUrl
+                                (url));
+                        user.setDbKey(responseBody.getDbKey());
+                        user.setOrganisation(responseBody.getOrganization());
+                        user.setRole(responseBody.getRole());
+                        user.setLanguage(responseBody.getLanguage());
+                        user.setVerified(responseBody.getVerified());
 
-                            userDao.saveOrUpdateUser(user);
-                            callback.onSuccessful(getSessionId(response.headers()), user);
-                        } else {
-                            callback.onError(response.code());
-                        }
+                        userDao.saveOrUpdateUser(user);
+                        callback.onSuccessful(getSessionId(response.headers()), user);
+                    } else {
+                        callback.onError(response.code());
                     }
-                }, new Action1<Throwable>() {
-                    @Override
-                    public void call(Throwable throwable) {
-                        callback.onFailed(throwable);
-                    }
+                }, throwable -> {
+                    callback.onFailed(throwable);
                 });
 
         compositeSubscription.add(subscription);

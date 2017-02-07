@@ -34,6 +34,7 @@ import java.util.Locale;
 
 import javax.inject.Inject;
 
+import dagger.Lazy;
 import retrofit2.Response;
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
@@ -42,7 +43,7 @@ import rx.schedulers.Schedulers;
 public class GBVSyncPresenter extends BaseSyncPresenter {
     private static final String TAG = GBVSyncPresenter.class.getSimpleName();
 
-    private SyncCaseService syncService;
+    private SyncCaseService syncCaseService;
     private SyncIncidentService syncIncidentService;
     private IncidentService incidentService;
     private IncidentFormService incidentFormService;
@@ -51,17 +52,17 @@ public class GBVSyncPresenter extends BaseSyncPresenter {
 
     @Inject
     public GBVSyncPresenter(@ActivityContext Context context,
-                            SyncCaseService syncService,
-                            SyncIncidentService syncIncidentService,
+                            Lazy<SyncCaseService> syncCaseService,
+                            Lazy<SyncIncidentService> syncIncidentService,
                             CaseService caseService,
                             CaseFormService caseFormService,
                             FormRemoteService formRemoteService,
-                            IncidentService incidentService, IncidentFormService incidentFormService) {
+                            IncidentService incidentService, Lazy<IncidentFormService> incidentFormService) {
         super(context, caseService, caseFormService, formRemoteService);
         this.incidentService = incidentService;
-        this.incidentFormService = incidentFormService;
-        this.syncIncidentService = syncIncidentService;
-        this.syncService = syncService;
+        this.incidentFormService = incidentFormService.get();
+        this.syncIncidentService = syncIncidentService.get();
+        this.syncCaseService = syncCaseService.get();
         initSyncRecordNumber();
     }
 
@@ -79,9 +80,9 @@ public class GBVSyncPresenter extends BaseSyncPresenter {
 //        isSyncing = true;
 //        Observable.from(caseList)
 //                .filter(item -> isSyncing && !item.isSynced())
-//                .map(item -> new Pair<>(item, syncService.uploadCaseJsonProfile(item)))
+//                .map(item -> new Pair<>(item, syncCaseService.uploadCaseJsonProfile(item)))
 //                .map(pair -> {
-//                    syncService.uploadAudio(pair.first);
+//                    syncCaseService.uploadAudio(pair.first);
 //                    return pair;
 //                })
 //                .subscribeOn(Schedulers.io())
@@ -139,7 +140,7 @@ public class GBVSyncPresenter extends BaseSyncPresenter {
         final List<JsonObject> downList = new ArrayList<>();
         final ProgressDialog loadingDialog = getView().showFetchingCaseAmountLoadingDialog();
 
-        syncService.getCasesIds(time, true)
+        syncCaseService.getCasesIds(time, true)
                 .map(jsonElementResponse -> {
                     if (jsonElementResponse.isSuccessful()) {
                         JsonElement jsonElement = jsonElementResponse.body();
@@ -180,7 +181,7 @@ public class GBVSyncPresenter extends BaseSyncPresenter {
         Observable.from(objects)
                 .filter(jsonObject -> isSyncing)
                 .map(jsonObject -> {
-                    Observable<Response<JsonElement>> responseObservable = syncService
+                    Observable<Response<JsonElement>> responseObservable = syncCaseService
                             .getCase(jsonObject.get("_id")
                                     .getAsString(), "en", true);
                     Response<JsonElement> response = responseObservable.toBlocking().first();
