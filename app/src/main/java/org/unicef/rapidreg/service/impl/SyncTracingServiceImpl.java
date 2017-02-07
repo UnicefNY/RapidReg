@@ -16,9 +16,9 @@ import org.unicef.rapidreg.model.RecordModel;
 import org.unicef.rapidreg.model.TracingPhoto;
 import org.unicef.rapidreg.repository.TracingPhotoDao;
 import org.unicef.rapidreg.repository.impl.TracingPhotoDaoImpl;
+import org.unicef.rapidreg.repository.remote.LoginRepository;
 import org.unicef.rapidreg.repository.remote.SyncTracingsRepository;
 import org.unicef.rapidreg.service.BaseRetrofitService;
-import org.unicef.rapidreg.service.RecordService;
 import org.unicef.rapidreg.service.SyncTracingService;
 import org.unicef.rapidreg.service.cache.ItemValuesMap;
 
@@ -37,37 +37,35 @@ import rx.functions.Func1;
 import static org.unicef.rapidreg.service.TracingService.TRACING_ID;
 
 
-public class SyncTracingServiceImpl extends BaseRetrofitService implements SyncTracingService{
-    private SyncTracingsRepository syncTracingsRepository;
-
+public class SyncTracingServiceImpl extends BaseRetrofitService<SyncTracingsRepository> implements SyncTracingService {
     private TracingPhotoDao tracingPhotoDao;
+
+    public SyncTracingServiceImpl(TracingPhotoDao
+                                          tracingPhotoDao) {
+        super(SyncTracingsRepository.class);
+        this.tracingPhotoDao = tracingPhotoDao;
+    }
 
     @Override
     protected String getBaseUrl() {
         return PrimeroAppConfiguration.getApiBaseUrl();
     }
 
-    public SyncTracingServiceImpl(TracingPhotoDao
-            tracingPhotoDao) {
-        this.tracingPhotoDao = tracingPhotoDao;
-        syncTracingsRepository = createRetrofit().create(SyncTracingsRepository.class);
-    }
-
     public Observable<Response<ResponseBody>> getPhoto(String id, String photoKey, String
             photoSize) {
-        return syncTracingsRepository.getPhoto(PrimeroAppConfiguration.getCookie(), id, photoKey, photoSize);
+        return getRepository().getPhoto(PrimeroAppConfiguration.getCookie(), id, photoKey, photoSize);
     }
 
     public Observable<Response<ResponseBody>> getAudio(String id) {
-        return syncTracingsRepository.getAudio(PrimeroAppConfiguration.getCookie(), id);
+        return getRepository().getAudio(PrimeroAppConfiguration.getCookie(), id);
     }
 
     public Observable<Response<JsonElement>> get(String id, String locale, Boolean isMobile) {
-        return syncTracingsRepository.get(PrimeroAppConfiguration.getCookie(), id, locale, isMobile);
+        return getRepository().get(PrimeroAppConfiguration.getCookie(), id, locale, isMobile);
     }
 
     public Observable<Response<JsonElement>> getIds(String lastUpdate, Boolean isMobile) {
-        return syncTracingsRepository.getIds(PrimeroAppConfiguration.getCookie(), lastUpdate, isMobile);
+        return getRepository().getIds(PrimeroAppConfiguration.getCookie(), lastUpdate, isMobile);
     }
 
     public Response<JsonElement> uploadJsonProfile(RecordModel item) {
@@ -84,11 +82,11 @@ public class SyncTracingServiceImpl extends BaseRetrofitService implements SyncT
 
         Observable<Response<JsonElement>> responseObservable;
         if (!TextUtils.isEmpty(item.getInternalId())) {
-            responseObservable = syncTracingsRepository.put(PrimeroAppConfiguration.getCookie(), item
+            responseObservable = getRepository().put(PrimeroAppConfiguration.getCookie(), item
                             .getInternalId(),
                     jsonObject);
         } else {
-            responseObservable = syncTracingsRepository.postExcludeMediaData(PrimeroAppConfiguration
+            responseObservable = getRepository().postExcludeMediaData(PrimeroAppConfiguration
                     .getCookie(), jsonObject);
         }
         Response<JsonElement> response = responseObservable.toBlocking().first();
@@ -112,7 +110,7 @@ public class SyncTracingServiceImpl extends BaseRetrofitService implements SyncT
                     PhotoConfig.CONTENT_TYPE_AUDIO), item.getAudio().getBlob());
             MultipartBody.Part body = MultipartBody.Part.createFormData(FORM_DATA_KEY_AUDIO,
                     "audioFile.amr", requestFile);
-            Observable<Response<JsonElement>> observable = syncTracingsRepository.postMediaData(
+            Observable<Response<JsonElement>> observable = getRepository().postMediaData(
                     PrimeroAppConfiguration.getCookie(), item.getInternalId(), body);
 
             Response<JsonElement> response = observable.toBlocking().first();
@@ -131,7 +129,7 @@ public class SyncTracingServiceImpl extends BaseRetrofitService implements SyncT
             requestPhotoKeys.addProperty(photoKey.getAsString(), 1);
         }
         requestBody.add("delete_tracing_request_photo", requestPhotoKeys);
-        return syncTracingsRepository.deletePhoto(PrimeroAppConfiguration.getCookie(), id, requestBody);
+        return getRepository().deletePhoto(PrimeroAppConfiguration.getCookie(), id, requestBody);
     }
 
     public void uploadPhotos(final RecordModel record) {
@@ -156,7 +154,7 @@ public class SyncTracingServiceImpl extends BaseRetrofitService implements SyncT
                                 MultipartBody.Part body = MultipartBody.Part.createFormData
                                         (FORM_DATA_KEY_PHOTO, tracingPhoto.getKey() + ".jpg",
                                                 requestFile);
-                                Observable<Response<JsonElement>> observable = syncTracingsRepository
+                                Observable<Response<JsonElement>> observable = getRepository()
                                         .postMediaData(PrimeroAppConfiguration.getCookie(), record
                                                 .getInternalId(), body);
                                 Response<JsonElement> response = observable.toBlocking().first();

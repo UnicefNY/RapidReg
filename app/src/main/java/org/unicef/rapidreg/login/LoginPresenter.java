@@ -15,14 +15,16 @@ import org.unicef.rapidreg.utils.TextUtils;
 
 import javax.inject.Inject;
 
+import dagger.Lazy;
+
 public class LoginPresenter extends MvpBasePresenter<LoginView> {
     public static final String TAG = LoginPresenter.class.getSimpleName();
 
     private LoginService loginService;
 
     @Inject
-    public LoginPresenter(LoginService loginService) {
-        this.loginService = loginService;
+    public LoginPresenter(Lazy<LoginService> loginService) {
+        this.loginService = loginService.get();
     }
 
     public String fetchURL() {

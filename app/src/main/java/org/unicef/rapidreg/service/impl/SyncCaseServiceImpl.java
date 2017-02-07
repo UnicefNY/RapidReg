@@ -15,6 +15,7 @@ import org.unicef.rapidreg.model.RecordModel;
 import org.unicef.rapidreg.repository.CasePhotoDao;
 import org.unicef.rapidreg.repository.impl.CasePhotoDaoImpl;
 import org.unicef.rapidreg.repository.remote.SyncCaseRepository;
+import org.unicef.rapidreg.repository.remote.SyncTracingsRepository;
 import org.unicef.rapidreg.service.BaseRetrofitService;
 import org.unicef.rapidreg.service.SyncCaseService;
 import org.unicef.rapidreg.service.cache.ItemValuesMap;
@@ -33,8 +34,7 @@ import rx.Subscriber;
 import rx.functions.Func1;
 
 
-public class SyncCaseServiceImpl extends BaseRetrofitService implements SyncCaseService {
-    private SyncCaseRepository syncCaseRepository;
+public class SyncCaseServiceImpl extends BaseRetrofitService<SyncCaseRepository> implements SyncCaseService {
     private CasePhotoDao casePhotoDao;
 
     @Override
@@ -43,26 +43,26 @@ public class SyncCaseServiceImpl extends BaseRetrofitService implements SyncCase
     }
 
     public SyncCaseServiceImpl(CasePhotoDao casePhotoDao) {
+        super(SyncCaseRepository.class);
         this.casePhotoDao = casePhotoDao;
-        syncCaseRepository = createRetrofit().create(SyncCaseRepository.class);
     }
 
     public Observable<Response<ResponseBody>> getCasePhoto(String id, String photoKey, int
             photoSize) {
-        return syncCaseRepository.getCasePhoto(PrimeroAppConfiguration.getCookie(), id, photoKey,
+        return getRepository().getCasePhoto(PrimeroAppConfiguration.getCookie(), id, photoKey,
                 photoSize);
     }
 
     public Observable<Response<ResponseBody>> getCaseAudio(String id) {
-        return syncCaseRepository.getCaseAudio(PrimeroAppConfiguration.getCookie(), id);
+        return getRepository().getCaseAudio(PrimeroAppConfiguration.getCookie(), id);
     }
 
     public Observable<Response<JsonElement>> getCase(String id, String locale, Boolean isMobile) {
-        return syncCaseRepository.getCase(PrimeroAppConfiguration.getCookie(), id, locale, isMobile);
+        return getRepository().getCase(PrimeroAppConfiguration.getCookie(), id, locale, isMobile);
     }
 
     public Observable<Response<JsonElement>> getCasesIds(String lastUpdate, Boolean isMobile) {
-        return syncCaseRepository.getCasesIds(PrimeroAppConfiguration.getCookie(), lastUpdate, isMobile);
+        return getRepository().getCasesIds(PrimeroAppConfiguration.getCookie(), lastUpdate, isMobile);
     }
 
     public Response<JsonElement> uploadCaseJsonProfile(RecordModel item) {
@@ -79,10 +79,10 @@ public class SyncCaseServiceImpl extends BaseRetrofitService implements SyncCase
 
         Observable<Response<JsonElement>> responseObservable;
         if (!TextUtils.isEmpty(item.getInternalId())) {
-            responseObservable = syncCaseRepository.putCase(PrimeroAppConfiguration.getCookie(), item
+            responseObservable = getRepository().putCase(PrimeroAppConfiguration.getCookie(), item
                     .getInternalId(), jsonObject);
         } else {
-            responseObservable = syncCaseRepository.postCaseExcludeMediaData(PrimeroAppConfiguration
+            responseObservable = getRepository().postCaseExcludeMediaData(PrimeroAppConfiguration
                     .getCookie(), jsonObject);
         }
         Response<JsonElement> response = responseObservable.toBlocking().first();
@@ -106,7 +106,7 @@ public class SyncCaseServiceImpl extends BaseRetrofitService implements SyncCase
                     PhotoConfig.CONTENT_TYPE_AUDIO), item.getAudio().getBlob());
             MultipartBody.Part body = MultipartBody.Part.createFormData(FORM_DATA_KEY_AUDIO,
                     "audioFile.amr", requestFile);
-            Observable<Response<JsonElement>> observable = syncCaseRepository.postCaseMediaData(
+            Observable<Response<JsonElement>> observable = getRepository().postCaseMediaData(
                     PrimeroAppConfiguration.getCookie(), item.getInternalId(), body);
 
             Response<JsonElement> response = observable.toBlocking().first();
@@ -122,7 +122,7 @@ public class SyncCaseServiceImpl extends BaseRetrofitService implements SyncCase
             requestPhotoKeys.addProperty(photoKey.getAsString(), 1);
         }
         requestBody.add("delete_child_photo", requestPhotoKeys);
-        return syncCaseRepository.deleteCasePhoto(PrimeroAppConfiguration.getCookie(), id, requestBody);
+        return getRepository().deleteCasePhoto(PrimeroAppConfiguration.getCookie(), id, requestBody);
     }
 
     public void uploadCasePhotos(final RecordModel record) {
@@ -146,7 +146,7 @@ public class SyncCaseServiceImpl extends BaseRetrofitService implements SyncCase
                                 MultipartBody.Part body = MultipartBody.Part.createFormData
                                         (FORM_DATA_KEY_PHOTO, casePhoto.getKey() + ".jpg",
                                                 requestFile);
-                                Observable<Response<JsonElement>> observable = syncCaseRepository
+                                Observable<Response<JsonElement>> observable = getRepository()
                                         .postCaseMediaData(PrimeroAppConfiguration.getCookie(),
                                                 record.getInternalId(), body);
                                 Response<JsonElement> response = observable.toBlocking().first();
