@@ -1,6 +1,6 @@
 package org.unicef.rapidreg.event;
 
-public class RedirectIncidentEvent {
+public class RedirectIncidentEvent implements Event {
 
     private final String incidentVal;
 

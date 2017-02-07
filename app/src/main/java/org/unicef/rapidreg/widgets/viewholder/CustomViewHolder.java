@@ -12,13 +12,15 @@ import android.widget.TextView;
 
 import org.greenrobot.eventbus.EventBus;
 import org.unicef.rapidreg.R;
-import org.unicef.rapidreg.event.RedirectIncidentEvent;
+import org.unicef.rapidreg.event.Event;
 import org.unicef.rapidreg.forms.Field;
 import org.unicef.rapidreg.service.cache.ItemValuesMap;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -56,7 +58,7 @@ public class CustomViewHolder extends BaseViewHolder<Field> {
     }
 
     private void restoreItemList() {
-        List<String> childrenArray = itemValues.getAsList(fieldName);
+        LinkedHashMap<String, Event> childrenArray = itemValues.getChildrenAsLinkedHashMap(fieldName);
         if (childrenArray == null) {
             return;
         }
@@ -99,10 +101,14 @@ public class CustomViewHolder extends BaseViewHolder<Field> {
 
     class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.CustomItemViewHolder> {
 
-        private List<String> values;
+        private List<String> keys = new ArrayList<>();
+        private List<Event> values = new ArrayList<>();
 
-        public CustomAdapter(List<String> values) {
-            this.values = values;
+        public CustomAdapter(LinkedHashMap<String, Event> keyValues) {
+            for (Map.Entry<String, Event> entry : keyValues.entrySet()) {
+                keys.add(entry.getKey());
+                values.add(entry.getValue());
+            }
         }
 
         @Override
@@ -114,12 +120,12 @@ public class CustomViewHolder extends BaseViewHolder<Field> {
 
         @Override
         public void onBindViewHolder(CustomItemViewHolder holder, int position) {
-            holder.setValue(values.get(position));
+            holder.setValue(keys.get(position), values.get(position));
         }
 
         @Override
         public int getItemCount() {
-            return values.size();
+            return keys.size();
         }
 
         class CustomItemViewHolder extends RecyclerView.ViewHolder {
@@ -135,11 +141,12 @@ public class CustomViewHolder extends BaseViewHolder<Field> {
                 ButterKnife.bind(this, itemView);
             }
 
-            public void setValue(String value) {
-                customItemView.setText(value);
+            public void setValue(String key, Event event) {
+                customItemView.setText(key);
                 customItemLayout.setOnClickListener(v -> {
-                    RedirectIncidentEvent redirectIncidentEvent = new RedirectIncidentEvent(value);
-                    EventBus.getDefault().postSticky(redirectIncidentEvent);
+                    if (event != null) {
+                        EventBus.getDefault().post(event);
+                    }
                 });
             }
         }
