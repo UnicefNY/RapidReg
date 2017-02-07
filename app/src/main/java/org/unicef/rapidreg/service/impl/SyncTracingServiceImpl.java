@@ -15,8 +15,6 @@ import org.unicef.rapidreg.base.record.recordphoto.PhotoConfig;
 import org.unicef.rapidreg.model.RecordModel;
 import org.unicef.rapidreg.model.TracingPhoto;
 import org.unicef.rapidreg.repository.TracingPhotoDao;
-import org.unicef.rapidreg.repository.impl.TracingPhotoDaoImpl;
-import org.unicef.rapidreg.repository.remote.LoginRepository;
 import org.unicef.rapidreg.repository.remote.SyncTracingsRepository;
 import org.unicef.rapidreg.service.BaseRetrofitService;
 import org.unicef.rapidreg.service.SyncTracingService;
@@ -133,7 +131,7 @@ public class SyncTracingServiceImpl extends BaseRetrofitService<SyncTracingsRepo
     }
 
     public void uploadPhotos(final RecordModel record) {
-        List<Long> tracingPhotos = new TracingPhotoDaoImpl().getIdsByTracingId(record.getId());
+        List<Long> tracingPhotos = tracingPhotoDao.getIdsByTracingId(record.getId());
         Observable.from(tracingPhotos)
                 .filter(tracingPhotoId -> true)
                 .flatMap(new Func1<Long, Observable<Pair<TracingPhoto, Response<JsonElement>>>>() {
