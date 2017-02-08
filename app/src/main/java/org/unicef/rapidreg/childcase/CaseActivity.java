@@ -184,7 +184,7 @@ public class CaseActivity extends RecordActivity implements BaseView {
         Bundle extra = new Bundle();
         extra.putString(INCIDENT_ID, incidentId);
 
-        intentSender.showIncidentActivity(this, false, extra);
+        intentSender.showIncidentActivity(this, true, extra);
     }
 
     @Override
