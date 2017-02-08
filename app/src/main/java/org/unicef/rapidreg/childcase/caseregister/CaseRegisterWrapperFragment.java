@@ -81,7 +81,7 @@ public class CaseRegisterWrapperFragment extends RecordRegisterWrapperFragment {
         Bundle extra = new Bundle();
         extra.putString(CASE_ID, caseId);
 
-        new IntentSender().showIncidentActivity(getActivity(), false, extra);
+        new IntentSender().showIncidentActivity(getActivity(), true, extra);
     }
 
     @OnClick(R.id.edit)

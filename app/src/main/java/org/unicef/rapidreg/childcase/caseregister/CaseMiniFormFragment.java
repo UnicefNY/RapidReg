@@ -124,7 +124,7 @@ public class CaseMiniFormFragment extends RecordRegisterFragment {
         Bundle extra = new Bundle();
         extra.putString(CASE_ID, caseId);
 
-        new IntentSender().showIncidentActivity(getActivity(), false, extra);
+        new IntentSender().showIncidentActivity(getActivity(), true, extra);
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
