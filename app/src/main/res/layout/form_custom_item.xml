@@ -9,7 +9,6 @@
         android:id="@+id/custom_item_content"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/white"
         android:paddingBottom="@dimen/size_10"
         android:paddingTop="@dimen/size_10"
         android:paddingLeft="@dimen/size_10"

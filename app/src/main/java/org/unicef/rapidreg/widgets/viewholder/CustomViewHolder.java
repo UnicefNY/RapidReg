@@ -51,6 +51,8 @@ public class CustomViewHolder extends BaseViewHolder<Field> {
 
     @Override
     public void setValue(Field field) {
+        setEditableBackgroundStyle(isEditable(field));
+
         fieldName = field.getName();
         customFormTitle.setText(field.getDisplayName().get(Locale.getDefault().getLanguage()));
 
