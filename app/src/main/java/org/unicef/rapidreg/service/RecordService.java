@@ -70,7 +70,7 @@ public class RecordService {
     }
 
     protected String getCaregiverName(ItemValuesMap itemValues) {
-        return "" + itemValues.getAsString(CAREGIVER_NAME);
+        return itemValues.concatMultiStringsWithBlank(CAREGIVER_NAME);
     }
 
     protected String getWrappedCondition(String queryStr) {

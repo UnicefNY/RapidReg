@@ -13,13 +13,9 @@ import com.raizlabs.android.dbflow.sql.language.SQLCondition;
 import org.unicef.rapidreg.PrimeroAppConfiguration;
 import org.unicef.rapidreg.model.Case;
 import org.unicef.rapidreg.model.CasePhoto;
-import org.unicef.rapidreg.model.Incident;
 import org.unicef.rapidreg.model.RecordModel;
 import org.unicef.rapidreg.repository.CaseDao;
 import org.unicef.rapidreg.repository.CasePhotoDao;
-import org.unicef.rapidreg.repository.IncidentDao;
-import org.unicef.rapidreg.repository.impl.CaseDaoImpl;
-import org.unicef.rapidreg.repository.impl.CasePhotoDaoImpl;
 import org.unicef.rapidreg.service.cache.ItemValuesMap;
 import org.unicef.rapidreg.utils.ImageCompressUtil;
 import org.unicef.rapidreg.utils.StreamUtil;
@@ -43,12 +39,10 @@ public class CaseService extends RecordService {
 
     private CaseDao caseDao;
     private CasePhotoDao casePhotoDao;
-    private IncidentDao incidentDao;
 
-    public CaseService(CaseDao caseDao, CasePhotoDao casePhotoDao, IncidentDao incidentDao) {
+    public CaseService(CaseDao caseDao, CasePhotoDao casePhotoDao) {
         this.caseDao = caseDao;
         this.casePhotoDao = casePhotoDao;
-        this.incidentDao = incidentDao;
     }
 
     public List<Case> getAll() {
@@ -135,7 +129,8 @@ public class CaseService extends RecordService {
                     .build()).eq(registrationDate));
         }
 
-        return extractIds(caseDao.getCaseListByConditionGroup(PrimeroAppConfiguration.getCurrentUsername(), PrimeroAppConfiguration.getApiBaseUrl(), conditionGroup));
+        return extractIds(caseDao.getCaseListByConditionGroup(PrimeroAppConfiguration.getCurrentUsername(),
+                PrimeroAppConfiguration.getApiBaseUrl(), conditionGroup));
     }
 
     public Case saveOrUpdate(ItemValuesMap itemValues, List<String> photoPaths) throws IOException {
@@ -173,7 +168,9 @@ public class CaseService extends RecordService {
         child.setCreateDate(date);
         child.setLastUpdatedDate(date);
         child.setContent(blob);
+
         child.setName(getName(itemValues));
+
         int age = itemValues.getAsInt(AGE) != null ? itemValues.getAsInt(AGE) : EMPTY_AGE;
         child.setAge(age);
         child.setCaregiver(getCaregiverName(itemValues));
@@ -182,7 +179,7 @@ public class CaseService extends RecordService {
         child.setCreatedBy(username);
         child.setOwnedBy(username);
         child.setModuleId(itemValues.getAsString(MODULE));
-        String location = itemValues.has(LOCATION) ? "" : itemValues.getAsString(LOCATION);
+        String location = itemValues.has(LOCATION) ? itemValues.getAsString(LOCATION) : "";
         child.setLocation(location);
         child.setUrl(TextUtils.lintUrl(PrimeroAppConfiguration.getApiBaseUrl()));
         caseDao.save(child);
@@ -207,7 +204,7 @@ public class CaseService extends RecordService {
         child.setLastUpdatedDate(new Date(Calendar.getInstance().getTimeInMillis()));
         child.setContent(caseBlob);
         child.setName(getName(itemValues));
-        String location = itemValues.has(LOCATION) ? "" : itemValues.getAsString(LOCATION);
+        String location = itemValues.has(LOCATION) ? itemValues.getAsString(LOCATION) : "";
         child.setLocation(location);
         int age = itemValues.getAsInt(AGE) != null ? itemValues.getAsInt(AGE) : 0;
         child.setAge(age);
@@ -300,12 +297,7 @@ public class CaseService extends RecordService {
 
 
     private String getName(ItemValuesMap values) {
-        return values.getAsString(FULL_NAME) + " "
-                + values.getAsString(FIRST_NAME) + " "
-                + values.getAsString(MIDDLE_NAME) + " "
-                + values.getAsString(SURNAME) + " "
-                + values.getAsString(NICKNAME) + " "
-                + values.getAsString(OTHER_NAME);
+        return values.concatMultiStringsWithBlank(FULL_NAME, FIRST_NAME, MIDDLE_NAME, SURNAME, NICKNAME, OTHER_NAME);
     }
 
     public Case getByInternalId(String id) {
