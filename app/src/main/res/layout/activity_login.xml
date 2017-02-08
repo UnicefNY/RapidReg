@@ -87,5 +87,4 @@
         android:text="@string/button_login_text"
         android:textColor="@color/white"
         android:textSize="@dimen/text_size_20" />
-
 </LinearLayout>

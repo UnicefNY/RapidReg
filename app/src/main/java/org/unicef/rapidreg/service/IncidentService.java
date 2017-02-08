@@ -22,6 +22,7 @@ import java.io.IOException;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.List;
 
 import static org.unicef.rapidreg.model.RecordModel.EMPTY_AGE;
@@ -177,15 +178,11 @@ public class IncidentService extends RecordService {
         if (itemValues.has(DATE_OF_INTERVIEW)) {
             incident.setRegistrationDate(Utils.getRegisterDate(itemValues.getAsString(DATE_OF_INTERVIEW)));
         }
-
         return incidentDao.update(incident);
     }
 
-
     private String getName(ItemValuesMap values) {
-        return values.getAsString(RELATION_NAME) + " "
-                + values.getAsString(RELATION_AGE) + " "
-                + values.getAsString(RELATION_NICKNAME);
+        return values.concatMultiStringsWithBlank(RELATION_NAME, RELATION_AGE, RELATION_NICKNAME);
     }
 
     public Incident getByInternalId(String id) {
@@ -196,5 +193,4 @@ public class IncidentService extends RecordService {
         Incident incident = incidentDao.getByInternalId(id);
         return incident != null && rev.equals(incident.getInternalRev());
     }
-
 }

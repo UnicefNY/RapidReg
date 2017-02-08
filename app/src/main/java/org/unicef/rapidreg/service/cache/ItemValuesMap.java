@@ -155,6 +155,16 @@ public class ItemValuesMap implements Serializable {
         public static final String INCIDENT_LINKS = "incident_links";
     }
 
+    public String concatMultiStringsWithBlank(String... keys) {
+        StringBuilder result = new StringBuilder();
+        for (String key : keys) {
+            if (has(key)) {
+                result.append(getAsString(key)).append(" ");
+            }
+        }
+        return result.toString().trim();
+    }
+
     public ItemValuesMap copy() {
         Map<String, Object> result = new HashMap<>();
         for (Map.Entry<String, Object> entry : values.entrySet()) {
