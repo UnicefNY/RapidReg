@@ -78,16 +78,18 @@ public class TracingService extends RecordService {
         ConditionGroup conditionGroup = ConditionGroup.clause();
         conditionGroup.and(Condition.column(NameAlias.builder(RecordModel.COLUMN_SHORT_ID).build())
                 .like(getWrappedCondition(uniqueId)));
-        conditionGroup.and(Condition.column(NameAlias.builder(RecordModel.COLUMN_NAME).build())
-                .like(getWrappedCondition(name)));
-
-        SQLCondition ageSearchCondition = generateAgeSearchCondition(ageFrom, ageTo);
-        if (ageSearchCondition != null) {
-            conditionGroup.and(ageSearchCondition);
-        }
         conditionGroup.and(Condition.column(NameAlias.builder(RecordModel.COLUMN_CREATED_BY).build())
                 .eq(PrimeroAppConfiguration.getCurrentUser().getUsername()));
 
+        SQLCondition ageSearchCondition = generateAgeSearchCondition(ageFrom, ageTo);
+
+        if (ageSearchCondition != null) {
+            conditionGroup.and(ageSearchCondition);
+        }
+        if (!TextUtils.isEmpty(name)){
+            conditionGroup.and(Condition.column(NameAlias.builder(RecordModel.COLUMN_NAME).build())
+                    .like(getWrappedCondition(name)));
+        }
         if (date != null) {
             conditionGroup.and(Condition.column(
                     NameAlias.builder(RecordModel.COLUMN_REGISTRATION_DATE).build()).eq(date));

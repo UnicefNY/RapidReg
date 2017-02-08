@@ -20,9 +20,7 @@ import org.unicef.rapidreg.utils.Utils;
 
 import java.io.IOException;
 import java.sql.Date;
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collections;
 import java.util.List;
 
 import static org.unicef.rapidreg.model.RecordModel.EMPTY_AGE;
@@ -37,7 +35,8 @@ public class IncidentService extends RecordService {
 
     private IncidentDao incidentDao = new IncidentDaoImpl();
 
-    public IncidentService() {}
+    public IncidentService() {
+    }
 
     public IncidentService(IncidentDao incidentDao) {
         this.incidentDao = incidentDao;
@@ -90,12 +89,14 @@ public class IncidentService extends RecordService {
         ConditionGroup conditionGroup = ConditionGroup.clause();
         conditionGroup.and(Condition.column(NameAlias.builder(RecordModel.COLUMN_SHORT_ID).build())
                 .like(getWrappedCondition(uniqueId)));
-        conditionGroup.and(Condition.column(NameAlias.builder(Incident.COLUMN_SURVIVOR_CODE).build())
-                .like(getWrappedCondition(survivorCode)));
+        conditionGroup.and(Condition.column(NameAlias.builder(RecordModel.COLUMN_OWNED_BY).build())
+                .eq(PrimeroAppConfiguration.getCurrentUser().getUsername()));
+
         SQLCondition ageSearchCondition = generateAgeSearchCondition(ageFrom, ageTo);
         if (ageSearchCondition != null) {
             conditionGroup.and(ageSearchCondition);
         }
+
         if (!TextUtils.isEmpty(typeOfViolence)) {
             conditionGroup.and(Condition.column(NameAlias.builder(Incident.COLUMN_TYPE_OF_VIOLENCE).build())
                     .eq(typeOfViolence));
@@ -104,8 +105,10 @@ public class IncidentService extends RecordService {
             conditionGroup.and(Condition.column(NameAlias.builder(Incident.COLUMN_LOCATION).build())
                     .eq(location));
         }
-        conditionGroup.and(Condition.column(NameAlias.builder(RecordModel.COLUMN_OWNED_BY).build())
-                .eq(PrimeroAppConfiguration.getCurrentUser().getUsername()));
+        if (!TextUtils.isEmpty(survivorCode)) {
+            conditionGroup.and(Condition.column(NameAlias.builder(Incident.COLUMN_SURVIVOR_CODE).build())
+                    .like(getWrappedCondition(survivorCode)));
+        }
         return conditionGroup;
     }
 

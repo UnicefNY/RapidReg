@@ -545,6 +545,7 @@ public class CPSyncPresenter extends BaseSyncPresenter {
         } else {
             item = new Tracing();
             item.setUniqueId(tracingsJsonObject.get("tracing_request_id").getAsString());
+            item.setShortId(tracingsJsonObject.get("short_id").getAsString());
             item.setInternalId(tracingsJsonObject.get("_id").getAsString());
             item.setInternalRev(newRev);
             item.setRegistrationDate(Utils.getRegisterDate(registrationDate));
