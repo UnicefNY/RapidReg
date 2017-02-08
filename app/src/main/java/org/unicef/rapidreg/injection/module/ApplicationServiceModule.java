@@ -52,8 +52,8 @@ public class ApplicationServiceModule {
 
     @Provides
     @Singleton
-    public CaseService provideCaseService(CaseDao caseDao, CasePhotoDao casePhotoDao) {
-        return new CaseService(caseDao, casePhotoDao);
+    public CaseService provideCaseService(CaseDao caseDao, CasePhotoDao casePhotoDao, IncidentDao incidentDao) {
+        return new CaseService(caseDao, casePhotoDao, incidentDao);
     }
 
     @Provides
