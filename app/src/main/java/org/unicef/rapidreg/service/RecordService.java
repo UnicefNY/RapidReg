@@ -82,15 +82,15 @@ public class RecordService {
     }
 
     public String getSurvivorCode(ItemValuesMap itemValues) {
-        return "" + itemValues.getAsString(SURVIVOR_CODE);
+        return itemValues.concatMultiStringsWithBlank(SURVIVOR_CODE);
     }
 
     public String getTypeOfViolence(ItemValuesMap itemValues) {
-        return "" + itemValues.getAsString(TYPE_OF_VIOLENCE);
+        return itemValues.concatMultiStringsWithBlank(TYPE_OF_VIOLENCE);
     }
 
     public String getLocation(ItemValuesMap itemValues) {
-        return itemValues.getAsString(LOCATION);
+        return itemValues.concatMultiStringsWithBlank(LOCATION);
     }
 
     public  String generateUniqueId() {
