@@ -26,7 +26,6 @@ import org.unicef.rapidreg.utils.Utils;
 
 import java.io.IOException;
 import java.sql.Date;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.UUID;
@@ -121,18 +120,22 @@ public class CaseService extends RecordService {
         ConditionGroup conditionGroup = ConditionGroup.clause();
         conditionGroup.and(Condition.column(NameAlias.builder(RecordModel.COLUMN_SHORT_ID).build())
                 .like(getWrappedCondition(shortId)));
-        conditionGroup.and(Condition.column(NameAlias.builder(RecordModel.COLUMN_NAME).build())
-                .like(getWrappedCondition(name)));
-//      TODO  conditionGroup.and(Condition.column(NameAlias.builder(RecordModel.COLUMN_LOCATION).build())
-//                .like(getWrappedCondition(location)));
         conditionGroup.and(Condition.column(NameAlias.builder(RecordModel.COLUMN_OWNED_BY).build())
                 .eq(PrimeroAppConfiguration.getCurrentUser().getUsername()));
 
+        //      TODO
+        if (!TextUtils.isEmpty(location)) {
+            conditionGroup.and(Condition.column(NameAlias.builder(RecordModel.COLUMN_LOCATION).build())
+                    .like(getWrappedCondition(location)));
+        }
         if (registrationDate != null) {
             conditionGroup.and(Condition.column(NameAlias.builder(Case.COLUMN_REGISTRATION_DATE)
                     .build()).eq(registrationDate));
         }
-
+        if (!TextUtils.isEmpty(name)) {
+            conditionGroup.and(Condition.column(NameAlias.builder(RecordModel.COLUMN_NAME).build())
+                    .like(getWrappedCondition(name)));
+        }
         return extractIds(caseDao.getCaseListByConditionGroup(PrimeroAppConfiguration.getCurrentUsername(),
                 PrimeroAppConfiguration.getApiBaseUrl(), conditionGroup));
     }

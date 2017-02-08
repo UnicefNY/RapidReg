@@ -337,31 +337,32 @@ public class GBVSyncPresenter extends BaseSyncPresenter {
                         });
     }
 
-    private void saveDownloadedIncidents(JsonObject tracingsJsonObject) {
-        String internalId = tracingsJsonObject.get("_id").getAsString();
+    private void saveDownloadedIncidents(JsonObject incidentsJsonObject) {
+        String internalId = incidentsJsonObject.get("_id").getAsString();
         Incident item = incidentService.getByInternalId(internalId);
-        String newRev = tracingsJsonObject.get("_rev").getAsString();
-        String registrationDate = tracingsJsonObject.get("registration_date").getAsString();
+        String newRev = incidentsJsonObject.get("_rev").getAsString();
+        String registrationDate = incidentsJsonObject.get("registration_date").getAsString();
         if (item != null) {
             item.setInternalRev(newRev);
             item.setSynced(true);
-            item.setContent(new Blob(tracingsJsonObject.toString().getBytes()));
-            item.setOwnedBy(tracingsJsonObject.get("owned_by").getAsString());
+            item.setContent(new Blob(incidentsJsonObject.toString().getBytes()));
+            item.setOwnedBy(incidentsJsonObject.get("owned_by").getAsString());
             item.setUrl(TextUtils.lintUrl(PrimeroAppConfiguration.getApiBaseUrl()));
             item.update();
         } else {
             item = new Incident();
-            item.setUniqueId(tracingsJsonObject.get("incident_id").getAsString());
-            item.setInternalId(tracingsJsonObject.get("_id").getAsString());
+            item.setUniqueId(incidentsJsonObject.get("incident_id").getAsString());
+            item.setShortId(incidentsJsonObject.get("short_id").getAsString());
+            item.setInternalId(incidentsJsonObject.get("_id").getAsString());
             item.setInternalRev(newRev);
             item.setRegistrationDate(Utils.getRegisterDate(registrationDate));
-            item.setCreatedBy(tracingsJsonObject.get("created_by").getAsString());
-            item.setOwnedBy(tracingsJsonObject.get("owned_by").getAsString());
+            item.setCreatedBy(incidentsJsonObject.get("created_by").getAsString());
+            item.setOwnedBy(incidentsJsonObject.get("owned_by").getAsString());
             item.setUrl(TextUtils.lintUrl(PrimeroAppConfiguration.getApiBaseUrl()));
             item.setLastSyncedDate(Calendar.getInstance().getTime());
             item.setLastUpdatedDate(Calendar.getInstance().getTime());
             item.setSynced(true);
-            item.setContent(new Blob(tracingsJsonObject.toString().getBytes()));
+            item.setContent(new Blob(incidentsJsonObject.toString().getBytes()));
             item.save();
         }
     }
