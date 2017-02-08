@@ -94,6 +94,7 @@ public abstract class RecordRegisterPresenter extends MvpBasePresenter<RecordReg
         itemValues.removeItem(ItemValuesMap.RecordProfile.ID_NORMAL_STATE);
         itemValues.removeItem(ItemValuesMap.RecordProfile.REGISTRATION_DATE);
         itemValues.removeItem(ItemValuesMap.RecordProfile.ID);
+        itemValues.removeItem(ItemValuesMap.RecordProfile.INCIDENT_LINKS);
     }
 
     public ItemValuesMap getDefaultItemValues() {
