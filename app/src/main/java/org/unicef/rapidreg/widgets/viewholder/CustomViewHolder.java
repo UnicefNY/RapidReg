@@ -22,6 +22,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import butterknife.BindColor;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -56,13 +57,19 @@ public class CustomViewHolder extends BaseViewHolder<Field> {
         fieldName = field.getName();
         customFormTitle.setText(field.getDisplayName().get(Locale.getDefault().getLanguage()));
 
-        restoreItemList();
+        restoreItemList(true);
     }
 
-    private void restoreItemList() {
+    private void restoreItemList(boolean clickable) {
         LinkedHashMap<String, Event> childrenArray = itemValues.getChildrenAsLinkedHashMap(fieldName);
         if (childrenArray == null) {
             return;
+        }
+
+        if (!clickable) {
+            for (Map.Entry<String, Event> entry : childrenArray.entrySet()) {
+                childrenArray.put(entry.getKey(), null);
+            }
         }
 
         RecyclerView.LayoutManager layout = new LinearLayoutManager(context);
@@ -94,11 +101,13 @@ public class CustomViewHolder extends BaseViewHolder<Field> {
     }
 
     @Override
-    public void setOnClickListener(Field field) {}
+    public void setOnClickListener(Field field) {
+
+    }
 
     @Override
     public void setFieldEditable(boolean editable) {
-
+        restoreItemList(!editable);
     }
 
     class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.CustomItemViewHolder> {
@@ -138,6 +147,12 @@ public class CustomViewHolder extends BaseViewHolder<Field> {
             @BindView(R.id.custom_item_content)
             TextView customItemView;
 
+            @BindColor(R.color.primero_blue)
+            int clickableColor;
+
+            @BindColor(R.color.primero_font_dark)
+            int unclickableColor;
+
             public CustomItemViewHolder(View itemView) {
                 super(itemView);
                 ButterKnife.bind(this, itemView);
@@ -145,11 +160,19 @@ public class CustomViewHolder extends BaseViewHolder<Field> {
 
             public void setValue(String key, Event event) {
                 customItemView.setText(key);
-                customItemLayout.setOnClickListener(v -> {
-                    if (event != null) {
+                if (event == null) {
+                    setClickable(false);
+                } else {
+                    setClickable(true);
+                    customItemLayout.setOnClickListener(v -> {
                         EventBus.getDefault().post(event);
-                    }
-                });
+                    });
+                }
+            }
+
+            public void setClickable(boolean clickable) {
+                customItemLayout.setClickable(clickable);
+                customItemView.setTextColor(clickable ? clickableColor : unclickableColor);
             }
         }
     }

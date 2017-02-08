@@ -166,6 +166,7 @@ public class RecordRegisterAdapter extends RecyclerView.Adapter<BaseViewHolder> 
 
         if (!activity.getCurrentFeature().isDetailMode()) {
             holder.setOnClickListener(field);
+            holder.setFieldEditable(true);
         } else {
             holder.setFieldEditable(false);
         }
