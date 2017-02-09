@@ -97,13 +97,18 @@ public class SyncFragment extends MvpFragment<SyncView, BaseSyncPresenter> imple
         View view = inflater.inflate(R.layout.fragment_sync, container, false);
         ButterKnife.bind(this, view);
         initView();
-        ConnectivityManager conMgr = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo networkInfo = conMgr.getActiveNetworkInfo();
 
-        if (networkInfo == null || !networkInfo.isConnectedOrConnecting()) {
+        if (!isNetworkAvailable()) {
             disableSyncButton();
         }
         return view;
+    }
+
+    private boolean isNetworkAvailable() {
+        ConnectivityManager conMgr = ((ConnectivityManager) getActivity().getSystemService(Context
+                .CONNECTIVITY_SERVICE));
+        NetworkInfo networkInfo = conMgr.getActiveNetworkInfo();
+        return networkInfo != null && networkInfo.isConnectedOrConnecting();
     }
 
     public void disableSyncButton() {
@@ -140,7 +145,7 @@ public class SyncFragment extends MvpFragment<SyncView, BaseSyncPresenter> imple
     @Override
     public BaseSyncPresenter createPresenter() {
         User.Role roleType = PrimeroAppConfiguration.getCurrentUser().getRoleType();
-        if (User.Role.GBV == roleType){
+        if (User.Role.GBV == roleType) {
             return gbvSyncPresenter;
         }
         return cpSyncPresenter;
@@ -148,6 +153,11 @@ public class SyncFragment extends MvpFragment<SyncView, BaseSyncPresenter> imple
 
     @OnClick(R.id.btn_sync)
     public void onSyncClick() {
+        if (!isNetworkAvailable()) {
+            Toast.makeText(getActivity(), getResources().getString(R.string.network_not_available), Toast
+                    .LENGTH_SHORT).show();
+            return;
+        }
         presenter.tryToSync();
     }
 
@@ -240,6 +250,11 @@ public class SyncFragment extends MvpFragment<SyncView, BaseSyncPresenter> imple
     }
 
     @Override
+    public void showDownloadingIncidentsSyncProgressDialog() {
+        showSyncProgressDialog(getResources().getString(R.string.downloading_incidents_sync_progress_msg));
+    }
+
+    @Override
     public ProgressDialog showFetchingCaseAmountLoadingDialog() {
         return ProgressDialog.show(getActivity(), "", getResources().getString(R.string.fetching_case_amount_msg),
                 true);
@@ -254,6 +269,12 @@ public class SyncFragment extends MvpFragment<SyncView, BaseSyncPresenter> imple
     @Override
     public ProgressDialog showFetchingFormLoadingDialog() {
         return ProgressDialog.show(getActivity(), "", getResources().getString(R.string.fetching_form_msg),
+                true);
+    }
+
+    @Override
+    public ProgressDialog showFetchingIncidentAmountLoadingDialog() {
+        return ProgressDialog.show(getActivity(), "", getResources().getString(R.string.fetching_incident_amount_msg),
                 true);
     }
 

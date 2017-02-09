@@ -39,6 +39,8 @@ public interface SyncView extends MvpView {
 
     void showDownloadingTracingsSyncProgressDialog();
 
+    void showDownloadingIncidentsSyncProgressDialog();
+
     void showUploadCasesSyncProgressDialog();
 
     ProgressDialog showFetchingCaseAmountLoadingDialog();
@@ -46,5 +48,7 @@ public interface SyncView extends MvpView {
     ProgressDialog showFetchingTracingAmountLoadingDialog();
 
     ProgressDialog showFetchingFormLoadingDialog();
+
+    ProgressDialog showFetchingIncidentAmountLoadingDialog();
 
 }

@@ -268,7 +268,7 @@ public class GBVSyncPresenter extends BaseSyncPresenter {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.US);
         final String time = sdf.format(cal.getTime());
         final List<JsonObject> objects = new ArrayList<>();
-        final ProgressDialog loadingDialog = getView().showFetchingTracingAmountLoadingDialog();
+        final ProgressDialog loadingDialog = getView().showFetchingIncidentAmountLoadingDialog();
         syncIncidentService.getIds(time, true)
                 .map(jsonElementResponse -> {
                     if (jsonElementResponse.isSuccessful()) {
@@ -292,7 +292,7 @@ public class GBVSyncPresenter extends BaseSyncPresenter {
                 .subscribe(jsonObjects -> {
                     loadingDialog.dismiss();
                     if (jsonObjects.size() != 0 && getView() != null) {
-                        getView().showDownloadingTracingsSyncProgressDialog();
+                        getView().showDownloadingIncidentsSyncProgressDialog();
                         getView().setProgressMax(jsonObjects.size());
                     }
                 }, throwable -> {

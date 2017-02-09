@@ -131,11 +131,14 @@
     <string name="date_of_inquiry">Date of Inquiry</string>
     <string name="toolbar_title_text_placeholder">Tool Bar Text Placeholder</string>
     <string name="fetching_case_amount_msg">Fetching case amount from web server...</string>
-    <string name="fetching_tracing_amount_msg">Fetching tracing amount from web server...</string>
+    <string name="fetching_tracing_amount_msg">Fetching Tracing request amount from web server...</string>
+    <string name="fetching_incident_amount_msg">Fetching incident amount from web server...</string>
     <string name="downloading_cases_sync_progress_msg">Downloading Cases...Please wait a moment.</string>
-    <string name="downloading_tracings_sync_progress_msg">Downloading Tracing Request...Please wait a moment.</string>
+    <string name="downloading_tracings_sync_progress_msg">Downloading Tracing request...Please wait a moment.</string>
+    <string name="downloading_incidents_sync_progress_msg">Downloading Incident...Please wait a moment.</string>
     <string name="fetching_form_msg">Fetching forms from web server...</string>
     <string name="uploading_sync_progress_msg">"Uploading...Please wait a moment."</string>
+    <string name="network_not_available">Network is not available, please check your network.</string>
     <!--Sync-->
 
     <!--Transparent theme-->
