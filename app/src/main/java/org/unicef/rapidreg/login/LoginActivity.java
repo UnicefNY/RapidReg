@@ -1,5 +1,6 @@
 package org.unicef.rapidreg.login;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.view.View;
@@ -18,6 +19,7 @@ import org.unicef.rapidreg.base.BaseProgressDialog;
 import org.unicef.rapidreg.injection.component.ActivityComponent;
 import org.unicef.rapidreg.injection.component.DaggerActivityComponent;
 import org.unicef.rapidreg.injection.module.ActivityModule;
+import org.unicef.rapidreg.loadform.TemplateFormService;
 import org.unicef.rapidreg.model.LoginResponse;
 
 import javax.inject.Inject;
@@ -208,5 +210,10 @@ public class LoginActivity extends MvpActivity<LoginView, LoginPresenter> implem
                 PrimeroAppConfiguration.getApiBaseUrl(), Toast.LENGTH_SHORT).show();
         Toast.makeText(LoginActivity.this, getResources().getString(R.string.login_failed_check_network_and_url),
                 Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void startTemplateFormService() {
+        PrimeroApplication.getAppRuntime().bindTemplateCaseService();
     }
 }
