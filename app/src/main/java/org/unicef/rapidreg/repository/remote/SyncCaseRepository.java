@@ -43,6 +43,7 @@ public interface SyncCaseRepository {
     @Headers("Content-Type: application/json")
     Observable<Response<JsonElement>> getCasesIds(
             @Header("Cookie") String cookie,
+            @Query("module_id") String moduleId,
             @Query("last_update") String lastUpdate,
             @Query("mobile") Boolean isMobile);
 

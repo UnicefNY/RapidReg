@@ -19,7 +19,7 @@ public interface SyncCaseService {
 
     Observable<Response<JsonElement>> getCase(String id, String locale, Boolean isMobile);
 
-    Observable<Response<JsonElement>> getCasesIds(String lastUpdate, Boolean isMobile);
+    Observable<Response<JsonElement>> getCasesIds(String moduleId, String lastUpdate, Boolean isMobile);
 
     Response<JsonElement> uploadCaseJsonProfile(RecordModel item);
 

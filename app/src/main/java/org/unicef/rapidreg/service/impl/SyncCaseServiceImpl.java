@@ -59,8 +59,8 @@ public class SyncCaseServiceImpl extends BaseRetrofitService<SyncCaseRepository>
         return getRepository().getCase(PrimeroAppConfiguration.getCookie(), id, locale, isMobile);
     }
 
-    public Observable<Response<JsonElement>> getCasesIds(String lastUpdate, Boolean isMobile) {
-        return getRepository().getCasesIds(PrimeroAppConfiguration.getCookie(), lastUpdate, isMobile);
+    public Observable<Response<JsonElement>> getCasesIds(String moduleId, String lastUpdate, Boolean isMobile) {
+        return getRepository().getCasesIds(PrimeroAppConfiguration.getCookie(), moduleId, lastUpdate, isMobile);
     }
 
     public Response<JsonElement> uploadCaseJsonProfile(RecordModel item) {

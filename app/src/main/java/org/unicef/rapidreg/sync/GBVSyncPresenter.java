@@ -141,7 +141,7 @@ public class GBVSyncPresenter extends BaseSyncPresenter {
         final List<JsonObject> downList = new ArrayList<>();
         final ProgressDialog loadingDialog = getView().showFetchingCaseAmountLoadingDialog();
 
-        syncCaseService.getCasesIds(time, true)
+        syncCaseService.getCasesIds(PrimeroAppConfiguration.MODULE_ID_GBV, time, true)
                 .map(jsonElementResponse -> {
                     if (jsonElementResponse.isSuccessful()) {
                         JsonElement jsonElement = jsonElementResponse.body();
