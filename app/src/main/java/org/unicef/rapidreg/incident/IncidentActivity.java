@@ -56,7 +56,7 @@ public class IncidentActivity extends RecordActivity implements BaseView {
 
         if (getIntent() != null && getIntent().getBundleExtra(BUNDLE_EXTRA) != null) {
             if (!incidentPresenter.isFormReady()) {
-                showQuitDialog(R.id.nav_cases);
+                showSyncFormDialog(getResources().getString(R.string.child_incident));
                 return;
             }
 
