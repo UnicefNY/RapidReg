@@ -92,20 +92,24 @@ public class CaseService extends RecordService {
     public List<Long> getCPSearchResult(String shortId, String name, int ageFrom, int ageTo,
                                         String caregiver, Date date) {
         ConditionGroup conditionGroup = ConditionGroup.clause();
-        conditionGroup.and(Condition.column(NameAlias.builder(RecordModel.COLUMN_NAME).build())
-                .like(getWrappedCondition(name)));
         SQLCondition ageSearchCondition = generateAgeSearchCondition(ageFrom, ageTo);
         if (ageSearchCondition != null) {
             conditionGroup.and(ageSearchCondition);
         }
-        conditionGroup.and(Condition.column(NameAlias.builder(RecordModel.COLUMN_CAREGIVER).build())
-                .like(getWrappedCondition(caregiver)));
         conditionGroup.and(Condition.column(NameAlias.builder(RecordModel.COLUMN_OWNED_BY).build())
                 .eq(PrimeroAppConfiguration.getCurrentUser().getUsername()));
 
+        if(!TextUtils.isEmpty(caregiver)){
+            conditionGroup.and(Condition.column(NameAlias.builder(RecordModel.COLUMN_CAREGIVER).build())
+                    .like(getWrappedCondition(caregiver)));
+        }
         if(!TextUtils.isEmpty(shortId)){
             conditionGroup.and(Condition.column(NameAlias.builder(RecordModel.COLUMN_SHORT_ID).build())
                     .like(getWrappedCondition(shortId)));
+        }
+        if(!TextUtils.isEmpty(name)){
+            conditionGroup.and(Condition.column(NameAlias.builder(RecordModel.COLUMN_NAME).build())
+                    .like(getWrappedCondition(name)));
         }
         if (date != null) {
             conditionGroup.and(Condition.column(NameAlias.builder(Case.COLUMN_REGISTRATION_DATE)
