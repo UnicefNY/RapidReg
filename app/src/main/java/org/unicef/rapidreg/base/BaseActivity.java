@@ -1,5 +1,6 @@
 package org.unicef.rapidreg.base;
 
+import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -25,6 +26,7 @@ import org.unicef.rapidreg.event.CreateIncidentThruGBVCaseEvent;
 import org.unicef.rapidreg.injection.component.ActivityComponent;
 import org.unicef.rapidreg.injection.component.DaggerActivityComponent;
 import org.unicef.rapidreg.injection.module.ActivityModule;
+import org.unicef.rapidreg.loadform.TemplateFormService;
 import org.unicef.rapidreg.model.User;
 
 import javax.inject.Inject;
@@ -203,6 +205,8 @@ public abstract class BaseActivity extends MvpActivity<BaseView, BasePresenter> 
         basePresenter.logOut();
         String message = getContext().getResources().getString(R.string.login_out_successful_text);
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+
+        PrimeroApplication.getAppRuntime().unbindTemplateCaseService();
         intentSender.showLoginActivity(this);
     }
 
