@@ -13,6 +13,7 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 import org.unicef.rapidreg.IntentSender;
 import org.unicef.rapidreg.PrimeroAppConfiguration;
+import org.unicef.rapidreg.PrimeroApplication;
 import org.unicef.rapidreg.R;
 import org.unicef.rapidreg.base.BaseAlertDialog;
 import org.unicef.rapidreg.base.BaseView;
@@ -190,7 +191,11 @@ public class CaseActivity extends RecordActivity implements BaseView {
         if (casePresenter.isIncidentFormReady()) {
             intentSender.showIncidentActivity(this, true, extra);
         } else {
-            showSyncFormDialog(getResources().getString(R.string.sync_forms_message));
+            if (PrimeroApplication.getAppRuntime().isIncidentFormSyncFail()) {
+                showSyncFormDialog(getResources().getString(R.string.sync_forms_message));
+            } else {
+                showMessageThruToast(getResources().getString(R.string.forms_is_syncing_msg));
+            }
         }
     }
 }
