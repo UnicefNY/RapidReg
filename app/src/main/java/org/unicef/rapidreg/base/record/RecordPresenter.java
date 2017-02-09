@@ -10,15 +10,6 @@ import javax.inject.Inject;
 
 public class RecordPresenter extends BasePresenter {
     protected final Gson gson = new Gson();
-    private volatile boolean isFormSyncFail;
-
-    public boolean isFormSyncFail() {
-        return isFormSyncFail;
-    }
-
-    public void setFormSyncFail(boolean formSyncFail) {
-        isFormSyncFail = formSyncFail;
-    }
 
     @Inject
     public RecordPresenter() {}
