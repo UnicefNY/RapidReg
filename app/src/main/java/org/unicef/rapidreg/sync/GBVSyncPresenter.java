@@ -222,7 +222,7 @@ public class GBVSyncPresenter extends BaseSyncPresenter {
             item.setName(casesJsonObject.get("name").getAsString());
             setAgeIfExists(item, casesJsonObject);
             item.setOwnedBy(casesJsonObject.get("owned_by").getAsString());
-            item.setUrl(TextUtils.lintUrl(PrimeroAppConfiguration.getApiBaseUrl()));
+            item.setServerUrl(TextUtils.lintUrl(PrimeroAppConfiguration.getApiBaseUrl()));
             if (casesJsonObject.get("caregiver") != null) {
                 item.setCaregiver(casesJsonObject.get("caregiver").getAsString());
             }
@@ -237,7 +237,7 @@ public class GBVSyncPresenter extends BaseSyncPresenter {
                     Utils.getRegisterDate(casesJsonObject.get("registration_date").getAsString()));
             item.setCreatedBy(casesJsonObject.get("created_by").getAsString());
             item.setOwnedBy(casesJsonObject.get("owned_by").getAsString());
-            item.setUrl(TextUtils.lintUrl(PrimeroAppConfiguration.getApiBaseUrl()));
+            item.setServerUrl(TextUtils.lintUrl(PrimeroAppConfiguration.getApiBaseUrl()));
 
             item.setLastSyncedDate(Calendar.getInstance().getTime());
             item.setLastUpdatedDate(Calendar.getInstance().getTime());
@@ -347,7 +347,7 @@ public class GBVSyncPresenter extends BaseSyncPresenter {
             item.setSynced(true);
             item.setContent(new Blob(incidentsJsonObject.toString().getBytes()));
             item.setOwnedBy(incidentsJsonObject.get("owned_by").getAsString());
-            item.setUrl(TextUtils.lintUrl(PrimeroAppConfiguration.getApiBaseUrl()));
+            item.setServerUrl(TextUtils.lintUrl(PrimeroAppConfiguration.getApiBaseUrl()));
             item.update();
         } else {
             item = new Incident();
@@ -358,7 +358,7 @@ public class GBVSyncPresenter extends BaseSyncPresenter {
             item.setRegistrationDate(Utils.getRegisterDate(registrationDate));
             item.setCreatedBy(incidentsJsonObject.get("created_by").getAsString());
             item.setOwnedBy(incidentsJsonObject.get("owned_by").getAsString());
-            item.setUrl(TextUtils.lintUrl(PrimeroAppConfiguration.getApiBaseUrl()));
+            item.setServerUrl(TextUtils.lintUrl(PrimeroAppConfiguration.getApiBaseUrl()));
             item.setLastSyncedDate(Calendar.getInstance().getTime());
             item.setLastUpdatedDate(Calendar.getInstance().getTime());
             item.setSynced(true);

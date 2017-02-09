@@ -42,7 +42,7 @@ public class TracingDaoImpl implements TracingDao {
         return SQLite.select().from(Tracing.class)
                 .where(conditionGroup)
                 .and(Tracing_Table.owned_by.eq(ownedBy))
-                .and(Tracing_Table.url.eq(url))
+                .and(Tracing_Table.server_url.eq(url))
                 .orderBy(Tracing_Table.registration_date, false)
                 .queryList();
     }
@@ -74,6 +74,6 @@ public class TracingDaoImpl implements TracingDao {
                 .select()
                 .from(Tracing.class)
                 .where(Tracing_Table.owned_by.eq(ownedBy))
-                .and(Tracing_Table.url.eq(url));
+                .and(Tracing_Table.server_url.eq(url));
     }
 }

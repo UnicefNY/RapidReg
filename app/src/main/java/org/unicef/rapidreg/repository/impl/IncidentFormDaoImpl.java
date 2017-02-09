@@ -12,7 +12,7 @@ public class IncidentFormDaoImpl implements IncidentFormDao {
     public IncidentForm getIncidentForm(String moduleId, String apiBaseUrl) {
         return SQLite.select().from(IncidentForm.class)
                 .where(IncidentForm_Table.module_id.eq(moduleId))
-                .and(Incident_Table.url.eq(apiBaseUrl))
+                .and(Incident_Table.server_url.eq(apiBaseUrl))
                 .querySingle();
     }
 }

@@ -160,7 +160,7 @@ public class TracingServiceTest {
         when(tracingPhotoDao.save(tracingTemp, photoPaths)).thenReturn(expected);
 
         Tracing savedTracing = tracingServiceSpy.save(itemValuesMap, photoPaths);
-        assertThat(savedTracing.getUrl(), is(TextUtils.lintUrl(url)));
+        assertThat(savedTracing.getServerUrl(), is(TextUtils.lintUrl(url)));
         verify(tracingDao, times(1)).save(any(Tracing.class));
         verify(tracingPhotoDao, times(1)).save(any(Tracing.class), anyList());
     }

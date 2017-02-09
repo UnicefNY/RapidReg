@@ -33,7 +33,7 @@ public class IncidentDaoImpl implements IncidentDao {
         return SQLite.select().from(Incident.class)
                 .where(conditionGroup)
                 .and(Incident_Table.owned_by.eq(ownedBy))
-                .and(Incident_Table.url.eq(url))
+                .and(Incident_Table.server_url.eq(url))
                 .orderBy(Incident_Table.registration_date, false)
                 .queryList();
     }
@@ -105,6 +105,6 @@ public class IncidentDaoImpl implements IncidentDao {
                 .select()
                 .from(Incident.class)
                 .where(Incident_Table.owned_by.eq(ownedBy))
-                .and(Incident_Table.url.eq(url));
+                .and(Incident_Table.server_url.eq(url));
     }
 }

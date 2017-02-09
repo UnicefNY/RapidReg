@@ -9,6 +9,6 @@ import org.unicef.rapidreg.repository.TracingFormDao;
 public class TracingFormDaoImpl implements TracingFormDao {
     @Override
     public TracingForm getTracingForm(String apiBaseUrl) {
-        return SQLite.select().from(TracingForm.class).where(Tracing_Table.url.eq(apiBaseUrl)).querySingle();
+        return SQLite.select().from(TracingForm.class).where(Tracing_Table.server_url.eq(apiBaseUrl)).querySingle();
     }
 }

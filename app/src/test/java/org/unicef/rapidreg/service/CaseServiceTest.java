@@ -107,7 +107,7 @@ public class CaseServiceTest {
         Case actual = caseServiceSpy.save(itemValues, Collections.EMPTY_LIST);
         when(caseDao.save(any(Case.class))).thenReturn(actual);
 
-        assertThat("Should have save url", actual.getUrl(), is(TextUtils.lintUrl(url)));
+        assertThat("Should have save url", actual.getServerUrl(), is(TextUtils.lintUrl(url)));
         assertThat("Should have save uuid.", actual.getUniqueId(), is(uuid));
         verify(caseDao, times(1)).save(any(Case.class));
     }

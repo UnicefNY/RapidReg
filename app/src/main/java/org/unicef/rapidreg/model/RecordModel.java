@@ -51,8 +51,8 @@ public class RecordModel extends BaseModel {
     private Date registrationDate;
     @Column(name = "created_by")
     private String createdBy;
-    @Column(name = "url")
-    private String url;
+    @Column(name = "server_url")
+    private String serverUrl;
     @Column(name = "owned_by")
     private String ownedBy;
     @Column(name = "created_date")
@@ -63,8 +63,6 @@ public class RecordModel extends BaseModel {
     private Date lastSyncedDate;
     @Column(name = "type")
     private int type;
-    @Column(name = "module_id")
-    private String moduleId;
 
     @Column
     private boolean isAudioSynced;
@@ -76,12 +74,12 @@ public class RecordModel extends BaseModel {
     public RecordModel() {
     }
 
-    public String getUrl() {
-        return url;
+    public String getServerUrl() {
+        return serverUrl;
     }
 
-    public void setUrl(String url) {
-        this.url = url;
+    public void setServerUrl(String serverUrl) {
+        this.serverUrl = serverUrl;
     }
 
     public long getId() {
@@ -244,25 +242,16 @@ public class RecordModel extends BaseModel {
         this.shortId = shortId;
     }
 
-    public String getModuleId() {
-        return moduleId;
-    }
-
-    public void setModuleId(String moduleId) {
-        this.moduleId = moduleId;
-    }
-
     @Override
     public String toString() {
         return "RecordModel{" +
                 "isAudioSynced=" + isAudioSynced +
-                ", moduleId='" + moduleId + '\'' +
                 ", type=" + type +
                 ", lastSyncedDate=" + lastSyncedDate +
                 ", lastUpdatedDate=" + lastUpdatedDate +
                 ", createDate=" + createDate +
                 ", ownedBy='" + ownedBy + '\'' +
-                ", url='" + url + '\'' +
+                ", serverUrl='" + serverUrl + '\'' +
                 ", createdBy='" + createdBy + '\'' +
                 ", registrationDate=" + registrationDate +
                 ", shortId='" + shortId + '\'' +

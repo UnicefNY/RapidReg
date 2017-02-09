@@ -84,11 +84,10 @@ public class IncidentService extends RecordService {
                 searchCondition));
     }
 
-    private ConditionGroup getSearchCondition(String uniqueId, String survivorCode, int ageFrom, int ageTo, String
+    private ConditionGroup getSearchCondition(String shortId, String survivorCode, int ageFrom, int ageTo, String
             typeOfViolence, String location) {
         ConditionGroup conditionGroup = ConditionGroup.clause();
-        conditionGroup.and(Condition.column(NameAlias.builder(RecordModel.COLUMN_SHORT_ID).build())
-                .like(getWrappedCondition(uniqueId)));
+
         conditionGroup.and(Condition.column(NameAlias.builder(RecordModel.COLUMN_OWNED_BY).build())
                 .eq(PrimeroAppConfiguration.getCurrentUser().getUsername()));
 
@@ -97,6 +96,10 @@ public class IncidentService extends RecordService {
             conditionGroup.and(ageSearchCondition);
         }
 
+        if(!TextUtils.isEmpty(shortId)){
+            conditionGroup.and(Condition.column(NameAlias.builder(RecordModel.COLUMN_SHORT_ID).build())
+                    .like(getWrappedCondition(shortId)));
+        }
         if (!TextUtils.isEmpty(typeOfViolence)) {
             conditionGroup.and(Condition.column(NameAlias.builder(Incident.COLUMN_TYPE_OF_VIOLENCE).build())
                     .eq(typeOfViolence));
@@ -148,7 +151,7 @@ public class IncidentService extends RecordService {
         incident.setSurvivorCode(getSurvivorCode(itemValues));
         incident.setTypeOfViolence(getTypeOfViolence(itemValues));
         incident.setLocation(getLocation(itemValues));
-        incident.setUrl(TextUtils.lintUrl(PrimeroAppConfiguration.getApiBaseUrl()));
+        incident.setServerUrl(TextUtils.lintUrl(PrimeroAppConfiguration.getApiBaseUrl()));
         int age = itemValues.has(AGE) ? itemValues.getAsInt(AGE) : EMPTY_AGE;
         incident.setAge(age);
         incident.setCaregiver(getCaregiverName(itemValues));

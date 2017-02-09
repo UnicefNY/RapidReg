@@ -32,7 +32,7 @@ public class CaseDaoImpl implements CaseDao {
         return SQLite.select().from(Case.class)
                 .where(conditionGroup)
                 .and(Case_Table.owned_by.eq(ownedBy))
-                .and(Case_Table.url.eq(url))
+                .and(Case_Table.server_url.eq(url))
                 .orderBy(Case_Table.registration_date, false)
                 .queryList();
     }
@@ -93,6 +93,6 @@ public class CaseDaoImpl implements CaseDao {
                 .select()
                 .from(Case.class)
                 .where(Case_Table.owned_by.eq(ownedBy))
-                .and(Case_Table.url.eq(url));
+                .and(Case_Table.server_url.eq(url));
     }
 }

@@ -162,7 +162,7 @@ public class IncidentServiceTest {
 
         assertThat(incident.getAge(), is(-1));
         assertThat(incident.getUniqueId(), is(uniqueId));
-        assertThat(incident.getUrl(), is(TextUtils.lintUrl(url)));
+        assertThat(incident.getServerUrl(), is(TextUtils.lintUrl(url)));
         assertThat(incident.getRegistrationDate(), is(Utils.getRegisterDate("11/11/1111")));
         assertThat(incident.getRegistrationDate(), is(Utils.getRegisterDate("11/11/1111")));
 
@@ -186,7 +186,7 @@ public class IncidentServiceTest {
         when(incidentDao.save(any(Incident.class))).thenReturn(incident);
 
         assertThat(incident.getAge(), is(-1));
-        assertThat(incident.getUrl(), is(TextUtils.lintUrl(url)));
+        assertThat(incident.getServerUrl(), is(TextUtils.lintUrl(url)));
         assertThat(incident.getUniqueId(), is(uniqueId));
     }
 

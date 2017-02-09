@@ -73,20 +73,21 @@ public class TracingService extends RecordService {
                 searchCondition));
     }
 
-    private ConditionGroup getSearchCondition(String uniqueId, String name, int ageFrom, int
+    private ConditionGroup getSearchCondition(String shortId, String name, int ageFrom, int
             ageTo, Date date) {
         ConditionGroup conditionGroup = ConditionGroup.clause();
-        conditionGroup.and(Condition.column(NameAlias.builder(RecordModel.COLUMN_SHORT_ID).build())
-                .like(getWrappedCondition(uniqueId)));
         conditionGroup.and(Condition.column(NameAlias.builder(RecordModel.COLUMN_CREATED_BY).build())
                 .eq(PrimeroAppConfiguration.getCurrentUser().getUsername()));
 
         SQLCondition ageSearchCondition = generateAgeSearchCondition(ageFrom, ageTo);
-
+        if (!TextUtils.isEmpty(shortId)) {
+            conditionGroup.and(Condition.column(NameAlias.builder(RecordModel.COLUMN_SHORT_ID).build())
+                    .like(getWrappedCondition(shortId)));
+        }
         if (ageSearchCondition != null) {
             conditionGroup.and(ageSearchCondition);
         }
-        if (!TextUtils.isEmpty(name)){
+        if (!TextUtils.isEmpty(name)) {
             conditionGroup.and(Condition.column(NameAlias.builder(RecordModel.COLUMN_NAME).build())
                     .like(getWrappedCondition(name)));
         }
@@ -134,7 +135,7 @@ public class TracingService extends RecordService {
         String username = PrimeroAppConfiguration.getCurrentUser().getUsername();
         tracing.setCreatedBy(username);
         tracing.setOwnedBy(username);
-        tracing.setUrl(TextUtils.lintUrl(PrimeroAppConfiguration.getApiBaseUrl()));
+        tracing.setServerUrl(TextUtils.lintUrl(PrimeroAppConfiguration.getApiBaseUrl()));
 
         Date date = new Date(Calendar.getInstance().getTimeInMillis());
         tracing.setCreateDate(date);

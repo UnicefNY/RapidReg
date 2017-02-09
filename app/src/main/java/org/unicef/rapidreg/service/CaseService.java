@@ -118,11 +118,13 @@ public class CaseService extends RecordService {
 
     public List<Long> getGBVSearchResult(String shortId, String name, String location, Date registrationDate) {
         ConditionGroup conditionGroup = ConditionGroup.clause();
-        conditionGroup.and(Condition.column(NameAlias.builder(RecordModel.COLUMN_SHORT_ID).build())
-                .like(getWrappedCondition(shortId)));
         conditionGroup.and(Condition.column(NameAlias.builder(RecordModel.COLUMN_OWNED_BY).build())
                 .eq(PrimeroAppConfiguration.getCurrentUser().getUsername()));
 
+        if (!TextUtils.isEmpty(shortId)) {
+            conditionGroup.and(Condition.column(NameAlias.builder(RecordModel.COLUMN_SHORT_ID).build())
+                    .like(getWrappedCondition(shortId)));
+        }
         //      TODO
         if (!TextUtils.isEmpty(location)) {
             conditionGroup.and(Condition.column(NameAlias.builder(RecordModel.COLUMN_LOCATION).build())
@@ -185,10 +187,9 @@ public class CaseService extends RecordService {
         child.setAudio(audioFileDefault);
         child.setCreatedBy(username);
         child.setOwnedBy(username);
-        child.setModuleId(itemValues.getAsString(MODULE));
         String location = itemValues.has(LOCATION) ? itemValues.getAsString(LOCATION) : "";
         child.setLocation(location);
-        child.setUrl(TextUtils.lintUrl(PrimeroAppConfiguration.getApiBaseUrl()));
+        child.setServerUrl(TextUtils.lintUrl(PrimeroAppConfiguration.getApiBaseUrl()));
         caseDao.save(child);
         savePhoto(child, photoPaths);
         return child;
