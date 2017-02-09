@@ -19,21 +19,11 @@ import rx.Observable;
 import static org.unicef.rapidreg.PrimeroAppConfiguration.MODULE_ID_GBV;
 
 public class CasePresenter extends RecordPresenter {
-    private CaseFormService caseFormService;
     private IncidentFormService incidentFormService;
 
     @Inject
-    public CasePresenter(CaseFormService caseFormService, IncidentFormService incidentFormService) {
-        this.caseFormService = caseFormService;
+    public CasePresenter(IncidentFormService incidentFormService) {
         this.incidentFormService = incidentFormService;
-    }
-
-    @Override
-    public void saveForm(RecordForm recordForm, String moduleId) {
-        Blob caseFormBlob = new Blob(gson.toJson(recordForm).getBytes());
-        CaseForm caseForm = new CaseForm(caseFormBlob);
-        caseForm.setModuleId(moduleId);
-        caseFormService.saveOrUpdate(caseForm);
     }
 
     public boolean isIncidentFormReady() {

@@ -35,7 +35,14 @@ public class TemplateFormPresenter {
                                  CaseFormService caseFormService,
                                  TracingFormService tracingFormService,
                                  IncidentFormService incidentFormService) {
-        this.formRemoteService = formRemoteService.get();
+        this(formRemoteService.get(), caseFormService, tracingFormService, incidentFormService);
+    }
+
+    public TemplateFormPresenter(FormRemoteService formRemoteService,
+                                 CaseFormService caseFormService,
+                                 TracingFormService tracingFormService,
+                                 IncidentFormService incidentFormService) {
+        this.formRemoteService = formRemoteService;
         this.caseFormService = caseFormService;
         this.tracingFormService = tracingFormService;
         this.incidentFormService = incidentFormService;
@@ -52,7 +59,7 @@ public class TemplateFormPresenter {
                 });
     }
 
-    private void saveCaseForm(RecordForm recordForm, String moduleId) {
+    public void saveCaseForm(RecordForm recordForm, String moduleId) {
         Blob caseFormBlob = new Blob(gson.toJson(recordForm).getBytes());
         CaseForm caseForm = new CaseForm(caseFormBlob);
         caseForm.setModuleId(moduleId);
@@ -70,7 +77,7 @@ public class TemplateFormPresenter {
                 });
     }
 
-    private void saveTracingForm(RecordForm recordForm) {
+    public void saveTracingForm(RecordForm recordForm) {
         Blob tracingFormBlob = new Blob(gson.toJson(recordForm).getBytes());
         TracingForm tracingForm = new TracingForm(tracingFormBlob);
         tracingForm.setModuleId(MODULE_ID_CP);
@@ -88,7 +95,7 @@ public class TemplateFormPresenter {
                 });
     }
 
-    private void saveIncidentForm(RecordForm recordForm) {
+    public void saveIncidentForm(RecordForm recordForm) {
         Blob incidentFormBlob = new Blob(gson.toJson(recordForm).getBytes());
         IncidentForm incidentForm = new IncidentForm(incidentFormBlob);
         incidentForm.setModuleId(MODULE_ID_GBV);

@@ -16,20 +16,10 @@ import rx.Observable;
 
 public class IncidentPresenter extends RecordPresenter {
     private IncidentFormService incidentFormService;
-    private FormRemoteService formRemoteService;
 
     @Inject
-    public IncidentPresenter(FormRemoteService authService,
-                             IncidentFormService incidentFormService) {
+    public IncidentPresenter(IncidentFormService incidentFormService) {
         this.incidentFormService = incidentFormService;
-        this.formRemoteService = authService;
-    }
-
-    @Override
-    public void saveForm(RecordForm recordForm, String moduleId) {
-        IncidentForm incidentForm = new IncidentForm(new Blob(gson.toJson(recordForm).getBytes()));
-        incidentForm.setModuleId(moduleId);
-        incidentFormService.saveOrUpdate(incidentForm);
     }
 
     public boolean isFormReady() {
