@@ -123,6 +123,21 @@ public abstract class RecordListFragment extends MvpFragment<RecordListView, Rec
         });
     }
 
+    public void showSyncFormDialog(String message) {
+        AlertDialog dialog = new BaseAlertDialog.Builder(getContext())
+                .setTitle(R.string.sync_forms)
+                .setMessage(String.format("%s %s", message, getResources().getString(R.string
+                        .sync_forms_message)))
+                .setPositiveButton(R.string.ok, (dialog1, which) -> ((RecordActivity)getActivity()).sendSyncFormEvent())
+                .setNegativeButton(R.string.cancel, null)
+                .show();
+        Utils.changeDialogDividerColor(getContext(), dialog);
+    }
+
+    public void showMessageThruToast(String message) {
+        Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
+    }
+
     protected abstract RecordListAdapter createRecordListAdapter();
 
     protected abstract int getDefaultSpinnerStatePosition();

@@ -61,23 +61,17 @@ public abstract class RecordActivity extends BaseActivity {
         return recordPresenter;
     }
 
-    public boolean isFormSyncFail() {
-        return recordPresenter.isFormSyncFail();
-    }
-
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         getComponent().inject(this);
         super.onCreate(savedInstanceState);
         subscriptions = new CompositeSubscription();
-        EventBus.getDefault().register(this);
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
 
-        EventBus.getDefault().unregister(this);
         subscriptions.clear();
     }
 
@@ -136,11 +130,6 @@ public abstract class RecordActivity extends BaseActivity {
     }
 
     public void showSyncFormDialog(String message) {
-        if (isFormSyncFail()) {
-            Toast.makeText(this, R.string.forms_is_syncing_msg, Toast.LENGTH_SHORT)
-                    .show();
-            return;
-        }
         AlertDialog dialog = new BaseAlertDialog.Builder(this)
                 .setTitle(R.string.sync_forms)
                 .setMessage(String.format("%s %s", message, getResources().getString(R.string
@@ -149,6 +138,10 @@ public abstract class RecordActivity extends BaseActivity {
                 .setNegativeButton(R.string.cancel, null)
                 .show();
         Utils.changeDialogDividerColor(this, dialog);
+    }
+
+    public void showMessageThruToast(String message) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
 
     private void onSelectFromGalleryResult(Intent data) {
@@ -203,7 +196,7 @@ public abstract class RecordActivity extends BaseActivity {
         }
     }
 
-    protected abstract void sendSyncFormEvent();
+    public abstract void sendSyncFormEvent();
 
     protected abstract RecordListFragment getRecordListFragment();
 
