@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 
 import org.greenrobot.eventbus.EventBus;
 import org.unicef.rapidreg.PrimeroAppConfiguration;
+import org.unicef.rapidreg.PrimeroApplication;
 import org.unicef.rapidreg.R;
 import org.unicef.rapidreg.base.record.RecordActivity;
 import org.unicef.rapidreg.base.record.recordlist.RecordListAdapter;
@@ -69,7 +70,11 @@ public class TracingListFragment extends RecordListFragment {
         tracingListPresenter.clearAudioFile();
 
         if (!tracingListPresenter.isFormReady()) {
-            ((RecordActivity)getActivity()).showSyncFormDialog(getResources().getString(R.string.tracing_request));
+            if (PrimeroApplication.getAppRuntime().isTracingFormSyncFail()) {
+                showSyncFormDialog(getResources().getString(R.string.tracing_request));
+            } else {
+                showMessageThruToast(getResources().getString(R.string.forms_is_syncing_msg));
+            }
             return;
         }
 

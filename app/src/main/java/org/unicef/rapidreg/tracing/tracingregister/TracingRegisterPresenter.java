@@ -25,7 +25,6 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
 
-import static org.unicef.rapidreg.base.record.recordregister.RecordRegisterFragment.INVALID_UNIQUE_ID;
 import static org.unicef.rapidreg.service.TracingService.TRACING_ID;
 import static org.unicef.rapidreg.service.TracingService.TRACING_PRIMARY_ID;
 

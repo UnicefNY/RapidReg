@@ -54,34 +54,34 @@ public class TracingPresenterTest {
         verify(tracingFormService, times(1)).saveOrUpdate(any(TracingForm.class));
     }
 
-    @Test
-    public void should_load_tracing_form_when_give_cookie_and_module_id() throws Exception {
-        TracingTemplateForm tracingTemplateForm = createTracingTemplateForm();
-        Observable<TracingTemplateForm> observable = Observable.just(tracingTemplateForm);
-        when(authService.getTracingForm("cookie", "en", true, "tracing_request", "primeromodule-cp"))
-                .thenReturn(observable);
-        Mockito.when(PrimeroAppConfiguration.getCookie()).thenReturn("cookie");
-        Mockito.when(PrimeroAppConfiguration.getDefaultLanguage()).thenReturn("en");
+//    @Test
+//    public void should_load_tracing_form_when_give_cookie_and_module_id() throws Exception {
+//        TracingTemplateForm tracingTemplateForm = createTracingTemplateForm();
+//        Observable<TracingTemplateForm> observable = Observable.just(tracingTemplateForm);
+//        when(authService.getTracingForm("cookie", "en", true, "tracing_request", "primeromodule-cp"))
+//                .thenReturn(observable);
+//        Mockito.when(PrimeroAppConfiguration.getCookie()).thenReturn("cookie");
+//        Mockito.when(PrimeroAppConfiguration.getDefaultLanguage()).thenReturn("en");
+//
+//        tracingPresenter.loadTracingForm();
+//
+//        verify(tracingFormService, times(1)).saveOrUpdate(any(TracingForm.class));
+//        assertFalse("Should mark sync successful.", tracingPresenter.isFormSyncFail());
+//    }
 
-        tracingPresenter.loadTracingForm();
-
-        verify(tracingFormService, times(1)).saveOrUpdate(any(TracingForm.class));
-        assertFalse("Should mark sync successful.", tracingPresenter.isFormSyncFail());
-    }
-
-    @Test
-    public void should_show_error_when_sync_form_fail() throws Exception {
-        Observable observable = Observable.error(new Exception());
-        when(authService.getTracingForm("cookie", "en", true, "tracing_request", "primeromodule-cp"))
-                .thenReturn(observable);
-
-        Mockito.when(PrimeroAppConfiguration.getCookie()).thenReturn("cookie");
-        Mockito.when(PrimeroAppConfiguration.getDefaultLanguage()).thenReturn("en");
-
-        tracingPresenter.loadTracingForm();
-
-        assertTrue("Should mark sync fail.", tracingPresenter.isFormSyncFail());
-    }
+//    @Test
+//    public void should_show_error_when_sync_form_fail() throws Exception {
+//        Observable observable = Observable.error(new Exception());
+//        when(authService.getTracingForm("cookie", "en", true, "tracing_request", "primeromodule-cp"))
+//                .thenReturn(observable);
+//
+//        Mockito.when(PrimeroAppConfiguration.getCookie()).thenReturn("cookie");
+//        Mockito.when(PrimeroAppConfiguration.getDefaultLanguage()).thenReturn("en");
+//
+//        tracingPresenter.loadTracingForm();
+//
+//        assertTrue("Should mark sync fail.", tracingPresenter.isFormSyncFail());
+//    }
 
     private TracingTemplateForm createTracingTemplateForm() {
         TracingTemplateForm tracingTemplateForm = new TracingTemplateForm();
