@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 
 import org.greenrobot.eventbus.EventBus;
 import org.unicef.rapidreg.PrimeroAppConfiguration;
+import org.unicef.rapidreg.PrimeroApplication;
 import org.unicef.rapidreg.R;
 import org.unicef.rapidreg.base.record.RecordActivity;
 import org.unicef.rapidreg.base.record.recordlist.RecordListAdapter;
@@ -70,7 +71,11 @@ public class IncidentListFragment extends RecordListFragment {
         incidentListPresenter.clearAudioFile();
 
         if (!incidentListPresenter.isFormReady()) {
-            ((RecordActivity)getActivity()).showSyncFormDialog(getResources().getString(R.string.child_incident));
+            if (PrimeroApplication.getAppRuntime().isIncidentFormSyncFail()) {
+                showSyncFormDialog(getResources().getString(R.string.child_incident));
+            } else {
+                showMessageThruToast(getResources().getString(R.string.forms_is_syncing_msg));
+            }
             return;
         }
 
