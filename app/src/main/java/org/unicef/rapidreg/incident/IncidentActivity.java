@@ -164,7 +164,7 @@ public class IncidentActivity extends RecordActivity implements BaseView {
     }
 
     @Override
-    protected void sendSyncFormEvent() {
+    public void sendSyncFormEvent() {
         EventBus.getDefault().postSticky(new LoadGBVIncidentFormEvent(PrimeroAppConfiguration
                 .getCookie()));
     }
@@ -173,12 +173,6 @@ public class IncidentActivity extends RecordActivity implements BaseView {
     protected RecordListFragment getRecordListFragment() {
         return (IncidentListFragment) getSupportFragmentManager()
                 .findFragmentByTag(IncidentListFragment.class.getSimpleName());
-    }
-
-    @Subscribe(threadMode = ThreadMode.MAIN, sticky = true, priority = 1)
-    public void onNeedLoadGBVIncidentFormsEvent(final LoadGBVIncidentFormEvent event) {
-        EventBus.getDefault().removeStickyEvent(event);
-        incidentPresenter.loadIncidentForm(PrimeroAppConfiguration.MODULE_ID_GBV);
     }
 
     @Override
