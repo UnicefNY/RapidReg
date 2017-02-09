@@ -52,7 +52,6 @@ public class PrimeroAppConfiguration {
         PrimeroAppConfiguration.cookie = cookie;
     }
 
-
     public static String getInternalFilePath() {
         return internalFilePath;
     }

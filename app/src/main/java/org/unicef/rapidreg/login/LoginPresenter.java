@@ -152,8 +152,4 @@ public class LoginPresenter extends MvpBasePresenter<LoginView> {
             }
         });
     }
-
-    public boolean isOnline() {
-        return loginService.isOnline();
-    }
 }

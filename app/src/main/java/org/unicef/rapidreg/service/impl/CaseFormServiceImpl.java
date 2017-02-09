@@ -62,7 +62,7 @@ public class CaseFormServiceImpl implements CaseFormService {
         CaseForm existingCaseForm = caseFormDao.getCaseForm(caseForm.getModuleId(), PrimeroAppConfiguration
                 .getApiBaseUrl());
         if (existingCaseForm == null) {
-            caseForm.setUrl(PrimeroAppConfiguration.getApiBaseUrl());
+            caseForm.setServerUrl(PrimeroAppConfiguration.getApiBaseUrl());
             caseForm.save();
         } else {
             existingCaseForm.setForm(caseForm.getForm());

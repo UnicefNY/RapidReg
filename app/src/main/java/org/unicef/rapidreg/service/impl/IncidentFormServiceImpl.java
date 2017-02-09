@@ -51,7 +51,7 @@ public class IncidentFormServiceImpl implements IncidentFormService {
         IncidentForm existingIncidentForm = incidentFormDao.getIncidentForm(incidentForm.
                 getModuleId(),PrimeroAppConfiguration.getApiBaseUrl());
         if (existingIncidentForm == null) {
-            incidentForm.setUrl(PrimeroAppConfiguration.getApiBaseUrl());
+            incidentForm.setServerUrl(PrimeroAppConfiguration.getApiBaseUrl());
             incidentForm.save();
         } else {
             existingIncidentForm.setForm(incidentForm.getForm());

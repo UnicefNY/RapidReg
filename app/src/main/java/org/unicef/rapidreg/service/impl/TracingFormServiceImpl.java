@@ -38,7 +38,7 @@ public class TracingFormServiceImpl implements TracingFormService {
         TracingForm existingTracingForm = tracingFormDao.getTracingForm(PrimeroAppConfiguration.getApiBaseUrl());
         if (existingTracingForm == null) {
             Log.d(TAG, "save new tracing form");
-            tracingForm.setUrl(PrimeroAppConfiguration.getApiBaseUrl());
+            tracingForm.setServerUrl(PrimeroAppConfiguration.getApiBaseUrl());
             tracingForm.save();
         } else {
             Log.d(TAG, "update existing tracing form");

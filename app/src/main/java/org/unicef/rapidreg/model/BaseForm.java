@@ -15,8 +15,8 @@ public class BaseForm extends BaseModel {
     @Column(name = "module_id")
     private String moduleId;
 
-    @Column
-    private String url;
+    @Column(name = "server_url")
+    private String serverUrl;
 
     public String getModuleId() {
         return moduleId;
@@ -27,8 +27,7 @@ public class BaseForm extends BaseModel {
     }
 
 
-    public BaseForm() {
-    }
+    public BaseForm() {}
 
     public BaseForm(Blob form) {
         this.form = form;
@@ -46,12 +45,12 @@ public class BaseForm extends BaseModel {
         return form;
     }
 
-    public String getUrl() {
-        return url;
+    public String getServerUrl() {
+        return serverUrl;
     }
 
-    public void setUrl(String url) {
-        this.url = url;
+    public void setServerUrl(String serverUrl) {
+        this.serverUrl = serverUrl;
     }
 
     public void setForm(Blob form) {
