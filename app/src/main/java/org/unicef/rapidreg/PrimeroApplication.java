@@ -1,7 +1,11 @@
 package org.unicef.rapidreg;
 
 import android.app.Application;
+import android.content.ComponentName;
 import android.content.Context;
+import android.content.Intent;
+import android.content.ServiceConnection;
+import android.os.IBinder;
 
 import com.facebook.stetho.Stetho;
 import com.raizlabs.android.dbflow.config.DatabaseConfig;
@@ -11,16 +15,21 @@ import com.raizlabs.android.dbflow.config.FlowManager;
 import com.raizlabs.android.dbflow.structure.database.DatabaseHelperListener;
 import com.raizlabs.android.dbflow.structure.database.OpenHelper;
 
+import org.unicef.rapidreg.loadform.TemplateFormService;
 import org.unicef.rapidreg.repository.impl.SQLCipherHelperImpl;
 import org.unicef.rapidreg.injection.component.ApplicationComponent;
 import org.unicef.rapidreg.injection.component.DaggerApplicationComponent;
 import org.unicef.rapidreg.injection.module.ApplicationModule;
+
+import javax.inject.Inject;
 
 public class PrimeroApplication extends Application {
 
     private static Context context;
 
     ApplicationComponent applicationComponent;
+
+    private static AppRuntime appRuntime;
 
     public static Context getAppContext() {
         return context;
@@ -30,6 +39,7 @@ public class PrimeroApplication extends Application {
     public void onCreate() {
         super.onCreate();
         context = getApplicationContext();
+        appRuntime = new AppRuntime(context);
 
         if (BuildConfig.DEBUG) {
             Stetho.initializeWithDefaults(context);
@@ -47,13 +57,7 @@ public class PrimeroApplication extends Application {
     private void initDB() {
         FlowManager.init(new FlowConfig.Builder(this)
                 .addDatabaseConfig(new DatabaseConfig.Builder(PrimeroDatabaseConfiguration.class)
-                        .openHelper(new DatabaseConfig.OpenHelperCreator() {
-                            @Override
-                            public OpenHelper createHelper(DatabaseDefinition databaseDefinition,
-                                                           DatabaseHelperListener helperListener) {
-                                return new SQLCipherHelperImpl(databaseDefinition, helperListener);
-                            }
-                        }).build())
+                        .openHelper((databaseDefinition, helperListener) -> new SQLCipherHelperImpl(databaseDefinition, helperListener)).build())
                 .build());
     }
 
@@ -72,5 +76,9 @@ public class PrimeroApplication extends Application {
 
     public void setApplicationComponent(ApplicationComponent applicationComponent) {
         this.applicationComponent = applicationComponent;
+    }
+
+    public static AppRuntime getAppRuntime() {
+        return appRuntime;
     }
 }
