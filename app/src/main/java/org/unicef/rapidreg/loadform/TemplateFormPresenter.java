@@ -76,7 +76,7 @@ public class TemplateFormPresenter {
         tracingForm.setModuleId(MODULE_ID_CP);
         tracingFormService.saveOrUpdate(tracingForm);
     }
-    
+
     public void loadIncidentForm(TemplateFormService.LoadCallback callback) {
         formRemoteService.getIncidentForm(PrimeroAppConfiguration.getCookie(), PrimeroAppConfiguration.getDefaultLanguage
                 (), true, PrimeroAppConfiguration.PARENT_INCIDENT, MODULE_ID_GBV)
