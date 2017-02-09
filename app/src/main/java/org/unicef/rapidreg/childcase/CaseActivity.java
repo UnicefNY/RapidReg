@@ -21,8 +21,10 @@ import org.unicef.rapidreg.base.record.recordlist.RecordListFragment;
 import org.unicef.rapidreg.childcase.caselist.CaseListFragment;
 import org.unicef.rapidreg.event.LoadCPCaseFormEvent;
 import org.unicef.rapidreg.event.LoadGBVCaseFormEvent;
+import org.unicef.rapidreg.event.LoadGBVIncidentFormEvent;
 import org.unicef.rapidreg.event.RedirectIncidentEvent;
 import org.unicef.rapidreg.event.SaveCaseEvent;
+import org.unicef.rapidreg.incident.IncidentPresenter;
 import org.unicef.rapidreg.model.User;
 import org.unicef.rapidreg.utils.Utils;
 
@@ -46,6 +48,7 @@ public class CaseActivity extends RecordActivity implements BaseView {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         getComponent().inject(this);
+        EventBus.getDefault().register(this);
         super.onCreate(savedInstanceState);
 
         setNavSelectedMenu(R.id.nav_cases, caseColor);
@@ -61,12 +64,13 @@ public class CaseActivity extends RecordActivity implements BaseView {
     }
 
     @Override
-    protected void sendSyncFormEvent() {
+    public void sendSyncFormEvent() {
         User.Role roleType = PrimeroAppConfiguration.getCurrentUser().getRoleType();
         if (roleType == User.Role.CP) {
             EventBus.getDefault().postSticky(new LoadCPCaseFormEvent(PrimeroAppConfiguration.getCookie()));
         }else if(roleType == User.Role.GBV){
             EventBus.getDefault().postSticky(new LoadGBVCaseFormEvent(PrimeroAppConfiguration.getCookie()));
+            EventBus.getDefault().postSticky(new LoadGBVIncidentFormEvent(PrimeroAppConfiguration.getCookie()));
         }else{
             EventBus.getDefault().postSticky(new LoadCPCaseFormEvent(PrimeroAppConfiguration.getCookie()));
         }
@@ -166,16 +170,15 @@ public class CaseActivity extends RecordActivity implements BaseView {
         EventBus.getDefault().postSticky(event);
     }
 
-    @Subscribe(threadMode = ThreadMode.MAIN, sticky = true, priority = 1)
-    public void onNeedLoadGBVCaseFormsEvent(LoadGBVCaseFormEvent event) {
-        EventBus.getDefault().removeStickyEvent(event);
-        casePresenter.loadCaseForm(PrimeroAppConfiguration.MODULE_ID_GBV);
+    @Override
+    public void promoteSyncFormsError() {
+        Toast.makeText(CaseActivity.this, R.string.sync_forms_error, Toast.LENGTH_SHORT).show();
     }
 
-    @Subscribe(threadMode = ThreadMode.MAIN, sticky = true, priority = 1)
-    public void onNeedLoadCPCaseFormsEvent(LoadCPCaseFormEvent event) {
-        EventBus.getDefault().removeStickyEvent(event);
-        casePresenter.loadCaseForm(PrimeroAppConfiguration.MODULE_ID_CP);
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN, priority = 1)
@@ -184,11 +187,10 @@ public class CaseActivity extends RecordActivity implements BaseView {
         Bundle extra = new Bundle();
         extra.putString(INCIDENT_ID, incidentId);
 
-        intentSender.showIncidentActivity(this, true, extra);
-    }
-
-    @Override
-    public void promoteSyncFormsError() {
-        Toast.makeText(CaseActivity.this, R.string.sync_forms_error, Toast.LENGTH_SHORT).show();
+        if (casePresenter.isIncidentFormReady()) {
+            intentSender.showIncidentActivity(this, true, extra);
+        } else {
+            showSyncFormDialog(getResources().getString(R.string.sync_forms_message));
+        }
     }
 }

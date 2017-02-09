@@ -5,9 +5,11 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import org.greenrobot.eventbus.EventBus;
 import org.unicef.rapidreg.PrimeroAppConfiguration;
+import org.unicef.rapidreg.PrimeroApplication;
 import org.unicef.rapidreg.R;
 import org.unicef.rapidreg.base.record.RecordActivity;
 import org.unicef.rapidreg.base.record.recordlist.RecordListAdapter;
@@ -78,7 +80,10 @@ public class CaseListFragment extends RecordListFragment {
         caseListPresenter.clearAudioFile();
 
         if (!caseListPresenter.isFormReady()) {
-            ((RecordActivity)getActivity()).showSyncFormDialog(getResources().getString(R.string.child_case));
+            if (PrimeroApplication.getAppRuntime().isCaseFormSyncFail()) {
+                ((RecordActivity)getActivity()).showSyncFormDialog(getResources().getString(R.string.child_case));
+            }
+
             return;
         }
 
@@ -92,7 +97,11 @@ public class CaseListFragment extends RecordListFragment {
         caseListPresenter.clearAudioFile();
 
         if (!caseListPresenter.isFormReady()) {
-            ((RecordActivity)getActivity()).showSyncFormDialog(getResources().getString(R.string.child_case));
+            if (PrimeroApplication.getAppRuntime().isCaseFormSyncFail()) {
+                showSyncFormDialog(getResources().getString(R.string.child_case));
+            } else {
+                showMessageThruToast(getResources().getString(R.string.forms_is_syncing_msg));
+            }
             return;
         }
 

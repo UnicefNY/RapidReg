@@ -1,6 +1,7 @@
 package org.unicef.rapidreg.childcase;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -46,41 +47,43 @@ public class CasePresenterTest {
         PowerMockito.mockStatic(PrimeroAppConfiguration.class);
     }
 
-    @Test
-    public void should_save_form_when_give_record_form_and_module_id() throws Exception {
-        CaseTemplateForm caseTemplateForm = createCaseTemplateForm();
-        String moduleId = "primeromodule-cp";
-        casePresenter.saveForm(caseTemplateForm, moduleId);
+//    @Test
+//    public void should_save_form_when_give_record_form_and_module_id() throws Exception {
+//        CaseTemplateForm caseTemplateForm = createCaseTemplateForm();
+//        String moduleId = "primeromodule-cp";
+//        casePresenter.saveForm(caseTemplateForm, moduleId);
+//
+//        verify(caseFormService, times(1)).saveOrUpdate(any(CaseForm.class));
+//    }
+//
+//    @Ignore("Move to TemplateFormService")
+//    @Test
+//    public void should_load_case_form_when_give_cookie_and_module_id() throws Exception {
+//        CaseTemplateForm caseTemplateForm = createCaseTemplateForm();
+//        Observable<CaseTemplateForm> observable = Observable.just(caseTemplateForm);
+//        when(authService.getCaseForm("cookie", "en", true, "case", PrimeroAppConfiguration.MODULE_ID_CP))
+//                .thenReturn(observable);
+//        Mockito.when(PrimeroAppConfiguration.getCookie()).thenReturn("cookie");
+//        Mockito.when(PrimeroAppConfiguration.getDefaultLanguage()).thenReturn("en");
+//        casePresenter.loadCaseForm(PrimeroAppConfiguration.MODULE_ID_CP);
+//
+//        verify(caseFormService, times(1)).saveOrUpdate(any(CaseForm.class));
+//        assertFalse("Should mark sync successful.", casePresenter.isFormSyncFail());
+//    }
 
-        verify(caseFormService, times(1)).saveOrUpdate(any(CaseForm.class));
-    }
-
-    @Test
-    public void should_load_case_form_when_give_cookie_and_module_id() throws Exception {
-        CaseTemplateForm caseTemplateForm = createCaseTemplateForm();
-        Observable<CaseTemplateForm> observable = Observable.just(caseTemplateForm);
-        when(authService.getCaseForm("cookie", "en", true, "case", PrimeroAppConfiguration.MODULE_ID_CP))
-                .thenReturn(observable);
-        Mockito.when(PrimeroAppConfiguration.getCookie()).thenReturn("cookie");
-        Mockito.when(PrimeroAppConfiguration.getDefaultLanguage()).thenReturn("en");
-        casePresenter.loadCaseForm(PrimeroAppConfiguration.MODULE_ID_CP);
-
-        verify(caseFormService, times(1)).saveOrUpdate(any(CaseForm.class));
-        assertFalse("Should mark sync successful.", casePresenter.isFormSyncFail());
-    }
-
+    @Ignore("Move to TemplateFormService")
     @Test
     public void should_show_error_when_sync_form_fail() throws Exception {
-        Observable observable = Observable.error(new Exception());
-        when(authService.getCaseForm("cookie", "en", true, "case", "primeromodule-cp"))
-                .thenReturn(observable);
-
-        Mockito.when(PrimeroAppConfiguration.getCookie()).thenReturn("cookie");
-        Mockito.when(PrimeroAppConfiguration.getDefaultLanguage()).thenReturn("en");
-
-        casePresenter.loadCaseForm("primeromodule-cp");
-
-        assertTrue("Should mark sync fail.", casePresenter.isFormSyncFail());
+//        Observable observable = Observable.error(new Exception());
+//        when(authService.getCaseForm("cookie", "en", true, "case", "primeromodule-cp"))
+//                .thenReturn(observable);
+//
+//        Mockito.when(PrimeroAppConfiguration.getCookie()).thenReturn("cookie");
+//        Mockito.when(PrimeroAppConfiguration.getDefaultLanguage()).thenReturn("en");
+//
+//        casePresenter.loadCaseForm("primeromodule-cp");
+//
+//        assertTrue("Should mark sync fail.", casePresenter.isFormSyncFail());
     }
 
     private CaseTemplateForm createCaseTemplateForm() {
