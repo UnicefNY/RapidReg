@@ -28,4 +28,6 @@ public interface LoginView extends MvpLceView<Call<LoginResponse>> {
     void showCredentialErrorMsg();
 
     void showServerConnectionErrorMsg();
+
+    void startTemplateFormService();
 }

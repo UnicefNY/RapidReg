@@ -50,7 +50,7 @@ public class TracingActivity extends RecordActivity implements BaseView {
     }
 
     @Override
-    protected void sendSyncFormEvent() {
+    public void sendSyncFormEvent() {
         EventBus.getDefault().postSticky(new LoadTracingFormEvent(PrimeroAppConfiguration.getCookie()));
     }
 
@@ -146,12 +146,6 @@ public class TracingActivity extends RecordActivity implements BaseView {
     protected void save() {
         SaveTracingEvent event = new SaveTracingEvent();
         EventBus.getDefault().postSticky(event);
-    }
-
-    @Subscribe(threadMode = ThreadMode.MAIN, sticky = true, priority = 1)
-    public void onNeedLoadFormsEvent(final LoadTracingFormEvent event) {
-        EventBus.getDefault().removeStickyEvent(event);
-        tracingPresenter.loadTracingForm();
     }
 
     @Override

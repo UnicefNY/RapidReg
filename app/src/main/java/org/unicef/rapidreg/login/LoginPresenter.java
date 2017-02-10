@@ -93,6 +93,7 @@ public class LoginPresenter extends MvpBasePresenter<LoginView> {
 
                     getView().showLoading(false);
                     getView().showOnlineLoginSuccessful();
+                    getView().startTemplateFormService();
                     getView().navigateToLoginSucceedPage();
                 }
             }
@@ -136,6 +137,7 @@ public class LoginPresenter extends MvpBasePresenter<LoginView> {
                 PrimeroAppConfiguration.setCurrentUser(user);
                 getView().showLoading(false);
                 getView().showOfflineLoginSuccessful();
+                getView().startTemplateFormService();
                 getView().navigateToLoginSucceedPage();
             }
 
