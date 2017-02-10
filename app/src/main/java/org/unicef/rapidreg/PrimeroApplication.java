@@ -26,10 +26,9 @@ import javax.inject.Inject;
 public class PrimeroApplication extends Application {
 
     private static Context context;
+    private static AppRuntime appRuntime;
 
     ApplicationComponent applicationComponent;
-
-    private static AppRuntime appRuntime;
 
     public static Context getAppContext() {
         return context;

@@ -206,7 +206,6 @@ public abstract class BaseActivity extends MvpActivity<BaseView, BasePresenter> 
         String message = getContext().getResources().getString(R.string.login_out_successful_text);
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
 
-        PrimeroApplication.getAppRuntime().unbindTemplateCaseService();
         intentSender.showLoginActivity(this);
     }
 

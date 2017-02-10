@@ -10,13 +10,13 @@ import org.unicef.rapidreg.loadform.TemplateFormService;
 import static android.content.Context.BIND_AUTO_CREATE;
 
 public class AppRuntime {
-    private Context context;
+    private Context applicationContext;
 
     private ServiceConnection templateCaseServiceConnection;
     private TemplateFormService.TemplateFormBinder templateFormBinder;
 
     public AppRuntime(Context context) {
-        this.context = context;
+        this.applicationContext = context;
 
         initTemplateCaseServiceConnection();
     }
@@ -57,11 +57,11 @@ public class AppRuntime {
     }
 
     public void bindTemplateCaseService() {
-        Intent intent = new Intent(context, TemplateFormService.class);
-        context.bindService(intent, templateCaseServiceConnection, BIND_AUTO_CREATE);
+        Intent intent = new Intent(applicationContext, TemplateFormService.class);
+        applicationContext.bindService(intent, templateCaseServiceConnection, BIND_AUTO_CREATE);
     }
 
     public void unbindTemplateCaseService() {
-        context.unbindService(templateCaseServiceConnection);
+        applicationContext.unbindService(templateCaseServiceConnection);
     }
 }

@@ -6,6 +6,5 @@ import javax.inject.Inject;
 
 public class TracingPresenter extends RecordPresenter {
     @Inject
-    public TracingPresenter() {
-    }
+    public TracingPresenter() {}
 }

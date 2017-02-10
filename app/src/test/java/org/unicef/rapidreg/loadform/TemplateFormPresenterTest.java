@@ -38,7 +38,7 @@ public class TemplateFormPresenterTest {
     private TracingFormService tracingFormService;
     private IncidentFormService incidentFormService;
 
-    TemplateFormPresenter templateFormPresenter;
+    private TemplateFormPresenter templateFormPresenter;
 
     @Before
     public void setUp() throws Exception {
@@ -98,7 +98,6 @@ public class TemplateFormPresenterTest {
     @Test
     public void should_save_form_when_give_tracing_form() throws Exception {
         TracingTemplateForm tracingTemplateForm = createTracingTemplateForm();
-        String moduleId = "primeromodule-cp";
         templateFormPresenter.saveTracingForm(tracingTemplateForm);
 
         verify(tracingFormService, times(1)).saveOrUpdate(any(TracingForm.class));
