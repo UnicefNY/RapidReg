@@ -118,6 +118,7 @@ public class IncidentMiniFormFragment extends RecordRegisterFragment {
     public void onSwitcherChecked() {
         Bundle args = new Bundle();
         args.putSerializable(RecordService.ITEM_VALUES, getRecordRegisterData());
+        args.putString(CASE_ID, getArguments().getString(CASE_ID, null));
         Feature feature = ((RecordActivity) getActivity()).getCurrentFeature().isDetailMode() ?
                 IncidentFeature.DETAILS_FULL : ((RecordActivity) getActivity()).getCurrentFeature()
                 .isAddMode() ?

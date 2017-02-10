@@ -23,6 +23,8 @@ import javax.inject.Inject;
 
 import butterknife.OnClick;
 
+import static org.unicef.rapidreg.service.CaseService.CASE_ID;
+
 public class IncidentRegisterFragment extends RecordRegisterFragment {
     @Inject
     IncidentRegisterPresenter incidentRegisterPresenter;
@@ -54,6 +56,7 @@ public class IncidentRegisterFragment extends RecordRegisterFragment {
     public void onSwitcherChecked() {
         Bundle args = new Bundle();
         args.putSerializable(RecordService.ITEM_VALUES, getRecordRegisterData());
+        args.putString(CASE_ID, getArguments().getString(CASE_ID, null));
 
         Feature feature = ((RecordActivity) getActivity()).getCurrentFeature().isDetailMode() ?
                 IncidentFeature.DETAILS_MINI : ((RecordActivity) getActivity()).getCurrentFeature()
