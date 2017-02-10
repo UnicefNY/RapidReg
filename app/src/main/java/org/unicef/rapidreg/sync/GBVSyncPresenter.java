@@ -40,6 +40,8 @@ import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
+import static org.unicef.rapidreg.PrimeroAppConfiguration.MODULE_ID_GBV;
+
 public class GBVSyncPresenter extends BaseSyncPresenter {
     private static final String TAG = GBVSyncPresenter.class.getSimpleName();
 
@@ -74,34 +76,30 @@ public class GBVSyncPresenter extends BaseSyncPresenter {
     }
 
     public void upLoadCases(List<Case> caseList) {
-//        if (totalNumberOfUploadRecords != 0) {
-//            getView().showUploadCasesSyncProgressDialog();
-//            getView().setProgressMax(totalNumberOfUploadRecords);
-//        }
-//        isSyncing = true;
-//        Observable.from(caseList)
-//                .filter(item -> isSyncing && !item.isSynced())
-//                .map(item -> new Pair<>(item, syncCaseService.uploadCaseJsonProfile(item)))
-//                .map(pair -> {
-//                    syncCaseService.uploadAudio(pair.first);
-//                    return pair;
-//                })
-//                .subscribeOn(Schedulers.io())
-//                .observeOn(AndroidSchedulers.mainThread())
-//                .subscribe(pair -> {
-//                    if (getView() != null) {
-//                        getView().setProgressIncrease();
-//                        increaseSyncNumber();
-//                        updateRecordSynced(pair.first, true);
-//                    }
-//                }, throwable -> {
-//                    try {
-//                        throwable.printStackTrace();
-//                        syncFail(throwable);
-//                    } catch (Exception e) {
-//                        e.printStackTrace();
-//                    }
-//                }, () -> upLoadIncidents(incidents));
+        if (totalNumberOfUploadRecords != 0) {
+            getView().showUploadCasesSyncProgressDialog();
+            getView().setProgressMax(totalNumberOfUploadRecords);
+        }
+        isSyncing = true;
+        Observable.from(caseList)
+                .filter(item -> isSyncing && !item.isSynced())
+                .map(item -> new Pair<>(item, syncCaseService.uploadCaseJsonProfile(item)))
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(pair -> {
+                    if (getView() != null) {
+                        getView().setProgressIncrease();
+                        increaseSyncNumber();
+                        updateRecordSynced(pair.first, true);
+                    }
+                }, throwable -> {
+                    try {
+                        throwable.printStackTrace();
+                        syncFail(throwable);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }, () -> upLoadIncidents(incidents));
         preDownloadCases();
     }
 
@@ -135,6 +133,8 @@ public class GBVSyncPresenter extends BaseSyncPresenter {
 
     public void preDownloadCases() {
         isSyncing = true;
+
+        //TODO will change to real time
         GregorianCalendar cal = new GregorianCalendar(2015, 1, 1);
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.US);
         final String time = sdf.format(cal.getTime());
@@ -368,18 +368,18 @@ public class GBVSyncPresenter extends BaseSyncPresenter {
     }
 
     private void downloadCaseForm() {
-        downloadCaseForm(getView().showFetchingFormLoadingDialog(), PrimeroAppConfiguration.MODULE_ID_GBV);
+        downloadCaseForm(getView().showFetchingFormLoadingDialog(), MODULE_ID_GBV);
     }
 
     @Override
     protected void downloadSecondFormByModule() {
         formRemoteService.getIncidentForm(PrimeroAppConfiguration.getCookie(),
                 PrimeroAppConfiguration.getDefaultLanguage(), true, PrimeroAppConfiguration.PARENT_INCIDENT,
-                PrimeroAppConfiguration.MODULE_ID_GBV)
+                MODULE_ID_GBV)
                 .subscribe(incidentFormJson -> {
                             IncidentForm incidentForm = new IncidentForm(new Blob(new Gson().toJson(incidentFormJson)
                                     .getBytes()));
-                            incidentForm.setModuleId(PrimeroAppConfiguration.MODULE_ID_GBV);
+                            incidentForm.setModuleId(MODULE_ID_GBV);
                             incidentFormService.saveOrUpdate(incidentForm);
                         },
                         throwable -> syncFail(throwable)

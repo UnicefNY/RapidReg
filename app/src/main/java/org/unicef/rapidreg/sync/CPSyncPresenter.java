@@ -49,6 +49,8 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Func1;
 import rx.schedulers.Schedulers;
 
+import static org.unicef.rapidreg.PrimeroAppConfiguration.MODULE_ID_CP;
+
 public class CPSyncPresenter extends BaseSyncPresenter {
     private static final String TAG = CPSyncPresenter.class.getSimpleName();
 
@@ -89,58 +91,58 @@ public class CPSyncPresenter extends BaseSyncPresenter {
     }
 
     public void upLoadCases(List<Case> caseList) {
-//        if (totalNumberOfUploadRecords != 0) {
-//            getView().showUploadCasesSyncProgressDialog();
-//            getView().setProgressMax(totalNumberOfUploadRecords);
-//        }
-//        isSyncing = true;
-//        Observable.from(caseList)
-//                .filter(item -> isSyncing && !item.isSynced())
-//                .map(item -> new Pair<>(item, syncCaseService.uploadCaseJsonProfile(item)))
-//                .map(pair -> {
-//                    syncCaseService.uploadAudio(pair.first);
-//                    return pair;
-//                })
-//                .map(caseResponsePair -> {
-//                    try {
-//                        Response<JsonElement> jsonElementResponse = caseResponsePair.second;
-//                        JsonArray photoKeys = jsonElementResponse.body().getAsJsonObject()
-//                                .get("photo_keys")
-//                                .getAsJsonArray();
-//                        String id = jsonElementResponse.body().getAsJsonObject().get("_id")
-//                                .getAsString();
-//                        okhttp3.Response response = null;
-//                        if (photoKeys.size() != 0) {
-//                            Call<Response<JsonElement>> call = syncCaseService.deleteCasePhotos
-//                                    (id, photoKeys);
-//                            response = call.execute().raw();
-//                        }
-//
-//                        if (response == null || response.isSuccessful()) {
-//                            syncCaseService.uploadCasePhotos(caseResponsePair.first);
-//                        }
-//                    } catch (IOException e) {
-//                        e.printStackTrace();
-//                        throw new RuntimeException(e);
-//                    }
-//                    return caseResponsePair;
-//                })
-//                .subscribeOn(Schedulers.io())
-//                .observeOn(AndroidSchedulers.mainThread())
-//                .subscribe(pair -> {
-//                    if (getView() != null) {
-//                        getView().setProgressIncrease();
-//                        increaseSyncNumber();
-//                        updateRecordSynced(pair.first, true);
-//                    }
-//                }, throwable -> {
-//                    try {
-//                        throwable.printStackTrace();
-//                        syncFail(throwable);
-//                    } catch (Exception e) {
-//                        e.printStackTrace();
-//                    }
-//                }, () -> upLoadTracing(tracings));
+        if (totalNumberOfUploadRecords != 0) {
+            getView().showUploadCasesSyncProgressDialog();
+            getView().setProgressMax(totalNumberOfUploadRecords);
+        }
+        isSyncing = true;
+        Observable.from(caseList)
+                .filter(item -> isSyncing && !item.isSynced())
+                .map(item -> new Pair<>(item, syncCaseService.uploadCaseJsonProfile(item)))
+                .map(pair -> {
+                    syncCaseService.uploadAudio(pair.first);
+                    return pair;
+                })
+                .map(caseResponsePair -> {
+                    try {
+                        Response<JsonElement> jsonElementResponse = caseResponsePair.second;
+                        JsonArray photoKeys = jsonElementResponse.body().getAsJsonObject()
+                                .get("photo_keys")
+                                .getAsJsonArray();
+                        String id = jsonElementResponse.body().getAsJsonObject().get("_id")
+                                .getAsString();
+                        okhttp3.Response response = null;
+                        if (photoKeys.size() != 0) {
+                            Call<Response<JsonElement>> call = syncCaseService.deleteCasePhotos
+                                    (id, photoKeys);
+                            response = call.execute().raw();
+                        }
+
+                        if (response == null || response.isSuccessful()) {
+                            syncCaseService.uploadCasePhotos(caseResponsePair.first);
+                        }
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                        throw new RuntimeException(e);
+                    }
+                    return caseResponsePair;
+                })
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(pair -> {
+                    if (getView() != null) {
+                        getView().setProgressIncrease();
+                        increaseSyncNumber();
+                        updateRecordSynced(pair.first, true);
+                    }
+                }, throwable -> {
+                    try {
+                        throwable.printStackTrace();
+                        syncFail(throwable);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }, () -> upLoadTracing(tracings));
         preDownloadCases();
     }
 
@@ -577,18 +579,18 @@ public class CPSyncPresenter extends BaseSyncPresenter {
     }
 
     private void downloadCaseForm() {
-        downloadCaseForm(getView().showFetchingFormLoadingDialog(), PrimeroAppConfiguration.MODULE_ID_CP);
+        downloadCaseForm(getView().showFetchingFormLoadingDialog(), MODULE_ID_CP);
     }
 
     @Override
     protected void downloadSecondFormByModule() {
         formRemoteService.getTracingForm(PrimeroAppConfiguration.getCookie(),
                 PrimeroAppConfiguration.getDefaultLanguage(), true, PrimeroAppConfiguration.PARENT_TRACING_REQUEST,
-                PrimeroAppConfiguration.MODULE_ID_CP)
+                MODULE_ID_CP)
                 .subscribe(tracingFormJson -> {
                             TracingForm tracingForm = new TracingForm(new Blob(new Gson().toJson(tracingFormJson)
                                     .getBytes()));
-                            tracingForm.setModuleId(PrimeroAppConfiguration.MODULE_ID_CP);
+                            tracingForm.setModuleId(MODULE_ID_CP);
                             tracingFormService.saveOrUpdate(tracingForm);
                         },
                         throwable -> syncFail(throwable),
