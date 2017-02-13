@@ -150,4 +150,8 @@
         <item name="android:backgroundDimEnabled">false</item>
     </style>
     <!--Transparent theme-->
+
+    <!--Dialog start-->
+    <string name="dialog_title_text_placeholder">Dialog Title Text</string>
+
 </resources>

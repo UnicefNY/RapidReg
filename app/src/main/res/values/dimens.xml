@@ -3,8 +3,8 @@
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="activity_top_margin">35dp</dimen>
-    <!--Text size-->
 
+    <!--General size on phone-->
     <dimen name="size_1">1dp</dimen>
     <dimen name="size_2">2dp</dimen>
     <dimen name="size_5">5dp</dimen>
@@ -21,10 +21,18 @@
     <dimen name="text_size_48">48sp</dimen>
     <dimen name="text_size_200">200sp</dimen>
 
-    <dimen name="field_padding_top_bottom">5dp</dimen>
-    <dimen name="field_padding_left">15dp</dimen>
+    <!--Text size-->
+    <dimen name="text_size_hidden_state">15sp</dimen>
+    <dimen name="dialog_text_relativ_size">1sp</dimen>
+    <dimen name="dialog_title_text_size">@dimen/text_size_18</dimen>
+    <dimen name="dialog_filed_text_size">@dimen/text_size_14</dimen>
+    <dimen name="dialog_button_text_size">@dimen/text_size_12</dimen>
+    <dimen name="dialog_filter_text_size">@dimen/text_size_14</dimen>
+
 
     <!--row in list start-->
+    <dimen name="field_padding_top_bottom">5dp</dimen>
+    <dimen name="field_padding_left">15dp</dimen>
     <dimen name="row_height">90dp</dimen>
     <dimen name="img_left_margin">18.7dp</dimen>
     <dimen name="img_vertical_margin">10.7dp</dimen>
@@ -39,7 +47,6 @@
     <dimen name="age_left_margin">7dp</dimen>
     <dimen name="gender_name_length">35dp</dimen>
     <dimen name="matching_badge_left_margin">10.8dp</dimen>
-    <dimen name="text_size_hidden_state">15sp</dimen>
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="case_spinner_indicator_left_margin">20.3dp</dimen>
     <dimen name="case_spinner_order_left_margin">59.7dp</dimen>
@@ -109,10 +116,9 @@
     <dimen name="record_delete_button_size">24dp</dimen>
     <!--camera & record end-->
 
-    <!--dialog text size-->
-    <dimen name="dialog_text_relativ_size">0.35sp</dimen>
-    <dimen name="text_view_height">25dp</dimen>
-    <!--dialog text end-->
+    <!--dialog start-->
+    <dimen name="dialog_title_padding">@dimen/size_10</dimen>
+    <!--dialog end-->
 
     <!--button scale start-->
     <item name="button_icon_scale" format="float" type="dimen">1</item>

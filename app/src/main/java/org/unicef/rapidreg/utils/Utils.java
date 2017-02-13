@@ -32,7 +32,7 @@ public class Utils {
             if (i == 0) {
                 res += item;
             } else {
-                res += "," + item;
+                res += ", " + item;
             }
         }
 

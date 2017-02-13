@@ -1,10 +1,14 @@
 package org.unicef.rapidreg.widgets.dialog;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.ContextThemeWrapper;
+import android.view.LayoutInflater;
+import android.view.View;
 import android.widget.TextView;
 import android.widget.ViewSwitcher;
 
@@ -38,28 +42,25 @@ public abstract class BaseDialog {
         this.itemValues = itemValues;
 
         builder = new BaseAlertDialog.Builder(context);
-        builder.setTitle(field.getDisplayName().get(Locale.getDefault().getLanguage()));
-
         builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                if (getResult() != null && !TextUtils.isEmpty(getResult().toString())) {
-                    BaseDialog.this.viewSwitcher.setDisplayedChild(GenericViewHolder.FORM_HAS_ANSWER_STATE);
-                } else {
-                    BaseDialog.this.viewSwitcher.setDisplayedChild(GenericViewHolder.FORM_NO_ANSWER_STATE);
-                }
-                dialog.dismiss();
-                itemValues.addItem(field.getName(), getResult());
-                resultView.setText(getDisplayText());
-            }
-        });
-
-        builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
-            }
-        });
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        if (getResult() != null && !TextUtils.isEmpty(getResult().toString())) {
+                            BaseDialog.this.viewSwitcher.setDisplayedChild(GenericViewHolder.FORM_HAS_ANSWER_STATE);
+                        } else {
+                            BaseDialog.this.viewSwitcher.setDisplayedChild(GenericViewHolder.FORM_NO_ANSWER_STATE);
+                        }
+                        dialog.dismiss();
+                        itemValues.addItem(field.getName(), getResult());
+                        resultView.setText(getDisplayText());
+                    }
+                })
+                .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
     }
 
     public void show() {

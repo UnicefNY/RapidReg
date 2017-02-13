@@ -36,14 +36,14 @@ public abstract class RecordListAdapter extends RecyclerView.Adapter<RecordListA
 
     protected Context context;
     protected DateFormat dateFormat = SimpleDateFormat.getDateInstance(DateFormat.MEDIUM, Locale.US);
-    protected List<Long>  recordList = new ArrayList<>();
+    protected List<Long> recordList = new ArrayList<>();
     protected boolean isDetailShow = true;
 
     public RecordListAdapter(Context context) {
         this.context = context;
     }
 
-    public void setRecordList(List<Long>  recordList) {
+    public void setRecordList(List<Long> recordList) {
         this.recordList = recordList;
     }
 

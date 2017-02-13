@@ -13,13 +13,15 @@
         android:layout_weight="9"
         android:padding="@dimen/size_10"
         android:singleLine="false"
-        android:textSize="@dimen/text_size_14"
+        android:textSize="@dimen/dialog_filed_text_size"
         tools:text="text" />
 
     <RadioButton
         android:id="@+id/radioButton"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_weight="1" />
+        android:layout_weight="1"
+        android:scaleX="@dimen/button_icon_scale"
+        android:scaleY="@dimen/button_icon_scale"/>
 
 </LinearLayout>

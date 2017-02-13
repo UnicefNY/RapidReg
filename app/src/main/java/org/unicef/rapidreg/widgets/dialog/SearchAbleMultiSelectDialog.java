@@ -1,12 +1,10 @@
 package org.unicef.rapidreg.widgets.dialog;
 
-
 import android.app.Dialog;
 import android.content.Context;
+import android.support.design.widget.TextInputLayout;
 import android.text.Editable;
-import android.text.SpannableString;
 import android.text.TextWatcher;
-import android.text.style.RelativeSizeSpan;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,12 +13,11 @@ import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
-import android.widget.CompoundButton;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.ListView;
-import android.widget.RadioButton;
 import android.widget.TextView;
 
 import org.unicef.rapidreg.R;
@@ -33,38 +30,41 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class SearchAbleDialog extends Dialog {
+public class SearchAbleMultiSelectDialog extends Dialog {
+    private static final String TAG = "SearchAbleMultiSelectDialog";
 
-    private static final String TAG = "SearchAbleDialog";
-
-    @BindView(R.id.List)
+    @BindView(R.id.dialog_title)
+    TextView dialogTitleTextView;
+    @BindView(R.id.dialog_list_content)
     ListView list;
     @BindView(R.id.EditBox)
     EditText filterText;
-    @BindView(R.id.dialog_title)
-    TextView dialogTitleTextView;
     @BindView(R.id.okButton)
     Button okButton;
     @BindView(R.id.cancelButton)
     Button cancelButton;
+    @BindView(R.id.clearButton)
+    Button clearButton;
+    @BindView(R.id.usernameWrapper)
+    TextInputLayout filterLayout;
 
-    private MyAdapter adapter = null;
+    private SearchAbleMultiSelectDialog.MyAdapter adapter = null;
 
     private Context context;
+    private List<String> results;
 
-
-    public SearchAbleDialog(Context context, String title, String[] items, int selectIndex) {
+    public SearchAbleMultiSelectDialog(Context context, String title, String[] items, List<String> selectedItems) {
         super(context);
         this.context = context;
+        results = selectedItems;
         requestWindowFeature(Window.FEATURE_NO_TITLE);
-        setContentView(R.layout.form_alert_dialog);
+        setContentView(R.layout.dialog_with_multi_select_list);
         ButterKnife.bind(this);
 
         dialogTitleTextView.setText(title);
-
         filterText.addTextChangedListener(filterTextWatcher);
 
-        adapter = new MyAdapter(context, new ArrayList<>(Arrays.asList(items)));
+        adapter = new SearchAbleMultiSelectDialog.MyAdapter(context, new ArrayList<>(Arrays.asList(items)));
 
         list.setAdapter(adapter);
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -74,14 +74,12 @@ public class SearchAbleDialog extends Dialog {
             }
         });
 
-        adapter.index = selectIndex;
         adapter.notifyDataSetChanged();
     }
 
     @OnClick(R.id.clearButton)
     void onClickCleanButton() {
-        adapter.index = -1;
-        adapter.listener.onClick("");
+        results.clear();
         adapter.notifyDataSetChanged();
     }
 
@@ -94,12 +92,28 @@ public class SearchAbleDialog extends Dialog {
         cancelButton.setOnClickListener(listener);
     }
 
-    public void setOnClick(SearchAbleDialogOnClickListener listener) {
+    public void setOnClick(SearchAbleMultiSelectDialog.SearchAbleMultiSelectDialogOnClickListener listener) {
         adapter.listener = listener;
     }
 
-    public interface SearchAbleDialogOnClickListener {
-        void onClick(String result);
+    public void disableDialogFilter(boolean isDisable) {
+        if (isDisable) {
+            filterLayout.setVisibility(View.GONE);
+        } else {
+            filterLayout.setVisibility(View.VISIBLE);
+        }
+    }
+
+    public void disableClearButton(boolean isDisable) {
+        if (isDisable) {
+            clearButton.setVisibility(View.GONE);
+        } else {
+            cancelButton.setVisibility(View.VISIBLE);
+        }
+    }
+
+    public interface SearchAbleMultiSelectDialogOnClickListener {
+        void onClick(List<String> results);
     }
 
     private TextWatcher filterTextWatcher = new TextWatcher() {
@@ -127,7 +141,9 @@ public class SearchAbleDialog extends Dialog {
         List<String> arrayList;
         List<String> mOriginalValues; // Original Values
         LayoutInflater inflater;
-        SearchAbleDialogOnClickListener listener = null;
+        private SearchAbleMultiSelectDialog.MyAdapter.ViewHolder holder;
+
+        SearchAbleMultiSelectDialog.SearchAbleMultiSelectDialogOnClickListener listener = null;
 
         public MyAdapter(Context context, List<String> arrayList) {
             this.arrayList = arrayList;
@@ -151,53 +167,55 @@ public class SearchAbleDialog extends Dialog {
 
         private class ViewHolder {
             TextView textView;
-            RadioButton radioButton;
-        }
+            CheckBox checkBox;
 
-        private ViewHolder holder;
-        int index = -1;
+        }
 
         @Override
         public View getView(final int position, View convertView, ViewGroup parent) {
 
-            holder = new ViewHolder();
+            holder = new SearchAbleMultiSelectDialog.MyAdapter.ViewHolder();
             if (convertView == null) {
-                convertView = inflater.inflate(R.layout.form_alert_dialog_row, null);
-                holder.textView = (TextView) convertView.findViewById(R.id.textView);
+                convertView = inflater.inflate(R.layout.form_check_box, null);
+                holder.textView = (TextView) convertView.findViewById(R.id.label);
                 holder.textView.setClickable(true);
-                holder.radioButton = (RadioButton) convertView.findViewById(R.id.radioButton);
+                holder.checkBox = (CheckBox) convertView.findViewById(R.id.value);
                 convertView.setTag(holder);
             } else {
-                holder = (ViewHolder) convertView.getTag();
+                holder = (SearchAbleMultiSelectDialog.MyAdapter.ViewHolder) convertView.getTag();
             }
 
             holder.textView.setText(arrayList.get(position));
             holder.textView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    index = position;
+                    if (!results.contains(arrayList.get(position))) {
+                        results.add(arrayList.get(position));
+                    } else {
+                        results.remove(arrayList.get(position));
+                    }
+                    listener.onClick(results);
                     notifyDataSetChanged();
                 }
             });
 
-            holder.radioButton
-                    .setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            holder.checkBox.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (!results.contains(arrayList.get(position))) {
+                        results.add(arrayList.get(position));
+                    } else {
+                        results.remove(arrayList.get(position));
+                    }
+                    listener.onClick(results);
+                    notifyDataSetChanged();
+                }
+            });
 
-                        @Override
-                        public void onCheckedChanged(CompoundButton buttonView,
-                                                     boolean isChecked) {
-                            if (isChecked) {
-                                index = position;
-                                listener.onClick(arrayList.get(index));
-                                notifyDataSetChanged();
-                            }
-                        }
-                    });
-
-            if (index == position) {
-                holder.radioButton.setChecked(true);
+            if (results.contains(arrayList.get(position))) {
+                holder.checkBox.setChecked(true);
             } else {
-                holder.radioButton.setChecked(false);
+                holder.checkBox.setChecked(false);
             }
             return convertView;
         }
@@ -246,5 +264,4 @@ public class SearchAbleDialog extends Dialog {
             return filter;
         }
     }
-
 }

@@ -4,18 +4,17 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <include layout="@layout/dialog_titlebar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+    <include layout="@layout/dialog_titlebar" />
 
     <include layout="@layout/dialog_filter" />
 
     <ListView
-        android:id="@+id/List"
+        android:id="@+id/dialog_list_content"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
-        android:choiceMode="singleChoice" />
+        android:layout_weight="1">
+
+    </ListView>
 
     <include layout="@layout/dialog_button" />
 

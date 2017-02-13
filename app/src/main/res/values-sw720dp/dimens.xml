@@ -5,8 +5,8 @@
     <dimen name="activity_horizontal_margin">45dp</dimen>
     <dimen name="activity_vertical_margin">45dp</dimen>
     <dimen name="activity_top_margin">130dp</dimen>
-    <!--Text size-->
 
+    <!--General size on phone-->
     <dimen name="size_1">2dp</dimen>
     <dimen name="size_2">5dp</dimen>
     <dimen name="size_5">13dp</dimen>
@@ -22,12 +22,20 @@
     <dimen name="text_size_24">60sp</dimen>
     <dimen name="text_size_48">120sp</dimen>
     <dimen name="text_size_200">500sp</dimen>
-    <dimen name="text_size_hidden_state">30sp</dimen>
 
-    <dimen name="field_padding_top_bottom">10dp</dimen>
-    <dimen name="field_padding_left">30dp</dimen>
+
+    <!--Text size-->
+    <dimen name="text_size_hidden_state">30sp</dimen>
+    <dimen name="dialog_text_relativ_size">2sp</dimen>
+    <dimen name="dialog_title_text_size">@dimen/text_size_18</dimen>
+    <dimen name="dialog_filed_text_size">@dimen/text_size_14</dimen>
+    <dimen name="dialog_button_text_size">@dimen/text_size_12</dimen>
+    <dimen name="dialog_filter_text_size">@dimen/text_size_14</dimen>
+
 
     <!--row in list start-->
+    <dimen name="field_padding_top_bottom">10dp</dimen>
+    <dimen name="field_padding_left">30dp</dimen>
     <dimen name="row_height">200dp</dimen>
     <dimen name="img_left_margin">40dp</dimen>
     <dimen name="img_vertical_margin">22dp</dimen>
@@ -120,10 +128,9 @@
     <dimen name="record_delete_button_size">70dp</dimen>
     <!--camera & record end-->
 
-    <!--dialog text size-->
-    <dimen name="dialog_text_relativ_size">1.6sp</dimen>
-    <dimen name="text_view_height">60dp</dimen>
-    <!--dialog text end-->
+    <!--dialog start-->
+    <dimen name="dialog_title_padding">@dimen/size_10</dimen>
+    <!--dialog end-->
 
     <!--button scale start-->
     <item name="button_icon_scale" format="float" type="dimen">2.2</item>

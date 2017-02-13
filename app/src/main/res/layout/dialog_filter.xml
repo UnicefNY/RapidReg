@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.TextInputLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/usernameWrapper"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="@dimen/size_5">
+
+    <EditText
+        android:id="@+id/EditBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="start"
+        android:hint="@string/filter"
+        android:maxLines="1"
+        android:textColor="@color/primero_blue"
+        android:textSize="@dimen/dialog_filter_text_size" />
+
+</android.support.design.widget.TextInputLayout>
