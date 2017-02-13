@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import com.hannesdorfmann.mosby.mvp.MvpBasePresenter;
 import com.raizlabs.android.dbflow.data.Blob;
 
@@ -177,6 +178,14 @@ public abstract class BaseSyncPresenter extends MvpBasePresenter<SyncView> {
     protected void setProgressIncrease() {
         if (getView() != null && isViewAttached()) {
             getView().setProgressIncrease();
+        }
+    }
+
+    protected void setAgeIfExists(RecordModel item, JsonObject source) {
+        try {
+            item.setAge(source.get("age").getAsInt());
+        } catch (Exception e) {
+            item.setAge(-1);
         }
     }
 

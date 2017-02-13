@@ -273,14 +273,6 @@ public class GBVSyncPresenter extends BaseSyncPresenter {
         }
     }
 
-    private void setAgeIfExists(Case item, JsonObject source) {
-        try {
-            item.setAge(source.get("age").getAsInt());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
     public void preDownloadIncidents() {
         isSyncing = true;
         GregorianCalendar cal = new GregorianCalendar(2015, 1, 1);
@@ -367,7 +359,6 @@ public class GBVSyncPresenter extends BaseSyncPresenter {
             item.setContent(new Blob(incidentsJsonObject.toString().getBytes()));
             item.setIncidentCaseId(incidentsJsonObject.get(COLUMN_INCIDENT_CASE_ID).getAsString());
             item.setServerUrl(TextUtils.lintUrl(PrimeroAppConfiguration.getApiBaseUrl()));
-
             if (incidentsJsonObject.has(COLUMN_INCIDENT_CASE_ID)) {
                 String incidentCaseId = incidentsJsonObject.get(COLUMN_INCIDENT_CASE_ID).getAsString();
                 item.setIncidentCaseId(incidentCaseId);
@@ -377,6 +368,7 @@ public class GBVSyncPresenter extends BaseSyncPresenter {
                     item.setCaseUniqueId(incidentCase.getUniqueId());
                 }
             }
+            setAgeIfExists(item, incidentsJsonObject);
             item.update();
         } else {
             item = new Incident();
@@ -392,7 +384,6 @@ public class GBVSyncPresenter extends BaseSyncPresenter {
             item.setLastUpdatedDate(Calendar.getInstance().getTime());
             item.setSynced(true);
             item.setContent(new Blob(incidentsJsonObject.toString().getBytes()));
-
             if (incidentsJsonObject.has(COLUMN_INCIDENT_CASE_ID)) {
                 String incidentCaseId = incidentsJsonObject.get(COLUMN_INCIDENT_CASE_ID).getAsString();
                 item.setIncidentCaseId(incidentCaseId);
@@ -402,6 +393,7 @@ public class GBVSyncPresenter extends BaseSyncPresenter {
                     item.setCaseUniqueId(incidentCase.getUniqueId());
                 }
             }
+            setAgeIfExists(item, incidentsJsonObject);
             item.save();
         }
     }

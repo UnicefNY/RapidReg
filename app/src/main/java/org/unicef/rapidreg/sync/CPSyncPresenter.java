@@ -15,6 +15,7 @@ import org.unicef.rapidreg.base.record.recordphoto.PhotoConfig;
 import org.unicef.rapidreg.injection.ActivityContext;
 import org.unicef.rapidreg.model.Case;
 import org.unicef.rapidreg.model.CasePhoto;
+import org.unicef.rapidreg.model.RecordModel;
 import org.unicef.rapidreg.model.Tracing;
 import org.unicef.rapidreg.model.TracingForm;
 import org.unicef.rapidreg.model.TracingPhoto;
@@ -396,15 +397,6 @@ public class CPSyncPresenter extends BaseSyncPresenter {
         aCase.update();
     }
 
-    private void setAgeIfExists(Case item, JsonObject source) {
-        try {
-            item.setAge(source.get("age").getAsInt());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-
     public void preDownloadTracings() {
         isSyncing = true;
         GregorianCalendar cal = new GregorianCalendar(2015, 1, 1);
@@ -540,6 +532,7 @@ public class CPSyncPresenter extends BaseSyncPresenter {
             item.setInternalRev(newRev);
             item.setSynced(true);
             item.setContent(new Blob(tracingsJsonObject.toString().getBytes()));
+            setAgeIfExists(item, tracingsJsonObject);
             item.setOwnedBy(tracingsJsonObject.get("owned_by").getAsString());
             item.setServerUrl(TextUtils.lintUrl(PrimeroAppConfiguration.getApiBaseUrl()));
             item.update();
@@ -557,6 +550,7 @@ public class CPSyncPresenter extends BaseSyncPresenter {
             item.setLastSyncedDate(Calendar.getInstance().getTime());
             item.setLastUpdatedDate(Calendar.getInstance().getTime());
             item.setSynced(true);
+            setAgeIfExists(item, tracingsJsonObject);
             item.setContent(new Blob(tracingsJsonObject.toString().getBytes()));
             item.save();
         }
