@@ -1,6 +1,7 @@
 package org.unicef.rapidreg.service;
 
 import com.facebook.stetho.okhttp3.StethoInterceptor;
+import com.google.gson.GsonBuilder;
 
 import org.unicef.rapidreg.BuildConfig;
 

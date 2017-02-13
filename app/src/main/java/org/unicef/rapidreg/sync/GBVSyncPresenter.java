@@ -3,6 +3,7 @@ package org.unicef.rapidreg.sync;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.support.v4.util.Pair;
+import android.util.Log;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
@@ -99,24 +100,42 @@ public class GBVSyncPresenter extends BaseSyncPresenter {
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
-                }, () -> upLoadIncidents(incidents));
+                }, () -> {
+                    preUploadIncidents(incidents).subscribe(incidents -> upLoadIncidents(incidents));
+                });
+    }
+
+    private Observable<List<Incident>> preUploadIncidents(List<Incident> incidents) {
+        isSyncing = true;
+        return Observable.from(incidents)
+                .map(incident -> {
+                    if (!TextUtils.isEmpty(incident.getCaseUniqueId())) {
+                        String incidentCaseId = caseService.getByUniqueId(incident.getCaseUniqueId()).getInternalId();
+                        incident.setIncidentCaseId(incidentCaseId);
+                        incident.save();
+                    }
+                    return incident;
+                })
+                .toList();
     }
 
     private void upLoadIncidents(List<Incident> incidents) {
         isSyncing = true;
         Observable.from(incidents)
                 .filter(item -> isSyncing && !item.isSynced())
-                .map(item -> new Pair<>(item, syncIncidentService.uploadJsonProfile(item)))
+                .map(item -> new Pair<>(item, syncIncidentService.uploadIncidentJsonProfile(item)))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(pair -> {
                     if (getView() != null) {
+                        Log.d(TAG, "onNext()...: " + pair.first.getIncidentCaseId());
                         getView().setProgressIncrease();
                         increaseSyncNumber();
                         updateRecordSynced(pair.first, true);
                     }
                 }, throwable -> {
                     try {
+                        Log.e(TAG, "onError: "+ throwable.getMessage());
                         throwable.printStackTrace();
                         syncFail(throwable);
                     } catch (Exception e) {
@@ -268,7 +287,7 @@ public class GBVSyncPresenter extends BaseSyncPresenter {
         final String time = sdf.format(cal.getTime());
         final List<JsonObject> objects = new ArrayList<>();
         final ProgressDialog loadingDialog = getView().showFetchingIncidentAmountLoadingDialog();
-        syncIncidentService.getIds(time, true)
+        syncIncidentService.getIncidentIds(time, true)
                 .map(jsonElementResponse -> {
                     if (jsonElementResponse.isSuccessful()) {
                         JsonElement jsonElement = jsonElementResponse.body();
@@ -310,7 +329,7 @@ public class GBVSyncPresenter extends BaseSyncPresenter {
                 .filter(jsonObject -> isSyncing)
                 .map(jsonObject -> {
                     Observable<Response<JsonElement>> responseObservable = syncIncidentService
-                            .get(jsonObject.get("_id")
+                            .getIncident(jsonObject.get("_id")
                                     .getAsString(), "en", true);
                     Response<JsonElement> response = responseObservable.toBlocking().first();
                     if (!response.isSuccessful()) {

@@ -5,6 +5,8 @@ import com.raizlabs.android.dbflow.annotation.Table;
 
 import org.unicef.rapidreg.PrimeroDatabaseConfiguration;
 
+import static org.unicef.rapidreg.model.Incident.COLUMN_INCIDENT_CASE_ID;
+
 @Table(database = PrimeroDatabaseConfiguration.class)
 public class Incident extends RecordModel {
 
@@ -12,6 +14,7 @@ public class Incident extends RecordModel {
     public static final String COLUMN_TYPE_OF_VIOLENCE = "type_of_violence";
     public static final String COLUMN_LOCATION = "location";
     public static final String COLUMN_CASE_UNIQUE_ID = "case_unique_id";
+    public static final String COLUMN_INCIDENT_CASE_ID = "incident_case_id";
 
     @Column(name = COLUMN_SURVIVOR_CODE)
     private String survivorCode;
@@ -24,6 +27,9 @@ public class Incident extends RecordModel {
 
     @Column(name = COLUMN_CASE_UNIQUE_ID)
     private String caseUniqueId;
+
+    @Column(name = COLUMN_INCIDENT_CASE_ID)
+    private String incidentCaseId;
 
     public Incident() {
     }
@@ -62,5 +68,13 @@ public class Incident extends RecordModel {
 
     public String getCaseUniqueId() {
         return caseUniqueId;
+    }
+
+    public String getIncidentCaseId() {
+        return incidentCaseId;
+    }
+
+    public void setIncidentCaseId(String incidentCaseId) {
+        this.incidentCaseId = incidentCaseId;
     }
 }

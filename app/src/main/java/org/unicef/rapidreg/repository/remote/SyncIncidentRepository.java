@@ -3,9 +3,12 @@ package org.unicef.rapidreg.repository.remote;
 import com.google.gson.JsonElement;
 
 import retrofit2.Response;
+import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.Headers;
+import retrofit2.http.POST;
+import retrofit2.http.PUT;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 import rx.Observable;
@@ -25,4 +28,15 @@ public interface SyncIncidentRepository {
             @Path("id") String id,
             @Query("locale") String locale,
             @Query("mobile") Boolean isMobile);
+
+    @POST("/api/incidents")
+    Observable<Response<JsonElement>> postIncident(
+            @Header("Cookie") String cookie,
+            @Body Object requestBody);
+
+    @PUT("/api/incidents/{id}")
+    Observable<Response<JsonElement>> putIncident(
+            @Header("Cookie") String cookie,
+            @Path("id") String id,
+            @Body Object requestBody);
 }
