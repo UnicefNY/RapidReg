@@ -39,7 +39,7 @@ public interface SyncCaseRepository {
             @Header("Cookie") String cookie,
             @Path("id") String id);
 
-    @GET("/children-ids?")
+    @GET("/children-ids")
     @Headers("Content-Type: application/json")
     Observable<Response<JsonElement>> getCasesIds(
             @Header("Cookie") String cookie,
