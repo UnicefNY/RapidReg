@@ -143,7 +143,6 @@ public class CPSyncPresenter extends BaseSyncPresenter {
                         e.printStackTrace();
                     }
                 }, () -> upLoadTracing(tracings));
-        preDownloadCases();
     }
 
     private void upLoadTracing(List<Tracing> tracingList) {

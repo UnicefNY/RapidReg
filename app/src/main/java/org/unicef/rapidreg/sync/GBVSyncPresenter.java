@@ -100,7 +100,6 @@ public class GBVSyncPresenter extends BaseSyncPresenter {
                         e.printStackTrace();
                     }
                 }, () -> upLoadIncidents(incidents));
-        preDownloadCases();
     }
 
     private void upLoadIncidents(List<Incident> incidents) {

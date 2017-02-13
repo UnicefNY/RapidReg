@@ -98,9 +98,6 @@ public class SyncFragment extends MvpFragment<SyncView, BaseSyncPresenter> imple
         ButterKnife.bind(this, view);
         initView();
 
-        if (!isNetworkAvailable()) {
-            disableSyncButton();
-        }
         return view;
     }
 
