@@ -57,6 +57,14 @@ public class ItemValuesMap implements Serializable {
         values.put(itemKey, map);
     }
 
+    public Object getAsObject(String key) {
+        if (values.get(key) == null) {
+            return null;
+        }
+
+        return values.get(key);
+    }
+
     public Boolean getAsBoolean(String key) {
         if (values.get(key) == null) {
             return Boolean.valueOf(null);

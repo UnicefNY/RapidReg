@@ -31,8 +31,7 @@ public class Incident extends RecordModel {
     @Column(name = COLUMN_INCIDENT_CASE_ID)
     private String incidentCaseId;
 
-    public Incident() {
-    }
+    public Incident() {}
 
     public Incident(long id) {
         super(id);

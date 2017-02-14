@@ -15,9 +15,11 @@ import org.unicef.rapidreg.model.Case;
 import org.unicef.rapidreg.service.CaseFormService;
 import org.unicef.rapidreg.service.CasePhotoService;
 import org.unicef.rapidreg.service.CaseService;
+import org.unicef.rapidreg.service.RecordService;
 import org.unicef.rapidreg.service.cache.ItemValuesMap;
 import org.unicef.rapidreg.utils.JsonUtils;
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -172,5 +174,16 @@ public class CaseRegisterPresenter extends RecordRegisterPresenter {
 
     private boolean validateRequiredField(ItemValuesMap itemValuesMap) {
         return caseService.validateRequiredFields(getTemplateForm(), itemValuesMap);
+    }
+
+    public ItemValuesMap filterGBVRelatedItemValues(ItemValuesMap recordRegisterData) {
+        ItemValuesMap itemValuesMap = new ItemValuesMap();
+        for (String itemKey : RecordService.RelatedItemColumn.GBV_RELATED_ITEMS) {
+            if (recordRegisterData.has(itemKey)) {
+                itemValuesMap.addItem(itemKey, recordRegisterData.getAsObject(itemKey));
+            }
+        }
+
+        return itemValuesMap;
     }
 }

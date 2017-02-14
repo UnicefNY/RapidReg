@@ -145,4 +145,34 @@ public class RecordService {
         return Condition.column(NameAlias.builder(RecordModel.COLUMN_AGE).build())
                 .between(ageFrom).and(ageTo);
     }
+
+    public static final class RelatedItemColumn {
+        public static final String GBV_SURVIVOR_CODE = "survivor_code";
+        public static final String GBV_SEX = "sex";
+        public static final String GBV_DATE_OF_BIRTH = "date_of_birth";
+        public static final String GBV_AGE = "age";
+        public static final String GBV_ETHNICITY = "gbv_ethnicity";
+        public static final String GBV_NATIONALITY = "gbv_nationality";
+        public static final String GBV_RELIGION = "gbv_religion";
+        public static final String GBV_COUNTRY_OF_ORIGIN = "country_of_origin";
+        public static final String GBV_DISPLACEMENT_STATUS = "gbv_displacement_status";
+        public static final String GBV_MARITAL_STATUS = "marital_status";
+        public static final String GBV_DISABILITY_TYPE = "gbv_disability_type";
+        public static final String GBV_UNACCOMPANIED_SEPARATED_STATUS = "unaccompanied_separated_status";
+
+        public static final String[] GBV_RELATED_ITEMS = new String[] {
+                GBV_SURVIVOR_CODE,
+                GBV_SEX,
+                GBV_DATE_OF_BIRTH,
+                GBV_AGE,
+                GBV_ETHNICITY,
+                GBV_NATIONALITY,
+                GBV_RELIGION,
+                GBV_COUNTRY_OF_ORIGIN,
+                GBV_DISPLACEMENT_STATUS,
+                GBV_MARITAL_STATUS,
+                GBV_DISABILITY_TYPE,
+                GBV_UNACCOMPANIED_SEPARATED_STATUS
+        };
+    }
 }

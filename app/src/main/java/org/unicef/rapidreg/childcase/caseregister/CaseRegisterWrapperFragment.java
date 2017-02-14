@@ -28,6 +28,8 @@ import org.unicef.rapidreg.forms.Section;
 import org.unicef.rapidreg.service.CaseService;
 import org.unicef.rapidreg.service.RecordService;
 import org.unicef.rapidreg.service.cache.ItemValuesMap;
+
+import java.io.Serializable;
 import java.util.ArrayList;
 
 import javax.inject.Inject;
@@ -80,6 +82,7 @@ public class CaseRegisterWrapperFragment extends RecordRegisterWrapperFragment {
         String caseId = getRecordRegisterData().getAsString(CASE_ID);
         Bundle extra = new Bundle();
         extra.putString(CASE_ID, caseId);
+        extra.putSerializable(RecordService.ITEM_VALUES, caseRegisterPresenter.filterGBVRelatedItemValues(getRecordRegisterData()));
 
         new IntentSender().showIncidentActivity(getActivity(), true, extra);
     }

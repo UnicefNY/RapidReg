@@ -16,7 +16,6 @@ import org.unicef.rapidreg.IntentSender;
 import org.unicef.rapidreg.R;
 import org.unicef.rapidreg.base.Feature;
 import org.unicef.rapidreg.base.record.RecordActivity;
-import org.unicef.rapidreg.base.record.recordphoto.PhotoConfig;
 import org.unicef.rapidreg.base.record.recordregister.RecordRegisterAdapter;
 import org.unicef.rapidreg.base.record.recordregister.RecordRegisterFragment;
 import org.unicef.rapidreg.childcase.CaseActivity;
@@ -43,12 +42,11 @@ import static org.unicef.rapidreg.childcase.CaseFeature.DETAILS_GBV_FULL;
 import static org.unicef.rapidreg.childcase.CaseFeature.DETAILS_GBV_MINI;
 import static org.unicef.rapidreg.childcase.CaseFeature.EDIT_FULL;
 import static org.unicef.rapidreg.childcase.caseregister.CaseRegisterPresenter.MODULE_CASE_CP;
+import static org.unicef.rapidreg.service.CaseService.CASE_ID;
 import static org.unicef.rapidreg.service.RecordService.MODULE;
-import static org.unicef.rapidreg.service.cache.ItemValuesMap.RecordProfile.ID;
 
 public class CaseMiniFormFragment extends RecordRegisterFragment {
     public static final String TAG = CaseMiniFormFragment.class.getSimpleName();
-    private static final String CASE_ID = "case_id";
 
     @Inject
     CaseRegisterPresenter caseRegisterPresenter;
@@ -123,6 +121,7 @@ public class CaseMiniFormFragment extends RecordRegisterFragment {
         String caseId = getRecordRegisterData().getAsString(CASE_ID);
         Bundle extra = new Bundle();
         extra.putString(CASE_ID, caseId);
+        extra.putSerializable(RecordService.ITEM_VALUES, caseRegisterPresenter.filterGBVRelatedItemValues(getRecordRegisterData()));
 
         new IntentSender().showIncidentActivity(getActivity(), true, extra);
     }

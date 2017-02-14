@@ -23,6 +23,7 @@ import org.unicef.rapidreg.forms.Field;
 import org.unicef.rapidreg.injection.component.DaggerFragmentComponent;
 import org.unicef.rapidreg.injection.component.FragmentComponent;
 import org.unicef.rapidreg.injection.module.FragmentModule;
+import org.unicef.rapidreg.service.RecordService;
 import org.unicef.rapidreg.service.cache.ItemValuesMap;
 
 import java.util.Collections;
@@ -31,6 +32,11 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+
+import org.unicef.rapidreg.service.RecordService;
+
+import static org.unicef.rapidreg.service.RecordService.*;
+import static org.unicef.rapidreg.service.RecordService.RelatedItemColumn.GBV_SURVIVOR_CODE;
 
 public abstract class RecordRegisterFragment extends MvpFragment<RecordRegisterView,
         RecordRegisterPresenter>
