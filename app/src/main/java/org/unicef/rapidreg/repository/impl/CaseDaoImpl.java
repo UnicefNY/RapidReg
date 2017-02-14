@@ -48,11 +48,6 @@ public class CaseDaoImpl implements CaseDao {
     }
 
     @Override
-    public Case getFirst() {
-        return SQLite.select().from(Case.class).querySingle();
-    }
-
-    @Override
     public Case save(Case childCase) {
         childCase.save();
         return childCase;

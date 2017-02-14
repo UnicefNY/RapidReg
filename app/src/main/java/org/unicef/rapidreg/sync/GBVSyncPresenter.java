@@ -42,6 +42,7 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
 import static org.unicef.rapidreg.PrimeroAppConfiguration.MODULE_ID_GBV;
+import static org.unicef.rapidreg.model.Incident.COLUMN_INCIDENT_CASE_ID;
 
 public class GBVSyncPresenter extends BaseSyncPresenter {
     private static final String TAG = GBVSyncPresenter.class.getSimpleName();
@@ -364,8 +365,18 @@ public class GBVSyncPresenter extends BaseSyncPresenter {
             item.setInternalRev(newRev);
             item.setSynced(true);
             item.setContent(new Blob(incidentsJsonObject.toString().getBytes()));
-            item.setOwnedBy(incidentsJsonObject.get("owned_by").getAsString());
+            item.setIncidentCaseId(incidentsJsonObject.get(COLUMN_INCIDENT_CASE_ID).getAsString());
             item.setServerUrl(TextUtils.lintUrl(PrimeroAppConfiguration.getApiBaseUrl()));
+
+            if (incidentsJsonObject.has(COLUMN_INCIDENT_CASE_ID)) {
+                String incidentCaseId = incidentsJsonObject.get(COLUMN_INCIDENT_CASE_ID).getAsString();
+                item.setIncidentCaseId(incidentCaseId);
+
+                Case incidentCase = caseService.getByInternalId(incidentCaseId);
+                if (incidentCase != null) {
+                    item.setCaseUniqueId(incidentCase.getUniqueId());
+                }
+            }
             item.update();
         } else {
             item = new Incident();
@@ -381,6 +392,16 @@ public class GBVSyncPresenter extends BaseSyncPresenter {
             item.setLastUpdatedDate(Calendar.getInstance().getTime());
             item.setSynced(true);
             item.setContent(new Blob(incidentsJsonObject.toString().getBytes()));
+
+            if (incidentsJsonObject.has(COLUMN_INCIDENT_CASE_ID)) {
+                String incidentCaseId = incidentsJsonObject.get(COLUMN_INCIDENT_CASE_ID).getAsString();
+                item.setIncidentCaseId(incidentCaseId);
+
+                Case incidentCase = caseService.getByInternalId(incidentCaseId);
+                if (incidentCase != null) {
+                    item.setCaseUniqueId(incidentCase.getUniqueId());
+                }
+            }
             item.save();
         }
     }

@@ -19,8 +19,6 @@ public interface CaseDao {
 
     Case getByInternalId(String id);
 
-    Case getFirst();
-
     Case save(Case childCase);
 
     Case update(Case childCase);
