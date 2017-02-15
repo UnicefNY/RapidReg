@@ -154,5 +154,8 @@
     <!--Dialog start-->
     <string name="dialog_title_text_placeholder">Dialog Title Text</string>
     <string name="dialog_progress_message_text_placeholder">Dialog Progress Message Text</string>
+    <string name="dialog_item_from_camera">From Camera</string>
+    <string name="dialog_item_from_gallery">From Gallery</string>
+    <string name="dialog_item_cancel">Cancel</string>
 
 </resources>

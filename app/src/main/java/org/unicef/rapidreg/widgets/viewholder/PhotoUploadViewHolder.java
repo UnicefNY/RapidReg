@@ -1,7 +1,6 @@
 package org.unicef.rapidreg.widgets.viewholder;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.provider.MediaStore;
@@ -11,7 +10,6 @@ import android.widget.GridView;
 import android.widget.TextView;
 
 import org.unicef.rapidreg.R;
-import org.unicef.rapidreg.base.BaseAlertDialog;
 import org.unicef.rapidreg.base.record.RecordActivity;
 import org.unicef.rapidreg.base.record.recordphoto.PhotoConfig;
 import org.unicef.rapidreg.base.record.recordphoto.RecordPhotoAdapter;
@@ -20,6 +18,8 @@ import org.unicef.rapidreg.childcase.casephoto.CasePhotoViewActivity;
 import org.unicef.rapidreg.forms.Field;
 import org.unicef.rapidreg.service.cache.ItemValuesMap;
 import org.unicef.rapidreg.tracing.tracingphoto.TracingPhotoViewActivity;
+import org.unicef.rapidreg.widgets.dialog.MessageDialog;
+import org.unicef.rapidreg.widgets.dialog.PhotoUploadDialog;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -115,49 +115,53 @@ public class PhotoUploadViewHolder extends BaseViewHolder<Field> {
     }
 
     private void showAddPhotoOptionDialog() {
-        final String fromCameraItem = "From Camera";
-        final String fromGalleryItem = "From Gallery";
-        final String cancelItem = "Cancel";
-        final String[] items = {fromCameraItem, fromGalleryItem, cancelItem};
-
-        BaseAlertDialog.Builder builder = new BaseAlertDialog.Builder(context);
-        builder.setItems(items, new DialogInterface.OnClickListener() {
+        PhotoUploadDialog photoUploadDialog = new PhotoUploadDialog(context);
+        photoUploadDialog.setItemCameraOnClickLisener(new View.OnClickListener() {
             @Override
-            public void onClick(DialogInterface dialog, int item) {
-                if (fromCameraItem.equals(items[item])) {
-                    Uri saveUri = Uri.fromFile(new File(PhotoConfig.MEDIA_PATH_FOR_CAMERA));
-                    Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                    intent.putExtra(MediaStore.EXTRA_OUTPUT, saveUri);
-                    ((RecordActivity) context).startActivityForResult(intent, REQUEST_CODE_CAMERA);
-                } else if (fromGalleryItem.equals(items[item])) {
-                    Intent intent = new Intent(Intent.ACTION_PICK,
-                            android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                    ((RecordActivity) context).startActivityForResult(intent, REQUEST_CODE_GALLERY);
-                } else if (cancelItem.equals(items[item])) {
-                    dialog.dismiss();
-                }
+            public void onClick(View v) {
+                Uri saveUri = Uri.fromFile(new File(PhotoConfig.MEDIA_PATH_FOR_CAMERA));
+                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                intent.putExtra(MediaStore.EXTRA_OUTPUT, saveUri);
+                ((RecordActivity) context).startActivityForResult(intent, REQUEST_CODE_CAMERA);
+                photoUploadDialog.dismiss();
             }
-        }).show();
+        });
+        photoUploadDialog.setItemGalleryOnClickLisener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Intent.ACTION_PICK,
+                        android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                ((RecordActivity) context).startActivityForResult(intent, REQUEST_CODE_GALLERY);
+                photoUploadDialog.dismiss();
+            }
+        });
+        photoUploadDialog.setItemCancelOnClickLisener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                photoUploadDialog.dismiss();
+            }
+        });
+        photoUploadDialog.show();
     }
 
     private void showDeletionConfirmDialog(final int position) {
-        BaseAlertDialog.Builder builder = new BaseAlertDialog.Builder(context);
-        builder.setMessage(R.string.remove_photo_confirmation);
-        builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+        MessageDialog messageDialog = new MessageDialog(context);
+        messageDialog.setMessage(R.string.remove_photo_confirmation);
+        messageDialog.setPositiveButton(R.string.ok, new View.OnClickListener() {
             @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
+            public void onClick(View v) {
+                messageDialog.dismiss();
                 RecordPhotoAdapter casePhotoAdapter = (RecordPhotoAdapter) photoGrid.getAdapter();
                 casePhotoAdapter.removeItem(position);
                 casePhotoAdapter.notifyDataSetChanged();
-
-            }
-        }).setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
             }
         });
-        builder.create().show();
+        messageDialog.setNegativeButton(R.string.cancel, new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                messageDialog.dismiss();
+            }
+        });
+        messageDialog.show();
     }
 }
