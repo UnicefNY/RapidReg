@@ -98,7 +98,8 @@ public class SingleLineRadioViewHolder extends BaseViewHolder<Field> {
 
     @Override
     public void setFieldEditable(boolean editable) {
-        disableUneditableField(editable, optionGroup);
+        disableUneditableField(editable, firstRadioButton);
+        disableUneditableField(editable, secondRadioButton);
     }
 
     public void setSelectedRadio(String selectedRadio) {
