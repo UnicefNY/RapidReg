@@ -28,6 +28,7 @@ import org.unicef.rapidreg.injection.component.DaggerFragmentComponent;
 import org.unicef.rapidreg.injection.component.FragmentComponent;
 import org.unicef.rapidreg.injection.module.FragmentModule;
 import org.unicef.rapidreg.service.cache.ItemValuesMap;
+import org.unicef.rapidreg.utils.Utils;
 
 import java.util.Collections;
 import java.util.List;
@@ -116,13 +117,12 @@ public abstract class RecordRegisterWrapperFragment extends MvpFragment<RecordRe
 
     @Override
     public void onRequiredFieldNotFilled() {
-        Toast.makeText(getActivity(), R.string.required_field_is_not_filled, Toast.LENGTH_LONG)
-                .show();
+        Utils.showMessageByToast(getActivity(), R.string.required_field_is_not_filled, Toast.LENGTH_LONG);
     }
 
     @Override
     public void onSavedFail() {
-        Toast.makeText(getActivity(), R.string.save_failed, Toast.LENGTH_SHORT).show();
+        Utils.showMessageByToast(getActivity(), R.string.save_failed, Toast.LENGTH_SHORT);
     }
 
     @Override

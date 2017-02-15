@@ -2,15 +2,9 @@ package org.unicef.rapidreg.base;
 
 import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
-import android.database.Cursor;
-import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
 import android.text.SpannableString;
 import android.text.style.RelativeSizeSpan;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ListAdapter;
 
 import org.unicef.rapidreg.R;
 
@@ -28,7 +22,7 @@ public class BaseAlertDialog extends AlertDialog {
         super(context, themeResId);
     }
 
-    public static class Builder extends AlertDialog.Builder{
+    public static class Builder extends AlertDialog.Builder {
 
         private Context context;
 

@@ -1,6 +1,5 @@
 package org.unicef.rapidreg.base.record.recordsearch;
 
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
@@ -12,7 +11,6 @@ import android.view.ViewGroup;
 import android.widget.DatePicker;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.ViewSwitcher;
 
@@ -20,17 +18,15 @@ import com.hannesdorfmann.mosby.mvp.MvpFragment;
 
 import org.unicef.rapidreg.PrimeroApplication;
 import org.unicef.rapidreg.R;
-import org.unicef.rapidreg.base.BaseAlertDialog;
 import org.unicef.rapidreg.base.record.RecordActivity;
 import org.unicef.rapidreg.base.record.recordlist.RecordListAdapter;
 import org.unicef.rapidreg.base.record.recordlist.RecordListView;
 import org.unicef.rapidreg.injection.component.DaggerFragmentComponent;
 import org.unicef.rapidreg.injection.component.FragmentComponent;
 import org.unicef.rapidreg.injection.module.FragmentModule;
-import org.unicef.rapidreg.model.RecordModel;
 import org.unicef.rapidreg.widgets.ClearableEditText;
+import org.unicef.rapidreg.widgets.dialog.MessageDialog;
 
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -39,8 +35,8 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.OnTextChanged;
 
-import static org.unicef.rapidreg.base.record.recordsearch.RecordSearchPresenter.CONSTANT.*;
-
+import static org.unicef.rapidreg.base.record.recordsearch.RecordSearchPresenter.CONSTANT.AGE_FROM;
+import static org.unicef.rapidreg.base.record.recordsearch.RecordSearchPresenter.CONSTANT.AGE_TO;
 import static org.unicef.rapidreg.model.RecordModel.EMPTY_AGE;
 
 public abstract class RecordSearchFragment extends MvpFragment<RecordListView, RecordSearchPresenter>
@@ -131,7 +127,7 @@ public abstract class RecordSearchFragment extends MvpFragment<RecordListView, R
         ButterKnife.bind(this, view);
         onInitViewContent();
         onInitSearchFields();
-        ((RecordActivity)getActivity()).setShowHideSwitcherToShowState();
+        ((RecordActivity) getActivity()).setShowHideSwitcherToShowState();
     }
 
     @Override
@@ -151,23 +147,7 @@ public abstract class RecordSearchFragment extends MvpFragment<RecordListView, R
 
     @OnClick(R.id.registration_date_container)
     public void onRegistrationDateContainerClicked() {
-        final DatePicker datePicker = new DatePicker(getActivity());
-        datePicker.setCalendarViewShown(false);
-
-        BaseAlertDialog.Builder builder = new BaseAlertDialog.Builder(getActivity());
-        builder.setTitle(getResources().getString(R.string.date));
-        builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                String date = String.format("%s/%s/%s", datePicker.getMonth() + 1,
-                        datePicker.getDayOfMonth(), datePicker.getYear());
-                registrationDate.setText(date);
-                dialog.dismiss();
-            }
-        });
-        builder.setNegativeButton(R.string.cancel, null);
-        builder.setView(datePicker);
-        builder.create().show();
+        showDatePickerDialog(registrationDate);
     }
 
     @OnTextChanged(R.id.registration_date)
@@ -186,23 +166,7 @@ public abstract class RecordSearchFragment extends MvpFragment<RecordListView, R
 
     @OnClick(R.id.date_of_inquiry_container)
     public void onDateOfInquiryContainerClicked() {
-        final DatePicker datePicker = new DatePicker(getActivity());
-        datePicker.setCalendarViewShown(false);
-
-        BaseAlertDialog.Builder builder = new BaseAlertDialog.Builder(getActivity());
-        builder.setTitle(getResources().getString(R.string.date));
-        builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                String date = String.format("%s/%s/%s", datePicker.getMonth() + 1,
-                        datePicker.getDayOfMonth(), datePicker.getYear());
-                dateOfInquiry.setText(date);
-                dialog.dismiss();
-            }
-        });
-        builder.setNegativeButton(R.string.cancel, null);
-        builder.setView(datePicker);
-        builder.create().show();
+        showDatePickerDialog(dateOfInquiry);
     }
 
     @OnTextChanged(R.id.date_of_inquiry)
@@ -257,8 +221,35 @@ public abstract class RecordSearchFragment extends MvpFragment<RecordListView, R
         return getResources().getString(R.string.click_to_search);
     }
 
+    private void showDatePickerDialog(TextView textView) {
+        final DatePicker datePicker = new DatePicker(getActivity());
+        datePicker.setCalendarViewShown(false);
+
+        MessageDialog messageDialog = new MessageDialog(getActivity());
+        messageDialog.setTitle(R.string.date);
+        messageDialog.setCustonView(datePicker);
+        messageDialog.setPositiveButton(R.string.ok, new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String date = String.format("%s/%s/%s", datePicker.getMonth() + 1,
+                        datePicker.getDayOfMonth(), datePicker.getYear());
+                textView.setText(date);
+                messageDialog.dismiss();
+            }
+        });
+        messageDialog.setNegativeButton(R.string.cancel, new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                messageDialog.dismiss();
+            }
+        });
+        messageDialog.show();
+    }
+
     protected abstract Map<String, String> getFilterValues();
+
     protected abstract void onInitSearchFields();
+
     protected abstract RecordListAdapter createRecordListAdapter();
 }
 

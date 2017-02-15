@@ -1,7 +1,5 @@
 package org.unicef.rapidreg.base.record;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -13,26 +11,19 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.view.GravityCompat;
-import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
-import android.view.MenuItem;
 import android.view.View;
-import android.widget.ImageButton;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import org.greenrobot.eventbus.EventBus;
-import org.unicef.rapidreg.IntentSender;
 import org.unicef.rapidreg.R;
 import org.unicef.rapidreg.base.BaseActivity;
-import org.unicef.rapidreg.base.BaseAlertDialog;
 import org.unicef.rapidreg.base.Feature;
 import org.unicef.rapidreg.base.record.recordlist.RecordListFragment;
 import org.unicef.rapidreg.base.record.recordphoto.PhotoConfig;
 import org.unicef.rapidreg.event.UpdateImageEvent;
 import org.unicef.rapidreg.utils.ImageCompressUtil;
 import org.unicef.rapidreg.utils.Utils;
+import org.unicef.rapidreg.widgets.dialog.MessageDialog;
 import org.unicef.rapidreg.widgets.viewholder.PhotoUploadViewHolder;
 
 import java.io.File;
@@ -130,18 +121,24 @@ public abstract class RecordActivity extends BaseActivity {
     }
 
     public void showSyncFormDialog(String message) {
-        AlertDialog dialog = new BaseAlertDialog.Builder(this)
-                .setTitle(R.string.sync_forms)
-                .setMessage(String.format("%s %s", message, getResources().getString(R.string
-                        .sync_forms_message)))
-                .setPositiveButton(R.string.ok, (dialog1, which) -> sendSyncFormEvent())
-                .setNegativeButton(R.string.cancel, null)
-                .show();
-        Utils.changeDialogDividerColor(this, dialog);
-    }
-
-    public void showMessageThruToast(String message) {
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+        MessageDialog messageDialog = new MessageDialog(this);
+        messageDialog.setTitle(R.string.sync_forms);
+        messageDialog.setMessage(String.format("%s %s", message, getResources().getString(R.string
+                .sync_forms_message)));
+        messageDialog.setPositiveButton(R.string.ok, new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sendSyncFormEvent();
+                messageDialog.dismiss();
+            }
+        });
+        messageDialog.setNegativeButton(R.string.cancel, new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                messageDialog.dismiss();
+            }
+        });
+        messageDialog.show();
     }
 
     private void onSelectFromGalleryResult(Intent data) {

@@ -1,6 +1,5 @@
 package org.unicef.rapidreg.widgets.viewholder;
 
-import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -13,8 +12,8 @@ import android.widget.TextView;
 
 import org.unicef.rapidreg.R;
 import org.unicef.rapidreg.base.BaseAlertDialog;
-import org.unicef.rapidreg.base.record.recordphoto.PhotoConfig;
 import org.unicef.rapidreg.base.record.RecordActivity;
+import org.unicef.rapidreg.base.record.recordphoto.PhotoConfig;
 import org.unicef.rapidreg.base.record.recordphoto.RecordPhotoAdapter;
 import org.unicef.rapidreg.childcase.CaseActivity;
 import org.unicef.rapidreg.childcase.casephoto.CasePhotoViewActivity;

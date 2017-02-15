@@ -6,6 +6,9 @@ import android.content.Context;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import org.unicef.rapidreg.R;
 
@@ -82,4 +85,22 @@ public class Utils {
         File file = new File(fileName);
         file.delete();
     }
+
+    public static void showMessageByToast(Context context, int ResId, int duration) {
+        Toast toast = Toast.makeText(context, ResId, duration);
+        initToastStyle(context, toast);
+    }
+
+    public static void showMessageByToast(Context context, String message, int duration) {
+        Toast toast = Toast.makeText(context, message, duration);
+        initToastStyle(context, toast);
+    }
+
+    private static void initToastStyle(Context context, Toast toast) {
+        ViewGroup group = (ViewGroup) toast.getView();
+        TextView messageTextView = (TextView) group.getChildAt(0);
+        messageTextView.setTextSize(context.getResources().getDimension(R.dimen.toast_text_size));
+        toast.show();
+    }
+
 }

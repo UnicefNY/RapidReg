@@ -14,6 +14,7 @@
     <dimen name="size_15">40dp</dimen>
     <dimen name="size_24">60dp</dimen>
     <dimen name="size_48">110dp</dimen>
+    <dimen name="text_size_6">15sp</dimen>
     <dimen name="text_size_12">30sp</dimen>
     <dimen name="text_size_14">35sp</dimen>
     <dimen name="text_size_16">39sp</dimen>
@@ -31,6 +32,7 @@
     <dimen name="dialog_filed_text_size">@dimen/text_size_14</dimen>
     <dimen name="dialog_button_text_size">@dimen/text_size_12</dimen>
     <dimen name="dialog_filter_text_size">@dimen/text_size_14</dimen>
+    <dimen name="toast_text_size">@dimen/text_size_12</dimen>
 
 
     <!--row in list start-->
@@ -135,4 +137,10 @@
     <!--button scale start-->
     <item name="button_icon_scale" format="float" type="dimen">2.2</item>
     <!--button scale end-->
+
+    <!--progress dialog start-->
+    <dimen name="progress_dialog_message_text_size">@dimen/text_size_14</dimen>
+    <dimen name="progress_dialog_padding">@dimen/size_10</dimen>
+    <dimen name="progress_dialog_message_marging">@dimen/size_5</dimen>
+    <!--progress dialog end-->
 </resources>

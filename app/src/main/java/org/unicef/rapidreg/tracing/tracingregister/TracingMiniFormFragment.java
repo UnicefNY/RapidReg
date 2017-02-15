@@ -22,6 +22,7 @@ import org.unicef.rapidreg.service.RecordService;
 import org.unicef.rapidreg.tracing.TracingActivity;
 import org.unicef.rapidreg.tracing.TracingFeature;
 import org.unicef.rapidreg.tracing.tracingphoto.TracingPhotoAdapter;
+import org.unicef.rapidreg.utils.Utils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -110,7 +111,7 @@ public class TracingMiniFormFragment extends RecordRegisterFragment {
     public void onSaveSuccessful(long recordId) {
         Bundle args = new Bundle();
         args.putLong(TRACING_PRIMARY_ID, recordId);
-        Toast.makeText(getActivity(), R.string.save_success, Toast.LENGTH_SHORT).show();
+        Utils.showMessageByToast(getActivity(), R.string.save_success, Toast.LENGTH_SHORT);
         ((RecordActivity) getActivity()).turnToFeature(TracingFeature.DETAILS_MINI, args, null);
     }
 

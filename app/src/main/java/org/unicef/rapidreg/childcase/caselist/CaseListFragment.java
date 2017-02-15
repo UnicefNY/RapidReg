@@ -7,7 +7,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import org.greenrobot.eventbus.EventBus;
 import org.unicef.rapidreg.PrimeroAppConfiguration;
 import org.unicef.rapidreg.PrimeroApplication;
 import org.unicef.rapidreg.R;
@@ -18,9 +17,8 @@ import org.unicef.rapidreg.base.record.recordlist.RecordListPresenter;
 import org.unicef.rapidreg.base.record.recordlist.spinner.SpinnerState;
 import org.unicef.rapidreg.childcase.CaseActivity;
 import org.unicef.rapidreg.childcase.CaseFeature;
-import org.unicef.rapidreg.event.LoadCPCaseFormEvent;
-import org.unicef.rapidreg.event.LoadGBVCaseFormEvent;
 import org.unicef.rapidreg.model.User;
+import org.unicef.rapidreg.utils.Utils;
 
 import java.util.Arrays;
 
@@ -100,7 +98,7 @@ public class CaseListFragment extends RecordListFragment {
             if (PrimeroApplication.getAppRuntime().isCaseFormSyncFail()) {
                 showSyncFormDialog(getResources().getString(R.string.child_case));
             } else {
-                showMessageThruToast(getResources().getString(R.string.forms_is_syncing_msg));
+                Utils.showMessageByToast(getActivity(), R.string.forms_is_syncing_msg, Toast.LENGTH_SHORT);
             }
             return;
         }

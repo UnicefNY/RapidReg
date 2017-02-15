@@ -3,7 +3,6 @@ package org.unicef.rapidreg.childcase.caseregister;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,6 +25,7 @@ import org.unicef.rapidreg.event.SaveCaseEvent;
 import org.unicef.rapidreg.forms.Field;
 import org.unicef.rapidreg.service.CaseService;
 import org.unicef.rapidreg.service.RecordService;
+import org.unicef.rapidreg.utils.Utils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -133,7 +133,7 @@ public class CaseMiniFormFragment extends RecordRegisterFragment {
 
     @Override
     public void onSaveSuccessful(long recordId) {
-        Toast.makeText(getActivity(), R.string.save_success, Toast.LENGTH_SHORT).show();
+        Utils.showMessageByToast(getActivity(), R.string.save_success, Toast.LENGTH_SHORT);
         Bundle args = new Bundle();
 
         String moduleId = caseRegisterPresenter.getCaseType();

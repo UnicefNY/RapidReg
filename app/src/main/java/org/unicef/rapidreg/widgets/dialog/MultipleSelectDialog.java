@@ -1,7 +1,6 @@
 package org.unicef.rapidreg.widgets.dialog;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.TextView;
@@ -13,7 +12,6 @@ import org.unicef.rapidreg.utils.Utils;
 import org.unicef.rapidreg.widgets.viewholder.GenericViewHolder;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 
@@ -69,33 +67,6 @@ public class MultipleSelectDialog extends BaseDialog {
                 dialog.dismiss();
             }
         });
-
-
-//        boolean[] selectedValues = getSelectedValues(itemValues.getAsList(field.getName()),
-//                optionItems);
-//
-//        getBuilder().setMultiChoiceItems(optionItems, selectedValues,
-//                new DialogInterface.OnMultiChoiceClickListener() {
-//                    @Override
-//                    public void onClick(DialogInterface dialog, int which, boolean isChecked) {
-//                        if (isChecked) {
-//                            result.add(optionItems[which]);
-//                        } else {
-//                            result.remove(optionItems[which]);
-//                        }
-//                    }
-//                });
-//    }
-//
-//    private boolean[] getSelectedValues(List<String> items, String[] optionItems) {
-//        boolean[] selectedValues = new boolean[optionItems.length];
-//        for (String item : items) {
-//            int selected;
-//            if ((selected = Arrays.asList(optionItems).indexOf(item)) != -1) {
-//                selectedValues[selected] = true;
-//            }
-//        }
-//        return selectedValues;
     }
 
     @Override

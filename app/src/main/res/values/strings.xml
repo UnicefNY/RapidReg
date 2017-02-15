@@ -153,5 +153,6 @@
 
     <!--Dialog start-->
     <string name="dialog_title_text_placeholder">Dialog Title Text</string>
+    <string name="dialog_progress_message_text_placeholder">Dialog Progress Message Text</string>
 
 </resources>

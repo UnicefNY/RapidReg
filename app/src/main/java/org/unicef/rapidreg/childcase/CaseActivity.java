@@ -1,11 +1,10 @@
 package org.unicef.rapidreg.childcase;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.view.GravityCompat;
+import android.view.View;
 import android.widget.Toast;
 
 import org.greenrobot.eventbus.EventBus;
@@ -15,7 +14,6 @@ import org.unicef.rapidreg.IntentSender;
 import org.unicef.rapidreg.PrimeroAppConfiguration;
 import org.unicef.rapidreg.PrimeroApplication;
 import org.unicef.rapidreg.R;
-import org.unicef.rapidreg.base.BaseAlertDialog;
 import org.unicef.rapidreg.base.BaseView;
 import org.unicef.rapidreg.base.record.RecordActivity;
 import org.unicef.rapidreg.base.record.recordlist.RecordListFragment;
@@ -25,9 +23,9 @@ import org.unicef.rapidreg.event.LoadGBVCaseFormEvent;
 import org.unicef.rapidreg.event.LoadGBVIncidentFormEvent;
 import org.unicef.rapidreg.event.RedirectIncidentEvent;
 import org.unicef.rapidreg.event.SaveCaseEvent;
-import org.unicef.rapidreg.incident.IncidentPresenter;
 import org.unicef.rapidreg.model.User;
 import org.unicef.rapidreg.utils.Utils;
+import org.unicef.rapidreg.widgets.dialog.MessageDialog;
 
 import javax.inject.Inject;
 
@@ -69,10 +67,10 @@ public class CaseActivity extends RecordActivity implements BaseView {
         User.Role roleType = PrimeroAppConfiguration.getCurrentUser().getRoleType();
         if (roleType == User.Role.CP) {
             EventBus.getDefault().postSticky(new LoadCPCaseFormEvent(PrimeroAppConfiguration.getCookie()));
-        }else if(roleType == User.Role.GBV){
+        } else if (roleType == User.Role.GBV) {
             EventBus.getDefault().postSticky(new LoadGBVCaseFormEvent(PrimeroAppConfiguration.getCookie()));
             EventBus.getDefault().postSticky(new LoadGBVIncidentFormEvent(PrimeroAppConfiguration.getCookie()));
-        }else{
+        } else {
             EventBus.getDefault().postSticky(new LoadCPCaseFormEvent(PrimeroAppConfiguration.getCookie()));
         }
     }
@@ -129,35 +127,39 @@ public class CaseActivity extends RecordActivity implements BaseView {
 
     @Override
     protected void showQuitDialog(final int clickedButton) {
-        AlertDialog dialog = new BaseAlertDialog.Builder(this)
-                .setTitle(R.string.quit)
-                .setMessage(R.string.quit_without_saving)
-                .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        Utils.clearAudioFile(AUDIO_FILE_PATH);
-                        switch (clickedButton) {
-                            case R.id.nav_cases:
-                                turnToFeature(CaseFeature.LIST, null, null);
-                                break;
-                            case R.id.nav_tracing:
-                                intentSender.showTracingActivity(CaseActivity.this, true);
-                                break;
-                            case R.id.nav_incident:
-                                intentSender.showIncidentActivity(CaseActivity.this, true);
-                                break;
-                            case R.id.nav_sync:
-                                intentSender.showSyncActivity(CaseActivity.this, true);
-                                break;
-                            default:
-                                break;
-                        }
-                    }
-                })
-                .setNegativeButton(R.string.cancel, null)
-                .show();
-
-        Utils.changeDialogDividerColor(this, dialog);
+        MessageDialog messageDialog = new MessageDialog(this);
+        messageDialog.setTitle((R.string.quit));
+        messageDialog.setMessage(R.string.quit_without_saving);
+        messageDialog.setPositiveButton(R.string.ok, new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Utils.clearAudioFile(AUDIO_FILE_PATH);
+                switch (clickedButton) {
+                    case R.id.nav_cases:
+                        turnToFeature(CaseFeature.LIST, null, null);
+                        break;
+                    case R.id.nav_tracing:
+                        intentSender.showTracingActivity(CaseActivity.this, true);
+                        break;
+                    case R.id.nav_incident:
+                        intentSender.showIncidentActivity(CaseActivity.this, true);
+                        break;
+                    case R.id.nav_sync:
+                        intentSender.showSyncActivity(CaseActivity.this, true);
+                        break;
+                    default:
+                        break;
+                }
+                messageDialog.dismiss();
+            }
+        });
+        messageDialog.setNegativeButton(R.string.cancel, new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                messageDialog.dismiss();
+            }
+        });
+        messageDialog.show();
     }
 
     @Override
@@ -173,7 +175,7 @@ public class CaseActivity extends RecordActivity implements BaseView {
 
     @Override
     public void promoteSyncFormsError() {
-        Toast.makeText(CaseActivity.this, R.string.sync_forms_error, Toast.LENGTH_SHORT).show();
+        Utils.showMessageByToast(this, R.string.sync_forms_error, Toast.LENGTH_SHORT);
     }
 
     @Override
@@ -194,7 +196,7 @@ public class CaseActivity extends RecordActivity implements BaseView {
             if (PrimeroApplication.getAppRuntime().isIncidentFormSyncFail()) {
                 showSyncFormDialog(getResources().getString(R.string.sync_forms_message));
             } else {
-                showMessageThruToast(getResources().getString(R.string.forms_is_syncing_msg));
+                Utils.showMessageByToast(this, R.string.forms_is_syncing_msg, Toast.LENGTH_SHORT);
             }
         }
     }

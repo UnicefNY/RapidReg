@@ -16,8 +16,7 @@ import org.unicef.rapidreg.base.record.recordregister.RecordRegisterAdapter;
 import org.unicef.rapidreg.base.record.recordregister.RecordRegisterFragment;
 import org.unicef.rapidreg.incident.IncidentFeature;
 import org.unicef.rapidreg.service.RecordService;
-
-import java.util.ArrayList;
+import org.unicef.rapidreg.utils.Utils;
 
 import javax.inject.Inject;
 
@@ -67,7 +66,6 @@ public class IncidentRegisterFragment extends RecordRegisterFragment {
 
     @Override
     public void onSaveSuccessful(long recordId) {
-        Toast.makeText(getActivity(), "IncidentRegisterFragment save successfully", Toast
-                .LENGTH_SHORT).show();
+        Utils.showMessageByToast(getActivity(), R.string.save_success, Toast.LENGTH_SHORT);
     }
 }

@@ -1,7 +1,6 @@
 package org.unicef.rapidreg.widgets.viewholder;
 
 import android.content.Context;
-import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -9,7 +8,6 @@ import android.widget.TextView;
 import android.widget.ViewSwitcher;
 
 import org.unicef.rapidreg.R;
-import org.unicef.rapidreg.base.BaseAlertDialog;
 import org.unicef.rapidreg.exception.DialogException;
 import org.unicef.rapidreg.forms.Field;
 import org.unicef.rapidreg.service.cache.ItemValuesMap;
@@ -95,9 +93,6 @@ public class GenericViewHolder extends BaseTextViewHolder {
 
     private void showFieldDialog(Field field, TextView valueView) {
         String fieldType = field.getType();
-
-        BaseAlertDialog.Builder builder = new BaseAlertDialog.Builder(context);
-        builder.setTitle(getLabel(field));
 
         if (fieldType.equals(Field.TYPE_SELECT_BOX)) {
             fieldType = field.isMultiSelect() ? Field.TYPE_MULTI_SELECT_BOX :

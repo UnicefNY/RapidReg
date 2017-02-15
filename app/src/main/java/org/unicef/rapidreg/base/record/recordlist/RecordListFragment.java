@@ -1,7 +1,5 @@
 package org.unicef.rapidreg.base.record.recordlist;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
@@ -13,21 +11,19 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
-import android.widget.Toast;
 import android.widget.ViewSwitcher;
 
 import com.hannesdorfmann.mosby.mvp.MvpFragment;
 
 import org.unicef.rapidreg.PrimeroApplication;
 import org.unicef.rapidreg.R;
-import org.unicef.rapidreg.base.BaseAlertDialog;
 import org.unicef.rapidreg.base.record.RecordActivity;
 import org.unicef.rapidreg.base.record.recordlist.spinner.SpinnerAdapter;
 import org.unicef.rapidreg.base.record.recordlist.spinner.SpinnerState;
 import org.unicef.rapidreg.injection.component.DaggerFragmentComponent;
 import org.unicef.rapidreg.injection.component.FragmentComponent;
 import org.unicef.rapidreg.injection.module.FragmentModule;
-import org.unicef.rapidreg.utils.Utils;
+import org.unicef.rapidreg.widgets.dialog.MessageDialog;
 
 import java.util.Arrays;
 import java.util.List;
@@ -124,18 +120,24 @@ public abstract class RecordListFragment extends MvpFragment<RecordListView, Rec
     }
 
     public void showSyncFormDialog(String message) {
-        AlertDialog dialog = new BaseAlertDialog.Builder(getContext())
-                .setTitle(R.string.sync_forms)
-                .setMessage(String.format("%s %s", message, getResources().getString(R.string
-                        .sync_forms_message)))
-                .setPositiveButton(R.string.ok, (dialog1, which) -> ((RecordActivity)getActivity()).sendSyncFormEvent())
-                .setNegativeButton(R.string.cancel, null)
-                .show();
-        Utils.changeDialogDividerColor(getContext(), dialog);
-    }
-
-    public void showMessageThruToast(String message) {
-        Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
+        MessageDialog messageDialog = new MessageDialog(getActivity());
+        messageDialog.setTitle(R.string.sync_forms);
+        messageDialog.setMessage(String.format("%s %s", message, getResources().getString(R.string
+                .sync_forms_message)));
+        messageDialog.setPositiveButton(R.string.ok, new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ((RecordActivity)getActivity()).sendSyncFormEvent();
+                messageDialog.dismiss();
+            }
+        });
+        messageDialog.setNegativeButton(R.string.cancel, new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                messageDialog.dismiss();
+            }
+        });
+        messageDialog.show();
     }
 
     protected abstract RecordListAdapter createRecordListAdapter();

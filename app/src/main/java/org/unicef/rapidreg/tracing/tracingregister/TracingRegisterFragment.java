@@ -14,16 +14,12 @@ import org.unicef.rapidreg.base.Feature;
 import org.unicef.rapidreg.base.record.RecordActivity;
 import org.unicef.rapidreg.base.record.recordregister.RecordRegisterAdapter;
 import org.unicef.rapidreg.base.record.recordregister.RecordRegisterFragment;
-import org.unicef.rapidreg.forms.Field;
-import org.unicef.rapidreg.forms.RecordForm;
 import org.unicef.rapidreg.service.RecordService;
-import org.unicef.rapidreg.service.TracingFormService;
-import org.unicef.rapidreg.service.cache.ItemValuesMap;
 import org.unicef.rapidreg.tracing.TracingFeature;
 import org.unicef.rapidreg.tracing.tracingphoto.TracingPhotoAdapter;
+import org.unicef.rapidreg.utils.Utils;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import javax.inject.Inject;
 
@@ -77,6 +73,6 @@ public class TracingRegisterFragment extends RecordRegisterFragment {
 
     @Override
     public void onSaveSuccessful(long recordId) {
-        Toast.makeText(getActivity(), "TracingRegisterFragment save successfully", Toast.LENGTH_SHORT).show();
+        Utils.showMessageByToast(getActivity(), R.string.save_success, Toast.LENGTH_SHORT);
     }
 }

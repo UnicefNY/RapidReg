@@ -1,6 +1,5 @@
 package org.unicef.rapidreg.login;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.view.View;
@@ -19,8 +18,8 @@ import org.unicef.rapidreg.base.BaseProgressDialog;
 import org.unicef.rapidreg.injection.component.ActivityComponent;
 import org.unicef.rapidreg.injection.component.DaggerActivityComponent;
 import org.unicef.rapidreg.injection.module.ActivityModule;
-import org.unicef.rapidreg.loadform.TemplateFormService;
 import org.unicef.rapidreg.model.LoginResponse;
+import org.unicef.rapidreg.utils.Utils;
 
 import javax.inject.Inject;
 
@@ -67,7 +66,7 @@ public class LoginActivity extends MvpActivity<LoginView, LoginPresenter> implem
         ButterKnife.bind(this);
 
         hideUrlInputIfUserEverLoginSuccessfully();
-        loginProgressDialog = new BaseProgressDialog(this);
+        loginProgressDialog = new BaseProgressDialog(this, R.style.ProgressDialogTheme);
 
         usernameEditView.requestFocus();
     }
@@ -135,10 +134,9 @@ public class LoginActivity extends MvpActivity<LoginView, LoginPresenter> implem
 
     @Override
     public void showError(Throwable e, boolean pullToRefresh) {
-        Toast.makeText(LoginActivity.this, getResources().getString(R.string.login_failed_to_connect_prefix) +
-                PrimeroAppConfiguration.getApiBaseUrl(), Toast.LENGTH_SHORT).show();
-        Toast.makeText(LoginActivity.this, getResources().getString(R.string.login_failed_check_network_and_url),
-                Toast.LENGTH_SHORT).show();
+        Utils.showMessageByToast(this, getResources().getString(R.string.login_failed_to_connect_prefix) +
+                PrimeroAppConfiguration.getApiBaseUrl(), Toast.LENGTH_SHORT);
+        Utils.showMessageByToast(this, R.string.login_failed_check_network_and_url, Toast.LENGTH_SHORT);
     }
 
     @Override
@@ -152,13 +150,12 @@ public class LoginActivity extends MvpActivity<LoginView, LoginPresenter> implem
 
     @Override
     public void showOnlineLoginSuccessful() {
-        Toast.makeText(this, getResources().getString(R.string.login_success_message), Toast.LENGTH_SHORT).show();
+        Utils.showMessageByToast(this, R.string.login_success_message, Toast.LENGTH_SHORT);
     }
 
     @Override
     public void showOfflineLoginSuccessful() {
-        Toast.makeText(this, getResources().getString(R.string.login_offline_success_text), Toast.LENGTH_SHORT)
-                .show();
+        Utils.showMessageByToast(this, R.string.login_offline_success_text, Toast.LENGTH_SHORT);
     }
 
     @Override
@@ -175,7 +172,7 @@ public class LoginActivity extends MvpActivity<LoginView, LoginPresenter> implem
 
     @Override
     public void showLoginErrorByToast(String message) {
-        Toast.makeText(LoginActivity.this, message, Toast.LENGTH_SHORT).show();
+        Utils.showMessageByToast(this,  message, Toast.LENGTH_SHORT);
     }
 
     @Override
@@ -200,16 +197,14 @@ public class LoginActivity extends MvpActivity<LoginView, LoginPresenter> implem
 
     @Override
     public void showCredentialErrorMsg() {
-        Toast.makeText(this, getResources().getString(R.string.login_failed_credential), Toast.LENGTH_LONG)
-                .show();
+        Utils.showMessageByToast(this, R.string.login_failed_credential, Toast.LENGTH_LONG);
     }
 
     @Override
     public void showServerConnectionErrorMsg() {
-        Toast.makeText(LoginActivity.this, getResources().getString(R.string.login_failed_to_connect_prefix) +
-                PrimeroAppConfiguration.getApiBaseUrl(), Toast.LENGTH_SHORT).show();
-        Toast.makeText(LoginActivity.this, getResources().getString(R.string.login_failed_check_network_and_url),
-                Toast.LENGTH_SHORT).show();
+        Utils.showMessageByToast(this, getResources().getString(R.string.login_failed_to_connect_prefix) +
+                PrimeroAppConfiguration.getApiBaseUrl(), Toast.LENGTH_SHORT);
+        Utils.showMessageByToast(this, R.string.login_failed_check_network_and_url, Toast.LENGTH_SHORT);
     }
 
     @Override

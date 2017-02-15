@@ -22,12 +22,13 @@ import com.hannesdorfmann.mosby.mvp.MvpFragment;
 import org.unicef.rapidreg.PrimeroAppConfiguration;
 import org.unicef.rapidreg.PrimeroApplication;
 import org.unicef.rapidreg.R;
-import org.unicef.rapidreg.base.BaseAlertDialog;
 import org.unicef.rapidreg.base.BaseProgressDialog;
 import org.unicef.rapidreg.injection.component.DaggerFragmentComponent;
 import org.unicef.rapidreg.injection.component.FragmentComponent;
 import org.unicef.rapidreg.injection.module.FragmentModule;
 import org.unicef.rapidreg.model.User;
+import org.unicef.rapidreg.utils.Utils;
+import org.unicef.rapidreg.widgets.dialog.MessageDialog;
 
 import javax.inject.Inject;
 
@@ -151,8 +152,7 @@ public class SyncFragment extends MvpFragment<SyncView, BaseSyncPresenter> imple
     @OnClick(R.id.btn_sync)
     public void onSyncClick() {
         if (!isNetworkAvailable()) {
-            Toast.makeText(getActivity(), getResources().getString(R.string.network_not_available), Toast
-                    .LENGTH_SHORT).show();
+            Utils.showMessageByToast(getActivity(), R.string.network_not_available, Toast.LENGTH_SHORT);
             return;
         }
         presenter.tryToSync();
@@ -168,12 +168,24 @@ public class SyncFragment extends MvpFragment<SyncView, BaseSyncPresenter> imple
 
     @Override
     public void showSyncCancelConfirmDialog() {
-        new BaseAlertDialog.Builder(getActivity())
-                .setMessage(confirmCancelSyncMessage)
-                .setCancelable(false)
-                .setNegativeButton(continueSyncButtonText, (dialog, which) -> syncProgressDialog.show())
-                .setPositiveButton(stopSyncButtonText, (dialog, which) -> presenter.cancelSync())
-                .show();
+        MessageDialog messageDialog = new MessageDialog(getActivity());
+        messageDialog.setMessage(confirmCancelSyncMessage);
+        messageDialog.setCancelable(false);
+        messageDialog.setPositiveButton(R.string.stop_sync_button_text, new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                presenter.cancelSync();
+                messageDialog.dismiss();
+            }
+        });
+        messageDialog.setNegativeButton(R.string.continue_sync_button_text, new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                syncProgressDialog.show();
+                messageDialog.dismiss();
+            }
+        });
+        messageDialog.show();
     }
 
     @Override
@@ -205,35 +217,45 @@ public class SyncFragment extends MvpFragment<SyncView, BaseSyncPresenter> imple
 
     @Override
     public void showAttemptSyncDialog() {
-        new BaseAlertDialog.Builder(getActivity())
-                .setMessage(tryToSyncMessage)
-                .setCancelable(false)
-                .setNegativeButton(notNowButtonText, (dialog, which) -> {
-                })
-                .setPositiveButton(confirmButtonText, (dialog, which) -> presenter.execSync())
-                .show();
+        MessageDialog messageDialog = new MessageDialog(getActivity());
+        messageDialog.setMessage(tryToSyncMessage);
+        messageDialog.setCancelable(false);
+        messageDialog.setPositiveButton(R.string.confirm_button_text, new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                presenter.execSync();
+                messageDialog.dismiss();
+            }
+        });
+        messageDialog.setNegativeButton(R.string.not_now_button_text, new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                messageDialog.dismiss();
+            }
+        });
+        messageDialog.show();
     }
 
     @Override
     public void showSyncUploadSuccessMessage() {
-        Toast.makeText(getActivity(), syncUploadSuccessMessage, Toast.LENGTH_SHORT).show();
+        Utils.showMessageByToast(getActivity(), syncUploadSuccessMessage, Toast.LENGTH_SHORT);
     }
 
     @Override
     public void showSyncPullFormSuccessMessage() {
-        Toast.makeText(getActivity(), syncDownloadFormSuccessMessage, Toast.LENGTH_SHORT).show();
+        Utils.showMessageByToast(getActivity(), syncDownloadFormSuccessMessage, Toast.LENGTH_SHORT);
     }
 
     @Override
     public void showRequestTimeoutSyncErrorMessage() {
-        Toast.makeText(getActivity(), getResources().getString(R.string.sync_request_time_out_error_message), Toast
-                .LENGTH_SHORT).show();
+        Utils.showMessageByToast(getActivity(), R.string.sync_request_time_out_error_message, Toast
+                .LENGTH_SHORT);
     }
 
     @Override
     public void showServerNotAvailableSyncErrorMessage() {
-        Toast.makeText(getActivity(), getResources().getString(R.string.sync_server_not_available_error_message), Toast
-                .LENGTH_SHORT).show();
+        Utils.showMessageByToast(getActivity(), R.string.sync_server_not_available_error_message, Toast
+                .LENGTH_SHORT);
     }
 
     @Override
@@ -253,26 +275,38 @@ public class SyncFragment extends MvpFragment<SyncView, BaseSyncPresenter> imple
 
     @Override
     public ProgressDialog showFetchingCaseAmountLoadingDialog() {
-        return ProgressDialog.show(getActivity(), "", getResources().getString(R.string.fetching_case_amount_msg),
-                true);
+        BaseProgressDialog fetchingCaseProgressDialog = new BaseProgressDialog(getActivity(), R.style.ProgressDialogTheme);
+        fetchingCaseProgressDialog.setMessage(getResources().getString(R.string.fetching_case_amount_msg));
+        fetchingCaseProgressDialog.setCancelable(false);
+        fetchingCaseProgressDialog.show();
+        return fetchingCaseProgressDialog;
     }
 
     @Override
     public ProgressDialog showFetchingTracingAmountLoadingDialog() {
-        return ProgressDialog.show(getActivity(), "", getResources().getString(R.string.fetching_tracing_amount_msg),
-                true);
+        BaseProgressDialog fetchingTracingProgressDialog = new BaseProgressDialog(getActivity(), R.style.ProgressDialogTheme);
+        fetchingTracingProgressDialog.setMessage(getResources().getString(R.string.fetching_tracing_amount_msg));
+        fetchingTracingProgressDialog.setCancelable(false);
+        fetchingTracingProgressDialog.show();
+        return fetchingTracingProgressDialog;
     }
 
     @Override
     public ProgressDialog showFetchingFormLoadingDialog() {
-        return ProgressDialog.show(getActivity(), "", getResources().getString(R.string.fetching_form_msg),
-                true);
+        BaseProgressDialog fetchingFormProgressDialog = new BaseProgressDialog(getActivity(), R.style.ProgressDialogTheme);
+        fetchingFormProgressDialog.setMessage(getResources().getString(R.string.fetching_form_msg));
+        fetchingFormProgressDialog.setCancelable(false);
+        fetchingFormProgressDialog.show();
+        return fetchingFormProgressDialog;
     }
 
     @Override
     public ProgressDialog showFetchingIncidentAmountLoadingDialog() {
-        return ProgressDialog.show(getActivity(), "", getResources().getString(R.string.fetching_incident_amount_msg),
-                true);
+        BaseProgressDialog fetchingIncidentProgressDialog = new BaseProgressDialog(getActivity(), R.style.ProgressDialogTheme);
+        fetchingIncidentProgressDialog.setMessage(getResources().getString(R.string.fetching_incident_amount_msg));
+        fetchingIncidentProgressDialog.setCancelable(false);
+        fetchingIncidentProgressDialog.show();
+        return fetchingIncidentProgressDialog;
     }
 
     @Override
@@ -282,12 +316,12 @@ public class SyncFragment extends MvpFragment<SyncView, BaseSyncPresenter> imple
 
     @Override
     public void showSyncDownloadSuccessMessage() {
-        Toast.makeText(getActivity(), syncDownloadSuccessMessage, Toast.LENGTH_SHORT).show();
+        Utils.showMessageByToast(getActivity(), syncDownloadSuccessMessage, Toast.LENGTH_SHORT);
     }
 
     @Override
     public void showSyncErrorMessage() {
-        Toast.makeText(getActivity(), getResources().getString(R.string.sync_error_message), Toast.LENGTH_LONG).show();
+        Utils.showMessageByToast(getActivity(), R.string.sync_error_message, Toast.LENGTH_LONG);
     }
 
     public FragmentComponent getComponent() {
@@ -298,7 +332,7 @@ public class SyncFragment extends MvpFragment<SyncView, BaseSyncPresenter> imple
     }
 
     private void showSyncProgressDialog(String title) {
-        syncProgressDialog = new BaseProgressDialog(getActivity());
+        syncProgressDialog = new BaseProgressDialog(getActivity(), R.style.ProgressDialogTheme);
         syncProgressDialog.setProgressStyle(BaseProgressDialog.STYLE_HORIZONTAL);
         syncProgressDialog.setMessage(title);
         syncProgressDialog.setCancelable(false);

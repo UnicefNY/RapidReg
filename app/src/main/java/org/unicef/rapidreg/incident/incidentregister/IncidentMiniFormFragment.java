@@ -23,6 +23,7 @@ import org.unicef.rapidreg.incident.IncidentFeature;
 import org.unicef.rapidreg.service.IncidentService;
 import org.unicef.rapidreg.service.RecordService;
 import org.unicef.rapidreg.service.cache.ItemValuesMap;
+import org.unicef.rapidreg.utils.Utils;
 
 import java.util.List;
 
@@ -30,7 +31,6 @@ import javax.inject.Inject;
 
 import butterknife.OnClick;
 
-import static org.unicef.rapidreg.IntentSender.BUNDLE_EXTRA;
 import static org.unicef.rapidreg.forms.Field.TYPE_INCIDENT_MINI_FORM_PROFILE;
 import static org.unicef.rapidreg.service.CaseService.CASE_ID;
 
@@ -101,7 +101,7 @@ public class IncidentMiniFormFragment extends RecordRegisterFragment {
 
     @Override
     public void onSaveSuccessful(long recordId) {
-        Toast.makeText(getActivity(), R.string.save_success, Toast.LENGTH_SHORT).show();
+        Utils.showMessageByToast(getActivity(), R.string.save_success, Toast.LENGTH_SHORT);
         Bundle args = new Bundle();
         args.putLong(IncidentService.INCIDENT_PRIMARY_ID, recordId);
         ((RecordActivity) getActivity()).turnToFeature(IncidentFeature.DETAILS_MINI, args, null);
