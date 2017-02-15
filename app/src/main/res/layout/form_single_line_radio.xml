@@ -11,12 +11,43 @@
         android:id="@+id/option_group"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="2"
+        android:gravity="center_vertical"
         android:orientation="horizontal"
         android:paddingBottom="@dimen/case_register_field_padding_top_bottom"
         android:paddingLeft="@dimen/case_register_field_padding_left_right"
         android:paddingRight="@dimen/case_register_field_padding_left_right">
 
+        <RadioButton
+            android:id="@+id/first_radio_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/size_10"
+            android:scaleX="@dimen/button_icon_scale"
+            android:scaleY="@dimen/button_icon_scale" />
+
+        <TextView
+            android:id="@+id/first_radio_button_text_view"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/size_10"
+            android:layout_weight="4"
+            android:textSize="@dimen/text_size_16" />
+
+        <RadioButton
+            android:id="@+id/second_radio_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/size_10"
+            android:scaleX="@dimen/button_icon_scale"
+            android:scaleY="@dimen/button_icon_scale" />
+
+        <TextView
+            android:id="@+id/second_radio_button_text_view"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/size_10"
+            android:layout_weight="4"
+            android:textSize="@dimen/text_size_16" />
     </RadioGroup>
 
     <include layout="@layout/list_item_border" />
