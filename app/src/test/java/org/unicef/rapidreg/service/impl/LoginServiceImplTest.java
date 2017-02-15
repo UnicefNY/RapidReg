@@ -16,12 +16,19 @@ import org.unicef.rapidreg.service.FormRemoteService;
 import org.unicef.rapidreg.service.LoginService;
 import org.unicef.rapidreg.utils.EncryptHelper;
 
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
+
+import okhttp3.Headers;
+import okhttp3.internal.framed.Header;
 
 import static junit.framework.Assert.assertFalse;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Matchers.anyString;
+import static org.mockito.Matchers.isNotNull;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
 
@@ -55,8 +62,18 @@ public class LoginServiceImplTest {
     @Test
     public void should_return_empty_string_when_no_user_exist() throws Exception {
         when(userDao.getAllUsers()).thenReturn(Collections.EMPTY_LIST);
-
         assertThat(loginService.getServerUrl(), is(""));
+    }
+
+    @Test
+    public void should_return_expectedUrl_when_user_exist() throws Exception {
+        jack.setServerUrl(expectedUrl);
+        List<User> users = new ArrayList<>();
+        users.add(jack);
+
+        when(userDao.getAllUsers()).thenReturn(users);
+
+        assertThat("Should return same url", loginService.getServerUrl(), is(expectedUrl));
     }
 
     @Test
@@ -82,6 +99,17 @@ public class LoginServiceImplTest {
     }
 
     @Test
+    public void should_verify_whether_password_is_valid() throws Exception {
+        boolean actual = loginService.isPasswordValid("ab12c34*");
+        assertThat("Should return password is true", actual, is(true));
+    }
+
+    @Test
+    public void should_return_false_when_password_is_invalid() throws Exception {
+        assertThat("Should return password is false", loginService.isPasswordValid("123"), is(false));
+    }
+
+    @Test
     public void should_return_false_when_url_is_invalid() {
         assertThat(loginService.isUrlValid(null), CoreMatchers.is(false));
         assertThat(loginService.isUrlValid(""), CoreMatchers.is(false));
@@ -90,10 +118,8 @@ public class LoginServiceImplTest {
     }
 
     @Test
-    public void should_verify_whether_password_is_valid() throws Exception {
-        boolean actual = loginService.isPasswordValid("123");
-
-        assertFalse(actual);
+    public void should_return_true_when_url_is_valid() throws Exception {
+        assertThat("should return url is true", loginService.isUrlValid("http://10.29.2.190:3000"), is(true));
     }
 
     @Test
