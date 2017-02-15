@@ -17,7 +17,7 @@ public class UtilsTest {
         items.add("Language1");
         items.add("Language2");
         String result = Utils.toStringResult(items);
-        assertThat(result, is("Language1,Language2"));
+        assertThat(result, is("Language1, Language2"));
 
         items = null;
         result = Utils.toStringResult(items);
