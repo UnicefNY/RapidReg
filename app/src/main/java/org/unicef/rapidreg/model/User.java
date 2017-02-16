@@ -7,6 +7,9 @@ import com.raizlabs.android.dbflow.structure.BaseModel;
 
 import org.unicef.rapidreg.PrimeroDatabaseConfiguration;
 import org.unicef.rapidreg.R;
+import org.unicef.rapidreg.utils.EncryptHelper;
+
+import java.util.UUID;
 
 @Table(database = PrimeroDatabaseConfiguration.class)
 public class User extends BaseModel {
@@ -70,6 +73,14 @@ public class User extends BaseModel {
         this.fullName = fullName;
         this.unauthenticatedPassword = unauthenticatedPassword;
         this.language = language;
+    }
+
+    public String getUserInfo() {
+        StringBuilder sb = new StringBuilder("");
+        sb.append(username)
+                .append("_")
+                .append(serverUrl);
+        return sb.toString();
     }
 
     public int getId() {

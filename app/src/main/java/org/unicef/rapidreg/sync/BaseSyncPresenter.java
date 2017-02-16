@@ -11,6 +11,7 @@ import com.hannesdorfmann.mosby.mvp.MvpBasePresenter;
 import com.raizlabs.android.dbflow.data.Blob;
 
 import org.unicef.rapidreg.PrimeroAppConfiguration;
+import org.unicef.rapidreg.PrimeroApplication;
 import org.unicef.rapidreg.model.Case;
 import org.unicef.rapidreg.model.CaseForm;
 import org.unicef.rapidreg.model.Incident;
@@ -198,12 +199,8 @@ public abstract class BaseSyncPresenter extends MvpBasePresenter<SyncView> {
         getView().setDataViews(currentDateTime, String.valueOf(numberOfSuccessfulUploadedRecords)
                 , String.valueOf
                         (numberOfFailedUploadedCases));
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences
-                (context);
-        sharedPreferences.edit().putString("syncStatisticData", new Gson().toJson(new
-                SyncStatisticData
-                (currentDateTime, numberOfSuccessfulUploadedRecords, numberOfFailedUploadedCases)
-        )).apply();
+
+        PrimeroApplication.getAppRuntime().storeSyncData(new SyncStatisticData(currentDateTime, numberOfSuccessfulUploadedRecords, numberOfFailedUploadedCases));
     }
 
     protected void syncUploadSuccessfully() {

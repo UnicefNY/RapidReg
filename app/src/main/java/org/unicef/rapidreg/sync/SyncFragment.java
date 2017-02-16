@@ -27,6 +27,7 @@ import org.unicef.rapidreg.injection.component.DaggerFragmentComponent;
 import org.unicef.rapidreg.injection.component.FragmentComponent;
 import org.unicef.rapidreg.injection.module.FragmentModule;
 import org.unicef.rapidreg.model.User;
+import org.unicef.rapidreg.utils.TextUtils;
 import org.unicef.rapidreg.utils.Utils;
 import org.unicef.rapidreg.widgets.dialog.MessageDialog;
 
@@ -120,18 +121,12 @@ public class SyncFragment extends MvpFragment<SyncView, BaseSyncPresenter> imple
     }
 
     private void initView() {
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        String syncStatisticData = sharedPreferences.getString("syncStatisticData", null);
-        SyncStatisticData syncData;
-        if (syncStatisticData != null) {
-            syncData = new Gson().fromJson(syncStatisticData, SyncStatisticData.class);
-        } else {
-            syncData = new SyncStatisticData();
+        SyncStatisticData syncData = PrimeroApplication.getAppRuntime().loadSyncData();
+        if (TextUtils.isEmpty(syncData.getLastSyncData())) {
             syncData.setLastSyncData(getResources().getString(R.string.not_sync_promote));
         }
         setDataViews(syncData.getLastSyncData(), syncData.getSyncedNumberAsString(),
                 syncData.getNotSyncedNumberAsString());
-
         tvProduceCases.setVisibility(View.GONE);
     }
 

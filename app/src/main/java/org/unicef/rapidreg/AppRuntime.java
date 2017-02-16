@@ -7,6 +7,9 @@ import android.content.ServiceConnection;
 import android.os.IBinder;
 
 import org.unicef.rapidreg.loadform.TemplateFormService;
+import org.unicef.rapidreg.repository.sharedpref.PrimeroDataPref;
+import org.unicef.rapidreg.sync.SyncStatisticData;
+
 import static android.content.Context.BIND_AUTO_CREATE;
 
 public class AppRuntime {
@@ -15,8 +18,11 @@ public class AppRuntime {
     private ServiceConnection templateCaseServiceConnection;
     private TemplateFormService.TemplateFormBinder templateFormBinder;
 
+    private PrimeroDataPref dataPref;
+
     public AppRuntime(Context context) {
         this.applicationContext = context;
+        this.dataPref = new PrimeroDataPref(context);
 
         initTemplateCaseServiceConnection();
     }
@@ -63,5 +69,13 @@ public class AppRuntime {
 
     public void unbindTemplateCaseService() {
         applicationContext.unbindService(templateCaseServiceConnection);
+    }
+
+    public void storeSyncData(SyncStatisticData syncData) {
+        dataPref.storeSyncData(syncData);
+    }
+
+    public SyncStatisticData loadSyncData() {
+        return dataPref.loadSyncData();
     }
 }
