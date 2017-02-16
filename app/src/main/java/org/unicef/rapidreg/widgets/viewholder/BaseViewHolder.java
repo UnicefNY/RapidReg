@@ -95,4 +95,6 @@ public abstract class BaseViewHolder<T> extends RecyclerView.ViewHolder {
     public abstract void setOnClickListener(T field);
 
     public abstract void setFieldEditable(boolean editable);
+
+    public abstract void setFieldClickable(boolean clickable);
 }

@@ -31,7 +31,6 @@ import java.util.List;
 import static java.util.Collections.EMPTY_LIST;
 
 public class RecordRegisterAdapter extends RecyclerView.Adapter<BaseViewHolder> {
-
     private static final String LAYOUT = "layout";
     private static final String PREFIX = "form_";
     private static final int VIEW_HOLDER_GENERIC = 0;
@@ -161,11 +160,13 @@ public class RecordRegisterAdapter extends RecyclerView.Adapter<BaseViewHolder> 
             }
         }
 
-        if (!activity.getCurrentFeature().isDetailMode()) {
-            holder.setOnClickListener(field);
-            holder.setFieldEditable(holder.isEditable(field));
-        } else {
+        if (activity.getCurrentFeature().isDetailMode()) {
+            holder.setFieldClickable(true);
             holder.setFieldEditable(false);
+        } else {
+            holder.setOnClickListener(field);
+            holder.setFieldClickable(false);
+            holder.setFieldEditable(holder.isEditable(field));
         }
     }
 

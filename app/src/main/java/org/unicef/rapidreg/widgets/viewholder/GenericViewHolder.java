@@ -126,4 +126,9 @@ public class GenericViewHolder extends BaseTextViewHolder {
     public void setFieldEditable(boolean editable) {
         disableUneditableField(editable, valueView);
     }
+
+    @Override
+    public void setFieldClickable(boolean clickable) {
+
+    }
 }

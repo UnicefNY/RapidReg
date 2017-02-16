@@ -74,6 +74,11 @@ public class AudioUploadViewHolder extends BaseViewHolder {
 
     }
 
+    @Override
+    public void setFieldClickable(boolean clickable) {
+
+    }
+
     @OnClick(R.id.play_button)
     public void onPlayButtonClicked() {
         Intent intent = new Intent(activity, AudioRecorderActivity.class);

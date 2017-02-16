@@ -65,6 +65,11 @@ public class PhotoUploadMiniFormViewHolder extends BaseViewHolder<Field> {
     public void setFieldEditable(boolean editable) {
     }
 
+    @Override
+    public void setFieldClickable(boolean clickable) {
+
+    }
+
     public class RecordPhotoViewPagerAdapter extends PagerAdapter {
         private List<RecordPhoto> photos = new ArrayList<>();
 

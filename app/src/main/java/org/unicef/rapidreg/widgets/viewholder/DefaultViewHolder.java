@@ -24,4 +24,9 @@ public class DefaultViewHolder extends BaseViewHolder<Field> {
     public void setFieldEditable(boolean editable) {
 
     }
+
+    @Override
+    public void setFieldClickable(boolean clickable) {
+
+    }
 }

@@ -106,6 +106,11 @@ public class PhotoUploadViewHolder extends BaseViewHolder<Field> {
 
     }
 
+    @Override
+    public void setFieldClickable(boolean clickable) {
+
+    }
+
     private void showViewPhotoDialog(final int position) {
         Class clz = context instanceof CaseActivity ? CasePhotoViewActivity.class : TracingPhotoViewActivity.class;
         Intent intent = new Intent(context, clz);

@@ -101,13 +101,16 @@ public class CustomViewHolder extends BaseViewHolder<Field> {
     }
 
     @Override
-    public void setOnClickListener(Field field) {
+    public void setOnClickListener(Field field) {}
+
+    @Override
+    public void setFieldEditable(boolean editable) {
 
     }
 
     @Override
-    public void setFieldEditable(boolean editable) {
-        restoreItemList(!editable);
+    public void setFieldClickable(boolean clickable) {
+        restoreItemList(clickable);
     }
 
     class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.CustomItemViewHolder> {

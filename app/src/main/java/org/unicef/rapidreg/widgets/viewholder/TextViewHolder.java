@@ -130,6 +130,11 @@ public class TextViewHolder extends BaseTextViewHolder {
     }
 
     @Override
+    public void setFieldClickable(boolean clickable) {
+
+    }
+
+    @Override
     protected String getResult() {
         return valueView.getText().toString();
     }

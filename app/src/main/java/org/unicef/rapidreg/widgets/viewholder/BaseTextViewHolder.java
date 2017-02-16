@@ -65,5 +65,10 @@ public abstract class BaseTextViewHolder extends BaseViewHolder<Field> {
 
     protected abstract String getResult();
 
+    @Override
+    public void setFieldClickable(boolean clickable) {
+
+    }
+
     protected abstract TextView getValueView();
 }

@@ -102,6 +102,11 @@ public class SingleLineRadioViewHolder extends BaseViewHolder<Field> {
         disableUneditableField(editable, secondRadioButton);
     }
 
+    @Override
+    public void setFieldClickable(boolean clickable) {
+
+    }
+
     public void setSelectedRadio(String selectedRadio) {
         if (selectedRadio.equals(firstRadioButtonTV.getText())) {
             firstRadioButton.setChecked(true);

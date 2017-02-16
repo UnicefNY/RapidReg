@@ -83,6 +83,11 @@ public class MiniFormProfileViewHolder extends BaseViewHolder<Field> {
 
     }
 
+    @Override
+    public void setFieldClickable(boolean clickable) {
+
+    }
+
     public void disableRecordGenderView() {
         genderBadge.setVisibility(GONE);
         genderName.setVisibility(GONE);

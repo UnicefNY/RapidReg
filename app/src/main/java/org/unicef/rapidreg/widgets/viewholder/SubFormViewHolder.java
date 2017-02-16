@@ -79,6 +79,11 @@ public class SubFormViewHolder extends BaseViewHolder<Field> {
 
     }
 
+    @Override
+    public void setFieldClickable(boolean clickable) {
+
+    }
+
     private void initDeleteBtn(ViewGroup container) {
         final Button deleteBtn = (Button) container.findViewById(R.id.delete_subform);
         deleteBtn.setOnClickListener(new View.OnClickListener() {

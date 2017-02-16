@@ -10,4 +10,9 @@ public class IncidentMiniFormProfileViewHolder extends MiniFormProfileViewHolder
         super(context, itemView, itemValues);
         disableRecordGenderView();
     }
+
+    @Override
+    public void setFieldClickable(boolean clickable) {
+
+    }
 }

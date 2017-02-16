@@ -56,4 +56,9 @@ public class TickBoxViewHolder extends BaseViewHolder<Field> {
     public void setFieldEditable(boolean editable) {
         disableUneditableField(editable, valueView);
     }
+
+    @Override
+    public void setFieldClickable(boolean clickable) {
+
+    }
 }
