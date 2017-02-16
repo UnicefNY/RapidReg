@@ -7,7 +7,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import org.unicef.rapidreg.R;
 import org.unicef.rapidreg.base.record.RecordActivity;
 import org.unicef.rapidreg.base.record.recordphoto.RecordPhotoAdapter;
 import org.unicef.rapidreg.forms.Field;
@@ -26,10 +25,8 @@ import org.unicef.rapidreg.widgets.viewholder.SubFormViewHolder;
 import org.unicef.rapidreg.widgets.viewholder.TextViewHolder;
 import org.unicef.rapidreg.widgets.viewholder.TickBoxViewHolder;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import static java.util.Collections.EMPTY_LIST;
 
@@ -166,7 +163,7 @@ public class RecordRegisterAdapter extends RecyclerView.Adapter<BaseViewHolder> 
 
         if (!activity.getCurrentFeature().isDetailMode()) {
             holder.setOnClickListener(field);
-            holder.setFieldEditable(true);
+            holder.setFieldEditable(holder.isEditable(field));
         } else {
             holder.setFieldEditable(false);
         }

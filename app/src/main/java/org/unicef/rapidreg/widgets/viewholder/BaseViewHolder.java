@@ -31,7 +31,7 @@ public abstract class BaseViewHolder<T> extends RecyclerView.ViewHolder {
         return field.getDisplayName().get(Locale.getDefault().getLanguage());
     }
 
-    protected boolean isEditable(Field field) {
+    public boolean isEditable(Field field) {
         return field.isMarkForMobileField() ? false : field.isEditable();
     }
 
