@@ -106,7 +106,7 @@ public class LoginPresenter extends MvpBasePresenter<LoginView> {
             }
 
             @Override
-            public void onError(int code) {
+            public void onError() {
                 getView().showLoading(false);
                 getView().showCredentialErrorMsg();
             }
@@ -148,7 +148,7 @@ public class LoginPresenter extends MvpBasePresenter<LoginView> {
             }
 
             @Override
-            public void onError(int code) {
+            public void onError() {
                 getView().showLoading(false);
                 getView().showCredentialErrorMsg();
             }

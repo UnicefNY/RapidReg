@@ -78,7 +78,7 @@ public class LoginServiceImpl extends BaseRetrofitService<LoginRepository> imple
                         userDao.saveOrUpdateUser(user);
                         callback.onSuccessful(getSessionId(response.headers()), user);
                     } else {
-                        callback.onError(response.code());
+                        callback.onError();
                     }
                 }, throwable -> {
                     callback.onFailed(throwable);
@@ -89,27 +89,16 @@ public class LoginServiceImpl extends BaseRetrofitService<LoginRepository> imple
 
     @Override
     public void loginOffline(String username, String password, String url, LoginCallback callback) {
-        VerifiedCode verifiedCode = verify(username, password, url);
-
-        if (LoginService.VerifiedCode.OK == verifiedCode) {
-            callback.onSuccessful("", userDao.getUser(username, url));
-        } else if (VerifiedCode.OFFLINE_PASSWORD_INCORRECT == verifiedCode) {
-            callback.onError(verifiedCode.ordinal());
-        } else {
-            callback.onFailed(null);
-        }
-    }
-
-    public VerifiedCode verify(String username, String password, String url) {
         User user = userDao.getUser(username, url);
         if (user == null) {
-            return LoginService.VerifiedCode.OFFLINE_USER_DOES_NOT_EXIST;
+            callback.onFailed(null);
+            return;
         }
-
         if (EncryptHelper.isMatched(password, user.getPassword())) {
-            return LoginService.VerifiedCode.OK;
+            callback.onSuccessful("", user);
+            return;
         }
-        return LoginService.VerifiedCode.OFFLINE_PASSWORD_INCORRECT;
+        callback.onError();
     }
 
     private String getSessionId(Headers headers) {

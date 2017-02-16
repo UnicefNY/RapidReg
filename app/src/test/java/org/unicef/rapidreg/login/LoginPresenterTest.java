@@ -22,7 +22,6 @@ import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
 
 @RunWith(RobolectricTestRunner.class)
-@Config(constants = BuildConfig.class, sdk = Build.VERSION_CODES.JELLY_BEAN)
 public class LoginPresenterTest {
 
     @Inject
@@ -46,7 +45,7 @@ public class LoginPresenterTest {
     }
 
     @Test
-    public void should_show_error_when_validate_empty_password_and_passord() {
+    public void should_show_error_when_validate_empty_password_and_password() {
         when(loginService.isUsernameValid("")).thenReturn(false);
         when(loginService.isPasswordValid("")).thenReturn(false);
         when(loginService.isUrlValid("http://10.29.3.184:3000")).thenReturn(true);

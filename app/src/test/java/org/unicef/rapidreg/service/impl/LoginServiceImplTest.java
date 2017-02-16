@@ -1,6 +1,7 @@
 package org.unicef.rapidreg.service.impl;
 
 import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.telephony.TelephonyManager;
 
 import org.hamcrest.CoreMatchers;
@@ -9,7 +10,10 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.robolectric.RobolectricTestRunner;
+import org.powermock.api.mockito.PowerMockito;
+import org.powermock.core.classloader.annotations.PrepareForTest;
+import org.powermock.modules.junit4.PowerMockRunner;
+import org.robolectric.annotation.Config;
 import org.unicef.rapidreg.model.User;
 import org.unicef.rapidreg.repository.UserDao;
 import org.unicef.rapidreg.service.FormRemoteService;
@@ -20,19 +24,18 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import okhttp3.Headers;
-import okhttp3.internal.framed.Header;
-
-import static junit.framework.Assert.assertFalse;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Matchers.anyString;
-import static org.mockito.Matchers.isNotNull;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
 
-@RunWith(RobolectricTestRunner.class)
+@RunWith(PowerMockRunner.class)
+@Config(manifest = Config.NONE)
+@PrepareForTest(EncryptHelper.class)
 public class LoginServiceImplTest {
     @Mock
     ConnectivityManager connectivityManager;
@@ -57,12 +60,79 @@ public class LoginServiceImplTest {
     @Before
     public void setUp() throws Exception {
         initMocks(this);
+        PowerMockito.mockStatic(EncryptHelper.class);
+    }
+
+    @Test
+    public void should_return_is_not_online_when_network_is_null() throws Exception {
+        when(connectivityManager.getActiveNetworkInfo()).thenReturn(null);
+        assertThat("Should return false", loginService.isOnline(), is(false));
+    }
+
+    @Test
+    public void should_return_is_not_online_when_network_is_not_available() throws Exception {
+        NetworkInfo networkInfo = mock(NetworkInfo.class);
+        when(networkInfo.isAvailable()).thenReturn(false);
+        when(connectivityManager.getActiveNetworkInfo()).thenReturn(networkInfo);
+        assertThat("Should return false", loginService.isOnline(), is(false));
+    }
+
+    @Test
+    public void should_return_is_not_online_when_network_is_not_connected() throws Exception {
+        NetworkInfo networkInfo = mock(NetworkInfo.class);
+        when(networkInfo.isConnected()).thenReturn(false);
+        when(connectivityManager.getActiveNetworkInfo()).thenReturn(networkInfo);
+        assertThat("Should return false", loginService.isOnline(), is(false));
+    }
+
+    @Test
+    public void should_return_is_online_when_network_is_ok() throws Exception {
+        NetworkInfo networkInfo = mock(NetworkInfo.class);
+        when(networkInfo.isAvailable()).thenReturn(true);
+        when(networkInfo.isConnected()).thenReturn(true);
+        when(connectivityManager.getActiveNetworkInfo()).thenReturn(networkInfo);
+        assertThat("Should return true", loginService.isOnline(), is(true));
     }
 
     @Test
     public void should_return_empty_string_when_no_user_exist() throws Exception {
         when(userDao.getAllUsers()).thenReturn(Collections.EMPTY_LIST);
         assertThat(loginService.getServerUrl(), is(""));
+    }
+
+    @Test
+    public void should_login_offline_when_fail() {
+        LoginService.LoginCallback loginCallback = mock(LoginService.LoginCallback.class);
+        when(userDao.getUser(anyString(), anyString())).thenReturn(null);
+
+        loginService.loginOffline(username, password, expectedUrl, loginCallback);
+
+        verify(loginCallback, times(1)).onFailed(null);
+        verify(userDao, times(1)).getUser(username, expectedUrl);
+    }
+
+    @Test
+    public void should_login_offline_when_error() throws Exception {
+        LoginService.LoginCallback loginCallback = mock(LoginService.LoginCallback.class);
+        when(userDao.getUser(anyString(),anyString())).thenReturn(jack);
+        when(EncryptHelper.isMatched(anyString(),anyString())).thenReturn(false);
+
+        loginService.loginOffline(username, password, expectedUrl, loginCallback);
+
+        verify(loginCallback, times(1)).onError();
+        verify(userDao, times(1)).getUser(username, expectedUrl);
+    }
+
+    @Test
+    public void should_login_offline_successfully() throws Exception {
+        LoginService.LoginCallback loginCallback = mock(LoginService.LoginCallback.class);
+        when(userDao.getUser(anyString(), anyString())).thenReturn(jack);
+        when(EncryptHelper.isMatched(anyString(), anyString())).thenReturn(true);
+
+        loginService.loginOffline(username,password,expectedUrl, loginCallback);
+
+        verify(loginCallback, times(1)).onSuccessful("", jack);
+        verify(userDao, times(1)).getUser(username, expectedUrl);
     }
 
     @Test
@@ -122,31 +192,5 @@ public class LoginServiceImplTest {
         assertThat("should return url is true", loginService.isUrlValid("http://10.29.2.190:3000"), is(true));
     }
 
-    @Test
-    public void should_verify_when_user_does_not_exist() {
-        when(userDao.getUser(anyString(), anyString())).thenReturn(null);
-
-        LoginService.VerifiedCode verifiedCode = loginService.verify(username, password, expectedUrl);
-
-        assertThat(verifiedCode, is(LoginService.VerifiedCode.OFFLINE_USER_DOES_NOT_EXIST));
-    }
-
-    @Test
-    public void should_verify_when_user_password_is_incorrect() {
-        when(userDao.getUser(username, expectedUrl)).thenReturn(jack);
-
-        LoginService.VerifiedCode verifiedCode = loginService.verify(username, "654321", expectedUrl);
-
-        assertThat(verifiedCode, is(LoginService.VerifiedCode.OFFLINE_PASSWORD_INCORRECT));
-    }
-
-    @Test
-    public void should_verify_when_both_username_and_password_are_correct() {
-        when(userDao.getUser(username, expectedUrl)).thenReturn(jack);
-
-        LoginService.VerifiedCode verifiedCode = loginService.verify(username, password, expectedUrl);
-
-        assertThat(verifiedCode, is(LoginService.VerifiedCode.OK));
-    }
 
 }

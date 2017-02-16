@@ -100,9 +100,11 @@ public class CaseServiceTest {
     public void should_save_case_when_give_item_values() throws Exception {
         String url = "https://35.61.56.113:8443";
         Mockito.when(PrimeroAppConfiguration.getApiBaseUrl()).thenReturn(url);
+
         CaseService caseServiceSpy = spy(caseService);
         String uuid = UUID.randomUUID().toString();
         when(caseServiceSpy.generateUniqueId()).thenReturn(uuid);
+
         ItemValuesMap itemValues = new ItemValuesMap();
         Case actual = caseServiceSpy.save(itemValues, Collections.EMPTY_LIST);
         when(caseDao.save(any(Case.class))).thenReturn(actual);
