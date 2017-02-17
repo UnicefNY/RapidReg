@@ -10,6 +10,7 @@ import android.widget.Toast;
 
 import com.hannesdorfmann.mosby.mvp.MvpActivity;
 
+import org.unicef.rapidreg.AppRuntime;
 import org.unicef.rapidreg.IntentSender;
 import org.unicef.rapidreg.PrimeroAppConfiguration;
 import org.unicef.rapidreg.PrimeroApplication;
@@ -208,7 +209,9 @@ public class LoginActivity extends MvpActivity<LoginView, LoginPresenter> implem
     }
 
     @Override
-    public void startTemplateFormService() {
-        PrimeroApplication.getAppRuntime().bindTemplateCaseService();
+    public void configAppRuntimeEvent() {
+        AppRuntime appRuntime = PrimeroApplication.getAppRuntime();
+        appRuntime.bindTemplateCaseService();
+        appRuntime.registerAppRuntimeReceiver();
     }
 }

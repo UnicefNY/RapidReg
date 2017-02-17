@@ -3,9 +3,12 @@ package org.unicef.rapidreg;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.os.IBinder;
+import android.util.Log;
 
+import org.unicef.rapidreg.broadcast.AppRuntimeReceiver;
 import org.unicef.rapidreg.loadform.TemplateFormService;
 import org.unicef.rapidreg.repository.sharedpref.PrimeroDataPref;
 import org.unicef.rapidreg.sync.SyncStatisticData;
@@ -13,10 +16,13 @@ import org.unicef.rapidreg.sync.SyncStatisticData;
 import static android.content.Context.BIND_AUTO_CREATE;
 
 public class AppRuntime {
+    private static final String TAG = AppRuntime.class.getSimpleName();
+
     private Context applicationContext;
 
     private ServiceConnection templateCaseServiceConnection;
     private TemplateFormService.TemplateFormBinder templateFormBinder;
+    private AppRuntimeReceiver appRuntimeReceiver;
 
     private PrimeroDataPref dataPref;
 
@@ -62,20 +68,41 @@ public class AppRuntime {
         return templateFormBinder.isIncidentTemplateFormSyncFail();
     }
 
-    public void bindTemplateCaseService() {
-        Intent intent = new Intent(applicationContext, TemplateFormService.class);
-        applicationContext.bindService(intent, templateCaseServiceConnection, BIND_AUTO_CREATE);
-    }
-
-    public void unbindTemplateCaseService() {
-        applicationContext.unbindService(templateCaseServiceConnection);
-    }
-
     public void storeSyncData(SyncStatisticData syncData) {
         dataPref.storeSyncData(syncData);
     }
 
     public SyncStatisticData loadSyncData() {
         return dataPref.loadSyncData();
+    }
+
+    public void bindTemplateCaseService() {
+        Intent intent = new Intent(applicationContext, TemplateFormService.class);
+        applicationContext.bindService(intent, templateCaseServiceConnection, BIND_AUTO_CREATE);
+    }
+
+    public void unbindTemplateCaseService() {
+        if (templateFormBinder != null) {
+            applicationContext.unbindService(templateCaseServiceConnection);
+        }
+    }
+
+    public void registerAppRuntimeReceiver() {
+        appRuntimeReceiver = new AppRuntimeReceiver();
+        final IntentFilter homeFilter = new IntentFilter(Intent.ACTION_CLOSE_SYSTEM_DIALOGS);
+
+        applicationContext.registerReceiver(appRuntimeReceiver, homeFilter);
+        Log.d(TAG, "AppRuntimeReceiver registered...");
+    }
+
+    public void unregisterAppRuntimeReceiver() {
+        if (null != appRuntimeReceiver) {
+            try {
+                applicationContext.unregisterReceiver(appRuntimeReceiver);
+                Log.d(TAG, "AppRuntimeReceiver unregistered...");
+            } catch (Exception e) {
+                Log.d(TAG, e.getMessage());
+            }
+        }
     }
 }

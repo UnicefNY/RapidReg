@@ -72,7 +72,16 @@
 
         <service
             android:name=".loadform.TemplateFormService"
-            android:enabled="true"></service>
+            android:enabled="true" />
+
+        <receiver
+            android:name=".broadcast.AppRuntimeReceiver"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.CLOSE_SYSTEM_DIALOGS" />
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

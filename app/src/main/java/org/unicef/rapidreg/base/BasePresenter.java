@@ -19,5 +19,6 @@ public class BasePresenter extends MvpBasePresenter<BaseView> {
     public void logOut() {
         PrimeroAppConfiguration.setCurrentUser(null);
         PrimeroApplication.getAppRuntime().unbindTemplateCaseService();
+        PrimeroApplication.getAppRuntime().unregisterAppRuntimeReceiver();
     }
 }

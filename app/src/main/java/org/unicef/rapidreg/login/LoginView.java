@@ -29,5 +29,5 @@ public interface LoginView extends MvpLceView<Call<LoginResponse>> {
 
     void showServerConnectionErrorMsg();
 
-    void startTemplateFormService();
+    void configAppRuntimeEvent();
 }
