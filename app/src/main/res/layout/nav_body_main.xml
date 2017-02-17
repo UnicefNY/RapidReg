@@ -20,7 +20,7 @@
     <TextView
         android:id="@+id/nav_incident"
         style="@style/NavigationItemTextViewStyle"
-        android:drawableLeft="@drawable/connect_big"
+        android:drawableLeft="@drawable/ic_assignment_blue_24dp"
         android:text="@string/incidents" />
 
     <TextView
