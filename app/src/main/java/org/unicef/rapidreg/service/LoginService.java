@@ -31,6 +31,6 @@ public interface LoginService {
 
         void onFailed(Throwable error);
 
-        void onError(int code);
+        void onError();
     }
 }
