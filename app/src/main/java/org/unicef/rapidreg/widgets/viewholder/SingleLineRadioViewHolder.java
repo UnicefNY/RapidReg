@@ -70,22 +70,34 @@ public class SingleLineRadioViewHolder extends BaseViewHolder<Field> {
     }
 
     private void initRadioGroupView(List<String> options, boolean editable) {
+        if (options.isEmpty()){
+            firstRadioButtonTV.setVisibility(View.GONE);
+            firstRadioButton.setVisibility(View.GONE);
+            secondRadioButtonTV.setVisibility(View.GONE);
+            secondRadioButton.setVisibility(View.GONE);
+            return;
+        }
+        if (1 == options.size()) {
+            secondRadioButtonTV.setVisibility(View.GONE);
+            secondRadioButton.setVisibility(View.GONE);
+            firstRadioButtonTV.setText((options.get(0)));
+            return;
+        }
         firstRadioButtonTV.setText((options.get(0)));
         secondRadioButtonTV.setText((options.get(1)));
     }
 
     @Override
     public void setOnClickListener(final Field field) {
-        optionGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(RadioGroup group, int checkedId) {
-                result = null;
-                if (firstRadioButton.isChecked()) {
-                    result = options.get(0);
-                }
-                if (secondRadioButton.isChecked()) {
-                    result = options.get(1);
-                }
+        optionGroup.setOnCheckedChangeListener((group, checkedId) -> {
+            result = null;
+            if (firstRadioButton.isChecked()) {
+                result = options.get(0);
+            }
+            if (secondRadioButton.isChecked()) {
+                result = options.get(1);
+            }
+            if (!TextUtils.isEmpty(result)) {
                 itemValues.addStringItem(field.getName(), getResult());
             }
         });

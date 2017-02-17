@@ -40,7 +40,7 @@ public class RecordRegisterAdapter extends RecyclerView.Adapter<BaseViewHolder> 
     private static final int VIEW_HOLDER_SUBFORM = 4;
     private static final int VIEW_HOLDER_TEXT = 5;
     private static final int VIEW_HOLDER_TEXT_AREA = 6;
-    private static final int VIEW_HOLDER_SELECT_SINGLE_LINE = 7;
+    private static final int VIEW_HOLDER_SELECT_BOX = 7;
     private static final int VIEW_HOLDER_RADIO_SINGLE_LINE = 8;
     private static final int VIEW_HOLDER_PHOTO_UPLOAD_BOX_MINI_FORM = 9;
     private static final int VIEW_HOLDER_MINI_FORM_PROFILE = 10;
@@ -97,7 +97,7 @@ public class RecordRegisterAdapter extends RecyclerView.Adapter<BaseViewHolder> 
                         .getIdentifier(PREFIX + Field.TYPE_SINGLE_LINE_RADIO,
                                 LAYOUT, packageName), parent, false), itemValues);
 
-            case VIEW_HOLDER_SELECT_SINGLE_LINE:
+            case VIEW_HOLDER_SELECT_BOX:
             case VIEW_HOLDER_GENERIC:
                 return new GenericViewHolder(activity, inflater.inflate(resources
                         .getIdentifier(PREFIX + Field.TYPE_TEXT_FIELD,
@@ -179,15 +179,14 @@ public class RecordRegisterAdapter extends RecyclerView.Adapter<BaseViewHolder> 
         if (field.isTextArea()){
             return VIEW_HOLDER_TEXT_AREA;
         }
-        if (field.isSelectField()) {
-            if (!field.isManyOptions()) {
-                return field.isMultiSelect() ?
-                        VIEW_HOLDER_SELECT_SINGLE_LINE : VIEW_HOLDER_RADIO_SINGLE_LINE;
+
+        if (field.isSelectField() || field.isRadioButton()) {
+            if (field.hasMoreThanTwoOptions()) {
+                return VIEW_HOLDER_SELECT_BOX;
             }
+            return field.isMultiSelect() ? VIEW_HOLDER_SELECT_BOX : VIEW_HOLDER_RADIO_SINGLE_LINE;
         }
-        if (field.isRadioButton()) {
-            return VIEW_HOLDER_RADIO_SINGLE_LINE;
-        }
+
         if (field.isTickBox()) {
             return VIEW_HOLDER_TICK_BOX;
         }

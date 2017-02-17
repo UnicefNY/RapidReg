@@ -229,11 +229,8 @@ public class Field {
         return TYPE_INCIDENT_MINI_FORM_PROFILE.equals(type);
     }
 
-    public boolean isManyOptions() {
-        if (getSelectOptions().size() > 2) {
-            return true;
-        }
-        return false;
+    public boolean hasMoreThanTwoOptions() {
+        return getSelectOptions().size() > 2;
     }
 
     public boolean isMarkForMobileField() {
