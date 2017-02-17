@@ -28,8 +28,9 @@
     <string name="login_user_label_key">login_user</string>
     <string name="syncing_forms_text">Syncing forms, please try it later</string>
     <string name="order_by">Order by&#160;</string>
-    <string name="cancel">Cancel</string>
+    <string name="cancel">CANCEL</string>
     <string name="ok">OK</string>
+    <string name="clear">CLEAR</string>
     <string name="case_id">ID:&#160;</string>
     <string name="child_gender">child gender</string>
 
@@ -157,5 +158,4 @@
     <string name="dialog_item_from_camera">From Camera</string>
     <string name="dialog_item_from_gallery">From Gallery</string>
     <string name="dialog_item_cancel">Cancel</string>
-
 </resources>

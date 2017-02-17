@@ -41,25 +41,27 @@ public abstract class BaseDialog {
         this.context = context;
         this.itemValues = itemValues;
 
+        createDialogBuilder(context);
+    }
+
+    private void createDialogBuilder(Context context) {
         builder = new BaseAlertDialog.Builder(context);
-        builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        if (getResult() != null && !TextUtils.isEmpty(getResult().toString())) {
-                            BaseDialog.this.viewSwitcher.setDisplayedChild(GenericViewHolder.FORM_HAS_ANSWER_STATE);
-                        } else {
-                            BaseDialog.this.viewSwitcher.setDisplayedChild(GenericViewHolder.FORM_NO_ANSWER_STATE);
-                        }
-                        dialog.dismiss();
-                        itemValues.addItem(field.getName(), getResult());
-                        resultView.setText(getDisplayText());
-                    }
-                })
-                .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
+        builder.setPositiveButton(R.string.ok, (dialog, which) -> {
+            if (getResult() != null && !TextUtils.isEmpty(getResult().toString())) {
+                viewSwitcher.setDisplayedChild(GenericViewHolder.FORM_HAS_ANSWER_STATE);
+            } else {
+                viewSwitcher.setDisplayedChild(GenericViewHolder.FORM_NO_ANSWER_STATE);
+            }
+            dialog.dismiss();
+            itemValues.addItem(field.getName(), getResult());
+            resultView.setText(getDisplayText());
+        })
+                .setNegativeButton(R.string.cancel, (dialog, which) -> dialog.dismiss())
+                .setNeutralButton(R.string.clear, (dialog, which) -> {
+                    resultView.setText("");
+                    itemValues.removeItem(field.getName());
+                    viewSwitcher.setDisplayedChild(GenericViewHolder.FORM_NO_ANSWER_STATE);
+                    dialog.dismiss();
                 });
     }
 

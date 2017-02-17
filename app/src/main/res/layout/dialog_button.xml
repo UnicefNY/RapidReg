@@ -8,7 +8,7 @@
     <Button
         android:id="@+id/clearButton"
         style="@style/DialogButton"
-        android:text="Clear" />
+        android:text="@string/clear" />
 
     <Button
         android:id="@+id/cancelButton"
