@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical"
+              android:weightSum="8">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="5"
+        android:gravity="center">
+
+        <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
+                                                      android:id="@+id/logo"
+                                                      android:layout_width="@dimen/login_logo_size"
+                                                      android:layout_height="@dimen/login_logo_size"
+                                                      android:src="@drawable/logo"
+                                                      app:civ_border_color="#00000000"
+                                                      app:civ_border_width="0dp" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginLeft="@dimen/login_input_margin"
+        android:layout_marginRight="@dimen/login_input_margin"
+        android:layout_weight="3"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <EditText
+            android:id="@+id/username"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/username_hint_text"
+            android:imeOptions="actionDone"
+            android:text="primero_gbv"
+            android:singleLine="true"
+            android:textColor="@color/primero_font_dark"
+            android:textSize="@dimen/text_size_18" />
+
+        <EditText
+            android:id="@+id/password"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/password_hint_text"
+            android:inputType="textPassword"
+            android:textColor="@color/primero_font_dark"
+            android:textSize="@dimen/text_size_18" />
+
+
+        <!--http://10.29.2.190:3000-->
+        <!--https://10.29.2.190:8443-->
+        <!--https://52.24.42.32:8443-->
+        <!--https://52.34.194.254:8443-->
+        <!--https://35.161.56.113:8443-->
+        <!--http://10.29.4.91:12306-->
+        <!--http://35.164.57.91:12306-->
+        <EditText
+            android:id="@+id/url"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/url_hint_text"
+            android:inputType="textUri"
+            android:text="http://35.164.57.91:12306"
+            android:textSize="@dimen/text_size_18" />
+
+        <TextView
+            android:id="@+id/change_url"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/field_padding_top_bottom"
+            android:text="@string/text_view_change_url"
+            android:textColor="@color/primero_blue"
+            android:textSize="@dimen/text_size_12" />
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/login"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/search_button_height"
+        android:background="@color/primero_blue"
+        android:text="@string/button_login_text"
+        android:textColor="@color/white"
+        android:textSize="@dimen/text_size_20" />
+</LinearLayout>
