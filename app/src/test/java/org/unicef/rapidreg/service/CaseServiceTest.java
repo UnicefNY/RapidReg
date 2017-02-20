@@ -1,5 +1,7 @@
 package org.unicef.rapidreg.service;
 
+import android.util.Log;
+
 import com.raizlabs.android.dbflow.data.Blob;
 import com.raizlabs.android.dbflow.sql.language.ConditionGroup;
 
@@ -16,13 +18,18 @@ import org.unicef.rapidreg.PrimeroAppConfiguration;
 import org.unicef.rapidreg.forms.Field;
 import org.unicef.rapidreg.forms.Section;
 import org.unicef.rapidreg.model.Case;
+import org.unicef.rapidreg.model.CasePhoto;
+import org.unicef.rapidreg.model.Incident;
 import org.unicef.rapidreg.model.User;
 import org.unicef.rapidreg.repository.CaseDao;
 import org.unicef.rapidreg.repository.CasePhotoDao;
+import org.unicef.rapidreg.repository.IncidentDao;
 import org.unicef.rapidreg.service.cache.ItemValuesMap;
+import org.unicef.rapidreg.utils.ImageCompressUtil;
 import org.unicef.rapidreg.utils.TextUtils;
 import org.unicef.rapidreg.utils.Utils;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
@@ -33,8 +40,11 @@ import static junit.framework.Assert.assertFalse;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.nullValue;
 import static org.hamcrest.core.Is.is;
 import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyInt;
+import static org.mockito.Matchers.anyLong;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.times;
@@ -47,7 +57,8 @@ import static org.unicef.rapidreg.service.RecordService.AGE;
 import static org.unicef.rapidreg.service.RecordService.REGISTRATION_DATE;
 
 @RunWith(PowerMockRunner.class)
-@PrepareForTest({UUID.class, PrimeroAppConfiguration.class})
+@PrepareForTest({UUID.class, PrimeroAppConfiguration.class,
+        ImageCompressUtil.class, Log.class})
 public class CaseServiceTest {
 
     @Mock
@@ -55,6 +66,9 @@ public class CaseServiceTest {
 
     @Mock
     CasePhotoDao casePhotoDao;
+
+    @Mock
+    IncidentDao incidentDao;
 
     @InjectMocks
     CaseService caseService;
@@ -64,6 +78,8 @@ public class CaseServiceTest {
         initMocks(this);
         PowerMockito.mockStatic(UUID.class);
         PowerMockito.mockStatic(PrimeroAppConfiguration.class);
+        PowerMockito.mockStatic(ImageCompressUtil.class);
+        PowerMockito.mockStatic(Log.class);
 
         UUID uuid = mock(UUID.class);
         when(uuid.toString()).thenReturn("anuuidwhichlengthis21");
@@ -71,6 +87,8 @@ public class CaseServiceTest {
 
         User user = new User("primero");
         Mockito.when(PrimeroAppConfiguration.getCurrentUser()).thenReturn(user);
+        String url = "https://35.61.56.113:8443";
+        Mockito.when(PrimeroAppConfiguration.getApiBaseUrl()).thenReturn(url);
     }
 
     @Test
@@ -98,9 +116,6 @@ public class CaseServiceTest {
 
     @Test
     public void should_save_case_when_give_item_values() throws Exception {
-        String url = "https://35.61.56.113:8443";
-        Mockito.when(PrimeroAppConfiguration.getApiBaseUrl()).thenReturn(url);
-
         CaseService caseServiceSpy = spy(caseService);
         String uuid = UUID.randomUUID().toString();
         when(caseServiceSpy.generateUniqueId()).thenReturn(uuid);
@@ -109,7 +124,7 @@ public class CaseServiceTest {
         Case actual = caseServiceSpy.save(itemValues, Collections.EMPTY_LIST);
         when(caseDao.save(any(Case.class))).thenReturn(actual);
 
-        assertThat("Should have save url", actual.getServerUrl(), is(TextUtils.lintUrl(url)));
+        assertThat("Should have save url", actual.getServerUrl(), is(TextUtils.lintUrl("https://35.61.56.113:8443")));
         assertThat("Should have save uuid.", actual.getUniqueId(), is(uuid));
         verify(caseDao, times(1)).save(any(Case.class));
     }
@@ -139,7 +154,7 @@ public class CaseServiceTest {
     }
 
     @Test
-    public void should_get_search_result_by_condition_group() throws Exception {
+    public void should_get_CP_search_result_by_condition_group() throws Exception {
         Case searchCaseOne = new Case(10000L);
         Case searchCaseTwo = new Case(10001L);
         Case searchCaseThree = new Case(10002L);
@@ -153,7 +168,7 @@ public class CaseServiceTest {
                 .class))).thenReturn
                 (searchResult);
 
-        List<Long> actual = caseService.getCPSearchResult("shortId", "name", 0, 10, "caregiver",
+        List<Long> actual = caseService.getCPSearchResult("", "", 0, 0, "",
                 null);
 
         assertThat("Should return id list", actual, is(Arrays.asList(new Long[]{10000L, 10001L,
@@ -165,5 +180,111 @@ public class CaseServiceTest {
         field.setRequired(required);
         field.setName(name);
         return field;
+    }
+
+    @Test
+    public void should_get_null_incidents_ids_when_incidents_is_null() throws Exception {
+        when(incidentDao.getAllIncidentsByCaseUniqueId(anyString())).thenReturn(null);
+        List<String> incidents = caseService.getIncidentsByCaseId("");
+        assertThat("Incidents should be null", incidents, is(nullValue()));
+    }
+
+    @Test
+    public void should_get_incidents_ids_when_incidents_exits() throws Exception {
+        List<Incident> incidents = new ArrayList<>();
+        Incident incident = new Incident(10086L);
+        incidents.add(incident);
+        List<String> listStr = new ArrayList<>();
+        CaseService caseServiceSpy = spy(caseService);  //
+
+        when(incidentDao.getAllIncidentsByCaseUniqueId(anyString())).thenReturn(incidents);
+        when(caseServiceSpy.extractUniqueIds(incidents)).thenReturn(listStr);
+
+        assertThat("Should return same incident string list", caseServiceSpy.getIncidentsByCaseId(""), is(listStr));
+    }
+
+    @Test
+    public void should_get_GBV_search_result_by_condition_group() throws Exception {
+        List<Case> searchResult = new ArrayList<>();
+
+        when(caseDao.getCaseListByConditionGroup(anyString(), anyString(), any(ConditionGroup.class)))
+                .thenReturn(searchResult);
+
+        List<Long> actual = caseService.getGBVSearchResult("", "", "", null);
+
+        assertThat("Should return id list", actual, is(searchResult));
+    }
+
+    @Test
+    public void should_call_save_when_case_id_exits() throws Exception {
+        ItemValuesMap itemValues = new ItemValuesMap();
+        itemValues.addStringItem(CASE_ID, "existedUniqueId");
+        itemValues.addNumberItem(AGE, 18);
+        itemValues.addStringItem(REGISTRATION_DATE, "25/12/2016");
+
+        Case c = new Case();
+        when(caseDao.getCaseByUniqueId("existedUniqueId")).thenReturn(c);
+        when(caseDao.update(c)).thenReturn(c);
+        when(caseService.update(itemValues, Collections.EMPTY_LIST)).thenReturn(null);
+
+        assertThat("Should return case", caseService.saveOrUpdate(itemValues, Collections.EMPTY_LIST), is(nullValue()));
+        verify(caseService, times(1)).update(itemValues, Collections.EMPTY_LIST);
+    }
+
+
+    @Test
+    public void should_save_photo() throws Exception {
+        List<String> photoPaths = Arrays.asList(new String[]{"aa"});
+        CasePhoto casePhoto = new CasePhoto();
+
+        when(casePhotoDao.getByCaseIdAndOrder(anyLong(), anyInt())).thenReturn(casePhoto);
+        when(ImageCompressUtil.readImageFile(anyString())).thenReturn(null);
+
+        caseService.savePhoto(new Case(), photoPaths);
+        verify(casePhotoDao, times(1)).save(casePhoto);
+    }
+
+//    @Test
+//    public void should_update_photo_when_previous_count_less() throws Exception {
+//        Case child = new Case();
+//        child.setId(1);
+//        List<String> photoPaths = Arrays.asList(new String[]{"aaa","bbb"});
+//        CasePhoto casePhoto = new CasePhoto();
+//
+//        when(casePhotoDao.getIdsByCaseId(child.getId())).thenReturn(new ArrayList<Long>(1));
+//
+//        caseService.updatePhoto(child, photoPaths);
+//        verify(casePhoto, times(2)).update();
+//        verify(casePhoto, times(1)).save();
+//    }
+
+
+    @Test
+    public void should_get_case_by_internal_id() throws Exception {
+        Case c = new Case();
+        when(caseDao.getByInternalId(anyString())).thenReturn(c);
+        assertThat("Should get case", caseService.getByInternalId(""), is(c));
+    }
+
+    @Test
+    public void should_not_has_same_rev_when_case_is_null() throws Exception {
+        when(caseDao.getByInternalId(anyString())).thenReturn(null);
+        assertThat("Should return false,not same", caseService.hasSameRev("",""), is(false));
+    }
+
+    @Test
+    public void should_not_has_same_rev_when_rev_not_equals_case_rev() throws Exception {
+        Case c = new Case();
+        c.setInternalRev("aa");
+        when(caseDao.getByInternalId(anyString())).thenReturn(c);
+        assertThat("Should return false, not same", caseService.hasSameRev("", "bb"), is(false));
+    }
+
+    @Test
+    public void should_has_same_rev() throws Exception {
+        Case c = new Case();
+        c.setInternalRev("aa");
+        when(caseDao.getByInternalId(anyString())).thenReturn(c);
+        assertThat("Should return true, same", caseService.hasSameRev("", "aa"), is(true));
     }
 }
