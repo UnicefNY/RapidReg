@@ -14,6 +14,7 @@ import org.mockito.Mock;
 import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
+import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
 import org.unicef.rapidreg.model.User;
 import org.unicef.rapidreg.repository.UserDao;
@@ -34,9 +35,8 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
 
-@RunWith(PowerMockRunner.class)
+@RunWith(RobolectricTestRunner.class)
 @Config(manifest = Config.NONE)
-@PrepareForTest(EncryptHelper.class)
 public class LoginServiceImplTest {
     @Mock
     ConnectivityManager connectivityManager;
@@ -61,7 +61,6 @@ public class LoginServiceImplTest {
     @Before
     public void setUp() throws Exception {
         initMocks(this);
-        PowerMockito.mockStatic(EncryptHelper.class);
     }
 
     @Test
@@ -116,9 +115,8 @@ public class LoginServiceImplTest {
     public void should_login_offline_when_error() throws Exception {
         LoginService.LoginCallback loginCallback = mock(LoginService.LoginCallback.class);
         when(userDao.getUser(anyString(),anyString())).thenReturn(jack);
-        when(EncryptHelper.isMatched(anyString(),anyString())).thenReturn(false);
 
-        loginService.loginOffline(username, password, expectedUrl, loginCallback);
+        loginService.loginOffline(username, "wrong pass workd", expectedUrl, loginCallback);
 
         verify(loginCallback, times(1)).onError();
         verify(userDao, times(1)).getUser(username, expectedUrl);
@@ -128,7 +126,6 @@ public class LoginServiceImplTest {
     public void should_login_offline_successfully() throws Exception {
         LoginService.LoginCallback loginCallback = mock(LoginService.LoginCallback.class);
         when(userDao.getUser(anyString(), anyString())).thenReturn(jack);
-        when(EncryptHelper.isMatched(anyString(), anyString())).thenReturn(true);
 
         loginService.loginOffline(username,password,expectedUrl, loginCallback);
 
@@ -180,7 +177,6 @@ public class LoginServiceImplTest {
         assertThat("Should return password is false", loginService.isPasswordValid("123"), is(false));
     }
 
-    @Ignore
     @Test
     public void should_return_false_when_url_is_invalid() {
         assertThat(loginService.isUrlValid(null), CoreMatchers.is(false));
@@ -189,7 +185,6 @@ public class LoginServiceImplTest {
         assertThat(loginService.isUrlValid("http://10.23.0"), CoreMatchers.is(false));
     }
 
-    @Ignore
     @Test
     public void should_return_true_when_url_is_valid() throws Exception {
         assertThat("should return url is true", loginService.isUrlValid("http://10.29.2.190:3000"), is(true));
