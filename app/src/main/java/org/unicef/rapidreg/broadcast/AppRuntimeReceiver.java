@@ -33,11 +33,7 @@ public class AppRuntimeReceiver extends BroadcastReceiver {
             Log.d(TAG, "Action reason: " + reason);
             switch (reason) {
                 case SYSTEM_DIALOG_REASON_RECENT_APPS:
-                    //TODO it's unstable, need to discuess whether logout
-                    return;
                 case SYSTEM_DIALOG_REASON_DREAM:
-                    //TODO it's not sensitive, need to update
-                    return;
                 case SYSTEM_DIALOG_REASON_HOME_KEY:
                 case SYSTEM_DIALOG_REASON_LOCK:
                 case SYSTEM_DIALOG_REASON_ASSIST:
@@ -45,10 +41,7 @@ public class AppRuntimeReceiver extends BroadcastReceiver {
                     PrimeroApplication.getAppRuntime().unbindTemplateCaseService();
                     PrimeroApplication.getAppRuntime().unregisterAppRuntimeReceiver();
 
-                    Context appContext = PrimeroApplication.getAppContext();
-                    Intent resetIntent = new Intent(appContext, LoginActivity.class);
-                    resetIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                    appContext.startActivity(resetIntent);
+                    System.exit(0);
                     return;
             }
         }
