@@ -11,7 +11,9 @@ import android.util.Log;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import org.unicef.rapidreg.IntentSender;
 import org.unicef.rapidreg.R;
+import org.unicef.rapidreg.login.AccountManager;
 import org.unicef.rapidreg.service.RecordService;
 
 import java.io.IOException;
@@ -60,6 +62,7 @@ public class AudioRecorderActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        doCloseIfNotLogin();
         setContentView(R.layout.activity_audio_record_layout);
         ButterKnife.bind(this);
 
@@ -72,6 +75,18 @@ public class AudioRecorderActivity extends AppCompatActivity {
                 playAudio();
             }
         }
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        doCloseIfNotLogin();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        doCloseIfNotLogin();
     }
 
     @Override
@@ -210,5 +225,14 @@ public class AudioRecorderActivity extends AppCompatActivity {
         seconds = seconds % 60;
 
         return String.format("%d:%02d", minutes, seconds);
+    }
+
+    private void doCloseIfNotLogin() {
+        if (!AccountManager.isSignIn()) {
+            AccountManager.doSignOut();
+            new IntentSender().showLoginActivity(this);
+            finish();
+            return;
+        }
     }
 }

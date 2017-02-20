@@ -4,6 +4,7 @@ import com.hannesdorfmann.mosby.mvp.MvpBasePresenter;
 
 import org.unicef.rapidreg.PrimeroAppConfiguration;
 import org.unicef.rapidreg.PrimeroApplication;
+import org.unicef.rapidreg.login.AccountManager;
 import org.unicef.rapidreg.model.User;
 
 import javax.inject.Inject;
@@ -17,8 +18,8 @@ public class BasePresenter extends MvpBasePresenter<BaseView> {
     }
 
     public void logOut() {
-        PrimeroAppConfiguration.setCurrentUser(null);
-        PrimeroApplication.getAppRuntime().unbindTemplateCaseService();
-        PrimeroApplication.getAppRuntime().unregisterAppRuntimeReceiver();
+        if (AccountManager.isSignIn()) {
+            AccountManager.doSignOut();
+        }
     }
 }

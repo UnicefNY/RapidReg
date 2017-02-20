@@ -64,7 +64,7 @@
             android:layout_height="wrap_content"
             android:hint="@string/url_hint_text"
             android:inputType="textUri"
-            android:text="http://35.164.57.91:12306"
+            android:text="https://35.161.56.113:8443"
             android:textSize="@dimen/text_size_18" />
 
         <TextView

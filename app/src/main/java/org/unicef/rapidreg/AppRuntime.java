@@ -77,13 +77,16 @@ public class AppRuntime {
     }
 
     public void bindTemplateCaseService() {
+        Log.d(TAG, "TemplateCaseService binded...");
         Intent intent = new Intent(applicationContext, TemplateFormService.class);
         applicationContext.bindService(intent, templateCaseServiceConnection, BIND_AUTO_CREATE);
     }
 
     public void unbindTemplateCaseService() {
+        Log.d(TAG, "TemplateCaseService unbinded...");
         if (templateFormBinder != null) {
             applicationContext.unbindService(templateCaseServiceConnection);
+            templateFormBinder = null;
         }
     }
 
@@ -99,6 +102,7 @@ public class AppRuntime {
         if (null != appRuntimeReceiver) {
             try {
                 applicationContext.unregisterReceiver(appRuntimeReceiver);
+                appRuntimeReceiver = null;
                 Log.d(TAG, "AppRuntimeReceiver unregistered...");
             } catch (Exception e) {
                 Log.d(TAG, e.getMessage());

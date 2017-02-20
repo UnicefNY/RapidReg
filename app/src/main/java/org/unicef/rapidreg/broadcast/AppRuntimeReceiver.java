@@ -9,6 +9,7 @@ import org.unicef.rapidreg.AppRuntime;
 import org.unicef.rapidreg.IntentSender;
 import org.unicef.rapidreg.PrimeroAppConfiguration;
 import org.unicef.rapidreg.PrimeroApplication;
+import org.unicef.rapidreg.login.AccountManager;
 import org.unicef.rapidreg.login.LoginActivity;
 
 public class AppRuntimeReceiver extends BroadcastReceiver {
@@ -37,11 +38,7 @@ public class AppRuntimeReceiver extends BroadcastReceiver {
                 case SYSTEM_DIALOG_REASON_HOME_KEY:
                 case SYSTEM_DIALOG_REASON_LOCK:
                 case SYSTEM_DIALOG_REASON_ASSIST:
-                    PrimeroAppConfiguration.setCurrentUser(null);
-                    PrimeroApplication.getAppRuntime().unbindTemplateCaseService();
-                    PrimeroApplication.getAppRuntime().unregisterAppRuntimeReceiver();
-
-                    System.exit(0);
+                    AccountManager.doSignOut();
                     return;
             }
         }

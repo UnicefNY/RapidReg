@@ -25,6 +25,7 @@ import org.unicef.rapidreg.event.CreateIncidentThruGBVCaseEvent;
 import org.unicef.rapidreg.injection.component.ActivityComponent;
 import org.unicef.rapidreg.injection.component.DaggerActivityComponent;
 import org.unicef.rapidreg.injection.module.ActivityModule;
+import org.unicef.rapidreg.login.AccountManager;
 import org.unicef.rapidreg.model.User;
 import org.unicef.rapidreg.utils.Utils;
 
@@ -112,6 +113,7 @@ public abstract class BaseActivity extends MvpActivity<BaseView, BasePresenter> 
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
+        doCloseIfNotLogin();
         getComponent().inject(this);
 
         super.onCreate(savedInstanceState);
@@ -122,6 +124,27 @@ public abstract class BaseActivity extends MvpActivity<BaseView, BasePresenter> 
         initNavigationHeader();
         initNavigationItemMenu();
         drawer.openDrawer(GravityCompat.START);
+    }
+
+    private void doCloseIfNotLogin() {
+        if (!AccountManager.isSignIn()) {
+            AccountManager.doSignOut();
+            intentSender.showLoginActivity(this);
+            finish();
+            return;
+        }
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        doCloseIfNotLogin();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        doCloseIfNotLogin();
     }
 
     private void initNavigationHeader() {
