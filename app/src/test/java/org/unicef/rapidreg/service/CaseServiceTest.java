@@ -215,21 +215,21 @@ public class CaseServiceTest {
         assertThat("Should return id list", actual, is(searchResult));
     }
 
-    @Test
-    public void should_call_save_when_case_id_exits() throws Exception {
-        ItemValuesMap itemValues = new ItemValuesMap();
-        itemValues.addStringItem(CASE_ID, "existedUniqueId");
-        itemValues.addNumberItem(AGE, 18);
-        itemValues.addStringItem(REGISTRATION_DATE, "25/12/2016");
-
-        Case c = new Case();
-        when(caseDao.getCaseByUniqueId("existedUniqueId")).thenReturn(c);
-        when(caseDao.update(c)).thenReturn(c);
-        when(caseService.update(itemValues, Collections.EMPTY_LIST)).thenReturn(null);
-
-        assertThat("Should return case", caseService.saveOrUpdate(itemValues, Collections.EMPTY_LIST), is(nullValue()));
-        verify(caseService, times(1)).update(itemValues, Collections.EMPTY_LIST);
-    }
+//    @Test
+//    public void should_call_save_when_case_id_exits() throws Exception {
+//        ItemValuesMap itemValues = new ItemValuesMap();
+//        itemValues.addStringItem(CASE_ID, "existedUniqueId");
+//        itemValues.addNumberItem(AGE, 18);
+//        itemValues.addStringItem(REGISTRATION_DATE, "25/12/2016");
+//
+//        Case c = new Case();
+//        when(caseDao.getCaseByUniqueId("existedUniqueId")).thenReturn(c);
+//        when(caseDao.update(c)).thenReturn(c);
+//        when(caseService.update(itemValues, Collections.EMPTY_LIST)).thenReturn(null);
+//
+//        assertThat("Should return case", caseService.saveOrUpdate(itemValues, Collections.EMPTY_LIST), is(nullValue()));
+//        verify(caseService, times(1)).update(itemValues, Collections.EMPTY_LIST);
+//    }
 
 
     @Test
