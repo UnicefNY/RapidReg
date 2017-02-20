@@ -6,14 +6,10 @@ import android.telephony.TelephonyManager;
 
 import org.hamcrest.CoreMatchers;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.powermock.api.mockito.PowerMockito;
-import org.powermock.core.classloader.annotations.PrepareForTest;
-import org.powermock.modules.junit4.PowerMockRunner;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
 import org.unicef.rapidreg.model.User;
@@ -114,7 +110,7 @@ public class LoginServiceImplTest {
     @Test
     public void should_login_offline_when_error() throws Exception {
         LoginService.LoginCallback loginCallback = mock(LoginService.LoginCallback.class);
-        when(userDao.getUser(anyString(),anyString())).thenReturn(jack);
+        when(userDao.getUser(anyString(), anyString())).thenReturn(jack);
 
         loginService.loginOffline(username, "wrong pass workd", expectedUrl, loginCallback);
 
@@ -127,7 +123,7 @@ public class LoginServiceImplTest {
         LoginService.LoginCallback loginCallback = mock(LoginService.LoginCallback.class);
         when(userDao.getUser(anyString(), anyString())).thenReturn(jack);
 
-        loginService.loginOffline(username,password,expectedUrl, loginCallback);
+        loginService.loginOffline(username, password, expectedUrl, loginCallback);
 
         verify(loginCallback, times(1)).onSuccessful("", jack);
         verify(userDao, times(1)).getUser(username, expectedUrl);
