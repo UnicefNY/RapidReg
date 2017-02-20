@@ -28,19 +28,24 @@ public class AppRuntimeReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         String action = intent.getAction();
         Log.d(TAG, "Received action: " + action);
-        if (Intent.ACTION_CLOSE_SYSTEM_DIALOGS.equals(action)) {
-            String reason = intent.getStringExtra(SYSTEM_DIALOG_REASON_KEY);
+        switch (action) {
+            case Intent.ACTION_CLOSE_SYSTEM_DIALOGS:
+                String reason = intent.getStringExtra(SYSTEM_DIALOG_REASON_KEY);
 
-            Log.d(TAG, "Action reason: " + reason);
-            switch (reason) {
-                case SYSTEM_DIALOG_REASON_RECENT_APPS:
-                case SYSTEM_DIALOG_REASON_DREAM:
-                case SYSTEM_DIALOG_REASON_HOME_KEY:
-                case SYSTEM_DIALOG_REASON_LOCK:
-                case SYSTEM_DIALOG_REASON_ASSIST:
-                    AccountManager.doSignOut();
-                    return;
-            }
+                Log.d(TAG, "Action reason: " + reason);
+                switch (reason) {
+                    case SYSTEM_DIALOG_REASON_RECENT_APPS:
+                    case SYSTEM_DIALOG_REASON_DREAM:
+                    case SYSTEM_DIALOG_REASON_HOME_KEY:
+                    case SYSTEM_DIALOG_REASON_LOCK:
+                    case SYSTEM_DIALOG_REASON_ASSIST:
+                        AccountManager.doSignOut();
+                        return;
+                }
+                break;
+            case Intent.ACTION_SCREEN_OFF:
+                AccountManager.doSignOut();
+                break;
         }
     }
 }

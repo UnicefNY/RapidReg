@@ -81,6 +81,9 @@
             <intent-filter>
                 <action android:name="android.intent.action.CLOSE_SYSTEM_DIALOGS" />
             </intent-filter>
+            <intent-filter>
+                <action android:name="ACTION_SCREEN_OFF" />
+            </intent-filter>
         </receiver>
     </application>
 

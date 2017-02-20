@@ -92,8 +92,9 @@ public class AppRuntime {
 
     public void registerAppRuntimeReceiver() {
         appRuntimeReceiver = new AppRuntimeReceiver();
-        final IntentFilter homeFilter = new IntentFilter(Intent.ACTION_CLOSE_SYSTEM_DIALOGS);
-
+        final IntentFilter homeFilter = new IntentFilter();
+        homeFilter.addAction(Intent.ACTION_CLOSE_SYSTEM_DIALOGS);
+        homeFilter.addAction(Intent.ACTION_SCREEN_OFF);
         applicationContext.registerReceiver(appRuntimeReceiver, homeFilter);
         Log.d(TAG, "AppRuntimeReceiver registered...");
     }
