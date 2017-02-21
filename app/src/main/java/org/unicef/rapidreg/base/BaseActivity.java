@@ -7,6 +7,7 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -40,6 +41,8 @@ import static android.view.View.GONE;
 import static org.unicef.rapidreg.model.User.Role.GBV;
 
 public abstract class BaseActivity extends MvpActivity<BaseView, BasePresenter> {
+
+    public static final String TAG = BaseActivity.class.getSimpleName();
 
     @BindView(R.id.nav_view)
     protected NavigationView navigationView;
@@ -336,4 +339,39 @@ public abstract class BaseActivity extends MvpActivity<BaseView, BasePresenter> 
         }
     }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        Log.e(TAG, "onPause: ");
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Log.e(TAG, "onResume: ");
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        Log.e(TAG, "onStart: ");
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        Log.e(TAG, "onStop: ");
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Log.e(TAG, "onDestroy: ");
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        Log.e(TAG, "onRestart: ");
+    }
 }
