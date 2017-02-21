@@ -40,12 +40,7 @@ public class TickBoxViewHolder extends BaseViewHolder<Field> {
 
     @Override
     public void setOnClickListener(final Field field) {
-        valueView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                itemValues.addBooleanItem(field.getName(), getResult());
-            }
-        });
+        valueView.setOnClickListener(view -> itemValues.addBooleanItem(field.getName(), getResult()));
     }
 
     protected Boolean getResult() {

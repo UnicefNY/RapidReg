@@ -158,4 +158,9 @@
     <string name="dialog_item_from_camera">From Camera</string>
     <string name="dialog_item_from_gallery">From Gallery</string>
     <string name="dialog_item_cancel">Cancel</string>
+    <string name="date_text">Date</string>
+    <string name="date_range">Date Range</string>
+    <string name="date_hint">Pick Date</string>
+    <string name="date_from_hint">From</string>
+    <string name="date_to_hint">To</string>
 </resources>
