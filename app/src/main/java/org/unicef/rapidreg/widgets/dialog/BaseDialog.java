@@ -47,12 +47,13 @@ public abstract class BaseDialog {
     private void createDialogBuilder(Context context) {
         builder = new BaseAlertDialog.Builder(context);
         builder.setPositiveButton(R.string.ok, (dialog, which) -> {
-            if (getResult() != null && !TextUtils.isEmpty(getResult().toString())) {
-                viewSwitcher.setDisplayedChild(GenericViewHolder.FORM_HAS_ANSWER_STATE);
-            } else {
-                viewSwitcher.setDisplayedChild(GenericViewHolder.FORM_NO_ANSWER_STATE);
+            if (viewSwitcher != null) {
+                if (getResult() != null && !TextUtils.isEmpty(getResult().toString())) {
+                    viewSwitcher.setDisplayedChild(GenericViewHolder.FORM_HAS_ANSWER_STATE);
+                } else {
+                    viewSwitcher.setDisplayedChild(GenericViewHolder.FORM_NO_ANSWER_STATE);
+                }
             }
-            dialog.dismiss();
             itemValues.addItem(field.getName(), getResult());
             resultView.setText(getDisplayText());
         })
@@ -60,8 +61,9 @@ public abstract class BaseDialog {
                 .setNeutralButton(R.string.clear, (dialog, which) -> {
                     resultView.setText("");
                     itemValues.removeItem(field.getName());
-                    viewSwitcher.setDisplayedChild(GenericViewHolder.FORM_NO_ANSWER_STATE);
-                    dialog.dismiss();
+                    if (viewSwitcher != null) {
+                        viewSwitcher.setDisplayedChild(GenericViewHolder.FORM_NO_ANSWER_STATE);
+                    }
                 });
     }
 

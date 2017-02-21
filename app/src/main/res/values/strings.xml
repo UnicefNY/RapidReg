@@ -160,7 +160,7 @@
     <string name="dialog_item_cancel">Cancel</string>
     <string name="date_text">Date</string>
     <string name="date_range">Date Range</string>
-    <string name="date_hint">Pick Date</string>
+    <string name="date_hint">Select Date</string>
     <string name="date_from_hint">From</string>
     <string name="date_to_hint">To</string>
 </resources>

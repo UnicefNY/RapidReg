@@ -50,6 +50,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/size_10"
             android:text="@string/date_range"
+            android:textColor="@color/gray"
             android:layout_weight="4"
             android:textSize="@dimen/text_size_16" />
     </RadioGroup>
@@ -66,6 +67,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
+            android:layout_marginLeft="@dimen/size_10"
             android:visibility="gone">
 
             <TextView
@@ -85,6 +87,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
+            android:layout_marginLeft="@dimen/size_10"
             android:visibility="gone">
 
             <LinearLayout

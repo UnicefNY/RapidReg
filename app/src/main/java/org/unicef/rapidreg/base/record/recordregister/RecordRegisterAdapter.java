@@ -165,7 +165,6 @@ public class RecordRegisterAdapter extends RecyclerView.Adapter<BaseViewHolder> 
                 ((SubFormViewHolder)holder).setSubformVisible(subformDropDownStatus.get(position));
             }
         }
-
         if (activity.getCurrentFeature().isDetailMode()) {
             holder.setFieldClickable(true);
             holder.setFieldEditable(false);
