@@ -78,13 +78,13 @@ public class CaseRegisterPresenterTest {
 
     @Test
     public void should_return_cp_template_when_case_type_is_cp() throws Exception {
-        CaseTemplateForm form = mock(CaseTemplateForm.class);
+        CaseTemplateForm form = new CaseTemplateForm();
         when(caseFormService.getCPTemplate()).thenReturn(form);
 
         caseRegisterPresenter.setCaseType(MODULE_CASE_CP);
         RecordForm actual = caseRegisterPresenter.getTemplateForm();
 
-        assertThat("Should return CP template when case type is CP.", actual, Is.<RecordForm>is(form));
+        assertThat("Should return CP template when case type is CP.", actual, is(form));
     }
 
     @Test

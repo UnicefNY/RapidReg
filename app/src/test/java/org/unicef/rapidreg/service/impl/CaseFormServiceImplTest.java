@@ -131,11 +131,36 @@ public class CaseFormServiceImplTest {
     }
 
     @Test
-    public void should_get_case_form() throws IOException {
+    public void should_get_cp_case_form() throws IOException {
         CaseForm caseForm = new CaseForm();
         caseForm.setForm(new Blob(formForm.getBytes()));
         when(caseFormDao.getCaseForm(anyString(), anyString())).thenReturn(caseForm);
         CaseTemplateForm form = caseFormService.getCPTemplate();
+
+        assertThat(form.getSections().size(), is(1));
+
+        Section section = form.getSections().get(0);
+        assertThat(section.getName().get("en"), is("Basic Identity"));
+        assertThat(section.getOrder(), is(10));
+        assertThat(section.getHelpText().get("en"), is(""));
+        assertThat(section.getBaseLanguage(), is("en"));
+
+        Field field = section.getFields().get(0);
+        assertThat(field.getName(), is("case_id"));
+        assertThat(field.getDisplayName().get("en"), is("Long ID"));
+        assertThat(field.getHelpText().get("en"), is(""));
+        assertThat(field.getType(), is("text_field"));
+        assertThat(field.getOptionStringsText().get("en").size(), is(0));
+        assertThat(field.getSubForm(), is(nullValue()));
+    }
+
+    @Test
+    public void should_get_gbv_case_form() throws Exception {
+        CaseForm caseForm = new CaseForm();
+        caseForm.setForm(new Blob(formForm.getBytes()));
+        when(caseFormDao.getCaseForm(anyString(), anyString())).thenReturn(caseForm);
+
+        CaseTemplateForm form = caseFormService.getGBVTemplate();
 
         assertThat(form.getSections().size(), is(1));
 

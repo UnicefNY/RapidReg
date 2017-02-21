@@ -7,11 +7,13 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.powermock.modules.junit4.PowerMockRunner;
 import org.unicef.rapidreg.base.record.recordlist.spinner.SpinnerState;
+import org.unicef.rapidreg.model.Case;
 import org.unicef.rapidreg.service.CaseFormService;
 import org.unicef.rapidreg.service.CasePhotoService;
 import org.unicef.rapidreg.service.CaseService;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -89,12 +91,20 @@ public class CaseListPresenterTest {
     }
 
     @Test
-    public void should_return_displayed_index() throws Exception {
+    public void should_return_displayed_index_when_case_is_empty() throws Exception {
         when(caseService.getAll()).thenReturn(Collections.EMPTY_LIST);
 
         int index = caseListPresenter.calculateDisplayedIndex();
 
-        assertThat("Should return 0 when cases is empty", index, is(1));
+        assertThat("Should return 1 when cases is empty", index, is(1));
+    }
+
+    @Test
+    public void should_return_zero_index_when_case_exits() throws Exception {
+        List<Case> cases = Arrays.asList(new Case());
+        when(caseService.getAll()).thenReturn(cases);
+
+        assertThat("Should return 0 when case exits", caseListPresenter.calculateDisplayedIndex(), is(0));
     }
 
     @Test
