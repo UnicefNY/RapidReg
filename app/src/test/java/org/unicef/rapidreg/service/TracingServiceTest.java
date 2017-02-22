@@ -28,6 +28,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.UUID;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsInAnyOrder;
@@ -41,16 +42,21 @@ import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.MockitoAnnotations.initMocks;
+import static org.powermock.api.mockito.PowerMockito.verifyPrivate;
 import static org.powermock.api.mockito.PowerMockito.when;
+import static org.unicef.rapidreg.service.RecordService.AGE;
 import static org.unicef.rapidreg.service.RecordService.CAREGIVER_NAME;
 import static org.unicef.rapidreg.service.RecordService.INQUIRY_DATE;
+import static org.unicef.rapidreg.service.RecordService.REGISTRATION_DATE;
 import static org.unicef.rapidreg.service.RecordService.RELATION_AGE;
 import static org.unicef.rapidreg.service.TracingService.TRACING_ID;
+import static org.unicef.rapidreg.service.TracingService.TRACING_PRIMARY_ID;
 
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({PrimeroAppConfiguration.class})
 public class TracingServiceTest {
     private String url = "http://35.61.56.113:8443";
+    private User user;
 
     @Mock
     private TracingDao tracingDao;
@@ -66,7 +72,7 @@ public class TracingServiceTest {
         initMocks(this);
         PowerMockito.mockStatic(PrimeroAppConfiguration.class);
 
-        User user = new User("userName");
+        user = new User("userName");
         when(PrimeroAppConfiguration.getCurrentUser()).thenReturn(user);
         when(PrimeroAppConfiguration.getCurrentUsername()).thenReturn(user.getUsername());
 
@@ -222,6 +228,44 @@ public class TracingServiceTest {
         assertThat(requiredFiledNames, hasSize(0));
     }
 
+    @Test
+    public void should_save_when_tracing_id_is_null() throws Exception {
+        ItemValuesMap itemValues = new ItemValuesMap();
+        itemValues.addStringItem(TRACING_ID, null);
+
+        TracingService tracingServiceSpy = spy(tracingService);
+        String uuid = UUID.randomUUID().toString();
+        when(tracingServiceSpy.generateUniqueId()).thenReturn(uuid);
+
+        Tracing actual = tracingServiceSpy.saveOrUpdate(itemValues, Collections.emptyList());
+
+        assertThat("Should return same uuid", actual.getUniqueId(), is(uuid));
+        verify(tracingDao, times(1)).save(any(Tracing.class));
+        verify(tracingPhotoDao, times(1)).save(any(Tracing.class), any());
+    }
+
+    @Test
+    public void should_update_when_tracing_id_exits() throws Exception {
+        ItemValuesMap itemValues = new ItemValuesMap();
+        itemValues.addStringItem(TRACING_ID, "tracing_id");
+        itemValues.addNumberItem(RELATION_AGE, 18);
+        itemValues.addStringItem(INQUIRY_DATE, "25/12/2016");
+
+        TracingService tracingServiceSpy = spy(tracingService);
+        Tracing tracing = new Tracing();
+        when(tracingDao.getTracingByUniqueId(anyString())).thenReturn(tracing);
+        when(tracingDao.update(any(Tracing.class))).thenReturn(tracing);
+        when(tracingPhotoDao.update(any(Tracing.class), any())).thenReturn(tracing);
+        when(tracingServiceSpy.getShortUUID(anyString())).thenReturn("");
+
+        Tracing actual = tracingServiceSpy.saveOrUpdate(itemValues, Collections.emptyList());
+        assertThat("Should return same tracing", actual, is(tracing));
+        assertThat("Should return 18 age", actual.getAge(), is(18));
+        verify(tracingDao, times(1)).getTracingByUniqueId("tracing_id");
+        verify(tracingDao, times(1)).update(tracing);
+        verify(tracingPhotoDao, times(1)).update(any(Tracing.class), any());
+    }
+
     private Field makeIncidentField(String name, boolean required) {
         Field field = new Field();
         field.setRequired(required);
@@ -229,4 +273,40 @@ public class TracingServiceTest {
         return field;
     }
 
+    @Test
+    public void should_get_tracing_by_internal_id() throws Exception {
+        Tracing tracing = new Tracing();
+
+        when(tracingDao.getByInternalId(anyString())).thenReturn(tracing);
+
+        assertThat("Should get tracing", tracingService.getByInternalId(""), is(tracing));
+        verify(tracingDao, times(1)).getByInternalId("");
+    }
+
+    @Test
+    public void should_return_true_when_tracing_has_same_rev() throws Exception {
+        Tracing tracing = new Tracing();
+        tracing.setInternalRev("aa");
+
+        when(tracingDao.getByInternalId(anyString())).thenReturn(tracing);
+        assertThat("Should return true", tracingService.hasSameRev("","aa"), is(true));
+        verify(tracingDao, times(1)).getByInternalId(anyString());
+    }
+
+    @Test
+    public void should_return_false_when_tracing_is_null() throws Exception {
+        when(tracingDao.getByInternalId(anyString())).thenReturn(null);
+        assertThat("Should return false", tracingService.hasSameRev("",""), is(false));
+        verify(tracingDao, times(1)).getByInternalId(anyString());
+    }
+
+    @Test
+    public void should_return_false_when_tracing_rev_different() throws Exception {
+        Tracing tracing = new Tracing();
+        tracing.setInternalRev("aa");
+
+        when(tracingDao.getByInternalId(anyString())).thenReturn(tracing);
+        assertThat("Should return false", tracingService.hasSameRev("","bb"), is(false));
+        verify(tracingDao, times(1)).getByInternalId(anyString());
+    }
 }

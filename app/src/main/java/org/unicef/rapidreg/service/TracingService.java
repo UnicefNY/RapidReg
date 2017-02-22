@@ -103,7 +103,6 @@ public class TracingService extends RecordService {
         if (itemValues.getAsString(TRACING_ID) == null) {
             return save(itemValues, photoPaths);
         } else {
-            Log.d(TAG, "update the existing tracing request");
             return update(itemValues, photoPaths);
         }
     }
