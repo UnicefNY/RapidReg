@@ -1,19 +1,26 @@
 package org.unicef.rapidreg.childcase;
 
-import android.support.v4.app.Fragment;
-
-import org.hamcrest.Matchers;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.powermock.modules.junit4.PowerMockRunner;
 import org.unicef.rapidreg.R;
-import org.unicef.rapidreg.childcase.caselist.CaseListFragment;
 
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
-import static org.unicef.rapidreg.childcase.CaseFeature.*;
+import static org.unicef.rapidreg.childcase.CaseFeature.ADD_CP_FULL;
+import static org.unicef.rapidreg.childcase.CaseFeature.ADD_CP_MINI;
+import static org.unicef.rapidreg.childcase.CaseFeature.ADD_GBV_FULL;
+import static org.unicef.rapidreg.childcase.CaseFeature.ADD_GBV_MINI;
+import static org.unicef.rapidreg.childcase.CaseFeature.DETAILS_CP_FULL;
+import static org.unicef.rapidreg.childcase.CaseFeature.DETAILS_CP_MINI;
+import static org.unicef.rapidreg.childcase.CaseFeature.DETAILS_GBV_FULL;
+import static org.unicef.rapidreg.childcase.CaseFeature.DETAILS_GBV_MINI;
+import static org.unicef.rapidreg.childcase.CaseFeature.EDIT_FULL;
+import static org.unicef.rapidreg.childcase.CaseFeature.EDIT_MINI;
+import static org.unicef.rapidreg.childcase.CaseFeature.LIST;
+import static org.unicef.rapidreg.childcase.CaseFeature.SEARCH;
 
 @RunWith(PowerMockRunner.class)
 public class CaseFeatureTest {
