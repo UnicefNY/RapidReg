@@ -60,7 +60,7 @@ public class IncidentRegisterPresenterTest {
     }
 
     @Test
-    public void should_return_true_record_id_when_get_record_id() {
+    public void should_return_record_id_when_get_record_id() {
         Bundle bundle = new Bundle();
         bundle.putLong(IncidentService.INCIDENT_PRIMARY_ID, 2);
         assertThat(incidentRegisterPresenter.getRecordId(bundle), is(2L));
@@ -185,5 +185,10 @@ public class IncidentRegisterPresenterTest {
         assertEquals(fieldList,null);
     }
 
-
+    @Test
+    public void should_return_unique_id() throws Exception {
+        Bundle bundle = new Bundle();
+        bundle.putString(IncidentService.INCIDENT_ID, "aa");
+        assertThat("Should return string 'aa'", incidentRegisterPresenter.getUniqueId(bundle), is("aa"));
+    }
 }

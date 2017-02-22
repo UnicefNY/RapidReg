@@ -7,10 +7,12 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.powermock.modules.junit4.PowerMockRunner;
 import org.unicef.rapidreg.base.record.recordlist.spinner.SpinnerState;
+import org.unicef.rapidreg.model.Incident;
 import org.unicef.rapidreg.service.IncidentFormService;
 import org.unicef.rapidreg.service.IncidentService;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -108,7 +110,17 @@ public class IncidentListPresenterTest {
 
         int index = incidentListPresenter.calculateDisplayedIndex();
 
-        assertThat("Should return 0 when incidents is empty", index, is(1));
+        assertThat("Should return 1 when incidents is empty", index, is(1));
+    }
+
+    @Test
+    public void should_return_zero_when_incident_list_exits() throws Exception {
+        List<Incident> incidents = Arrays.asList(new Incident());
+
+        when(incidentService.getAll()).thenReturn(incidents);
+
+        assertThat("Should return 0 when incident exits", incidentListPresenter.calculateDisplayedIndex(), is(0));
+        verify(incidentService, times(1)).getAll();
     }
 
     @Test

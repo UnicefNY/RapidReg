@@ -226,10 +226,12 @@ public class CaseServiceTest {
         itemValues.addStringItem(REGISTRATION_DATE, "25/12/2016");
 
         Case c = new Case();
-        when(caseDao.getCaseByUniqueId("existedUniqueId")).thenReturn(c);
-        when(caseDao.update(c)).thenReturn(c);
+        when(caseDao.getCaseByUniqueId(anyString())).thenReturn(c);
+        when(caseDao.update(any())).thenReturn(c);
 
         assertThat("Should return update case", caseService.saveOrUpdate(itemValues, Collections.EMPTY_LIST), is(c));
+        verify(caseDao, times(1)).getCaseByUniqueId("existedUniqueId");
+        verify(caseDao, times(1)).update(c);
     }
 
     @Test

@@ -1,7 +1,5 @@
 package org.unicef.rapidreg.service;
 
-import android.util.Log;
-
 import com.google.gson.Gson;
 import com.raizlabs.android.dbflow.data.Blob;
 import com.raizlabs.android.dbflow.sql.language.Condition;
@@ -119,7 +117,6 @@ public class IncidentService extends RecordService {
         if (itemValues.getAsString(INCIDENT_ID) == null) {
             return save(itemValues);
         } else {
-            Log.d(TAG, "update the existing incident");
             return update(itemValues);
         }
     }
@@ -163,7 +160,6 @@ public class IncidentService extends RecordService {
         incidentDao.save(incident);
         return incident;
     }
-
 
     public Incident update(ItemValuesMap itemValues) throws IOException {
         Gson gson = new Gson();

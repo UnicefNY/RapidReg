@@ -7,6 +7,8 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
@@ -25,6 +27,7 @@ import org.unicef.rapidreg.utils.Utils;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import edu.emory.mathcs.backport.java.util.Arrays;
 
@@ -44,14 +47,19 @@ import static org.mockito.MockitoAnnotations.initMocks;
 import static org.unicef.rapidreg.service.IncidentService.INCIDENT_ID;
 import static org.unicef.rapidreg.service.RecordService.AGE;
 import static org.unicef.rapidreg.service.RecordService.DATE_OF_INTERVIEW;
+import static org.unicef.rapidreg.service.RecordService.REGISTRATION_DATE;
 
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({PrimeroAppConfiguration.class})
 public class IncidentServiceTest {
+
     private String url = "http://35.61.56.113:8443";
 
-    private IncidentDao incidentDao = mock(IncidentDaoImpl.class);
-    private IncidentService incidentService = new IncidentService(incidentDao);
+    @Mock
+    IncidentDao incidentDao;
+
+    @InjectMocks
+    IncidentService incidentService;
 
     @Before
     public void setUp() throws Exception {
@@ -263,4 +271,72 @@ public class IncidentServiceTest {
         return field;
     }
 
+    @Test
+    public void should_save_when_incident_id_is_null() throws Exception {
+        ItemValuesMap itemValues = new ItemValuesMap();
+        itemValues.addStringItem(INCIDENT_ID, null);
+
+        String uuid = UUID.randomUUID().toString();
+        IncidentService incidentServiceSpy = spy(incidentService);
+        when(incidentServiceSpy.generateUniqueId()).thenReturn(uuid);
+
+        Incident actual = incidentServiceSpy.saveOrUpdate(itemValues);
+
+        assertThat("Should return same uuid", actual.getUniqueId(), is(uuid));
+    }
+
+    @Test
+    public void should_update_when_incident_id_exits() throws Exception {
+        ItemValuesMap itemValues = new ItemValuesMap();
+        itemValues.addStringItem(INCIDENT_ID, "incident");
+        itemValues.addStringItem(REGISTRATION_DATE, "25/12/2016");
+
+        Incident incident = new Incident();
+        when(incidentDao.getIncidentByUniqueId(anyString())).thenReturn(incident);
+        when(incidentDao.update(any())).thenReturn(incident);
+
+        assertThat("Should return same incident", incidentService.saveOrUpdate(itemValues), is(incident));
+        verify(incidentDao, times(1)).getIncidentByUniqueId("incident");
+        verify(incidentDao, times(1)).update(incident);
+    }
+
+    @Test
+    public void should_get_incident_by_internal_id() throws Exception {
+        Incident incident = new Incident();
+
+        when(incidentDao.getByInternalId(anyString())).thenReturn(incident);
+
+        assertThat("Should get incident", incidentService.getByInternalId(""), is(incident));
+        verify(incidentDao, times(1)).getByInternalId("");
+    }
+
+    @Test
+    public void should_return_false_when_incident_is_null() throws Exception {
+        when(incidentDao.getByInternalId(anyString())).thenReturn(null);
+
+        assertThat("Should return false", incidentService.hasSameRev("",""), is(false));
+        verify(incidentDao, times(1)).getByInternalId("");
+    }
+
+    @Test
+    public void should_return_false_when_incident_rev_is_different() throws Exception {
+        Incident incident = new Incident();
+        incident.setInternalRev("aa");
+
+        when(incidentDao.getByInternalId(anyString())).thenReturn(incident);
+
+        assertThat("Should return false", incidentService.hasSameRev("", "bb"), is(false));
+        verify(incidentDao, times(1)).getByInternalId("");
+    }
+
+    @Test
+    public void should_return_true_when_incident_rev_same() throws Exception {
+        Incident incident = new Incident();
+        incident.setInternalRev("aa");
+
+        when(incidentDao.getByInternalId(anyString())).thenReturn(incident);
+
+        assertThat("Should return true", incidentService.hasSameRev("", "aa"), is(true));
+        verify(incidentDao, times(1)).getByInternalId("");
+    }
 }

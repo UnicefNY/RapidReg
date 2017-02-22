@@ -5,8 +5,11 @@ import com.raizlabs.android.dbflow.data.Blob;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.unicef.rapidreg.PrimeroAppConfiguration;
+import org.unicef.rapidreg.model.Session;
 import org.unicef.rapidreg.repository.IncidentFormDao;
 import org.unicef.rapidreg.repository.impl.IncidentFormDaoImpl;
 import org.unicef.rapidreg.forms.Field;
@@ -16,20 +19,27 @@ import org.unicef.rapidreg.model.IncidentForm;
 import org.unicef.rapidreg.service.IncidentFormService;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.mockito.MockitoAnnotations.initMocks;
 
-@RunWith(MockitoJUnitRunner.class)
 public class IncidentFormServiceImplTest {
-    private IncidentFormService incidentFormService;
-    private IncidentFormDao incidentFormDao;
+
+    @InjectMocks
+    IncidentFormServiceImpl incidentFormService;
+
+    @Mock
+    IncidentFormDao incidentFormDao;
 
     private String formForm = "{\n" +
             "  \"Incidents\": [\n" +
@@ -69,8 +79,7 @@ public class IncidentFormServiceImplTest {
 
     @Before
     public void setUp() throws Exception {
-        incidentFormDao = mock(IncidentFormDaoImpl.class);
-        incidentFormService = new IncidentFormServiceImpl(incidentFormDao);
+        initMocks(this);
     }
 
     @Test
