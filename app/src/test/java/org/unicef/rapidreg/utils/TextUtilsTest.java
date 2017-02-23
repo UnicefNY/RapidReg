@@ -5,6 +5,7 @@ import org.junit.Test;
 import org.unicef.rapidreg.PrimeroAppConfiguration;
 
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.nullValue;
 import static org.junit.Assert.assertThat;
 
 public class TextUtilsTest {
@@ -37,5 +38,38 @@ public class TextUtilsTest {
         String url = "http://35.61.65.113:8443/";
         PrimeroAppConfiguration.setApiBaseUrl(url);
         assertThat(PrimeroAppConfiguration.getApiBaseUrl(), Is.is(expectedUrl));
+    }
+
+    @Test
+    public void should_return_null_when_unique_id_is_null() throws Exception {
+        assertThat("Should return null", TextUtils.getLastSevenNumbers(null), is(nullValue()));
+    }
+
+    @Test
+    public void should_return_unique_id_when_unique_id_length_less_7() throws Exception {
+        String uniqueId = "123456";
+
+        assertThat("Should return uniqueId", TextUtils.getLastSevenNumbers(uniqueId), is(uniqueId));
+    }
+
+    @Test
+    public void should_return_last_seven_numbers_when_unique_id_more_7() throws Exception {
+        String uniqueId = "1234567890";
+
+        assertThat("Should return last 7 numbers", TextUtils.getLastSevenNumbers(uniqueId), is("4567890"));
+    }
+
+    @Test
+    public void should_return_expected_url_when_lint_url() throws Exception {
+        String url = "http://35.61.65.113:8443";
+
+        assertThat("Should return expected url", TextUtils.lintUrl(url), is(expectedUrl));
+    }
+
+    @Test
+    public void should_return_url_when_lint_url() throws Exception {
+        String url = "http://35.61.65.113:8443/";
+
+        assertThat("Should return url", TextUtils.lintUrl(url), is(url));
     }
 }

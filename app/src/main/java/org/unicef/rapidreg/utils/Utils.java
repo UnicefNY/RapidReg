@@ -1,11 +1,7 @@
 package org.unicef.rapidreg.utils;
 
 
-import android.app.Dialog;
 import android.content.Context;
-import android.support.v4.content.ContextCompat;
-import android.util.Log;
-import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -56,14 +52,6 @@ public class Utils {
         return res;
     }
 
-    public static void changeDialogDividerColor(Context context, Dialog dialog) {
-        int titleDividerId = context.getResources().getIdentifier("titleDivider", "id", "android");
-        View titleDivider = dialog.findViewById(titleDividerId);
-        if (titleDivider != null) {
-            titleDivider.setBackgroundColor(ContextCompat.getColor(context, R.color.primero_blue));
-        }
-    }
-
     private static void checkFormat(int len) {
         if (len < 2) {
             throw new IllegalArgumentException();
@@ -76,7 +64,6 @@ public class Utils {
             java.util.Date date = registrationDateFormat.parse(registrationDateString);
             return new Date(date.getTime());
         } catch (ParseException e) {
-            Log.e(TAG, "date format error");
             return new Date(System.currentTimeMillis());
         }
     }

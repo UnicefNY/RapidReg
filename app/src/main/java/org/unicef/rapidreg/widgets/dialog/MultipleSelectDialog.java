@@ -74,7 +74,7 @@ public class MultipleSelectDialog extends BaseDialog {
         initView();
 
         dialog.show();
-        Utils.changeDialogDividerColor(context, dialog);
+        changeDialogDividerColor(context, dialog);
     }
 
     @Override

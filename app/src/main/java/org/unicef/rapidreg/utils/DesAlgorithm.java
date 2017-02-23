@@ -6,16 +6,26 @@ import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
 import javax.crypto.IllegalBlockSizeException;
 
-public class DesUtils {
-    private static String defaultSecretKey = "default_secret_key";
+public class DesAlgorithm {
+    private static final String DES_KEY = "primero";
+
     private Cipher encryptCipher = null;
     private Cipher decryptCipher = null;
 
-    public DesUtils() throws Exception {
-        this(defaultSecretKey);
+    private static DesAlgorithm instance;
+
+    public static DesAlgorithm getInstance() {
+        if (instance == null) {
+            synchronized (DesAlgorithm.class) {
+                if (instance == null) {
+                    instance = new DesAlgorithm(DES_KEY);
+                }
+            }
+        }
+        return instance;
     }
 
-    public DesUtils(String secretKey) {
+    private DesAlgorithm(String secretKey) {
         Key key;
         try {
             key = getKey(secretKey.getBytes());
@@ -28,11 +38,15 @@ public class DesUtils {
         }
     }
 
-    public String encrypt(String strIn) {
+    public String desEncrypt(String plainText) throws Exception {
+        return encrypt(plainText);
+    }
+
+    private String encrypt(String strIn) {
         return byteArr2HexStr(encrypt(strIn.getBytes()));
     }
 
-    public byte[] encrypt(byte[] arrB) {
+    private byte[] encrypt(byte[] arrB) {
         try {
             return encryptCipher.doFinal(arrB);
         } catch (IllegalBlockSizeException e) {
@@ -42,15 +56,7 @@ public class DesUtils {
         }
     }
 
-    public String decrypt(String strIn) throws Exception {
-        return new String(decrypt(hexStr2ByteArr(strIn)));
-    }
-
-    public byte[] decrypt(byte[] arrB) throws Exception {
-        return decryptCipher.doFinal(arrB);
-    }
-
-    public static String byteArr2HexStr(byte[] arrB) {
+    private String byteArr2HexStr(byte[] arrB) {
         int iLen = arrB.length;
         StringBuffer sb = new StringBuffer(iLen * 2);
         for (int i = 0; i < iLen; i++) {
@@ -64,17 +70,6 @@ public class DesUtils {
             sb.append(Integer.toString(intTmp, 16));
         }
         return sb.toString();
-    }
-
-    public static byte[] hexStr2ByteArr(String strIn) {
-        byte[] arrB = strIn.getBytes();
-        int iLen = arrB.length;
-        byte[] arrOut = new byte[iLen / 2];
-        for (int i = 0; i < iLen; i = i + 2) {
-            String strTmp = new String(arrB, i, 2);
-            arrOut[i / 2] = (byte) Integer.parseInt(strTmp, 16);
-        }
-        return arrOut;
     }
 
     private Key getKey(byte[] arrBTmp) {

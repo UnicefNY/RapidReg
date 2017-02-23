@@ -8,7 +8,7 @@ import com.google.gson.Gson;
 import org.unicef.rapidreg.PrimeroAppConfiguration;
 import org.unicef.rapidreg.model.User;
 import org.unicef.rapidreg.sync.SyncStatisticData;
-import org.unicef.rapidreg.utils.EncryptHelper;
+import org.unicef.rapidreg.utils.DesAlgorithm;
 import org.unicef.rapidreg.utils.TextUtils;
 
 import java.util.HashMap;
@@ -66,7 +66,7 @@ public class PrimeroDataPref {
         }
 
         try {
-            String prefName = EncryptHelper.desEncrypt(user.getUserInfo());
+            String prefName = DesAlgorithm.getInstance().desEncrypt(user.getUserInfo());
             SharedPreferences sharedPreferences = context.getSharedPreferences(prefName, Context.MODE_PRIVATE);
             return sharedPreferences;
         } catch (Exception e) {

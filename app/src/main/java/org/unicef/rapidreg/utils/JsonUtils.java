@@ -16,28 +16,6 @@ import java.util.List;
 import java.util.Map;
 
 public class JsonUtils {
-    public static Object toJSON(Object object) throws JSONException {
-        if (object instanceof Map) {
-            JSONObject json = new JSONObject();
-            Map map = (Map) object;
-            for (Object key : map.keySet()) {
-                json.put(key.toString(), toJSON(map.get(key)));
-            }
-            return json;
-        } else if (object instanceof Iterable) {
-            JSONArray json = new JSONArray();
-            for (Object value : ((Iterable) object)) {
-                json.put(value);
-            }
-            return json;
-        } else {
-            return object;
-        }
-    }
-
-    public static Map<String, Object> getMap(JsonObject object, String key) {
-        return toMap(object.getAsJsonObject(key));
-    }
 
     public static Map<String, Object> toMap(JsonObject object) {
         Map<String, Object> map = new HashMap();
@@ -47,7 +25,7 @@ public class JsonUtils {
         return map;
     }
 
-    public static List toList(JsonArray array) {
+    private static List toList(JsonArray array) {
         List list = new ArrayList();
         for (int i = 0; i < array.size(); i++) {
             list.add(fromJson(array.get(i)));

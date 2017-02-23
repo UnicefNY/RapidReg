@@ -2,8 +2,10 @@ package org.unicef.rapidreg.widgets.dialog;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.ContextThemeWrapper;
@@ -72,7 +74,16 @@ public abstract class BaseDialog {
         initView();
         AlertDialog dialog = builder.show();
 
-        Utils.changeDialogDividerColor(context, dialog);
+        changeDialogDividerColor(context, dialog);
+    }
+
+
+    public void changeDialogDividerColor(Context context, Dialog dialog) {
+        int titleDividerId = context.getResources().getIdentifier("titleDivider", "id", "android");
+        View titleDivider = dialog.findViewById(titleDividerId);
+        if (titleDivider != null) {
+            titleDivider.setBackgroundColor(ContextCompat.getColor(context, R.color.primero_blue));
+        }
     }
 
     public static String[] getSelectOptions(String fieldType, Field field) {
