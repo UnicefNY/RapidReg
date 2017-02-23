@@ -10,6 +10,7 @@ import com.raizlabs.android.dbflow.sql.language.NameAlias;
 import com.raizlabs.android.dbflow.sql.language.SQLCondition;
 
 import org.unicef.rapidreg.PrimeroAppConfiguration;
+import org.unicef.rapidreg.model.Case;
 import org.unicef.rapidreg.model.RecordModel;
 import org.unicef.rapidreg.model.Tracing;
 import org.unicef.rapidreg.repository.TracingDao;
@@ -120,6 +121,15 @@ public class TracingService extends RecordService {
         Tracing tracing = updateTracingFromItemValues(itemValues);
         tracing.setSynced(false);
         return tracingPhotoDao.update(tracingDao.update(tracing), photoBitPaths);
+    }
+
+    public Tracing deleteByRecordId(long recordId) {
+        Tracing deleteTracing = tracingDao.getTracingById(recordId);
+        if (deleteTracing != null && !deleteTracing.isSynced()) {
+            return null;
+        }
+        tracingDao.delete(deleteTracing);
+        return deleteTracing;
     }
 
     private Tracing generateTracingFromItemValues(ItemValuesMap itemValues, String uniqueId) {

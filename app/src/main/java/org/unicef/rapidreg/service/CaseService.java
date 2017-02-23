@@ -267,7 +267,7 @@ public class CaseService extends RecordService {
         if (deleteCase != null && !deleteCase.isSynced()) {
             return null;
         }
-        caseDao.deleteByRecordId(recordId);
+        caseDao.delete(deleteCase);
         casePhotoDao.deleteByCaseId(recordId);
         return deleteCase;
     }

@@ -24,4 +24,6 @@ public interface CaseDao {
     Case update(Case childCase);
 
     Case deleteByRecordId(Long recordId);
+
+    Case delete(Case deleteCase);
 }

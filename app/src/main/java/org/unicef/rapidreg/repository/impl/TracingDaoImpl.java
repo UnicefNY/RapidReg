@@ -57,6 +57,23 @@ public class TracingDaoImpl implements TracingDao {
         return SQLite.select().from(Tracing.class).where(Tracing_Table._id.eq(id)).querySingle();
     }
 
+    @Override
+    public Tracing deleteByRecordId(long recordId) {
+        Tracing deleteTracing = getTracingById(recordId);
+        if (deleteTracing != null) {
+            deleteTracing.delete();
+        }
+        return deleteTracing;
+    }
+
+    @Override
+    public Tracing delete(Tracing deleteTracing) {
+        if (deleteTracing != null) {
+            deleteTracing.delete();
+        }
+        return deleteTracing;
+    }
+
     private List<Tracing> getTracingsByDateASC(String ownedBy, String url) {
         return getCurrentServerUserCondition(ownedBy, url)
                 .orderBy(Tracing_Table.registration_date, true)

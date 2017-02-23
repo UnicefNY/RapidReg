@@ -32,6 +32,7 @@ import java.util.UUID;
 import edu.emory.mathcs.backport.java.util.Arrays;
 
 import static junit.framework.Assert.assertFalse;
+import static junit.framework.Assert.assertNull;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.hasSize;
@@ -39,6 +40,7 @@ import static org.hamcrest.core.Is.is;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -338,5 +340,33 @@ public class IncidentServiceTest {
 
         assertThat("Should return true", incidentService.hasSameRev("", "aa"), is(true));
         verify(incidentDao, times(1)).getByInternalId("");
+    }
+
+    @Test
+    public void should_delete_when_incident_exists_and_synced_yet() throws Exception {
+        long recordId = 123L;
+
+        Incident deleteIncident = new Incident(recordId);
+        deleteIncident.setSynced(true);
+        when(incidentDao.getIncidentById(recordId)).thenReturn(deleteIncident);
+
+        Incident actual = incidentService.deleteByRecordId(recordId);
+
+        verify(incidentDao, times(1)).delete(deleteIncident);
+        assertThat(actual, is(deleteIncident));
+    }
+
+    @Test
+    public void should_not_delete_when_incident_exists_and_not_synced_yet() throws Exception {
+        long recordId = 123L;
+
+        Incident deleteIncident = new Incident(recordId);
+        deleteIncident.setSynced(false);
+        when(incidentDao.getIncidentById(recordId)).thenReturn(deleteIncident);
+
+        Incident actual = incidentService.deleteByRecordId(recordId);
+
+        verify(incidentDao, never()).delete(deleteIncident);
+        assertNull(actual);
     }
 }

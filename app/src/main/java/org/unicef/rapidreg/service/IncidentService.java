@@ -183,6 +183,15 @@ public class IncidentService extends RecordService {
         return incidentDao.update(incident);
     }
 
+    public Incident deleteByRecordId(long recordId) {
+        Incident deleteIncident = incidentDao.getIncidentById(recordId);
+        if (deleteIncident != null && !deleteIncident.isSynced()) {
+            return null;
+        }
+        incidentDao.delete(deleteIncident);
+        return deleteIncident;
+    }
+
     private String getName(ItemValuesMap values) {
         return values.concatMultiStringsWithBlank(RELATION_NAME, RELATION_AGE, RELATION_NICKNAME);
     }

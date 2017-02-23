@@ -76,6 +76,14 @@ public class IncidentDaoImpl implements IncidentDao {
                 .queryList();
     }
 
+    @Override
+    public Incident delete(Incident deleteIncident) {
+        if (deleteIncident != null) {
+            deleteIncident.delete();
+        }
+        return deleteIncident;
+    }
+
     private List<Incident> getIncidentsByAgeASC(String ownedBy, String url) {
         return getCurrentServerCondition(ownedBy, url)
                 .orderBy(Incident_Table.age, true)

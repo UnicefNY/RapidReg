@@ -20,4 +20,8 @@ public interface TracingDao {
     Tracing getTracingById(long tracingId);
 
     Tracing getByInternalId(String id);
+
+    Tracing deleteByRecordId(long recordId);
+
+    Tracing delete(Tracing deleteTracing);
 }

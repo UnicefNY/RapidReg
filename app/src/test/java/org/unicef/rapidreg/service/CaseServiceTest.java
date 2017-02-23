@@ -303,7 +303,7 @@ public class CaseServiceTest {
 
         Case actual = caseService.deleteByRecordId(recordId);
 
-        verify(caseDao, times(1)).deleteByRecordId(recordId);
+        verify(caseDao, times(1)).delete(deleteCase);
         verify(casePhotoDao, times(1)).deleteByCaseId(recordId);
         assertThat(actual, is(deleteCase));
     }
@@ -317,7 +317,7 @@ public class CaseServiceTest {
 
         Case actual = caseService.deleteByRecordId(recordId);
 
-        verify(caseDao, never()).deleteByRecordId(recordId);
+        verify(caseDao, never()).delete(deleteCase);
         verify(casePhotoDao, never()).deleteByCaseId(recordId);
         assertNull(actual);
     }

@@ -30,14 +30,17 @@ import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
+import static junit.framework.Assert.assertNull;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.core.Is.is;
 import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyChar;
 import static org.mockito.Matchers.anyList;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -308,5 +311,33 @@ public class TracingServiceTest {
         when(tracingDao.getByInternalId(anyString())).thenReturn(tracing);
         assertThat("Should return false", tracingService.hasSameRev("","bb"), is(false));
         verify(tracingDao, times(1)).getByInternalId(anyString());
+    }
+
+    @Test
+    public void should_delete_when_tracing_exists_and_synced_yet() throws Exception {
+        long recordId = 123L;
+
+        Tracing deleteTracing = new Tracing(recordId);
+        deleteTracing.setSynced(true);
+        when(tracingDao.getTracingById(recordId)).thenReturn(deleteTracing);
+
+        Tracing actual = tracingService.deleteByRecordId(recordId);
+
+        verify(tracingDao, times(1)).delete(deleteTracing);
+        assertThat(actual, is(deleteTracing));
+    }
+
+    @Test
+    public void should_not_delete_when_tracing_exists_and_not_synced_yet() throws Exception {
+        long recordId = 123L;
+
+        Tracing deleteTracing = new Tracing(recordId);
+        deleteTracing.setSynced(false);
+        when(tracingDao.getTracingById(recordId)).thenReturn(deleteTracing);
+
+        Tracing actual = tracingService.deleteByRecordId(recordId);
+
+        verify(tracingDao, never()).delete(deleteTracing);
+        assertNull(actual);
     }
 }
