@@ -99,6 +99,11 @@ public abstract class RecordActivity extends BaseActivity {
         listFragment.toggleMode(detailState.isDetailShow());
     }
 
+    protected void showDeleteMode() {
+        RecordListFragment listFragment = getRecordListFragment();
+        listFragment.toggleDeleteMode(true);
+    }
+
     public Feature getCurrentFeature() {
         return currentFeature;
     }

@@ -59,7 +59,6 @@ public class CaseActivity extends RecordActivity implements BaseView {
         }
 
         turnToFeature(CaseFeature.LIST, null, null);
-
     }
 
     @Override

@@ -54,20 +54,17 @@ public class IncidentListAdapter extends RecordListAdapter {
         String age = itemValues.getAsString(RecordService.AGE);
         holder.disableRecordImageView();
         holder.setValues(gender, shortUUID, age, record);
-        holder.setViewOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Bundle args = new Bundle();
-                args.putLong(IncidentService.INCIDENT_PRIMARY_ID, recordId);
-                ((RecordActivity) context).turnToFeature(IncidentFeature.DETAILS_MINI, args, null);
-                try {
-                    Utils.clearAudioFile(AUDIO_FILE_PATH);
-                    if (record.getAudio() != null) {
-                        StreamUtil.writeFile(record.getAudio().getBlob(), RecordService
-                                .AUDIO_FILE_PATH);
-                    }
-                } catch (IOException e) {
+        holder.setViewOnClickListener(v -> {
+            Bundle args = new Bundle();
+            args.putLong(IncidentService.INCIDENT_PRIMARY_ID, recordId);
+            ((RecordActivity) context).turnToFeature(IncidentFeature.DETAILS_MINI, args, null);
+            try {
+                Utils.clearAudioFile(AUDIO_FILE_PATH);
+                if (record.getAudio() != null) {
+                    StreamUtil.writeFile(record.getAudio().getBlob(), RecordService
+                            .AUDIO_FILE_PATH);
                 }
+            } catch (IOException e) {
             }
         });
         holder.disableRecordGenderView();

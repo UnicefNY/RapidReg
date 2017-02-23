@@ -76,6 +76,5 @@
             android:gravity="right"
             android:textColor="@color/primero_font_light"
             android:textSize="@dimen/text_size_14" />
-
     </LinearLayout>
 </RelativeLayout>

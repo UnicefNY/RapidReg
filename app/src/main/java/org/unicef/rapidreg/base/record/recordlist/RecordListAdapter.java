@@ -1,6 +1,7 @@
 package org.unicef.rapidreg.base.record.recordlist;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.res.ResourcesCompat;
@@ -17,6 +18,7 @@ import android.widget.ViewSwitcher;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 
+import org.greenrobot.eventbus.EventBus;
 import org.unicef.rapidreg.R;
 import org.unicef.rapidreg.model.Gender;
 import org.unicef.rapidreg.model.RecordModel;
@@ -39,8 +41,10 @@ public abstract class RecordListAdapter extends RecyclerView.Adapter<RecordListA
     protected Context context;
     protected DateFormat dateFormat = SimpleDateFormat.getDateInstance(DateFormat.MEDIUM, Locale.US);
     protected List<Long> recordList = new ArrayList<>();
+    protected List<Long> recordWillBeDeletedList = new ArrayList<>();
     protected boolean isDetailShow = true;
     protected boolean isItemDeleteCheckBoxShow = false;
+    protected boolean isDeleteMode = false;
 
     public RecordListAdapter(Context context) {
         this.context = context;
@@ -50,10 +54,16 @@ public abstract class RecordListAdapter extends RecyclerView.Adapter<RecordListA
         this.recordList = recordList;
     }
 
-    public void removeRecord(long recordId) {
-        if (recordList.contains(recordId)) {
+    public void removeRecords() {
+        for (Long recordId : recordWillBeDeletedList) {
             recordList.remove(recordId);
         }
+        recordWillBeDeletedList.clear();
+        notifyDataSetChanged();
+    }
+
+    public List<Long> getRecordWillBeDeletedList() {
+        return recordWillBeDeletedList;
     }
 
     @Override
@@ -74,11 +84,24 @@ public abstract class RecordListAdapter extends RecyclerView.Adapter<RecordListA
         notifyDataSetChanged();
     }
 
+    public void toggleDeleteViews(boolean isDeleteMode) {
+        this.isDeleteMode = isDeleteMode;
+        notifyDataSetChanged();
+    }
+
     protected void toggleTextArea(RecordListViewHolder holder) {
         if (isDetailShow) {
             holder.viewSwitcher.setDisplayedChild(TEXT_AREA_SHOWED_STATE);
         } else {
             holder.viewSwitcher.setDisplayedChild(TEXT_AREA_HIDDEN_STATE);
+        }
+    }
+
+    protected void toggleDeleteArea(RecordListViewHolder holder, boolean isDeletable) {
+        if (isDeleteMode) {
+            holder.toggleDeleteView(isDeletable);
+        } else {
+            holder.toggleNormalView();
         }
     }
 
@@ -139,11 +162,11 @@ public abstract class RecordListAdapter extends RecyclerView.Adapter<RecordListA
         @BindView(R.id.view_switcher)
         public ViewSwitcher viewSwitcher;
 
-        @BindView(R.id.item_delete_checkbox)
-        public CheckBox itemDeleteCB;
-
         @BindView(R.id.item_delete_checkbox_content)
         public LinearLayout itemDeleteCheckboxContent;
+
+        @BindView(R.id.delete_state)
+        public CheckBox deleteStateCheckBox;
 
         public RecordListViewHolder(View itemView) {
             super(itemView);
@@ -171,10 +194,20 @@ public abstract class RecordListAdapter extends RecyclerView.Adapter<RecordListA
 
             Date registrationDateText = record.getRegistrationDate();
             registrationDate.setText(isValidDate(registrationDateText) ? dateFormat.format(registrationDateText) : "---");
+
+            deleteStateCheckBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
+                if (isChecked) {
+                    recordWillBeDeletedList.add(recordList.get(getAdapterPosition()));
+                }
+            });
         }
 
         public void setViewOnClickListener(View.OnClickListener listener) {
             itemView.setOnClickListener(listener);
+        }
+
+        public void setViewOnLongClickListener(View.OnLongClickListener listener) {
+            itemView.setOnLongClickListener(listener);
         }
 
         public void disableRecordImageView() {
@@ -188,6 +221,30 @@ public abstract class RecordListAdapter extends RecyclerView.Adapter<RecordListA
         public void disableRecordGenderView() {
             genderBadge.setVisibility(View.GONE);
             genderName.setVisibility(View.GONE);
+        }
+
+        public void setDeletable(boolean deletable) {
+            itemView.setEnabled(deletable);
+            if (deletable) {
+                itemView.setBackgroundColor(Color.WHITE);
+            } else {
+                itemView.setBackgroundColor(Color.LTGRAY);
+            }
+        }
+
+        public void toggleDeleteView(boolean isDeletable) {
+            recordWillBeDeletedList.clear();
+            deleteStateCheckBox.setVisibility(View.VISIBLE);
+            itemView.setEnabled(isDeletable);
+            deleteStateCheckBox.setEnabled(isDeletable);
+            itemView.setBackgroundColor(isDeletable ? Color.WHITE : Color.LTGRAY);
+        }
+
+        public void toggleNormalView() {
+            deleteStateCheckBox.setVisibility(View.GONE);
+            itemView.setEnabled(true);
+            itemView.setBackgroundColor(Color.WHITE);
+            recordWillBeDeletedList.clear();
         }
     }
 }

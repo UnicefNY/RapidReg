@@ -124,6 +124,10 @@ public abstract class RecordListFragment extends MvpFragment<RecordListView, Rec
         messageDialog.show();
     }
 
+    public void toggleDeleteMode(boolean isDeleteMode) {
+        recordListAdapter.toggleDeleteViews(isDeleteMode);
+    }
+
     private void initListContainer(final RecordListAdapter adapter) {
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
