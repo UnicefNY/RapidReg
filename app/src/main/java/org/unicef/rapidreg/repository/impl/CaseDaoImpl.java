@@ -59,6 +59,15 @@ public class CaseDaoImpl implements CaseDao {
         return childCase;
     }
 
+    @Override
+    public Case deleteByRecordId(Long recordId) {
+        Case childCase = getCaseById(recordId);
+        if (childCase != null) {
+            childCase.delete();
+        }
+        return childCase;
+    }
+
     private List<Case> getCasesByAgeASC(String ownedBy, String url) {
         return getCurrentServerUserCondition(ownedBy, url)
                 .orderBy(Case_Table.age, true)

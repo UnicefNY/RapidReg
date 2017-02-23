@@ -262,6 +262,16 @@ public class CaseService extends RecordService {
         }
     }
 
+    public Case deleteByRecordId(long recordId) {
+        Case deleteCase = caseDao.getCaseById(recordId);
+        if (deleteCase != null && !deleteCase.isSynced()) {
+            return null;
+        }
+        caseDao.deleteByRecordId(recordId);
+        casePhotoDao.deleteByCaseId(recordId);
+        return deleteCase;
+    }
+
     private CasePhoto generateSavePhoto(Case child, List<String> photoPaths, int index) throws
             IOException {
         CasePhoto casePhoto = casePhotoDao.getByCaseIdAndOrder(child.getId(), index + 1);
@@ -307,7 +317,6 @@ public class CaseService extends RecordService {
         }
         return null;
     }
-
 
     private String getName(ItemValuesMap values) {
         return values.concatMultiStringsWithBlank(FULL_NAME, FIRST_NAME, MIDDLE_NAME, SURNAME, NICKNAME, OTHER_NAME);

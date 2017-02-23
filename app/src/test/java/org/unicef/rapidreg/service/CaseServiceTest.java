@@ -38,6 +38,7 @@ import java.util.UUID;
 import edu.emory.mathcs.backport.java.util.Arrays;
 
 import static junit.framework.Assert.assertFalse;
+import static junit.framework.Assert.assertNull;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.hasSize;
@@ -47,7 +48,9 @@ import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyInt;
 import static org.mockito.Matchers.anyLong;
 import static org.mockito.Matchers.anyString;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.timeout;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.MockitoAnnotations.initMocks;
@@ -289,4 +292,35 @@ public class CaseServiceTest {
         when(caseDao.getByInternalId(anyString())).thenReturn(c);
         assertThat("Should return true, same", caseService.hasSameRev("", "aa"), is(true));
     }
+
+    @Test
+    public void should_delete_when_case_exists_and_synced_yet() throws Exception {
+        long recordId = 123L;
+
+        Case deleteCase = new Case(recordId);
+        deleteCase.setSynced(true);
+        when(caseDao.getCaseById(recordId)).thenReturn(deleteCase);
+
+        Case actual = caseService.deleteByRecordId(recordId);
+
+        verify(caseDao, times(1)).deleteByRecordId(recordId);
+        verify(casePhotoDao, times(1)).deleteByCaseId(recordId);
+        assertThat(actual, is(deleteCase));
+    }
+
+    @Test
+    public void should_not_delete_when_case_exist_and_not_synced_yet() throws Exception {
+        long recordId = 123L;
+        Case deleteCase = new Case(recordId);
+        deleteCase.setSynced(false);
+        when(caseDao.getCaseById(recordId)).thenReturn(deleteCase);
+
+        Case actual = caseService.deleteByRecordId(recordId);
+
+        verify(caseDao, never()).deleteByRecordId(recordId);
+        verify(casePhotoDao, never()).deleteByCaseId(recordId);
+        assertNull(actual);
+    }
+
+
 }

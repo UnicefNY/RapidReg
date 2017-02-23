@@ -47,6 +47,12 @@ public abstract class RecordListAdapter extends RecyclerView.Adapter<RecordListA
         this.recordList = recordList;
     }
 
+    public void removeRecord(long recordId) {
+        if (recordList.contains(recordId)) {
+            recordList.remove(recordId);
+        }
+    }
+
     @Override
     public RecordListViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         ViewGroup itemView = (ViewGroup) LayoutInflater.from(parent.getContext())
