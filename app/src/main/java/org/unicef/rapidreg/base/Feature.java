@@ -17,4 +17,6 @@ public interface Feature {
     boolean isDetailMode();
 
     boolean isAddMode();
+
+    boolean isDeleteMode();
 }

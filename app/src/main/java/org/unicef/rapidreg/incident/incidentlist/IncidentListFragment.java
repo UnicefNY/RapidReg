@@ -5,6 +5,7 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.Toast;
 
 import org.unicef.rapidreg.PrimeroApplication;
@@ -80,5 +81,10 @@ public class IncidentListFragment extends RecordListFragment {
 
         RecordActivity activity = (RecordActivity) getActivity();
         activity.turnToFeature(IncidentFeature.ADD_MINI, null, null);
+    }
+
+    @OnClick(R.id.list_item_delete_cancel_button)
+    public void onListItemDeleteCancelButtonClicked(Button button) {
+        ((RecordActivity) getActivity()).turnToFeature(IncidentFeature.LIST, null, null);
     }
 }

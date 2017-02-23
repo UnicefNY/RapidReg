@@ -8,7 +8,9 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.ViewSwitcher;
 
@@ -38,6 +40,7 @@ public abstract class RecordListAdapter extends RecyclerView.Adapter<RecordListA
     protected DateFormat dateFormat = SimpleDateFormat.getDateInstance(DateFormat.MEDIUM, Locale.US);
     protected List<Long> recordList = new ArrayList<>();
     protected boolean isDetailShow = true;
+    protected boolean isItemDeleteCheckBoxShow = false;
 
     public RecordListAdapter(Context context) {
         this.context = context;
@@ -97,6 +100,19 @@ public abstract class RecordListAdapter extends RecyclerView.Adapter<RecordListA
         return true;
     }
 
+    public void itemDeleteCheckBox(boolean isShowItemDeleteCheckBox) {
+        this.isItemDeleteCheckBoxShow = isShowItemDeleteCheckBox;
+        notifyDataSetChanged();
+    }
+
+    protected void showItemDeleteCheckBox(RecordListViewHolder holder) {
+        if (isItemDeleteCheckBoxShow) {
+            holder.itemDeleteCheckboxContent.setVisibility(View.VISIBLE);
+        } else {
+            holder.itemDeleteCheckboxContent.setVisibility(View.GONE);
+        }
+    }
+
     public class RecordListViewHolder extends RecyclerView.ViewHolder {
 
         @BindView(R.id.id_normal_state)
@@ -122,6 +138,12 @@ public abstract class RecordListAdapter extends RecyclerView.Adapter<RecordListA
 
         @BindView(R.id.view_switcher)
         public ViewSwitcher viewSwitcher;
+
+        @BindView(R.id.item_delete_checkbox)
+        public CheckBox itemDeleteCB;
+
+        @BindView(R.id.item_delete_checkbox_content)
+        public LinearLayout itemDeleteCheckboxContent;
 
         public RecordListViewHolder(View itemView) {
             super(itemView);

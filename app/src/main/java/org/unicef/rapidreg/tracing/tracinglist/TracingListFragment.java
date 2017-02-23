@@ -5,10 +5,12 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.Toast;
 
 import org.unicef.rapidreg.PrimeroApplication;
 import org.unicef.rapidreg.R;
+import org.unicef.rapidreg.base.record.RecordActivity;
 import org.unicef.rapidreg.base.record.recordlist.RecordListAdapter;
 import org.unicef.rapidreg.base.record.recordlist.RecordListFragment;
 import org.unicef.rapidreg.base.record.recordlist.RecordListPresenter;
@@ -78,5 +80,10 @@ public class TracingListFragment extends RecordListFragment {
 
         TracingActivity activity = (TracingActivity) getActivity();
         activity.turnToFeature(TracingFeature.ADD_MINI, null, null);
+    }
+
+    @OnClick(R.id.list_item_delete_cancel_button)
+    public void onListItemDeleteCancelButtonClicked(Button button) {
+        ((RecordActivity) getActivity()).turnToFeature(TracingFeature.LIST, null, null);
     }
 }

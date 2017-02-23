@@ -4,16 +4,11 @@ import android.support.v4.app.Fragment;
 
 import org.unicef.rapidreg.R;
 import org.unicef.rapidreg.base.Feature;
-import org.unicef.rapidreg.childcase.caselist.CaseListFragment;
-import org.unicef.rapidreg.childcase.caseregister.CaseMiniFormFragment;
-import org.unicef.rapidreg.childcase.caseregister.CaseRegisterWrapperFragment;
-import org.unicef.rapidreg.childcase.casesearch.CaseSearchFragment;
 import org.unicef.rapidreg.exception.FragmentSwitchException;
 import org.unicef.rapidreg.incident.incidentlist.IncidentListFragment;
 import org.unicef.rapidreg.incident.incidentregister.IncidentMiniFormFragment;
 import org.unicef.rapidreg.incident.incidentregister.IncidentRegisterWrapperFragment;
 import org.unicef.rapidreg.incident.incidentsearch.IncidentSearchFragment;
-import org.unicef.rapidreg.model.Incident;
 
 public enum IncidentFeature implements Feature {
     LIST(R.string.incidents, IncidentListFragment.class),
@@ -23,6 +18,7 @@ public enum IncidentFeature implements Feature {
     EDIT_FULL(R.string.edit, IncidentRegisterWrapperFragment.class),
     DETAILS_MINI(R.string.incident_details, IncidentMiniFormFragment.class),
     DETAILS_FULL(R.string.incident_details, IncidentRegisterWrapperFragment.class),
+    DELETE(R.string.delete, IncidentListFragment.class),
     SEARCH(R.string.search, IncidentSearchFragment.class);
 
     private int titleId;
@@ -63,5 +59,12 @@ public enum IncidentFeature implements Feature {
     public boolean isAddMode() {
         return this == ADD_MINI || this == ADD_FULL;
     }
+
+    @Override
+    public boolean isDeleteMode() {
+        return this == DELETE;
+    }
+
+
 }
 

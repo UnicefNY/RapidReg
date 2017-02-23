@@ -81,5 +81,6 @@ public class CaseListAdapter extends RecordListAdapter {
             }
         });
         toggleTextArea(holder);
+        showItemDeleteCheckBox(holder);
     }
 }

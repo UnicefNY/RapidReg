@@ -173,6 +173,12 @@ public class CaseActivity extends RecordActivity implements BaseView {
         EventBus.getDefault().postSticky(event);
     }
 
+
+    @Override
+    protected void showDeleteCheckBox() {
+        turnToFeature(CaseFeature.DELETE, null, null);
+    }
+
     @Override
     public void promoteSyncFormsError() {
         Utils.showMessageByToast(this, R.string.sync_forms_error, Toast.LENGTH_SHORT);

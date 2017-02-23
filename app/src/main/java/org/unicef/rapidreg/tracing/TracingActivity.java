@@ -150,6 +150,11 @@ public class TracingActivity extends RecordActivity implements BaseView {
     }
 
     @Override
+    protected void showDeleteCheckBox() {
+        turnToFeature(TracingFeature.DELETE, null, null);
+    }
+
+    @Override
     public void promoteSyncFormsError() {
         Utils.showMessageByToast(this, R.string.sync_forms_error, Toast.LENGTH_SHORT);
     }

@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.ViewSwitcher;
@@ -17,6 +18,8 @@ import com.hannesdorfmann.mosby.mvp.MvpFragment;
 
 import org.unicef.rapidreg.PrimeroApplication;
 import org.unicef.rapidreg.R;
+import org.unicef.rapidreg.base.BaseActivity;
+import org.unicef.rapidreg.base.Feature;
 import org.unicef.rapidreg.base.record.RecordActivity;
 import org.unicef.rapidreg.base.record.recordlist.spinner.SpinnerAdapter;
 import org.unicef.rapidreg.base.record.recordlist.spinner.SpinnerState;
@@ -52,6 +55,15 @@ public abstract class RecordListFragment extends MvpFragment<RecordListView, Rec
     @BindView(R.id.list_result)
     protected ViewSwitcher viewSwitcher;
 
+    @BindView(R.id.list_delete_button_content)
+    LinearLayout listDeleteBtnContent;
+
+    @BindView(R.id.list_item_delete_button)
+    Button listItemDeleteBtn;
+
+    @BindView(R.id.list_item_delete_cancel_button)
+    Button listItemDeleteCancelBtn;
+
     protected RecordListAdapter recordListAdapter;
 
     @Nullable
@@ -71,9 +83,9 @@ public abstract class RecordListFragment extends MvpFragment<RecordListView, Rec
     @Override
     public void onInitViewContent() {
         recordListAdapter = createRecordListAdapter();
-
         initListContainer(recordListAdapter);
         initOrderSpinner(recordListAdapter);
+        initDeletButtonContent();
     }
 
     protected FragmentComponent getComponent() {
@@ -87,12 +99,40 @@ public abstract class RecordListFragment extends MvpFragment<RecordListView, Rec
         recordListAdapter.toggleViews(isShow);
     }
 
+    public void deleteItemMode(boolean isShowItemDeleteCheckBox) {
+        recordListAdapter.itemDeleteCheckBox(isShowItemDeleteCheckBox);
+    }
+
+    public void showSyncFormDialog(String message) {
+        MessageDialog messageDialog = new MessageDialog(getActivity());
+        messageDialog.setTitle(R.string.sync_forms);
+        messageDialog.setMessage(String.format("%s %s", message, getResources().getString(R.string
+                .sync_forms_message)));
+        messageDialog.setPositiveButton(R.string.ok, new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ((RecordActivity) getActivity()).sendSyncFormEvent();
+                messageDialog.dismiss();
+            }
+        });
+        messageDialog.setNegativeButton(R.string.cancel, new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                messageDialog.dismiss();
+            }
+        });
+        messageDialog.show();
+    }
+
     private void initListContainer(final RecordListAdapter adapter) {
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         listContainer.setLayoutManager(layoutManager);
         listContainer.setAdapter(adapter);
         viewSwitcher.setDisplayedChild(presenter.calculateDisplayedIndex());
+
+        Feature currentFeature = ((RecordActivity) getActivity()).getCurrentFeature();
+        deleteItemMode(currentFeature.isDeleteMode());
     }
 
     private void initOrderSpinner(final RecordListAdapter adapter) {
@@ -119,25 +159,15 @@ public abstract class RecordListFragment extends MvpFragment<RecordListView, Rec
         });
     }
 
-    public void showSyncFormDialog(String message) {
-        MessageDialog messageDialog = new MessageDialog(getActivity());
-        messageDialog.setTitle(R.string.sync_forms);
-        messageDialog.setMessage(String.format("%s %s", message, getResources().getString(R.string
-                .sync_forms_message)));
-        messageDialog.setPositiveButton(R.string.ok, new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ((RecordActivity)getActivity()).sendSyncFormEvent();
-                messageDialog.dismiss();
-            }
-        });
-        messageDialog.setNegativeButton(R.string.cancel, new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                messageDialog.dismiss();
-            }
-        });
-        messageDialog.show();
+    private void initDeletButtonContent() {
+        Feature currentFeature = ((BaseActivity) getActivity()).getCurrentFeature();
+        if (currentFeature.isDeleteMode()) {
+            listDeleteBtnContent.setVisibility(View.VISIBLE);
+            addButton.setVisibility(View.GONE);
+        } else {
+            listDeleteBtnContent.setVisibility(View.GONE);
+            addButton.setVisibility(View.VISIBLE);
+        }
     }
 
     protected abstract RecordListAdapter createRecordListAdapter();

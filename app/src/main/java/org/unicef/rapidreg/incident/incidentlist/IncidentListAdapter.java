@@ -72,6 +72,7 @@ public class IncidentListAdapter extends RecordListAdapter {
         });
         holder.disableRecordGenderView();
         toggleTextArea(holder);
+        showItemDeleteCheckBox(holder);
     }
 
 

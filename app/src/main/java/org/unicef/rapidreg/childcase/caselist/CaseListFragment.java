@@ -5,6 +5,7 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.Toast;
 
 import org.unicef.rapidreg.PrimeroAppConfiguration;
@@ -107,6 +108,11 @@ public class CaseListFragment extends RecordListFragment {
         Bundle bundle = new Bundle();
         bundle.putString(MODULE, MODULE_CASE_GBV);
         activity.turnToFeature(CaseFeature.ADD_GBV_MINI, bundle, null);
+    }
+
+    @OnClick(R.id.list_item_delete_cancel_button)
+    public void onListItemDeleteCancelButtonClicked(Button button) {
+        ((RecordActivity) getActivity()).turnToFeature(CaseFeature.LIST, null, null);
     }
 
     public void enableShowHideSwitcherForCPUser() {

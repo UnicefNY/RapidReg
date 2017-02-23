@@ -22,6 +22,7 @@ public enum CaseFeature implements Feature {
     DETAILS_CP_FULL(R.string.cp_case_details, CaseRegisterWrapperFragment.class),
     DETAILS_GBV_MINI(R.string.gbv_case_details, CaseMiniFormFragment.class),
     DETAILS_GBV_FULL(R.string.gbv_case_details, CaseRegisterWrapperFragment.class),
+    DELETE(R.string.delete, CaseListFragment.class),
     SEARCH(R.string.search, CaseSearchFragment.class),;
 
     private int titleId;
@@ -64,6 +65,11 @@ public enum CaseFeature implements Feature {
     @Override
     public boolean isAddMode() {
         return this == ADD_CP_MINI || this == ADD_CP_FULL || this == ADD_GBV_MINI || this == ADD_GBV_FULL;
+    }
+
+    @Override
+    public boolean isDeleteMode() {
+        return this == DELETE;
     }
 
     public boolean isCPCase() {

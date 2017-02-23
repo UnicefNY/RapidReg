@@ -7,6 +7,7 @@ import android.support.v4.view.GravityCompat;
 
 import org.unicef.rapidreg.R;
 import org.unicef.rapidreg.base.BaseActivity;
+import org.unicef.rapidreg.base.Feature;
 
 public class SyncActivity extends BaseActivity {
 
@@ -60,5 +61,15 @@ public class SyncActivity extends BaseActivity {
     @Override
     protected void showHideDetail() {
 
+    }
+
+    @Override
+    protected void showDeleteCheckBox() {
+
+    }
+
+    @Override
+    public Feature getCurrentFeature() {
+        return null;
     }
 }

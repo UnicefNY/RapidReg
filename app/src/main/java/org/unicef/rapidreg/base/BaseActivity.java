@@ -7,10 +7,9 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.util.Log;
-import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -38,6 +37,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 import static android.view.View.GONE;
+import static android.view.View.VISIBLE;
 import static org.unicef.rapidreg.model.User.Role.GBV;
 
 public abstract class BaseActivity extends MvpActivity<BaseView, BasePresenter> {
@@ -64,6 +64,18 @@ public abstract class BaseActivity extends MvpActivity<BaseView, BasePresenter> 
 
     @BindView(R.id.search)
     protected ImageButton searchMenu;
+
+    @BindView(R.id.toolbar_main_button_content)
+    protected LinearLayout toolbarMainBtnContent;
+
+    @BindView(R.id.select_all_image_button)
+    protected ImageButton selectAllMenu;
+
+    @BindView(R.id.delete_item)
+    protected ImageButton deleteMenu;
+
+    @BindView(R.id.toolbar_select_all_button_content)
+    protected LinearLayout toolbarSelectAllBtnContent;
 
     @BindView(R.id.create_incident)
     protected ImageButton createIncidentBtn;
@@ -177,7 +189,7 @@ public abstract class BaseActivity extends MvpActivity<BaseView, BasePresenter> 
         if (user != null) {
             User.Role role = user.getRoleType();
             for (int resId : role.getResIds()) {
-                findViewById(resId).setVisibility(View.VISIBLE);
+                findViewById(resId).setVisibility(VISIBLE);
             }
         }
     }
@@ -243,6 +255,7 @@ public abstract class BaseActivity extends MvpActivity<BaseView, BasePresenter> 
         showHideMenu.setOnClickListener(view -> showHideDetail());
         saveMenu.setOnClickListener(view -> save());
         searchMenu.setOnClickListener(view -> search());
+        deleteMenu.setOnClickListener(view -> showDeleteCheckBox());
     }
 
     @OnClick(R.id.create_incident)
@@ -259,25 +272,35 @@ public abstract class BaseActivity extends MvpActivity<BaseView, BasePresenter> 
         hideAllToolbarIcons();
 
         if (feature.isListMode()) {
+            toolbarMainBtnContent.setVisibility(VISIBLE);
+            toolbarSelectAllBtnContent.setVisibility(GONE);
+            deleteMenu.setVisibility(VISIBLE);
             showHideMenu.setVisibility(GONE);
-            searchMenu.setVisibility(View.VISIBLE);
+            searchMenu.setVisibility(VISIBLE);
             createIncidentBtn.setVisibility(GONE);
         } else if (feature.isEditMode()) {
-            saveMenu.setVisibility(View.VISIBLE);
+            toolbarMainBtnContent.setVisibility(VISIBLE);
+            toolbarSelectAllBtnContent.setVisibility(GONE);
+            saveMenu.setVisibility(VISIBLE);
         } else if (feature.isDetailMode()) {
+            toolbarMainBtnContent.setVisibility(VISIBLE);
+            toolbarSelectAllBtnContent.setVisibility(GONE);
             enableCreateIncidentBtn();
+        } else if (feature.isDeleteMode()) {
+            toolbarMainBtnContent.setVisibility(GONE);
+            toolbarSelectAllBtnContent.setVisibility(VISIBLE);
         }
     }
 
     private void enableCreateIncidentBtn() {
         if (GBV == PrimeroAppConfiguration.getCurrentUser().getRoleType() &&
                 this instanceof CaseActivity) {
-            createIncidentBtn.setVisibility(View.VISIBLE);
+            createIncidentBtn.setVisibility(VISIBLE);
         }
     }
 
     public void enableShowHideSwitcher() {
-        showHideMenu.setVisibility(View.VISIBLE);
+        showHideMenu.setVisibility(VISIBLE);
     }
 
     public void setShowHideSwitcherToShowState() {
@@ -290,6 +313,8 @@ public abstract class BaseActivity extends MvpActivity<BaseView, BasePresenter> 
         searchMenu.setVisibility(GONE);
         saveMenu.setVisibility(GONE);
         createIncidentBtn.setVisibility(GONE);
+        toolbarSelectAllBtnContent.setVisibility(GONE);
+        deleteMenu.setVisibility(GONE);
     }
 
     protected void setNavSelectedMenu(int resId, ColorStateList color) {
@@ -313,6 +338,10 @@ public abstract class BaseActivity extends MvpActivity<BaseView, BasePresenter> 
     protected abstract void save();
 
     protected abstract void showHideDetail();
+
+    protected abstract void showDeleteCheckBox();
+
+    public abstract Feature getCurrentFeature();
 
     public enum DetailState {
         VISIBILITY(R.drawable.ic_visibility_white_24dp, true),
@@ -339,39 +368,4 @@ public abstract class BaseActivity extends MvpActivity<BaseView, BasePresenter> 
         }
     }
 
-    @Override
-    protected void onPause() {
-        super.onPause();
-        Log.e(TAG, "onPause: ");
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        Log.e(TAG, "onResume: ");
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        Log.e(TAG, "onStart: ");
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        Log.e(TAG, "onStop: ");
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        Log.e(TAG, "onDestroy: ");
-    }
-
-    @Override
-    protected void onRestart() {
-        super.onRestart();
-        Log.e(TAG, "onRestart: ");
-    }
 }

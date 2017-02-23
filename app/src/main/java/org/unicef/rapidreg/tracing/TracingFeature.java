@@ -18,6 +18,7 @@ public enum TracingFeature implements Feature {
     EDIT_FULL(R.string.edit, TracingRegisterWrapperFragment.class),
     DETAILS_MINI(R.string.tracing_details, TracingMiniFormFragment.class),
     DETAILS_FULL(R.string.tracing_details, TracingRegisterWrapperFragment.class),
+    DELETE(R.string.delete, TracingListFragment.class),
     SEARCH(R.string.search, TracingSearchFragment.class);
 
     private int titleId;
@@ -57,6 +58,11 @@ public enum TracingFeature implements Feature {
     @Override
     public boolean isAddMode() {
         return this == ADD_MINI || this == ADD_FULL;
+    }
+
+    @Override
+    public boolean isDeleteMode() {
+        return this == DELETE;
     }
 
 
