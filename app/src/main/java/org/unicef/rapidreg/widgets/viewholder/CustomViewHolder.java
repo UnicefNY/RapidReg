@@ -11,6 +11,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import org.greenrobot.eventbus.EventBus;
+import org.unicef.rapidreg.PrimeroAppConfiguration;
 import org.unicef.rapidreg.R;
 import org.unicef.rapidreg.event.Event;
 import org.unicef.rapidreg.forms.Field;
@@ -55,7 +56,7 @@ public class CustomViewHolder extends BaseViewHolder<Field> {
         setEditableBackgroundStyle(isEditable(field));
 
         fieldName = field.getName();
-        customFormTitle.setText(field.getDisplayName().get(Locale.getDefault().getLanguage()));
+        customFormTitle.setText(field.getDisplayName().get(PrimeroAppConfiguration.getDefaultLanguage()));
 
         restoreItemList(true);
     }

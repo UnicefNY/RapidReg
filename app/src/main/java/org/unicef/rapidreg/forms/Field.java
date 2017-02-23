@@ -5,6 +5,7 @@ import android.text.TextUtils;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import org.unicef.rapidreg.PrimeroAppConfiguration;
 import org.unicef.rapidreg.widgets.dialog.BaseDialog;
 import org.unicef.rapidreg.widgets.dialog.DateDialog;
 import org.unicef.rapidreg.widgets.dialog.MultipleSelectDialog;
@@ -251,7 +252,7 @@ public class Field {
     }
 
     public List<String> getSelectOptions() {
-        String language = Locale.getDefault().getLanguage();
+        String language = PrimeroAppConfiguration.getDefaultLanguage();
 
         List<String> items = new ArrayList<>();
         if (getType().equals(Field.TYPE_MULTI_SELECT_BOX)) {

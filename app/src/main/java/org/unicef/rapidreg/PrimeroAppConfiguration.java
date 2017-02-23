@@ -61,7 +61,7 @@ public class PrimeroAppConfiguration {
     }
 
     public static String getDefaultLanguage() {
-        return Locale.getDefault().getLanguage();
+        return "en";
     }
 
     public static String getAndroidId() {

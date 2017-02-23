@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.ViewSwitcher;
 
+import org.unicef.rapidreg.PrimeroAppConfiguration;
 import org.unicef.rapidreg.R;
 import org.unicef.rapidreg.base.BaseAlertDialog;
 import org.unicef.rapidreg.forms.Field;
@@ -75,7 +76,7 @@ public abstract class BaseDialog {
     }
 
     public static String[] getSelectOptions(String fieldType, Field field) {
-        String language = Locale.getDefault().getLanguage();
+        String language = PrimeroAppConfiguration.getDefaultLanguage();
         List<CharSequence> items = new ArrayList<>();
 
         List<Object> options = field.getOptionStringsText().get(language);

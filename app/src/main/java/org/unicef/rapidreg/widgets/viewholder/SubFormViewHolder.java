@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import org.unicef.rapidreg.PrimeroAppConfiguration;
 import org.unicef.rapidreg.R;
 import org.unicef.rapidreg.base.record.RecordActivity;
 import org.unicef.rapidreg.base.record.recordregister.RecordRegisterAdapter;
@@ -57,7 +58,7 @@ public class SubFormViewHolder extends BaseViewHolder<Field> {
     public void setValue(Field field) {
         fields = removeSeparatorFields(field.getSubForm().getFields());
         fieldParent = field.getName();
-        displayParent = field.getDisplayName().get(Locale.getDefault().getLanguage());
+        displayParent = field.getDisplayName().get(PrimeroAppConfiguration.getDefaultLanguage());
 
         attachParentToFields(fields, fieldParent);
         addSubFormBtn.setText(String.format("%s %s", context.getString(R.string.add), displayParent));

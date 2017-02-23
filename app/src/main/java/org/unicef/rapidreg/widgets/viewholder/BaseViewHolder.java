@@ -4,6 +4,7 @@ import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
+import org.unicef.rapidreg.PrimeroAppConfiguration;
 import org.unicef.rapidreg.R;
 import org.unicef.rapidreg.forms.Field;
 import org.unicef.rapidreg.service.cache.ItemValuesMap;
@@ -28,7 +29,7 @@ public abstract class BaseViewHolder<T> extends RecyclerView.ViewHolder {
     }
 
     protected String getLabel(Field field) {
-        return field.getDisplayName().get(Locale.getDefault().getLanguage());
+        return field.getDisplayName().get(PrimeroAppConfiguration.getDefaultLanguage());
     }
 
     public boolean isEditable(Field field) {

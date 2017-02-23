@@ -62,25 +62,22 @@ public class CaseListAdapter extends RecordListAdapter {
         }
         String age = itemValues.getAsString(RecordService.AGE);
         holder.setValues(gender, shortUUID, age, record);
-        holder.setViewOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Bundle args = new Bundle();
-                String moduleId = itemValues.getAsString(MODULE);
-                Feature feature = moduleId.equals(MODULE_CASE_CP) ? CaseFeature.DETAILS_CP_MINI :
-                        CaseFeature.DETAILS_GBV_MINI;
+        holder.setViewOnClickListener(v -> {
+            Bundle args = new Bundle();
+            String moduleId = itemValues.getAsString(MODULE);
+            Feature feature = moduleId.equals(MODULE_CASE_CP) ? CaseFeature.DETAILS_CP_MINI :
+                    CaseFeature.DETAILS_GBV_MINI;
 
-                args.putString(MODULE, moduleId);
-                args.putLong(CaseService.CASE_PRIMARY_ID, recordId);
-                ((RecordActivity) context).turnToFeature(feature, args, null);
-                try {
-                    Utils.clearAudioFile(AUDIO_FILE_PATH);
-                    if (record.getAudio() != null) {
-                        StreamUtil.writeFile(record.getAudio().getBlob(), RecordService
-                                .AUDIO_FILE_PATH);
-                    }
-                } catch (IOException e) {
+            args.putString(MODULE, moduleId);
+            args.putLong(CaseService.CASE_PRIMARY_ID, recordId);
+            ((RecordActivity) context).turnToFeature(feature, args, null);
+            try {
+                Utils.clearAudioFile(AUDIO_FILE_PATH);
+                if (record.getAudio() != null) {
+                    StreamUtil.writeFile(record.getAudio().getBlob(), RecordService
+                            .AUDIO_FILE_PATH);
                 }
+            } catch (IOException e) {
             }
         });
         toggleTextArea(holder);
