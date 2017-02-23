@@ -41,37 +41,76 @@
                 android:textSize="@dimen/text_size_18"
                 android:textStyle="bold" />
 
-            <ImageButton
-                android:id="@+id/toggle"
+            <LinearLayout
+                android:id="@+id/toolbar_main_button_content"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="@dimen/size_10"
-                android:background="@drawable/ic_visibility_white_24dp" />
+                android:gravity="center_vertical">
 
-            <TextView
-                android:id="@+id/save"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="@dimen/size_10"
-                android:clickable="true"
-                android:text="SAVE"
-                android:textColor="@android:color/white"
-                android:textSize="@dimen/text_size_14"
-                android:textStyle="bold" />
+                <ImageButton
+                    android:id="@+id/delete_item"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="@dimen/size_10"
+                    android:background="@drawable/ic_delete_white_24dp" />
 
-            <ImageButton
-                android:id="@+id/create_incident"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="@dimen/size_10"
-                android:visibility="gone"
-                android:background="@drawable/ic_add_incident_icon_white_24dp" />
+                <ImageButton
+                    android:id="@+id/toggle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="@dimen/size_10"
+                    android:background="@drawable/ic_visibility_white_24dp" />
 
-            <ImageButton
-                android:id="@+id/search"
+                <TextView
+                    android:id="@+id/save"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="@dimen/size_10"
+                    android:clickable="true"
+                    android:text="@string/toolbar_save_button_text"
+                    android:textColor="@android:color/white"
+                    android:textSize="@dimen/text_size_14"
+                    android:textStyle="bold" />
+
+                <ImageButton
+                    android:id="@+id/create_incident"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="@dimen/size_10"
+                    android:background="@drawable/ic_add_incident_icon_white_24dp"
+                    android:visibility="gone" />
+
+                <ImageButton
+                    android:id="@+id/search"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/ic_search_white_24dp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/toolbar_select_all_button_content"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@drawable/ic_search_white_24dp" />
+                android:gravity="center"
+                android:visibility="gone">
+
+                <ImageButton
+                    android:id="@+id/select_all_image_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="@dimen/size_10"
+                    android:background="@drawable/ic_check_box_outline_blank_white_24dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/toolbar_select_all_button_text"
+                    android:textColor="@android:color/white"
+                    android:textSize="@dimen/text_size_14"
+                    android:textStyle="bold" />
+
+            </LinearLayout>
 
         </LinearLayout>
 

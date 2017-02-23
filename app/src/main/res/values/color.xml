@@ -39,6 +39,7 @@
     <color name="fuchsia">#ff00ff</color>
     <color name="magenta">#ff00ff</color>
     <color name="red">#ff0000</color>
+    <color name="red_a200">#ff5252</color>
     <color name="oldlace">#fdf5e6</color>
     <color name="lightgoldenrodyellow">#fafad2</color>
     <color name="linen">#faf0e6</color>

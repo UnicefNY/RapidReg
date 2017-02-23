@@ -48,4 +48,16 @@
         app:layout_anchor="@id/container"
         app:layout_anchorGravity="bottom|right|end" />
 
+    <LinearLayout
+        android:id="@+id/list_delete_button_content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_anchor="@id/container"
+        app:layout_anchorGravity="bottom">
+
+        <include layout="@layout/list_delete_item_button" />
+
+    </LinearLayout>
+
 </android.support.design.widget.CoordinatorLayout>

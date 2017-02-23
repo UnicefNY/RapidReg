@@ -45,6 +45,11 @@
     <string name="date">Date</string>
     <string name="location">Location</string>
 
+    <!-- Toolbar Start-->
+    <string name="toolbar_save_button_text">SAVE</string>
+    <string name="toolbar_select_all_button_text">SELECT ALL</string>
+    <!-- Toolbar End-->
+
     <!-- Title -->
     <string name="search">Search</string>
     <string name="cases">Cases</string>
@@ -163,4 +168,9 @@
     <string name="date_hint">Select Date</string>
     <string name="date_from_hint">From</string>
     <string name="date_to_hint">To</string>
+
+    <!--List start-->
+    <string name="list_item_delete_button_text">DELETE</string>
+    <string name="list_item_delete_cancel_button_text">CANCEL</string>
+
 </resources>

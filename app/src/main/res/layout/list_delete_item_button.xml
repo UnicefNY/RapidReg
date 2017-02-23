@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">
+
+    <Button
+        android:id="@+id/list_item_delete_button"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:background="@color/red_a200"
+        android:padding="@dimen/list_item_delete_button_padding"
+        android:text="@string/list_item_delete_button_text"
+        android:textColor="@color/white"
+        android:textSize="@dimen/list_item_delete_button_text_size" />
+
+    <Button
+        android:id="@+id/list_item_delete_cancel_button"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:background="@color/darker_gray"
+        android:padding="@dimen/list_item_delete_button_padding"
+        android:text="@string/list_item_delete_cancel_button_text"
+        android:textColor="@color/white"
+        android:textSize="@dimen/list_item_delete_button_text_size" />
+
+</LinearLayout>

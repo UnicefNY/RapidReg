@@ -6,6 +6,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:gravity="center_vertical"
         android:orientation="horizontal">
 
         <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -17,14 +18,33 @@
 
         <ViewSwitcher
             android:id="@+id/view_switcher"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
+            android:layout_weight="9"
             android:padding="@dimen/text_area_padding">
 
             <include layout="@layout/case_list_text_area_normal_state" />
 
             <include layout="@layout/case_list_text_area_hidden_state" />
         </ViewSwitcher>
+
+        <LinearLayout
+            android:id="@+id/item_delete_checkbox_content"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginRight="@dimen/size_5"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:visibility="gone">
+
+            <CheckBox
+                android:id="@+id/item_delete_checkbox"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:scaleX="@dimen/button_icon_scale"
+                android:scaleY="@dimen/button_icon_scale" />
+
+        </LinearLayout>
     </LinearLayout>
 
     <include layout="@layout/list_item_border" />

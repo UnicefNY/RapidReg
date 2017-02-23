@@ -148,4 +148,8 @@
     <dimen name="progress_dialog_padding">@dimen/size_10</dimen>
     <dimen name="progress_dialog_message_marging">@dimen/size_5</dimen>
     <!--progress dialog end-->
+
+    <!--lsit delete start-->
+    <dimen name="list_item_delete_button_text_size">@dimen/text_size_14</dimen>
+    <dimen name="list_item_delete_button_padding">@dimen/size_10</dimen>
 </resources>
