@@ -24,6 +24,7 @@ import org.unicef.rapidreg.utils.StreamUtil;
 import org.unicef.rapidreg.utils.Utils;
 
 import java.io.IOException;
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -82,6 +83,15 @@ public class CaseListAdapter extends RecordListAdapter {
             }
         });
         toggleTextArea(holder);
-        showItemDeleteCheckBox(holder);
+        toggleDeleteArea(holder, record.isSynced());
+    }
+
+    @Override
+    public void removeRecords() {
+        List<Long> recordIds = getRecordWillBeDeletedList();
+        for (Long recordId : recordIds) {
+            caseService.deleteByRecordId(recordId);
+        }
+        super.removeRecords();
     }
 }

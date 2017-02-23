@@ -57,6 +57,7 @@ public abstract class RecordActivity extends BaseActivity {
         getComponent().inject(this);
         super.onCreate(savedInstanceState);
         subscriptions = new CompositeSubscription();
+        deleteMenu.setOnClickListener(view -> showDeleteMode());
     }
 
     @Override

@@ -172,5 +172,7 @@
     <!--List start-->
     <string name="list_item_delete_button_text">DELETE</string>
     <string name="list_item_delete_cancel_button_text">CANCEL</string>
+    <string name="delete_title">Delete Confirmation</string>
+    <string name="delete_confirm_message">Are you sure to delete records?</string>
 
 </resources>

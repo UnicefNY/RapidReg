@@ -21,6 +21,7 @@ import org.unicef.rapidreg.utils.StreamUtil;
 import org.unicef.rapidreg.utils.Utils;
 
 import java.io.IOException;
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -69,7 +70,6 @@ public class IncidentListAdapter extends RecordListAdapter {
         });
         holder.disableRecordGenderView();
         toggleTextArea(holder);
-        showItemDeleteCheckBox(holder);
     }
 
 

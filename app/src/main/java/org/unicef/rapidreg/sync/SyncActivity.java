@@ -64,11 +64,6 @@ public class SyncActivity extends BaseActivity {
     }
 
     @Override
-    protected void showDeleteCheckBox() {
-
-    }
-
-    @Override
     public Feature getCurrentFeature() {
         return null;
     }

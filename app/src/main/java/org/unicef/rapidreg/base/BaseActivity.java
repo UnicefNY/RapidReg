@@ -255,7 +255,6 @@ public abstract class BaseActivity extends MvpActivity<BaseView, BasePresenter> 
         showHideMenu.setOnClickListener(view -> showHideDetail());
         saveMenu.setOnClickListener(view -> save());
         searchMenu.setOnClickListener(view -> search());
-        deleteMenu.setOnClickListener(view -> showDeleteCheckBox());
     }
 
     @OnClick(R.id.create_incident)
@@ -338,8 +337,6 @@ public abstract class BaseActivity extends MvpActivity<BaseView, BasePresenter> 
     protected abstract void save();
 
     protected abstract void showHideDetail();
-
-    protected abstract void showDeleteCheckBox();
 
     public abstract Feature getCurrentFeature();
 

@@ -72,6 +72,5 @@ public class TracingListAdapter extends RecordListAdapter {
             }
         });
         toggleTextArea(holder);
-        showItemDeleteCheckBox(holder);
     }
 }

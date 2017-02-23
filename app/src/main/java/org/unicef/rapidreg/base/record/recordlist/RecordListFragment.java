@@ -33,6 +33,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public abstract class RecordListFragment extends MvpFragment<RecordListView, RecordListPresenter>
         implements RecordListView {
@@ -85,7 +86,6 @@ public abstract class RecordListFragment extends MvpFragment<RecordListView, Rec
         recordListAdapter = createRecordListAdapter();
         initListContainer(recordListAdapter);
         initOrderSpinner(recordListAdapter);
-        initDeletButtonContent();
     }
 
     protected FragmentComponent getComponent() {
@@ -99,8 +99,15 @@ public abstract class RecordListFragment extends MvpFragment<RecordListView, Rec
         recordListAdapter.toggleViews(isShow);
     }
 
-    public void deleteItemMode(boolean isShowItemDeleteCheckBox) {
-        recordListAdapter.itemDeleteCheckBox(isShowItemDeleteCheckBox);
+    public void toggleDeleteMode(boolean isDeleteMode) {
+        if (isDeleteMode) {
+            listDeleteBtnContent.setVisibility(View.VISIBLE);
+            addButton.setVisibility(View.GONE);
+        } else {
+            listDeleteBtnContent.setVisibility(View.GONE);
+            addButton.setVisibility(View.VISIBLE);
+        }
+        recordListAdapter.toggleDeleteViews(isDeleteMode);
     }
 
     public void showSyncFormDialog(String message) {
@@ -108,24 +115,14 @@ public abstract class RecordListFragment extends MvpFragment<RecordListView, Rec
         messageDialog.setTitle(R.string.sync_forms);
         messageDialog.setMessage(String.format("%s %s", message, getResources().getString(R.string
                 .sync_forms_message)));
-        messageDialog.setPositiveButton(R.string.ok, new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ((RecordActivity) getActivity()).sendSyncFormEvent();
-                messageDialog.dismiss();
-            }
+        messageDialog.setPositiveButton(R.string.ok, v -> {
+            ((RecordActivity) getActivity()).sendSyncFormEvent();
+            messageDialog.dismiss();
         });
-        messageDialog.setNegativeButton(R.string.cancel, new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                messageDialog.dismiss();
-            }
+        messageDialog.setNegativeButton(R.string.cancel, v -> {
+            messageDialog.dismiss();
         });
         messageDialog.show();
-    }
-
-    public void toggleDeleteMode(boolean isDeleteMode) {
-        recordListAdapter.toggleDeleteViews(isDeleteMode);
     }
 
     private void initListContainer(final RecordListAdapter adapter) {
@@ -134,9 +131,6 @@ public abstract class RecordListFragment extends MvpFragment<RecordListView, Rec
         listContainer.setLayoutManager(layoutManager);
         listContainer.setAdapter(adapter);
         viewSwitcher.setDisplayedChild(presenter.calculateDisplayedIndex());
-
-        Feature currentFeature = ((RecordActivity) getActivity()).getCurrentFeature();
-        deleteItemMode(currentFeature.isDeleteMode());
     }
 
     private void initOrderSpinner(final RecordListAdapter adapter) {
@@ -163,15 +157,26 @@ public abstract class RecordListFragment extends MvpFragment<RecordListView, Rec
         });
     }
 
-    private void initDeletButtonContent() {
-        Feature currentFeature = ((BaseActivity) getActivity()).getCurrentFeature();
-        if (currentFeature.isDeleteMode()) {
-            listDeleteBtnContent.setVisibility(View.VISIBLE);
-            addButton.setVisibility(View.GONE);
-        } else {
-            listDeleteBtnContent.setVisibility(View.GONE);
-            addButton.setVisibility(View.VISIBLE);
-        }
+    @OnClick(R.id.list_item_delete_button)
+    public void onItemDeleteButtonClick() {
+        MessageDialog messageDialog = new MessageDialog(getActivity());
+        messageDialog.setTitle(R.string.delete_title);
+        messageDialog.setMessage(getResources().getString(R.string.delete_confirm_message));
+        messageDialog.setPositiveButton(R.string.ok, v -> {
+            recordListAdapter.removeRecords();
+            messageDialog.dismiss();
+            toggleDeleteMode(false);
+        });
+        messageDialog.setNegativeButton(R.string.cancel, v -> {
+            messageDialog.dismiss();
+            toggleDeleteMode(false);
+        });
+        messageDialog.show();
+    }
+
+    @OnClick(R.id.list_item_delete_cancel_button)
+    public void onItemDeleteCancelButtonClick() {
+        toggleDeleteMode(false);
     }
 
     protected abstract RecordListAdapter createRecordListAdapter();

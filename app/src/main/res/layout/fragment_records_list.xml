@@ -55,9 +55,7 @@
         android:visibility="gone"
         app:layout_anchor="@id/container"
         app:layout_anchorGravity="bottom">
-
         <include layout="@layout/list_delete_item_button" />
-
     </LinearLayout>
 
 </android.support.design.widget.CoordinatorLayout>

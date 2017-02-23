@@ -159,11 +159,6 @@ public class IncidentActivity extends RecordActivity implements BaseView {
     }
 
     @Override
-    protected void showDeleteCheckBox() {
-        turnToFeature(IncidentFeature.DELETE, null, null);
-    }
-
-    @Override
     protected void onDestroy() {
         super.onDestroy();
     }
