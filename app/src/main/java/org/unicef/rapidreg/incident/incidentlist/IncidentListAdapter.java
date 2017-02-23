@@ -70,7 +70,15 @@ public class IncidentListAdapter extends RecordListAdapter {
         });
         holder.disableRecordGenderView();
         toggleTextArea(holder);
+        toggleDeleteArea(holder, record.isSynced());
     }
 
-
+    @Override
+    public void removeRecords() {
+        List<Long> recordIds = getRecordWillBeDeletedList();
+        for (Long recordId : recordIds) {
+            incidentService.deleteByRecordId(recordId);
+        }
+        super.removeRecords();
+    }
 }
