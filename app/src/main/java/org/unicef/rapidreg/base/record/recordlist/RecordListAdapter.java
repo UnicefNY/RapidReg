@@ -221,7 +221,7 @@ public abstract class RecordListAdapter extends RecyclerView.Adapter<RecordListA
             deleteStateCheckBox.setChecked(false);
             deleteStateCheckBox.setVisibility(View.VISIBLE);
 
-            itemView.setOnClickListener(null);
+            itemView.setOnClickListener(view -> deleteStateCheckBox.toggle());
             itemView.setEnabled(isDeletable);
             itemView.setBackgroundColor(isDeletable ? Color.WHITE : Color.LTGRAY);
         }
