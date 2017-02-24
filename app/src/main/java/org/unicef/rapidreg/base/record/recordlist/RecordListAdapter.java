@@ -54,11 +54,13 @@ public abstract class RecordListAdapter extends RecyclerView.Adapter<RecordListA
     }
 
     public void removeRecords() {
+        retainedPosition = caculateRetainedPosition();
         for (Long recordId : recordWillBeDeletedList) {
+            int position = recordList.indexOf(recordId);
             recordList.remove(recordId);
+            notifyItemRemoved(position);
         }
         recordWillBeDeletedList.clear();
-        notifyDataSetChanged();
     }
 
     public List<Long> getRecordWillBeDeletedList() {
@@ -122,6 +124,28 @@ public abstract class RecordListAdapter extends RecyclerView.Adapter<RecordListA
         return true;
     }
 
+    public int caculateRetainedPosition() {
+        if (recordWillBeDeletedList.isEmpty()) {
+            return retainedPosition;
+        }
+        retainedPosition = recordList.indexOf(recordWillBeDeletedList.get(0));
+        for (Long recordId : recordWillBeDeletedList) {
+            int position = recordList.indexOf(recordId);
+            if (retainedPosition > position) {
+                retainedPosition = position;
+            }
+        }
+        return retainedPosition;
+    }
+
+    public void setRetainedPosition(int retainedPosition) {
+        this.retainedPosition = retainedPosition;
+    }
+
+    public int getRetainedPosition() {
+        return retainedPosition;
+    }
+
     public class RecordListViewHolder extends RecyclerView.ViewHolder {
 
         @BindView(R.id.id_normal_state)
@@ -164,7 +188,6 @@ public abstract class RecordListAdapter extends RecyclerView.Adapter<RecordListA
                               String ageContent,
                               RecordModel record) {
             int position = getAdapterPosition();
-            Log.d(TAG, "Current Position: " + position);
             deleteStateCheckBox.setTag(recordList.get(position));
             Glide
                     .with(image.getContext())
@@ -188,7 +211,6 @@ public abstract class RecordListAdapter extends RecyclerView.Adapter<RecordListA
 
             deleteStateCheckBox.setOnClickListener(view -> {
                 if (deleteStateCheckBox.isChecked()) {
-                    Log.d(TAG, "Selected Position: " + position);
                     recordWillBeDeletedList.add(recordList.get(position));
                 } else {
                     Long recordId = recordList.get(position);

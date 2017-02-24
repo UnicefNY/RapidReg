@@ -81,9 +81,4 @@ public class TracingListFragment extends RecordListFragment {
         TracingActivity activity = (TracingActivity) getActivity();
         activity.turnToFeature(TracingFeature.ADD_MINI, null, null);
     }
-
-    @OnClick(R.id.list_item_delete_cancel_button)
-    public void onListItemDeleteCancelButtonClicked(Button button) {
-        ((RecordActivity) getActivity()).turnToFeature(TracingFeature.LIST, null, null);
-    }
 }

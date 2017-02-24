@@ -42,7 +42,7 @@ public abstract class RecordListFragment extends MvpFragment<RecordListView, Rec
 
     public static final int HAVE_RESULT_LIST = 0;
     public static final int HAVE_NO_RESULT = 1;
-    public static final int ANIMATION_DURATION = 1000;
+    public static final int ANIMATION_DURATION = 2000;
 
     @BindView(R.id.list_container)
     protected RecyclerView listContainer;
@@ -73,7 +73,8 @@ public abstract class RecordListFragment extends MvpFragment<RecordListView, Rec
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable final ViewGroup container,
+    public View onCreateView(LayoutInflater inflater,
+                             @Nullable final ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_records_list, container, false);
     }
@@ -135,8 +136,8 @@ public abstract class RecordListFragment extends MvpFragment<RecordListView, Rec
         DefaultItemAnimator itemAnimator = new DefaultItemAnimator();
         itemAnimator.setAddDuration(ANIMATION_DURATION);
         itemAnimator.setRemoveDuration(ANIMATION_DURATION);
-        listContainer.setItemAnimator(itemAnimator);
         listContainer.setLayoutManager(layoutManager);
+        listContainer.setItemAnimator(itemAnimator);
         listContainer.setAdapter(adapter);
         viewSwitcher.setDisplayedChild(presenter.calculateDisplayedIndex());
     }
@@ -171,19 +172,25 @@ public abstract class RecordListFragment extends MvpFragment<RecordListView, Rec
         messageDialog.setTitle(R.string.delete_title);
         messageDialog.setMessage(getResources().getString(R.string.delete_confirm_message));
         messageDialog.setPositiveButton(R.string.ok, v -> {
+            listContainer.scrollToPosition(recordListAdapter.caculateRetainedPosition());
             recordListAdapter.removeRecords();
-            messageDialog.dismiss();
             toggleDeleteMode(false);
+            messageDialog.dismiss();
+            Toast.makeText(getActivity(), R.string.delete_success_info, Toast.LENGTH_SHORT).show();
         });
         messageDialog.setNegativeButton(R.string.cancel, v -> {
-            messageDialog.dismiss();
+            int retainedPosition = layoutManager.findFirstVisibleItemPosition();
             toggleDeleteMode(false);
+            listContainer.scrollToPosition(retainedPosition);
+            messageDialog.dismiss();
         });
         messageDialog.show();
     }
 
     @OnClick(R.id.list_item_delete_cancel_button)
     public void onItemDeleteCancelButtonClick() {
+        int retainedPosition = layoutManager.findFirstVisibleItemPosition();
+        listContainer.scrollToPosition(retainedPosition);
         toggleDeleteMode(false);
     }
 

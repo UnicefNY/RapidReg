@@ -110,11 +110,6 @@ public class CaseListFragment extends RecordListFragment {
         activity.turnToFeature(CaseFeature.ADD_GBV_MINI, bundle, null);
     }
 
-    @OnClick(R.id.list_item_delete_cancel_button)
-    public void onListItemDeleteCancelButtonClicked(Button button) {
-        ((RecordActivity) getActivity()).turnToFeature(CaseFeature.LIST, null, null);
-    }
-
     public void enableShowHideSwitcherForCPUser() {
         User.Role role = PrimeroAppConfiguration.getCurrentUser().getRoleType();
         if (User.Role.CP == role) {
