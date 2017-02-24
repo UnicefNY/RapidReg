@@ -43,6 +43,7 @@ public abstract class RecordListAdapter extends RecyclerView.Adapter<RecordListA
     protected List<Long> recordWillBeDeletedList = new ArrayList<>();
     protected boolean isDetailShow = true;
     protected boolean isDeleteMode = false;
+    protected int retainedPosition = 0;
 
     public RecordListAdapter(Context context) {
         this.context = context;
@@ -83,7 +84,6 @@ public abstract class RecordListAdapter extends RecyclerView.Adapter<RecordListA
     }
 
     public void toggleDeleteViews(boolean isDeleteMode) {
-        recordWillBeDeletedList.clear();
         this.isDeleteMode = isDeleteMode;
         notifyDataSetChanged();
     }
@@ -163,6 +163,9 @@ public abstract class RecordListAdapter extends RecyclerView.Adapter<RecordListA
                               String shortUUID,
                               String ageContent,
                               RecordModel record) {
+            int position = getAdapterPosition();
+            Log.d(TAG, "Current Position: " + position);
+            deleteStateCheckBox.setTag(recordList.get(position));
             Glide
                     .with(image.getContext())
                     .load(record)
@@ -181,12 +184,14 @@ public abstract class RecordListAdapter extends RecyclerView.Adapter<RecordListA
             Date registrationDateText = record.getRegistrationDate();
             registrationDate.setText(isValidDate(registrationDateText) ? dateFormat.format(registrationDateText) : "---");
 
-            deleteStateCheckBox.setChecked(false);
-            deleteStateCheckBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
-                if (isChecked) {
-                    recordWillBeDeletedList.add(recordList.get(getAdapterPosition()));
+            deleteStateCheckBox.setChecked(recordWillBeDeletedList.contains(deleteStateCheckBox.getTag()));
+
+            deleteStateCheckBox.setOnClickListener(view -> {
+                if (deleteStateCheckBox.isChecked()) {
+                    Log.d(TAG, "Selected Position: " + position);
+                    recordWillBeDeletedList.add(recordList.get(position));
                 } else {
-                    Long recordId = recordList.get(getAdapterPosition());
+                    Long recordId = recordList.get(position);
                     if (recordWillBeDeletedList.contains(recordId)) {
                         recordWillBeDeletedList.remove(recordId);
                     }
@@ -216,9 +221,6 @@ public abstract class RecordListAdapter extends RecyclerView.Adapter<RecordListA
         }
 
         public void toggleDeleteView(boolean isDeletable) {
-            recordWillBeDeletedList.clear();
-
-            deleteStateCheckBox.setChecked(false);
             deleteStateCheckBox.setVisibility(View.VISIBLE);
 
             itemView.setOnClickListener(view -> deleteStateCheckBox.toggle());
@@ -227,6 +229,7 @@ public abstract class RecordListAdapter extends RecyclerView.Adapter<RecordListA
         }
 
         public void toggleNormalView() {
+            deleteStateCheckBox.setChecked(false);
             deleteStateCheckBox.setVisibility(View.GONE);
 
             itemView.setEnabled(true);

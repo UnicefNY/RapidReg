@@ -3,6 +3,7 @@ package org.unicef.rapidreg.base.record.recordlist;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -12,6 +13,7 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
+import android.widget.Toast;
 import android.widget.ViewSwitcher;
 
 import com.hannesdorfmann.mosby.mvp.MvpFragment;
@@ -40,6 +42,7 @@ public abstract class RecordListFragment extends MvpFragment<RecordListView, Rec
 
     public static final int HAVE_RESULT_LIST = 0;
     public static final int HAVE_NO_RESULT = 1;
+    public static final int ANIMATION_DURATION = 1000;
 
     @BindView(R.id.list_container)
     protected RecyclerView listContainer;
@@ -66,6 +69,7 @@ public abstract class RecordListFragment extends MvpFragment<RecordListView, Rec
     Button listItemDeleteCancelBtn;
 
     protected RecordListAdapter recordListAdapter;
+    protected LinearLayoutManager layoutManager;
 
     @Nullable
     @Override
@@ -126,8 +130,12 @@ public abstract class RecordListFragment extends MvpFragment<RecordListView, Rec
     }
 
     private void initListContainer(final RecordListAdapter adapter) {
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
+        layoutManager = new LinearLayoutManager(getActivity());
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        DefaultItemAnimator itemAnimator = new DefaultItemAnimator();
+        itemAnimator.setAddDuration(ANIMATION_DURATION);
+        itemAnimator.setRemoveDuration(ANIMATION_DURATION);
+        listContainer.setItemAnimator(itemAnimator);
         listContainer.setLayoutManager(layoutManager);
         listContainer.setAdapter(adapter);
         viewSwitcher.setDisplayedChild(presenter.calculateDisplayedIndex());
