@@ -175,9 +175,11 @@ public abstract class RecordListFragment extends MvpFragment<RecordListView, Rec
         messageDialog.setTitle(R.string.delete_title);
         messageDialog.setMessage(getResources().getString(R.string.delete_confirm_message));
         messageDialog.setPositiveButton(R.string.yes, view -> {
-            listContainer.scrollToPosition(recordListAdapter.caculateRetainedPosition());
+            int retainedPosition = recordListAdapter.caculateRetainedPosition();
             recordListAdapter.removeRecords();
+            recordListAdapter.notifyDataSetChanged();
             toggleDeleteMode(false);
+            listContainer.scrollToPosition(retainedPosition);
             messageDialog.dismiss();
             Toast.makeText(getActivity(), R.string.delete_success_info, Toast.LENGTH_SHORT).show();
         });
@@ -187,9 +189,9 @@ public abstract class RecordListFragment extends MvpFragment<RecordListView, Rec
 
     @OnClick(R.id.list_item_delete_cancel_button)
     public void onItemDeleteCancelButtonClick() {
+        toggleDeleteMode(false);
         int retainedPosition = layoutManager.findFirstVisibleItemPosition();
         listContainer.scrollToPosition(retainedPosition);
-        toggleDeleteMode(false);
     }
 
     @Override

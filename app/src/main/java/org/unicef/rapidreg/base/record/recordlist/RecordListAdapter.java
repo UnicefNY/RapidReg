@@ -45,7 +45,6 @@ public abstract class RecordListAdapter extends RecyclerView.Adapter<RecordListA
     protected List<Long> recordWillBeDeletedList = new ArrayList<>();
     protected boolean isDetailShow = true;
     protected boolean isDeleteMode = false;
-    protected int retainedPosition = 0;
     protected OnViewUpdateListener onViewUpdateListener;
 
     public RecordListAdapter(Context context) {
@@ -61,7 +60,6 @@ public abstract class RecordListAdapter extends RecyclerView.Adapter<RecordListA
     }
 
     public void removeRecords() {
-        retainedPosition = caculateRetainedPosition();
         for (Long recordId : recordWillBeDeletedList) {
             int position = recordList.indexOf(recordId);
             recordList.remove(recordId);
@@ -132,6 +130,7 @@ public abstract class RecordListAdapter extends RecyclerView.Adapter<RecordListA
     }
 
     public int caculateRetainedPosition() {
+        int retainedPosition = 0;
         if (recordWillBeDeletedList.isEmpty()) {
             return retainedPosition;
         }
@@ -142,15 +141,7 @@ public abstract class RecordListAdapter extends RecyclerView.Adapter<RecordListA
                 retainedPosition = position;
             }
         }
-        return retainedPosition;
-    }
-
-    public void setRetainedPosition(int retainedPosition) {
-        this.retainedPosition = retainedPosition;
-    }
-
-    public int getRetainedPosition() {
-        return retainedPosition;
+        return --retainedPosition;
     }
 
     public class RecordListViewHolder extends RecyclerView.ViewHolder {
