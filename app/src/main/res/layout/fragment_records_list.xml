@@ -22,7 +22,8 @@
         <ViewSwitcher
             android:id="@+id/list_result"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:layout_weight="1">
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/list_container"
@@ -37,6 +38,17 @@
                 android:textColor="@color/primero_font_dark"
                 android:textSize="@dimen/text_size_14" />
         </ViewSwitcher>
+
+        <LinearLayout
+            android:id="@+id/list_delete_button_content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone">
+
+            <include layout="@layout/list_delete_item_button" />
+
+        </LinearLayout>
+
     </LinearLayout>
 
     <android.support.design.widget.FloatingActionButton
@@ -48,14 +60,5 @@
         app:layout_anchor="@id/container"
         app:layout_anchorGravity="bottom|right|end" />
 
-    <LinearLayout
-        android:id="@+id/list_delete_button_content"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:visibility="gone"
-        app:layout_anchor="@id/container"
-        app:layout_anchorGravity="bottom">
-        <include layout="@layout/list_delete_item_button" />
-    </LinearLayout>
 
 </android.support.design.widget.CoordinatorLayout>
