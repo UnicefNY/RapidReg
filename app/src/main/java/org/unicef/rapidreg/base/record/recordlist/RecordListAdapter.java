@@ -44,9 +44,14 @@ public abstract class RecordListAdapter extends RecyclerView.Adapter<RecordListA
     protected boolean isDetailShow = true;
     protected boolean isDeleteMode = false;
     protected int retainedPosition = 0;
+    protected OnViewUpdateListener onViewUpdateListener;
 
     public RecordListAdapter(Context context) {
         this.context = context;
+    }
+
+    public void setOnViewUpdateListener(OnViewUpdateListener onViewUpdateListener) {
+        this.onViewUpdateListener = onViewUpdateListener;
     }
 
     public void setRecordList(List<Long> recordList) {
@@ -218,6 +223,9 @@ public abstract class RecordListAdapter extends RecyclerView.Adapter<RecordListA
                         recordWillBeDeletedList.remove(recordId);
                     }
                 }
+                if (onViewUpdateListener != null) {
+                    onViewUpdateListener.onRecordsDeletable(!recordWillBeDeletedList.isEmpty());
+                }
             });
         }
 
@@ -243,7 +251,11 @@ public abstract class RecordListAdapter extends RecyclerView.Adapter<RecordListA
         }
 
         public void toggleDeleteView(boolean isDeletable) {
+            if (onViewUpdateListener != null) {
+                onViewUpdateListener.onRecordsDeletable(!recordWillBeDeletedList.isEmpty());
+            }
             deleteStateCheckBox.setVisibility(View.VISIBLE);
+            deleteStateCheckBox.setEnabled(isDeletable);
 
             itemView.setOnClickListener(view -> deleteStateCheckBox.toggle());
             itemView.setEnabled(isDeletable);
@@ -259,5 +271,9 @@ public abstract class RecordListAdapter extends RecyclerView.Adapter<RecordListA
 
             recordWillBeDeletedList.clear();
         }
+    }
+
+    public interface OnViewUpdateListener {
+        void onRecordsDeletable(boolean isDeletable);
     }
 }

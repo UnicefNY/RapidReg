@@ -175,5 +175,7 @@
     <string name="delete_title">Delete Confirmation</string>
     <string name="delete_confirm_message">Are you sure to delete records?</string>
     <string name="delete_success_info">Records are deleted</string>
+    <string name="yes">YES</string>
+    <string name="no">NO</string>
 
 </resources>

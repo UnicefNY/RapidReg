@@ -1,5 +1,6 @@
 package org.unicef.rapidreg.base.record.recordlist;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
@@ -18,6 +19,9 @@ import android.widget.ViewSwitcher;
 
 import com.hannesdorfmann.mosby.mvp.MvpFragment;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 import org.unicef.rapidreg.PrimeroApplication;
 import org.unicef.rapidreg.R;
 import org.unicef.rapidreg.base.BaseActivity;
@@ -25,6 +29,7 @@ import org.unicef.rapidreg.base.Feature;
 import org.unicef.rapidreg.base.record.RecordActivity;
 import org.unicef.rapidreg.base.record.recordlist.spinner.SpinnerAdapter;
 import org.unicef.rapidreg.base.record.recordlist.spinner.SpinnerState;
+import org.unicef.rapidreg.event.RecordsUndeletableEvent;
 import org.unicef.rapidreg.injection.component.DaggerFragmentComponent;
 import org.unicef.rapidreg.injection.component.FragmentComponent;
 import org.unicef.rapidreg.injection.module.FragmentModule;
@@ -38,7 +43,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public abstract class RecordListFragment extends MvpFragment<RecordListView, RecordListPresenter>
-        implements RecordListView {
+        implements RecordListView, RecordListAdapter.OnViewUpdateListener {
 
     public static final int HAVE_RESULT_LIST = 0;
     public static final int HAVE_NO_RESULT = 1;
@@ -65,6 +70,9 @@ public abstract class RecordListFragment extends MvpFragment<RecordListView, Rec
     @BindView(R.id.list_item_delete_button)
     Button listItemDeleteBtn;
 
+    @BindView(R.id.list_item_delete_button_gray)
+    Button unclickbleListItemDeleteBtn;
+
     @BindView(R.id.list_item_delete_cancel_button)
     Button listItemDeleteCancelBtn;
 
@@ -89,6 +97,7 @@ public abstract class RecordListFragment extends MvpFragment<RecordListView, Rec
     @Override
     public void onInitViewContent() {
         recordListAdapter = createRecordListAdapter();
+        recordListAdapter.setOnViewUpdateListener(this);
         initListContainer(recordListAdapter);
         initOrderSpinner(recordListAdapter);
     }
@@ -171,17 +180,14 @@ public abstract class RecordListFragment extends MvpFragment<RecordListView, Rec
         MessageDialog messageDialog = new MessageDialog(getActivity());
         messageDialog.setTitle(R.string.delete_title);
         messageDialog.setMessage(getResources().getString(R.string.delete_confirm_message));
-        messageDialog.setPositiveButton(R.string.ok, v -> {
+        messageDialog.setPositiveButton(R.string.yes, v -> {
             listContainer.scrollToPosition(recordListAdapter.caculateRetainedPosition());
             recordListAdapter.removeRecords();
             toggleDeleteMode(false);
             messageDialog.dismiss();
             Toast.makeText(getActivity(), R.string.delete_success_info, Toast.LENGTH_SHORT).show();
         });
-        messageDialog.setNegativeButton(R.string.cancel, v -> {
-            int retainedPosition = layoutManager.findFirstVisibleItemPosition();
-            toggleDeleteMode(false);
-            listContainer.scrollToPosition(retainedPosition);
+        messageDialog.setNegativeButton(R.string.no, v -> {
             messageDialog.dismiss();
         });
         messageDialog.show();
@@ -192,6 +198,17 @@ public abstract class RecordListFragment extends MvpFragment<RecordListView, Rec
         int retainedPosition = layoutManager.findFirstVisibleItemPosition();
         listContainer.scrollToPosition(retainedPosition);
         toggleDeleteMode(false);
+    }
+
+    @Override
+    public void onRecordsDeletable(boolean isDeletable) {
+        if (isDeletable) {
+            listItemDeleteBtn.setVisibility(View.VISIBLE);
+            unclickbleListItemDeleteBtn.setVisibility(View.GONE);
+        } else {
+            unclickbleListItemDeleteBtn.setVisibility(View.VISIBLE);
+            listItemDeleteBtn.setVisibility(View.GONE);
+        }
     }
 
     protected abstract RecordListAdapter createRecordListAdapter();
