@@ -110,6 +110,11 @@ public abstract class RecordActivity extends BaseActivity {
         listFragment.toggleDeleteMode(true);
     }
 
+    public void showListMode() {
+        changeToolbarTitle(currentFeature.getTitleId());
+        changeToolbarIcon(currentFeature);
+    }
+
     public Feature getCurrentFeature() {
         return currentFeature;
     }

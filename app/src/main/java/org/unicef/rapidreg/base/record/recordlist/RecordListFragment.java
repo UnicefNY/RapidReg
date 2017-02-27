@@ -120,6 +120,7 @@ public abstract class RecordListFragment extends MvpFragment<RecordListView, Rec
         } else {
             listDeleteBtnContent.setVisibility(View.GONE);
             addButton.setVisibility(View.VISIBLE);
+            ((RecordActivity) getActivity()).showListMode();
         }
         recordListAdapter.toggleDeleteViews(isDeleteMode);
     }
