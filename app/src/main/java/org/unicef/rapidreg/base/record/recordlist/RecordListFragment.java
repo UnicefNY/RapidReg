@@ -177,7 +177,7 @@ public abstract class RecordListFragment extends MvpFragment<RecordListView, Rec
     public void enableShowHideSwitcherForCPUser() {
         User.Role role = PrimeroAppConfiguration.getCurrentUser().getRoleType();
         if (User.Role.CP == role) {
-            ((CaseActivity) getActivity()).enableShowHideSwitcher();
+            ((RecordActivity) getActivity()).enableShowHideSwitcher();
         }
     }
 
