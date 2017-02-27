@@ -141,19 +141,11 @@ public abstract class RecordActivity extends BaseActivity {
         messageDialog.setTitle(R.string.sync_forms);
         messageDialog.setMessage(String.format("%s %s", message, getResources().getString(R.string
                 .sync_forms_message)));
-        messageDialog.setPositiveButton(R.string.ok, new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                sendSyncFormEvent();
-                messageDialog.dismiss();
-            }
+        messageDialog.setPositiveButton(R.string.ok, view -> {
+            sendSyncFormEvent();
+            messageDialog.dismiss();
         });
-        messageDialog.setNegativeButton(R.string.cancel, new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                messageDialog.dismiss();
-            }
-        });
+        messageDialog.setNegativeButton(R.string.cancel, view -> messageDialog.dismiss());
         messageDialog.show();
     }
 
