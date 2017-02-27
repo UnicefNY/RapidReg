@@ -18,14 +18,17 @@ import android.widget.ViewSwitcher;
 
 import com.hannesdorfmann.mosby.mvp.MvpFragment;
 
+import org.unicef.rapidreg.PrimeroAppConfiguration;
 import org.unicef.rapidreg.PrimeroApplication;
 import org.unicef.rapidreg.R;
 import org.unicef.rapidreg.base.record.RecordActivity;
 import org.unicef.rapidreg.base.record.recordlist.spinner.SpinnerAdapter;
 import org.unicef.rapidreg.base.record.recordlist.spinner.SpinnerState;
+import org.unicef.rapidreg.childcase.CaseActivity;
 import org.unicef.rapidreg.injection.component.DaggerFragmentComponent;
 import org.unicef.rapidreg.injection.component.FragmentComponent;
 import org.unicef.rapidreg.injection.module.FragmentModule;
+import org.unicef.rapidreg.model.User;
 import org.unicef.rapidreg.widgets.dialog.MessageDialog;
 
 import java.util.Arrays;
@@ -93,6 +96,7 @@ public abstract class RecordListFragment extends MvpFragment<RecordListView, Rec
         recordListAdapter.setOnViewUpdateListener(this);
         initListContainer(recordListAdapter);
         initOrderSpinner(recordListAdapter);
+        enableShowHideSwitcherForCPUser();
     }
 
     protected FragmentComponent getComponent() {
@@ -114,6 +118,7 @@ public abstract class RecordListFragment extends MvpFragment<RecordListView, Rec
             listDeleteBtnContent.setVisibility(View.GONE);
             addButton.setVisibility(View.VISIBLE);
             ((RecordActivity) getActivity()).showListMode();
+            enableShowHideSwitcherForCPUser();
         }
         recordListAdapter.toggleDeleteViews(isDeleteMode);
     }
@@ -167,6 +172,13 @@ public abstract class RecordListFragment extends MvpFragment<RecordListView, Rec
 
             }
         });
+    }
+
+    public void enableShowHideSwitcherForCPUser() {
+        User.Role role = PrimeroAppConfiguration.getCurrentUser().getRoleType();
+        if (User.Role.CP == role) {
+            ((CaseActivity) getActivity()).enableShowHideSwitcher();
+        }
     }
 
     @OnClick(R.id.list_item_delete_button)

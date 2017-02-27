@@ -46,7 +46,6 @@ public class TracingListFragment extends RecordListFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         getComponent().inject(this);
-        ((TracingActivity)getActivity()).enableShowHideSwitcher();
         return super.onCreateView(inflater, container, savedInstanceState);
     }
 

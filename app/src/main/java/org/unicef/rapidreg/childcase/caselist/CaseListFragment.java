@@ -56,7 +56,6 @@ public class CaseListFragment extends RecordListFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         getComponent().inject(this);
-        enableShowHideSwitcherForCPUser();
         return super.onCreateView(inflater, container, savedInstanceState);
     }
 
@@ -108,13 +107,6 @@ public class CaseListFragment extends RecordListFragment {
         Bundle bundle = new Bundle();
         bundle.putString(MODULE, MODULE_CASE_GBV);
         activity.turnToFeature(CaseFeature.ADD_GBV_MINI, bundle, null);
-    }
-
-    public void enableShowHideSwitcherForCPUser() {
-        User.Role role = PrimeroAppConfiguration.getCurrentUser().getRoleType();
-        if (User.Role.CP == role) {
-            ((CaseActivity) getActivity()).enableShowHideSwitcher();
-        }
     }
 
     @OnClick(R.id.add)
