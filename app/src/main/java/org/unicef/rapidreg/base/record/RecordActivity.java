@@ -33,6 +33,8 @@ import javax.inject.Inject;
 
 import rx.subscriptions.CompositeSubscription;
 
+import static android.view.View.GONE;
+import static android.view.View.VISIBLE;
 import static org.unicef.rapidreg.service.RecordService.AUDIO_FILE_PATH;
 
 public abstract class RecordActivity extends BaseActivity {
@@ -101,6 +103,9 @@ public abstract class RecordActivity extends BaseActivity {
     }
 
     protected void showDeleteMode() {
+        changeToolbarTitle(R.string.delete);
+        toolbarMainBtnContent.setVisibility(GONE);
+        toolbarSelectAllBtnContent.setVisibility(VISIBLE);
         RecordListFragment listFragment = getRecordListFragment();
         listFragment.toggleDeleteMode(true);
     }

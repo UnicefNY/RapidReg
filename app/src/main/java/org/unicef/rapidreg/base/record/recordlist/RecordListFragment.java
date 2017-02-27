@@ -180,16 +180,14 @@ public abstract class RecordListFragment extends MvpFragment<RecordListView, Rec
         MessageDialog messageDialog = new MessageDialog(getActivity());
         messageDialog.setTitle(R.string.delete_title);
         messageDialog.setMessage(getResources().getString(R.string.delete_confirm_message));
-        messageDialog.setPositiveButton(R.string.yes, v -> {
+        messageDialog.setPositiveButton(R.string.yes, view -> {
             listContainer.scrollToPosition(recordListAdapter.caculateRetainedPosition());
             recordListAdapter.removeRecords();
             toggleDeleteMode(false);
             messageDialog.dismiss();
             Toast.makeText(getActivity(), R.string.delete_success_info, Toast.LENGTH_SHORT).show();
         });
-        messageDialog.setNegativeButton(R.string.no, v -> {
-            messageDialog.dismiss();
-        });
+        messageDialog.setNegativeButton(R.string.no, view -> messageDialog.dismiss());
         messageDialog.show();
     }
 

@@ -6,10 +6,12 @@ import android.graphics.drawable.Drawable;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -212,13 +214,15 @@ public abstract class RecordListAdapter extends RecyclerView.Adapter<RecordListA
             Date registrationDateText = record.getRegistrationDate();
             registrationDate.setText(isValidDate(registrationDateText) ? dateFormat.format(registrationDateText) : "---");
 
+            deleteStateCheckBox.setOnCheckedChangeListener(null);
             deleteStateCheckBox.setChecked(recordWillBeDeletedList.contains(deleteStateCheckBox.getTag()));
-
-            deleteStateCheckBox.setOnClickListener(view -> {
-                if (deleteStateCheckBox.isChecked()) {
-                    recordWillBeDeletedList.add(recordList.get(position));
+            deleteStateCheckBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
+                Long recordId = recordList.get(position);
+                if (isChecked) {
+                    if (!recordWillBeDeletedList.contains(recordId)) {
+                        recordWillBeDeletedList.add(recordList.get(position));
+                    }
                 } else {
-                    Long recordId = recordList.get(position);
                     if (recordWillBeDeletedList.contains(recordId)) {
                         recordWillBeDeletedList.remove(recordId);
                     }
