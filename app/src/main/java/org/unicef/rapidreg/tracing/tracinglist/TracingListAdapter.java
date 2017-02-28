@@ -3,7 +3,6 @@ package org.unicef.rapidreg.tracing.tracinglist;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
@@ -11,10 +10,8 @@ import com.google.gson.JsonObject;
 import org.unicef.rapidreg.base.record.RecordActivity;
 import org.unicef.rapidreg.base.record.recordlist.RecordListAdapter;
 import org.unicef.rapidreg.injection.ActivityContext;
-import org.unicef.rapidreg.model.Case;
 import org.unicef.rapidreg.model.Gender;
 import org.unicef.rapidreg.model.RecordModel;
-import org.unicef.rapidreg.model.Tracing;
 import org.unicef.rapidreg.service.RecordService;
 import org.unicef.rapidreg.service.TracingService;
 import org.unicef.rapidreg.service.cache.ItemValuesMap;
@@ -28,8 +25,8 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import static org.unicef.rapidreg.service.TracingService.TRACING_PRIMARY_ID;
 import static org.unicef.rapidreg.service.RecordService.AUDIO_FILE_PATH;
+import static org.unicef.rapidreg.service.TracingService.TRACING_PRIMARY_ID;
 
 public class TracingListAdapter extends RecordListAdapter {
 
@@ -74,6 +71,7 @@ public class TracingListAdapter extends RecordListAdapter {
         });
         toggleTextArea(holder);
         toggleDeleteArea(holder, record.isSynced());
+        toggleDeleteCheckBox(holder);
     }
 
     @Override

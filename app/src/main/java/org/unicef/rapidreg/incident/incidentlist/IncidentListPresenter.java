@@ -49,6 +49,11 @@ public class IncidentListPresenter extends RecordListPresenter {
     }
 
     @Override
+    public int getsyncedRecordsCount() {
+        return incidentService.getAllSyncedRecordsId().size();
+    }
+
+    @Override
     public int calculateDisplayedIndex() {
         List<Incident> incidents = incidentService.getAll();
         return incidents.isEmpty() ? HAVE_NO_RESULT : HAVE_RESULT_LIST;

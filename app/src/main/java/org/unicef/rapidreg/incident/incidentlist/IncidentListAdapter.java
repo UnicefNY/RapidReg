@@ -2,7 +2,6 @@ package org.unicef.rapidreg.incident.incidentlist;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.view.View;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
@@ -71,6 +70,7 @@ public class IncidentListAdapter extends RecordListAdapter {
         holder.disableRecordGenderView();
         toggleTextArea(holder);
         toggleDeleteArea(holder, record.isSynced());
+        toggleDeleteCheckBox(holder);
     }
 
     @Override

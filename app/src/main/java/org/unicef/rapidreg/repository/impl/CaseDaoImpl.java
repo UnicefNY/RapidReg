@@ -76,6 +76,14 @@ public class CaseDaoImpl implements CaseDao {
         return deleteCase;
     }
 
+    @Override
+    public List<Case> getALLSyncedRecords() {
+        return SQLite.select()
+                .from(Case.class)
+                .where(Case_Table.is_synced.eq(true))
+                .queryList();
+    }
+
     private List<Case> getCasesByAgeASC(String ownedBy, String url) {
         return getCurrentServerUserCondition(ownedBy, url)
                 .orderBy(Case_Table.age, true)

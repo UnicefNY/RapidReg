@@ -12,7 +12,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.text.TextUtils;
-import android.view.View;
 
 import org.greenrobot.eventbus.EventBus;
 import org.unicef.rapidreg.R;
@@ -44,6 +43,7 @@ public abstract class RecordActivity extends BaseActivity {
 
     private String imagePath;
     private CompositeSubscription subscriptions;
+    private boolean isSelectAll = false;
 
     private boolean isDeleteMode = false;
 
@@ -62,6 +62,7 @@ public abstract class RecordActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         subscriptions = new CompositeSubscription();
         deleteMenu.setOnClickListener(view -> showDeleteMode());
+        selectAllMenu.setOnClickListener(view -> onClickedSelectAllButton());
     }
 
     @Override
@@ -121,6 +122,33 @@ public abstract class RecordActivity extends BaseActivity {
         isDeleteMode = false;
         changeToolbarTitle(currentFeature.getTitleId());
         changeToolbarIcon(currentFeature);
+        isSelectAll = false;
+        toggleSelectAllButtonState(isSelectAll);
+    }
+
+    public void onClickedSelectAllButton() {
+        RecordListFragment listFragment = getRecordListFragment();
+        if (listFragment.getPresenter().getsyncedRecordsCount() > 0) {
+            toggleSelectAllButtonState(!isSelectAll);
+            setSelectAll(!isSelectAll);
+            listFragment.toggleSelectAllItems(isSelectAll());
+        }
+    }
+
+    public void toggleSelectAllButtonState(boolean isChecked) {
+        if (isChecked) {
+            selectAllMenu.setBackgroundResource(R.drawable.ic_check_box_white_24dp);
+        } else {
+            selectAllMenu.setBackgroundResource(R.drawable.ic_check_box_outline_blank_white_24dp);
+        }
+    }
+
+    public void setSelectAll(boolean selectAll) {
+        isSelectAll = selectAll;
+    }
+
+    public boolean isSelectAll() {
+        return isSelectAll;
     }
 
     public Feature getCurrentFeature() {

@@ -26,4 +26,6 @@ public interface CaseDao {
     Case deleteByRecordId(Long recordId);
 
     Case delete(Case deleteCase);
+
+    List<Case> getALLSyncedRecords();
 }

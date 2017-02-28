@@ -122,6 +122,10 @@ public class CaseService extends RecordService {
                 conditionGroup));
     }
 
+    public List<Long> getAllSyncedRecordsId() {
+        return extractIds(caseDao.getALLSyncedRecords());
+    }
+
     public List<Long> getGBVSearchResult(String shortId, String name, String location, Date registrationDate) {
         ConditionGroup conditionGroup = ConditionGroup.clause();
         conditionGroup.and(Condition.column(NameAlias.builder(RecordModel.COLUMN_OWNED_BY).build())

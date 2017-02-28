@@ -51,4 +51,9 @@ public class CaseListPresenter extends RecordListPresenter {
         List<Case> cases = caseService.getAll();
         return cases.isEmpty() ? HAVE_NO_RESULT : HAVE_RESULT_LIST;
     }
+
+    @Override
+    public int getsyncedRecordsCount() {
+        return caseService.getAllSyncedRecordsId().size();
+    }
 }

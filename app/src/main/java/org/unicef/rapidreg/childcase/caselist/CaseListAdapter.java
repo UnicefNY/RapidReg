@@ -2,7 +2,6 @@ package org.unicef.rapidreg.childcase.caselist;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.view.View;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
@@ -13,7 +12,6 @@ import org.unicef.rapidreg.base.record.RecordActivity;
 import org.unicef.rapidreg.base.record.recordlist.RecordListAdapter;
 import org.unicef.rapidreg.childcase.CaseFeature;
 import org.unicef.rapidreg.injection.ActivityContext;
-import org.unicef.rapidreg.model.Case;
 import org.unicef.rapidreg.model.Gender;
 import org.unicef.rapidreg.model.RecordModel;
 import org.unicef.rapidreg.service.CaseService;
@@ -84,6 +82,7 @@ public class CaseListAdapter extends RecordListAdapter {
         });
         toggleTextArea(holder);
         toggleDeleteArea(holder, record.isSynced());
+        toggleDeleteCheckBox(holder);
     }
 
     @Override

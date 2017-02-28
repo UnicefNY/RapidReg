@@ -29,4 +29,6 @@ public interface IncidentDao {
     List<Incident> getAllIncidentsByCaseUniqueId(String caseUniqueId);
 
     Incident delete(Incident deleteIncident);
+
+    List<Incident> getALLSyncedRecords();
 }

@@ -49,4 +49,9 @@ public class TracingListPresenter extends RecordListPresenter {
                 return null;
         }
     }
+
+    @Override
+    public int getsyncedRecordsCount() {
+        return tracingService.getAllSyncedRecordsId().size();
+    }
 }

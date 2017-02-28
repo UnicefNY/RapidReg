@@ -4,7 +4,6 @@ import com.raizlabs.android.dbflow.sql.language.ConditionGroup;
 import com.raizlabs.android.dbflow.sql.language.SQLite;
 import com.raizlabs.android.dbflow.sql.language.Where;
 
-import org.unicef.rapidreg.model.Case_Table;
 import org.unicef.rapidreg.model.Tracing;
 import org.unicef.rapidreg.model.Tracing_Table;
 import org.unicef.rapidreg.repository.TracingDao;
@@ -72,6 +71,14 @@ public class TracingDaoImpl implements TracingDao {
             deleteTracing.delete();
         }
         return deleteTracing;
+    }
+
+    @Override
+    public List<Tracing> getALLSyncedRecords() {
+        return SQLite.select()
+                .from(Tracing.class)
+                .where(Tracing_Table.is_synced.eq(true))
+                .queryList();
     }
 
     private List<Tracing> getTracingsByDateASC(String ownedBy, String url) {

@@ -204,4 +204,8 @@ public class IncidentService extends RecordService {
         Incident incident = incidentDao.getByInternalId(id);
         return incident != null && rev.equals(incident.getInternalRev());
     }
+
+    public List<Long> getAllSyncedRecordsId() {
+        return extractIds(incidentDao.getALLSyncedRecords());
+    }
 }

@@ -6,6 +6,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,7 +25,6 @@ import org.unicef.rapidreg.R;
 import org.unicef.rapidreg.base.record.RecordActivity;
 import org.unicef.rapidreg.base.record.recordlist.spinner.SpinnerAdapter;
 import org.unicef.rapidreg.base.record.recordlist.spinner.SpinnerState;
-import org.unicef.rapidreg.childcase.CaseActivity;
 import org.unicef.rapidreg.injection.component.DaggerFragmentComponent;
 import org.unicef.rapidreg.injection.component.FragmentComponent;
 import org.unicef.rapidreg.injection.module.FragmentModule;
@@ -123,6 +123,10 @@ public abstract class RecordListFragment extends MvpFragment<RecordListView, Rec
         recordListAdapter.toggleDeleteViews(isDeleteMode);
     }
 
+    public void toggleSelectAllItems(boolean isSelectAll) {
+        recordListAdapter.toggleSelectAllItems(isSelectAll);
+    }
+
     public void showSyncFormDialog(String message) {
         MessageDialog messageDialog = new MessageDialog(getActivity());
         messageDialog.setTitle(R.string.sync_forms);
@@ -164,6 +168,7 @@ public abstract class RecordListFragment extends MvpFragment<RecordListView, Rec
                     return;
                 }
                 adapter.setRecordList(filterRecords);
+                adapter.setSyncedListCount(presenter.getsyncedRecordsCount());
                 adapter.notifyDataSetChanged();
             }
 
@@ -216,6 +221,14 @@ public abstract class RecordListFragment extends MvpFragment<RecordListView, Rec
             listItemDeleteBtn.setVisibility(View.GONE);
         }
     }
+
+    @Override
+    public void onSelectedAllButtonCheckable(boolean isChecked) {
+        ((RecordActivity) getActivity()).toggleSelectAllButtonState(isChecked);
+        ((RecordActivity) getActivity()).setSelectAll(isChecked);
+        Log.e("RecordListFragment", "onSelectedAllButtonCheckable: isSelectAll - > " + isChecked);
+    }
+
 
     protected abstract RecordListAdapter createRecordListAdapter();
 

@@ -6,7 +6,6 @@ import com.raizlabs.android.dbflow.sql.language.Where;
 
 import org.unicef.rapidreg.model.Incident;
 import org.unicef.rapidreg.model.Incident_Table;
-import org.unicef.rapidreg.model.Tracing_Table;
 import org.unicef.rapidreg.repository.IncidentDao;
 
 import java.util.List;
@@ -82,6 +81,14 @@ public class IncidentDaoImpl implements IncidentDao {
             deleteIncident.delete();
         }
         return deleteIncident;
+    }
+
+    @Override
+    public List<Incident> getALLSyncedRecords() {
+        return SQLite.select()
+                .from(Incident.class)
+                .where(Incident_Table.is_synced.eq(true))
+                .queryList();
     }
 
     private List<Incident> getIncidentsByAgeASC(String ownedBy, String url) {

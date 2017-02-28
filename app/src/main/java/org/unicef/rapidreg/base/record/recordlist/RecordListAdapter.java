@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -43,7 +44,10 @@ public abstract class RecordListAdapter extends RecyclerView.Adapter<RecordListA
     protected List<Long> recordWillBeDeletedList = new ArrayList<>();
     protected boolean isDetailShow = true;
     protected boolean isDeleteMode = false;
+    protected boolean isSelectAll = false;
+    protected int retainedPosition = 0;
     protected OnViewUpdateListener onViewUpdateListener;
+    protected int syncedRecordsCount;
 
     public RecordListAdapter(Context context) {
         this.context = context;
@@ -93,6 +97,20 @@ public abstract class RecordListAdapter extends RecyclerView.Adapter<RecordListA
         notifyDataSetChanged();
     }
 
+    public void toggleSelectAllItems(boolean isSelectAll) {
+        this.isSelectAll = isSelectAll;
+        if (isSelectAll) {
+            for (Long recordId : recordList) {
+                if (!recordWillBeDeletedList.contains(recordId)) {
+                    recordWillBeDeletedList.add(recordId);
+                }
+            }
+        } else {
+            recordWillBeDeletedList.clear();
+        }
+        notifyDataSetChanged();
+    }
+
     protected void toggleTextArea(RecordListViewHolder holder) {
         if (isDetailShow) {
             holder.viewSwitcher.setDisplayedChild(TEXT_AREA_SHOWED_STATE);
@@ -107,6 +125,13 @@ public abstract class RecordListAdapter extends RecyclerView.Adapter<RecordListA
         } else {
             holder.toggleNormalView();
         }
+    }
+
+    protected void toggleDeleteCheckBox(RecordListViewHolder holder) {
+        if (!holder.getRecord().isSynced()) {
+            recordWillBeDeletedList.remove(holder.getRecord().getId());
+        }
+        holder.deleteStateCheckBox.setChecked(recordWillBeDeletedList.contains(holder.deleteStateCheckBox.getTag()));
     }
 
     protected Drawable getDefaultGenderBadge(int genderId) {
@@ -142,6 +167,10 @@ public abstract class RecordListAdapter extends RecyclerView.Adapter<RecordListA
         return --retainedPosition;
     }
 
+    public void setSyncedListCount(int syncedRecordsCount) {
+        this.syncedRecordsCount = syncedRecordsCount;
+    }
+
     public class RecordListViewHolder extends RecyclerView.ViewHolder {
 
         @BindView(R.id.id_normal_state)
@@ -174,6 +203,8 @@ public abstract class RecordListAdapter extends RecyclerView.Adapter<RecordListA
         @BindView(R.id.delete_state)
         public CheckBox deleteStateCheckBox;
 
+        private RecordModel record;
+
         public RecordListViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
@@ -183,6 +214,7 @@ public abstract class RecordListAdapter extends RecyclerView.Adapter<RecordListA
                               String shortUUID,
                               String ageContent,
                               RecordModel record) {
+            this.record = record;
             int position = getAdapterPosition();
             deleteStateCheckBox.setTag(recordList.get(position));
             Glide
@@ -205,21 +237,29 @@ public abstract class RecordListAdapter extends RecyclerView.Adapter<RecordListA
 
             deleteStateCheckBox.setOnCheckedChangeListener(null);
             deleteStateCheckBox.setChecked(recordWillBeDeletedList.contains(deleteStateCheckBox.getTag()));
-            deleteStateCheckBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
-                Long recordId = recordList.get(position);
-                if (isChecked) {
-                    if (!recordWillBeDeletedList.contains(recordId)) {
-                        recordWillBeDeletedList.add(recordList.get(position));
+            deleteStateCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    Long recordId = recordList.get(position);
+                    if (isChecked) {
+                        if (!recordWillBeDeletedList.contains(recordId)) {
+                            recordWillBeDeletedList.add(recordId);
+                        }
+                    } else {
+                        if (recordWillBeDeletedList.contains(recordId)) {
+                            recordWillBeDeletedList.remove(recordId);
+                        }
                     }
-                } else {
-                    if (recordWillBeDeletedList.contains(recordId)) {
-                        recordWillBeDeletedList.remove(recordId);
+                    if (onViewUpdateListener != null) {
+                        onViewUpdateListener.onRecordsDeletable(!recordWillBeDeletedList.isEmpty());
+                        onViewUpdateListener.onSelectedAllButtonCheckable(recordWillBeDeletedList.size() == syncedRecordsCount);
                     }
-                }
-                if (onViewUpdateListener != null) {
-                    onViewUpdateListener.onRecordsDeletable(!recordWillBeDeletedList.isEmpty());
                 }
             });
+        }
+
+        public RecordModel getRecord() {
+            return record;
         }
 
         public void setViewOnClickListener(View.OnClickListener listener) {
@@ -268,5 +308,7 @@ public abstract class RecordListAdapter extends RecyclerView.Adapter<RecordListA
 
     public interface OnViewUpdateListener {
         void onRecordsDeletable(boolean isDeletable);
+
+        void onSelectedAllButtonCheckable(boolean isChecked);
     }
 }

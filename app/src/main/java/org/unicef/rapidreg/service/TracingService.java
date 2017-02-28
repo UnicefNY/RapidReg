@@ -1,7 +1,5 @@
 package org.unicef.rapidreg.service;
 
-import android.util.Log;
-
 import com.google.gson.Gson;
 import com.raizlabs.android.dbflow.data.Blob;
 import com.raizlabs.android.dbflow.sql.language.Condition;
@@ -10,7 +8,6 @@ import com.raizlabs.android.dbflow.sql.language.NameAlias;
 import com.raizlabs.android.dbflow.sql.language.SQLCondition;
 
 import org.unicef.rapidreg.PrimeroAppConfiguration;
-import org.unicef.rapidreg.model.Case;
 import org.unicef.rapidreg.model.RecordModel;
 import org.unicef.rapidreg.model.Tracing;
 import org.unicef.rapidreg.repository.TracingDao;
@@ -222,5 +219,9 @@ public class TracingService extends RecordService {
     public boolean hasSameRev(String id, String rev) {
         Tracing tracing = tracingDao.getByInternalId(id);
         return tracing != null && rev.equals(tracing.getInternalRev());
+    }
+
+    public List<Long> getAllSyncedRecordsId() {
+        return extractIds(tracingDao.getALLSyncedRecords());
     }
 }

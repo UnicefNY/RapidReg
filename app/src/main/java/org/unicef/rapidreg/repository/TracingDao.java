@@ -24,4 +24,6 @@ public interface TracingDao {
     Tracing deleteByRecordId(long recordId);
 
     Tracing delete(Tracing deleteTracing);
+
+    List<Tracing> getALLSyncedRecords();
 }

@@ -27,4 +27,6 @@ public abstract class RecordListPresenter extends MvpBasePresenter<RecordListVie
     public abstract int calculateDisplayedIndex();
 
     public abstract List<Long> getRecordsByFilter(SpinnerState spinnerState);
+
+    public abstract int getsyncedRecordsCount();
 }
