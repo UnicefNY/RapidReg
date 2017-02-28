@@ -19,10 +19,6 @@ import rx.Observable;
 
 
 public class SyncIncidentServiceImpl extends BaseRetrofitService<SyncIncidentRepository> implements SyncIncidentService {
-    public SyncIncidentServiceImpl() {
-        super(SyncIncidentRepository.class);
-    }
-
     @Override
     public Response<JsonElement> uploadIncidentJsonProfile(Incident item) {
         ItemValuesMap itemValuesMap = ItemValuesMap.fromJson(new String(item.getContent().getBlob()));
@@ -37,10 +33,10 @@ public class SyncIncidentServiceImpl extends BaseRetrofitService<SyncIncidentRep
 
         Response<JsonElement> response;
         if (!TextUtils.isEmpty(item.getInternalId())) {
-            response = getRepository().putIncident(PrimeroAppConfiguration.getCookie(),
+            response = getRepository(SyncIncidentRepository.class).putIncident(PrimeroAppConfiguration.getCookie(),
                     item.getInternalId(), jsonObject).toBlocking().first();
         } else {
-            response = getRepository().postIncident(PrimeroAppConfiguration.getCookie(), jsonObject)
+            response = getRepository(SyncIncidentRepository.class).postIncident(PrimeroAppConfiguration.getCookie(), jsonObject)
                     .toBlocking().first();
         }
         if (!response.isSuccessful()) {
@@ -59,12 +55,13 @@ public class SyncIncidentServiceImpl extends BaseRetrofitService<SyncIncidentRep
 
     @Override
     public Observable<Response<JsonElement>> getIncidentIds(String lastUpdate, boolean isMobile) {
-        return getRepository().getIncidentIds(PrimeroAppConfiguration.getCookie(), lastUpdate, isMobile);
+        return getRepository(SyncIncidentRepository.class).getIncidentIds(PrimeroAppConfiguration.getCookie(), lastUpdate,
+                isMobile);
     }
 
     @Override
     public Observable<Response<JsonElement>> getIncident(String id, String locale, boolean isMobile) {
-        return getRepository().getIncident(PrimeroAppConfiguration.getCookie(), id, locale, isMobile);
+        return getRepository(SyncIncidentRepository.class).getIncident(PrimeroAppConfiguration.getCookie(), id, locale, isMobile);
     }
 
     @Override

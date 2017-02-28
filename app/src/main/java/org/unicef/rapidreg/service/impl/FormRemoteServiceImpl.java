@@ -17,10 +17,6 @@ import rx.schedulers.Schedulers;
 
 
 public class FormRemoteServiceImpl extends BaseRetrofitService<FormRepository> implements FormRemoteService {
-    public FormRemoteServiceImpl() {
-        super(FormRepository.class);
-    }
-
     @Override
     protected String getBaseUrl() {
         return PrimeroAppConfiguration.getApiBaseUrl();
@@ -28,7 +24,8 @@ public class FormRemoteServiceImpl extends BaseRetrofitService<FormRepository> i
 
     public Observable<CaseTemplateForm> getCaseForm(String cookie, String locale,
                                                     Boolean isMobile, String parentForm, String moduleId) {
-        return getRepository().getCaseForm(cookie, locale, isMobile, parentForm, moduleId)
+        return getRepository(FormRepository.class).getCaseForm(cookie, locale, isMobile, parentForm,
+                moduleId)
                 .flatMap(new Func1<CaseTemplateForm, Observable<CaseTemplateForm>>() {
                     @Override
                     public Observable<CaseTemplateForm> call(CaseTemplateForm caseForm) {
@@ -46,7 +43,8 @@ public class FormRemoteServiceImpl extends BaseRetrofitService<FormRepository> i
 
     public Observable<TracingTemplateForm> getTracingForm(String cookie, String locale,
                                                           Boolean isMobile, String parentForm, String moduleId) {
-        return getRepository().getTracingForm(cookie, locale, isMobile, parentForm, moduleId)
+        return getRepository(FormRepository.class).getTracingForm(cookie, locale, isMobile,
+                parentForm, moduleId)
                 .flatMap(new Func1<TracingTemplateForm, Observable<TracingTemplateForm>>() {
                     @Override
                     public Observable<TracingTemplateForm> call(TracingTemplateForm
@@ -65,7 +63,8 @@ public class FormRemoteServiceImpl extends BaseRetrofitService<FormRepository> i
 
     public Observable<IncidentTemplateForm> getIncidentForm(String cookie, String locale,
                                                             Boolean isMobile, String parentForm, String moduleId) {
-        return getRepository().getIncidentForm(cookie, locale, isMobile, parentForm, moduleId)
+        return getRepository(FormRepository.class).getIncidentForm(cookie, locale, isMobile,
+                parentForm, moduleId)
                 .flatMap(new Func1<IncidentTemplateForm, Observable<IncidentTemplateForm>>() {
                     @Override
                     public Observable<IncidentTemplateForm> call(IncidentTemplateForm

@@ -13,7 +13,6 @@ import org.unicef.rapidreg.model.User;
 import org.unicef.rapidreg.repository.UserDao;
 import org.unicef.rapidreg.repository.remote.LoginRepository;
 import org.unicef.rapidreg.service.BaseRetrofitService;
-import org.unicef.rapidreg.service.LoginService;
 import org.unicef.rapidreg.utils.EncryptHelper;
 import org.unicef.rapidreg.utils.TextUtils;
 

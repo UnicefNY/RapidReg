@@ -10,6 +10,7 @@ import org.unicef.rapidreg.event.LoadGBVIncidentFormEvent;
 import org.unicef.rapidreg.event.LoadTracingFormEvent;
 import org.unicef.rapidreg.model.User;
 import org.unicef.rapidreg.service.LoginService;
+import org.unicef.rapidreg.service.SystemSettingsService;
 import org.unicef.rapidreg.service.impl.LoginServiceImpl;
 import org.unicef.rapidreg.utils.TextUtils;
 
@@ -21,10 +22,12 @@ public class LoginPresenter extends MvpBasePresenter<LoginView> {
     public static final String TAG = LoginPresenter.class.getSimpleName();
 
     private LoginService loginService;
+    private SystemSettingsService systemSettingsService;
 
     @Inject
-    public LoginPresenter(Lazy<LoginService> loginService) {
+    public LoginPresenter(Lazy<LoginService> loginService, Lazy<SystemSettingsService> systemSettingsServiceLazy) {
         this.loginService = loginService.get();
+        this.systemSettingsService = systemSettingsServiceLazy.get();
     }
 
     public String fetchURL() {

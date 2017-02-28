@@ -82,6 +82,7 @@ public class CPSyncPresenter extends BaseSyncPresenter {
         this.tracingService = tracingService;
         this.tracingPhotoService = tracingPhotoService;
         this.tracingFormService = tracingFormService;
+
         initSyncRecordNumber();
     }
 

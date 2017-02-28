@@ -11,6 +11,7 @@ import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
 import org.unicef.rapidreg.BuildConfig;
 import org.unicef.rapidreg.service.LoginService;
+import org.unicef.rapidreg.service.SystemSettingsService;
 
 import javax.inject.Inject;
 
@@ -34,13 +35,16 @@ public class LoginPresenterTest {
     private LoginService loginService;
 
     @Mock
+    private SystemSettingsService systemSettingService;
+
+    @Mock
     private LoginView loginView;
 
     @Before
     public void setUp() throws Exception {
         initMocks(this);
 
-        loginPresenter = new LoginPresenter(() -> loginService);
+        loginPresenter = new LoginPresenter(() -> loginService, () -> systemSettingService);
         loginPresenter.attachView(loginView);
     }
 

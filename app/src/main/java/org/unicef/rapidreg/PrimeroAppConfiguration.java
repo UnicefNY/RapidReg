@@ -15,7 +15,7 @@ public class PrimeroAppConfiguration {
     public static final String PARENT_INCIDENT = "incident";
     public static final String PARENT_TRACING_REQUEST = "tracing_request";
 
-    private static String apiBaseUrl = "https://10.29.3.184:8443";
+    private static String apiBaseUrl = "https://127.0.0.1:8443";
 
     private static String cookie = null;
 

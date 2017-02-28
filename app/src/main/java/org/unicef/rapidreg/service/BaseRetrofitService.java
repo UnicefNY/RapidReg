@@ -1,7 +1,6 @@
 package org.unicef.rapidreg.service;
 
 import com.facebook.stetho.okhttp3.StethoInterceptor;
-import com.google.gson.GsonBuilder;
 
 import org.unicef.rapidreg.BuildConfig;
 
@@ -11,6 +10,7 @@ import java.util.concurrent.TimeUnit;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManagerFactory;
 
+import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
@@ -19,13 +19,6 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public abstract class BaseRetrofitService<T> {
     private T repository;
     private Retrofit retrofit;
-
-    public BaseRetrofitService() {
-    }
-
-    public BaseRetrofitService(Class<T> repositoryClass) {
-        repository = createRetrofit().create(repositoryClass);
-    }
 
     protected Retrofit createRetrofit() {
         retrofit = new Retrofit.Builder()
@@ -52,16 +45,10 @@ public abstract class BaseRetrofitService<T> {
         return builder.build();
     }
 
-    public T getRepository() {
-        if (repository == null) {
-            throw new IllegalStateException("Repository is not specified, Repository Class<T> must be passed via " +
-                    "constructor");
-        }
-        return repository;
-    }
-
     public T getRepository(Class<T> repositoryClass) {
-        repository = createRetrofit().create(repositoryClass);
+        if (repository == null || !getBaseUrl().equals(retrofit.baseUrl().toString())){
+            repository = createRetrofit().create(repositoryClass);
+        }
         return repository;
     }
 

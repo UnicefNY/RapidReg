@@ -12,6 +12,7 @@ import org.unicef.rapidreg.repository.TracingDao;
 import org.unicef.rapidreg.repository.TracingFormDao;
 import org.unicef.rapidreg.repository.TracingPhotoDao;
 import org.unicef.rapidreg.repository.UserDao;
+import org.unicef.rapidreg.repository.remote.SystemSettingRepository;
 import org.unicef.rapidreg.service.CaseFormService;
 import org.unicef.rapidreg.service.CasePhotoService;
 import org.unicef.rapidreg.service.CaseService;
@@ -23,6 +24,7 @@ import org.unicef.rapidreg.service.RecordService;
 import org.unicef.rapidreg.service.SyncCaseService;
 import org.unicef.rapidreg.service.SyncIncidentService;
 import org.unicef.rapidreg.service.SyncTracingService;
+import org.unicef.rapidreg.service.SystemSettingsService;
 import org.unicef.rapidreg.service.TracingFormService;
 import org.unicef.rapidreg.service.TracingPhotoService;
 import org.unicef.rapidreg.service.TracingService;
@@ -34,6 +36,7 @@ import org.unicef.rapidreg.service.impl.LoginServiceImpl;
 import org.unicef.rapidreg.service.impl.SyncCaseServiceImpl;
 import org.unicef.rapidreg.service.impl.SyncIncidentServiceImpl;
 import org.unicef.rapidreg.service.impl.SyncTracingServiceImpl;
+import org.unicef.rapidreg.service.impl.SystemSettingsServiceImpl;
 import org.unicef.rapidreg.service.impl.TracingFormServiceImpl;
 import org.unicef.rapidreg.service.impl.UserServiceImpl;
 
@@ -126,6 +129,12 @@ public class ApplicationServiceModule {
     @Singleton
     public SyncIncidentService provideSyncIncidentService() {
         return new SyncIncidentServiceImpl();
+    }
+
+    @Provides
+    @Singleton
+    public SystemSettingsService provideSystemSettingsService() {
+        return new SystemSettingsServiceImpl();
     }
 
     @Provides
