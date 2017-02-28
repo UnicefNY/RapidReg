@@ -66,9 +66,6 @@ public abstract class RecordListFragment extends MvpFragment<RecordListView, Rec
     @BindView(R.id.list_item_delete_button)
     Button listItemDeleteBtn;
 
-    @BindView(R.id.list_item_delete_button_gray)
-    Button unclickbleListItemDeleteBtn;
-
     @BindView(R.id.list_item_delete_cancel_button)
     Button listItemDeleteCancelBtn;
 
@@ -192,16 +189,20 @@ public abstract class RecordListFragment extends MvpFragment<RecordListView, Rec
         messageDialog.setTitle(R.string.delete_title);
         messageDialog.setMessage(getResources().getString(R.string.delete_confirm_message));
         messageDialog.setPositiveButton(R.string.yes, view -> {
-            int retainedPosition = recordListAdapter.caculateRetainedPosition();
-            recordListAdapter.removeRecords();
-            recordListAdapter.notifyDataSetChanged();
-            toggleDeleteMode(false);
-            listContainer.scrollToPosition(retainedPosition);
+            removeRecordsAndRedirectToFirstPosition();
             messageDialog.dismiss();
             Toast.makeText(getActivity(), R.string.delete_success_info, Toast.LENGTH_SHORT).show();
         });
         messageDialog.setNegativeButton(R.string.no, view -> messageDialog.dismiss());
         messageDialog.show();
+    }
+
+    private void removeRecordsAndRedirectToFirstPosition() {
+        int retainedPosition = recordListAdapter.caculateRetainedPosition();
+        recordListAdapter.removeRecords();
+        recordListAdapter.notifyDataSetChanged();
+        toggleDeleteMode(false);
+        listContainer.scrollToPosition(retainedPosition);
     }
 
     @OnClick(R.id.list_item_delete_cancel_button)
@@ -213,13 +214,8 @@ public abstract class RecordListFragment extends MvpFragment<RecordListView, Rec
 
     @Override
     public void onRecordsDeletable(boolean isDeletable) {
-        if (isDeletable) {
-            listItemDeleteBtn.setVisibility(View.VISIBLE);
-            unclickbleListItemDeleteBtn.setVisibility(View.GONE);
-        } else {
-            unclickbleListItemDeleteBtn.setVisibility(View.VISIBLE);
-            listItemDeleteBtn.setVisibility(View.GONE);
-        }
+        listItemDeleteBtn.setEnabled(isDeletable);
+        listItemDeleteBtn.setBackgroundResource(isDeletable ? R.color.red_a200 : R.color.gray);
     }
 
     @Override

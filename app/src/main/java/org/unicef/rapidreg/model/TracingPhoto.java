@@ -25,7 +25,7 @@ public class TracingPhoto extends RecordPhoto {
         super(id);
     }
 
-    public void setTracingId(Tracing tracing) {
+    public void setTracing(Tracing tracing) {
         this.tracingId = tracing.getId();
     }
 

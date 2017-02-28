@@ -14,6 +14,7 @@ import com.raizlabs.android.dbflow.data.Blob;
 import org.unicef.rapidreg.PrimeroAppConfiguration;
 import org.unicef.rapidreg.injection.ActivityContext;
 import org.unicef.rapidreg.model.Case;
+import org.unicef.rapidreg.model.CasePhoto;
 import org.unicef.rapidreg.model.Incident;
 import org.unicef.rapidreg.model.IncidentForm;
 import org.unicef.rapidreg.service.CaseFormService;
@@ -23,12 +24,15 @@ import org.unicef.rapidreg.service.IncidentFormService;
 import org.unicef.rapidreg.service.IncidentService;
 import org.unicef.rapidreg.service.SyncCaseService;
 import org.unicef.rapidreg.service.SyncIncidentService;
+import org.unicef.rapidreg.service.cache.ItemValuesMap;
 import org.unicef.rapidreg.utils.TextUtils;
 import org.unicef.rapidreg.utils.Utils;
 
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Locale;
@@ -415,5 +419,60 @@ public class GBVSyncPresenter extends BaseSyncPresenter {
                         },
                         throwable -> syncFail(throwable)
                         , () -> syncPullFormSuccessfully());
+    }
+
+    @Override
+    public void produceCases(int number) {
+        List<Case> cases = caseService.getAll();
+        try {
+            if (cases.isEmpty()) {
+                return;
+            }
+            Case first = cases.get(0);
+
+            if (first == null) {
+                return;
+            }
+            for (int i = 0; i < number; i++) {
+                first.setId(0);
+                first.setUniqueId(null);
+                first.setInternalId(null);
+                first.setInternalRev(null);
+
+                ItemValuesMap itemValues = ItemValuesMap.fromJson(new String(first.getContent()
+                        .getBlob()));
+                itemValues.removeItem(CaseService.CASE_ID);
+                caseService.save(itemValues, Collections.EMPTY_LIST);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void produceOtherCases(int number) {
+        List<Incident> incidents = incidentService.getAll();
+        try {
+            if (incidents.isEmpty()) {
+                return;
+            }
+            Incident first = incidents.get(0);
+            if (first == null) {
+                return;
+            }
+            for (int i = 0; i < number; i ++) {
+                first.setId(0);
+                first.setUniqueId(null);
+                first.setInternalId(null);
+                first.setInternalRev(null);
+
+                ItemValuesMap itemValues = ItemValuesMap.fromJson(new String(first.getContent()
+                        .getBlob()));
+                itemValues.removeItem(IncidentService.INCIDENT_ID);
+                incidentService.save(itemValues);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

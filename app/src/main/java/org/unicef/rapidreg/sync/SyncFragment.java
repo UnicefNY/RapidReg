@@ -12,6 +12,7 @@ import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.text.InputType;
+import android.util.Config;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,6 +22,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
+import com.hannesdorfmann.mosby.mvp.BuildConfig;
 import com.hannesdorfmann.mosby.mvp.MvpFragment;
 
 import org.unicef.rapidreg.PrimeroAppConfiguration;
@@ -41,6 +43,7 @@ import butterknife.BindString;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import butterknife.OnLongClick;
 
 public class SyncFragment extends MvpFragment<SyncView, BaseSyncPresenter> implements SyncView {
     private BaseProgressDialog syncProgressDialog;
@@ -131,7 +134,7 @@ public class SyncFragment extends MvpFragment<SyncView, BaseSyncPresenter> imple
         }
         setDataViews(syncData.getLastSyncData(), syncData.getSyncedNumberAsString(),
                 syncData.getNotSyncedNumberAsString());
-        tvProduceCases.setVisibility(View.GONE);
+        tvProduceCases.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -328,6 +331,35 @@ public class SyncFragment extends MvpFragment<SyncView, BaseSyncPresenter> imple
                 .applicationComponent(PrimeroApplication.get(getActivity()).getComponent())
                 .fragmentModule(new FragmentModule(this))
                 .build();
+    }
+
+    @OnClick(R.id.tv_produce_cases)
+    public void onProduceCasesBtnClick() {
+        final EditText tvNumber = new EditText(getActivity());
+        tvNumber.setInputType(InputType.TYPE_CLASS_NUMBER);
+        tvNumber.setRawInputType(Configuration.KEYBOARD_12KEY);
+        tvNumber.setText("100");
+        new AlertDialog.Builder(getActivity())
+                .setView(tvNumber)
+                .setMessage("Please enter the case number.")
+                .setPositiveButton(R.string.ok, (dialog, which) -> presenter.produceCases(Integer.valueOf(tvNumber.getText().toString())))
+                .setNegativeButton(R.string.cancel, null)
+                .show();
+    }
+
+    @OnLongClick(R.id.tv_produce_cases)
+    public boolean onProduceOtherCasesBtnClick() {
+        final EditText tvNumber = new EditText(getActivity());
+        tvNumber.setInputType(InputType.TYPE_CLASS_NUMBER);
+        tvNumber.setRawInputType(Configuration.KEYBOARD_12KEY);
+        tvNumber.setText("100");
+        new AlertDialog.Builder(getActivity())
+                .setView(tvNumber)
+                .setMessage("Please enter the tracing/incident number.")
+                .setPositiveButton(R.string.ok, (dialog, which) -> presenter.produceOtherCases(Integer.valueOf(tvNumber.getText().toString())))
+                .setNegativeButton(R.string.cancel, null)
+                .show();
+        return true;
     }
 
     private void showSyncProgressDialog(String title) {

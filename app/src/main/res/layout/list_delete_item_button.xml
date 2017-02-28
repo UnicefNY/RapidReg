@@ -14,21 +14,7 @@
         android:text="@string/list_item_delete_button_text"
         android:textColor="@color/white"
         android:textSize="@dimen/list_item_delete_button_text_size"
-        android:enabled="true"
-        android:visibility="gone"/>
-
-    <Button
-        android:id="@+id/list_item_delete_button_gray"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:background="@color/gray"
-        android:padding="@dimen/list_item_delete_button_padding"
-        android:text="@string/list_item_delete_button_text"
-        android:textColor="@color/white"
-        android:textSize="@dimen/list_item_delete_button_text_size"
-        android:enabled="false"
-        android:visibility="visible" />
+        android:enabled="true" />
 
     <Button
         android:id="@+id/list_item_delete_cancel_button"

@@ -123,7 +123,7 @@ public class TracingPhotoDaoImpl implements TracingPhotoDao {
         }
         String filePath = photoPaths.get(index);
         tracingPhoto.setPhoto(ImageCompressUtil.readImageFile(filePath));
-        tracingPhoto.setTracingId(parent);
+        tracingPhoto.setTracing(parent);
         tracingPhoto.setOrder(index + 1);
         tracingPhoto.setKey(UUID.randomUUID().toString());
         return tracingPhoto;
@@ -138,7 +138,7 @@ public class TracingPhotoDaoImpl implements TracingPhotoDao {
             tracingPhoto = getById(photoId);
         } catch (NumberFormatException e) {
             tracingPhoto = new TracingPhoto();
-            tracingPhoto.setTracingId(tracing);
+            tracingPhoto.setTracing(tracing);
             tracingPhoto.setPhoto(ImageCompressUtil.readImageFile(filePath));
         }
         tracingPhoto.setId(getByTracingIdAndOrder(tracing.getId(), index + 1).getId());

@@ -15,7 +15,6 @@ import org.unicef.rapidreg.base.record.recordphoto.PhotoConfig;
 import org.unicef.rapidreg.injection.ActivityContext;
 import org.unicef.rapidreg.model.Case;
 import org.unicef.rapidreg.model.CasePhoto;
-import org.unicef.rapidreg.model.RecordModel;
 import org.unicef.rapidreg.model.Tracing;
 import org.unicef.rapidreg.model.TracingForm;
 import org.unicef.rapidreg.model.TracingPhoto;
@@ -28,6 +27,7 @@ import org.unicef.rapidreg.service.SyncTracingService;
 import org.unicef.rapidreg.service.TracingFormService;
 import org.unicef.rapidreg.service.TracingPhotoService;
 import org.unicef.rapidreg.service.TracingService;
+import org.unicef.rapidreg.service.cache.ItemValuesMap;
 import org.unicef.rapidreg.utils.TextUtils;
 import org.unicef.rapidreg.utils.Utils;
 
@@ -35,6 +35,7 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Locale;
@@ -560,7 +561,7 @@ public class CPSyncPresenter extends BaseSyncPresenter {
     private void updateTracingPhotos(String id, byte[] photoBytes) {
         Tracing aTracing = tracingService.getByInternalId(id);
         TracingPhoto TracingPhoto = new TracingPhoto();
-        TracingPhoto.setTracingId(aTracing);
+        TracingPhoto.setTracing(aTracing);
         TracingPhoto.setOrder(tracingPhotoService.getIdsByTracingId(aTracing.getId()).size() + 1);
         TracingPhoto.setPhoto(new Blob(photoBytes));
         TracingPhoto.save();
@@ -589,5 +590,76 @@ public class CPSyncPresenter extends BaseSyncPresenter {
                         },
                         throwable -> syncFail(throwable),
                         () -> syncPullFormSuccessfully());
+    }
+
+    @Override
+    public void produceCases(int number) {
+        List<Case> cases = caseService.getAll();
+        try {
+            if (cases.isEmpty()) {
+                return;
+            }
+            Case first = cases.get(0);
+
+            if (first == null) {
+                return;
+            }
+            List<Long> casePhotos = casePhotoService.getIdsByCaseId(first.getId());
+            for (int i = 0; i < number; i++) {
+                first.setId(0);
+                first.setUniqueId(null);
+                first.setInternalId(null);
+                first.setInternalRev(null);
+
+                ItemValuesMap itemValues = ItemValuesMap.fromJson(new String(first.getContent()
+                        .getBlob()));
+                itemValues.removeItem(CaseService.CASE_ID);
+                Case savedCase = caseService.save(itemValues, Collections.EMPTY_LIST);
+                for (Long casePhotoId : casePhotos) {
+                    CasePhoto casePhoto = casePhotoService.getById(casePhotoId);
+                    casePhoto.setId(0);
+                    casePhoto.setCase(savedCase);
+                    casePhoto.save();
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void produceOtherCases(int number) {
+        List<Tracing> tracings = tracingService.getAll();
+        try {
+            if (tracings.isEmpty()) {
+                return;
+            }
+            Tracing first = tracings.get(0);
+
+            if (first == null) {
+                return;
+            }
+
+            List<Long> tracingPhotos = tracingPhotoService.getIdsByTracingId(first.getId());
+            for (int i = 0; i < number; i ++) {
+                first.setId(0);
+                first.setUniqueId(null);
+                first.setInternalId(null);
+                first.setInternalRev(null);
+
+                ItemValuesMap itemValues = ItemValuesMap.fromJson(new String(first.getContent()
+                        .getBlob()));
+                itemValues.removeItem(TracingService.TRACING_ID);
+                Tracing savedTracing = tracingService.save(itemValues, Collections.EMPTY_LIST);
+                for (Long tracingPhotoId : tracingPhotos) {
+                    TracingPhoto tracingPhoto = tracingPhotoService.getById(tracingPhotoId);
+                    tracingPhoto.setId(0);
+                    tracingPhoto.setTracing(savedTracing);
+                    tracingPhoto.save();
+                }
+            }
+        } catch (IOException e) {
+        e.printStackTrace();
+    }
     }
 }

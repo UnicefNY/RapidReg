@@ -86,7 +86,7 @@
             android:text="Produce cases for test"
             android:textColor="@color/primero_blue"
             android:textSize="@dimen/text_size_16"
-            android:visibility="gone" />
+            android:visibility="gone"/>
     </LinearLayout>
 
 </LinearLayout>
