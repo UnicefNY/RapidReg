@@ -45,6 +45,8 @@ public abstract class RecordActivity extends BaseActivity {
     private String imagePath;
     private CompositeSubscription subscriptions;
 
+    private boolean isDeleteMode = false;
+
     @Inject
     RecordPresenter recordPresenter;
 
@@ -95,6 +97,10 @@ public abstract class RecordActivity extends BaseActivity {
         }
     }
 
+    public boolean isDeleteMode() {
+        return isDeleteMode;
+    }
+
     protected void showHideDetail() {
         detailState = detailState.getNextState();
         showHideMenu.setBackgroundResource(detailState.getResId());
@@ -103,6 +109,7 @@ public abstract class RecordActivity extends BaseActivity {
     }
 
     protected void showDeleteMode() {
+        isDeleteMode = true;
         changeToolbarTitle(R.string.delete);
         toolbarMainBtnContent.setVisibility(GONE);
         toolbarSelectAllBtnContent.setVisibility(VISIBLE);
@@ -111,6 +118,7 @@ public abstract class RecordActivity extends BaseActivity {
     }
 
     public void showListMode() {
+        isDeleteMode = false;
         changeToolbarTitle(currentFeature.getTitleId());
         changeToolbarIcon(currentFeature);
     }

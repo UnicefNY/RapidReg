@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.view.GravityCompat;
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
@@ -15,6 +16,7 @@ import org.unicef.rapidreg.base.record.RecordActivity;
 import org.unicef.rapidreg.base.record.recordlist.RecordListFragment;
 import org.unicef.rapidreg.event.LoadTracingFormEvent;
 import org.unicef.rapidreg.event.SaveTracingEvent;
+import org.unicef.rapidreg.exception.FragmentSwitchException;
 import org.unicef.rapidreg.tracing.tracinglist.TracingListFragment;
 import org.unicef.rapidreg.utils.Utils;
 import org.unicef.rapidreg.widgets.dialog.MessageDialog;
@@ -60,7 +62,7 @@ public class TracingActivity extends RecordActivity implements BaseView {
 
     @Override
     protected void processBackButton() {
-        if (currentFeature.isListMode()) {
+        if (currentFeature.isListMode() && !isDeleteMode()) {
             logOut();
         } else if (currentFeature.isEditMode()) {
             showQuitDialog(R.id.nav_tracing);

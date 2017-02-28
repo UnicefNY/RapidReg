@@ -53,6 +53,7 @@ public class CaseService extends RecordService {
                 TextUtils.lintUrl(PrimeroAppConfiguration.getApiBaseUrl()));
     }
 
+
     public Case getById(long caseId) {
         return caseDao.getCaseById(caseId);
     }
