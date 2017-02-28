@@ -51,6 +51,11 @@ public class TracingListPresenter extends RecordListPresenter {
     }
 
     @Override
+    public List<Long> getSyncedRecords() {
+        return tracingService.getAllSyncedRecordsId();
+    }
+
+    @Override
     public int getsyncedRecordsCount() {
         return tracingService.getAllSyncedRecordsId().size();
     }

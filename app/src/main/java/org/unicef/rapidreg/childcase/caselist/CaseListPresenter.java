@@ -47,6 +47,11 @@ public class CaseListPresenter extends RecordListPresenter {
     }
 
     @Override
+    public List<Long> getSyncedRecords() {
+        return caseService.getAllSyncedRecordsId();
+    }
+
+    @Override
     public int calculateDisplayedIndex() {
         List<Case> cases = caseService.getAll();
         return cases.isEmpty() ? HAVE_NO_RESULT : HAVE_RESULT_LIST;

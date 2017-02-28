@@ -222,6 +222,6 @@ public class TracingService extends RecordService {
     }
 
     public List<Long> getAllSyncedRecordsId() {
-        return extractIds(tracingDao.getALLSyncedRecords());
+        return extractIds(tracingDao.getALLSyncedRecords(PrimeroAppConfiguration.getCurrentUsername()));
     }
 }

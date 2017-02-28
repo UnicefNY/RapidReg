@@ -123,7 +123,7 @@ public class CaseService extends RecordService {
     }
 
     public List<Long> getAllSyncedRecordsId() {
-        return extractIds(caseDao.getALLSyncedRecords());
+        return extractIds(caseDao.getALLSyncedRecords(PrimeroAppConfiguration.getCurrentUsername()));
     }
 
     public List<Long> getGBVSearchResult(String shortId, String name, String location, Date registrationDate) {

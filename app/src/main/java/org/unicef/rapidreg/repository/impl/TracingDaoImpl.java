@@ -74,10 +74,11 @@ public class TracingDaoImpl implements TracingDao {
     }
 
     @Override
-    public List<Tracing> getALLSyncedRecords() {
+    public List<Tracing> getALLSyncedRecords(String ownedBy) {
         return SQLite.select()
                 .from(Tracing.class)
                 .where(Tracing_Table.is_synced.eq(true))
+                .and(Tracing_Table.owned_by.eq(ownedBy))
                 .queryList();
     }
 

@@ -84,10 +84,11 @@ public class IncidentDaoImpl implements IncidentDao {
     }
 
     @Override
-    public List<Incident> getALLSyncedRecords() {
+    public List<Incident> getALLSyncedRecords(String ownedBy) {
         return SQLite.select()
                 .from(Incident.class)
                 .where(Incident_Table.is_synced.eq(true))
+                .and(Incident_Table.owned_by.eq(ownedBy))
                 .queryList();
     }
 

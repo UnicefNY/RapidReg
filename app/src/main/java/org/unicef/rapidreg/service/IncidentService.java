@@ -206,6 +206,6 @@ public class IncidentService extends RecordService {
     }
 
     public List<Long> getAllSyncedRecordsId() {
-        return extractIds(incidentDao.getALLSyncedRecords());
+        return extractIds(incidentDao.getALLSyncedRecords(PrimeroAppConfiguration.getCurrentUsername()));
     }
 }

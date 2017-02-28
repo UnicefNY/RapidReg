@@ -121,7 +121,7 @@ public abstract class RecordListFragment extends MvpFragment<RecordListView, Rec
     }
 
     public void toggleSelectAllItems(boolean isSelectAll) {
-        recordListAdapter.toggleSelectAllItems(isSelectAll);
+        recordListAdapter.toggleSelectAllItems(isSelectAll, presenter.getSyncedRecords());
     }
 
     public void showSyncFormDialog(String message) {

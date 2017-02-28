@@ -49,6 +49,11 @@ public class IncidentListPresenter extends RecordListPresenter {
     }
 
     @Override
+    public List<Long> getSyncedRecords() {
+        return incidentService.getAllSyncedRecordsId();
+    }
+
+    @Override
     public int getsyncedRecordsCount() {
         return incidentService.getAllSyncedRecordsId().size();
     }

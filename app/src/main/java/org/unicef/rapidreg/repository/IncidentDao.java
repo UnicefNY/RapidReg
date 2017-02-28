@@ -30,5 +30,5 @@ public interface IncidentDao {
 
     Incident delete(Incident deleteIncident);
 
-    List<Incident> getALLSyncedRecords();
+    List<Incident> getALLSyncedRecords(String ownedBy);
 }

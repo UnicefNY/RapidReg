@@ -45,7 +45,6 @@ public abstract class RecordListAdapter extends RecyclerView.Adapter<RecordListA
     protected boolean isDetailShow = true;
     protected boolean isDeleteMode = false;
     protected boolean isSelectAll = false;
-    protected int retainedPosition = 0;
     protected OnViewUpdateListener onViewUpdateListener;
     protected int syncedRecordsCount;
 
@@ -97,10 +96,10 @@ public abstract class RecordListAdapter extends RecyclerView.Adapter<RecordListA
         notifyDataSetChanged();
     }
 
-    public void toggleSelectAllItems(boolean isSelectAll) {
+    public void toggleSelectAllItems(boolean isSelectAll, List<Long> willBeSelectedList) {
         this.isSelectAll = isSelectAll;
         if (isSelectAll) {
-            for (Long recordId : recordList) {
+            for (Long recordId : willBeSelectedList) {
                 if (!recordWillBeDeletedList.contains(recordId)) {
                     recordWillBeDeletedList.add(recordId);
                 }
@@ -128,9 +127,6 @@ public abstract class RecordListAdapter extends RecyclerView.Adapter<RecordListA
     }
 
     protected void toggleDeleteCheckBox(RecordListViewHolder holder) {
-        if (!holder.getRecord().isSynced()) {
-            recordWillBeDeletedList.remove(holder.getRecord().getId());
-        }
         holder.deleteStateCheckBox.setChecked(recordWillBeDeletedList.contains(holder.deleteStateCheckBox.getTag()));
     }
 
@@ -237,23 +233,20 @@ public abstract class RecordListAdapter extends RecyclerView.Adapter<RecordListA
 
             deleteStateCheckBox.setOnCheckedChangeListener(null);
             deleteStateCheckBox.setChecked(recordWillBeDeletedList.contains(deleteStateCheckBox.getTag()));
-            deleteStateCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                @Override
-                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    Long recordId = recordList.get(position);
-                    if (isChecked) {
-                        if (!recordWillBeDeletedList.contains(recordId)) {
-                            recordWillBeDeletedList.add(recordId);
-                        }
-                    } else {
-                        if (recordWillBeDeletedList.contains(recordId)) {
-                            recordWillBeDeletedList.remove(recordId);
-                        }
+            deleteStateCheckBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
+                Long recordId = recordList.get(position);
+                if (isChecked) {
+                    if (!recordWillBeDeletedList.contains(recordId)) {
+                        recordWillBeDeletedList.add(recordId);
                     }
-                    if (onViewUpdateListener != null) {
-                        onViewUpdateListener.onRecordsDeletable(!recordWillBeDeletedList.isEmpty());
-                        onViewUpdateListener.onSelectedAllButtonCheckable(recordWillBeDeletedList.size() == syncedRecordsCount);
+                } else {
+                    if (recordWillBeDeletedList.contains(recordId)) {
+                        recordWillBeDeletedList.remove(recordId);
                     }
+                }
+                if (onViewUpdateListener != null) {
+                    onViewUpdateListener.onRecordsDeletable(!recordWillBeDeletedList.isEmpty());
+                    onViewUpdateListener.onSelectedAllButtonCheckable(recordWillBeDeletedList.size() == syncedRecordsCount);
                 }
             });
         }

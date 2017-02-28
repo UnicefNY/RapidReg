@@ -25,5 +25,5 @@ public interface TracingDao {
 
     Tracing delete(Tracing deleteTracing);
 
-    List<Tracing> getALLSyncedRecords();
+    List<Tracing> getALLSyncedRecords(String ownedBy);
 }

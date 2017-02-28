@@ -77,10 +77,11 @@ public class CaseDaoImpl implements CaseDao {
     }
 
     @Override
-    public List<Case> getALLSyncedRecords() {
+    public List<Case> getALLSyncedRecords(String ownedBy) {
         return SQLite.select()
                 .from(Case.class)
                 .where(Case_Table.is_synced.eq(true))
+                .and(Case_Table.owned_by.eq(ownedBy))
                 .queryList();
     }
 

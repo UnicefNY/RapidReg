@@ -27,5 +27,5 @@ public interface CaseDao {
 
     Case delete(Case deleteCase);
 
-    List<Case> getALLSyncedRecords();
+    List<Case> getALLSyncedRecords(String userName);
 }
