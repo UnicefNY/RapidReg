@@ -126,6 +126,7 @@ public class TracingService extends RecordService {
             return null;
         }
         tracingDao.delete(deleteTracing);
+        tracingPhotoDao.deleteByTracingId(recordId);
         return deleteTracing;
     }
 
