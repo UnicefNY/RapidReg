@@ -77,8 +77,12 @@
 
     <!--login start-->
     <dimen name="login_logo_size">120dp</dimen>
-    <dimen name="login_logo_top_margin">113dp</dimen>
-    <dimen name="login_input_margin">25dp</dimen>
+    <dimen name="login_logo_top_margin">113dp</dimen> 
+    <dimen name="login_input_margin">50dp</dimen> 
+    <dimen name="login_username_top_to_margin">40dp</dimen>
+     <dimen name="login_edit_text_top_margin">8dp</dimen>
+    <dimen name="login_change_url_top_margin">10dp</dimen>
+    <dimen name="login_button_top_margin">25dp</dimen>
     <!--login end-->
 
     <!--case register start-->

@@ -83,7 +83,7 @@ public class LoginActivity extends MvpActivity<LoginView, LoginPresenter> implem
 
     @OnClick(R.id.change_url)
     public void onChangeUrlTextClicked() {
-        changeUrlTextView.setVisibility(View.INVISIBLE);
+        changeUrlTextView.setVisibility(View.GONE);
         urlEditView.setVisibility(View.VISIBLE);
         urlEditView.requestFocus();
         urlEditView.setSelection(0, urlEditView.length());
@@ -95,7 +95,7 @@ public class LoginActivity extends MvpActivity<LoginView, LoginPresenter> implem
     }
 
     private void hideUrlInputIfUserEverLoginSuccessfully() {
-        changeUrlTextView.setVisibility(View.INVISIBLE);
+        changeUrlTextView.setVisibility(View.GONE);
         try {
             String url = fetchHistoryURL();
             urlEditView.setText(url);
