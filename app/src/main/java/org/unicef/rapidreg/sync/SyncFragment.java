@@ -16,6 +16,7 @@ import android.util.Config;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -54,9 +55,6 @@ public class SyncFragment extends MvpFragment<SyncView, BaseSyncPresenter> imple
     @BindView(R.id.tv_produce_cases)
     TextView tvProduceCases;
 
-    @BindString(R.string.produce_cases_successfully_msg)
-    String produceCasesSuccessfullyMsg;
-
     @BindView(R.id.last_sync_time)
     TextView lastSyncTime;
 
@@ -66,6 +64,8 @@ public class SyncFragment extends MvpFragment<SyncView, BaseSyncPresenter> imple
     @BindView(R.id.record_count_for_not_sync)
     TextView countOfNotSync;
 
+    @BindString(R.string.produce_cases_successfully_msg)
+    String produceCasesSuccessfullyMsg;
     @BindString(R.string.start_sync_message)
     String startSyncMessage;
     @BindString(R.string.confirm_cancel_sync_message)
@@ -157,6 +157,7 @@ public class SyncFragment extends MvpFragment<SyncView, BaseSyncPresenter> imple
             Utils.showMessageByToast(getActivity(), R.string.network_not_available, Toast.LENGTH_SHORT);
             return;
         }
+        getActivity().getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         presenter.tryToSync();
     }
 
@@ -178,6 +179,7 @@ public class SyncFragment extends MvpFragment<SyncView, BaseSyncPresenter> imple
             public void onClick(View v) {
                 presenter.cancelSync();
                 messageDialog.dismiss();
+                getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
             }
         });
         messageDialog.setNegativeButton(R.string.continue_sync_button_text, new View.OnClickListener() {
@@ -318,11 +320,13 @@ public class SyncFragment extends MvpFragment<SyncView, BaseSyncPresenter> imple
 
     @Override
     public void showSyncDownloadSuccessMessage() {
+        getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         Utils.showMessageByToast(getActivity(), syncDownloadSuccessMessage, Toast.LENGTH_SHORT);
     }
 
     @Override
     public void showSyncErrorMessage() {
+        getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         Utils.showMessageByToast(getActivity(), R.string.sync_error_message, Toast.LENGTH_LONG);
     }
 
