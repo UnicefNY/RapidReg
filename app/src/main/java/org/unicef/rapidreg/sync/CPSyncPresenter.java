@@ -22,15 +22,18 @@ import org.unicef.rapidreg.service.CaseFormService;
 import org.unicef.rapidreg.service.CasePhotoService;
 import org.unicef.rapidreg.service.CaseService;
 import org.unicef.rapidreg.service.FormRemoteService;
+import org.unicef.rapidreg.service.RecordService;
 import org.unicef.rapidreg.service.SyncCaseService;
 import org.unicef.rapidreg.service.SyncTracingService;
 import org.unicef.rapidreg.service.TracingFormService;
 import org.unicef.rapidreg.service.TracingPhotoService;
 import org.unicef.rapidreg.service.TracingService;
 import org.unicef.rapidreg.service.cache.ItemValuesMap;
+import org.unicef.rapidreg.utils.StreamUtil;
 import org.unicef.rapidreg.utils.TextUtils;
 import org.unicef.rapidreg.utils.Utils;
 
+import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -604,6 +607,12 @@ public class CPSyncPresenter extends BaseSyncPresenter {
             if (first == null) {
                 return;
             }
+
+            Blob audioBlob = first.getAudio();
+            if (audioBlob != null) {
+                StreamUtil.writeFile(audioBlob.getBlob(), RecordService.AUDIO_FILE_PATH);
+            }
+
             List<Long> casePhotos = casePhotoService.getIdsByCaseId(first.getId());
             for (int i = 0; i < number; i++) {
                 first.setId(0);
@@ -638,6 +647,11 @@ public class CPSyncPresenter extends BaseSyncPresenter {
 
             if (first == null) {
                 return;
+            }
+
+            Blob audioBlob = first.getAudio();
+            if (audioBlob != null) {
+                StreamUtil.writeFile(audioBlob.getBlob(), RecordService.AUDIO_FILE_PATH);
             }
 
             List<Long> tracingPhotos = tracingPhotoService.getIdsByTracingId(first.getId());
