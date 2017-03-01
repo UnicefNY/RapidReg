@@ -18,6 +18,7 @@
     <dimen name="size_60">60dp</dimen>
     <dimen name="size_100">100dp</dimen>
     <dimen name="size_200">200dp</dimen>
+    <dimen name="size_280">280dp</dimen>
     <dimen name="text_size_6">6sp</dimen>
     <dimen name="text_size_12">12sp</dimen>
     <dimen name="text_size_14">14sp</dimen>
@@ -35,9 +36,9 @@
     <dimen name="dialog_text_relativ_size">1sp</dimen>
     <dimen name="dialog_title_text_size">@dimen/text_size_18</dimen>
     <dimen name="dialog_filed_text_size">@dimen/text_size_14</dimen>
-    <dimen name="dialog_button_text_size">@dimen/text_size_12</dimen>
+    <dimen name="dialog_button_text_size">@dimen/text_size_14</dimen>
     <dimen name="dialog_filter_text_size">@dimen/text_size_14</dimen>
-    <dimen name="dialog_photo_upload_text_size">@dimen/text_size_12</dimen>
+    <dimen name="dialog_photo_upload_text_size">@dimen/text_size_16</dimen>
     <dimen name="toast_text_size">@dimen/text_size_6</dimen>
 
 
@@ -132,9 +133,9 @@
     <!--camera & record end-->
 
     <!--dialog start-->
-    <dimen name="dialog_title_padding">@dimen/size_10</dimen>
-    <dimen name="dialog_button_padding">@dimen/size_10</dimen>
-    <dimen name="dialog_photo_upload_width">@dimen/size_200</dimen>
+    <dimen name="dialog_title_padding">@dimen/size_15</dimen>
+    <dimen name="dialog_button_padding">@dimen/size_15</dimen>
+    <dimen name="dialog_photo_upload_width">@dimen/size_280</dimen>
     <!--dialog end-->
 
     <!--button scale start-->
@@ -142,7 +143,7 @@
     <!--button scale end-->
 
     <!--progress dialog start-->
-    <dimen name="progress_dialog_message_text_size">@dimen/text_size_14</dimen>
+    <dimen name="progress_dialog_message_text_size">@dimen/text_size_18</dimen>
     <dimen name="progress_dialog_padding">@dimen/size_10</dimen>
     <dimen name="progress_dialog_message_marging">@dimen/size_5</dimen>
     <!--progress dialog end-->

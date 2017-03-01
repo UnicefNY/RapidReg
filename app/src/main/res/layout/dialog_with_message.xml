@@ -10,14 +10,17 @@
         android:id="@+id/dialog_message"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:paddingTop="@dimen/dialog_title_padding"
         android:paddingLeft="@dimen/dialog_title_padding"
         android:paddingRight="@dimen/dialog_title_padding"
+        android:textColor="@color/black"
         android:textSize="@dimen/progress_dialog_message_text_size"/>
 
     <FrameLayout
         android:id="@+id/dialog_custom_view_content"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:paddingTop="@dimen/dialog_title_padding"/>
 
     <include layout="@layout/dialog_button" />
 
