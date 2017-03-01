@@ -116,6 +116,8 @@ public abstract class RecordActivity extends BaseActivity {
         toolbarSelectAllBtnContent.setVisibility(VISIBLE);
         RecordListFragment listFragment = getRecordListFragment();
         listFragment.toggleDeleteMode(true);
+        isSelectAll = false;
+        toggleSelectAllButtonState(isSelectAll);
     }
 
     public void showListMode() {

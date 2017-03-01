@@ -134,7 +134,6 @@ public class SyncFragment extends MvpFragment<SyncView, BaseSyncPresenter> imple
         }
         setDataViews(syncData.getLastSyncData(), syncData.getSyncedNumberAsString(),
                 syncData.getNotSyncedNumberAsString());
-        tvProduceCases.setVisibility(View.VISIBLE);
     }
 
     @Override

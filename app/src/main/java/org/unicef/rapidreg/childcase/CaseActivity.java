@@ -24,7 +24,6 @@ import org.unicef.rapidreg.event.LoadGBVCaseFormEvent;
 import org.unicef.rapidreg.event.LoadGBVIncidentFormEvent;
 import org.unicef.rapidreg.event.RedirectIncidentEvent;
 import org.unicef.rapidreg.event.SaveCaseEvent;
-import org.unicef.rapidreg.exception.FragmentSwitchException;
 import org.unicef.rapidreg.model.User;
 import org.unicef.rapidreg.utils.Utils;
 import org.unicef.rapidreg.widgets.dialog.MessageDialog;
