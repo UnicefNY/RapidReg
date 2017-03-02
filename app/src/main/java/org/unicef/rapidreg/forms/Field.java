@@ -327,4 +327,8 @@ public class Field {
             return clz;
         }
     }
+
+    public class ValidationKeywords {
+        public static final String AGE_KEY = "age";
+    }
 }

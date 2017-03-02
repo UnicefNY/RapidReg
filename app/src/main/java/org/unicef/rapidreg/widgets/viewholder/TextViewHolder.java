@@ -2,6 +2,7 @@ package org.unicef.rapidreg.widgets.viewholder;
 
 import android.content.Context;
 import android.content.res.Configuration;
+import android.support.design.widget.TextInputLayout;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextUtils;
@@ -14,6 +15,7 @@ import android.widget.ViewSwitcher;
 
 import org.unicef.rapidreg.R;
 import org.unicef.rapidreg.forms.Field;
+import org.unicef.rapidreg.service.RecordService;
 import org.unicef.rapidreg.service.cache.ItemValuesMap;
 
 import butterknife.BindView;
@@ -21,6 +23,7 @@ import butterknife.ButterKnife;
 
 public class TextViewHolder extends BaseTextViewHolder {
     public static final String TAG = TextViewHolder.class.getSimpleName();
+    private static final int AGE_MAX_LENGTH = 3;
 
     @BindView(R.id.label)
     TextView labelView;
@@ -44,6 +47,7 @@ public class TextViewHolder extends BaseTextViewHolder {
 
     @Override
     public void setValue(Field field) {
+        valueView.setTag(field.getName());
         String labelText = getLabel(field);
 
         if (isRequired(field)) {
@@ -58,6 +62,7 @@ public class TextViewHolder extends BaseTextViewHolder {
         disableUneditableField(isEditable(field), valueView);
         setEditableBackgroundStyle(isEditable(field));
 
+        valueView.setError(null);
         valueView.setSingleLine(true);
         valueView.setInputType(InputType.TYPE_CLASS_TEXT);
         if (field.isTextArea()) {
@@ -89,6 +94,7 @@ public class TextViewHolder extends BaseTextViewHolder {
                 inputMethodManager.showSoftInput(valueView, InputMethodManager.SHOW_IMPLICIT);
             }
         });
+
         valueView.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
@@ -115,6 +121,9 @@ public class TextViewHolder extends BaseTextViewHolder {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
+                String verifyResult = verifyValue(String.valueOf(s), field);
+                valueView.setError(verifyResult);
+                valueView.postInvalidate();
                 saveValues(field);
             }
 
@@ -122,6 +131,31 @@ public class TextViewHolder extends BaseTextViewHolder {
             public void afterTextChanged(Editable s) {
             }
         });
+    }
+
+    private String verifyValue(String value, Field field) {
+        if (field.isNumericField()) {
+            if (field.getName().contains(Field.ValidationKeywords.AGE_KEY)) {
+                if (!isAgeValid(value)) {
+                    return "Age should between 0 - 130";
+                }
+            }
+        }
+        return null;
+    }
+
+    private boolean isAgeValid(String ageContent) {
+        if (TextUtils.isEmpty(ageContent)) {
+            return true;
+        }
+        if (ageContent.length() > AGE_MAX_LENGTH) {
+            return false;
+        }
+        int age = Integer.valueOf(ageContent);
+        if (age < RecordService.AGE_MIN || age > RecordService.AGE_MAX) {
+            return false;
+        }
+        return true;
     }
 
     @Override

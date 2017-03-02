@@ -51,6 +51,9 @@ public class RecordService {
     public static final String MODULE_GBV_CASE = "primeromodule-gbv";
     public static final String MODULE_CP_CASE = "primeromodule-cp";
 
+    public static final int AGE_MIN = 0;
+    public static final int AGE_MAX = 130;
+
     public static final String AUDIO_FILE_PATH = PrimeroAppConfiguration.getInternalFilePath() + "/audioFile.amr";
     private static final String TAG = RecordService.class.getSimpleName();
 
