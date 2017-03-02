@@ -2,11 +2,6 @@ package org.unicef.rapidreg.base;
 
 import android.app.AlertDialog;
 import android.content.Context;
-import android.support.annotation.NonNull;
-import android.text.SpannableString;
-import android.text.style.RelativeSizeSpan;
-
-import org.unicef.rapidreg.R;
 
 public class BaseAlertDialog extends AlertDialog {
 
@@ -42,7 +37,7 @@ public class BaseAlertDialog extends AlertDialog {
 
         @Override
         public AlertDialog.Builder setTitle(CharSequence title) {
-            return super.setTitle(getSpannableString(title));
+            return super.setTitle(title);
         }
 
         @Override
@@ -52,7 +47,7 @@ public class BaseAlertDialog extends AlertDialog {
 
         @Override
         public AlertDialog.Builder setMessage(CharSequence message) {
-            return super.setMessage(getSpannableString(message));
+            return super.setMessage(message);
         }
 
         @Override
@@ -62,7 +57,7 @@ public class BaseAlertDialog extends AlertDialog {
 
         @Override
         public AlertDialog.Builder setPositiveButton(CharSequence text, OnClickListener listener) {
-            return super.setPositiveButton(getSpannableString(text), listener);
+            return super.setPositiveButton(text, listener);
         }
 
         @Override
@@ -72,7 +67,7 @@ public class BaseAlertDialog extends AlertDialog {
 
         @Override
         public AlertDialog.Builder setNegativeButton(CharSequence text, OnClickListener listener) {
-            return super.setNegativeButton(getSpannableString(text), listener);
+            return super.setNegativeButton(text, listener);
         }
 
         @Override
@@ -82,15 +77,8 @@ public class BaseAlertDialog extends AlertDialog {
 
         @Override
         public AlertDialog.Builder setNeutralButton(CharSequence text, OnClickListener listener) {
-            return super.setNeutralButton(getSpannableString(text), listener);
+            return super.setNeutralButton(text, listener);
         }
 
-        @NonNull
-        private SpannableString getSpannableString(CharSequence message) {
-            SpannableString spannableString = new SpannableString(message);
-            spannableString.setSpan(new RelativeSizeSpan(context.getResources()
-                    .getDimension(R.dimen.dialog_text_relativ_size)), 0, spannableString.length(), 0);
-            return spannableString;
-        }
     }
 }
