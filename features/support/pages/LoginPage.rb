@@ -3,25 +3,30 @@ module Screen
     class LoginPage < RapidRegAppPage
 
       def login(account)
-        p account
         raise("Account dose not exist...") if account.empty?
         username = account["username"]
         password = account["password"]
         url = account["url"]
+        p account["username"]
         loginAs(username,password,url)
       end
 
       def loginAs(username, password,url)
         set_login_username(username)
         set_login_password(password)
+        change_url
+        sleep 1
         set_login_url(url)
         sign_in
         puts "Log in..."
       end
 
-      def reLoginAs(username, password)
+      def reLoginAs(username, password,url)
         set_login_username(username)
         set_login_password(password)
+        change_url
+        sleep 1
+        set_login_url(url)
         sign_in
         puts "Log in..."
       end
@@ -44,6 +49,10 @@ module Screen
 
       def set_login_password(password)
         findById("password").send_keys("#{password}")
+      end
+
+      def change_url
+        clickById("change_url")
       end
 
       def set_login_url(url)
