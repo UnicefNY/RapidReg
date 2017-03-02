@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
@@ -11,11 +12,15 @@
         android:drawableLeft="@drawable/cases"
         android:text="@string/cases" />
 
+    <TextView style="@style/NavigationItemLine"/>
+
     <TextView
         android:id="@+id/nav_tracing"
         style="@style/NavigationItemTextViewStyle"
         android:drawableLeft="@drawable/tracing"
         android:text="@string/tracing" />
+
+    <TextView style="@style/NavigationItemLine" />
 
     <TextView
         android:id="@+id/nav_incident"
@@ -23,16 +28,14 @@
         android:drawableLeft="@drawable/ic_assignment_blue_24dp"
         android:text="@string/incidents" />
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/size_1"
-        android:layout_marginBottom="@dimen/size_5"
-        android:background="@android:color/darker_gray" />
+    <TextView style="@style/NavigationItemLine" />
 
     <TextView
         android:id="@+id/nav_sync"
         style="@style/NavigationItemTextViewStyle"
         android:drawableLeft="@drawable/ic_autorenew_black_24dp"
         android:text="@string/sync" />
+
+    <TextView style="@style/NavigationItemLine" />
 
 </LinearLayout>

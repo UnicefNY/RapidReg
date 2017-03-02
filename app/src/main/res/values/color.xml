@@ -4,6 +4,10 @@
     <color name="color_primary_dark">#303f9f</color>
     <color name="color_accent">#ff4081</color>
 
+    <!--NavigationView-->
+     <color name="nav_text_black">#494949</color>
+     <color name="nav_line_gray">#E6E6E6 </color>
+
     <color name="accent">#ffc107</color>
     <color name="blue">#ab1177ff</color>
     <color name="white">#ffffff</color>

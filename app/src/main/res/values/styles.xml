@@ -44,16 +44,24 @@
     <style name="NavigationItemTextViewStyle">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_marginBottom">@dimen/size_5</item>
         <item name="android:textSize">@dimen/text_size_18</item>
         <item name="android:drawablePadding">@dimen/size_24</item>
         <item name="android:paddingLeft">@dimen/size_15</item>
         <item name="android:paddingRight">@dimen/size_15</item>
-        <item name="android:paddingTop">@dimen/size_10</item>
-        <item name="android:paddingBottom">@dimen/size_10</item>
+        <item name="android:paddingTop">@dimen/size_12</item>
+        <item name="android:paddingBottom">@dimen/size_12</item>
         <item name="android:gravity">center_vertical</item>
-        <item name="android:textColor">@color/primero_font_medium</item>
+        <item name="android:textColor">@color/nav_text_black</item>
     </style>
+
+    <style name="NavigationItemLine">
+             <item name="android:layout_width">match_parent</item>
+             <item name="android:layout_height">@dimen/size_1</item> 
+            <item name="android:layout_marginRight">@dimen/size_15</item> 
+            <item name="android:layout_marginLeft">@dimen/size_15</item> 
+            <item name="android:background">@color/nav_line_gray</item>
+    </style>
+
 
     <style name="RadioButton">
         <item name="android:textSize">@dimen/text_size_16</item>
