@@ -1,5 +1,8 @@
 <resources>
     <string name="app_name">RapidReg</string>
+    <!--List Spinner-->
+    <string name="spinner_order_by">Order by</string>
+
     <!--Loging activity layout string-->
     <string name="app_banner_text">Primero</string>
     <string name="username_hint_text">Username</string>

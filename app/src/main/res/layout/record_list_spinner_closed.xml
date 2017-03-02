@@ -13,11 +13,21 @@
         android:gravity="center" />
 
     <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:text="@string/spinner_order_by"
+        android:textColor="@color/primero_blue"
+        android:textSize="@dimen/text_size_16"
+        android:layout_marginLeft="@dimen/size_2"
+        android:layout_marginRight="@dimen/size_10" />
+
+    <TextView
         android:id="@+id/order_name"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="9"
-        android:textColor="@color/primero_blue"
+        android:lines="1"
+        android:textColor="@color/primero_font_dark"
         android:textSize="@dimen/text_size_16" />
 
     <ImageView
