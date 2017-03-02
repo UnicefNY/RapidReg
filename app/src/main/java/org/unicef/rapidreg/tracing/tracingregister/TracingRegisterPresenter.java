@@ -14,11 +14,13 @@ import org.unicef.rapidreg.forms.RecordForm;
 import org.unicef.rapidreg.forms.Section;
 import org.unicef.rapidreg.forms.TracingTemplateForm;
 import org.unicef.rapidreg.model.Tracing;
+import org.unicef.rapidreg.service.RecordService;
 import org.unicef.rapidreg.service.TracingFormService;
 import org.unicef.rapidreg.service.TracingPhotoService;
 import org.unicef.rapidreg.service.TracingService;
 import org.unicef.rapidreg.service.cache.ItemValuesMap;
 import org.unicef.rapidreg.utils.JsonUtils;
+import org.unicef.rapidreg.utils.TextUtils;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -58,6 +60,12 @@ public class TracingRegisterPresenter extends RecordRegisterPresenter {
     @Override
     public void saveRecord(ItemValuesMap itemValuesMap, List<String> photoPaths,
                            SaveRecordCallback callback) {
+        List<String> validateValueMsgList = validateFieldValue(itemValuesMap);
+        if (!validateValueMsgList.isEmpty()) {
+            callback.onFileValueInvalid(validateValueMsgList);
+            return;
+        }
+
         if (!validateRequiredField(itemValuesMap)) {
             callback.onRequiredFieldNotFilled();
             return;
@@ -72,6 +80,15 @@ public class TracingRegisterPresenter extends RecordRegisterPresenter {
         } catch (IOException e) {
             callback.onSavedFail();
         }
+    }
+
+    protected List<String> validateFieldValue(ItemValuesMap itemValuesMap) {
+        List<String> validateMsgList = new ArrayList<>();
+//        String ageValiteMsg = validateAge(itemValuesMap.getAsString(RecordService.RELATION_AGE));
+//        if (!TextUtils.isEmpty(ageValiteMsg)) {
+//            validateMsgList.add(ageValiteMsg);
+//        }
+        return validateMsgList;
     }
 
     @Override

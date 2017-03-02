@@ -13,6 +13,7 @@ import org.unicef.rapidreg.forms.Field;
 import org.unicef.rapidreg.forms.RecordForm;
 import org.unicef.rapidreg.service.RecordService;
 import org.unicef.rapidreg.service.cache.ItemValuesMap;
+import org.unicef.rapidreg.utils.TextUtils;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -66,7 +67,6 @@ public abstract class RecordRegisterPresenter extends MvpBasePresenter<RecordReg
 
         return fields;
     }
-
 
     public void addProfileItems(ItemValuesMap itemValues, Date registrationDate, String
             uniqueId, List<String> incidentIds, long recordId) {
@@ -152,6 +152,17 @@ public abstract class RecordRegisterPresenter extends MvpBasePresenter<RecordReg
         }
 
         return getPhotoPathsByRecordId(getRecordId(bundle));
+    }
+
+    protected boolean validateAge(String ageContent) {
+        if (TextUtils.isEmpty(ageContent)) {
+            return true;
+        }
+        int age = Integer.valueOf(ageContent);
+        if (age < RecordService.AGE_MIN || age > RecordService.AGE_MAX) {
+            return false;
+        }
+        return true;
     }
 
     public abstract void saveRecord(ItemValuesMap itemValuesMap, List<String> photoPaths,

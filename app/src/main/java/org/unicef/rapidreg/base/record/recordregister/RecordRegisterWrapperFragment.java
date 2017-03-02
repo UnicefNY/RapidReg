@@ -180,6 +180,13 @@ public abstract class RecordRegisterWrapperFragment extends MvpFragment<RecordRe
         });
     }
 
+    @Override
+    public void onFileValueInvalid(List<String> invalidMsgList) {
+        for (String invalidMsg : invalidMsgList) {
+            Toast.makeText(getContext(), invalidMsg, Toast.LENGTH_SHORT).show();
+        }
+    }
+
     protected abstract RecordPhotoAdapter createRecordPhotoAdapter();
 
     protected abstract void initItemValues();

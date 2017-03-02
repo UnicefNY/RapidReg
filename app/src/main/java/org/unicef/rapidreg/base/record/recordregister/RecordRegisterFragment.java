@@ -183,6 +183,13 @@ public abstract class RecordRegisterFragment extends MvpFragment<RecordRegisterV
         saveStateToArguments();
     }
 
+    @Override
+    public void onFileValueInvalid(List<String> invalidMsgList) {
+        for (String invalidMsg : invalidMsgList) {
+            Toast.makeText(getContext(), invalidMsg, Toast.LENGTH_SHORT).show();
+        }
+    }
+
     private void saveStateToArguments() {
         if (getView() != null)
             savedState = saveState();

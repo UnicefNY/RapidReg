@@ -5,6 +5,8 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
+
 import com.ogaclejapan.smarttablayout.utils.v4.FragmentPagerItem;
 import org.unicef.rapidreg.R;
 import org.unicef.rapidreg.base.Feature;
@@ -17,6 +19,8 @@ import org.unicef.rapidreg.childcase.casephoto.CasePhotoAdapter;
 import org.unicef.rapidreg.service.RecordService;
 
 import java.util.ArrayList;
+import java.util.List;
+
 import javax.inject.Inject;
 import butterknife.OnClick;
 

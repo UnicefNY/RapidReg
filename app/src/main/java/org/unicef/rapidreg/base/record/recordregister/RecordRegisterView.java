@@ -17,5 +17,6 @@ public interface RecordRegisterView extends MvpView {
         void onSaveSuccessful(long recordId);
         void onSavedFail();
         void onRequiredFieldNotFilled();
+        void onFileValueInvalid(List<String> invalidMsgList);
     }
 }

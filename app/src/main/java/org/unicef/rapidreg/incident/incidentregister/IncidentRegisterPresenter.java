@@ -16,8 +16,10 @@ import org.unicef.rapidreg.forms.Section;
 import org.unicef.rapidreg.model.Incident;
 import org.unicef.rapidreg.service.IncidentFormService;
 import org.unicef.rapidreg.service.IncidentService;
+import org.unicef.rapidreg.service.RecordService;
 import org.unicef.rapidreg.service.cache.ItemValuesMap;
 import org.unicef.rapidreg.utils.JsonUtils;
+import org.unicef.rapidreg.utils.TextUtils;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -54,6 +56,11 @@ public class IncidentRegisterPresenter extends RecordRegisterPresenter {
     @Override
     public void saveRecord(ItemValuesMap itemValuesMap, List<String> photoPaths,
                            RecordRegisterView.SaveRecordCallback callback) {
+        List<String> validateValueMsgList = validateFieldValue(itemValuesMap);
+        if (!validateValueMsgList.isEmpty()) {
+            callback.onFileValueInvalid(validateValueMsgList);
+            return;
+        }
 
         IncidentTemplateForm incidentForm = incidentFormService.getGBVTemplate();
         boolean validateRequiredFields = incidentService.validateRequiredFields(incidentForm,
@@ -72,6 +79,15 @@ public class IncidentRegisterPresenter extends RecordRegisterPresenter {
         } catch (IOException e) {
             callback.onSavedFail();
         }
+    }
+
+    private List<String> validateFieldValue(ItemValuesMap itemValuesMap) {
+        List<String> validateMsgList = new ArrayList<>();
+//        String ageValiteMsg = validateAge(itemValuesMap.getAsString(RecordService.AGE));
+//        if (!TextUtils.isEmpty(ageValiteMsg)) {
+//            validateMsgList.add(ageValiteMsg);
+//        }
+        return validateMsgList;
     }
 
     @Override

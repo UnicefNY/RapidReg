@@ -23,7 +23,7 @@ public enum CaseFeature implements Feature {
     DETAILS_GBV_MINI(R.string.gbv_case_details, CaseMiniFormFragment.class),
     DETAILS_GBV_FULL(R.string.gbv_case_details, CaseRegisterWrapperFragment.class),
     DELETE(R.string.delete, CaseListFragment.class),
-    SEARCH(R.string.search, CaseSearchFragment.class),;
+    SEARCH(R.string.search, CaseSearchFragment.class);
 
     private int titleId;
     private Class clz;
