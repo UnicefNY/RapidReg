@@ -3,34 +3,42 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:minHeight="@dimen/case_register_mini_heigh"
-    android:orientation="horizontal"
+    android:orientation="vertical"
     android:paddingBottom="@dimen/case_register_field_padding_top_bottom"
     android:paddingTop="@dimen/case_register_field_padding_top_bottom">
 
-    <TextView
-        android:id="@+id/label"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="9"
-        android:paddingBottom="@dimen/case_register_field_padding_top_bottom"
-        android:paddingLeft="@dimen/case_register_label_padding_left_right"
-        android:paddingRight="@dimen/case_register_label_padding_left_right"
-        android:paddingTop="@dimen/case_register_field_padding_top_bottom"
-        android:textColor="@color/gray"
-        android:textSize="@dimen/text_size_16" />
-
     <LinearLayout
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:gravity="center">
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <TextView
+            android:id="@+id/label"
+            android:text="text"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="9"
+            android:paddingBottom="@dimen/case_register_field_padding_top_bottom"
+            android:paddingLeft="@dimen/size_15"
+            android:paddingRight="@dimen/case_register_label_padding_left_right"
+            android:paddingTop="@dimen/case_register_field_padding_top_bottom"
+            android:textColor="@color/nav_text_black"
+            android:textSize="@dimen/text_size_16" />
 
-        <CheckBox
-            android:id="@+id/value"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:scaleX="@dimen/button_icon_scale"
-            android:scaleY="@dimen/button_icon_scale" />
-
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:layout_marginRight="@dimen/size_10"
+            android:gravity="center">
+            <CheckBox
+                android:id="@+id/value"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:scaleX="@dimen/button_icon_scale"
+                android:scaleY="@dimen/button_icon_scale" />
+        </LinearLayout>
     </LinearLayout>
+
+    <TextView style="@style/NavigationItemLine" />
+
 </LinearLayout>

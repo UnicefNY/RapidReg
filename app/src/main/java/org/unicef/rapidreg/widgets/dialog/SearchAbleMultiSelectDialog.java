@@ -186,30 +186,24 @@ public class SearchAbleMultiSelectDialog extends Dialog {
             }
 
             holder.textView.setText(arrayList.get(position));
-            holder.textView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (!results.contains(arrayList.get(position))) {
-                        results.add(arrayList.get(position));
-                    } else {
-                        results.remove(arrayList.get(position));
-                    }
-                    listener.onClick(results);
-                    notifyDataSetChanged();
+            holder.textView.setOnClickListener(v -> {
+                if (!results.contains(arrayList.get(position))) {
+                    results.add(arrayList.get(position));
+                } else {
+                    results.remove(arrayList.get(position));
                 }
+                listener.onClick(results);
+                notifyDataSetChanged();
             });
 
-            holder.checkBox.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (!results.contains(arrayList.get(position))) {
-                        results.add(arrayList.get(position));
-                    } else {
-                        results.remove(arrayList.get(position));
-                    }
-                    listener.onClick(results);
-                    notifyDataSetChanged();
+            holder.checkBox.setOnClickListener(v -> {
+                if (!results.contains(arrayList.get(position))) {
+                    results.add(arrayList.get(position));
+                } else {
+                    results.remove(arrayList.get(position));
                 }
+                listener.onClick(results);
+                notifyDataSetChanged();
             });
 
             if (results.contains(arrayList.get(position))) {

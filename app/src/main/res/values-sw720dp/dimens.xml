@@ -30,6 +30,7 @@
     <dimen name="text_size_48">120sp</dimen>
     <dimen name="text_size_200">500sp</dimen>
 
+    <dimen name="dialog_radio_margin_right">0dp</dimen>
 
     <!--Text size-->
     <dimen name="text_size_hidden_state">30sp</dimen>

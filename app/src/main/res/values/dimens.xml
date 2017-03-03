@@ -28,6 +28,8 @@
     <dimen name="text_size_48">48sp</dimen>
     <dimen name="text_size_200">200sp</dimen>
 
+    <dimen name="dialog_radio_margin_right">10dp</dimen>
+
     <!--Text size-->
     <dimen name="text_size_hidden_state">15sp</dimen>
     <dimen name="dialog_text_relativ_size">1sp</dimen>
