@@ -21,6 +21,8 @@
     <dimen name="size_100">220dp</dimen>
     <dimen name="size_200">440dp</dimen>
     <dimen name="size_280">540dp</dimen>
+    <dimen name="size_300">660dp</dimen>
+    <dimen name="size_400">840dp</dimen>
     <dimen name="text_size_6">15sp</dimen>
     <dimen name="text_size_12">30sp</dimen>
     <dimen name="text_size_14">35sp</dimen>
@@ -147,6 +149,8 @@
     <dimen name="dialog_title_padding">@dimen/size_15</dimen>
     <dimen name="dialog_button_padding">@dimen/size_15</dimen>
     <dimen name="dialog_photo_upload_width">@dimen/size_280</dimen>
+    <dimen name="dialog_width">@dimen/size_300</dimen>
+    <dimen name="dialog_height">@dimen/size_300</dimen>
     <!--dialog end-->
 
     <!--button scale start-->

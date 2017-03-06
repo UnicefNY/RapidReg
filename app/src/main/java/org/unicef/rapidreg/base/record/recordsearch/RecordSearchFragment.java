@@ -222,12 +222,10 @@ public abstract class RecordSearchFragment extends MvpFragment<RecordListView, R
     }
 
     private void showDatePickerDialog(TextView textView) {
-        final DatePicker datePicker = new DatePicker(getActivity());
-        datePicker.setCalendarViewShown(false);
-
         MessageDialog messageDialog = new MessageDialog(getActivity());
         messageDialog.setTitle(R.string.date);
-        messageDialog.setCustonView(datePicker);
+        DatePicker datePicker = messageDialog.getDatePicker();
+        datePicker.setCalendarViewShown(false);
         messageDialog.setPositiveButton(R.string.ok, new View.OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -2,8 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="@dimen/dialog_button_padding"
-    android:orientation="horizontal">
+    android:orientation="horizontal"
+    android:padding="@dimen/dialog_button_padding">
 
     <Button
         android:id="@+id/clearButton"

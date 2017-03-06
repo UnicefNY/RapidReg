@@ -5,6 +5,7 @@ import android.content.Context;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
@@ -23,6 +24,12 @@ public class MessageDialog extends Dialog {
 
     @BindView(R.id.dialog_custom_view_content)
     FrameLayout dialogCustonViewContent;
+
+    @BindView(R.id.date_picker_content)
+    FrameLayout datePickerContent;
+
+    @BindView(R.id.date_picker)
+    DatePicker datePicker;
 
     @BindView(R.id.okButton)
     Button okButton;
@@ -49,6 +56,8 @@ public class MessageDialog extends Dialog {
         clearButton.setVisibility(View.GONE);
         dialogMessageTV.setVisibility(View.GONE);
         dialogCustonViewContent.setVisibility(View.GONE);
+        datePickerContent.setVisibility(View.GONE);
+        datePicker.setVisibility(View.GONE);
     }
 
     @Override
@@ -90,5 +99,9 @@ public class MessageDialog extends Dialog {
         clearButton.setOnClickListener(onClickListener);
     }
 
-
+    public DatePicker getDatePicker() {
+        datePickerContent.setVisibility(View.VISIBLE);
+        datePicker.setVisibility(View.VISIBLE);
+        return datePicker;
+    }
 }
