@@ -67,12 +67,7 @@ public class SearchAbleMultiSelectDialog extends Dialog {
         adapter = new SearchAbleMultiSelectDialog.MyAdapter(context, new ArrayList<>(Arrays.asList(items)));
 
         list.setAdapter(adapter);
-        list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> a, View v, int position, long id) {
-                Log.d(TAG, "Selected Item is = " + list.getItemAtPosition(position));
-            }
-        });
+        list.setOnItemClickListener((a, v, position, id) -> Log.d(TAG, "Selected Item is = " + list.getItemAtPosition(position)));
 
         adapter.notifyDataSetChanged();
     }
@@ -166,9 +161,8 @@ public class SearchAbleMultiSelectDialog extends Dialog {
         }
 
         private class ViewHolder {
-            TextView textView;
+            TextView textView, line;
             CheckBox checkBox;
-
         }
 
         @Override
@@ -180,6 +174,8 @@ public class SearchAbleMultiSelectDialog extends Dialog {
                 holder.textView = (TextView) convertView.findViewById(R.id.label);
                 holder.textView.setClickable(true);
                 holder.checkBox = (CheckBox) convertView.findViewById(R.id.value);
+                holder.line = (TextView)convertView.findViewById(R.id.checkbox_line);
+                holder.line.setVisibility(View.VISIBLE);
                 convertView.setTag(holder);
             } else {
                 holder = (SearchAbleMultiSelectDialog.MyAdapter.ViewHolder) convertView.getTag();

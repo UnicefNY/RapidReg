@@ -39,6 +39,9 @@
         </LinearLayout>
     </LinearLayout>
 
-    <TextView style="@style/NavigationItemLine" />
+    <TextView
+        android:id="@+id/checkbox_line"
+        style="@style/NavigationItemLine"
+        android:visibility="gone"/>
 
 </LinearLayout>

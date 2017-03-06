@@ -4,18 +4,14 @@ package org.unicef.rapidreg.widgets.dialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.text.Editable;
-import android.text.SpannableString;
 import android.text.TextWatcher;
-import android.text.style.RelativeSizeSpan;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
-import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
-import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.Filter;
 import android.widget.Filterable;
@@ -67,12 +63,7 @@ public class SearchAbleDialog extends Dialog {
         adapter = new MyAdapter(context, new ArrayList<>(Arrays.asList(items)));
 
         list.setAdapter(adapter);
-        list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> a, View v, int position, long id) {
-                Log.d(TAG, "Selected Item is = " + list.getItemAtPosition(position));
-            }
-        });
+        list.setOnItemClickListener((a, v, position, id) -> Log.d(TAG, "Selected Item is = " + list.getItemAtPosition(position)));
 
         adapter.index = selectIndex;
         adapter.notifyDataSetChanged();
@@ -150,7 +141,7 @@ public class SearchAbleDialog extends Dialog {
         }
 
         private class ViewHolder {
-            TextView textView;
+            TextView textView, line;
             RadioButton radioButton;
         }
 
@@ -166,31 +157,25 @@ public class SearchAbleDialog extends Dialog {
                 holder.textView = (TextView) convertView.findViewById(R.id.textView);
                 holder.textView.setClickable(true);
                 holder.radioButton = (RadioButton) convertView.findViewById(R.id.radioButton);
+                holder.line = (TextView)convertView.findViewById(R.id.radio_line);
+                holder.line.setVisibility(View.VISIBLE);
                 convertView.setTag(holder);
             } else {
                 holder = (ViewHolder) convertView.getTag();
             }
 
             holder.textView.setText(arrayList.get(position));
-            holder.textView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    index = position;
-                    notifyDataSetChanged();
-                }
+            holder.textView.setOnClickListener(v -> {
+                index = position;
+                notifyDataSetChanged();
             });
 
             holder.radioButton
-                    .setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-
-                        @Override
-                        public void onCheckedChanged(CompoundButton buttonView,
-                                                     boolean isChecked) {
-                            if (isChecked) {
-                                index = position;
-                                listener.onClick(arrayList.get(index));
-                                notifyDataSetChanged();
-                            }
+                    .setOnCheckedChangeListener((buttonView, isChecked) -> {
+                        if (isChecked) {
+                            index = position;
+                            listener.onClick(arrayList.get(index));
+                            notifyDataSetChanged();
                         }
                     });
 

@@ -37,6 +37,9 @@
             android:scaleY="@dimen/button_icon_scale"/>
     </LinearLayout>
 
-    <TextView style="@style/NavigationItemLine" />
+    <TextView
+        android:id="@+id/radio_line"
+        style="@style/NavigationItemLine"
+        android:visibility="gone"/>
 
 </LinearLayout>
