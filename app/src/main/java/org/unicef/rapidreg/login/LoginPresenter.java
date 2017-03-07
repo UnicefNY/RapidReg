@@ -11,6 +11,7 @@ import org.unicef.rapidreg.event.LoadTracingFormEvent;
 import org.unicef.rapidreg.model.User;
 import org.unicef.rapidreg.service.LoginService;
 import org.unicef.rapidreg.service.SystemSettingsService;
+import org.unicef.rapidreg.service.cache.GlobalLocationCache;
 import org.unicef.rapidreg.service.impl.LoginServiceImpl;
 import org.unicef.rapidreg.utils.TextUtils;
 
@@ -98,6 +99,9 @@ public class LoginPresenter extends MvpBasePresenter<LoginView> {
                     getView().showOnlineLoginSuccessful();
                     getView().configAppRuntimeEvent();
                     getView().navigateToLoginSucceedPage();
+
+                    systemSettingsService.initSystemSettings();
+                    systemSettingsService.setGlobalSystemSettings();
                 }
             }
 
@@ -142,6 +146,7 @@ public class LoginPresenter extends MvpBasePresenter<LoginView> {
                 getView().showOfflineLoginSuccessful();
                 getView().configAppRuntimeEvent();
                 getView().navigateToLoginSucceedPage();
+                systemSettingsService.setGlobalSystemSettings();
             }
 
             @Override

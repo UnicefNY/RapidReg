@@ -26,7 +26,6 @@ public class BaseForm extends BaseModel {
         this.moduleId = moduleId;
     }
 
-
     public BaseForm() {}
 
     public BaseForm(Blob form) {

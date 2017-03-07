@@ -129,7 +129,7 @@ public abstract class RecordListFragment extends MvpFragment<RecordListView, Rec
         messageDialog.setTitle(R.string.sync_forms);
         messageDialog.setMessage(String.format("%s %s", message, getResources().getString(R.string
                 .sync_forms_message)));
-        messageDialog.setPositiveButton(R.string.ok, v -> {
+        messageDialog.setPositiveButton(R.string.ok, view -> {
             ((RecordActivity) getActivity()).sendSyncFormEvent();
             messageDialog.dismiss();
         });
@@ -198,7 +198,7 @@ public abstract class RecordListFragment extends MvpFragment<RecordListView, Rec
     }
 
     private void removeRecordsAndRedirectToFirstPosition() {
-        int retainedPosition = recordListAdapter.caculateRetainedPosition();
+        int retainedPosition = recordListAdapter.calculateRetainedPosition();
         recordListAdapter.removeRecords();
         recordListAdapter.notifyDataSetChanged();
         toggleDeleteMode(false);

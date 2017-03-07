@@ -2,7 +2,6 @@ package org.unicef.rapidreg.widgets.dialog;
 
 import android.content.Context;
 import android.text.TextUtils;
-import android.view.View;
 import android.widget.TextView;
 import android.widget.ViewSwitcher;
 
@@ -30,8 +29,7 @@ public class MultipleSelectDialog extends BaseDialog {
 
     @Override
     public void initView() {
-        String fieldType = field.getType();
-        optionItems = getSelectOptions(fieldType, field);
+        optionItems = getSelectOptions(field);
         results.addAll(itemValues.getAsList(field.getName()));
 
         dialog = new SearchAbleMultiSelectDialog(context, field.getDisplayName().get(Locale.getDefault()
@@ -39,33 +37,20 @@ public class MultipleSelectDialog extends BaseDialog {
 
         dialog.disableClearButton(true);
         dialog.disableDialogFilter(true);
-        dialog.setOnClick(new SearchAbleMultiSelectDialog.SearchAbleMultiSelectDialogOnClickListener() {
-            @Override
-            public void onClick(List<String> results) {
-                MultipleSelectDialog.this.results = results;
-            }
-        });
+        dialog.setOnClick(items -> MultipleSelectDialog.this.results = items);
 
-        dialog.setCancelButton(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-            }
-        });
+        dialog.setCancelButton(view -> dialog.dismiss());
 
-        dialog.setOkButton(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (getResult() != null && !TextUtils.isEmpty(getResult().toString())) {
-                    viewSwitcher.setDisplayedChild(GenericViewHolder.FORM_HAS_ANSWER_STATE);
-                } else {
-                    viewSwitcher.setDisplayedChild(GenericViewHolder.FORM_NO_ANSWER_STATE);
-                }
-                resultView.setText(getDisplayText());
-
-                itemValues.addItem(field.getName(), getResult());
-                dialog.dismiss();
+        dialog.setOkButton(view -> {
+            if (getResult() != null && !TextUtils.isEmpty(getResult().toString())) {
+                viewSwitcher.setDisplayedChild(GenericViewHolder.FORM_HAS_ANSWER_STATE);
+            } else {
+                viewSwitcher.setDisplayedChild(GenericViewHolder.FORM_NO_ANSWER_STATE);
             }
+            resultView.setText(getDisplayText());
+
+            itemValues.addItem(field.getName(), getResult());
+            dialog.dismiss();
         });
     }
 

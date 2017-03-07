@@ -2,6 +2,7 @@ package org.unicef.rapidreg;
 
 import android.provider.Settings;
 
+import org.unicef.rapidreg.model.SystemSettings;
 import org.unicef.rapidreg.model.User;
 import org.unicef.rapidreg.utils.TextUtils;
 
@@ -23,6 +24,8 @@ public class PrimeroAppConfiguration {
 
     private static User currentUser;
 
+    private static SystemSettings currentSystemSettings;
+
     public static String getApiBaseUrl() {
         return apiBaseUrl;
     }
@@ -30,6 +33,14 @@ public class PrimeroAppConfiguration {
     public static void setApiBaseUrl(String apiBaseUrl) {
         apiBaseUrl = TextUtils.lintUrl(apiBaseUrl);
         PrimeroAppConfiguration.apiBaseUrl = apiBaseUrl;
+    }
+
+    public static SystemSettings getCurrentSystemSettings() {
+        return currentSystemSettings;
+    }
+
+    public static void setCurrentSystemSettings(SystemSettings currentSystemSettings) {
+        PrimeroAppConfiguration.currentSystemSettings = currentSystemSettings;
     }
 
     public static String getCookie() {

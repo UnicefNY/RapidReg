@@ -2,13 +2,12 @@ package org.unicef.rapidreg.widgets.dialog;
 
 import android.content.Context;
 import android.text.TextUtils;
-import android.view.View;
 import android.widget.TextView;
 import android.widget.ViewSwitcher;
 
 import org.unicef.rapidreg.forms.Field;
+import org.unicef.rapidreg.service.cache.GlobalLocationCache;
 import org.unicef.rapidreg.service.cache.ItemValuesMap;
-import org.unicef.rapidreg.utils.Utils;
 import org.unicef.rapidreg.widgets.viewholder.GenericViewHolder;
 
 import java.util.Arrays;
@@ -30,8 +29,9 @@ public class SingleSelectDialog extends BaseDialog {
 
     @Override
     public void initView() {
-        String fieldType = field.getType();
-        optionItems = getSelectOptions(fieldType, field);
+        optionItems = getSelectOptions(field);
+
+        simplifyLocationOptionsIfLocationFiled();
 
         int selectIndex = Arrays.asList(optionItems).indexOf(result);
         if (selectIndex == -1) {
@@ -42,35 +42,37 @@ public class SingleSelectDialog extends BaseDialog {
         dialog = new SearchAbleDialog(context, field.getDisplayName().get(Locale.getDefault()
                 .getLanguage()), optionItems, selectIndex);
 
-        dialog.setOnClick(new SearchAbleDialog.SearchAbleDialogOnClickListener() {
-            @Override
-            public void onClick(String result) {
-                SingleSelectDialog.this.result = result;
+        dialog.setOnClick(result -> SingleSelectDialog.this.result = result);
+
+        dialog.setCancelButton(v -> dialog.dismiss());
+
+        dialog.setOkButton(view -> {
+            if (getResult() != null && !TextUtils.isEmpty(getResult().toString())) {
+                viewSwitcher.setDisplayedChild(GenericViewHolder.FORM_HAS_ANSWER_STATE);
+            } else {
+                viewSwitcher.setDisplayedChild(GenericViewHolder.FORM_NO_ANSWER_STATE);
             }
+            resultView.setText(getResult() == null ? null : getResult().toString());
+
+            itemValues.addItem(field.getName(), recoveryLocationValueIfLocationFiled());
+            dialog.dismiss();
         });
 
-        dialog.setCancelButton(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-            }
-        });
+    }
 
-        dialog.setOkButton(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (getResult() != null && !TextUtils.isEmpty(getResult().toString())) {
-                    viewSwitcher.setDisplayedChild(GenericViewHolder.FORM_HAS_ANSWER_STATE);
-                } else {
-                    viewSwitcher.setDisplayedChild(GenericViewHolder.FORM_NO_ANSWER_STATE);
-                }
-                resultView.setText(getResult() == null ? null : getResult().toString());
+    private void simplifyLocationOptionsIfLocationFiled() {
+        if (field.isSelectField() && GlobalLocationCache.containsKey(field.getName())) {
+            GlobalLocationCache.initSimpleLocations(optionItems);
+            optionItems = GlobalLocationCache.getSimpleLocations().toArray(new String[0]);
+        }
+    }
 
-                itemValues.addItem(field.getName(), getResult());
-                dialog.dismiss();
-            }
-        });
-
+    private String recoveryLocationValueIfLocationFiled() {
+        if (field.isSelectField() && GlobalLocationCache.containsKey(field.getName()) && !org.unicef.rapidreg.utils
+                .TextUtils.isEmpty(getResult())) {
+            return Arrays.asList(getSelectOptions(field)).get(GlobalLocationCache.index(getResult()));
+        }
+        return getResult();
     }
 
     @Override

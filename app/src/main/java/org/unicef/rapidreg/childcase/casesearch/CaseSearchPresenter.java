@@ -13,7 +13,6 @@ import javax.inject.Inject;
 import static org.unicef.rapidreg.base.record.recordsearch.RecordSearchPresenter.CONSTANT.*;
 
 public class CaseSearchPresenter extends RecordSearchPresenter {
-
     private CaseService caseService;
 
     @Inject

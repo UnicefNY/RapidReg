@@ -23,7 +23,6 @@ import static org.unicef.rapidreg.base.record.recordsearch.RecordSearchPresenter
 import static org.unicef.rapidreg.model.RecordModel.EMPTY_AGE;
 
 public class CaseSearchFragment extends RecordSearchFragment {
-
     @Inject
     CaseSearchPresenter caseSearchPresenter;
 

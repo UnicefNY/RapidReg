@@ -79,7 +79,7 @@ public abstract class BaseDialog {
         }
     }
 
-    public static String[] getSelectOptions(String fieldType, Field field) {
+    public static String[] getSelectOptions(Field field) {
         String language = PrimeroAppConfiguration.getDefaultLanguage();
         List<CharSequence> items = new ArrayList<>();
 

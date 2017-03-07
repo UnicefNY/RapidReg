@@ -127,9 +127,9 @@ public class CPSyncPresenter extends BaseSyncPresenter {
                         if (response == null || response.isSuccessful()) {
                             syncCaseService.uploadCasePhotos(caseResponsePair.first);
                         }
-                    } catch (IOException e) {
+                    } catch (Exception e) {
                         e.printStackTrace();
-                        throw new RuntimeException(e);
+//                        throw new RuntimeException(e);
                     }
                     return caseResponsePair;
                 })
@@ -180,9 +180,9 @@ public class CPSyncPresenter extends BaseSyncPresenter {
                         if (response == null || response.isSuccessful()) {
                             syncTracingService.uploadPhotos(tracingResponsePair.first);
                         }
-                    } catch (IOException e) {
+                    } catch (Exception e) {
                         e.printStackTrace();
-                        throw new RuntimeException(e);
+//                        throw new RuntimeException(e);
                     }
                     return tracingResponsePair;
                 })

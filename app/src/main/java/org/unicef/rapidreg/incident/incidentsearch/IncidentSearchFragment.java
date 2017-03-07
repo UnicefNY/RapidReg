@@ -94,34 +94,18 @@ public class IncidentSearchFragment extends RecordSearchFragment {
 
     private void setMultipleSelectionOnClickListener(final ClearableEditText target, final List<String> items, final
     String title) {
-        target.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                final String originalValue = target.getText();
-                int originalIndex = items.contains(originalValue) ? items.indexOf(originalValue) : -1;
-                dialog = new SearchAbleDialog(IncidentSearchFragment.this.getContext(), title,
-                        items.toArray(new String[0]), originalIndex);
-                dialog.setOnClick(new SearchAbleDialog.SearchAbleDialogOnClickListener() {
-                    @Override
-                    public void onClick(String result) {
-                        target.setText(result);
-                    }
-                });
-                dialog.setCancelButton(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        target.setText(originalValue);
-                        dialog.dismiss();
-                    }
-                });
-                dialog.setOkButton(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        dialog.dismiss();
-                    }
-                });
-                dialog.show();
-            }
+        target.setOnClickListener(view -> {
+            final String originalValue = target.getText();
+            int originalIndex = items.contains(originalValue) ? items.indexOf(originalValue) : -1;
+            dialog = new SearchAbleDialog(IncidentSearchFragment.this.getContext(), title,
+                    items.toArray(new String[0]), originalIndex);
+            dialog.setOnClick(result -> target.setText(result));
+            dialog.setCancelButton(v -> {
+                target.setText(originalValue);
+                dialog.dismiss();
+            });
+            dialog.setOkButton(v -> dialog.dismiss());
+            dialog.show();
         });
     }
 }

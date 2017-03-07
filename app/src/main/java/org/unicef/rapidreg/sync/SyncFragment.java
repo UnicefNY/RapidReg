@@ -3,16 +3,13 @@ package org.unicef.rapidreg.sync;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.text.InputType;
-import android.util.Config;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,8 +19,6 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.gson.Gson;
-import com.hannesdorfmann.mosby.mvp.BuildConfig;
 import com.hannesdorfmann.mosby.mvp.MvpFragment;
 
 import org.unicef.rapidreg.PrimeroAppConfiguration;
@@ -96,7 +91,6 @@ public class SyncFragment extends MvpFragment<SyncView, BaseSyncPresenter> imple
 
     @Inject
     GBVSyncPresenter gbvSyncPresenter;
-
 
     @Nullable
     @Override
@@ -173,20 +167,14 @@ public class SyncFragment extends MvpFragment<SyncView, BaseSyncPresenter> imple
         MessageDialog messageDialog = new MessageDialog(getActivity());
         messageDialog.setMessage(confirmCancelSyncMessage);
         messageDialog.setCancelable(false);
-        messageDialog.setPositiveButton(R.string.stop_sync_button_text, new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                presenter.cancelSync();
-                messageDialog.dismiss();
-                getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-            }
+        messageDialog.setPositiveButton(R.string.stop_sync_button_text, view -> {
+            presenter.cancelSync();
+            messageDialog.dismiss();
+            getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         });
-        messageDialog.setNegativeButton(R.string.continue_sync_button_text, new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                syncProgressDialog.show();
-                messageDialog.dismiss();
-            }
+        messageDialog.setNegativeButton(R.string.continue_sync_button_text, view -> {
+            syncProgressDialog.show();
+            messageDialog.dismiss();
         });
         messageDialog.show();
     }
@@ -223,19 +211,11 @@ public class SyncFragment extends MvpFragment<SyncView, BaseSyncPresenter> imple
         MessageDialog messageDialog = new MessageDialog(getActivity());
         messageDialog.setMessage(tryToSyncMessage);
         messageDialog.setCancelable(false);
-        messageDialog.setPositiveButton(R.string.confirm_button_text, new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                presenter.execSync();
-                messageDialog.dismiss();
-            }
+        messageDialog.setPositiveButton(R.string.confirm_button_text, view -> {
+            presenter.execSync();
+            messageDialog.dismiss();
         });
-        messageDialog.setNegativeButton(R.string.not_now_button_text, new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                messageDialog.dismiss();
-            }
-        });
+        messageDialog.setNegativeButton(R.string.not_now_button_text, view -> messageDialog.dismiss());
         messageDialog.show();
     }
 
@@ -278,7 +258,8 @@ public class SyncFragment extends MvpFragment<SyncView, BaseSyncPresenter> imple
 
     @Override
     public ProgressDialog showFetchingCaseAmountLoadingDialog() {
-        BaseProgressDialog fetchingCaseProgressDialog = new BaseProgressDialog(getActivity(), R.style.ProgressDialogTheme);
+        BaseProgressDialog fetchingCaseProgressDialog = new BaseProgressDialog(getActivity(), R.style
+                .ProgressDialogTheme);
         fetchingCaseProgressDialog.setMessage(getResources().getString(R.string.fetching_case_amount_msg));
         fetchingCaseProgressDialog.setCancelable(false);
         fetchingCaseProgressDialog.show();
@@ -287,7 +268,8 @@ public class SyncFragment extends MvpFragment<SyncView, BaseSyncPresenter> imple
 
     @Override
     public ProgressDialog showFetchingTracingAmountLoadingDialog() {
-        BaseProgressDialog fetchingTracingProgressDialog = new BaseProgressDialog(getActivity(), R.style.ProgressDialogTheme);
+        BaseProgressDialog fetchingTracingProgressDialog = new BaseProgressDialog(getActivity(), R.style
+                .ProgressDialogTheme);
         fetchingTracingProgressDialog.setMessage(getResources().getString(R.string.fetching_tracing_amount_msg));
         fetchingTracingProgressDialog.setCancelable(false);
         fetchingTracingProgressDialog.show();
@@ -296,7 +278,8 @@ public class SyncFragment extends MvpFragment<SyncView, BaseSyncPresenter> imple
 
     @Override
     public ProgressDialog showFetchingFormLoadingDialog() {
-        BaseProgressDialog fetchingFormProgressDialog = new BaseProgressDialog(getActivity(), R.style.ProgressDialogTheme);
+        BaseProgressDialog fetchingFormProgressDialog = new BaseProgressDialog(getActivity(), R.style
+                .ProgressDialogTheme);
         fetchingFormProgressDialog.setMessage(getResources().getString(R.string.fetching_form_msg));
         fetchingFormProgressDialog.setCancelable(false);
         fetchingFormProgressDialog.show();
@@ -305,7 +288,8 @@ public class SyncFragment extends MvpFragment<SyncView, BaseSyncPresenter> imple
 
     @Override
     public ProgressDialog showFetchingIncidentAmountLoadingDialog() {
-        BaseProgressDialog fetchingIncidentProgressDialog = new BaseProgressDialog(getActivity(), R.style.ProgressDialogTheme);
+        BaseProgressDialog fetchingIncidentProgressDialog = new BaseProgressDialog(getActivity(), R.style
+                .ProgressDialogTheme);
         fetchingIncidentProgressDialog.setMessage(getResources().getString(R.string.fetching_incident_amount_msg));
         fetchingIncidentProgressDialog.setCancelable(false);
         fetchingIncidentProgressDialog.show();
@@ -345,7 +329,8 @@ public class SyncFragment extends MvpFragment<SyncView, BaseSyncPresenter> imple
         new AlertDialog.Builder(getActivity())
                 .setView(tvNumber)
                 .setMessage("Please enter the case number.")
-                .setPositiveButton(R.string.ok, (dialog, which) -> presenter.produceCases(Integer.valueOf(tvNumber.getText().toString())))
+                .setPositiveButton(R.string.ok, (dialog, which) -> presenter.produceCases(Integer.valueOf(tvNumber
+                        .getText().toString())))
                 .setNegativeButton(R.string.cancel, null)
                 .show();
     }
@@ -359,7 +344,8 @@ public class SyncFragment extends MvpFragment<SyncView, BaseSyncPresenter> imple
         new AlertDialog.Builder(getActivity())
                 .setView(tvNumber)
                 .setMessage("Please enter the tracing/incident number.")
-                .setPositiveButton(R.string.ok, (dialog, which) -> presenter.produceOtherCases(Integer.valueOf(tvNumber.getText().toString())))
+                .setPositiveButton(R.string.ok, (dialog, which) -> presenter.produceOtherCases(Integer.valueOf
+                        (tvNumber.getText().toString())))
                 .setNegativeButton(R.string.cancel, null)
                 .show();
         return true;

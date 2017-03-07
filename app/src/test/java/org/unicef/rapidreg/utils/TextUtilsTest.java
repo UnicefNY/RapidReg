@@ -72,4 +72,39 @@ public class TextUtilsTest {
 
         assertThat("Should return url", TextUtils.lintUrl(url), is(url));
     }
+
+    @Test
+    public void should_truncate_string_by_double_colon_when_source_level_smaller_than_2() {
+        String result =  TextUtils.truncateByDoubleColons("L0", 2);
+
+        assertThat(result, is("L0"));
+    }
+
+    @Test
+    public void should_truncate_string_by_double_colon_when_source_level_equals_2() {
+        String result = TextUtils.truncateByDoubleColons("L0::L1", 2);
+
+        assertThat(result, is("L0::L1"));
+    }
+
+    @Test
+    public void should_truncate_string_by_double_colon_when_source_level_larger_than_2() {
+        String result = TextUtils.truncateByDoubleColons("L0::L1::L2::L3", 2);
+
+        assertThat(result, is("L2::L3"));
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void should_truncate_string_by_double_colon_when_target_level_smaller_than_0() {
+        String result = TextUtils.truncateByDoubleColons("L0::L1::L2::L3", -1);
+
+        assertThat(result, is("L2::L3"));
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void should_truncate_string_by_double_colon_when_target_level_equals_0() {
+        String result = TextUtils.truncateByDoubleColons("L0::L1::L2::L3", 0);
+
+        assertThat(result, is("L2::L3"));
+    }
 }

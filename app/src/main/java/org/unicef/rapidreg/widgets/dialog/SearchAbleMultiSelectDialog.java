@@ -10,7 +10,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
-import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -31,7 +30,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class SearchAbleMultiSelectDialog extends Dialog {
-    private static final String TAG = "SearchAbleMultiSelectDialog";
+    private static final String TAG = SearchAbleMultiSelectDialog.class.getSimpleName();
 
     @BindView(R.id.dialog_title)
     TextView dialogTitleTextView;
@@ -67,7 +66,8 @@ public class SearchAbleMultiSelectDialog extends Dialog {
         adapter = new SearchAbleMultiSelectDialog.MyAdapter(context, new ArrayList<>(Arrays.asList(items)));
 
         list.setAdapter(adapter);
-        list.setOnItemClickListener((a, v, position, id) -> Log.d(TAG, "Selected Item is = " + list.getItemAtPosition(position)));
+        list.setOnItemClickListener((adapter, view, position, id) -> Log.d(TAG, "Selected Item is = " + list
+                .getItemAtPosition(position)));
 
         adapter.notifyDataSetChanged();
     }
@@ -182,7 +182,7 @@ public class SearchAbleMultiSelectDialog extends Dialog {
             }
 
             holder.textView.setText(arrayList.get(position));
-            holder.textView.setOnClickListener(v -> {
+            holder.textView.setOnClickListener(view -> {
                 if (!results.contains(arrayList.get(position))) {
                     results.add(arrayList.get(position));
                 } else {
@@ -192,7 +192,7 @@ public class SearchAbleMultiSelectDialog extends Dialog {
                 notifyDataSetChanged();
             });
 
-            holder.checkBox.setOnClickListener(v -> {
+            holder.checkBox.setOnClickListener(view -> {
                 if (!results.contains(arrayList.get(position))) {
                     results.add(arrayList.get(position));
                 } else {
@@ -224,7 +224,8 @@ public class SearchAbleMultiSelectDialog extends Dialog {
 
                 @Override
                 protected FilterResults performFiltering(CharSequence constraint) {
-                    FilterResults results = new FilterResults();        // Holds the results of a filtering operation in values
+                    FilterResults results = new FilterResults();        // Holds the results of a filtering operation
+                    // in values
                     List<String> FilteredArrList = new ArrayList<>();
 
                     if (mOriginalValues == null) {

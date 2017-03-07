@@ -9,6 +9,7 @@ import org.unicef.rapidreg.PrimeroAppConfiguration;
 import org.unicef.rapidreg.R;
 import org.unicef.rapidreg.base.record.RecordActivity;
 import org.unicef.rapidreg.forms.Field;
+import org.unicef.rapidreg.service.cache.GlobalLocationCache;
 import org.unicef.rapidreg.service.cache.ItemValuesMap;
 import org.unicef.rapidreg.utils.Utils;
 
@@ -50,12 +51,22 @@ public abstract class BaseTextViewHolder extends BaseViewHolder<Field> {
             getValueView().setText(getValue(field.getName()));
         }
 
-        LinkedHashMap<String, String> fieldsValueVerifyResultMap = fieldValueVerifyResult.getChildrenAsLinkedHashMap(field.getSectionName().get(PrimeroAppConfiguration.getDefaultLanguage()));
+        LinkedHashMap<String, String> fieldsValueVerifyResultMap = fieldValueVerifyResult.getChildrenAsLinkedHashMap
+                (field.getSectionName().get(PrimeroAppConfiguration.getDefaultLanguage()));
         if (fieldsValueVerifyResultMap != null) {
-            String fieldVerfyResult = fieldsValueVerifyResultMap.get(field.getDisplayName().get(PrimeroAppConfiguration.getDefaultLanguage()));
+            String fieldVerfyResult = fieldsValueVerifyResultMap.get(field.getDisplayName().get
+                    (PrimeroAppConfiguration.getDefaultLanguage()));
             if (!TextUtils.isEmpty(fieldVerfyResult)) {
                 getValueView().setError(fieldVerfyResult);
             }
+        }
+        simplifyLocationIfLocationFiled(field);
+    }
+
+    protected void simplifyLocationIfLocationFiled(Field field) {
+        if (field.isSelectField() && GlobalLocationCache.containsKey(field.getName())) {
+            getValueView().setText(org.unicef.rapidreg.utils.TextUtils.truncateByDoubleColons(getValueView().getText
+                    ().toString(), PrimeroAppConfiguration.getCurrentSystemSettings().getDistrictLevel()));
         }
     }
 

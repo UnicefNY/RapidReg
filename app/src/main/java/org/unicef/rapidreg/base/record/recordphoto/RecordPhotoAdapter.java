@@ -65,6 +65,7 @@ public abstract class RecordPhotoAdapter extends BaseAdapter {
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View itemView = inflater.inflate(R.layout.form_photo_item, null);
         ImageView imageView = (ImageView) itemView.findViewById(R.id.photo_item);
+
         int width = (int) context.getResources().getDimension(R.dimen.camera_photo_size);
         imageView.getLayoutParams().height = width;
         imageView.getLayoutParams().width = width;
@@ -72,11 +73,13 @@ public abstract class RecordPhotoAdapter extends BaseAdapter {
             Glide.with(context).load(R.drawable.photo_camera).override(width, width).centerCrop().into(imageView);
             return itemView;
         }
+
         boolean isAddImageButtonIndex = paths.size() < MAX && i == paths.size();
         if (isAddImageButtonIndex){
             Glide.with(context).load(R.drawable.photo_add).override(width, width).centerCrop().into(imageView);
             return itemView;
         }
+
         String path = paths.get(i);
         try {
             long photoId = Long.parseLong(path);

@@ -68,25 +68,19 @@ public class GenericViewHolder extends BaseTextViewHolder {
     @Override
     public void setOnClickListener(final Field field) {
         valueView.setFocusable(false);
-        itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                try {
-                    showFieldDialog(field, valueView);
-                } catch (Exception e) {
-                    Log.e(TAG, String.format("show dialog error. Field: %s", field), e);
-                }
+        itemView.setOnClickListener(view -> {
+            try {
+                showFieldDialog(field, valueView);
+            } catch (Exception e) {
+                Log.e(TAG, String.format("show dialog error. Field: %s", field), e);
             }
         });
 
-        valueView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                try {
-                    showFieldDialog(field, valueView);
-                } catch (Exception e) {
-                    Log.e(TAG, String.format("show dialog error. Field: %s", field), e);
-                }
+        valueView.setOnClickListener(view -> {
+            try {
+                showFieldDialog(field, valueView);
+            } catch (Exception e) {
+                Log.e(TAG, String.format("show dialog error. Field: %s", field), e);
             }
         });
     }

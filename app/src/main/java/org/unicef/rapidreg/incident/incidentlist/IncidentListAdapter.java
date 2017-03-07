@@ -2,6 +2,7 @@ package org.unicef.rapidreg.incident.incidentlist;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.view.ViewGroup;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
@@ -74,6 +75,11 @@ public class IncidentListAdapter extends RecordListAdapter {
     }
 
     @Override
+    public RecordListViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        return super.onCreateViewHolder(parent, viewType);
+    }
+
+    @Override
     public void removeRecords() {
         List<Long> recordIds = getRecordWillBeDeletedList();
         for (Long recordId : recordIds) {
@@ -81,4 +87,5 @@ public class IncidentListAdapter extends RecordListAdapter {
         }
         super.removeRecords();
     }
+
 }

@@ -13,15 +13,19 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.ViewSwitcher;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 
+import org.unicef.rapidreg.PrimeroAppConfiguration;
 import org.unicef.rapidreg.R;
 import org.unicef.rapidreg.model.Gender;
+import org.unicef.rapidreg.model.Incident;
 import org.unicef.rapidreg.model.RecordModel;
+import org.unicef.rapidreg.utils.TextUtils;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -148,7 +152,7 @@ public abstract class RecordListAdapter extends RecyclerView.Adapter<RecordListA
         return true;
     }
 
-    public int caculateRetainedPosition() {
+    public int calculateRetainedPosition() {
         int retainedPosition = 0;
         if (recordWillBeDeletedList.isEmpty()) {
             return retainedPosition;
@@ -172,6 +176,10 @@ public abstract class RecordListAdapter extends RecyclerView.Adapter<RecordListA
         @BindView(R.id.id_normal_state)
         public TextView idNormalState;
 
+        @BindView(R.id.incident_id_normal_state)
+        public TextView incidentIdNormalState;
+
+
         @BindView(R.id.id_on_hidden_state)
         public TextView idHiddenState;
 
@@ -184,8 +192,17 @@ public abstract class RecordListAdapter extends RecyclerView.Adapter<RecordListA
         @BindView(R.id.age)
         public TextView age;
 
+        @BindView(R.id.incident_age)
+        public TextView incidentAge;
+
         @BindView(R.id.registration_date)
         public TextView registrationDate;
+
+        @BindView(R.id.incident_registration_date)
+        public TextView incidentRegistrationDate;
+
+        @BindView(R.id.incident_location)
+        public TextView incidentLocation;
 
         @BindView(R.id.record_image)
         public ImageView image;
@@ -198,6 +215,13 @@ public abstract class RecordListAdapter extends RecyclerView.Adapter<RecordListA
 
         @BindView(R.id.delete_state)
         public CheckBox deleteStateCheckBox;
+
+        @BindView(R.id.container_record_list_item)
+        public RelativeLayout containerRecordListItem;
+
+        @BindView(R.id.container_incident_list_item)
+        public RelativeLayout containerIncidentListItem;
+
 
         private RecordModel record;
 
@@ -228,8 +252,12 @@ public abstract class RecordListAdapter extends RecyclerView.Adapter<RecordListA
             genderName.setTextColor(ContextCompat.getColor(context, gender.getColorId()));
             age.setText(isValidAge(ageContent) ? ageContent : "---");
 
-            Date registrationDateText = record.getRegistrationDate();
-            registrationDate.setText(isValidDate(registrationDateText) ? dateFormat.format(registrationDateText) : "---");
+
+
+            Date registrationDate = record.getRegistrationDate();
+            String registrationDateText = isValidDate(registrationDate) ? dateFormat.format(registrationDate) :
+                    "---";
+            this.registrationDate.setText(registrationDateText);
 
             deleteStateCheckBox.setOnCheckedChangeListener(null);
             deleteStateCheckBox.setChecked(recordWillBeDeletedList.contains(deleteStateCheckBox.getTag()));
@@ -249,6 +277,16 @@ public abstract class RecordListAdapter extends RecyclerView.Adapter<RecordListA
                     onViewUpdateListener.onSelectedAllButtonCheckable(recordWillBeDeletedList.size() == syncedRecordsCount);
                 }
             });
+
+            if (record instanceof Incident) {
+                containerRecordListItem.setVisibility(View.GONE);
+                containerIncidentListItem.setVisibility(View.VISIBLE);
+                incidentLocation.setText(TextUtils.truncateByDoubleColons(((Incident) record).getLocation(),
+                        PrimeroAppConfiguration.getCurrentSystemSettings().getDistrictLevel()));
+                incidentIdNormalState.setText(shortUUID);
+                incidentAge.setText(ageContent);
+                incidentRegistrationDate.setText(registrationDateText);
+            }
         }
 
         public RecordModel getRecord() {
