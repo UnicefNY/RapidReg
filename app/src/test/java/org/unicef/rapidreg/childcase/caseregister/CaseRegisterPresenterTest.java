@@ -1,5 +1,7 @@
 package org.unicef.rapidreg.childcase.caseregister;
 
+import android.view.View;
+
 import com.raizlabs.android.dbflow.data.Blob;
 
 import org.hamcrest.core.Is;
@@ -11,6 +13,7 @@ import org.mockito.Mock;
 import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
+import org.unicef.rapidreg.base.record.recordregister.RecordRegisterView;
 import org.unicef.rapidreg.base.record.recordregister.RecordRegisterView.SaveRecordCallback;
 import org.unicef.rapidreg.forms.CaseTemplateForm;
 import org.unicef.rapidreg.forms.Field;
@@ -129,6 +132,10 @@ public class CaseRegisterPresenterTest {
         PowerMockito.mockStatic(RecordService.class);
         when(caseService.validateRequiredFields(cpCaseTemplate, itemValuesMap)).thenReturn(false);
 
+        RecordRegisterView view = mock(RecordRegisterView.class);
+        when(view.getFieldValueVerifyResult()).thenReturn(new ItemValuesMap());
+
+        caseRegisterPresenter.attachView(view);
         caseRegisterPresenter.saveRecord(itemValuesMap, photoPaths, callback);
 
         verify(callback).onRequiredFieldNotFilled();

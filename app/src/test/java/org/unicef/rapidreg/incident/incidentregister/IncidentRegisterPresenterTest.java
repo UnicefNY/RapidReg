@@ -92,6 +92,11 @@ public class IncidentRegisterPresenterTest {
         when(record.getUniqueId()).thenReturn("");
         when(record.getId()).thenReturn(1L);
 
+        RecordRegisterView view = mock(RecordRegisterView.class);
+        when(view.getFieldValueVerifyResult()).thenReturn(new ItemValuesMap());
+
+        incidentRegisterPresenter.attachView(view);
+
         incidentRegisterPresenter.saveRecord(itemValuesMap, new ArrayList<String>(), callback);
 
         verify(incidentService, times(1)).saveOrUpdate(itemValuesMap);
@@ -111,6 +116,11 @@ public class IncidentRegisterPresenterTest {
         when(incidentFormService.getGBVTemplate()).thenReturn(incidentTemplateForm);
         when(incidentService.validateRequiredFields(incidentTemplateForm, itemValuesMap))
                 .thenReturn(false);
+
+        RecordRegisterView view = mock(RecordRegisterView.class);
+        when(view.getFieldValueVerifyResult()).thenReturn(new ItemValuesMap());
+
+        incidentRegisterPresenter.attachView(view);
 
         incidentRegisterPresenter.saveRecord(itemValuesMap, new ArrayList<String>(), callback);
         verify(callback, times(1)).onRequiredFieldNotFilled();

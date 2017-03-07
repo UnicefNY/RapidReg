@@ -21,4 +21,7 @@
 
     <string name="login_user_label_key">用户</string>
     <string name="syncing_forms_text">正在同步,请稍候...</string>
+    <string name="ok">OK</string>
+    <string name="clear">CLEAR</string>
+    <string name="cancel">CANCEL</string>
 </resources>
