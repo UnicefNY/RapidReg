@@ -29,21 +29,19 @@ import org.unicef.rapidreg.utils.Utils;
 
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-import org.unicef.rapidreg.service.RecordService;
-
-import static org.unicef.rapidreg.service.RecordService.*;
-import static org.unicef.rapidreg.service.RecordService.RelatedItemColumn.GBV_SURVIVOR_CODE;
+import org.unicef.rapidreg.widgets.dialog.MessageDialog;
 
 public abstract class RecordRegisterFragment extends MvpFragment<RecordRegisterView,
         RecordRegisterPresenter>
         implements RecordRegisterView, RecordRegisterView.SaveRecordCallback {
-
-    public static final String ITEM_VALUES = "item_values";
 
     protected static final int[] ANIM_TO_FULL = {R.anim.slide_in_right, R.anim.slide_out_left};
     protected static final int[] ANIM_TO_MINI = {android.R.anim.slide_in_left, android.R.anim
@@ -94,6 +92,7 @@ public abstract class RecordRegisterFragment extends MvpFragment<RecordRegisterV
     @Override
     public void onInitViewContent() {
         recordRegisterAdapter = createRecordRegisterAdapter();
+        initFieldValueVerifyResult();
 
         RecyclerView.LayoutManager manager = new LinearLayoutManager(getContext());
         manager.setAutoMeasureEnabled(true);
@@ -102,6 +101,13 @@ public abstract class RecordRegisterFragment extends MvpFragment<RecordRegisterV
 
         fieldList.setAdapter(recordRegisterAdapter);
         formSwitcher.setText(R.string.show_short_form);
+    }
+
+    private void initFieldValueVerifyResult() {
+        Bundle extra = getArguments();
+        if (extra != null && extra.containsKey(RecordService.VERIFY_MESSAGE)) {
+            setFieldValueVerifyResult((ItemValuesMap) getArguments().getSerializable(RecordService.VERIFY_MESSAGE));
+        }
     }
 
     @Override
@@ -125,6 +131,19 @@ public abstract class RecordRegisterFragment extends MvpFragment<RecordRegisterV
     @Override
     public ItemValuesMap getRecordRegisterData() {
         return recordRegisterAdapter.getItemValues();
+    }
+
+    @Override
+    public void setFieldValueVerifyResult(ItemValuesMap fieldValueVerifyResult) {
+        recordRegisterAdapter.setFieldValueVerifyResult(fieldValueVerifyResult);
+    }
+
+    @Override
+    public ItemValuesMap getFieldValueVerifyResult() {
+        if (recordRegisterAdapter == null) {
+            return new ItemValuesMap();
+        }
+        return recordRegisterAdapter.getFieldValueVerifyResult();
     }
 
     public void addProfileFieldForDetailsPage(int position, List<Field> fields) {
@@ -184,10 +203,30 @@ public abstract class RecordRegisterFragment extends MvpFragment<RecordRegisterV
     }
 
     @Override
-    public void onFileValueInvalid(List<String> invalidMsgList) {
-        for (String invalidMsg : invalidMsgList) {
-            Toast.makeText(getContext(), invalidMsg, Toast.LENGTH_SHORT).show();
+    public void onFieldValueInvalid() {
+        ItemValuesMap fieldValueVerifyResult = getFieldValueVerifyResult();
+        MessageDialog messageDialog = new MessageDialog(getContext());
+        messageDialog.setTitle(R.string.invalid_value);
+        String errorMsg = generateFileValueInvalidMsg(fieldValueVerifyResult);
+        messageDialog.setMessage(errorMsg);
+        messageDialog.setPositiveButton(R.string.ok, view -> messageDialog.dismiss());
+        messageDialog.show();
+    }
+
+    private String generateFileValueInvalidMsg(ItemValuesMap fieldValueVerifyResult) {
+        StringBuilder sb = new StringBuilder("");
+        Map<String, Object> values = fieldValueVerifyResult.getValues();
+        for (Map.Entry<String, Object> entry : values.entrySet()) {
+            sb.append("[" + entry.getKey() + "]\n");
+            LinkedHashMap<String, String> entryVal = (LinkedHashMap<String, String>) entry.getValue();
+            for (Map.Entry<String, String> valueEntry : entryVal.entrySet()) {
+                sb.append(valueEntry.getKey());
+                sb.append(": " + valueEntry.getValue());
+                sb.append("\n");
+            }
+            sb.append("\n");
         }
+        return sb.toString();
     }
 
     private void saveStateToArguments() {

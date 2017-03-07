@@ -129,8 +129,7 @@ public class SubFormViewHolder extends BaseViewHolder<Field> {
         assignIndexForFields(fields, index);
 
         RecordRegisterAdapter adapter = new RecordRegisterAdapter(activity, fields,
-                itemValues.getChildAsItemValues(fieldParent, index), false);
-
+                itemValues.getChildAsItemValues(fieldParent, index), fieldValueVerifyResult, false);
         fieldList.setAdapter(adapter);
 
         boolean visibleStatus = subformDropDownStatus.get(index);

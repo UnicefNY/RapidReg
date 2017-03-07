@@ -16,7 +16,6 @@ import org.unicef.rapidreg.widgets.dialog.SingleTextDialog;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 
 public class Field {
@@ -80,6 +79,8 @@ public class Field {
     private boolean isShowOnMiniForm;
 
     private String parent;
+
+    private Map<String, String> sectionName;
 
     private int index = INVALID_INDEX;
 
@@ -169,6 +170,14 @@ public class Field {
 
     public void setParent(String parent) {
         this.parent = parent;
+    }
+
+    public Map<String, String> getSectionName() {
+        return sectionName;
+    }
+
+    public void setSectionName(Map<String, String> sectionName) {
+        this.sectionName = sectionName;
     }
 
     public boolean isSeparator() {
@@ -297,6 +306,7 @@ public class Field {
         newField.setSubForm(subForm);
         newField.setShowOnMiniForm(isShowOnMiniForm);
         newField.setParent(parent);
+        newField.setSectionName(sectionName);
 
         return newField;
 

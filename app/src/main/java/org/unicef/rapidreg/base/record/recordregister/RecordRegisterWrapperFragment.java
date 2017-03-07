@@ -29,9 +29,12 @@ import org.unicef.rapidreg.injection.component.FragmentComponent;
 import org.unicef.rapidreg.injection.module.FragmentModule;
 import org.unicef.rapidreg.service.cache.ItemValuesMap;
 import org.unicef.rapidreg.utils.Utils;
+import org.unicef.rapidreg.widgets.dialog.MessageDialog;
 
 import java.util.Collections;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -40,7 +43,6 @@ public abstract class RecordRegisterWrapperFragment extends MvpFragment<RecordRe
         RecordRegisterPresenter>
         implements RecordRegisterView, RecordRegisterView.SaveRecordCallback {
     private static final String TAG = RecordRegisterWrapperFragment.class.getSimpleName();
-    public static final String ITEM_VALUES = "item_values";
 
     @BindView(R.id.viewpager)
     ViewPager viewPager;
@@ -57,6 +59,7 @@ public abstract class RecordRegisterWrapperFragment extends MvpFragment<RecordRe
     protected RecordPhotoAdapter recordPhotoAdapter;
 
     private ItemValuesMap itemValues;
+    private ItemValuesMap itemValuesVerifyList;
 
     public FragmentComponent getComponent() {
         return DaggerFragmentComponent.builder()
@@ -114,6 +117,16 @@ public abstract class RecordRegisterWrapperFragment extends MvpFragment<RecordRe
         return itemValues;
     }
 
+    @Override
+    public void setFieldValueVerifyResult(ItemValuesMap fieldValueVerifyResult) {
+        this.itemValuesVerifyList = fieldValueVerifyResult;
+    }
+
+    @Override
+    public ItemValuesMap getFieldValueVerifyResult() {
+        return itemValuesVerifyList;
+    }
+
 
     @Override
     public void onRequiredFieldNotFilled() {
@@ -169,6 +182,7 @@ public abstract class RecordRegisterWrapperFragment extends MvpFragment<RecordRe
                 RecordRegisterFragment currentPage = (RecordRegisterFragment) adapter.getPage
                         (position);
                 if (recordPhotoAdapter != null) {
+                    currentPage.setFieldValueVerifyResult(itemValuesVerifyList);
                     recordPhotoAdapter = currentPage.getPhotoAdapter();
                     recordPhotoAdapter.setItems(currentPage.getPhotoPathsData());
                 }
@@ -181,10 +195,30 @@ public abstract class RecordRegisterWrapperFragment extends MvpFragment<RecordRe
     }
 
     @Override
-    public void onFileValueInvalid(List<String> invalidMsgList) {
-        for (String invalidMsg : invalidMsgList) {
-            Toast.makeText(getContext(), invalidMsg, Toast.LENGTH_SHORT).show();
+    public void onFieldValueInvalid() {
+        ItemValuesMap fieldValueVerifyResult = getFieldValueVerifyResult();
+        MessageDialog messageDialog = new MessageDialog(getContext());
+        messageDialog.setTitle(R.string.invalid_value);
+        String errorMsg = generateFileValueInvalidMsg(fieldValueVerifyResult);
+        messageDialog.setMessage(errorMsg);
+        messageDialog.setPositiveButton(R.string.ok, view -> messageDialog.dismiss());
+        messageDialog.show();
+    }
+
+    private String generateFileValueInvalidMsg(ItemValuesMap fieldValueVerifyResult) {
+        StringBuilder sb = new StringBuilder("");
+        Map<String, Object> values = fieldValueVerifyResult.getValues();
+        for (Map.Entry<String, Object> entry : values.entrySet()) {
+            sb.append("[" + entry.getKey() + "]\n");
+            LinkedHashMap<String, String> entryVal = (LinkedHashMap<String, String>) entry.getValue();
+            for (Map.Entry<String, String> valueEntry : entryVal.entrySet()) {
+                sb.append(valueEntry.getKey());
+                sb.append(": " + valueEntry.getValue());
+                sb.append("\n");
+            }
+            sb.append("\n");
         }
+        return sb.toString();
     }
 
     protected abstract RecordPhotoAdapter createRecordPhotoAdapter();

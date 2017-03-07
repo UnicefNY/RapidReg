@@ -5,12 +5,14 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.TextView;
 
+import org.unicef.rapidreg.PrimeroAppConfiguration;
 import org.unicef.rapidreg.R;
 import org.unicef.rapidreg.base.record.RecordActivity;
 import org.unicef.rapidreg.forms.Field;
 import org.unicef.rapidreg.service.cache.ItemValuesMap;
 import org.unicef.rapidreg.utils.Utils;
 
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -31,7 +33,6 @@ public abstract class BaseTextViewHolder extends BaseViewHolder<Field> {
         }
     }
 
-
     protected void initValueViewStatus() {
         if (!((RecordActivity) context).getCurrentFeature().isEditMode()) {
             getValueView().setEnabled(false);
@@ -47,6 +48,14 @@ public abstract class BaseTextViewHolder extends BaseViewHolder<Field> {
             getValueView().setText(getValueForSubForm(field));
         } else {
             getValueView().setText(getValue(field.getName()));
+        }
+
+        LinkedHashMap<String, String> fieldsValueVerifyResultMap = fieldValueVerifyResult.getChildrenAsLinkedHashMap(field.getSectionName().get(PrimeroAppConfiguration.getDefaultLanguage()));
+        if (fieldsValueVerifyResultMap != null) {
+            String fieldVerfyResult = fieldsValueVerifyResultMap.get(field.getDisplayName().get(PrimeroAppConfiguration.getDefaultLanguage()));
+            if (!TextUtils.isEmpty(fieldVerfyResult)) {
+                getValueView().setError(fieldVerfyResult);
+            }
         }
     }
 

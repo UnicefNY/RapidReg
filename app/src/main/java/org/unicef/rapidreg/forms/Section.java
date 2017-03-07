@@ -57,6 +57,12 @@ public class Section {
     }
 
     public List<Field> getFields() {
+        List<Field> newFields = new ArrayList<>();
+        for (Field field : fields) {
+            field.setSectionName(getName());
+            newFields.add(field);
+        }
+        fields = newFields;
         return fields;
     }
 

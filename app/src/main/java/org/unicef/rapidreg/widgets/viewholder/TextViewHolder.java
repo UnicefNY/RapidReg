@@ -2,7 +2,9 @@ package org.unicef.rapidreg.widgets.viewholder;
 
 import android.content.Context;
 import android.content.res.Configuration;
+import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
+import android.support.v7.widget.AppCompatEditText;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextUtils;
@@ -11,12 +13,19 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.ViewSwitcher;
 
+import org.unicef.rapidreg.PrimeroAppConfiguration;
 import org.unicef.rapidreg.R;
 import org.unicef.rapidreg.forms.Field;
 import org.unicef.rapidreg.service.RecordService;
 import org.unicef.rapidreg.service.cache.ItemValuesMap;
+import org.unicef.rapidreg.widgets.VerifyWithoutPopupEditText;
+
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -29,7 +38,7 @@ public class TextViewHolder extends BaseTextViewHolder {
     TextView labelView;
 
     @BindView(R.id.value)
-    EditText valueView;
+    VerifyWithoutPopupEditText valueView;
 
     @BindView(R.id.view_switcher)
     ViewSwitcher viewSwitcher;
@@ -38,6 +47,8 @@ public class TextViewHolder extends BaseTextViewHolder {
     TextView formQuestion;
 
     private InputMethodManager inputMethodManager;
+
+    private LinkedHashMap<String, String> verifyResultMap = new LinkedHashMap<>();
 
     public TextViewHolder(Context context, View itemView, ItemValuesMap itemValues) {
         super(context, itemView, itemValues);
@@ -62,7 +73,6 @@ public class TextViewHolder extends BaseTextViewHolder {
         disableUneditableField(isEditable(field), valueView);
         setEditableBackgroundStyle(isEditable(field));
 
-        valueView.setError(null);
         valueView.setSingleLine(true);
         valueView.setInputType(InputType.TYPE_CLASS_TEXT);
         if (field.isTextArea()) {
@@ -84,31 +94,25 @@ public class TextViewHolder extends BaseTextViewHolder {
 
     @Override
     public void setOnClickListener(final Field field) {
-        itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                viewSwitcher.setDisplayedChild(GenericViewHolder.FORM_HAS_ANSWER_STATE);
-                valueView.setFocusableInTouchMode(true);
-                valueView.setFocusable(true);
-                valueView.requestFocus();
-                inputMethodManager.showSoftInput(valueView, InputMethodManager.SHOW_IMPLICIT);
-            }
+        itemView.setOnClickListener(view -> {
+            viewSwitcher.setDisplayedChild(GenericViewHolder.FORM_HAS_ANSWER_STATE);
+            valueView.setFocusableInTouchMode(true);
+            valueView.setFocusable(true);
+            valueView.requestFocus();
+            inputMethodManager.showSoftInput(valueView, InputMethodManager.SHOW_IMPLICIT);
         });
 
-        valueView.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if (v.getId() == valueView.getId()) {
-                    if (!hasFocus) {
-                        if (TextUtils.isEmpty(valueView.getText())) {
-                            viewSwitcher.setDisplayedChild(GenericViewHolder.FORM_NO_ANSWER_STATE);
-                        } else {
-                            viewSwitcher.setDisplayedChild(GenericViewHolder.FORM_HAS_ANSWER_STATE);
-                        }
-                        itemView.setClickable(true);
+        valueView.setOnFocusChangeListener((v, hasFocus) -> {
+            if (v.getId() == valueView.getId()) {
+                if (!hasFocus) {
+                    if (TextUtils.isEmpty(valueView.getText())) {
+                        viewSwitcher.setDisplayedChild(GenericViewHolder.FORM_NO_ANSWER_STATE);
                     } else {
-                        itemView.setClickable(false);
+                        viewSwitcher.setDisplayedChild(GenericViewHolder.FORM_HAS_ANSWER_STATE);
                     }
+                    itemView.setClickable(true);
+                } else {
+                    itemView.setClickable(false);
                 }
             }
         });
@@ -116,19 +120,42 @@ public class TextViewHolder extends BaseTextViewHolder {
         valueView.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
             }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 String verifyResult = verifyValue(String.valueOf(s), field);
-                valueView.setError(verifyResult);
-                valueView.postInvalidate();
+                String defaultLanguage = PrimeroAppConfiguration.getDefaultLanguage();
+                String fieldVerifyKey = field.getDisplayName().get(defaultLanguage);
+                String sectionVerifyKey = field.getSectionName().get(defaultLanguage);
+                verifyResultMap = fieldValueVerifyResult.getChildrenAsLinkedHashMap(sectionVerifyKey);
+                if (verifyResultMap == null) {
+                    verifyResultMap = new LinkedHashMap<>();
+                }
+                if (!TextUtils.isEmpty(verifyResult)) {
+                    verifyResultMap.put(fieldVerifyKey, verifyResult);
+                    fieldValueVerifyResult.addLinkedHashMap(sectionVerifyKey, verifyResultMap);
+                    valueView.setError(verifyResult);
+                } else {
+                    if (verifyResultMap.containsKey(fieldVerifyKey)) {
+                        verifyResultMap.remove(fieldVerifyKey);
+                    }
+                    if (verifyResultMap.isEmpty()) {
+                        fieldValueVerifyResult.removeItem(sectionVerifyKey);
+                    } else {
+                        fieldValueVerifyResult.addLinkedHashMap(sectionVerifyKey, verifyResultMap);
+                    }
+                    valueView.setError(null);
+                }
                 saveValues(field);
             }
 
             @Override
             public void afterTextChanged(Editable s) {
+                String verifyResult = verifyValue(getResult(), field);
+                if (!TextUtils.isEmpty(verifyResult)) {
+                    Toast.makeText(context, verifyResult, Toast.LENGTH_SHORT).show();
+                }
             }
         });
     }
