@@ -100,7 +100,8 @@ public class CaseRegisterWrapperFragment extends RecordRegisterWrapperFragment {
     @Override
     protected void initItemValues() {
         if (getArguments() != null) {
-            setRecordRegisterData((ItemValuesMap) getArguments().getSerializable(ITEM_VALUES));
+            setRecordRegisterData((ItemValuesMap) getArguments().getSerializable(RecordService.ITEM_VALUES));
+            setFieldValueVerifyResult((ItemValuesMap) getArguments().getSerializable(RecordService.VERIFY_MESSAGE));
         }
     }
 
@@ -118,6 +119,7 @@ public class CaseRegisterWrapperFragment extends RecordRegisterWrapperFragment {
             Bundle args = new Bundle();
             args.putString(MODULE, caseRegisterPresenter.getCaseType());
             args.putSerializable(RecordService.ITEM_VALUES, getRecordRegisterData());
+            args.putSerializable(RecordService.VERIFY_MESSAGE, getFieldValueVerifyResult());
             args.putStringArrayList(RecordService.RECORD_PHOTOS, (ArrayList<String>) recordPhotoAdapter.getAllItems());
             pages.add(FragmentPagerItem.of(values[0], CaseRegisterFragment.class, args));
         }

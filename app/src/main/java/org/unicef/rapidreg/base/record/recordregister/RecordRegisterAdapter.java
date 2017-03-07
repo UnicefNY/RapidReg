@@ -28,6 +28,7 @@ import org.unicef.rapidreg.widgets.viewholder.TickBoxViewHolder;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static java.util.Collections.EMPTY_LIST;
 
@@ -59,14 +60,16 @@ public class RecordRegisterAdapter extends RecyclerView.Adapter<BaseViewHolder> 
     private RecordPhotoAdapter adapter;
 
     private ItemValuesMap itemValues;
+    private ItemValuesMap itemValuesVerifyList;
 
     private HashMap<Integer, List<Boolean>> subformDropDownStatus = new HashMap<>();
 
-    public RecordRegisterAdapter(Context context, List<Field> fields, ItemValuesMap itemValues, boolean isMiniForm) {
+    public RecordRegisterAdapter(Context context, List<Field> fields, ItemValuesMap itemValues, ItemValuesMap itemValuesVerifyList, boolean isMiniForm) {
         this.fields = fields;
         this.activity = (RecordActivity) context;
         this.itemValues = itemValues;
         this.isMiniForm = isMiniForm;
+        this.itemValuesVerifyList = itemValuesVerifyList;
 
         inflater = LayoutInflater.from(context);
         resources = context.getResources();
@@ -83,6 +86,14 @@ public class RecordRegisterAdapter extends RecyclerView.Adapter<BaseViewHolder> 
 
     public void setItemValues(ItemValuesMap itemValues) {
         this.itemValues = itemValues;
+    }
+
+    public ItemValuesMap getFieldValueVerifyResult() {
+        return itemValuesVerifyList;
+    }
+
+    public void setFieldValueVerifyResult(ItemValuesMap fieldValueVerifyResult) {
+        this.itemValuesVerifyList = fieldValueVerifyResult;
     }
 
     @Override
@@ -154,6 +165,7 @@ public class RecordRegisterAdapter extends RecyclerView.Adapter<BaseViewHolder> 
     @Override
     public void onBindViewHolder(BaseViewHolder holder, int position) {
         Field field = fields.get(position);
+        holder.setFieldValueVerifyResult(itemValuesVerifyList);
         holder.setValue(field);
         holder.setIsRecyclable(false);
         holder.setCurrentPosition(position);

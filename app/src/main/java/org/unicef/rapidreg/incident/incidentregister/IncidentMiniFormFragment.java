@@ -85,6 +85,7 @@ public class IncidentMiniFormFragment extends RecordRegisterFragment {
         RecordRegisterAdapter recordRegisterAdapter = new RecordRegisterAdapter(getActivity(),
                 fields,
                 incidentRegisterPresenter.getDefaultItemValues(),
+                incidentRegisterPresenter.getFieldValueVerifyResult(),
                 true);
         return recordRegisterAdapter;
     }
@@ -118,6 +119,7 @@ public class IncidentMiniFormFragment extends RecordRegisterFragment {
     public void onSwitcherChecked() {
         Bundle args = new Bundle();
         args.putSerializable(RecordService.ITEM_VALUES, getRecordRegisterData());
+        args.putSerializable(RecordService.VERIFY_MESSAGE, getFieldValueVerifyResult());
         args.putString(CASE_ID, getArguments().getString(CASE_ID, null));
         Feature feature = ((RecordActivity) getActivity()).getCurrentFeature().isDetailMode() ?
                 IncidentFeature.DETAILS_FULL : ((RecordActivity) getActivity()).getCurrentFeature()

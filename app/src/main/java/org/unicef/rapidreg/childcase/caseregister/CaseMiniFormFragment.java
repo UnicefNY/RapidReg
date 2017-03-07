@@ -25,6 +25,7 @@ import org.unicef.rapidreg.event.SaveCaseEvent;
 import org.unicef.rapidreg.forms.Field;
 import org.unicef.rapidreg.service.CaseService;
 import org.unicef.rapidreg.service.RecordService;
+import org.unicef.rapidreg.service.cache.ItemValuesMap;
 import org.unicef.rapidreg.utils.Utils;
 
 import java.util.ArrayList;
@@ -57,8 +58,10 @@ public class CaseMiniFormFragment extends RecordRegisterFragment {
     @NonNull
     @Override
     public CaseRegisterPresenter createPresenter() {
-        if (getArguments() != null && getArguments().containsKey(MODULE)) {
-            caseRegisterPresenter.setCaseType(getArguments().getString(MODULE));
+        if (getArguments() != null) {
+            if (getArguments().containsKey(MODULE)) {
+                caseRegisterPresenter.setCaseType(getArguments().getString(MODULE));
+            }
         }
         return caseRegisterPresenter;
     }
@@ -109,6 +112,7 @@ public class CaseMiniFormFragment extends RecordRegisterFragment {
         RecordRegisterAdapter recordRegisterAdapter = new RecordRegisterAdapter(getActivity(),
                 fields,
                 caseRegisterPresenter.getDefaultItemValues(),
+                caseRegisterPresenter.getFieldValueVerifyResult(),
                 true);
         casePhotoAdapter.setItems(caseRegisterPresenter.getDefaultPhotoPaths());
         recordRegisterAdapter.setPhotoAdapter(casePhotoAdapter);
@@ -122,7 +126,6 @@ public class CaseMiniFormFragment extends RecordRegisterFragment {
         Bundle extra = new Bundle();
         extra.putString(CASE_ID, caseId);
         extra.putSerializable(RecordService.ITEM_VALUES, caseRegisterPresenter.filterGBVRelatedItemValues(getRecordRegisterData()));
-
         new IntentSender().showIncidentActivity(getActivity(), true, extra);
     }
 
@@ -157,6 +160,7 @@ public class CaseMiniFormFragment extends RecordRegisterFragment {
     public void onSwitcherChecked() {
         Bundle args = new Bundle();
         args.putSerializable(RecordService.ITEM_VALUES, getRecordRegisterData());
+        args.putSerializable(RecordService.VERIFY_MESSAGE, getFieldValueVerifyResult());
         args.putString(MODULE, caseRegisterPresenter.getCaseType());
         args.putStringArrayList(RecordService.RECORD_PHOTOS, (ArrayList<String>) getPhotoPathsData());
 

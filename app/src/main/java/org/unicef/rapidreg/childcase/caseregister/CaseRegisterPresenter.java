@@ -5,6 +5,7 @@ import android.os.Bundle;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import org.json.JSONException;
+import org.unicef.rapidreg.PrimeroAppConfiguration;
 import org.unicef.rapidreg.base.record.recordregister.RecordRegisterFragment;
 import org.unicef.rapidreg.base.record.recordregister.RecordRegisterPresenter;
 import org.unicef.rapidreg.base.record.recordregister.RecordRegisterView.SaveRecordCallback;
@@ -18,13 +19,10 @@ import org.unicef.rapidreg.service.CaseService;
 import org.unicef.rapidreg.service.RecordService;
 import org.unicef.rapidreg.service.cache.ItemValuesMap;
 import org.unicef.rapidreg.utils.JsonUtils;
-import org.unicef.rapidreg.utils.TextUtils;
 
 import java.io.IOException;
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -42,6 +40,7 @@ public class CaseRegisterPresenter extends RecordRegisterPresenter {
     public static final String MODULE_CASE_GBV = "primeromodule-gbv";
 
     public static final String AGE = "age";
+    public static final String AGE_SECTION = "Basic Identity";
     public static final String CAREGIVER_AGE = "caregiver_age";
     public static final String VERIFICATION_SUBFORM_SECTION = "verification_subform_section";
     public static final String VERIFICATION_INQUIRER_AGE = "verification_inquirer_age";
@@ -85,12 +84,11 @@ public class CaseRegisterPresenter extends RecordRegisterPresenter {
     @Override
     public void saveRecord(ItemValuesMap itemValuesMap, List<String> photoPaths,
                            SaveRecordCallback callback) {
-        List<String> validateValueMsgList = validateFieldValue(itemValuesMap);
-        if (!validateValueMsgList.isEmpty()) {
-            callback.onFileValueInvalid(validateValueMsgList);
+        ItemValuesMap fieldValueVerifyResult = getView().getFieldValueVerifyResult();
+        if (fieldValueVerifyResult != null && fieldValueVerifyResult.getValues().size() > 0) {
+            callback.onFieldValueInvalid();
             return;
         }
-
         if (!validateRequiredField(itemValuesMap)) {
             callback.onRequiredFieldNotFilled();
             return;
@@ -108,45 +106,6 @@ public class CaseRegisterPresenter extends RecordRegisterPresenter {
         } catch (IOException e) {
             callback.onSavedFail();
         }
-    }
-
-    private List<String> validateFieldValue(ItemValuesMap itemValuesMap) {
-        List<String> validateMsgList = new ArrayList<>();
-        HashMap<String, String> ageNeedToValidateMap = getAgeNeedToValidateMap(itemValuesMap);
-        for (Map.Entry<String, String> age : ageNeedToValidateMap.entrySet()) {
-            boolean isAgeValid = validateAge(age.getValue());
-            if (!isAgeValid) {
-                validateMsgList.add("Sorry, " + age.getKey() + " should between 0 - 130.");
-            }
-        }
-        return validateMsgList;
-    }
-
-    private HashMap<String, String> getAgeNeedToValidateMap(ItemValuesMap itemValuesMap) {
-        HashMap<String, String> ageNeedToValidateMap = new HashMap<>();
-        if (itemValuesMap.has(AGE)) {
-            ageNeedToValidateMap.put(AGE, itemValuesMap.getAsString(AGE));
-        }
-        if (itemValuesMap.has(CAREGIVER_AGE)) {
-            ageNeedToValidateMap.put(CAREGIVER_AGE, itemValuesMap.getAsString(CAREGIVER_AGE));
-        }
-        if (itemValuesMap.has(VERIFICATION_SUBFORM_SECTION)) {
-            List<Map<String, Object>> subformValuesList = itemValuesMap.getChildrenAsJsonArray(VERIFICATION_SUBFORM_SECTION);
-            for (Map<String, Object> subformValues : subformValuesList) {
-                if (subformValues.containsKey(VERIFICATION_INQUIRER_AGE)) {
-                    ageNeedToValidateMap.put(VERIFICATION_INQUIRER_AGE, (String) subformValues.get(VERIFICATION_INQUIRER_AGE));
-                }
-            }
-        }
-        if (itemValuesMap.has(FAMILY_DETAILS_SECTION)) {
-            List<Map<String, Object>> subformValuesList = itemValuesMap.getChildrenAsJsonArray(FAMILY_DETAILS_SECTION);
-            for (Map<String, Object> subformValues : subformValuesList) {
-                if (subformValues.containsKey(RELATION_AGE)) {
-                    ageNeedToValidateMap.put(RELATION_AGE, (String) subformValues.get(RELATION_AGE));
-                }
-            }
-        }
-        return ageNeedToValidateMap;
     }
 
     @Override
@@ -196,6 +155,7 @@ public class CaseRegisterPresenter extends RecordRegisterPresenter {
 
         for (Section section : sections) {
             for (Field field : section.getFields()) {
+                field.setSectionName(section.getName());
                 if (field.isShowOnMiniForm()) {
                     if (field.isPhotoUploadBox()) {
                         fields.add(0, field);
@@ -212,7 +172,13 @@ public class CaseRegisterPresenter extends RecordRegisterPresenter {
     public List<Field> getFields(int position) {
         RecordForm form = getTemplateForm();
         if (form != null) {
-            return form.getSections().get(position).getFields();
+            List<Field> fields = new ArrayList<>();
+            Section section = form.getSections().get(position);
+            for (Field field : section.getFields()) {
+                field.setSectionName(section.getName());
+                fields.add(field);
+            }
+            return fields;
         }
         return null;
     }

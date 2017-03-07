@@ -1,15 +1,10 @@
 package org.unicef.rapidreg.widgets.dialog;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
-import android.util.Log;
-import android.view.ContextThemeWrapper;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.ViewSwitcher;
@@ -19,12 +14,10 @@ import org.unicef.rapidreg.R;
 import org.unicef.rapidreg.base.BaseAlertDialog;
 import org.unicef.rapidreg.forms.Field;
 import org.unicef.rapidreg.service.cache.ItemValuesMap;
-import org.unicef.rapidreg.utils.Utils;
 import org.unicef.rapidreg.widgets.viewholder.GenericViewHolder;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 
 public abstract class BaseDialog {

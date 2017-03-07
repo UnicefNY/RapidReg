@@ -23,6 +23,7 @@ import static org.unicef.rapidreg.model.RecordModel.EMPTY_AGE;
 public class RecordService {
     public static final String RECORD_ID = "record_id";
     public static final String ITEM_VALUES = "item_values";
+    public static final String VERIFY_MESSAGE = "verify_message";
     public static final String RECORD_PHOTOS = "record_photos";
     public static final String AGE = "age";
     public static final String FULL_NAME = "name";

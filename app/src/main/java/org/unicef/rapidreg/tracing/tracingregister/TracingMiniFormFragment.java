@@ -72,10 +72,12 @@ public class TracingMiniFormFragment extends RecordRegisterFragment {
         RecordRegisterAdapter recordRegisterAdapter = new RecordRegisterAdapter(getActivity(),
                 fields,
                 tracingRegisterPresenter.getDefaultItemValues(),
+                tracingRegisterPresenter.getFieldValueVerifyResult(),
                 true);
 
         tracingPhotoAdapter.setItems(tracingRegisterPresenter.getDefaultPhotoPaths());
         recordRegisterAdapter.setPhotoAdapter(tracingPhotoAdapter);
+        recordRegisterAdapter.setFieldValueVerifyResult(getFieldValueVerifyResult());
 
         return recordRegisterAdapter;
     }
@@ -127,6 +129,7 @@ public class TracingMiniFormFragment extends RecordRegisterFragment {
     public void onSwitcherChecked() {
         Bundle args = new Bundle();
         args.putSerializable(RecordService.ITEM_VALUES, getRecordRegisterData());
+        args.putSerializable(RecordService.VERIFY_MESSAGE, getFieldValueVerifyResult());
         args.putStringArrayList(RecordService.RECORD_PHOTOS, (ArrayList<String>) getPhotoPathsData());
         Feature feature = ((RecordActivity) getActivity()).getCurrentFeature().isDetailMode() ?
                 TracingFeature.DETAILS_FULL : ((RecordActivity) getActivity()).getCurrentFeature().isAddMode() ?

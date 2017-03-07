@@ -77,7 +77,8 @@ public class IncidentRegisterWrapperFragment extends RecordRegisterWrapperFragme
     @Override
     protected void initItemValues() {
         if (getArguments() != null) {
-            setRecordRegisterData((ItemValuesMap) getArguments().getSerializable(ITEM_VALUES));
+            setRecordRegisterData((ItemValuesMap) getArguments().getSerializable(RecordService.ITEM_VALUES));
+            setFieldValueVerifyResult((ItemValuesMap) getArguments().getSerializable(RecordService.VERIFY_MESSAGE));
         }
     }
 
@@ -94,6 +95,7 @@ public class IncidentRegisterWrapperFragment extends RecordRegisterWrapperFragme
             String[] values = section.getName().values().toArray(new String[0]);
             Bundle args = new Bundle();
             args.putSerializable(RecordService.ITEM_VALUES, getRecordRegisterData());
+            args.putSerializable(RecordService.VERIFY_MESSAGE, getFieldValueVerifyResult());
             pages.add(FragmentPagerItem.of(values[0], IncidentRegisterFragment.class, args));
         }
         return pages;

@@ -12,11 +12,13 @@ public interface RecordRegisterView extends MvpView {
     void setPhotoPathsData(List<String> photoPaths);
     List<String> getPhotoPathsData();
     ItemValuesMap getRecordRegisterData();
+    void setFieldValueVerifyResult(ItemValuesMap fieldValueVerifyResult);
+    ItemValuesMap getFieldValueVerifyResult();
 
     interface SaveRecordCallback {
         void onSaveSuccessful(long recordId);
         void onSavedFail();
         void onRequiredFieldNotFilled();
-        void onFileValueInvalid(List<String> invalidMsgList);
+        void onFieldValueInvalid();
     }
 }

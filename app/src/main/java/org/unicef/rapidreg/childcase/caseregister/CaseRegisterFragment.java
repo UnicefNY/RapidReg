@@ -52,6 +52,7 @@ public class CaseRegisterFragment extends RecordRegisterFragment {
         RecordRegisterAdapter recordRegisterAdapter = new RecordRegisterAdapter(getActivity(),
                 caseRegisterPresenter.getValidFields(FragmentPagerItem.getPosition(getArguments())),
                 caseRegisterPresenter.getDefaultItemValues(),
+                caseRegisterPresenter.getFieldValueVerifyResult(),
                 false);
 
         casePhotoAdapter.setItems(caseRegisterPresenter.getDefaultPhotoPaths());
@@ -74,6 +75,7 @@ public class CaseRegisterFragment extends RecordRegisterFragment {
         args.putString(MODULE, caseRegisterPresenter.getCaseType());
         args.putStringArrayList(RecordService.RECORD_PHOTOS, (ArrayList<String>) caseRegisterPresenter.getDefaultPhotoPaths());
         args.putSerializable(RecordService.ITEM_VALUES, caseRegisterPresenter.getDefaultItemValues());
+        args.putSerializable(RecordService.VERIFY_MESSAGE, getFieldValueVerifyResult());
 
         CaseFeature currentFeature = (CaseFeature) ((CaseActivity) getActivity()).getCurrentFeature();
 

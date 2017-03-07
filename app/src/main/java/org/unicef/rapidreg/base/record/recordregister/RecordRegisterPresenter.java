@@ -1,5 +1,6 @@
 package org.unicef.rapidreg.base.record.recordregister;
 
+import android.app.Fragment;
 import android.os.Bundle;
 import android.util.Log;
 
@@ -27,7 +28,6 @@ import java.util.Locale;
 import static org.unicef.rapidreg.base.record.recordregister.RecordRegisterFragment
         .INVALID_RECORD_ID;
 import static org.unicef.rapidreg.base.record.recordregister.RecordRegisterFragment.INVALID_UNIQUE_ID;
-import static org.unicef.rapidreg.base.record.recordregister.RecordRegisterFragment.ITEM_VALUES;
 import static org.unicef.rapidreg.service.cache.ItemValuesMap.RecordProfile.INCIDENT_LINKS;
 
 public abstract class RecordRegisterPresenter extends MvpBasePresenter<RecordRegisterView> {
@@ -117,7 +117,7 @@ public abstract class RecordRegisterPresenter extends MvpBasePresenter<RecordReg
         }
 
         if (getRecordId(bundle) == INVALID_RECORD_ID) {
-            ItemValuesMap itemValuesMap = (ItemValuesMap) bundle.getSerializable(ITEM_VALUES);
+            ItemValuesMap itemValuesMap = (ItemValuesMap) bundle.getSerializable(RecordService.ITEM_VALUES);
             if (itemValuesMap != null) {
                 return itemValuesMap;
             }
@@ -183,4 +183,20 @@ public abstract class RecordRegisterPresenter extends MvpBasePresenter<RecordReg
     public abstract List<Field> getFields(int position);
 
     public abstract RecordForm getTemplateForm();
+
+    public ItemValuesMap getFieldValueVerifyResult() {
+        if (!isViewAttached()) {
+            return new ItemValuesMap();
+        }
+        Bundle extra = ((MvpFragment) getView()).getArguments();
+        if (extra == null) {
+            return new ItemValuesMap();
+        }
+
+        if (extra.containsKey(RecordService.VERIFY_MESSAGE)) {
+            return (ItemValuesMap) extra.getSerializable(RecordService.VERIFY_MESSAGE);
+        }
+
+        return new ItemValuesMap();
+    }
 }

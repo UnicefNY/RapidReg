@@ -47,6 +47,7 @@ public class TracingRegisterFragment extends RecordRegisterFragment {
         RecordRegisterAdapter recordRegisterAdapter = new RecordRegisterAdapter(getActivity(),
                 tracingRegisterPresenter.getValidFields(FragmentPagerItem.getPosition(getArguments())),
                 tracingRegisterPresenter.getDefaultItemValues(),
+                tracingRegisterPresenter.getFieldValueVerifyResult(),
                 false);
 
         tracingPhotoAdapter.setItems(tracingRegisterPresenter.getDefaultPhotoPaths());
@@ -65,6 +66,7 @@ public class TracingRegisterFragment extends RecordRegisterFragment {
         Bundle args = new Bundle();
         args.putStringArrayList(RecordService.RECORD_PHOTOS, (ArrayList<String>) getPhotoPathsData());
         args.putSerializable(RecordService.ITEM_VALUES, getRecordRegisterData());
+        args.putSerializable(RecordService.VERIFY_MESSAGE, getFieldValueVerifyResult());
         Feature feature = ((RecordActivity) getActivity()).getCurrentFeature().isDetailMode() ?
                 TracingFeature.DETAILS_MINI : ((RecordActivity) getActivity()).getCurrentFeature().isAddMode() ?
                 TracingFeature.ADD_MINI : TracingFeature.EDIT_MINI;
