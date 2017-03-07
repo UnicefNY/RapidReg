@@ -54,10 +54,10 @@ public abstract class BaseTextViewHolder extends BaseViewHolder<Field> {
         LinkedHashMap<String, String> fieldsValueVerifyResultMap = fieldValueVerifyResult.getChildrenAsLinkedHashMap
                 (field.getSectionName().get(PrimeroAppConfiguration.getDefaultLanguage()));
         if (fieldsValueVerifyResultMap != null) {
-            String fieldVerfyResult = fieldsValueVerifyResultMap.get(field.getDisplayName().get
+            String fieldVerifyResult = fieldsValueVerifyResultMap.get(field.getDisplayName().get
                     (PrimeroAppConfiguration.getDefaultLanguage()));
-            if (!TextUtils.isEmpty(fieldVerfyResult)) {
-                getValueView().setError(fieldVerfyResult);
+            if (!TextUtils.isEmpty(fieldVerifyResult)) {
+                getValueView().setError(fieldVerifyResult);
             }
         }
         simplifyLocationIfLocationFiled(field);
