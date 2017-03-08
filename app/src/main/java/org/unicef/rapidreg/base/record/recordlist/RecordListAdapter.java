@@ -10,7 +10,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -253,7 +252,6 @@ public abstract class RecordListAdapter extends RecyclerView.Adapter<RecordListA
             age.setText(isValidAge(ageContent) ? ageContent : "---");
 
 
-
             Date registrationDate = record.getRegistrationDate();
             String registrationDateText = isValidDate(registrationDate) ? dateFormat.format(registrationDate) :
                     "---";
@@ -274,17 +272,19 @@ public abstract class RecordListAdapter extends RecyclerView.Adapter<RecordListA
                 }
                 if (onViewUpdateListener != null) {
                     onViewUpdateListener.onRecordsDeletable(!recordWillBeDeletedList.isEmpty());
-                    onViewUpdateListener.onSelectedAllButtonCheckable(recordWillBeDeletedList.size() == syncedRecordsCount);
+                    onViewUpdateListener.onSelectedAllButtonCheckable(recordWillBeDeletedList.size() ==
+                            syncedRecordsCount);
                 }
             });
 
             if (record instanceof Incident) {
                 containerRecordListItem.setVisibility(View.GONE);
                 containerIncidentListItem.setVisibility(View.VISIBLE);
-                incidentLocation.setText(TextUtils.truncateByDoubleColons(((Incident) record).getLocation(),
-                        PrimeroAppConfiguration.getCurrentSystemSettings().getDistrictLevel()));
+                String locationText = TextUtils.truncateByDoubleColons(((Incident) record).getLocation(),
+                        PrimeroAppConfiguration.getCurrentSystemSettings().getDistrictLevel());
+                incidentLocation.setText(TextUtils.isEmpty(locationText) ? "---" : locationText);
                 incidentIdNormalState.setText(shortUUID);
-                incidentAge.setText(ageContent);
+                incidentAge.setText(isValidAge(ageContent) ? ageContent : "---");
                 incidentRegistrationDate.setText(registrationDateText);
             }
         }

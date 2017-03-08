@@ -42,8 +42,9 @@ public class IncidentMiniFormProfileViewHolder extends MiniFormProfileViewHolder
         super.setValue(field);
         containerRecordListItem.setVisibility(View.GONE);
         containerIncidentListItem.setVisibility(View.VISIBLE);
-        incidentLocation.setText(TextUtils.truncateByDoubleColons(itemValues.getAsString("location"),
-                PrimeroAppConfiguration.getCurrentSystemSettings().getDistrictLevel()));
+        String locationText = TextUtils.truncateByDoubleColons(itemValues.getAsString("location"),
+                PrimeroAppConfiguration.getCurrentSystemSettings().getDistrictLevel());
+        incidentLocation.setText(TextUtils.isEmpty(locationText) ? "---" : locationText);
         incidentRegistrationDate.setText(itemValues.getAsString(ItemValuesMap.RecordProfile
                 .REGISTRATION_DATE));
         incidentIdView.setText(itemValues.getAsString(ItemValuesMap.RecordProfile.ID_NORMAL_STATE));

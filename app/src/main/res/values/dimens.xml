@@ -8,6 +8,7 @@
     <dimen name="size_1">1dp</dimen>
     <dimen name="size_2">2dp</dimen>
     <dimen name="size_5">5dp</dimen>
+    <dimen name="size_minus_5">-5dp</dimen>
     <dimen name="size_10">10dp</dimen>
     <dimen name="size_12">12dp</dimen>
     <dimen name="size_15">15dp</dimen>
