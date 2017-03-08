@@ -96,6 +96,9 @@ public abstract class RecordListAdapter extends RecyclerView.Adapter<RecordListA
 
     public void toggleDeleteViews(boolean isDeleteMode) {
         this.isDeleteMode = isDeleteMode;
+        if (isDeleteMode) {
+            onViewUpdateListener.onRecordsDeletable(!recordWillBeDeletedList.isEmpty() && !recordList.isEmpty());
+        }
         notifyDataSetChanged();
     }
 
