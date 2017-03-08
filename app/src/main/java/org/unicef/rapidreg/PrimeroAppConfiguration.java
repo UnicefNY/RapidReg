@@ -10,6 +10,8 @@ import java.util.Locale;
 
 public class PrimeroAppConfiguration {
     public static final String MODULE_ID_GBV = "primeromodule-gbv";
+    public static final int DEFAULT_DISTRICT_LEVEL = 2;
+
     public static final String MODULE_ID_CP = "primeromodule-cp";
 
     public static final String PARENT_CASE = "case";

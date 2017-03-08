@@ -58,7 +58,7 @@ public class CaseListPresenter extends RecordListPresenter {
     }
 
     @Override
-    public int getsyncedRecordsCount() {
+    public int getSyncedRecordsCount() {
         return caseService.getAllSyncedRecordsId().size();
     }
 }

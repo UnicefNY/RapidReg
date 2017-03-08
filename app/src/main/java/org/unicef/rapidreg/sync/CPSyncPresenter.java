@@ -129,7 +129,7 @@ public class CPSyncPresenter extends BaseSyncPresenter {
                         }
                     } catch (Exception e) {
                         e.printStackTrace();
-//                        throw new RuntimeException(e);
+                        throw new RuntimeException(e);
                     }
                     return caseResponsePair;
                 })
@@ -366,8 +366,7 @@ public class CPSyncPresenter extends BaseSyncPresenter {
             item.setShortId(casesJsonObject.get("short_id").getAsString());
             item.setInternalId(casesJsonObject.get("_id").getAsString());
             item.setInternalRev(newRev);
-            item.setRegistrationDate(
-                    Utils.getRegisterDate(casesJsonObject.get("registration_date").getAsString()));
+            item.setRegistrationDate(Utils.getRegisterDateByYyyyMmDd(casesJsonObject.get("registration_date").getAsString()));
             item.setCreatedBy(casesJsonObject.get("created_by").getAsString());
             item.setOwnedBy(casesJsonObject.get("owned_by").getAsString());
             item.setServerUrl(PrimeroAppConfiguration.getApiBaseUrl());

@@ -1,5 +1,7 @@
 package org.unicef.rapidreg.service.impl;
 
+import android.util.Log;
+
 import com.google.gson.JsonObject;
 
 import org.unicef.rapidreg.PrimeroAppConfiguration;
@@ -15,6 +17,8 @@ import rx.schedulers.Schedulers;
 
 public class SystemSettingsServiceImpl extends BaseRetrofitService<SystemSettingRepository> implements
         SystemSettingsService {
+    private static final String TAG = SystemSettingsService.class.getSimpleName();
+
     private SystemSettingsDao systemSettingsDao;
 
     public SystemSettingsServiceImpl(SystemSettingsDao systemSettingsDao) {
@@ -35,7 +39,7 @@ public class SystemSettingsServiceImpl extends BaseRetrofitService<SystemSetting
                         GlobalLocationCache.clearSimpleLocationCache();
                     }
                 }, throwable -> {
-
+                    Log.e(TAG, "Init system settings error->" + throwable.getMessage());
                 });
     }
 
@@ -43,6 +47,12 @@ public class SystemSettingsServiceImpl extends BaseRetrofitService<SystemSetting
     public void setGlobalSystemSettings() {
         SystemSettings currentSystemSettings = systemSettingsDao.getByServerUrl(PrimeroAppConfiguration
                 .getApiBaseUrl());
+        if (currentSystemSettings == null) {
+            currentSystemSettings = new SystemSettings();
+            currentSystemSettings.setDistrictLevel(PrimeroAppConfiguration.DEFAULT_DISTRICT_LEVEL);
+            currentSystemSettings.setServerUrl(PrimeroAppConfiguration.getApiBaseUrl());
+            systemSettingsDao.save(currentSystemSettings);
+        }
         PrimeroAppConfiguration.setCurrentSystemSettings(currentSystemSettings);
     }
 
@@ -58,7 +68,6 @@ public class SystemSettingsServiceImpl extends BaseRetrofitService<SystemSetting
             currentSystemSettings.setDistrictLevel(districtLevel);
             systemSettingsDao.update(currentSystemSettings);
         }
-        PrimeroAppConfiguration.setCurrentSystemSettings(currentSystemSettings);
     }
 
     @Override

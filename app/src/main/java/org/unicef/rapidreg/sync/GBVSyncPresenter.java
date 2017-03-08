@@ -14,7 +14,6 @@ import com.raizlabs.android.dbflow.data.Blob;
 import org.unicef.rapidreg.PrimeroAppConfiguration;
 import org.unicef.rapidreg.injection.ActivityContext;
 import org.unicef.rapidreg.model.Case;
-import org.unicef.rapidreg.model.CasePhoto;
 import org.unicef.rapidreg.model.Incident;
 import org.unicef.rapidreg.model.IncidentForm;
 import org.unicef.rapidreg.service.CaseFormService;
@@ -113,8 +112,10 @@ public class GBVSyncPresenter extends BaseSyncPresenter {
     private Observable<List<Incident>> preUploadIncidents(List<Incident> incidents) {
         isSyncing = true;
         return Observable.from(incidents)
+                .filter(incident -> isSyncing && !incident.isSynced())
                 .map(incident -> {
-                    if (!TextUtils.isEmpty(incident.getCaseUniqueId())) {
+                    if (!TextUtils.isEmpty(incident.getCaseUniqueId()) && TextUtils.isEmpty(incident
+                            .getIncidentCaseId())) {
                         String incidentCaseId = caseService.getByUniqueId(incident.getCaseUniqueId()).getInternalId();
                         incident.setIncidentCaseId(incidentCaseId);
                         incident.save();
@@ -140,7 +141,7 @@ public class GBVSyncPresenter extends BaseSyncPresenter {
                     }
                 }, throwable -> {
                     try {
-                        Log.e(TAG, "onError: "+ throwable.getMessage());
+                        Log.e(TAG, "onError: " + throwable.getMessage());
                         throwable.printStackTrace();
                         syncFail(throwable);
                     } catch (Exception e) {
@@ -460,7 +461,7 @@ public class GBVSyncPresenter extends BaseSyncPresenter {
             if (first == null) {
                 return;
             }
-            for (int i = 0; i < number; i ++) {
+            for (int i = 0; i < number; i++) {
                 first.setId(0);
                 first.setUniqueId(null);
                 first.setInternalId(null);

@@ -68,6 +68,16 @@ public class Utils {
         }
     }
 
+    public static Date getRegisterDateByYyyyMmDd(String registrationDateString) {
+        SimpleDateFormat registrationDateFormat = new SimpleDateFormat("yyyy/MM/dd");
+        try {
+            java.util.Date date = registrationDateFormat.parse(registrationDateString);
+            return new Date(date.getTime());
+        } catch (ParseException e) {
+            return new Date(System.currentTimeMillis());
+        }
+    }
+
     public static void clearAudioFile(String fileName) {
         File file = new File(fileName);
         file.delete();

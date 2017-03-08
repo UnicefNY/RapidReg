@@ -30,5 +30,5 @@ public abstract class RecordListPresenter extends MvpBasePresenter<RecordListVie
 
     public abstract List<Long> getSyncedRecords();
 
-    public abstract int getsyncedRecordsCount();
+    public abstract int getSyncedRecordsCount();
 }

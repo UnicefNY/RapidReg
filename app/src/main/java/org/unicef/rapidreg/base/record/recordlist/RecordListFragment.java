@@ -165,7 +165,7 @@ public abstract class RecordListFragment extends MvpFragment<RecordListView, Rec
                     return;
                 }
                 adapter.setRecordList(filterRecords);
-                adapter.setSyncedListCount(presenter.getsyncedRecordsCount());
+                adapter.setSyncedListCount(presenter.getSyncedRecordsCount());
                 adapter.notifyDataSetChanged();
             }
 

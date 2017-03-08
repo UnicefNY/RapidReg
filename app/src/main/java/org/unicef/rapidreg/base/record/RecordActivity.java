@@ -130,7 +130,7 @@ public abstract class RecordActivity extends BaseActivity {
 
     public void onClickedSelectAllButton() {
         RecordListFragment listFragment = getRecordListFragment();
-        if (listFragment.getPresenter().getsyncedRecordsCount() > 0) {
+        if (listFragment.getPresenter().getSyncedRecordsCount() > 0) {
             toggleSelectAllButtonState(!isSelectAll);
             setSelectAll(!isSelectAll);
             listFragment.toggleSelectAllItems(isSelectAll());
