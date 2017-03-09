@@ -11,7 +11,6 @@ import org.unicef.rapidreg.service.cache.ItemValuesMap;
 import org.unicef.rapidreg.widgets.PrimeroDatePicker;
 
 import java.util.Calendar;
-import java.util.Date;
 
 public class DateDialog extends BaseDialog {
     private String result;
@@ -45,13 +44,13 @@ public class DateDialog extends BaseDialog {
         int year = calendar.get(Calendar.YEAR);
 
         if (datePicker.getYear() > year) {
-            return context.getResources().getString(R.string.invalid_date);
+            return context.getResources().getString(R.string.invalid_date_msg);
         }
         if (datePicker.getMonth() > month) {
-            return context.getResources().getString(R.string.invalid_date);
+            return context.getResources().getString(R.string.invalid_date_msg);
         }
         if (datePicker.getDayOfMonth() > dayOfMonth) {
-            return context.getResources().getString(R.string.invalid_date);
+            return context.getResources().getString(R.string.invalid_date_msg);
         }
         return "";
     }

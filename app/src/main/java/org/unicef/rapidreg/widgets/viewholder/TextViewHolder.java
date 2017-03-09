@@ -167,13 +167,12 @@ public class TextViewHolder extends BaseTextViewHolder {
     }
 
     private String verifyValue(String value, Field field) {
-        if (field.isNumericField()) {
-            if (field.getName().contains(Field.ValidationKeywords.AGE_KEY)) {
-                if (!isAgeValid(value)) {
-                    return "Age must be between 0 - 130";
-                }
-            }
+        boolean isAgeField = field.isNumericField() && field.getName().contains(Field.ValidationKeywords.AGE_KEY);
+
+        if (isAgeField) {
+            return isAgeValid(value) ? "" : "Age must be between 0 - 130";
         }
+
         return null;
     }
 

@@ -75,11 +75,6 @@ public class IncidentListAdapter extends RecordListAdapter {
     }
 
     @Override
-    public RecordListViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return super.onCreateViewHolder(parent, viewType);
-    }
-
-    @Override
     public void removeRecords() {
         List<Long> recordIds = getRecordWillBeDeletedList();
         for (Long recordId : recordIds) {
