@@ -164,7 +164,7 @@ public class TextViewHolder extends BaseTextViewHolder {
         if (field.isNumericField()) {
             if (field.getName().contains(Field.ValidationKeywords.AGE_KEY)) {
                 if (!isAgeValid(value)) {
-                    return "Age should be between 0 - 130";
+                    return "Age must be between 0 - 130";
                 }
             }
         }
