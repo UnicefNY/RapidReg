@@ -5,9 +5,13 @@ import android.widget.DatePicker;
 import android.widget.TextView;
 import android.widget.ViewSwitcher;
 
+import org.unicef.rapidreg.R;
 import org.unicef.rapidreg.forms.Field;
 import org.unicef.rapidreg.service.cache.ItemValuesMap;
 import org.unicef.rapidreg.widgets.PrimeroDatePicker;
+
+import java.util.Calendar;
+import java.util.Date;
 
 public class DateDialog extends BaseDialog {
     private String result;
@@ -31,6 +35,25 @@ public class DateDialog extends BaseDialog {
             datePicker.updateDate(year, month, day);
         }
         getBuilder().setView(datePicker);
+    }
+
+    @Override
+    public String verifyResult() {
+        Calendar calendar = Calendar.getInstance();
+        int dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);
+        int month = calendar.get(Calendar.MONTH);
+        int year = calendar.get(Calendar.YEAR);
+
+        if (datePicker.getYear() > year) {
+            return context.getResources().getString(R.string.invalid_date);
+        }
+        if (datePicker.getMonth() > month) {
+            return context.getResources().getString(R.string.invalid_date);
+        }
+        if (datePicker.getDayOfMonth() > dayOfMonth) {
+            return context.getResources().getString(R.string.invalid_date);
+        }
+        return "";
     }
 
     @Override

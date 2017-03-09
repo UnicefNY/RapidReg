@@ -1,6 +1,5 @@
 package org.unicef.rapidreg.base.record.recordregister;
 
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
@@ -204,7 +203,7 @@ public abstract class RecordRegisterWrapperFragment extends MvpFragment<RecordRe
     public void onFieldValueInvalid() {
         ItemValuesMap fieldValueVerifyResult = getFieldValueVerifyResult();
         MessageDialog messageDialog = new MessageDialog(getContext());
-        messageDialog.setTitle(R.string.invalid_value);
+        messageDialog.setTitle(R.string.cannot_save);
         String errorMsg = generateFileValueInvalidMsg(fieldValueVerifyResult);
         messageDialog.setMessageColor(getContext().getResources().getColor(R.color.primero_font_medium));
         messageDialog.setMessageTextSize(R.dimen.text_size_6);

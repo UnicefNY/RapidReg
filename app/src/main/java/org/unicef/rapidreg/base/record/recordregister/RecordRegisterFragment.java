@@ -207,7 +207,7 @@ public abstract class RecordRegisterFragment extends MvpFragment<RecordRegisterV
     public void onFieldValueInvalid() {
         ItemValuesMap fieldValueVerifyResult = getFieldValueVerifyResult();
         MessageDialog messageDialog = new MessageDialog(getContext());
-        messageDialog.setTitle(R.string.invalid_value);
+        messageDialog.setTitle(R.string.cannot_save);
         String errorMsg = generateFileValueInvalidMsg(fieldValueVerifyResult);
         messageDialog.setMessageColor(getContext().getResources().getColor(R.color.primero_font_medium));
         messageDialog.setMessageTextSize(R.dimen.text_size_6);

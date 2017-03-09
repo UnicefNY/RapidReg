@@ -42,19 +42,10 @@ public abstract class BaseDialog {
 
     private void createDialogBuilder(Context context) {
         builder = new BaseAlertDialog.Builder(context);
-        builder.setPositiveButton(R.string.ok, (dialog, which) -> {
-            if (viewSwitcher != null) {
-                if (getResult() != null && !TextUtils.isEmpty(getResult().toString())) {
-                    viewSwitcher.setDisplayedChild(GenericViewHolder.FORM_HAS_ANSWER_STATE);
-                } else {
-                    viewSwitcher.setDisplayedChild(GenericViewHolder.FORM_NO_ANSWER_STATE);
-                }
-            }
-            itemValues.addItem(field.getName(), getResult());
-            resultView.setText(getDisplayText());
-        })
+        builder.setPositiveButton(R.string.ok, null)
                 .setNegativeButton(R.string.cancel, (dialog, which) -> dialog.dismiss())
                 .setNeutralButton(R.string.clear, (dialog, which) -> {
+                    dialog.dismiss();
                     resultView.setText("");
                     itemValues.removeItem(field.getName());
                     if (viewSwitcher != null) {
@@ -66,10 +57,29 @@ public abstract class BaseDialog {
     public void show() {
         initView();
         AlertDialog dialog = builder.show();
-
+        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(view -> {
+            if (!TextUtils.isEmpty(verifyResult())) {
+                MessageDialog messageDialog = new MessageDialog(context);
+                messageDialog.setTitle(R.string.invalid_value);
+                messageDialog.setMessage(verifyResult());
+                messageDialog.setMessageColor(context.getResources().getColor(R.color.primero_font_medium));
+                messageDialog.setPositiveButton(R.string.ok, subview -> messageDialog.dismiss());
+                messageDialog.show();
+            } else {
+                if (viewSwitcher != null) {
+                    if (getResult() != null && !TextUtils.isEmpty(getResult().toString())) {
+                        viewSwitcher.setDisplayedChild(GenericViewHolder.FORM_HAS_ANSWER_STATE);
+                    } else {
+                        viewSwitcher.setDisplayedChild(GenericViewHolder.FORM_NO_ANSWER_STATE);
+                    }
+                }
+                dialog.dismiss();
+                itemValues.addItem(field.getName(), getResult());
+                resultView.setText(getDisplayText());
+            }
+        });
         changeDialogDividerColor(context, dialog);
     }
-
 
     public void changeDialogDividerColor(Context context, Dialog dialog) {
         int titleDividerId = context.getResources().getIdentifier("titleDivider", "id", "android");
@@ -106,6 +116,10 @@ public abstract class BaseDialog {
 
     protected String getDisplayText() {
         return getResult() == null ? null : getResult().toString();
+    }
+
+    public String verifyResult() {
+        return null;
     }
 
     public abstract void initView();
