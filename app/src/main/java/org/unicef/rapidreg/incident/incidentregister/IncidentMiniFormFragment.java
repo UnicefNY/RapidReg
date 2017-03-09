@@ -112,6 +112,7 @@ public class IncidentMiniFormFragment extends RecordRegisterFragment {
     public void onEditClicked() {
         Bundle args = new Bundle();
         args.putSerializable(RecordService.ITEM_VALUES, getRecordRegisterData());
+        args.putSerializable(RecordService.VERIFY_MESSAGE, getFieldValueVerifyResult());
         ((IncidentActivity) getActivity()).turnToFeature(IncidentFeature.EDIT_MINI, args, null);
     }
 

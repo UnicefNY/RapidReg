@@ -321,7 +321,7 @@ public abstract class RecordListAdapter extends RecyclerView.Adapter<RecordListA
             if (onViewUpdateListener != null) {
                 onViewUpdateListener.onRecordsDeletable(!recordWillBeDeletedList.isEmpty());
             }
-            deleteStateCheckBox.setVisibility(View.VISIBLE);
+            itemDeleteCheckboxContent.setVisibility(View.VISIBLE);
             deleteStateCheckBox.setEnabled(isDeletable);
             itemView.setEnabled(isDeletable);
 
@@ -331,7 +331,7 @@ public abstract class RecordListAdapter extends RecyclerView.Adapter<RecordListA
 
         public void toggleNormalView() {
             deleteStateCheckBox.setChecked(false);
-            deleteStateCheckBox.setVisibility(View.GONE);
+            itemDeleteCheckboxContent.setVisibility(View.GONE);
 
             itemView.setEnabled(true);
             itemView.setBackgroundColor(Color.WHITE);

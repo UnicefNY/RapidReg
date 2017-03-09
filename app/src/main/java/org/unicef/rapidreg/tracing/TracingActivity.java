@@ -1,5 +1,9 @@
 package org.unicef.rapidreg.tracing;
 
+import android.annotation.TargetApi;
+import android.app.ActivityManager;
+import android.content.Context;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -108,35 +112,27 @@ public class TracingActivity extends RecordActivity implements BaseView {
         MessageDialog messageDialog = new MessageDialog(this);
         messageDialog.setTitle((R.string.quit));
         messageDialog.setMessage(R.string.quit_without_saving);
-        messageDialog.setPositiveButton(R.string.ok, new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Utils.clearAudioFile(AUDIO_FILE_PATH);
-                switch (clickedButton) {
-                    case R.id.nav_tracing:
-                        turnToFeature(TracingFeature.LIST, null, null);
-                        break;
-                    case R.id.nav_cases:
-                        intentSender.showCasesActivity(TracingActivity.this, true, false);
-                        break;
-                    case R.id.nav_incident:
-                        intentSender.showIncidentActivity(TracingActivity.this, true);
-                        break;
-                    case R.id.nav_sync:
-                        intentSender.showSyncActivity(TracingActivity.this, true);
-                        break;
-                    default:
-                        break;
-                }
-                messageDialog.dismiss();
+        messageDialog.setPositiveButton(R.string.ok, view -> {
+            Utils.clearAudioFile(AUDIO_FILE_PATH);
+            switch (clickedButton) {
+                case R.id.nav_tracing:
+                    turnToFeature(TracingFeature.LIST, null, null);
+                    break;
+                case R.id.nav_cases:
+                    intentSender.showCasesActivity(TracingActivity.this, true, false);
+                    break;
+                case R.id.nav_incident:
+                    intentSender.showIncidentActivity(TracingActivity.this, true);
+                    break;
+                case R.id.nav_sync:
+                    intentSender.showSyncActivity(TracingActivity.this, true);
+                    break;
+                default:
+                    break;
             }
+            messageDialog.dismiss();
         });
-        messageDialog.setNegativeButton(R.string.cancel, new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                messageDialog.dismiss();
-            }
-        });
+        messageDialog.setNegativeButton(R.string.cancel, view -> messageDialog.dismiss());
         messageDialog.show();
     }
 

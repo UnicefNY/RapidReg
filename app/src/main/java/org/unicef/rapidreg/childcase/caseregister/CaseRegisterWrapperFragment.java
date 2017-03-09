@@ -92,6 +92,7 @@ public class CaseRegisterWrapperFragment extends RecordRegisterWrapperFragment {
         Bundle args = new Bundle();
         args.putString(MODULE, caseRegisterPresenter.getCaseType());
         args.putSerializable(RecordService.ITEM_VALUES, getRecordRegisterData());
+        args.putSerializable(RecordService.VERIFY_MESSAGE, new ItemValuesMap());
         args.putStringArrayList(RecordService.RECORD_PHOTOS, (ArrayList<String>) recordPhotoAdapter.getAllItems());
 
         ((CaseActivity) getActivity()).turnToFeature(EDIT_FULL, args, null);

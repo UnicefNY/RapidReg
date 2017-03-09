@@ -34,6 +34,7 @@
             android:layout_height="match_parent"
             android:layout_marginRight="@dimen/size_5"
             android:layout_weight="1"
+            android:visibility="gone"
             android:gravity="center">
 
             <CheckBox
@@ -41,7 +42,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:scaleX="@dimen/button_icon_scale"
-                android:visibility="gone"
                 android:scaleY="@dimen/button_icon_scale" />
 
         </LinearLayout>

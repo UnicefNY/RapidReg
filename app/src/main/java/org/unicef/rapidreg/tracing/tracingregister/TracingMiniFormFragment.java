@@ -122,6 +122,7 @@ public class TracingMiniFormFragment extends RecordRegisterFragment {
         Bundle args = new Bundle();
         args.putSerializable(RecordService.ITEM_VALUES, getRecordRegisterData());
         args.putStringArrayList(RecordService.RECORD_PHOTOS, (ArrayList<String>) getPhotoPathsData());
+        args.putSerializable(RecordService.VERIFY_MESSAGE, getFieldValueVerifyResult());
         ((TracingActivity) getActivity()).turnToFeature(TracingFeature.EDIT_MINI, args, null);
     }
 

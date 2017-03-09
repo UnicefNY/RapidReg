@@ -76,6 +76,18 @@ public class MessageDialog extends Dialog {
         dialogMessageTV.setText(message);
     }
 
+    public void setMessageColor(int colorId) {
+        dialogMessageTV.setTextColor(colorId);
+    }
+
+    public void setMessageTextSize(int textSizeId) {
+        dialogMessageTV.setTextSize(getContext().getResources().getDimension(textSizeId));
+    }
+
+    public void setMessageTextSize(float textSize) {
+        dialogMessageTV.setTextSize(textSize);
+    }
+
     public void setCustonView(View view) {
         dialogCustonViewContent.setVisibility(View.VISIBLE);
         dialogCustonViewContent.addView(view);

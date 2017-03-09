@@ -27,6 +27,7 @@ import org.unicef.rapidreg.service.RecordService;
 import org.unicef.rapidreg.service.cache.ItemValuesMap;
 import org.unicef.rapidreg.utils.Utils;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -208,6 +209,8 @@ public abstract class RecordRegisterFragment extends MvpFragment<RecordRegisterV
         MessageDialog messageDialog = new MessageDialog(getContext());
         messageDialog.setTitle(R.string.invalid_value);
         String errorMsg = generateFileValueInvalidMsg(fieldValueVerifyResult);
+        messageDialog.setMessageColor(getContext().getResources().getColor(R.color.primero_font_medium));
+        messageDialog.setMessageTextSize(R.dimen.text_size_6);
         messageDialog.setMessage(errorMsg);
         messageDialog.setPositiveButton(R.string.ok, view -> messageDialog.dismiss());
         messageDialog.show();
@@ -216,17 +219,33 @@ public abstract class RecordRegisterFragment extends MvpFragment<RecordRegisterV
     private String generateFileValueInvalidMsg(ItemValuesMap fieldValueVerifyResult) {
         StringBuilder sb = new StringBuilder("");
         Map<String, Object> values = fieldValueVerifyResult.getValues();
-        for (Map.Entry<String, Object> entry : values.entrySet()) {
-            sb.append("[" + entry.getKey() + "]\n");
-            LinkedHashMap<String, String> entryVal = (LinkedHashMap<String, String>) entry.getValue();
-            for (Map.Entry<String, String> valueEntry : entryVal.entrySet()) {
-                sb.append(valueEntry.getKey());
-                sb.append(": " + valueEntry.getValue());
-                sb.append("\n");
+        HashMap<String, List<String>> invalidMsgMap = generateInvalidShowMsgMap(values);
+        for (Map.Entry<String, List<String>> entry : invalidMsgMap.entrySet()) {
+            sb.append(entry.getKey() + "\n\n");
+            sb.append("Please check below fields:\n");
+            for (String invalidMsg : entry.getValue()) {
+                sb.append("- "+invalidMsg + "\n");
             }
             sb.append("\n");
         }
         return sb.toString();
+    }
+
+    private HashMap<String, List<String>> generateInvalidShowMsgMap(Map<String, Object> values) {
+        HashMap<String, List<String>> invalidShowMsgMap = new HashMap<>();
+        for (Map.Entry<String, Object> entry : values.entrySet()) {
+            LinkedHashMap<String, String> entryVal = (LinkedHashMap<String, String>) entry.getValue();
+            for (Map.Entry<String, String> valueEntry : entryVal.entrySet()) {
+                List<String> invalidEntryList = invalidShowMsgMap.containsKey(valueEntry.getValue()) ?
+                        invalidShowMsgMap.get(valueEntry.getValue()) : new ArrayList<>();
+                String invalidEntry = entry.getKey() + " > " + valueEntry.getKey();
+                if (!invalidEntryList.contains(invalidEntry)) {
+                    invalidEntryList.add(invalidEntry);
+                }
+                invalidShowMsgMap.put(valueEntry.getValue(), invalidEntryList);
+            }
+        }
+        return invalidShowMsgMap;
     }
 
     private void saveStateToArguments() {

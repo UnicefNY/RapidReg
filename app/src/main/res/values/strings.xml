@@ -177,9 +177,11 @@
     <string name="delete_success_info">Records are deleted</string>
     <string name="yes">YES</string>
     <string name="no">NO</string>
-    <string name="invalid_value">Invalid Message</string>
+    <string name="invalid_value">Cannot Save</string>
     <string name="ok">OK</string>
     <string name="clear">CLEAR</string>
     <string name="cancel">CANCEL</string>
+    <string name="invalid_date">Date should not be in future.</string>
+    <string name="warning">Warning</string>
 
 </resources>

@@ -1,5 +1,6 @@
 package org.unicef.rapidreg.sync;
 
+import android.app.ActivityManager;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;

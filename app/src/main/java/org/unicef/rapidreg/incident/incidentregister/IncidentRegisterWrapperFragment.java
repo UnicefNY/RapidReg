@@ -71,6 +71,7 @@ public class IncidentRegisterWrapperFragment extends RecordRegisterWrapperFragme
     public void onEditClicked() {
         Bundle args = new Bundle();
         args.putSerializable(RecordService.ITEM_VALUES, getRecordRegisterData());
+        args.putSerializable(RecordService.VERIFY_MESSAGE, getFieldValueVerifyResult());
         ((IncidentActivity) getActivity()).turnToFeature(IncidentFeature.EDIT_FULL, args, null);
     }
 

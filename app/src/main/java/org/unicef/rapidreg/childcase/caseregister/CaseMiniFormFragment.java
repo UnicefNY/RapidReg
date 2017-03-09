@@ -152,6 +152,7 @@ public class CaseMiniFormFragment extends RecordRegisterFragment {
         Bundle args = new Bundle();
         args.putString(MODULE, caseRegisterPresenter.getCaseType());
         args.putSerializable(RecordService.ITEM_VALUES, getRecordRegisterData());
+        args.putSerializable(RecordService.VERIFY_MESSAGE, getFieldValueVerifyResult());
         args.putStringArrayList(RecordService.RECORD_PHOTOS, (ArrayList<String>) getPhotoPathsData());
         ((CaseActivity) getActivity()).turnToFeature(CaseFeature.EDIT_MINI, args, null);
     }

@@ -4,4 +4,6 @@
     <string name="ok">OK</string>
     <string name="clear">CLEAR</string>
     <string name="cancel">CANCEL</string>
+    <string name="invalid_date">Date should not be in future.</string>
+    <string name="warning">Warning</string>
 </resources>
