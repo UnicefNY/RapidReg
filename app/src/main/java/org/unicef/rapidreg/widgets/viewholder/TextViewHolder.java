@@ -48,8 +48,6 @@ public class TextViewHolder extends BaseTextViewHolder {
 
     private InputMethodManager inputMethodManager;
 
-    private LinkedHashMap<String, String> verifyResultMap = new LinkedHashMap<>();
-
     public TextViewHolder(Context context, View itemView, ItemValuesMap itemValues) {
         super(context, itemView, itemValues);
         ButterKnife.bind(this, itemView);
@@ -125,28 +123,18 @@ public class TextViewHolder extends BaseTextViewHolder {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 String verifyResult = verifyValue(String.valueOf(s), field);
+
+                if (!TextUtils.isEmpty(verifyResult)) {
+                    valueView.setError(verifyResult);
+                } else {
+                    valueView.setError(null);
+                }
+
                 String defaultLanguage = PrimeroAppConfiguration.getDefaultLanguage();
                 String fieldVerifyKey = field.getDisplayName().get(defaultLanguage);
                 String sectionVerifyKey = field.getSectionName().get(defaultLanguage);
-                verifyResultMap = fieldValueVerifyResult.getChildrenAsLinkedHashMap(sectionVerifyKey);
-                if (verifyResultMap == null) {
-                    verifyResultMap = new LinkedHashMap<>();
-                }
-                if (!TextUtils.isEmpty(verifyResult)) {
-                    verifyResultMap.put(fieldVerifyKey, verifyResult);
-                    fieldValueVerifyResult.addLinkedHashMap(sectionVerifyKey, verifyResultMap);
-                    valueView.setError(verifyResult);
-                } else {
-                    if (verifyResultMap.containsKey(fieldVerifyKey)) {
-                        verifyResultMap.remove(fieldVerifyKey);
-                    }
-                    if (verifyResultMap.isEmpty()) {
-                        fieldValueVerifyResult.removeItem(sectionVerifyKey);
-                    } else {
-                        fieldValueVerifyResult.addLinkedHashMap(sectionVerifyKey, verifyResultMap);
-                    }
-                    valueView.setError(null);
-                }
+                updateVerifyResultToMap(sectionVerifyKey, fieldVerifyKey, verifyResult);
+
                 saveValues(field);
             }
 
@@ -158,6 +146,24 @@ public class TextViewHolder extends BaseTextViewHolder {
                 }
             }
         });
+    }
+
+    private void updateVerifyResultToMap(String parentKey, String childKey, String childValue) {
+        LinkedHashMap<String, String> childVerifyResultMap = fieldValueVerifyResult.getChildrenAsLinkedHashMap(parentKey);
+        if (childVerifyResultMap == null) {
+            childVerifyResultMap = new LinkedHashMap<>();
+        }
+        if (!TextUtils.isEmpty(childValue)) {
+            childVerifyResultMap.put(childKey, childValue);
+            fieldValueVerifyResult.addLinkedHashMap(parentKey, childVerifyResultMap);
+        } else {
+            childVerifyResultMap.remove(childKey);
+            if (childVerifyResultMap.isEmpty()) {
+                fieldValueVerifyResult.removeItem(parentKey);
+            } else {
+                fieldValueVerifyResult.addLinkedHashMap(parentKey, childVerifyResultMap);
+            }
+        }
     }
 
     private String verifyValue(String value, Field field) {

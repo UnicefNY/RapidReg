@@ -5,6 +5,8 @@ import org.junit.runner.RunWith;
 import org.powermock.modules.junit4.PowerMockRunner;
 import org.unicef.rapidreg.R;
 
+import java.util.LinkedHashMap;
+
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertThat;
