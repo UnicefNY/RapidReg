@@ -49,7 +49,7 @@ public class SearchAbleDialog extends Dialog {
     private Context context;
 
 
-    public SearchAbleDialog(Context context, String title, String[] items, int selectIndex) {
+    public SearchAbleDialog(Context context, String title, List<String> items, int selectIndex) {
         super(context);
         this.context = context;
         requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -60,7 +60,7 @@ public class SearchAbleDialog extends Dialog {
 
         filterText.addTextChangedListener(filterTextWatcher);
 
-        adapter = new MyAdapter(context, new ArrayList<>(Arrays.asList(items)));
+        adapter = new MyAdapter(context, items);
 
         list.setAdapter(adapter);
         list.setOnItemClickListener((a, v, position, id) -> Log.d(TAG, "Selected Item is = " + list.getItemAtPosition(position)));

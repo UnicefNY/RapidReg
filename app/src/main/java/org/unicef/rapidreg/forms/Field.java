@@ -25,7 +25,7 @@ public class Field {
     public static final String TYPE_MULTI_SELECT_BOX = "multi_select_box";
     public static final String TYPE_SUBFORM_FIELD = "subform_container";
     public static final String TYPE_TICK_BOX = "tick_box";
-    public static final String TYPE_TEXT_AREA= "textarea";
+    public static final String TYPE_TEXT_AREA = "textarea";
     public static final String TYPE_TEXT_FIELD = "text_field";
     public static final String TYPE_PHOTO_UPLOAD_LAYOUT = "photo_upload_layout";
     public static final String TYPE_AUDIO_UPLOAD_LAYOUT = "audio_item";
@@ -325,7 +325,7 @@ public class Field {
         PHOTO_UPLOAD_BOX(null),
         AUDIO_UPLOAD_BOX(null),
         CUSTOM(null),
-        SUBFORM(null), ;
+        SUBFORM(null),;
 
         private Class<? extends BaseDialog> clz;
 
@@ -341,4 +341,37 @@ public class Field {
     public class ValidationKeywords {
         public static final String AGE_KEY = "age";
     }
+
+    public List<String> getSelectOptionValuesIfSelectable() {
+        if (!isSelectField()){
+            throw new IllegalStateException("Filed is not multiple selectable");
+        }
+        String language = PrimeroAppConfiguration.getDefaultLanguage();
+        List<String> items = new ArrayList<>();
+
+        List<Object> options = getOptionStringsText().get(language);
+        if (options.get(0) instanceof Map) {
+            List<Map<String, String>> arrayList = getOptionStringsText().get(language);
+            for (Map<String, String> map : arrayList) {
+                items.add(map.get("display_text"));
+            }
+            return items;
+        }
+        return getOptionStringsText().get(language);
+    }
+
+    public List<String> getSelectOptionKeysIfMultiple() {
+        if (!isMultiSelect()){
+            throw new IllegalStateException("Filed is not multiple selectable");
+        }
+        String language = PrimeroAppConfiguration.getDefaultLanguage();
+        List<String> items = new ArrayList<>();
+
+        List<Map<String, String>> arrayList = getOptionStringsText().get(language);
+        for (Map<String, String> map : arrayList) {
+            items.add(map.get("id"));
+        }
+        return items;
+    }
+
 }

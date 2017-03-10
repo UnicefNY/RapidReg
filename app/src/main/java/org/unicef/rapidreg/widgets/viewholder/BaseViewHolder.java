@@ -1,25 +1,18 @@
 package org.unicef.rapidreg.widgets.viewholder;
 
 import android.content.Context;
-import android.graphics.Color;
-import android.support.design.widget.Snackbar;
 import android.support.v7.widget.RecyclerView;
-import android.text.TextUtils;
 import android.view.View;
-import android.widget.EditText;
-import android.widget.TextView;
 
 import org.unicef.rapidreg.PrimeroAppConfiguration;
 import org.unicef.rapidreg.R;
 import org.unicef.rapidreg.forms.Field;
 import org.unicef.rapidreg.service.cache.ItemValuesMap;
 import org.unicef.rapidreg.utils.Utils;
-import org.unicef.rapidreg.widgets.VerifyWithoutPopupEditText;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
-import java.util.Objects;
 
 public abstract class BaseViewHolder<T> extends RecyclerView.ViewHolder {
 
@@ -78,17 +71,27 @@ public abstract class BaseViewHolder<T> extends RecyclerView.ViewHolder {
         return field.getParent() != null;
     }
 
-    protected String getValueForSubForm(Field field) {
-        if (itemValues == null) {
+    protected String getValue(Field field) {
+        if (itemValues == null || !itemValues.getValues().containsKey(field.getName())) {
             return null;
         }
-
         Map<String, Object> value = itemValues.getValues();
-        if (value.containsKey(field.getName())) {
-            Object res = value.get(field.getName());
-            return res instanceof List ? Utils.toStringResult((List<String>) res) : res.toString();
+        Object res = value.get(field.getName());
+
+        if (!(res instanceof List)) {
+            return res.toString();
         }
-        return null;
+
+        List<String> optionValues = new ArrayList<>();
+        if (field.isMultiSelect()) {
+            List<String> optionKeys = (List<String>) res;
+            List<String> selectOptionKeys = field.getSelectOptionKeysIfMultiple();
+            List<String> selectOptionValues = field.getSelectOptionValuesIfSelectable();
+            for (String optionKey : optionKeys) {
+                optionValues.add(selectOptionValues.get(selectOptionKeys.indexOf(optionKey)));
+            }
+        }
+        return Utils.toStringResult(optionValues);
     }
 
     public int getCurrentPosition() {

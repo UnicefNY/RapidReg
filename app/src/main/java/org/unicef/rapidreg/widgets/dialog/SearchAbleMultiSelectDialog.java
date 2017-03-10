@@ -22,7 +22,6 @@ import android.widget.TextView;
 import org.unicef.rapidreg.R;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import butterknife.BindView;
@@ -52,7 +51,7 @@ public class SearchAbleMultiSelectDialog extends Dialog {
     private Context context;
     private List<String> results;
 
-    public SearchAbleMultiSelectDialog(Context context, String title, String[] items, List<String> selectedItems) {
+    public SearchAbleMultiSelectDialog(Context context, String title, List<String> items, List<String> selectedItems) {
         super(context);
         this.context = context;
         results = selectedItems;
@@ -63,7 +62,7 @@ public class SearchAbleMultiSelectDialog extends Dialog {
         dialogTitleTextView.setText(title);
         filterText.addTextChangedListener(filterTextWatcher);
 
-        adapter = new SearchAbleMultiSelectDialog.MyAdapter(context, new ArrayList<>(Arrays.asList(items)));
+        adapter = new SearchAbleMultiSelectDialog.MyAdapter(context, items);
 
         list.setAdapter(adapter);
         list.setOnItemClickListener((adapter, view, position, id) -> Log.d(TAG, "Selected Item is = " + list
@@ -174,7 +173,7 @@ public class SearchAbleMultiSelectDialog extends Dialog {
                 holder.textView = (TextView) convertView.findViewById(R.id.label);
                 holder.textView.setClickable(true);
                 holder.checkBox = (CheckBox) convertView.findViewById(R.id.value);
-                holder.line = (TextView)convertView.findViewById(R.id.checkbox_line);
+                holder.line = (TextView) convertView.findViewById(R.id.checkbox_line);
                 holder.line.setVisibility(View.VISIBLE);
                 convertView.setTag(holder);
             } else {

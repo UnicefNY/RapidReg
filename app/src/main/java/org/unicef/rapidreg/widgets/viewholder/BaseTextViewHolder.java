@@ -11,11 +11,8 @@ import org.unicef.rapidreg.base.record.RecordActivity;
 import org.unicef.rapidreg.forms.Field;
 import org.unicef.rapidreg.service.cache.GlobalLocationCache;
 import org.unicef.rapidreg.service.cache.ItemValuesMap;
-import org.unicef.rapidreg.utils.Utils;
 
 import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
 
 public abstract class BaseTextViewHolder extends BaseViewHolder<Field> {
     public BaseTextViewHolder(Context context, View itemView, ItemValuesMap itemValues) {
@@ -45,18 +42,17 @@ public abstract class BaseTextViewHolder extends BaseViewHolder<Field> {
     }
 
     protected void initValueViewData(Field field) {
-        if (isSubFormField(field)) {
-            getValueView().setText(getValueForSubForm(field));
-        } else {
-            getValueView().setText(getValue(field.getName()));
-        }
+        getValueView().setText(getValue(field));
 
         if (fieldValueVerifyResult != null) {
-            LinkedHashMap<String, String> fieldsValueVerifyResultMap = fieldValueVerifyResult.getChildrenAsLinkedHashMap(field.getSectionName().get(PrimeroAppConfiguration.getDefaultLanguage()));
+            LinkedHashMap<String, String> fieldsValueVerifyResultMap = fieldValueVerifyResult
+                    .getChildrenAsLinkedHashMap(field.getSectionName().get(PrimeroAppConfiguration.getDefaultLanguage
+                            ()));
             if (fieldsValueVerifyResultMap != null) {
-                String fieldVerfyResult = fieldsValueVerifyResultMap.get(field.getDisplayName().get(PrimeroAppConfiguration.getDefaultLanguage()));
-                if (!TextUtils.isEmpty(fieldVerfyResult)) {
-                    getValueView().setError(fieldVerfyResult);
+                String fieldVerifyResult = fieldsValueVerifyResultMap.get(field.getDisplayName().get
+                        (PrimeroAppConfiguration.getDefaultLanguage()));
+                if (!TextUtils.isEmpty(fieldVerifyResult)) {
+                    getValueView().setError(fieldVerifyResult);
                 }
             }
         }
@@ -68,19 +64,6 @@ public abstract class BaseTextViewHolder extends BaseViewHolder<Field> {
             getValueView().setText(org.unicef.rapidreg.utils.TextUtils.truncateByDoubleColons(getValueView().getText
                     ().toString(), PrimeroAppConfiguration.getCurrentSystemSettings().getDistrictLevel()));
         }
-    }
-
-    private String getValue(String name) {
-        if (itemValues == null) {
-            return null;
-        }
-
-        Map<String, Object> value = itemValues.getValues();
-        if (value.containsKey(name)) {
-            Object res = value.get(name);
-            return res instanceof List ? Utils.toStringResult((List<String>) res) : res.toString();
-        }
-        return null;
     }
 
     protected abstract String getResult();

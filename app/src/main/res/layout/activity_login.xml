@@ -60,6 +60,8 @@
         <!--https://35.161.56.113:8443-->
         <!--http://10.29.4.91:12306-->
         <!--http://35.164.57.91:12306-->
+        <!--https://primero-qa-v1-3.dev.quoininc.com-->
+        <!--https://integration-mobile-v1-3.primero.org-->
         <EditText
             android:id="@+id/url"
             android:layout_width="match_parent"

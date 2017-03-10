@@ -32,7 +32,7 @@ public class TickBoxViewHolder extends BaseViewHolder<Field> {
         setEditableBackgroundStyle(isEditable(field));
 
         if (isSubFormField(field)) {
-            valueView.setChecked(Boolean.valueOf(getValueForSubForm(field)));
+            valueView.setChecked(Boolean.valueOf(getValue(field)));
         } else {
             valueView.setChecked(itemValues.getAsBoolean(field.getName()));
         }

@@ -10,13 +10,13 @@ import org.unicef.rapidreg.service.cache.GlobalLocationCache;
 import org.unicef.rapidreg.service.cache.ItemValuesMap;
 import org.unicef.rapidreg.widgets.viewholder.GenericViewHolder;
 
-import java.util.Arrays;
+import java.util.List;
 import java.util.Locale;
 
 public class SingleSelectDialog extends BaseDialog {
 
     private String result;
-    private String[] optionItems;
+    private List<String> optionItems;
 
     SearchAbleDialog dialog;
 
@@ -29,16 +29,13 @@ public class SingleSelectDialog extends BaseDialog {
 
     @Override
     public void initView() {
-        optionItems = getSelectOptions(field);
+        optionItems = field.getSelectOptionValuesIfSelectable();
 
         simplifyLocationOptionsIfLocationFiled();
 
-        int selectIndex = Arrays.asList(optionItems).indexOf(result);
-        if (selectIndex == -1) {
-            result = "";
-        } else {
-            result = optionItems[selectIndex];
-        }
+        int selectIndex = optionItems.indexOf(result);
+        result = optionItems.contains(result) ? optionItems.get(selectIndex) : "";
+
         dialog = new SearchAbleDialog(context, field.getDisplayName().get(Locale.getDefault()
                 .getLanguage()), optionItems, selectIndex);
 
@@ -63,14 +60,14 @@ public class SingleSelectDialog extends BaseDialog {
     private void simplifyLocationOptionsIfLocationFiled() {
         if (field.isSelectField() && GlobalLocationCache.containsKey(field.getName())) {
             GlobalLocationCache.initSimpleLocations(optionItems);
-            optionItems = GlobalLocationCache.getSimpleLocations().toArray(new String[0]);
+            optionItems = GlobalLocationCache.getSimpleLocations();
         }
     }
 
     private String recoveryLocationValueIfLocationFiled() {
         if (field.isSelectField() && GlobalLocationCache.containsKey(field.getName()) && !org.unicef.rapidreg.utils
                 .TextUtils.isEmpty(getResult())) {
-            return Arrays.asList(getSelectOptions(field)).get(GlobalLocationCache.index(getResult()));
+            return field.getSelectOptionValuesIfSelectable().get(GlobalLocationCache.index(getResult()));
         }
         return getResult();
     }

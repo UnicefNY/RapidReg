@@ -23,6 +23,10 @@ public class GlobalLocationCache {
         simpleLocations = new ArrayList<>();
     }
 
+    public static void initSimpleLocations(List<String> locations) {
+        initSimpleLocations(locations.toArray(new String[0]));
+    }
+
     public static void initSimpleLocations(String... locations) {
         if (simpleLocations.isEmpty()) {
             for (String location : locations) {
@@ -45,9 +49,10 @@ public class GlobalLocationCache {
         return simpleLocations.indexOf(location);
     }
 
-    public static boolean containLocationValue(String location){
+    public static boolean containLocationValue(String location) {
         return simpleLocations.contains(location);
     }
+
     public static boolean containsKey(String key) {
         return locationKeys.contains(key);
     }

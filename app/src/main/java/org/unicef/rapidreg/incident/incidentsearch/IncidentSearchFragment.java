@@ -103,8 +103,7 @@ public class IncidentSearchFragment extends RecordSearchFragment {
             final String originalValue = target.getText();
             int originalIndex = items.contains(originalValue) ? items.indexOf(originalValue) : -1;
 
-            dialog = new SearchAbleDialog(IncidentSearchFragment.this.getContext(), title,
-                    items.toArray(new String[0]), originalIndex);
+            dialog = new SearchAbleDialog(IncidentSearchFragment.this.getContext(), title, items, originalIndex);
             dialog.setOnClick(result -> target.setText(result));
             dialog.setCancelButton(v -> {
                 target.setText(originalValue);

@@ -59,8 +59,8 @@ public class SingleLineRadioViewHolder extends BaseViewHolder<Field> {
         setEditableBackgroundStyle(isEditable(field));
 
         if (isSubFormField(field)) {
-            if (!TextUtils.isEmpty(getValueForSubForm(field))) {
-                setSelectedRadio(getValueForSubForm(field));
+            if (!TextUtils.isEmpty(getValue(field))) {
+                setSelectedRadio(getValue(field));
             }
         } else {
             if (!TextUtils.isEmpty(itemValues.getAsString(field.getName()))) {

@@ -89,23 +89,6 @@ public abstract class BaseDialog {
         }
     }
 
-    public static String[] getSelectOptions(Field field) {
-        String language = PrimeroAppConfiguration.getDefaultLanguage();
-        List<CharSequence> items = new ArrayList<>();
-
-        List<Object> options = field.getOptionStringsText().get(language);
-        if (options.get(0) instanceof Map) {
-            List<Map<String, String>> arrayList = field.getOptionStringsText().get(language);
-            for (Map<String, String> map : arrayList) {
-                items.add(map.get("display_text"));
-            }
-        } else {
-            items = field.getOptionStringsText().get(language);
-        }
-
-        return items.toArray(new String[0]);
-    }
-
     protected BaseAlertDialog.Builder getBuilder() {
         return builder;
     }
