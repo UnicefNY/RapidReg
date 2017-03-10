@@ -5,12 +5,16 @@ import android.widget.DatePicker;
 import android.widget.TextView;
 import android.widget.ViewSwitcher;
 
+import org.unicef.rapidreg.PrimeroAppConfiguration;
 import org.unicef.rapidreg.R;
 import org.unicef.rapidreg.forms.Field;
 import org.unicef.rapidreg.service.cache.ItemValuesMap;
 import org.unicef.rapidreg.widgets.PrimeroDatePicker;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
+import java.util.List;
 
 public class DateDialog extends BaseDialog {
     private String result;
@@ -38,19 +42,23 @@ public class DateDialog extends BaseDialog {
 
     @Override
     public String verifyResult() {
-        Calendar calendar = Calendar.getInstance();
-        int dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);
-        int month = calendar.get(Calendar.MONTH);
-        int year = calendar.get(Calendar.YEAR);
+        boolean isVerifyDateField = VerifyDateField.DATE_VERIFY_DISPLAY_LIST.contains(
+                field.getDisplayName().get(PrimeroAppConfiguration.getDefaultLanguage()));
+        if (isVerifyDateField) {
+            Calendar calendar = Calendar.getInstance();
+            int dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);
+            int month = calendar.get(Calendar.MONTH);
+            int year = calendar.get(Calendar.YEAR);
 
-        if (datePicker.getYear() > year) {
-            return context.getResources().getString(R.string.invalid_date_msg);
-        }
-        if (datePicker.getMonth() > month) {
-            return context.getResources().getString(R.string.invalid_date_msg);
-        }
-        if (datePicker.getDayOfMonth() > dayOfMonth) {
-            return context.getResources().getString(R.string.invalid_date_msg);
+            if (datePicker.getYear() > year) {
+                return context.getResources().getString(R.string.invalid_date_msg);
+            }
+            if (datePicker.getMonth() > month) {
+                return context.getResources().getString(R.string.invalid_date_msg);
+            }
+            if (datePicker.getDayOfMonth() > dayOfMonth) {
+                return context.getResources().getString(R.string.invalid_date_msg);
+            }
         }
         return "";
     }
@@ -59,5 +67,15 @@ public class DateDialog extends BaseDialog {
     public String getResult() {
         return String.format("%s/%s/%s", datePicker.getDayOfMonth(), datePicker.getMonth() + 1,
                 datePicker.getYear());
+    }
+
+    public static class VerifyDateField {
+        public static final List<String> DATE_VERIFY_DISPLAY_LIST = new ArrayList<>(
+                Arrays.asList("Date of Birth",
+                        "What is the survivor's Date of Birth?",
+                        "Date of Registration or Interview",
+                        "Date of Inquiry",
+                        "Date of Interview")
+        );
     }
 }
