@@ -16,6 +16,7 @@ import android.widget.ViewSwitcher;
 
 import com.hannesdorfmann.mosby.mvp.MvpFragment;
 
+import org.unicef.rapidreg.PrimeroAppConfiguration;
 import org.unicef.rapidreg.PrimeroApplication;
 import org.unicef.rapidreg.R;
 import org.unicef.rapidreg.base.record.RecordActivity;
@@ -37,6 +38,7 @@ import butterknife.OnTextChanged;
 
 import static org.unicef.rapidreg.base.record.recordsearch.RecordSearchPresenter.CONSTANT.AGE_FROM;
 import static org.unicef.rapidreg.base.record.recordsearch.RecordSearchPresenter.CONSTANT.AGE_TO;
+import static org.unicef.rapidreg.base.record.recordsearch.RecordSearchPresenter.CONSTANT.LOCATION;
 import static org.unicef.rapidreg.model.RecordModel.EMPTY_AGE;
 
 public abstract class RecordSearchFragment extends MvpFragment<RecordListView, RecordSearchPresenter>
@@ -213,6 +215,10 @@ public abstract class RecordSearchFragment extends MvpFragment<RecordListView, R
                     if (EMPTY_AGE == Integer.valueOf(value)) {
                         continue;
                     }
+                }
+                if (LOCATION.equals(key)){
+                    return org.unicef.rapidreg.utils.TextUtils.truncateByDoubleColons(value, PrimeroAppConfiguration
+                            .getCurrentSystemSettings().getDistrictLevel());
                 }
                 return value;
             }
