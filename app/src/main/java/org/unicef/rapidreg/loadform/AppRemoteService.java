@@ -18,8 +18,8 @@ import org.unicef.rapidreg.event.LoadTracingFormEvent;
 
 import javax.inject.Inject;
 
-public class TemplateFormService extends Service {
-    private static final String TAG = TemplateFormService.class.getSimpleName();
+public class AppRemoteService extends Service {
+    private static final String TAG = AppRemoteService.class.getSimpleName();
 
     @Inject
     TemplateFormPresenter templateFormPresenter;

@@ -32,13 +32,13 @@ import static org.mockito.Mockito.when;
 
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({PrimeroAppConfiguration.class})
-public class TemplateFormPresenterTest {
+public class AppRemotePresenterTest {
     private FormRemoteService formRemoteService;
     private CaseFormService caseFormService;
     private TracingFormService tracingFormService;
     private IncidentFormService incidentFormService;
 
-    private TemplateFormPresenter templateFormPresenter;
+    private AppRemotePresenter appRemotePresenter;
 
     @Before
     public void setUp() throws Exception {
@@ -49,7 +49,7 @@ public class TemplateFormPresenterTest {
         tracingFormService = mock(TracingFormService.class);
         incidentFormService = mock(IncidentFormService.class);
 
-        templateFormPresenter = new TemplateFormPresenter(formRemoteService,
+        appRemotePresenter = new AppRemotePresenter(formRemoteService,
                 caseFormService,
                 tracingFormService,
                 incidentFormService);
@@ -59,7 +59,7 @@ public class TemplateFormPresenterTest {
     public void should_save_form_when_give_record_form_and_module_id() throws Exception {
         CaseTemplateForm caseTemplateForm = createCaseTemplateForm();
         String moduleId = "primeromodule-cp";
-        templateFormPresenter.saveCaseForm(caseTemplateForm, moduleId);
+        appRemotePresenter.saveCaseForm(caseTemplateForm, moduleId);
 
         verify(caseFormService, times(1)).saveOrUpdate(any(CaseForm.class));
     }
@@ -72,8 +72,8 @@ public class TemplateFormPresenterTest {
                 .thenReturn(observable);
         when(PrimeroAppConfiguration.getCookie()).thenReturn("cookie");
         when(PrimeroAppConfiguration.getDefaultLanguage()).thenReturn("en");
-        TemplateFormService.LoadCallback callback = mock(TemplateFormService.LoadCallback.class);
-        templateFormPresenter.loadCaseForm(PrimeroAppConfiguration.MODULE_ID_CP, callback);
+        AppRemoteService.LoadCallback callback = mock(AppRemoteService.LoadCallback.class);
+        appRemotePresenter.loadCaseForm(PrimeroAppConfiguration.MODULE_ID_CP, callback);
 
         verify(caseFormService, times(1)).saveOrUpdate(any(CaseForm.class));
         verify(callback, times(1)).onSuccess();
@@ -88,8 +88,8 @@ public class TemplateFormPresenterTest {
 
         when(PrimeroAppConfiguration.getCookie()).thenReturn("cookie");
         when(PrimeroAppConfiguration.getDefaultLanguage()).thenReturn("en");
-        TemplateFormService.LoadCallback callback = mock(TemplateFormService.LoadCallback.class);
-        templateFormPresenter.loadCaseForm("primeromodule-cp", callback);
+        AppRemoteService.LoadCallback callback = mock(AppRemoteService.LoadCallback.class);
+        appRemotePresenter.loadCaseForm("primeromodule-cp", callback);
 
         verify(callback, times(1)).onFailure();
         verify(callback, never()).onSuccess();
@@ -98,7 +98,7 @@ public class TemplateFormPresenterTest {
     @Test
     public void should_save_form_when_give_tracing_form() throws Exception {
         TracingTemplateForm tracingTemplateForm = createTracingTemplateForm();
-        templateFormPresenter.saveTracingForm(tracingTemplateForm);
+        appRemotePresenter.saveTracingForm(tracingTemplateForm);
 
         verify(tracingFormService, times(1)).saveOrUpdate(any(TracingForm.class));
     }
@@ -111,8 +111,8 @@ public class TemplateFormPresenterTest {
                 .thenReturn(observable);
         Mockito.when(PrimeroAppConfiguration.getCookie()).thenReturn("cookie");
         Mockito.when(PrimeroAppConfiguration.getDefaultLanguage()).thenReturn("en");
-        TemplateFormService.LoadCallback callback = mock(TemplateFormService.LoadCallback.class);
-        templateFormPresenter.loadTracingForm(callback);
+        AppRemoteService.LoadCallback callback = mock(AppRemoteService.LoadCallback.class);
+        appRemotePresenter.loadTracingForm(callback);
 
         verify(tracingFormService, times(1)).saveOrUpdate(any(TracingForm.class));
         verify(callback, times(1)).onSuccess();
@@ -127,8 +127,8 @@ public class TemplateFormPresenterTest {
 
         Mockito.when(PrimeroAppConfiguration.getCookie()).thenReturn("cookie");
         Mockito.when(PrimeroAppConfiguration.getDefaultLanguage()).thenReturn("en");
-        TemplateFormService.LoadCallback callback = mock(TemplateFormService.LoadCallback.class);
-        templateFormPresenter.loadTracingForm(callback);
+        AppRemoteService.LoadCallback callback = mock(AppRemoteService.LoadCallback.class);
+        appRemotePresenter.loadTracingForm(callback);
 
         verify(callback, times(1)).onFailure();
         verify(callback, never()).onSuccess();
@@ -142,8 +142,8 @@ public class TemplateFormPresenterTest {
                 "primeromodule-gbv")).thenReturn(observable);
         Mockito.when(PrimeroAppConfiguration.getCookie()).thenReturn("cookie");
         Mockito.when(PrimeroAppConfiguration.getDefaultLanguage()).thenReturn("en");
-        TemplateFormService.LoadCallback callback = mock(TemplateFormService.LoadCallback.class);
-        templateFormPresenter.loadIncidentForm(callback);
+        AppRemoteService.LoadCallback callback = mock(AppRemoteService.LoadCallback.class);
+        appRemotePresenter.loadIncidentForm(callback);
 
         verify(incidentFormService, times(1)).saveOrUpdate(any(IncidentForm.class));
         verify(callback, times(1)).onSuccess();
@@ -157,8 +157,8 @@ public class TemplateFormPresenterTest {
                 .thenReturn(observable);
         Mockito.when(PrimeroAppConfiguration.getCookie()).thenReturn("cookie");
         Mockito.when(PrimeroAppConfiguration.getDefaultLanguage()).thenReturn("en");
-        TemplateFormService.LoadCallback callback = mock(TemplateFormService.LoadCallback.class);
-        templateFormPresenter.loadIncidentForm(callback);
+        AppRemoteService.LoadCallback callback = mock(AppRemoteService.LoadCallback.class);
+        appRemotePresenter.loadIncidentForm(callback);
 
         verify(callback, times(1)).onFailure();
         verify(callback, never()).onSuccess();
@@ -167,7 +167,7 @@ public class TemplateFormPresenterTest {
     @Test
     public void should_save_form_when_give_incident_form() throws Exception {
         IncidentTemplateForm incidentTemplateForm = createIncidentTemplateForm();
-        templateFormPresenter.saveIncidentForm(incidentTemplateForm);
+        appRemotePresenter.saveIncidentForm(incidentTemplateForm);
         verify(incidentFormService, times(1)).saveOrUpdate(any(IncidentForm.class));
     }
 

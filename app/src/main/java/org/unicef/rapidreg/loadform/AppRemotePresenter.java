@@ -20,7 +20,7 @@ import dagger.Lazy;
 import static org.unicef.rapidreg.PrimeroAppConfiguration.MODULE_ID_CP;
 import static org.unicef.rapidreg.PrimeroAppConfiguration.MODULE_ID_GBV;
 
-public class TemplateFormPresenter {
+public class AppRemotePresenter {
 
     private FormRemoteService formRemoteService;
 
@@ -31,24 +31,24 @@ public class TemplateFormPresenter {
     protected final Gson gson = new Gson();
 
     @Inject
-    public TemplateFormPresenter(Lazy<FormRemoteService> formRemoteService,
-                                 CaseFormService caseFormService,
-                                 TracingFormService tracingFormService,
-                                 IncidentFormService incidentFormService) {
+    public AppRemotePresenter(Lazy<FormRemoteService> formRemoteService,
+                              CaseFormService caseFormService,
+                              TracingFormService tracingFormService,
+                              IncidentFormService incidentFormService) {
         this(formRemoteService.get(), caseFormService, tracingFormService, incidentFormService);
     }
 
-    public TemplateFormPresenter(FormRemoteService formRemoteService,
-                                 CaseFormService caseFormService,
-                                 TracingFormService tracingFormService,
-                                 IncidentFormService incidentFormService) {
+    public AppRemotePresenter(FormRemoteService formRemoteService,
+                              CaseFormService caseFormService,
+                              TracingFormService tracingFormService,
+                              IncidentFormService incidentFormService) {
         this.formRemoteService = formRemoteService;
         this.caseFormService = caseFormService;
         this.tracingFormService = tracingFormService;
         this.incidentFormService = incidentFormService;
     }
 
-    public void loadCaseForm(String moduleId, TemplateFormService.LoadCallback callback) {
+    public void loadCaseForm(String moduleId, AppRemoteService.LoadCallback callback) {
         formRemoteService.getCaseForm(PrimeroAppConfiguration.getCookie(), PrimeroAppConfiguration.getDefaultLanguage
                 (), true, PrimeroAppConfiguration.PARENT_CASE, moduleId)
                 .subscribe(caseForm -> {
@@ -66,7 +66,7 @@ public class TemplateFormPresenter {
         caseFormService.saveOrUpdate(caseForm);
     }
 
-    public void loadTracingForm(TemplateFormService.LoadCallback callback) {
+    public void loadTracingForm(AppRemoteService.LoadCallback callback) {
         formRemoteService.getTracingForm(PrimeroAppConfiguration.getCookie(), PrimeroAppConfiguration.getDefaultLanguage
                 (), true, PrimeroAppConfiguration.PARENT_TRACING_REQUEST, MODULE_ID_CP)
                 .subscribe(tracingForm -> {
@@ -84,7 +84,7 @@ public class TemplateFormPresenter {
         tracingFormService.saveOrUpdate(tracingForm);
     }
 
-    public void loadIncidentForm(TemplateFormService.LoadCallback callback) {
+    public void loadIncidentForm(AppRemoteService.LoadCallback callback) {
         formRemoteService.getIncidentForm(PrimeroAppConfiguration.getCookie(), PrimeroAppConfiguration.getDefaultLanguage
                 (), true, PrimeroAppConfiguration.PARENT_INCIDENT, MODULE_ID_GBV)
                 .subscribe(incidentForm -> {
