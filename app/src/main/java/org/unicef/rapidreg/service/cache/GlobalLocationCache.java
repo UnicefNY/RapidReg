@@ -45,6 +45,9 @@ public class GlobalLocationCache {
         return simpleLocations.indexOf(location);
     }
 
+    public static boolean containLocationValue(String location){
+        return simpleLocations.contains(location);
+    }
     public static boolean containsKey(String key) {
         return locationKeys.contains(key);
     }

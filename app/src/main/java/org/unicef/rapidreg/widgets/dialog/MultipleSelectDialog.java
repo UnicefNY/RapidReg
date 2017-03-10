@@ -5,19 +5,23 @@ import android.text.TextUtils;
 import android.widget.TextView;
 import android.widget.ViewSwitcher;
 
+import org.unicef.rapidreg.PrimeroAppConfiguration;
 import org.unicef.rapidreg.forms.Field;
 import org.unicef.rapidreg.service.cache.ItemValuesMap;
 import org.unicef.rapidreg.utils.Utils;
 import org.unicef.rapidreg.widgets.viewholder.GenericViewHolder;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 public class MultipleSelectDialog extends BaseDialog {
 
     private List<String> results;
     private String[] optionItems;
+    private List<String> optionItemKeys;
 
     private SearchAbleMultiSelectDialog dialog;
 
@@ -30,7 +34,9 @@ public class MultipleSelectDialog extends BaseDialog {
     @Override
     public void initView() {
         optionItems = getSelectOptions(field);
-        results.addAll(itemValues.getAsList(field.getName()));
+        optionItemKeys = getSelectOptionKeys(field);
+
+        results.addAll(parseKeysAsDisplayTexts(itemValues.getAsList(field.getName())));
 
         dialog = new SearchAbleMultiSelectDialog(context, field.getDisplayName().get(Locale.getDefault()
                 .getLanguage()), optionItems, results);
@@ -49,9 +55,36 @@ public class MultipleSelectDialog extends BaseDialog {
             }
             resultView.setText(getDisplayText());
 
-            itemValues.addItem(field.getName(), getResult());
+            itemValues.addItem(field.getName(), parseDisplayTextsAsKeys(getResult()));
             dialog.dismiss();
         });
+    }
+
+    private List<String> parseKeysAsDisplayTexts(List<String> keys) {
+        List<String> result = new ArrayList<>();
+        for (String key : keys) {
+            result.add(optionItems[optionItemKeys.indexOf(key)]);
+        }
+        return result;
+    }
+
+    private List<String> parseDisplayTextsAsKeys(List<String> displayTexts) {
+        List<String> result = new ArrayList<>();
+        for (String displayText : displayTexts) {
+            result.add(optionItemKeys.get(Arrays.asList(optionItems).indexOf(displayText)));
+        }
+        return result;
+    }
+
+    private static List<String> getSelectOptionKeys(Field field) {
+        String language = PrimeroAppConfiguration.getDefaultLanguage();
+        List<String> items = new ArrayList<>();
+
+        List<Map<String, String>> arrayList = field.getOptionStringsText().get(language);
+        for (Map<String, String> map : arrayList) {
+            items.add(map.get("id"));
+        }
+        return items;
     }
 
     @Override

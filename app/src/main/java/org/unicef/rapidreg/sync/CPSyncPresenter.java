@@ -3,6 +3,7 @@ package org.unicef.rapidreg.sync;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.support.v4.util.Pair;
+import android.util.Log;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
@@ -33,7 +34,6 @@ import org.unicef.rapidreg.utils.StreamUtil;
 import org.unicef.rapidreg.utils.TextUtils;
 import org.unicef.rapidreg.utils.Utils;
 
-import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -366,7 +366,8 @@ public class CPSyncPresenter extends BaseSyncPresenter {
             item.setShortId(casesJsonObject.get("short_id").getAsString());
             item.setInternalId(casesJsonObject.get("_id").getAsString());
             item.setInternalRev(newRev);
-            item.setRegistrationDate(Utils.getRegisterDateByYyyyMmDd(casesJsonObject.get("registration_date").getAsString()));
+            item.setRegistrationDate(Utils.getRegisterDateByYyyyMmDd(casesJsonObject.get("registration_date")
+                    .getAsString()));
             item.setCreatedBy(casesJsonObject.get("created_by").getAsString());
             item.setOwnedBy(casesJsonObject.get("owned_by").getAsString());
             item.setServerUrl(PrimeroAppConfiguration.getApiBaseUrl());
@@ -654,7 +655,7 @@ public class CPSyncPresenter extends BaseSyncPresenter {
             }
 
             List<Long> tracingPhotos = tracingPhotoService.getIdsByTracingId(first.getId());
-            for (int i = 0; i < number; i ++) {
+            for (int i = 0; i < number; i++) {
                 first.setId(0);
                 first.setUniqueId(null);
                 first.setInternalId(null);
@@ -672,7 +673,7 @@ public class CPSyncPresenter extends BaseSyncPresenter {
                 }
             }
         } catch (IOException e) {
-        e.printStackTrace();
-    }
+            e.printStackTrace();
+        }
     }
 }

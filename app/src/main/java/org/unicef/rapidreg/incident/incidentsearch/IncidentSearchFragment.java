@@ -11,6 +11,7 @@ import org.unicef.rapidreg.base.record.recordlist.RecordListAdapter;
 import org.unicef.rapidreg.base.record.recordsearch.RecordSearchFragment;
 import org.unicef.rapidreg.base.record.recordsearch.RecordSearchPresenter;
 import org.unicef.rapidreg.incident.incidentlist.IncidentListAdapter;
+import org.unicef.rapidreg.service.cache.GlobalLocationCache;
 import org.unicef.rapidreg.widgets.ClearableEditText;
 import org.unicef.rapidreg.widgets.dialog.SearchAbleDialog;
 
@@ -58,8 +59,10 @@ public class IncidentSearchFragment extends RecordSearchFragment {
         searchValues.put(AGE_FROM, ageFrom.getText().isEmpty() ? String.valueOf(EMPTY_AGE) : ageFrom.getText());
         searchValues.put(AGE_TO, ageTo.getText().isEmpty() ? String.valueOf(EMPTY_AGE) : ageTo.getText());
         searchValues.put(TYPE_OF_VIOLENCE, typeOfViolence.getText());
-        searchValues.put(LOCATION, location.getText());
 
+        searchValues.put(LOCATION, GlobalLocationCache.containLocationValue(location.getText()) ?
+                incidentSearchPresenter.getIncidentLocationList().get(GlobalLocationCache.index(location.getText()))
+                : null);
         return searchValues;
     }
 
@@ -82,8 +85,10 @@ public class IncidentSearchFragment extends RecordSearchFragment {
 
     private void initIncidentLocationField() {
         List<String> locationValues = incidentSearchPresenter.getIncidentLocationList();
-        setMultipleSelectionOnClickListener(location, locationValues, getResources().getString(R.string
-                .location));
+        GlobalLocationCache.initSimpleLocations(locationValues.toArray(new String[0]));
+        setMultipleSelectionOnClickListener(location, GlobalLocationCache.getSimpleLocations(), getResources()
+                .getString(R.string
+                        .location));
     }
 
     private void initTypeOfViolenceField() {
@@ -97,6 +102,7 @@ public class IncidentSearchFragment extends RecordSearchFragment {
         target.setOnClickListener(view -> {
             final String originalValue = target.getText();
             int originalIndex = items.contains(originalValue) ? items.indexOf(originalValue) : -1;
+
             dialog = new SearchAbleDialog(IncidentSearchFragment.this.getContext(), title,
                     items.toArray(new String[0]), originalIndex);
             dialog.setOnClick(result -> target.setText(result));
