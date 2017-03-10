@@ -1,27 +1,17 @@
 package org.unicef.rapidreg;
 
 import android.app.Application;
-import android.content.ComponentName;
 import android.content.Context;
-import android.content.Intent;
-import android.content.ServiceConnection;
-import android.os.IBinder;
 
 import com.facebook.stetho.Stetho;
 import com.raizlabs.android.dbflow.config.DatabaseConfig;
-import com.raizlabs.android.dbflow.config.DatabaseDefinition;
 import com.raizlabs.android.dbflow.config.FlowConfig;
 import com.raizlabs.android.dbflow.config.FlowManager;
-import com.raizlabs.android.dbflow.structure.database.DatabaseHelperListener;
-import com.raizlabs.android.dbflow.structure.database.OpenHelper;
 
-import org.unicef.rapidreg.loadform.TemplateFormService;
 import org.unicef.rapidreg.repository.impl.SQLCipherHelperImpl;
 import org.unicef.rapidreg.injection.component.ApplicationComponent;
 import org.unicef.rapidreg.injection.component.DaggerApplicationComponent;
 import org.unicef.rapidreg.injection.module.ApplicationModule;
-
-import javax.inject.Inject;
 
 public class PrimeroApplication extends Application {
 

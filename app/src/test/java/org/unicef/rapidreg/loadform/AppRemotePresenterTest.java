@@ -18,6 +18,7 @@ import org.unicef.rapidreg.model.TracingForm;
 import org.unicef.rapidreg.service.CaseFormService;
 import org.unicef.rapidreg.service.FormRemoteService;
 import org.unicef.rapidreg.service.IncidentFormService;
+import org.unicef.rapidreg.service.SystemSettingsService;
 import org.unicef.rapidreg.service.TracingFormService;
 
 import edu.emory.mathcs.backport.java.util.Arrays;
@@ -37,6 +38,7 @@ public class AppRemotePresenterTest {
     private CaseFormService caseFormService;
     private TracingFormService tracingFormService;
     private IncidentFormService incidentFormService;
+    private SystemSettingsService systemSettingsService;
 
     private AppRemotePresenter appRemotePresenter;
 
@@ -48,11 +50,13 @@ public class AppRemotePresenterTest {
         caseFormService = mock(CaseFormService.class);
         tracingFormService = mock(TracingFormService.class);
         incidentFormService = mock(IncidentFormService.class);
+        systemSettingsService = mock(SystemSettingsService.class);
 
         appRemotePresenter = new AppRemotePresenter(formRemoteService,
                 caseFormService,
                 tracingFormService,
-                incidentFormService);
+                incidentFormService,
+                systemSettingsService);
     }
 
     @Test

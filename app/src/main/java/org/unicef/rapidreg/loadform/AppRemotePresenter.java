@@ -1,5 +1,7 @@
 package org.unicef.rapidreg.loadform;
 
+import android.util.Log;
+
 import com.google.gson.Gson;
 import com.raizlabs.android.dbflow.data.Blob;
 
@@ -11,6 +13,7 @@ import org.unicef.rapidreg.model.TracingForm;
 import org.unicef.rapidreg.service.CaseFormService;
 import org.unicef.rapidreg.service.FormRemoteService;
 import org.unicef.rapidreg.service.IncidentFormService;
+import org.unicef.rapidreg.service.SystemSettingsService;
 import org.unicef.rapidreg.service.TracingFormService;
 
 import javax.inject.Inject;
@@ -21,12 +24,13 @@ import static org.unicef.rapidreg.PrimeroAppConfiguration.MODULE_ID_CP;
 import static org.unicef.rapidreg.PrimeroAppConfiguration.MODULE_ID_GBV;
 
 public class AppRemotePresenter {
+    private static final String TAG = AppRemotePresenter.class.getSimpleName();
 
     private FormRemoteService formRemoteService;
-
     private CaseFormService caseFormService;
     private TracingFormService tracingFormService;
     private IncidentFormService incidentFormService;
+    private SystemSettingsService systemSettingsService;
 
     protected final Gson gson = new Gson();
 
@@ -34,18 +38,21 @@ public class AppRemotePresenter {
     public AppRemotePresenter(Lazy<FormRemoteService> formRemoteService,
                               CaseFormService caseFormService,
                               TracingFormService tracingFormService,
-                              IncidentFormService incidentFormService) {
-        this(formRemoteService.get(), caseFormService, tracingFormService, incidentFormService);
+                              IncidentFormService incidentFormService,
+                              Lazy<SystemSettingsService> systemSettingsService) {
+        this(formRemoteService.get(), caseFormService, tracingFormService, incidentFormService, systemSettingsService.get());
     }
 
     public AppRemotePresenter(FormRemoteService formRemoteService,
                               CaseFormService caseFormService,
                               TracingFormService tracingFormService,
-                              IncidentFormService incidentFormService) {
+                              IncidentFormService incidentFormService,
+                              SystemSettingsService systemSettingsService) {
         this.formRemoteService = formRemoteService;
         this.caseFormService = caseFormService;
         this.tracingFormService = tracingFormService;
         this.incidentFormService = incidentFormService;
+        this.systemSettingsService = systemSettingsService;
     }
 
     public void loadCaseForm(String moduleId, AppRemoteService.LoadCallback callback) {
@@ -100,5 +107,12 @@ public class AppRemotePresenter {
         IncidentForm incidentForm = new IncidentForm(incidentFormBlob);
         incidentForm.setModuleId(MODULE_ID_GBV);
         incidentFormService.saveOrUpdate(incidentForm);
+    }
+
+    public void loadSystemSettings() {
+        systemSettingsService.getSystemSettings()
+                .subscribe(systemSettings -> systemSettingsService.saveOrUpdateSystemSettings(systemSettings),
+                        throwable -> Log.e(TAG, "Init system settings error->" + throwable.getMessage()),
+                        () -> systemSettingsService.setGlobalSystemSettings());
     }
 }

@@ -71,7 +71,7 @@
             android:theme="@style/Transparent" />
 
         <service
-            android:name=".loadform.TemplateFormService"
+            android:name=".loadform.AppRemoteService"
             android:enabled="true" />
 
         <receiver

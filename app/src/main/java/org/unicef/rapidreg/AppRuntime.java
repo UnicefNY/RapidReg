@@ -9,7 +9,7 @@ import android.os.IBinder;
 import android.util.Log;
 
 import org.unicef.rapidreg.broadcast.AppRuntimeReceiver;
-import org.unicef.rapidreg.loadform.TemplateFormService;
+import org.unicef.rapidreg.loadform.AppRemoteService;
 import org.unicef.rapidreg.repository.sharedpref.PrimeroDataPref;
 import org.unicef.rapidreg.sync.SyncStatisticData;
 
@@ -21,7 +21,7 @@ public class AppRuntime {
     private Context applicationContext;
 
     private ServiceConnection templateCaseServiceConnection;
-    private TemplateFormService.TemplateFormBinder templateFormBinder;
+    private AppRemoteService.AppRemoteBinder appRemoteBinder;
     private AppRuntimeReceiver appRuntimeReceiver;
 
     private PrimeroDataPref dataPref;
@@ -37,35 +37,35 @@ public class AppRuntime {
         templateCaseServiceConnection = new ServiceConnection() {
             @Override
             public void onServiceConnected(ComponentName name, IBinder service) {
-                templateFormBinder = (TemplateFormService.TemplateFormBinder) service;
+                appRemoteBinder = (AppRemoteService.AppRemoteBinder) service;
             }
 
             @Override
             public void onServiceDisconnected(ComponentName name) {
-                templateFormBinder = null;
+                appRemoteBinder = null;
             }
         };
     }
 
     public boolean isCaseFormSyncFail() {
-        if (templateFormBinder == null) {
+        if (appRemoteBinder == null) {
             return false;
         }
-        return templateFormBinder.isCaseTemplateFormSyncFail();
+        return appRemoteBinder.isCaseTemplateFormSyncFail();
     }
 
     public boolean isTracingFormSyncFail() {
-        if (templateFormBinder == null) {
+        if (appRemoteBinder == null) {
             return false;
         }
-        return templateFormBinder.isTracingTemplateFormSyncFail();
+        return appRemoteBinder.isTracingTemplateFormSyncFail();
     }
 
     public boolean isIncidentFormSyncFail() {
-        if (templateFormBinder == null) {
+        if (appRemoteBinder == null) {
             return false;
         }
-        return templateFormBinder.isIncidentTemplateFormSyncFail();
+        return appRemoteBinder.isIncidentTemplateFormSyncFail();
     }
 
     public void storeSyncData(SyncStatisticData syncData) {
@@ -78,15 +78,15 @@ public class AppRuntime {
 
     public void bindTemplateCaseService() {
         Log.d(TAG, "TemplateCaseService binded...");
-        Intent intent = new Intent(applicationContext, TemplateFormService.class);
+        Intent intent = new Intent(applicationContext, AppRemoteService.class);
         applicationContext.bindService(intent, templateCaseServiceConnection, BIND_AUTO_CREATE);
     }
 
     public void unbindTemplateCaseService() {
         Log.d(TAG, "TemplateCaseService unbinded...");
-        if (templateFormBinder != null) {
+        if (appRemoteBinder != null) {
             applicationContext.unbindService(templateCaseServiceConnection);
-            templateFormBinder = null;
+            appRemoteBinder = null;
         }
     }
 

@@ -3,11 +3,10 @@ package org.unicef.rapidreg.injection.component;
 import android.app.Application;
 import android.content.Context;
 
-import org.unicef.rapidreg.PrimeroApplication;
 import org.unicef.rapidreg.PrimeroGlideModule;
 import org.unicef.rapidreg.injection.ApplicationContext;
 import org.unicef.rapidreg.injection.module.ApplicationModule;
-import org.unicef.rapidreg.loadform.TemplateFormService;
+import org.unicef.rapidreg.loadform.AppRemoteService;
 import org.unicef.rapidreg.service.CaseFormService;
 import org.unicef.rapidreg.service.CasePhotoService;
 import org.unicef.rapidreg.service.CaseService;
@@ -33,7 +32,7 @@ import dagger.Component;
 public interface ApplicationComponent {
     void inject(PrimeroGlideModule primeroGlideModule);
 
-    void inject(TemplateFormService templateFormService);
+    void inject(AppRemoteService appRemoteService);
 
     @ApplicationContext
     Context context();

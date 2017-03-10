@@ -14,6 +14,7 @@ import org.unicef.rapidreg.PrimeroApplication;
 import org.unicef.rapidreg.event.LoadCPCaseFormEvent;
 import org.unicef.rapidreg.event.LoadGBVCaseFormEvent;
 import org.unicef.rapidreg.event.LoadGBVIncidentFormEvent;
+import org.unicef.rapidreg.event.LoadSystemSettingEvent;
 import org.unicef.rapidreg.event.LoadTracingFormEvent;
 
 import javax.inject.Inject;
@@ -22,13 +23,13 @@ public class AppRemoteService extends Service {
     private static final String TAG = AppRemoteService.class.getSimpleName();
 
     @Inject
-    TemplateFormPresenter templateFormPresenter;
+    AppRemotePresenter appRemotePresenter;
 
-    private final TemplateFormBinder templateFormBinder = new TemplateFormBinder();
+    private final AppRemoteBinder appRemoteBinder = new AppRemoteBinder();
 
     @Override
     public IBinder onBind(Intent intent) {
-        return templateFormBinder;
+        return appRemoteBinder;
     }
 
     @Override
@@ -55,74 +56,82 @@ public class AppRemoteService extends Service {
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN, sticky = true, priority = 1)
-    public void onNeedLoadGBVCaseFormsEvent(LoadGBVCaseFormEvent event) {
+    public void onLoadGBVCaseFormsEvent(LoadGBVCaseFormEvent event) {
         Log.d(TAG, "Loading GBV case form...");
         EventBus.getDefault().removeStickyEvent(event);
-        templateFormPresenter.loadCaseForm(PrimeroAppConfiguration.MODULE_ID_GBV, new LoadCallback() {
+        appRemotePresenter.loadCaseForm(PrimeroAppConfiguration.MODULE_ID_GBV, new LoadCallback() {
             @Override
             public void onSuccess() {
-                templateFormBinder.setCaseFormSyncFail(false);
+                appRemoteBinder.setCaseFormSyncFail(false);
             }
 
             @Override
             public void onFailure() {
-                templateFormBinder.setCaseFormSyncFail(true);
+                appRemoteBinder.setCaseFormSyncFail(true);
             }
         });
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN, sticky = true, priority = 1)
-    public void onNeedLoadCPCaseFormsEvent(LoadCPCaseFormEvent event) {
+    public void onLoadCPCaseFormsEvent(LoadCPCaseFormEvent event) {
         Log.d(TAG, "Loading CP case form...");
         EventBus.getDefault().removeStickyEvent(event);
-        templateFormPresenter.loadCaseForm(PrimeroAppConfiguration.MODULE_ID_CP, new LoadCallback() {
+        appRemotePresenter.loadCaseForm(PrimeroAppConfiguration.MODULE_ID_CP, new LoadCallback() {
             @Override
             public void onSuccess() {
-                templateFormBinder.setCaseFormSyncFail(false);
+                appRemoteBinder.setCaseFormSyncFail(false);
             }
 
             @Override
             public void onFailure() {
-                templateFormBinder.setCaseFormSyncFail(true);
+                appRemoteBinder.setCaseFormSyncFail(true);
             }
         });
     }
 
+
     @Subscribe(threadMode = ThreadMode.MAIN, sticky = true, priority = 1)
-    public void onNeedLoadFormsEvent(final LoadTracingFormEvent event) {
+    public void onLoadFormsEvent(final LoadTracingFormEvent event) {
         Log.d(TAG, "Loading Tracing request form...");
         EventBus.getDefault().removeStickyEvent(event);
-        templateFormPresenter.loadTracingForm(new LoadCallback() {
+        appRemotePresenter.loadTracingForm(new LoadCallback() {
             @Override
             public void onSuccess() {
-                templateFormBinder.setTracingFormSyncFail(false);
+                appRemoteBinder.setTracingFormSyncFail(false);
             }
 
             @Override
             public void onFailure() {
-                templateFormBinder.setTracingFormSyncFail(true);
+                appRemoteBinder.setTracingFormSyncFail(true);
             }
         });
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN, sticky = true, priority = 1)
-    public void onNeedLoadGBVIncidentFormsEvent(final LoadGBVIncidentFormEvent event) {
+    public void onLoadGBVIncidentFormsEvent(final LoadGBVIncidentFormEvent event) {
         Log.d(TAG, "Loading GBV incident form...");
         EventBus.getDefault().removeStickyEvent(event);
-        templateFormPresenter.loadIncidentForm(new LoadCallback() {
+        appRemotePresenter.loadIncidentForm(new LoadCallback() {
             @Override
             public void onSuccess() {
-                templateFormBinder.setIncidentFormSyncFail(false);
+                appRemoteBinder.setIncidentFormSyncFail(false);
             }
 
             @Override
             public void onFailure() {
-                templateFormBinder.setIncidentFormSyncFail(true);
+                appRemoteBinder.setIncidentFormSyncFail(true);
             }
         });
     }
 
-    public class TemplateFormBinder extends Binder {
+    @Subscribe(threadMode = ThreadMode.MAIN, sticky = true, priority = 1)
+    public void onLoadSystemSettingsEvent(LoadSystemSettingEvent event) {
+        Log.d(TAG, "Loading System Settings...");
+        EventBus.getDefault().removeStickyEvent(event);
+        appRemotePresenter.loadSystemSettings();
+    }
+
+    public class AppRemoteBinder extends Binder {
 
         private volatile boolean isCaseFormSyncFail;
         private volatile boolean isTracingRequestFormSyncFail;
@@ -155,6 +164,7 @@ public class AppRemoteService extends Service {
 
     interface LoadCallback {
         void onSuccess();
+
         void onFailure();
     }
 }
