@@ -232,21 +232,13 @@ public abstract class RecordSearchFragment extends MvpFragment<RecordListView, R
         messageDialog.setTitle(R.string.date);
         DatePicker datePicker = messageDialog.getDatePicker();
         datePicker.setCalendarViewShown(false);
-        messageDialog.setPositiveButton(R.string.ok, new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String date = String.format("%s/%s/%s", datePicker.getMonth() + 1,
-                        datePicker.getDayOfMonth(), datePicker.getYear());
-                textView.setText(date);
-                messageDialog.dismiss();
-            }
+        messageDialog.setPositiveButton(R.string.ok, v -> {
+            String date = String.format("%s/%s/%s", datePicker.getMonth() + 1,
+                    datePicker.getDayOfMonth(), datePicker.getYear());
+            textView.setText(date);
+            messageDialog.dismiss();
         });
-        messageDialog.setNegativeButton(R.string.cancel, new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                messageDialog.dismiss();
-            }
-        });
+        messageDialog.setNegativeButton(R.string.cancel, v -> messageDialog.dismiss());
         messageDialog.show();
     }
 
