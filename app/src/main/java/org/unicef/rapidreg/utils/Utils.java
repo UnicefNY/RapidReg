@@ -58,7 +58,7 @@ public class Utils {
         }
     }
 
-    public static Date getRegisterDate(String registrationDateString) {
+    public static Date getRegisterDateAsDdMmYyyy(String registrationDateString) {
         SimpleDateFormat registrationDateFormat = new SimpleDateFormat("dd/MM/yyyy");
         try {
             java.util.Date date = registrationDateFormat.parse(registrationDateString);

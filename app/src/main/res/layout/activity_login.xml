@@ -69,7 +69,7 @@
             android:hint="@string/url_hint_text"
             android:inputType="textUri"
             android:layout_marginTop="@dimen/login_edit_text_top_margin"
-            android:text="http://35.164.57.91:12306"
+            android:text="https://integration-mobile-v1-3.primero.org"
             android:textSize="@dimen/text_size_18" />
 
         <TextView

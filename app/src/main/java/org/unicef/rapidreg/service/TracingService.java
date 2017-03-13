@@ -24,7 +24,7 @@ import java.util.Calendar;
 import java.util.List;
 
 import static org.unicef.rapidreg.model.RecordModel.EMPTY_AGE;
-import static org.unicef.rapidreg.utils.Utils.getRegisterDate;
+import static org.unicef.rapidreg.utils.Utils.getRegisterDateAsDdMmYyyy;
 
 public class TracingService extends RecordService {
     public static final String TAG = TracingService.class.getSimpleName();
@@ -154,7 +154,7 @@ public class TracingService extends RecordService {
         tracing.setAge(age);
 
         tracing.setCaregiver(getCaregiverName(itemValues));
-        tracing.setRegistrationDate(getRegisterDate(itemValues.getAsString(INQUIRY_DATE)));
+        tracing.setRegistrationDate(getRegisterDateAsDdMmYyyy(itemValues.getAsString(INQUIRY_DATE)));
         tracing.setAudio(getAudioBlob());
 
         tracing.setContent(generateTracingBlob(itemValues, uniqueId, username));
@@ -175,7 +175,7 @@ public class TracingService extends RecordService {
         tracing.setAge(age);
 
         tracing.setCaregiver(getCaregiverName(itemValues));
-        tracing.setRegistrationDate(getRegisterDate(itemValues.getAsString(INQUIRY_DATE)));
+        tracing.setRegistrationDate(getRegisterDateAsDdMmYyyy(itemValues.getAsString(INQUIRY_DATE)));
         tracing.setAudio(getAudioBlob());
 
         tracing.setContent(generateTracingBlob(itemValues, tracing.getUniqueId(), username));

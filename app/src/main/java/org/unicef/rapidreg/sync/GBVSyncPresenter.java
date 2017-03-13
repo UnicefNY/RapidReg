@@ -259,7 +259,7 @@ public class GBVSyncPresenter extends BaseSyncPresenter {
             item.setInternalId(casesJsonObject.get("_id").getAsString());
             item.setInternalRev(newRev);
             item.setRegistrationDate(
-                    Utils.getRegisterDate(casesJsonObject.get("registration_date").getAsString()));
+                    Utils.getRegisterDateAsDdMmYyyy(casesJsonObject.get("registration_date").getAsString()));
             item.setCreatedBy(casesJsonObject.get("created_by").getAsString());
             item.setOwnedBy(casesJsonObject.get("owned_by").getAsString());
             item.setServerUrl(TextUtils.lintUrl(PrimeroAppConfiguration.getApiBaseUrl()));
@@ -371,7 +371,7 @@ public class GBVSyncPresenter extends BaseSyncPresenter {
             item.setOwnedBy(incidentsJsonObject.get("owned_by").getAsString());
             item.setLastSyncedDate(Calendar.getInstance().getTime());
             item.setLastUpdatedDate(Calendar.getInstance().getTime());
-            item.setRegistrationDate(Utils.getRegisterDate(registrationDate));
+            item.setRegistrationDate(Utils.getRegisterDateAsDdMmYyyy(registrationDate));
 
             setIncidentProperties(item, incidentsJsonObject);
             item.save();

@@ -152,7 +152,7 @@ public class IncidentService extends RecordService {
         int age = itemValues.has(AGE) ? itemValues.getAsInt(AGE) : EMPTY_AGE;
         incident.setAge(age);
         incident.setCaregiver(getCaregiverName(itemValues));
-        incident.setRegistrationDate(Utils.getRegisterDate(itemValues.getAsString(DATE_OF_INTERVIEW)));
+        incident.setRegistrationDate(Utils.getRegisterDateAsDdMmYyyy(itemValues.getAsString(DATE_OF_INTERVIEW)));
         incident.setCreatedBy(username);
         incident.setOwnedBy(username);
         String caseId = itemValues.has(CASE_ID) ? itemValues.getAsString(CASE_ID) : EMPTY_ID;
@@ -178,7 +178,7 @@ public class IncidentService extends RecordService {
         incident.setSynced(false);
 
         if (itemValues.has(DATE_OF_INTERVIEW)) {
-            incident.setRegistrationDate(Utils.getRegisterDate(itemValues.getAsString(DATE_OF_INTERVIEW)));
+            incident.setRegistrationDate(Utils.getRegisterDateAsDdMmYyyy(itemValues.getAsString(DATE_OF_INTERVIEW)));
         }
         return incidentDao.update(incident);
     }

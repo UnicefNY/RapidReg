@@ -3,7 +3,6 @@ package org.unicef.rapidreg.sync;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.support.v4.util.Pair;
-import android.util.Log;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
@@ -344,20 +343,10 @@ public class CPSyncPresenter extends BaseSyncPresenter {
 
     private void saveDownloadedCases(JsonObject casesJsonObject) {
         String internalId = casesJsonObject.get("_id").getAsString();
-        String newRev = casesJsonObject.get("_rev").getAsString();
 
         Case item = caseService.getByInternalId(internalId);
         if (item != null) {
-            item.setInternalRev(newRev);
-            item.setSynced(true);
-            item.setContent(new Blob(casesJsonObject.toString().getBytes()));
-            item.setName(casesJsonObject.get("name").getAsString());
-            setAgeIfExists(item, casesJsonObject);
-            item.setOwnedBy(casesJsonObject.get("owned_by").getAsString());
-            item.setServerUrl(PrimeroAppConfiguration.getApiBaseUrl());
-            if (casesJsonObject.get("caregiver") != null) {
-                item.setCaregiver(casesJsonObject.get("caregiver").getAsString());
-            }
+            setCaseProperties(casesJsonObject, item);
             item.update();
             casePhotoService.deleteByCaseId(item.getId());
         } else {
@@ -365,26 +354,27 @@ public class CPSyncPresenter extends BaseSyncPresenter {
             item.setUniqueId(casesJsonObject.get("case_id").getAsString());
             item.setShortId(casesJsonObject.get("short_id").getAsString());
             item.setInternalId(casesJsonObject.get("_id").getAsString());
-            item.setInternalRev(newRev);
-            item.setRegistrationDate(Utils.getRegisterDateByYyyyMmDd(casesJsonObject.get("registration_date")
-                    .getAsString()));
-            item.setCreatedBy(casesJsonObject.get("created_by").getAsString());
-            item.setOwnedBy(casesJsonObject.get("owned_by").getAsString());
-            item.setServerUrl(PrimeroAppConfiguration.getApiBaseUrl());
 
-            item.setLastSyncedDate(Calendar.getInstance().getTime());
-            item.setLastUpdatedDate(Calendar.getInstance().getTime());
-            item.setSynced(true);
-
-            item.setContent(new Blob(casesJsonObject.toString().getBytes()));
-
-            item.setName(casesJsonObject.get("name").getAsString());
-            setAgeIfExists(item, casesJsonObject);
-            if (casesJsonObject.get("caregiver") != null) {
-                item.setCaregiver(casesJsonObject.get("caregiver").getAsString());
-            }
+            setCaseProperties(casesJsonObject, item);
             item.save();
         }
+    }
+
+    private void setCaseProperties(JsonObject casesJsonObject, Case item) {
+        item.setInternalRev(casesJsonObject.get("_rev").getAsString());
+        item.setOwnedBy(casesJsonObject.get("owned_by").getAsString());
+        item.setCreatedBy(casesJsonObject.get("created_by").getAsString());
+        item.setServerUrl(PrimeroAppConfiguration.getApiBaseUrl());
+        item.setSynced(true);
+        item.setLastSyncedDate(Calendar.getInstance().getTime());
+        item.setLastUpdatedDate(Calendar.getInstance().getTime());
+        item.setName(casesJsonObject.get("name").getAsString());
+        item.setContent(new Blob(casesJsonObject.toString().getBytes()));
+        item.setCaregiver(casesJsonObject.has("caregiver") ? casesJsonObject.get("caregiver").getAsString() :
+                null);
+        item.setRegistrationDate(Utils.getRegisterDateAsDdMmYyyy(casesJsonObject.get("registration_date")
+                .getAsString()));
+        setAgeIfExists(item, casesJsonObject);
     }
 
     private void updateCasePhotos(String id, byte[] photoBytes) {
@@ -548,7 +538,7 @@ public class CPSyncPresenter extends BaseSyncPresenter {
             item.setShortId(tracingsJsonObject.get("short_id").getAsString());
             item.setInternalId(tracingsJsonObject.get("_id").getAsString());
             item.setInternalRev(newRev);
-            item.setRegistrationDate(Utils.getRegisterDate(registrationDate));
+            item.setRegistrationDate(Utils.getRegisterDateAsDdMmYyyy(registrationDate));
             item.setCreatedBy(tracingsJsonObject.get("created_by").getAsString());
             item.setOwnedBy(tracingsJsonObject.get("owned_by").getAsString());
             item.setServerUrl(TextUtils.lintUrl(PrimeroAppConfiguration.getApiBaseUrl()));

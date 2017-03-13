@@ -6,8 +6,6 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.bumptech.glide.load.engine.Resource;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -15,7 +13,6 @@ import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
-import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -27,9 +24,7 @@ import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.anyFloat;
 import static org.mockito.Matchers.anyInt;
-import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.mockingDetails;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -81,7 +76,7 @@ public class UtilsTest {
         String registrationDateString = "23/02/2017";
         Date date = new Date(new SimpleDateFormat("dd/MM/yyyy").parse(registrationDateString).getTime());
 
-        assertThat("Should return same date", Utils.getRegisterDate(registrationDateString), is(date));
+        assertThat("Should return same date", Utils.getRegisterDateAsDdMmYyyy(registrationDateString), is(date));
     }
 
     @Test
@@ -89,7 +84,7 @@ public class UtilsTest {
         String str = "aa";
 
         Date date = new Date(System.currentTimeMillis());
-        Date actual = Utils.getRegisterDate(str);
+        Date actual = Utils.getRegisterDateAsDdMmYyyy(str);
 
         assertThat("Should return same day", actual.getDay(), is(date.getDay()));
         assertThat("Should return same month", actual.getMonth(), is(date.getMonth()));

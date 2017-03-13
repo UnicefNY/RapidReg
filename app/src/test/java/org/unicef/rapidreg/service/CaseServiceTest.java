@@ -5,7 +5,6 @@ import android.util.Log;
 import com.raizlabs.android.dbflow.data.Blob;
 import com.raizlabs.android.dbflow.sql.language.ConditionGroup;
 
-import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -50,7 +49,6 @@ import static org.mockito.Matchers.anyLong;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.spy;
-import static org.mockito.Mockito.timeout;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.MockitoAnnotations.initMocks;
@@ -156,7 +154,7 @@ public class CaseServiceTest {
         assertFalse("Sync status should be false", actual.isSynced());
         assertThat("Age should be 18", actual.getAge(), is(18));
         assertThat("Registration date should be 25/12/2016", actual.getRegistrationDate(), is
-                (Utils.getRegisterDate("25/12/2016")));
+                (Utils.getRegisterDateAsDdMmYyyy("25/12/2016")));
     }
 
     @Test
