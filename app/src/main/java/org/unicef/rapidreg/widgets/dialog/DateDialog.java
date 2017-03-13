@@ -14,6 +14,7 @@ import org.unicef.rapidreg.widgets.PrimeroDatePicker;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 public class DateDialog extends BaseDialog {
@@ -46,17 +47,11 @@ public class DateDialog extends BaseDialog {
                 field.getDisplayName().get(PrimeroAppConfiguration.getDefaultLanguage()));
         if (isVerifyDateField) {
             Calendar calendar = Calendar.getInstance();
-            int dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);
-            int month = calendar.get(Calendar.MONTH);
-            int year = calendar.get(Calendar.YEAR);
 
-            if (datePicker.getYear() > year) {
-                return context.getResources().getString(R.string.invalid_date_msg);
-            }
-            if (datePicker.getMonth() > month) {
-                return context.getResources().getString(R.string.invalid_date_msg);
-            }
-            if (datePicker.getDayOfMonth() > dayOfMonth) {
+            Calendar pickedCalendar = Calendar.getInstance();
+            pickedCalendar.set(datePicker.getYear(), datePicker.getMonth(), datePicker.getDayOfMonth());
+
+            if (calendar.before(pickedCalendar)) {
                 return context.getResources().getString(R.string.invalid_date_msg);
             }
         }
