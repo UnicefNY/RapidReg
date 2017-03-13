@@ -21,6 +21,7 @@ import org.unicef.rapidreg.service.CaseService;
 import org.unicef.rapidreg.service.FormRemoteService;
 import org.unicef.rapidreg.service.IncidentFormService;
 import org.unicef.rapidreg.service.IncidentService;
+import org.unicef.rapidreg.service.RecordService;
 import org.unicef.rapidreg.service.SyncCaseService;
 import org.unicef.rapidreg.service.SyncIncidentService;
 import org.unicef.rapidreg.service.cache.ItemValuesMap;
@@ -356,51 +357,45 @@ public class GBVSyncPresenter extends BaseSyncPresenter {
     private void saveDownloadedIncidents(JsonObject incidentsJsonObject) {
         String internalId = incidentsJsonObject.get("_id").getAsString();
         Incident item = incidentService.getByInternalId(internalId);
-        String newRev = incidentsJsonObject.get("_rev").getAsString();
         String registrationDate = incidentsJsonObject.get("registration_date").getAsString();
         if (item != null) {
-            item.setInternalRev(newRev);
-            item.setSynced(true);
-            item.setContent(new Blob(incidentsJsonObject.toString().getBytes()));
             item.setIncidentCaseId(incidentsJsonObject.get(COLUMN_INCIDENT_CASE_ID).getAsString());
-            item.setServerUrl(TextUtils.lintUrl(PrimeroAppConfiguration.getApiBaseUrl()));
-            if (incidentsJsonObject.has(COLUMN_INCIDENT_CASE_ID)) {
-                String incidentCaseId = incidentsJsonObject.get(COLUMN_INCIDENT_CASE_ID).getAsString();
-                item.setIncidentCaseId(incidentCaseId);
-
-                Case incidentCase = caseService.getByInternalId(incidentCaseId);
-                if (incidentCase != null) {
-                    item.setCaseUniqueId(incidentCase.getUniqueId());
-                }
-            }
-            setAgeIfExists(item, incidentsJsonObject);
+            setIncidentProperties(item, incidentsJsonObject);
             item.update();
         } else {
             item = new Incident();
             item.setUniqueId(incidentsJsonObject.get("incident_id").getAsString());
             item.setShortId(incidentsJsonObject.get("short_id").getAsString());
             item.setInternalId(incidentsJsonObject.get("_id").getAsString());
-            item.setInternalRev(newRev);
-            item.setRegistrationDate(Utils.getRegisterDate(registrationDate));
             item.setCreatedBy(incidentsJsonObject.get("created_by").getAsString());
             item.setOwnedBy(incidentsJsonObject.get("owned_by").getAsString());
-            item.setServerUrl(TextUtils.lintUrl(PrimeroAppConfiguration.getApiBaseUrl()));
             item.setLastSyncedDate(Calendar.getInstance().getTime());
             item.setLastUpdatedDate(Calendar.getInstance().getTime());
-            item.setSynced(true);
-            item.setContent(new Blob(incidentsJsonObject.toString().getBytes()));
-            if (incidentsJsonObject.has(COLUMN_INCIDENT_CASE_ID)) {
-                String incidentCaseId = incidentsJsonObject.get(COLUMN_INCIDENT_CASE_ID).getAsString();
-                item.setIncidentCaseId(incidentCaseId);
+            item.setRegistrationDate(Utils.getRegisterDate(registrationDate));
 
-                Case incidentCase = caseService.getByInternalId(incidentCaseId);
-                if (incidentCase != null) {
-                    item.setCaseUniqueId(incidentCase.getUniqueId());
-                }
-            }
-            setAgeIfExists(item, incidentsJsonObject);
+            setIncidentProperties(item, incidentsJsonObject);
             item.save();
         }
+    }
+
+    private void setIncidentProperties(Incident item, JsonObject incidentsJsonObject) {
+        String newRev = incidentsJsonObject.get("_rev").getAsString();
+        item.setInternalRev(newRev);
+        item.setServerUrl(TextUtils.lintUrl(PrimeroAppConfiguration.getApiBaseUrl()));
+        item.setSynced(true);
+        item.setContent(new Blob(incidentsJsonObject.toString().getBytes()));
+        item.setLocation(incidentsJsonObject.has(RecordService.LOCATION) ? incidentsJsonObject.get(RecordService
+                .LOCATION).getAsString() : null);
+        if (incidentsJsonObject.has(COLUMN_INCIDENT_CASE_ID)) {
+            String incidentCaseId = incidentsJsonObject.get(COLUMN_INCIDENT_CASE_ID).getAsString();
+            item.setIncidentCaseId(incidentCaseId);
+
+            Case incidentCase = caseService.getByInternalId(incidentCaseId);
+            if (incidentCase != null) {
+                item.setCaseUniqueId(incidentCase.getUniqueId());
+            }
+        }
+        setAgeIfExists(item, incidentsJsonObject);
     }
 
     private void downloadCaseForm() {

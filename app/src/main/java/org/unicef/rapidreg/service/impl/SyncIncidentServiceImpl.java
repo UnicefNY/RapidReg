@@ -9,16 +9,17 @@ import org.unicef.rapidreg.PrimeroAppConfiguration;
 import org.unicef.rapidreg.model.Incident;
 import org.unicef.rapidreg.repository.remote.SyncIncidentRepository;
 import org.unicef.rapidreg.service.BaseRetrofitService;
+import org.unicef.rapidreg.service.RecordService;
 import org.unicef.rapidreg.service.SyncIncidentService;
 import org.unicef.rapidreg.service.cache.ItemValuesMap;
 import org.unicef.rapidreg.utils.TextUtils;
-import org.w3c.dom.Text;
 
 import retrofit2.Response;
 import rx.Observable;
 
 
-public class SyncIncidentServiceImpl extends BaseRetrofitService<SyncIncidentRepository> implements SyncIncidentService {
+public class SyncIncidentServiceImpl extends BaseRetrofitService<SyncIncidentRepository> implements
+        SyncIncidentService {
     @Override
     public Response<JsonElement> uploadIncidentJsonProfile(Incident item) {
         ItemValuesMap itemValuesMap = ItemValuesMap.fromJson(new String(item.getContent().getBlob()));
@@ -36,7 +37,8 @@ public class SyncIncidentServiceImpl extends BaseRetrofitService<SyncIncidentRep
             response = getRepository(SyncIncidentRepository.class).putIncident(PrimeroAppConfiguration.getCookie(),
                     item.getInternalId(), jsonObject).toBlocking().first();
         } else {
-            response = getRepository(SyncIncidentRepository.class).postIncident(PrimeroAppConfiguration.getCookie(), jsonObject)
+            response = getRepository(SyncIncidentRepository.class).postIncident(PrimeroAppConfiguration.getCookie(),
+                    jsonObject)
                     .toBlocking().first();
         }
         if (!response.isSuccessful()) {
@@ -47,6 +49,8 @@ public class SyncIncidentServiceImpl extends BaseRetrofitService<SyncIncidentRep
 
         item.setInternalId(responseJsonObject.get("_id").getAsString());
         item.setInternalRev(responseJsonObject.get("_rev").getAsString());
+        item.setLocation(responseJsonObject.has(RecordService.LOCATION) ? responseJsonObject.get(RecordService
+                .LOCATION).getAsString() : null);
         item.setContent(new Blob(responseJsonObject.toString().getBytes()));
         item.update();
 
@@ -55,13 +59,15 @@ public class SyncIncidentServiceImpl extends BaseRetrofitService<SyncIncidentRep
 
     @Override
     public Observable<Response<JsonElement>> getIncidentIds(String lastUpdate, boolean isMobile) {
-        return getRepository(SyncIncidentRepository.class).getIncidentIds(PrimeroAppConfiguration.getCookie(), lastUpdate,
+        return getRepository(SyncIncidentRepository.class).getIncidentIds(PrimeroAppConfiguration.getCookie(),
+                lastUpdate,
                 isMobile);
     }
 
     @Override
     public Observable<Response<JsonElement>> getIncident(String id, String locale, boolean isMobile) {
-        return getRepository(SyncIncidentRepository.class).getIncident(PrimeroAppConfiguration.getCookie(), id, locale, isMobile);
+        return getRepository(SyncIncidentRepository.class).getIncident(PrimeroAppConfiguration.getCookie(), id,
+                locale, isMobile);
     }
 
     @Override
