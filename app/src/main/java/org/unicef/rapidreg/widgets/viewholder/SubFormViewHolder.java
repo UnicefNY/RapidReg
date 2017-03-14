@@ -259,11 +259,14 @@ public class SubFormViewHolder extends BaseViewHolder<Field> {
     }
 
     public void setSubformVisible(List<Boolean> visibleStatus) {
-        if (visibleStatus.isEmpty()) {
+        if (visibleStatus.isEmpty() || subformDropDownStatus.isEmpty()) {
             return;
         }
 
-        for (int index = 0; index < visibleStatus.size(); index ++) {
+        int subformSize = visibleStatus.size() > subformDropDownStatus.size() ?
+                subformDropDownStatus.size() : visibleStatus.size();
+
+        for (int index = 0; index < subformSize; index ++) {
             boolean status = visibleStatus.get(index);
             subformDropDownStatus.remove(index);
             subformDropDownStatus.add(index, status);
