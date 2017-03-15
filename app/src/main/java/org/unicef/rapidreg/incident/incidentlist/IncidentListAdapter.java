@@ -81,6 +81,6 @@ public class IncidentListAdapter extends RecordListAdapter {
             incidentService.deleteByRecordId(recordId);
         }
         super.removeRecords();
+        incidentService.execSQL(RecordService.SQL_VACUUM);
     }
-
 }

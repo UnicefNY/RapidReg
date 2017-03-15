@@ -77,6 +77,10 @@ public class PrimeroAppConfiguration {
         return "en";
     }
 
+    public static String getDatabaseName() {
+        return "primero";
+    }
+
     public static String getAndroidId() {
         return Settings.Secure.getString(PrimeroApplication.getAppContext().getContentResolver(),
                 Settings.Secure.ANDROID_ID);

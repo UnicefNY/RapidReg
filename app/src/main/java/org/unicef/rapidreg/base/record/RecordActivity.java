@@ -201,8 +201,7 @@ public abstract class RecordActivity extends BaseActivity {
     }
 
     private String getOutputMediaFilePath() {
-        File mediaStorageDir = new File(getFilesDir()
-                + File.separator + PhotoConfig.IMAGES_DIR_NAME);
+        File mediaStorageDir = new File(PhotoConfig.IMAGES_DIR_NAME);
         if (!mediaStorageDir.exists()) {
             mediaStorageDir.mkdirs();
         }

@@ -1,12 +1,23 @@
 package org.unicef.rapidreg.childcase.caselist;
 
 import android.content.Context;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Bundle;
+import android.widget.Toast;
 
+import com.facebook.stetho.inspector.protocol.module.Database;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+import com.raizlabs.android.dbflow.config.DatabaseConfig;
+import com.raizlabs.android.dbflow.config.DatabaseDefinition;
+import com.raizlabs.android.dbflow.config.FlowManager;
+import com.raizlabs.android.dbflow.structure.database.DatabaseWrapper;
+import com.raizlabs.android.dbflow.structure.database.transaction.ITransaction;
+import com.raizlabs.android.dbflow.structure.database.transaction.Transaction;
 
 import org.unicef.rapidreg.PrimeroAppConfiguration;
+import org.unicef.rapidreg.PrimeroDatabaseConfiguration;
 import org.unicef.rapidreg.base.Feature;
 import org.unicef.rapidreg.base.record.RecordActivity;
 import org.unicef.rapidreg.base.record.recordlist.RecordListAdapter;
@@ -92,5 +103,6 @@ public class CaseListAdapter extends RecordListAdapter {
             caseService.deleteByRecordId(recordId);
         }
         super.removeRecords();
+        caseService.execSQL(RecordService.SQL_VACUUM);
     }
 }

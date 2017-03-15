@@ -158,8 +158,7 @@ public abstract class RecordRegisterPresenter extends MvpBasePresenter<RecordReg
     }
 
     public void clearImagesCache() {
-        File mediaStorageDir = new File(PrimeroApplication.getAppContext().getFilesDir()
-                + File.separator + PhotoConfig.IMAGES_DIR_NAME);
+        File mediaStorageDir = new File(PhotoConfig.IMAGES_DIR_NAME);
         if (mediaStorageDir.exists()) {
             File[] imageFiles = mediaStorageDir.listFiles();
             for (File image : imageFiles) {

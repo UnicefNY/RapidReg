@@ -81,5 +81,6 @@ public class TracingListAdapter extends RecordListAdapter {
             tracingService.deleteByRecordId(recordId);
         }
         super.removeRecords();
+        tracingService.execSQL(RecordService.SQL_VACUUM);
     }
 }

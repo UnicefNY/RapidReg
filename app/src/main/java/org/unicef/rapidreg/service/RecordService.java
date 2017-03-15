@@ -1,8 +1,10 @@
 package org.unicef.rapidreg.service;
 
+import com.raizlabs.android.dbflow.config.FlowManager;
 import com.raizlabs.android.dbflow.sql.language.Condition;
 import com.raizlabs.android.dbflow.sql.language.NameAlias;
 import com.raizlabs.android.dbflow.sql.language.SQLCondition;
+import com.raizlabs.android.dbflow.structure.database.DatabaseWrapper;
 
 import org.unicef.rapidreg.PrimeroAppConfiguration;
 import org.unicef.rapidreg.forms.Field;
@@ -51,6 +53,8 @@ public class RecordService {
 
     public static final String MODULE_GBV_CASE = "primeromodule-gbv";
     public static final String MODULE_CP_CASE = "primeromodule-cp";
+
+    public static final String SQL_VACUUM = "VACUUM";
 
     public static final int AGE_MIN = 0;
     public static final int AGE_MAX = 130;
@@ -148,6 +152,14 @@ public class RecordService {
 
         return Condition.column(NameAlias.builder(RecordModel.COLUMN_AGE).build())
                 .between(ageFrom).and(ageTo);
+    }
+
+    public void execSQL(String sqlEntry) {
+        DatabaseWrapper databaseWrapper = FlowManager.getDatabase(
+                PrimeroAppConfiguration.getDatabaseName()).getWritableDatabase();
+        if (databaseWrapper != null) {
+            databaseWrapper.execSQL(sqlEntry);
+        }
     }
 
     public static final class RelatedItemColumn {
