@@ -16,4 +16,6 @@ public class PhotoConfig {
 
     public static final String MEDIA_PATH_FOR_CAMERA = Environment.getExternalStorageDirectory() +
             "/_media_path_for_camera_image.jpg";
+
+    public static final String IMAGES_DIR_NAME = "/Images/";
 }

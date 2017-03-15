@@ -38,6 +38,7 @@ import static org.unicef.rapidreg.service.RecordService.AUDIO_FILE_PATH;
 
 public abstract class RecordActivity extends BaseActivity {
     public static final String TAG = RecordActivity.class.getSimpleName();
+    private static final String JPEG_FILE_SUFFIX = ".jpg";
 
     protected Feature currentFeature;
 
@@ -200,12 +201,12 @@ public abstract class RecordActivity extends BaseActivity {
     }
 
     private String getOutputMediaFilePath() {
-        File mediaStorageDir = new File(Environment.getExternalStorageDirectory()
-                + File.separator + getApplicationContext().getPackageName());
+        File mediaStorageDir = new File(getFilesDir()
+                + File.separator + PhotoConfig.IMAGES_DIR_NAME);
         if (!mediaStorageDir.exists()) {
             mediaStorageDir.mkdirs();
         }
-        return mediaStorageDir.getPath() + File.separator + System.currentTimeMillis() + ".jpg";
+        return mediaStorageDir.getPath() + File.separator + System.currentTimeMillis() + JPEG_FILE_SUFFIX;
     }
 
     private void onCaptureImageResult() {

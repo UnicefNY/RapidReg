@@ -61,9 +61,7 @@ public class AppRemotePresenter {
                 .subscribe(caseForm -> {
                     saveCaseForm(caseForm, moduleId);
                     callback.onSuccess();
-                }, throwable -> {
-                    callback.onFailure();
-                });
+                }, throwable -> callback.onFailure());
     }
 
     public void saveCaseForm(RecordForm recordForm, String moduleId) {
@@ -79,9 +77,7 @@ public class AppRemotePresenter {
                 .subscribe(tracingForm -> {
                     saveTracingForm(tracingForm);
                     callback.onSuccess();
-                }, throwable -> {
-                    callback.onFailure();
-                });
+                }, throwable -> callback.onFailure());
     }
 
     public void saveTracingForm(RecordForm recordForm) {
@@ -97,9 +93,7 @@ public class AppRemotePresenter {
                 .subscribe(incidentForm -> {
                     saveIncidentForm(incidentForm);
                     callback.onSuccess();
-                }, throwable -> {
-                    callback.onFailure();
-                });
+                }, throwable -> callback.onFailure());
     }
 
     public void saveIncidentForm(RecordForm recordForm) {

@@ -102,6 +102,7 @@ public class CaseRegisterPresenter extends RecordRegisterPresenter {
             List<String> incidentList = caseService.getIncidentsByCaseId(record.getUniqueId());
             addProfileItems(itemValuesMap, record.getRegistrationDate(), record.getUniqueId(),
                     incidentList, record.getId());
+            clearImagesCache();
             callback.onSaveSuccessful(record.getId());
         } catch (IOException e) {
             callback.onSavedFail();

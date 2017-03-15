@@ -8,6 +8,8 @@ import com.hannesdorfmann.mosby.mvp.MvpBasePresenter;
 import com.hannesdorfmann.mosby.mvp.MvpFragment;
 
 import org.json.JSONException;
+import org.unicef.rapidreg.PrimeroApplication;
+import org.unicef.rapidreg.base.record.recordphoto.PhotoConfig;
 import org.unicef.rapidreg.base.record.recordregister.RecordRegisterView.SaveRecordCallback;
 import org.unicef.rapidreg.event.RedirectIncidentEvent;
 import org.unicef.rapidreg.forms.Field;
@@ -16,6 +18,7 @@ import org.unicef.rapidreg.service.RecordService;
 import org.unicef.rapidreg.service.cache.ItemValuesMap;
 import org.unicef.rapidreg.utils.TextUtils;
 
+import java.io.File;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -154,15 +157,15 @@ public abstract class RecordRegisterPresenter extends MvpBasePresenter<RecordReg
         return getPhotoPathsByRecordId(getRecordId(bundle));
     }
 
-    protected boolean validateAge(String ageContent) {
-        if (TextUtils.isEmpty(ageContent)) {
-            return true;
+    public void clearImagesCache() {
+        File mediaStorageDir = new File(PrimeroApplication.getAppContext().getFilesDir()
+                + File.separator + PhotoConfig.IMAGES_DIR_NAME);
+        if (mediaStorageDir.exists()) {
+            File[] imageFiles = mediaStorageDir.listFiles();
+            for (File image : imageFiles) {
+                image.delete();
+            }
         }
-        int age = Integer.valueOf(ageContent);
-        if (age < RecordService.AGE_MIN || age > RecordService.AGE_MAX) {
-            return false;
-        }
-        return true;
     }
 
     public abstract void saveRecord(ItemValuesMap itemValuesMap, List<String> photoPaths,
