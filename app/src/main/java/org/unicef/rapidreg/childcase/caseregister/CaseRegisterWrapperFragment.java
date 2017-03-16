@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.ogaclejapan.smarttablayout.utils.v4.FragmentPagerItem;
 import com.ogaclejapan.smarttablayout.utils.v4.FragmentPagerItems;
@@ -28,6 +29,7 @@ import org.unicef.rapidreg.forms.Section;
 import org.unicef.rapidreg.service.CaseService;
 import org.unicef.rapidreg.service.RecordService;
 import org.unicef.rapidreg.service.cache.ItemValuesMap;
+import org.unicef.rapidreg.utils.Utils;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -129,6 +131,7 @@ public class CaseRegisterWrapperFragment extends RecordRegisterWrapperFragment {
 
     @Override
     public void onSaveSuccessful(long recordId) {
+        Utils.showMessageByToast(getActivity(), R.string.save_success, Toast.LENGTH_SHORT);
         String moduleId = caseRegisterPresenter.getCaseType();
         Feature feature = moduleId.equals(MODULE_CASE_CP) ? DETAILS_CP_FULL : DETAILS_GBV_FULL;
 
