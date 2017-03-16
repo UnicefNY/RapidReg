@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.ogaclejapan.smarttablayout.utils.v4.FragmentPagerItem;
 import com.ogaclejapan.smarttablayout.utils.v4.FragmentPagerItems;
@@ -23,6 +24,7 @@ import org.unicef.rapidreg.service.cache.ItemValuesMap;
 import org.unicef.rapidreg.tracing.TracingActivity;
 import org.unicef.rapidreg.tracing.TracingFeature;
 import org.unicef.rapidreg.tracing.tracingphoto.TracingPhotoAdapter;
+import org.unicef.rapidreg.utils.Utils;
 
 import java.util.ArrayList;
 
@@ -101,6 +103,7 @@ public class TracingRegisterWrapperFragment extends RecordRegisterWrapperFragmen
 
     @Override
     public void onSaveSuccessful(long recordId) {
+        Utils.showMessageByToast(getActivity(), R.string.save_success, Toast.LENGTH_SHORT);
         Bundle args = new Bundle();
         args.putSerializable(RecordService.ITEM_VALUES, getRecordRegisterData());
         args.putStringArrayList(RecordService.RECORD_PHOTOS, (ArrayList<String>) getPhotoPathsData());
