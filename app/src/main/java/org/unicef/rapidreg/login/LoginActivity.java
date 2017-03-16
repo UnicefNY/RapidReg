@@ -111,7 +111,7 @@ public class LoginActivity extends MvpActivity<LoginView, LoginPresenter> implem
 
     private String fetchHistoryURL() {
         String url = urlEditView.getText().toString().trim();
-        return "".equals(url) ? presenter.fetchURL() : url;
+        return "".equals(url) ? presenter.loadLastLoginUrl() : url;
     }
 
     @NonNull

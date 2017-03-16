@@ -7,6 +7,7 @@ import android.util.Log;
 import android.util.Patterns;
 
 import org.unicef.rapidreg.PrimeroAppConfiguration;
+import org.unicef.rapidreg.PrimeroApplication;
 import org.unicef.rapidreg.model.LoginRequestBody;
 import org.unicef.rapidreg.model.LoginResponse;
 import org.unicef.rapidreg.model.User;
@@ -117,12 +118,8 @@ public class LoginServiceImpl extends BaseRetrofitService<LoginRepository> imple
     }
 
     @Override
-    public String getServerUrl() {
-        List<User> users = userDao.getAllUsers();
-        if (users.isEmpty()) {
-            return "";
-        }
-        return users.get(0).getServerUrl();
+    public String loadLastLoginServerUrl() {
+        return PrimeroApplication.getAppRuntime().loadLastLoginServerUrl();
     }
 
     @Override

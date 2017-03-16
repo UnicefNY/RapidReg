@@ -22,16 +22,27 @@ public class PrimeroDataPref {
     private SharedPreferences.Editor editor;
 
     private static final String PREF_SYNC_KEY = "sync_data";
+    private static final String PREF_KEY_SERVER_URL = "__server_url";
+    private static final String PREF_NAME_SERVER_URL = "__last_login_server_url";
 
     public PrimeroDataPref(Context context) {
         userDataSharedPreferences = new HashMap<>();
         this.context = context;
     }
 
-    public void addOrUpdateDataPref(User user) {
-        String prefName = user.getUserInfo();
-        SharedPreferences sharedPreferences = context.getSharedPreferences(prefName, Context.MODE_PRIVATE);
-        userDataSharedPreferences.put(prefName, sharedPreferences);
+    public void storeLastLoginServerUrl(String serverUrl) {
+        SharedPreferences preferences = context.getSharedPreferences(PREF_NAME_SERVER_URL, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putString(PREF_KEY_SERVER_URL, serverUrl);
+        editor.apply();
+    }
+
+    public String loadLastLoginServerUrl() {
+        SharedPreferences preferences = context.getSharedPreferences(PREF_NAME_SERVER_URL, Context.MODE_PRIVATE);
+        if (preferences == null) {
+            return "";
+        }
+        return preferences.getString(PREF_KEY_SERVER_URL, "");
     }
 
     public void storeSyncData(SyncStatisticData syncStatisticData) {
@@ -39,7 +50,6 @@ public class PrimeroDataPref {
         if (sharedPreferences == null) {
             return;
         }
-
         editor = sharedPreferences.edit();
         editor.putString(PREF_SYNC_KEY, new Gson().toJson(syncStatisticData));
         editor.apply();
@@ -64,7 +74,6 @@ public class PrimeroDataPref {
         if (user == null) {
             return null;
         }
-
         try {
             String prefName = DesAlgorithm.getInstance().desEncrypt(user.getUserInfo());
             SharedPreferences sharedPreferences = context.getSharedPreferences(prefName, Context.MODE_PRIVATE);

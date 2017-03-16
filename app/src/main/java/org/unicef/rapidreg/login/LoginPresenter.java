@@ -4,6 +4,7 @@ import com.hannesdorfmann.mosby.mvp.MvpBasePresenter;
 
 import org.greenrobot.eventbus.EventBus;
 import org.unicef.rapidreg.PrimeroAppConfiguration;
+import org.unicef.rapidreg.PrimeroApplication;
 import org.unicef.rapidreg.event.LoadCPCaseFormEvent;
 import org.unicef.rapidreg.event.LoadGBVCaseFormEvent;
 import org.unicef.rapidreg.event.LoadGBVIncidentFormEvent;
@@ -12,7 +13,6 @@ import org.unicef.rapidreg.event.LoadTracingFormEvent;
 import org.unicef.rapidreg.model.User;
 import org.unicef.rapidreg.service.LoginService;
 import org.unicef.rapidreg.service.SystemSettingsService;
-import org.unicef.rapidreg.service.cache.GlobalLocationCache;
 import org.unicef.rapidreg.service.impl.LoginServiceImpl;
 import org.unicef.rapidreg.utils.TextUtils;
 
@@ -32,15 +32,14 @@ public class LoginPresenter extends MvpBasePresenter<LoginView> {
         this.systemSettingsService = systemSettingsServiceLazy.get();
     }
 
-    public String fetchURL() {
-        return loginService.getServerUrl();
+    public String loadLastLoginUrl() {
+        return loginService.loadLastLoginServerUrl();
     }
 
     public void doLogin(String username, String password, String url, String imei) {
         if (!validate(username, password, url)) {
             return;
         }
-
         PrimeroAppConfiguration.setApiBaseUrl(TextUtils.lintUrl(url));
         try {
             getView().showLoading(true);
@@ -101,6 +100,7 @@ public class LoginPresenter extends MvpBasePresenter<LoginView> {
                     EventBus.getDefault().postSticky(new LoadSystemSettingEvent());
 
                     getView().navigateToLoginSucceedPage();
+                    PrimeroApplication.getAppRuntime().storeLastLoginServerUrl(url);
                 }
             }
 
@@ -146,6 +146,7 @@ public class LoginPresenter extends MvpBasePresenter<LoginView> {
                 getView().configAppRuntimeEvent();
                 getView().navigateToLoginSucceedPage();
                 systemSettingsService.setGlobalSystemSettings();
+                PrimeroApplication.getAppRuntime().storeLastLoginServerUrl(url);
             }
 
             @Override

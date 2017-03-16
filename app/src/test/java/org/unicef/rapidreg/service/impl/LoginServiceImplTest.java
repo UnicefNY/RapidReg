@@ -91,12 +91,6 @@ public class LoginServiceImplTest {
     }
 
     @Test
-    public void should_return_empty_string_when_no_user_exist() throws Exception {
-        when(userDao.getAllUsers()).thenReturn(Collections.EMPTY_LIST);
-        assertThat(loginService.getServerUrl(), is(""));
-    }
-
-    @Test
     public void should_login_offline_when_fail() {
         LoginService.LoginCallback loginCallback = mock(LoginService.LoginCallback.class);
         when(userDao.getUser(anyString(), anyString())).thenReturn(null);
@@ -127,17 +121,6 @@ public class LoginServiceImplTest {
 
         verify(loginCallback, times(1)).onSuccessful("", jack);
         verify(userDao, times(1)).getUser(username, expectedUrl);
-    }
-
-    @Test
-    public void should_return_expectedUrl_when_user_exist() throws Exception {
-        jack.setServerUrl(expectedUrl);
-        List<User> users = new ArrayList<>();
-        users.add(jack);
-
-        when(userDao.getAllUsers()).thenReturn(users);
-
-        assertThat("Should return same url", loginService.getServerUrl(), is(expectedUrl));
     }
 
     @Test

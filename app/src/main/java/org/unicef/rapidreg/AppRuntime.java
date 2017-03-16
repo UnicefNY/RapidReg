@@ -76,6 +76,14 @@ public class AppRuntime {
         return dataPref.loadSyncData();
     }
 
+    public void storeLastLoginServerUrl(String url){
+        dataPref.storeLastLoginServerUrl(url);
+    }
+
+    public String loadLastLoginServerUrl(){
+        return dataPref.loadLastLoginServerUrl();
+    }
+
     public void bindTemplateCaseService() {
         Log.d(TAG, "TemplateCaseService binded...");
         Intent intent = new Intent(applicationContext, AppRemoteService.class);

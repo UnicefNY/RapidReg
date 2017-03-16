@@ -14,7 +14,6 @@ import org.unicef.rapidreg.injection.component.DaggerApplicationComponent;
 import org.unicef.rapidreg.injection.module.ApplicationModule;
 
 public class PrimeroApplication extends Application {
-
     private static Context context;
     private static AppRuntime appRuntime;
 

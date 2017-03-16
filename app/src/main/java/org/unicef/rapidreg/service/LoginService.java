@@ -1,6 +1,5 @@
 package org.unicef.rapidreg.service;
 
-import org.unicef.rapidreg.R;
 import org.unicef.rapidreg.model.User;
 
 public interface LoginService {
@@ -12,19 +11,13 @@ public interface LoginService {
 
     void destroy();
 
-    String getServerUrl();
+    String loadLastLoginServerUrl();
 
     boolean isUsernameValid(String username);
 
     boolean isPasswordValid(String password);
 
     boolean isUrlValid(String url);
-
-    enum VerifiedCode {
-        OFFLINE_USER_DOES_NOT_EXIST,
-        OFFLINE_PASSWORD_INCORRECT,
-        OK
-    }
 
     interface LoginCallback {
         void onSuccessful(String cookie, User user);
