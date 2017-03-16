@@ -118,6 +118,7 @@ public class DateRangeViewHolder extends BaseViewHolder<Field> {
             try {
                 Field fakeField = new Field();
                 fakeField.setName(dateValFromKey);
+                fakeField.setDisplayName(field.getDisplayName());
                 FiledDialogFactory.createDialog(Field.FieldType.DATE_FIELD, context, fakeField, itemValues, dateFromValView, null).show();
             } catch (DialogException e) {
                 Log.e(TAG, e.getMessage());
@@ -128,6 +129,7 @@ public class DateRangeViewHolder extends BaseViewHolder<Field> {
             try {
                 Field fakeField = new Field();
                 fakeField.setName(dateValToKey);
+                fakeField.setDisplayName(field.getDisplayName());
                 FiledDialogFactory.createDialog(Field.FieldType.DATE_FIELD, context, fakeField, itemValues, dateToValView, null).show();
             } catch (DialogException e) {
                 Log.e(TAG, e.getMessage());
