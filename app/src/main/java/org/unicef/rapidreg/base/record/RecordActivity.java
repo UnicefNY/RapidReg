@@ -215,10 +215,18 @@ public abstract class RecordActivity extends BaseActivity {
                     PhotoConfig.MAX_COMPRESS_WIDTH, PhotoConfig.MAX_COMPRESS_HEIGHT);
             imagePath = getOutputMediaFilePath();
             ImageCompressUtil.storeImage(compressedImage, imagePath);
+            clearTemporaryFile();
             compressedImage.recycle();
             postSelectedImagePath();
         } catch (IOException e) {
             e.printStackTrace();
+        }
+    }
+
+    private void clearTemporaryFile() {
+        File tempFile = new File(PhotoConfig.MEDIA_PATH_FOR_CAMERA);
+        if (tempFile.exists()) {
+            tempFile.delete();
         }
     }
 
