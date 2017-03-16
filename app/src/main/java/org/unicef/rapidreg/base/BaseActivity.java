@@ -27,6 +27,7 @@ import org.unicef.rapidreg.injection.component.DaggerActivityComponent;
 import org.unicef.rapidreg.injection.module.ActivityModule;
 import org.unicef.rapidreg.login.AccountManager;
 import org.unicef.rapidreg.model.User;
+import org.unicef.rapidreg.service.cache.GlobalLocationCache;
 import org.unicef.rapidreg.utils.Utils;
 
 import javax.inject.Inject;

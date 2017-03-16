@@ -60,7 +60,7 @@ public abstract class BaseTextViewHolder extends BaseViewHolder<Field> {
     }
 
     protected void simplifyLocationIfLocationFiled(Field field) {
-        if (field.isSelectField() && GlobalLocationCache.containsKey(field.getName())) {
+        if (field.isSelectField() && GlobalLocationCache.containsLocation(field.getName())) {
             getValueView().setText(org.unicef.rapidreg.utils.TextUtils.truncateByDoubleColons(getValueView().getText
                     ().toString(), PrimeroAppConfiguration.getCurrentSystemSettings().getDistrictLevel()));
         }

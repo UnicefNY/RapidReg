@@ -10,17 +10,10 @@ import java.util.List;
 import java.util.Set;
 
 public class GlobalLocationCache {
-    private static Set<String> locationKeys = new HashSet<>();
     private static List<String> simpleLocations = new ArrayList<>();
 
     private GlobalLocationCache() throws IllegalAccessException {
         throw new IllegalAccessException();
-    }
-
-    static {
-        Collections.addAll(locationKeys, "location_current", "relation_location_last", "relation_location_current",
-                "location_separation", "location_last", "location");
-        simpleLocations = new ArrayList<>();
     }
 
     public static void initSimpleLocations(List<String> locations) {
@@ -53,7 +46,7 @@ public class GlobalLocationCache {
         return simpleLocations.contains(location);
     }
 
-    public static boolean containsKey(String key) {
-        return locationKeys.contains(key);
+    public static boolean containsLocation(String key) {
+        return key.contains("location");
     }
 }

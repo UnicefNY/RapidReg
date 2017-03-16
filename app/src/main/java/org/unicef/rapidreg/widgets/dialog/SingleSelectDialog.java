@@ -58,14 +58,14 @@ public class SingleSelectDialog extends BaseDialog {
     }
 
     private void simplifyLocationOptionsIfLocationFiled() {
-        if (field.isSelectField() && GlobalLocationCache.containsKey(field.getName())) {
+        if (field.isSelectField() && GlobalLocationCache.containsLocation(field.getName())) {
             GlobalLocationCache.initSimpleLocations(optionItems);
             optionItems = GlobalLocationCache.getSimpleLocations();
         }
     }
 
     private String recoveryLocationValueIfLocationFiled() {
-        if (field.isSelectField() && GlobalLocationCache.containsKey(field.getName()) && !org.unicef.rapidreg.utils
+        if (field.isSelectField() && GlobalLocationCache.containsLocation(field.getName()) && !org.unicef.rapidreg.utils
                 .TextUtils.isEmpty(getResult())) {
             return field.getSelectOptionValuesIfSelectable().get(GlobalLocationCache.index(getResult()));
         }
