@@ -12,7 +12,7 @@
     <string name="button_login_text">Login</string>
     <string name="login_loading_text">Logging in, please wait...</string>
     <string name="login_offline_no_user_text">Sorry, your must be connected to the internet for the first-time login.</string>
-    <string name="login_offline_success_text">Offline login succeed.</string>
+    <string name="login_offline_success_text">Offline login successful.</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="action_settings">Settings</string>
@@ -26,7 +26,7 @@
     <string name="login_unauthorized_message">Sorry, incorrect username or password.</string>
     <string name="login_service_unavailable_message">Service Unavailable!</string>
     <string name="login_not_find_code_message">Not find status code!</string>
-    <string name="login_success_message">Login succeed.</string>
+    <string name="login_success_message">Login successful.</string>
 
     <string name="login_user_label_key">login_user</string>
     <string name="syncing_forms_text">Syncing forms, please try it later</string>

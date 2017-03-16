@@ -69,15 +69,12 @@ public class PhotoUploadViewHolder extends BaseViewHolder<Field> {
     }
 
     private void setViewPhotoListener() {
-        photoGrid.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
-                if (((RecordActivity) context).getCurrentFeature().isDetailMode()
-                        || adapter.isFull() || position < adapter.getCount() - 1) {
-                    showViewPhotoDialog(position);
-                } else {
-                    showAddPhotoOptionDialog();
-                }
+        photoGrid.setOnItemClickListener((parent, v, position, id) -> {
+            if (((RecordActivity) context).getCurrentFeature().isDetailMode()
+                    || adapter.isFull() || position < adapter.getCount() - 1) {
+                showViewPhotoDialog(position);
+            } else {
+                showAddPhotoOptionDialog();
             }
         });
     }
@@ -85,14 +82,11 @@ public class PhotoUploadViewHolder extends BaseViewHolder<Field> {
     @Override
     public void setOnClickListener(Field field) {
         setViewPhotoListener();
-        photoGrid.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-            @Override
-            public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
-                if (adapter.isFull() || i != adapter.getCount() - 1) {
-                    showDeletionConfirmDialog(i);
-                }
-                return true;
+        photoGrid.setOnItemLongClickListener((adapterView, view, i, l) -> {
+            if (adapter.isFull() || i != adapter.getCount() - 1) {
+                showDeletionConfirmDialog(i);
             }
+            return true;
         });
     }
 
@@ -121,52 +115,33 @@ public class PhotoUploadViewHolder extends BaseViewHolder<Field> {
 
     private void showAddPhotoOptionDialog() {
         PhotoUploadDialog photoUploadDialog = new PhotoUploadDialog(context);
-        photoUploadDialog.setItemCameraOnClickLisener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Uri saveUri = Uri.fromFile(new File(PhotoConfig.MEDIA_PATH_FOR_CAMERA));
-                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                intent.putExtra(MediaStore.EXTRA_OUTPUT, saveUri);
-                ((RecordActivity) context).startActivityForResult(intent, REQUEST_CODE_CAMERA);
-                photoUploadDialog.dismiss();
-            }
+        photoUploadDialog.setItemCameraOnClickLisener(v -> {
+            Uri saveUri = Uri.fromFile(new File(PhotoConfig.MEDIA_PATH_FOR_CAMERA));
+            Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+            intent.putExtra(MediaStore.EXTRA_OUTPUT, saveUri);
+            ((RecordActivity) context).startActivityForResult(intent, REQUEST_CODE_CAMERA);
+            photoUploadDialog.dismiss();
         });
-        photoUploadDialog.setItemGalleryOnClickLisener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(Intent.ACTION_PICK,
-                        android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                ((RecordActivity) context).startActivityForResult(intent, REQUEST_CODE_GALLERY);
-                photoUploadDialog.dismiss();
-            }
+        photoUploadDialog.setItemGalleryOnClickLisener(v -> {
+            Intent intent = new Intent(Intent.ACTION_PICK,
+                    MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+            ((RecordActivity) context).startActivityForResult(intent, REQUEST_CODE_GALLERY);
+            photoUploadDialog.dismiss();
         });
-        photoUploadDialog.setItemCancelOnClickLisener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                photoUploadDialog.dismiss();
-            }
-        });
+        photoUploadDialog.setItemCancelOnClickLisener(v -> photoUploadDialog.dismiss());
         photoUploadDialog.show();
     }
 
     private void showDeletionConfirmDialog(final int position) {
         MessageDialog messageDialog = new MessageDialog(context);
         messageDialog.setMessage(R.string.remove_photo_confirmation);
-        messageDialog.setPositiveButton(R.string.ok, new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                messageDialog.dismiss();
-                RecordPhotoAdapter casePhotoAdapter = (RecordPhotoAdapter) photoGrid.getAdapter();
-                casePhotoAdapter.removeItem(position);
-                casePhotoAdapter.notifyDataSetChanged();
-            }
+        messageDialog.setPositiveButton(R.string.ok, v -> {
+            messageDialog.dismiss();
+            RecordPhotoAdapter casePhotoAdapter = (RecordPhotoAdapter) photoGrid.getAdapter();
+            casePhotoAdapter.removeItem(position);
+            casePhotoAdapter.notifyDataSetChanged();
         });
-        messageDialog.setNegativeButton(R.string.cancel, new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                messageDialog.dismiss();
-            }
-        });
+        messageDialog.setNegativeButton(R.string.cancel, v -> messageDialog.dismiss());
         messageDialog.show();
     }
 }

@@ -372,7 +372,7 @@ public class CPSyncPresenter extends BaseSyncPresenter {
         item.setContent(new Blob(casesJsonObject.toString().getBytes()));
         item.setCaregiver(casesJsonObject.has("caregiver") ? casesJsonObject.get("caregiver").getAsString() :
                 null);
-        item.setRegistrationDate(Utils.getRegisterDateAsDdMmYyyy(casesJsonObject.get("registration_date")
+        item.setRegistrationDate(Utils.getRegisterDateByYyyyMmDd(casesJsonObject.get("registration_date")
                 .getAsString()));
         setAgeIfExists(item, casesJsonObject);
     }

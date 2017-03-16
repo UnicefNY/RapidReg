@@ -237,46 +237,37 @@ public class GBVSyncPresenter extends BaseSyncPresenter {
 
     private void saveDownloadedCases(JsonObject casesJsonObject) {
         String internalId = casesJsonObject.get("_id").getAsString();
-        String newRev = casesJsonObject.get("_rev").getAsString();
 
         Case item = caseService.getByInternalId(internalId);
         if (item != null) {
-            item.setInternalRev(newRev);
-            item.setSynced(true);
-            item.setContent(new Blob(casesJsonObject.toString().getBytes()));
-            item.setName(casesJsonObject.get("name").getAsString());
-            setAgeIfExists(item, casesJsonObject);
-            item.setOwnedBy(casesJsonObject.get("owned_by").getAsString());
-            item.setServerUrl(TextUtils.lintUrl(PrimeroAppConfiguration.getApiBaseUrl()));
-            if (casesJsonObject.get("caregiver") != null) {
-                item.setCaregiver(casesJsonObject.get("caregiver").getAsString());
-            }
+            setCaseProperties(casesJsonObject, item);
             item.update();
         } else {
             item = new Case();
             item.setUniqueId(casesJsonObject.get("case_id").getAsString());
             item.setShortId(casesJsonObject.get("short_id").getAsString());
             item.setInternalId(casesJsonObject.get("_id").getAsString());
-            item.setInternalRev(newRev);
             item.setRegistrationDate(
                     Utils.getRegisterDateAsDdMmYyyy(casesJsonObject.get("registration_date").getAsString()));
             item.setCreatedBy(casesJsonObject.get("created_by").getAsString());
-            item.setOwnedBy(casesJsonObject.get("owned_by").getAsString());
-            item.setServerUrl(TextUtils.lintUrl(PrimeroAppConfiguration.getApiBaseUrl()));
 
             item.setLastSyncedDate(Calendar.getInstance().getTime());
             item.setLastUpdatedDate(Calendar.getInstance().getTime());
-            item.setSynced(true);
 
-            item.setContent(new Blob(casesJsonObject.toString().getBytes()));
-
-            item.setName(casesJsonObject.get("name").getAsString());
-            setAgeIfExists(item, casesJsonObject);
-            if (casesJsonObject.get("caregiver") != null) {
-                item.setCaregiver(casesJsonObject.get("caregiver").getAsString());
-            }
+            setCaseProperties(casesJsonObject, item);
             item.save();
         }
+    }
+
+    private void setCaseProperties(JsonObject casesJsonObject, Case item) {
+        item.setInternalRev(casesJsonObject.get("_rev").getAsString());
+        item.setSynced(true);
+        item.setContent(new Blob(casesJsonObject.toString().getBytes()));
+        item.setServerUrl(TextUtils.lintUrl(PrimeroAppConfiguration.getApiBaseUrl()));
+        item.setOwnedBy(casesJsonObject.get("owned_by").getAsString());
+        item.setName(casesJsonObject.get("name").getAsString());
+        item.setCaregiver(casesJsonObject.has("caregiver") ? casesJsonObject.get("caregiver").getAsString() : null);
+        setAgeIfExists(item, casesJsonObject);
     }
 
     public void preDownloadIncidents() {
@@ -358,6 +349,7 @@ public class GBVSyncPresenter extends BaseSyncPresenter {
         String internalId = incidentsJsonObject.get("_id").getAsString();
         Incident item = incidentService.getByInternalId(internalId);
         String registrationDate = incidentsJsonObject.get("registration_date").getAsString();
+
         if (item != null) {
             item.setIncidentCaseId(incidentsJsonObject.get(COLUMN_INCIDENT_CASE_ID).getAsString());
             setIncidentProperties(item, incidentsJsonObject);
@@ -369,16 +361,15 @@ public class GBVSyncPresenter extends BaseSyncPresenter {
             item.setInternalId(incidentsJsonObject.get("_id").getAsString());
             item.setCreatedBy(incidentsJsonObject.get("created_by").getAsString());
             item.setOwnedBy(incidentsJsonObject.get("owned_by").getAsString());
-            item.setLastSyncedDate(Calendar.getInstance().getTime());
-            item.setLastUpdatedDate(Calendar.getInstance().getTime());
             item.setRegistrationDate(Utils.getRegisterDateAsDdMmYyyy(registrationDate));
-
             setIncidentProperties(item, incidentsJsonObject);
             item.save();
         }
     }
 
     private void setIncidentProperties(Incident item, JsonObject incidentsJsonObject) {
+        item.setLastSyncedDate(Calendar.getInstance().getTime());
+        item.setLastUpdatedDate(Calendar.getInstance().getTime());
         String newRev = incidentsJsonObject.get("_rev").getAsString();
         item.setInternalRev(newRev);
         item.setServerUrl(TextUtils.lintUrl(PrimeroAppConfiguration.getApiBaseUrl()));

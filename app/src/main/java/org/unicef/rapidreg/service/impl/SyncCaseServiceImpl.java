@@ -95,6 +95,8 @@ public class SyncCaseServiceImpl extends BaseRetrofitService<SyncCaseRepository>
 
         item.setInternalId(responseJsonObject.get("_id").getAsString());
         item.setInternalRev(responseJsonObject.get("_rev").getAsString());
+        item.setCaregiver(responseJsonObject.has("caregiver") ? responseJsonObject.get("caregiver").getAsString() :
+                null);
         item.setContent(new Blob(responseJsonObject.toString().getBytes()));
         item.update();
 
