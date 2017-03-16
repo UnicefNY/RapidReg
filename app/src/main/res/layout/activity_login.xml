@@ -37,7 +37,6 @@
             android:layout_height="wrap_content"
             android:hint="@string/username_hint_text"
             android:imeOptions="actionDone"
-            android:text="primero_cp"
             android:singleLine="true"
             android:textColor="@color/primero_font_dark"
             android:textSize="@dimen/text_size_18" />
@@ -69,7 +68,6 @@
             android:hint="@string/url_hint_text"
             android:inputType="textUri"
             android:layout_marginTop="@dimen/login_edit_text_top_margin"
-            android:text="https://integration-mobile-v1-3.primero.org"
             android:textSize="@dimen/text_size_18" />
 
         <TextView
