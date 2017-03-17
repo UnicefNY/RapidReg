@@ -54,6 +54,7 @@ import rx.functions.Func1;
 import rx.schedulers.Schedulers;
 
 import static org.unicef.rapidreg.PrimeroAppConfiguration.MODULE_ID_CP;
+import static org.unicef.rapidreg.service.RecordService.CAREGIVER_NAME;
 
 public class CPSyncPresenter extends BaseSyncPresenter {
     private static final String TAG = CPSyncPresenter.class.getSimpleName();
@@ -370,7 +371,7 @@ public class CPSyncPresenter extends BaseSyncPresenter {
         item.setLastUpdatedDate(Calendar.getInstance().getTime());
         item.setName(casesJsonObject.get("name").getAsString());
         item.setContent(new Blob(casesJsonObject.toString().getBytes()));
-        item.setCaregiver(casesJsonObject.has("caregiver") ? casesJsonObject.get("caregiver").getAsString() :
+        item.setCaregiver(casesJsonObject.has(CAREGIVER_NAME) ? casesJsonObject.get(CAREGIVER_NAME).getAsString() :
                 null);
         item.setRegistrationDate(Utils.getRegisterDateByYyyyMmDd(casesJsonObject.get("registration_date")
                 .getAsString()));

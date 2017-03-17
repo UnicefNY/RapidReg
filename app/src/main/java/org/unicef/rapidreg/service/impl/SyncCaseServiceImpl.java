@@ -31,6 +31,8 @@ import rx.Observable;
 import rx.Subscriber;
 import rx.functions.Func1;
 
+import static org.unicef.rapidreg.service.RecordService.CAREGIVER_NAME;
+
 
 public class SyncCaseServiceImpl extends BaseRetrofitService<SyncCaseRepository> implements SyncCaseService {
     private CasePhotoDao casePhotoDao;
@@ -95,7 +97,7 @@ public class SyncCaseServiceImpl extends BaseRetrofitService<SyncCaseRepository>
 
         item.setInternalId(responseJsonObject.get("_id").getAsString());
         item.setInternalRev(responseJsonObject.get("_rev").getAsString());
-        item.setCaregiver(responseJsonObject.has("caregiver") ? responseJsonObject.get("caregiver").getAsString() :
+        item.setCaregiver(responseJsonObject.has(CAREGIVER_NAME) ? responseJsonObject.get(CAREGIVER_NAME).getAsString() :
                 null);
         item.setContent(new Blob(responseJsonObject.toString().getBytes()));
         item.update();
