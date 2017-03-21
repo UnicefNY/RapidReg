@@ -147,7 +147,7 @@ public abstract class RecordListAdapter extends RecyclerView.Adapter<RecordListA
     }
 
     protected boolean isValidAge(String value) {
-        if (value == null) {
+        if (value == null || "".equals(value.trim())) {
             return false;
         }
         return Double.valueOf(value).intValue() >= 0;

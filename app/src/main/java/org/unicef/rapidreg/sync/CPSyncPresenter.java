@@ -22,14 +22,11 @@ import org.unicef.rapidreg.service.CaseFormService;
 import org.unicef.rapidreg.service.CasePhotoService;
 import org.unicef.rapidreg.service.CaseService;
 import org.unicef.rapidreg.service.FormRemoteService;
-import org.unicef.rapidreg.service.RecordService;
 import org.unicef.rapidreg.service.SyncCaseService;
 import org.unicef.rapidreg.service.SyncTracingService;
 import org.unicef.rapidreg.service.TracingFormService;
 import org.unicef.rapidreg.service.TracingPhotoService;
 import org.unicef.rapidreg.service.TracingService;
-import org.unicef.rapidreg.service.cache.ItemValuesMap;
-import org.unicef.rapidreg.utils.StreamUtil;
 import org.unicef.rapidreg.utils.TextUtils;
 import org.unicef.rapidreg.utils.Utils;
 
@@ -37,7 +34,6 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collections;
 import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Locale;
@@ -584,87 +580,5 @@ public class CPSyncPresenter extends BaseSyncPresenter {
                         },
                         throwable -> syncFail(throwable),
                         () -> syncPullFormSuccessfully());
-    }
-
-    @Override
-    public void produceCases(int number) {
-        List<Case> cases = caseService.getAll();
-        try {
-            if (cases.isEmpty()) {
-                return;
-            }
-            Case first = cases.get(0);
-
-            if (first == null) {
-                return;
-            }
-
-            Blob audioBlob = first.getAudio();
-            if (audioBlob != null) {
-                StreamUtil.writeFile(audioBlob.getBlob(), RecordService.AUDIO_FILE_PATH);
-            }
-
-            List<Long> casePhotos = casePhotoService.getIdsByCaseId(first.getId());
-            for (int i = 0; i < number; i++) {
-                first.setId(0);
-                first.setUniqueId(null);
-                first.setInternalId(null);
-                first.setInternalRev(null);
-
-                ItemValuesMap itemValues = ItemValuesMap.fromJson(new String(first.getContent()
-                        .getBlob()));
-                itemValues.removeItem(CaseService.CASE_ID);
-                Case savedCase = caseService.save(itemValues, Collections.EMPTY_LIST);
-                for (Long casePhotoId : casePhotos) {
-                    CasePhoto casePhoto = casePhotoService.getById(casePhotoId);
-                    casePhoto.setId(0);
-                    casePhoto.setCase(savedCase);
-                    casePhoto.save();
-                }
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    @Override
-    public void produceOtherCases(int number) {
-        List<Tracing> tracings = tracingService.getAll();
-        try {
-            if (tracings.isEmpty()) {
-                return;
-            }
-            Tracing first = tracings.get(0);
-
-            if (first == null) {
-                return;
-            }
-
-            Blob audioBlob = first.getAudio();
-            if (audioBlob != null) {
-                StreamUtil.writeFile(audioBlob.getBlob(), RecordService.AUDIO_FILE_PATH);
-            }
-
-            List<Long> tracingPhotos = tracingPhotoService.getIdsByTracingId(first.getId());
-            for (int i = 0; i < number; i++) {
-                first.setId(0);
-                first.setUniqueId(null);
-                first.setInternalId(null);
-                first.setInternalRev(null);
-
-                ItemValuesMap itemValues = ItemValuesMap.fromJson(new String(first.getContent()
-                        .getBlob()));
-                itemValues.removeItem(TracingService.TRACING_ID);
-                Tracing savedTracing = tracingService.save(itemValues, Collections.EMPTY_LIST);
-                for (Long tracingPhotoId : tracingPhotos) {
-                    TracingPhoto tracingPhoto = tracingPhotoService.getById(tracingPhotoId);
-                    tracingPhoto.setId(0);
-                    tracingPhoto.setTracing(savedTracing);
-                    tracingPhoto.save();
-                }
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 }

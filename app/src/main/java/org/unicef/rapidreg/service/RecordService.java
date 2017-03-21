@@ -10,7 +10,6 @@ import org.unicef.rapidreg.PrimeroAppConfiguration;
 import org.unicef.rapidreg.forms.Field;
 import org.unicef.rapidreg.forms.RecordForm;
 import org.unicef.rapidreg.forms.Section;
-import org.unicef.rapidreg.model.Incident;
 import org.unicef.rapidreg.model.RecordModel;
 import org.unicef.rapidreg.service.cache.ItemValuesMap;
 
@@ -101,7 +100,7 @@ public class RecordService {
         return itemValues.concatMultiStringsWithBlank(LOCATION);
     }
 
-    public  String generateUniqueId() {
+    public String generateUniqueId() {
         return UUID.randomUUID().toString();
     }
 
@@ -176,7 +175,7 @@ public class RecordService {
         public static final String GBV_DISABILITY_TYPE = "gbv_disability_type";
         public static final String GBV_UNACCOMPANIED_SEPARATED_STATUS = "unaccompanied_separated_status";
 
-        public static final String[] GBV_RELATED_ITEMS = new String[] {
+        public static final String[] GBV_RELATED_ITEMS = new String[]{
                 GBV_SURVIVOR_CODE,
                 GBV_SEX,
                 GBV_DATE_OF_BIRTH,

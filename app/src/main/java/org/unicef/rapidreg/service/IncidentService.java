@@ -94,7 +94,7 @@ public class IncidentService extends RecordService {
             conditionGroup.and(ageSearchCondition);
         }
 
-        if(!TextUtils.isEmpty(shortId)){
+        if (!TextUtils.isEmpty(shortId)) {
             conditionGroup.and(Condition.column(NameAlias.builder(RecordModel.COLUMN_SHORT_ID).build())
                     .like(getWrappedCondition(shortId)));
         }
@@ -149,7 +149,7 @@ public class IncidentService extends RecordService {
         incident.setTypeOfViolence(getTypeOfViolence(itemValues));
         incident.setLocation(getLocation(itemValues));
         incident.setServerUrl(TextUtils.lintUrl(PrimeroAppConfiguration.getApiBaseUrl()));
-        int age = itemValues.has(AGE) ? itemValues.getAsInt(AGE) : EMPTY_AGE;
+        int age = itemValues.getAsInt(AGE) != null ? itemValues.getAsInt(AGE) : EMPTY_AGE;
         incident.setAge(age);
         incident.setCaregiver(getCaregiverName(itemValues));
         incident.setRegistrationDate(Utils.getRegisterDateAsDdMmYyyy(itemValues.getAsString(DATE_OF_INTERVIEW)));
@@ -172,7 +172,7 @@ public class IncidentService extends RecordService {
         incident.setSurvivorCode(getSurvivorCode(itemValues));
         incident.setTypeOfViolence(getTypeOfViolence(itemValues));
         incident.setLocation(getLocation(itemValues));
-        int age = itemValues.getAsInt(AGE) != null ? itemValues.getAsInt(AGE) : 0;
+        int age = itemValues.getAsInt(AGE) != null ? itemValues.getAsInt(AGE) : EMPTY_AGE;
         incident.setAge(age);
         incident.setCaregiver(getCaregiverName(itemValues));
         incident.setSynced(false);

@@ -134,8 +134,6 @@ public class TextViewHolder extends BaseTextViewHolder {
                 String fieldVerifyKey = field.getDisplayName().get(defaultLanguage);
                 String sectionVerifyKey = field.getSectionName().get(defaultLanguage);
                 updateVerifyResultToMap(sectionVerifyKey, fieldVerifyKey, verifyResult);
-
-                saveValues(field);
             }
 
             @Override
@@ -143,7 +141,9 @@ public class TextViewHolder extends BaseTextViewHolder {
                 String verifyResult = verifyValue(getResult(), field);
                 if (!TextUtils.isEmpty(verifyResult)) {
                     Toast.makeText(context, verifyResult, Toast.LENGTH_SHORT).show();
+                    return;
                 }
+                saveValues(field);
             }
         });
     }

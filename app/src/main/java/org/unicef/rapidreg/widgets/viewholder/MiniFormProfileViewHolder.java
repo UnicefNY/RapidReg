@@ -75,7 +75,7 @@ public class MiniFormProfileViewHolder extends BaseViewHolder<Field> {
                 .REGISTRATION_DATE));
 
         String age = extractAge();
-        this.age.setText(age == null ? "---" : age);
+        this.age.setText(TextUtils.isEmpty(age) ? "---" : age);
     }
 
 

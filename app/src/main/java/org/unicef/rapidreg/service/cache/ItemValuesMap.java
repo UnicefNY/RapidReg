@@ -87,7 +87,7 @@ public class ItemValuesMap implements Serializable {
     }
 
     public Integer getAsInt(String key) {
-        if (values.get(key) == null) {
+        if (values.get(key) == null || "".equals(values.get(key).toString().trim())) {
             return null;
         }
         return Double.valueOf(values.get(key).toString()).intValue();

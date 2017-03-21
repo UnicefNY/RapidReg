@@ -47,9 +47,6 @@ public class SyncFragment extends MvpFragment<SyncView, BaseSyncPresenter> imple
     @BindView(R.id.btn_sync)
     Button syncButton;
 
-    @BindView(R.id.tv_produce_cases)
-    TextView tvProduceCases;
-
     @BindView(R.id.last_sync_time)
     TextView lastSyncTime;
 
@@ -318,37 +315,6 @@ public class SyncFragment extends MvpFragment<SyncView, BaseSyncPresenter> imple
                 .applicationComponent(PrimeroApplication.get(getActivity()).getComponent())
                 .fragmentModule(new FragmentModule(this))
                 .build();
-    }
-
-    @OnClick(R.id.tv_produce_cases)
-    public void onProduceCasesBtnClick() {
-        final EditText tvNumber = new EditText(getActivity());
-        tvNumber.setInputType(InputType.TYPE_CLASS_NUMBER);
-        tvNumber.setRawInputType(Configuration.KEYBOARD_12KEY);
-        tvNumber.setText("100");
-        new AlertDialog.Builder(getActivity())
-                .setView(tvNumber)
-                .setMessage("Please enter the case number.")
-                .setPositiveButton(R.string.ok, (dialog, which) -> presenter.produceCases(Integer.valueOf(tvNumber
-                        .getText().toString())))
-                .setNegativeButton(R.string.cancel, null)
-                .show();
-    }
-
-    @OnLongClick(R.id.tv_produce_cases)
-    public boolean onProduceOtherCasesBtnClick() {
-        final EditText tvNumber = new EditText(getActivity());
-        tvNumber.setInputType(InputType.TYPE_CLASS_NUMBER);
-        tvNumber.setRawInputType(Configuration.KEYBOARD_12KEY);
-        tvNumber.setText("100");
-        new AlertDialog.Builder(getActivity())
-                .setView(tvNumber)
-                .setMessage("Please enter the tracing/incident number.")
-                .setPositiveButton(R.string.ok, (dialog, which) -> presenter.produceOtherCases(Integer.valueOf
-                        (tvNumber.getText().toString())))
-                .setNegativeButton(R.string.cancel, null)
-                .show();
-        return true;
     }
 
     private void showSyncProgressDialog(String title) {

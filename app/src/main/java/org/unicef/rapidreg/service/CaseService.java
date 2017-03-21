@@ -224,7 +224,7 @@ public class CaseService extends RecordService {
         child.setName(getName(itemValues));
         String location = itemValues.has(LOCATION) ? itemValues.getAsString(LOCATION) : "";
         child.setLocation(location);
-        int age = itemValues.getAsInt(AGE) != null ? itemValues.getAsInt(AGE) : 0;
+        int age = itemValues.getAsInt(AGE) != null ? itemValues.getAsInt(AGE) : EMPTY_AGE;
         child.setAge(age);
         child.setCaregiver(getCaregiverName(itemValues));
         child.setRegistrationDate(Utils.getRegisterDateAsDdMmYyyy(itemValues.getAsString(REGISTRATION_DATE)));

@@ -171,7 +171,7 @@ public class TracingService extends RecordService {
         tracing.setLastUpdatedDate(date);
         tracing.setName(getName(itemValues));
 
-        int age = itemValues.getAsInt(RELATION_AGE) != null ? itemValues.getAsInt(RELATION_AGE) : 0;
+        int age = itemValues.getAsInt(RELATION_AGE) != null ? itemValues.getAsInt(RELATION_AGE) : EMPTY_AGE;
         tracing.setAge(age);
 
         tracing.setCaregiver(getCaregiverName(itemValues));

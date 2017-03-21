@@ -218,8 +218,4 @@ public abstract class BaseSyncPresenter extends MvpBasePresenter<SyncView> {
             getView().hideSyncProgressDialog();
         }
     }
-
-    public abstract void produceCases(int number);
-
-    public abstract void produceOtherCases(int number);
 }

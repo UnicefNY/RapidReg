@@ -1,7 +1,6 @@
 package org.unicef.rapidreg.widgets.viewholder;
 
 import android.content.Context;
-import android.text.TextUtils;
 import android.view.View;
 import android.widget.TextView;
 
@@ -11,6 +10,7 @@ import org.unicef.rapidreg.base.record.RecordActivity;
 import org.unicef.rapidreg.forms.Field;
 import org.unicef.rapidreg.service.cache.GlobalLocationCache;
 import org.unicef.rapidreg.service.cache.ItemValuesMap;
+import org.unicef.rapidreg.utils.TextUtils;
 
 import java.util.LinkedHashMap;
 
@@ -20,14 +20,13 @@ public abstract class BaseTextViewHolder extends BaseViewHolder<Field> {
     }
 
     protected void saveValues(final Field field) {
-        if (TextUtils.isEmpty(getValueView().getText())) {
-            itemValues.addItem(field.getName(), "");
+        String result = getResult();
+        if (!field.isNumericField() || !TextUtils.isEmpty(result)) {
+            itemValues.addItem(field.getName(), result);
             return;
         }
-        if (field.isNumericField()) {
-            itemValues.addItem(field.getName(), String.valueOf(getResult()));
-        } else {
-            itemValues.addItem(field.getName(), getResult());
+        if (TextUtils.isEmpty(result)){
+            itemValues.removeItem(field.getName());
         }
     }
 
