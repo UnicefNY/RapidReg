@@ -342,6 +342,7 @@ public class CPSyncPresenter extends BaseSyncPresenter {
         String internalId = casesJsonObject.get("_id").getAsString();
 
         Case item = caseService.getByInternalId(internalId);
+
         if (item != null) {
             setCaseProperties(casesJsonObject, item);
             item.update();
@@ -358,6 +359,7 @@ public class CPSyncPresenter extends BaseSyncPresenter {
     }
 
     private void setCaseProperties(JsonObject casesJsonObject, Case item) {
+        casesJsonObject.remove("histories");
         item.setInternalRev(casesJsonObject.get("_rev").getAsString());
         item.setOwnedBy(casesJsonObject.get("owned_by").getAsString());
         item.setCreatedBy(casesJsonObject.get("created_by").getAsString());
@@ -518,15 +520,8 @@ public class CPSyncPresenter extends BaseSyncPresenter {
     private void saveDownloadedTracings(JsonObject tracingsJsonObject) {
         String internalId = tracingsJsonObject.get("_id").getAsString();
         Tracing item = tracingService.getByInternalId(internalId);
-        String newRev = tracingsJsonObject.get("_rev").getAsString();
-        String registrationDate = tracingsJsonObject.get("inquiry_date").getAsString();
         if (item != null) {
-            item.setInternalRev(newRev);
-            item.setSynced(true);
-            item.setContent(new Blob(tracingsJsonObject.toString().getBytes()));
-            setAgeIfExists(item, tracingsJsonObject);
-            item.setOwnedBy(tracingsJsonObject.get("owned_by").getAsString());
-            item.setServerUrl(TextUtils.lintUrl(PrimeroAppConfiguration.getApiBaseUrl()));
+            setTracingRequestProperties(tracingsJsonObject, item);
             item.update();
             tracingPhotoService.deleteByTracingId(item.getId());
         } else {
@@ -534,18 +529,26 @@ public class CPSyncPresenter extends BaseSyncPresenter {
             item.setUniqueId(tracingsJsonObject.get("tracing_request_id").getAsString());
             item.setShortId(tracingsJsonObject.get("short_id").getAsString());
             item.setInternalId(tracingsJsonObject.get("_id").getAsString());
-            item.setInternalRev(newRev);
-            item.setRegistrationDate(Utils.getRegisterDateAsDdMmYyyy(registrationDate));
-            item.setCreatedBy(tracingsJsonObject.get("created_by").getAsString());
-            item.setOwnedBy(tracingsJsonObject.get("owned_by").getAsString());
-            item.setServerUrl(TextUtils.lintUrl(PrimeroAppConfiguration.getApiBaseUrl()));
-            item.setLastSyncedDate(Calendar.getInstance().getTime());
-            item.setLastUpdatedDate(Calendar.getInstance().getTime());
-            item.setSynced(true);
-            setAgeIfExists(item, tracingsJsonObject);
-            item.setContent(new Blob(tracingsJsonObject.toString().getBytes()));
+
+            setTracingRequestProperties(tracingsJsonObject, item);
             item.save();
         }
+    }
+
+    private void setTracingRequestProperties(JsonObject tracingsJsonObject, Tracing item) {
+        tracingsJsonObject.remove("histories");
+        String newRev = tracingsJsonObject.get("_rev").getAsString();
+        String registrationDate = tracingsJsonObject.get("inquiry_date").getAsString();
+        item.setInternalRev(newRev);
+        item.setRegistrationDate(Utils.getRegisterDateAsDdMmYyyy(registrationDate));
+        item.setCreatedBy(tracingsJsonObject.get("created_by").getAsString());
+        item.setOwnedBy(tracingsJsonObject.get("owned_by").getAsString());
+        item.setServerUrl(TextUtils.lintUrl(PrimeroAppConfiguration.getApiBaseUrl()));
+        item.setLastSyncedDate(Calendar.getInstance().getTime());
+        item.setLastUpdatedDate(Calendar.getInstance().getTime());
+        item.setSynced(true);
+        item.setContent(new Blob(tracingsJsonObject.toString().getBytes()));
+        setAgeIfExists(item, tracingsJsonObject);
     }
 
     private void updateTracingPhotos(String id, byte[] photoBytes) {

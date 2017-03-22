@@ -11,7 +11,6 @@ import android.widget.Toast;
 import com.ogaclejapan.smarttablayout.utils.v4.FragmentPagerItem;
 import com.ogaclejapan.smarttablayout.utils.v4.FragmentPagerItems;
 
-import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 import org.unicef.rapidreg.IntentSender;
@@ -23,7 +22,6 @@ import org.unicef.rapidreg.base.record.recordregister.RecordRegisterWrapperFragm
 import org.unicef.rapidreg.childcase.CaseActivity;
 import org.unicef.rapidreg.childcase.casephoto.CasePhotoAdapter;
 import org.unicef.rapidreg.event.CreateIncidentThruGBVCaseEvent;
-import org.unicef.rapidreg.event.RedirectIncidentEvent;
 import org.unicef.rapidreg.event.SaveCaseEvent;
 import org.unicef.rapidreg.forms.Section;
 import org.unicef.rapidreg.service.CaseService;
@@ -31,18 +29,18 @@ import org.unicef.rapidreg.service.RecordService;
 import org.unicef.rapidreg.service.cache.ItemValuesMap;
 import org.unicef.rapidreg.utils.Utils;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 
 import javax.inject.Inject;
 
 import butterknife.OnClick;
 
-import static org.unicef.rapidreg.childcase.CaseFeature.*;
+import static org.unicef.rapidreg.childcase.CaseFeature.DETAILS_CP_FULL;
+import static org.unicef.rapidreg.childcase.CaseFeature.DETAILS_GBV_FULL;
+import static org.unicef.rapidreg.childcase.CaseFeature.EDIT_FULL;
 import static org.unicef.rapidreg.childcase.caseregister.CaseRegisterPresenter.MODULE_CASE_CP;
 import static org.unicef.rapidreg.service.CaseService.CASE_ID;
 import static org.unicef.rapidreg.service.RecordService.MODULE;
-import static org.unicef.rapidreg.service.cache.ItemValuesMap.RecordProfile.ID;
 
 public class CaseRegisterWrapperFragment extends RecordRegisterWrapperFragment {
     public static final String TAG = CaseRegisterWrapperFragment.class.getSimpleName();
@@ -63,7 +61,8 @@ public class CaseRegisterWrapperFragment extends RecordRegisterWrapperFragment {
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle
+            savedInstanceState) {
         getComponent().inject(this);
         return super.onCreateView(inflater, container, savedInstanceState);
     }
@@ -76,7 +75,7 @@ public class CaseRegisterWrapperFragment extends RecordRegisterWrapperFragment {
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void saveCase(SaveCaseEvent event) {
-       caseRegisterPresenter.saveRecord(getRecordRegisterData(), getPhotoPathsData(), this);
+        caseRegisterPresenter.saveRecord(getRecordRegisterData(), getPhotoPathsData(), this);
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -84,7 +83,8 @@ public class CaseRegisterWrapperFragment extends RecordRegisterWrapperFragment {
         String caseId = getRecordRegisterData().getAsString(CASE_ID);
         Bundle extra = new Bundle();
         extra.putString(CASE_ID, caseId);
-        extra.putSerializable(RecordService.ITEM_VALUES, caseRegisterPresenter.filterGBVRelatedItemValues(getRecordRegisterData()));
+        extra.putSerializable(RecordService.ITEM_VALUES, caseRegisterPresenter.filterGBVRelatedItemValues
+                (getRecordRegisterData()));
 
         new IntentSender().showIncidentActivity(getActivity(), true, extra);
     }

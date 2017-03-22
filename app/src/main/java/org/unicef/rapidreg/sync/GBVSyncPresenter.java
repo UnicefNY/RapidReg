@@ -260,6 +260,7 @@ public class GBVSyncPresenter extends BaseSyncPresenter {
     }
 
     private void setCaseProperties(JsonObject casesJsonObject, Case item) {
+        casesJsonObject.remove("histories");
         item.setInternalRev(casesJsonObject.get("_rev").getAsString());
         item.setSynced(true);
         item.setContent(new Blob(casesJsonObject.toString().getBytes()));
@@ -368,6 +369,7 @@ public class GBVSyncPresenter extends BaseSyncPresenter {
     }
 
     private void setIncidentProperties(Incident item, JsonObject incidentsJsonObject) {
+        incidentsJsonObject.remove("histories");
         item.setLastSyncedDate(Calendar.getInstance().getTime());
         item.setLastUpdatedDate(Calendar.getInstance().getTime());
         String newRev = incidentsJsonObject.get("_rev").getAsString();
