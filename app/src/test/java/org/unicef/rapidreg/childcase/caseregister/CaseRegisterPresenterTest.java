@@ -174,7 +174,7 @@ public class CaseRegisterPresenterTest {
         assertThat("created_by should be right", actual.getAsString("created_by"), is("primero"));
         assertThat("previously_owned_by should be right", actual.getAsString("previously_owned_by"), is("primero"));
         assertThat("_id_normal_state should be right", actual.getAsString("_id_normal_state"), is(shortUUID));
-        assertThat("_id should be right", actual.getAsLong("_id"), is(123L));
+        assertThat("_id should be right", actual.getAsLong("_primary_id"), is(123L));
         assertThat("_registration_date should be right", actual.getAsString("_registration_date"),
                 is(SimpleDateFormat.getDateInstance(DateFormat.MEDIUM, Locale.US).format(date)));
         assertThat("registration_date should be right", actual.getAsString("registration_date"), is("15/12/2016"));
