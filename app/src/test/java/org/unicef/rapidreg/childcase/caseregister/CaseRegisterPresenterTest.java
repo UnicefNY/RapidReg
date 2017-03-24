@@ -1,7 +1,5 @@
 package org.unicef.rapidreg.childcase.caseregister;
 
-import android.view.View;
-
 import com.raizlabs.android.dbflow.data.Blob;
 
 import org.hamcrest.core.Is;
@@ -72,7 +70,7 @@ public class CaseRegisterPresenterTest {
                     "\"created_by\":\"primero\"," +
                     "\"previously_owned_by\":\"primero\"," +
                     "\"registration_date\":\"15/12/2016\"" +
-            "}";
+                    "}";
 
     @Before
     public void setUp() throws Exception {
@@ -115,7 +113,7 @@ public class CaseRegisterPresenterTest {
 
         assertThat("Should contain mini form field", actual.contains(miniFormField), is(true));
         assertThat("Should not contain full form field", actual.contains(otherField), is(false));
-        verify(caseFormService,times(1)).getCPTemplate();
+        verify(caseFormService, times(1)).getCPTemplate();
     }
 
     @Test
@@ -164,12 +162,15 @@ public class CaseRegisterPresenterTest {
         ItemValuesMap actual = caseRegisterPresenter.getItemValuesByRecordId(123L);
 
         assertThat("Should have same size of items", actual.getValues().size(), is(14));
-        assertThat("safety_plan_main_concern should be right", actual.getAsString("safety_plan_main_concern"), is("kkkk"));
-        assertThat("safety_plan_resources_economic should be right", actual.getAsString("safety_plan_resources_economic"), is("hjvgh"));
+        assertThat("safety_plan_main_concern should be right", actual.getAsString("safety_plan_main_concern"), is
+                ("kkkk"));
+        assertThat("safety_plan_resources_economic should be right", actual.getAsString
+                ("safety_plan_resources_economic"), is("hjvgh"));
         assertThat("consent_for_services should be right", actual.getAsBoolean("consent_for_services"), is(true));
         assertThat("module_id should be right", actual.getAsString("module_id"), is("primeromodule-gbv"));
         assertThat("case_id_display should be right", actual.getAsString("case_id_display"), is("1cb7a98"));
-        assertThat("case_id should be right", actual.getAsString("case_id"), is("6cd8cee7-3dea-4417-ba05-9b0b81cb7a98"));
+        assertThat("case_id should be right", actual.getAsString("case_id"), is
+                ("6cd8cee7-3dea-4417-ba05-9b0b81cb7a98"));
         assertThat("owned_by should be right", actual.getAsString("owned_by"), is("primero"));
         assertThat("created_by should be right", actual.getAsString("created_by"), is("primero"));
         assertThat("previously_owned_by should be right", actual.getAsString("previously_owned_by"), is("primero"));

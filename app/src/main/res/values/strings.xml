@@ -184,5 +184,6 @@
     <string name="invalid_date_msg">Date should not be in future.</string>
     <string name="warning">Warning</string>
     <string name="invalid_value">Invalid Value</string>
+    <string name="no_filed_exists_in_subform">No field exists in current subform.</string>
 
 </resources>

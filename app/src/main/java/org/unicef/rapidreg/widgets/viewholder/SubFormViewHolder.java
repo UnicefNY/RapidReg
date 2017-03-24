@@ -10,12 +10,14 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.unicef.rapidreg.PrimeroAppConfiguration;
 import org.unicef.rapidreg.R;
 import org.unicef.rapidreg.base.record.RecordActivity;
 import org.unicef.rapidreg.base.record.recordregister.RecordRegisterAdapter;
 import org.unicef.rapidreg.forms.Field;
+import org.unicef.rapidreg.forms.Section;
 import org.unicef.rapidreg.service.cache.ItemValuesMap;
 import org.unicef.rapidreg.widgets.dialog.MessageDialog;
 
@@ -23,7 +25,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 
 import butterknife.BindView;
@@ -56,6 +57,9 @@ public class SubFormViewHolder extends BaseViewHolder<Field> {
 
     @Override
     public void setValue(Field field) {
+        if (field.getSubForm() == null) {
+            return;
+        }
         fields = removeSeparatorFields(field.getSubForm().getFields());
         fieldParent = field.getName();
         displayParent = field.getDisplayName().get(PrimeroAppConfiguration.getDefaultLanguage());
@@ -70,6 +74,11 @@ public class SubFormViewHolder extends BaseViewHolder<Field> {
     @Override
     public void setOnClickListener(Field field) {
         addSubFormBtn.setOnClickListener(v -> {
+            Section subForm = field.getSubForm();
+            if (subForm == null) {
+                Toast.makeText(context, R.string.no_filed_exists_in_subform, Toast.LENGTH_SHORT).show();
+                return;
+            }
             itemValues.addChild(fieldParent, new HashMap<>());
             addSubForm(itemValues.getChildrenSize(fieldParent) - 1, true);
         });
@@ -266,7 +275,7 @@ public class SubFormViewHolder extends BaseViewHolder<Field> {
         int subformSize = visibleStatus.size() > subformDropDownStatus.size() ?
                 subformDropDownStatus.size() : visibleStatus.size();
 
-        for (int index = 0; index < subformSize; index ++) {
+        for (int index = 0; index < subformSize; index++) {
             boolean status = visibleStatus.get(index);
             subformDropDownStatus.remove(index);
             subformDropDownStatus.add(index, status);

@@ -21,7 +21,7 @@
             android:id="@+id/first_radio_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/size_10"
+            android:layout_marginLeft="@dimen/size_24"
             android:scaleX="@dimen/button_icon_scale"
             android:scaleY="@dimen/button_icon_scale" />
 
