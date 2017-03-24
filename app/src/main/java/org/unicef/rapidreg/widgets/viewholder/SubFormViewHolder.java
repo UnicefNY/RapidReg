@@ -48,14 +48,16 @@ public class SubFormViewHolder extends BaseViewHolder<Field> {
 
     @Override
     public void setValue(Field field) {
-        fields = removeSeparatorFields(field.getSubForm().getFields());
         fieldParent = field.getName();
         displayParent = field.getDisplayName().get(Locale.getDefault().getLanguage());
-
-        attachParentToFields(fields, fieldParent);
         addSubFormBtn.setText(String.format("%s %s", context.getString(R.string.add), displayParent));
         addSubFormBtn.setVisibility(activity.getCurrentFeature().isEditMode() ?
                 View.VISIBLE : View.GONE);
+        if (field.getSubForm() == null) {
+            return;
+        }
+        fields = removeSeparatorFields(field.getSubForm().getFields());
+        attachParentToFields(fields, fieldParent);
         restoreSubForms();
     }
 
