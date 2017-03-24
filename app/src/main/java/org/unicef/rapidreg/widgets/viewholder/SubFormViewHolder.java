@@ -57,17 +57,16 @@ public class SubFormViewHolder extends BaseViewHolder<Field> {
 
     @Override
     public void setValue(Field field) {
+        fieldParent = field.getName();
+        displayParent = field.getDisplayName().get(PrimeroAppConfiguration.getDefaultLanguage());
+        addSubFormBtn.setText(String.format("%s %s", context.getString(R.string.add), displayParent));
+        addSubFormBtn.setVisibility(activity.getCurrentFeature().isEditMode() ?
+                View.VISIBLE : GONE);
         if (field.getSubForm() == null) {
             return;
         }
         fields = removeSeparatorFields(field.getSubForm().getFields());
-        fieldParent = field.getName();
-        displayParent = field.getDisplayName().get(PrimeroAppConfiguration.getDefaultLanguage());
-
         attachParentToFields(fields, fieldParent);
-        addSubFormBtn.setText(String.format("%s %s", context.getString(R.string.add), displayParent));
-        addSubFormBtn.setVisibility(activity.getCurrentFeature().isEditMode() ?
-                View.VISIBLE : GONE);
         restoreSubForms();
     }
 
@@ -96,27 +95,16 @@ public class SubFormViewHolder extends BaseViewHolder<Field> {
 
     private void initDeleteBtn(ViewGroup container) {
         final Button deleteBtn = (Button) container.findViewById(R.id.delete_subform);
-        deleteBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                MessageDialog messageDialog = new MessageDialog(context);
-                messageDialog.setTitle(R.string.delete);
-                messageDialog.setMessage(R.string.delete_subform);
-                messageDialog.setPositiveButton(R.string.delete, new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        SubFormViewHolder.this.deleteSubForm(view);
-                        messageDialog.dismiss();
-                    }
-                });
-                messageDialog.setNegativeButton(R.string.cancel, new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        messageDialog.dismiss();
-                    }
-                });
-                messageDialog.show();
-            }
+        deleteBtn.setOnClickListener(view -> {
+            MessageDialog messageDialog = new MessageDialog(context);
+            messageDialog.setTitle(R.string.delete);
+            messageDialog.setMessage(R.string.delete_subform);
+            messageDialog.setPositiveButton(R.string.delete, v -> {
+                SubFormViewHolder.this.deleteSubForm(view);
+                messageDialog.dismiss();
+            });
+            messageDialog.setNegativeButton(R.string.cancel, v -> messageDialog.dismiss());
+            messageDialog.show();
         });
         deleteBtn.setVisibility(activity.getCurrentFeature().isEditMode() ?
                 View.VISIBLE : GONE);
