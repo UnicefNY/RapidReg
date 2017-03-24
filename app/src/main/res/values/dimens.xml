@@ -78,6 +78,10 @@
     <dimen name="sync_padding_top_bottom">9dp</dimen>
     <dimen name="sync_value_padding_top_bottom">26dp</dimen>
     <dimen name="sync_button_padding_top">80dp</dimen>
+    <dimen name="login_username_top_to_margin">100dp</dimen>
+    <dimen name="login_edit_text_top_margin">8dp</dimen>
+    <dimen name="login_change_url_top_margin">10dp</dimen>
+    <dimen name="login_button_top_margin">25dp</dimen>
     <!--sync end-->
 
 
