@@ -112,6 +112,7 @@
     <string name="tracing_request">Tracing request</string>
     <string name="not_sync_promote">Not synced yet</string>
     <string name="produce_cases_successfully_msg">Produce cases complete!</string>
+    <string name="no_filed_exists_in_subform">No field exists in current subform.</string>
     <!--Sync-->
 
     <!--Transparent theme-->

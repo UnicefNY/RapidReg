@@ -12,11 +12,13 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.unicef.rapidreg.R;
 import org.unicef.rapidreg.base.RecordActivity;
 import org.unicef.rapidreg.base.RecordRegisterAdapter;
 import org.unicef.rapidreg.forms.Field;
+import org.unicef.rapidreg.forms.Section;
 import org.unicef.rapidreg.service.cache.ItemValuesMap;
 
 import java.util.ArrayList;
@@ -62,10 +64,14 @@ public class SubFormViewHolder extends BaseViewHolder<Field> {
     }
 
     @Override
-    public void setOnClickListener(Field field) {
+    public void setOnClickListener(final Field field) {
         addSubFormBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (field.getSubForm() == null) {
+                    Toast.makeText(context, R.string.no_filed_exists_in_subform, Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 itemValues.addChild(fieldParent, new HashMap<String, Object>());
                 addSubForm(itemValues.getChildrenSize(fieldParent) - 1);
             }
