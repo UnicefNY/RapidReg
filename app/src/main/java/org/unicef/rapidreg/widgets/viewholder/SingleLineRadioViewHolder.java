@@ -3,7 +3,6 @@ package org.unicef.rapidreg.widgets.viewholder;
 import android.content.Context;
 import android.text.TextUtils;
 import android.view.View;
-import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
@@ -48,13 +47,27 @@ public class SingleLineRadioViewHolder extends BaseViewHolder<Field> {
         if (isRequired(field)) {
             labelText += " (Required)";
         }
-        options = field.getSelectOptions();
-        firstOption.setText(options.get(0));
-        secondOption.setText(options.get(1));
 
+        firstOption.setVisibility(View.GONE);
+        secondOption.setVisibility(View.GONE);
+
+        options = field.getSelectOptions();
+
+        if (options.isEmpty()) {
+            return;
+        }
+
+        firstOption.setVisibility(View.VISIBLE);
+        firstOption.setText(options.get(0));
         labelView.setHint(labelText);
         disableUneditableField(isEditable(field), firstOption);
-        disableUneditableField(isEditable(field), secondOption);
+
+        if (options.size() >= 2) {
+            secondOption.setVisibility(View.VISIBLE);
+            secondOption.setText(options.get(1));
+            disableUneditableField(isEditable(field), secondOption);
+        }
+
         setEditableBackgroundStyle(isEditable(field));
 
         if (isSubFormField(field)) {
