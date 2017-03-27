@@ -24,15 +24,12 @@ import org.unicef.rapidreg.service.IncidentService;
 import org.unicef.rapidreg.service.RecordService;
 import org.unicef.rapidreg.service.SyncCaseService;
 import org.unicef.rapidreg.service.SyncIncidentService;
-import org.unicef.rapidreg.service.cache.ItemValuesMap;
 import org.unicef.rapidreg.utils.TextUtils;
 import org.unicef.rapidreg.utils.Utils;
 
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collections;
 import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Locale;
@@ -266,7 +263,7 @@ public class GBVSyncPresenter extends BaseSyncPresenter {
         item.setContent(new Blob(casesJsonObject.toString().getBytes()));
         item.setServerUrl(TextUtils.lintUrl(PrimeroAppConfiguration.getApiBaseUrl()));
         item.setOwnedBy(casesJsonObject.get("owned_by").getAsString());
-        item.setName(casesJsonObject.get("name").getAsString());
+        item.setName(casesJsonObject.has("name") ? casesJsonObject.get("name").getAsString() : null);
         item.setCaregiver(casesJsonObject.has("caregiver") ? casesJsonObject.get("caregiver").getAsString() : null);
         setAgeIfExists(item, casesJsonObject);
     }
