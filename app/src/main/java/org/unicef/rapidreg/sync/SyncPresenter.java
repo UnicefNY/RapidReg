@@ -228,7 +228,8 @@ public class SyncPresenter extends MvpBasePresenter<SyncView> {
                 })
                 .map(new Func1<Pair<Tracing, Response<JsonElement>>, Pair<Tracing, Response<JsonElement>>>() {
                     @Override
-                    public Pair<Tracing, Response<JsonElement>> call(Pair<Tracing, Response<JsonElement>> tracingResponsePair) {
+                    public Pair<Tracing, Response<JsonElement>> call(Pair<Tracing, Response<JsonElement>>
+                                                                             tracingResponsePair) {
                         try {
                             Response<JsonElement> jsonElementResponse = tracingResponsePair.second;
                             JsonArray photoKeys = jsonElementResponse.body().getAsJsonObject().get("photo_keys")
@@ -414,7 +415,8 @@ public class SyncPresenter extends MvpBasePresenter<SyncView> {
                     public Object call(JsonObject jsonObject) {
                         String id = jsonObject.get("_id").getAsString();
                         String photoKey = jsonObject.get("photo_key").getAsString();
-                        Response<ResponseBody> response = syncService.getCasePhoto(id, photoKey, PhotoConfig.RESIZE_FOR_WEB)
+                        Response<ResponseBody> response = syncService.getCasePhoto(id, photoKey, PhotoConfig
+                                .RESIZE_FOR_WEB)
                                 .toBlocking()
                                 .first();
                         try {
@@ -523,7 +525,8 @@ public class SyncPresenter extends MvpBasePresenter<SyncView> {
                     @Override
                     public Response<JsonElement> call(JsonObject jsonObject) {
 
-                        Observable<Response<JsonElement>> responseObservable = syncTracingService.get(jsonObject.get("_id")
+                        Observable<Response<JsonElement>> responseObservable = syncTracingService.get(jsonObject.get
+                                ("_id")
                                 .getAsString(), "en", true);
                         Response<JsonElement> response = responseObservable.toBlocking().first();
                         if (!response.isSuccessful()) {
@@ -581,7 +584,8 @@ public class SyncPresenter extends MvpBasePresenter<SyncView> {
                     public Object call(JsonObject jsonObject) {
                         String id = jsonObject.get("_id").getAsString();
                         String photoKey = jsonObject.get("photo_key").getAsString();
-                        Response<ResponseBody> response = syncTracingService.getPhoto(id, photoKey, "1080").toBlocking().first();
+                        Response<ResponseBody> response = syncTracingService.getPhoto(id, photoKey, "1080")
+                                .toBlocking().first();
                         try {
                             updateTracingPhotos(id, response.body().bytes());
                         } catch (IOException e) {
@@ -630,7 +634,7 @@ public class SyncPresenter extends MvpBasePresenter<SyncView> {
             item.setInternalRev(newRev);
             item.setSynced(true);
             item.setContent(new Blob(casesJsonObject.toString().getBytes()));
-            item.setName(casesJsonObject.get("name").getAsString());
+            item.setName(casesJsonObject.has("name") ? casesJsonObject.get("name").getAsString() : null);
             item.setAge(casesJsonObject.get("age").getAsInt());
             //TODO set caregiver
             if (casesJsonObject.get("caregiver") != null) {
@@ -651,7 +655,7 @@ public class SyncPresenter extends MvpBasePresenter<SyncView> {
             item.setLastUpdatedDate(Calendar.getInstance().getTime());
             item.setSynced(true);
             item.setContent(new Blob(casesJsonObject.toString().getBytes()));
-            item.setName(casesJsonObject.get("name").getAsString());
+            item.setName(casesJsonObject.has("name") ? casesJsonObject.get("name").getAsString() : null);
             item.setAge(casesJsonObject.get("age").getAsInt());
             //TODO set caregiver
             if (casesJsonObject.get("caregiver") != null) {
