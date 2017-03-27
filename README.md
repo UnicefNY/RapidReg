@@ -55,5 +55,4 @@ Android load strings from res/values/strings.xml by default.
   This will cause the emulator to restart. Once the Home screen appears again, re-launch your application, 
   and the application launches with the new locale.
 - Reset default locale in device Settings.
-  
 
