@@ -95,6 +95,7 @@ public class SyncTracingServiceImpl extends BaseRetrofitService<SyncTracingsRepo
 
         item.setInternalId(responseJsonObject.get("_id").getAsString());
         item.setInternalRev(responseJsonObject.get("_rev").getAsString());
+        responseJsonObject.remove("histories");
         item.setContent(new Blob(responseJsonObject.toString().getBytes()));
         item.update();
 

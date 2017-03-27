@@ -51,6 +51,7 @@ public class SyncIncidentServiceImpl extends BaseRetrofitService<SyncIncidentRep
         item.setInternalRev(responseJsonObject.get("_rev").getAsString());
         item.setLocation(responseJsonObject.has(RecordService.LOCATION) ? responseJsonObject.get(RecordService
                 .LOCATION).getAsString() : null);
+        responseJsonObject.remove("histories");
         item.setContent(new Blob(responseJsonObject.toString().getBytes()));
         item.update();
 

@@ -99,6 +99,7 @@ public class SyncCaseServiceImpl extends BaseRetrofitService<SyncCaseRepository>
         item.setInternalRev(responseJsonObject.get("_rev").getAsString());
         item.setCaregiver(responseJsonObject.has(CAREGIVER_NAME) ? responseJsonObject.get(CAREGIVER_NAME).getAsString() :
                 null);
+        responseJsonObject.remove("histories");
         item.setContent(new Blob(responseJsonObject.toString().getBytes()));
         item.update();
 
