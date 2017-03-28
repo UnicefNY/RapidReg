@@ -1,6 +1,5 @@
 package org.unicef.rapidreg.service.impl;
 
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 import org.unicef.rapidreg.PrimeroAppConfiguration;
@@ -9,14 +8,11 @@ import org.unicef.rapidreg.repository.SystemSettingsDao;
 import org.unicef.rapidreg.repository.remote.SystemSettingRepository;
 import org.unicef.rapidreg.service.BaseRetrofitService;
 import org.unicef.rapidreg.service.SystemSettingsService;
-import org.unicef.rapidreg.service.cache.GlobalLocationCache;
 
 import java.util.concurrent.TimeUnit;
 
-import retrofit2.Response;
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Func1;
 import rx.schedulers.Schedulers;
 
 public class SystemSettingsServiceImpl extends BaseRetrofitService<SystemSettingRepository> implements
@@ -31,7 +27,7 @@ public class SystemSettingsServiceImpl extends BaseRetrofitService<SystemSetting
 
     @Override
     public Observable<SystemSettings> getSystemSettings() {
-        return getRepository(SystemSettingRepository.class).getSystemSettings()
+        return getRepository(SystemSettingRepository.class).getSystemSettings(PrimeroAppConfiguration.getCookie())
                 .map(response -> {
                     SystemSettings currentSystemSettings = new SystemSettings();
                     currentSystemSettings.setServerUrl(PrimeroAppConfiguration.getApiBaseUrl());

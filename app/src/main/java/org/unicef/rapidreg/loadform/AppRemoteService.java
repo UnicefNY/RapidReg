@@ -132,7 +132,6 @@ public class AppRemoteService extends Service {
     }
 
     public class AppRemoteBinder extends Binder {
-
         private volatile boolean isCaseFormSyncFail;
         private volatile boolean isTracingRequestFormSyncFail;
         private volatile boolean isIncidentFormSyncFail;
