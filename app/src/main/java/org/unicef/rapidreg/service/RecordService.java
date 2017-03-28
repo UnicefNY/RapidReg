@@ -49,6 +49,7 @@ public class RecordService {
     public static final String SURVIVOR_CODE = "survivor_code";
     public static final String TYPE_OF_VIOLENCE = "type_of_incident_violence";
     public static final String LOCATION = "location";
+    public static final String INCIDENT_LOCATION = "incident_location";
 
     public static final String MODULE_GBV_CASE = "primeromodule-gbv";
     public static final String MODULE_CP_CASE = "primeromodule-cp";
@@ -97,7 +98,7 @@ public class RecordService {
     }
 
     public String getLocation(ItemValuesMap itemValues) {
-        return itemValues.concatMultiStringsWithBlank(LOCATION);
+        return itemValues.concatMultiStringsWithBlank(INCIDENT_LOCATION);
     }
 
     public String generateUniqueId() {

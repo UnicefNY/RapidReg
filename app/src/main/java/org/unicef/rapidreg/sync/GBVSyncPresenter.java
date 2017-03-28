@@ -374,8 +374,8 @@ public class GBVSyncPresenter extends BaseSyncPresenter {
         item.setServerUrl(TextUtils.lintUrl(PrimeroAppConfiguration.getApiBaseUrl()));
         item.setSynced(true);
         item.setContent(new Blob(incidentsJsonObject.toString().getBytes()));
-        item.setLocation(incidentsJsonObject.has(RecordService.LOCATION) ? incidentsJsonObject.get(RecordService
-                .LOCATION).getAsString() : null);
+        item.setLocation(incidentsJsonObject.has(RecordService.INCIDENT_LOCATION) ? incidentsJsonObject.get(RecordService
+                .INCIDENT_LOCATION).getAsString() : null);
         if (incidentsJsonObject.has(COLUMN_INCIDENT_CASE_ID)) {
             String incidentCaseId = incidentsJsonObject.get(COLUMN_INCIDENT_CASE_ID).getAsString();
             item.setIncidentCaseId(incidentCaseId);

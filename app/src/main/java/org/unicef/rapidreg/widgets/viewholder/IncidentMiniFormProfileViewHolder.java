@@ -7,6 +7,7 @@ import android.widget.TextView;
 import org.unicef.rapidreg.PrimeroAppConfiguration;
 import org.unicef.rapidreg.R;
 import org.unicef.rapidreg.forms.Field;
+import org.unicef.rapidreg.service.RecordService;
 import org.unicef.rapidreg.service.cache.ItemValuesMap;
 import org.unicef.rapidreg.utils.TextUtils;
 
@@ -42,7 +43,7 @@ public class IncidentMiniFormProfileViewHolder extends MiniFormProfileViewHolder
         super.setValue(field);
         containerRecordListItem.setVisibility(View.GONE);
         containerIncidentListItem.setVisibility(View.VISIBLE);
-        String locationText = TextUtils.truncateByDoubleColons(itemValues.getAsString("location"),
+        String locationText = TextUtils.truncateByDoubleColons(itemValues.getAsString(RecordService.INCIDENT_LOCATION),
                 PrimeroAppConfiguration.getCurrentSystemSettings().getDistrictLevel());
         incidentLocation.setText(TextUtils.isEmpty(locationText) ? "---" : locationText);
         incidentRegistrationDate.setText(itemValues.getAsString(ItemValuesMap.RecordProfile
