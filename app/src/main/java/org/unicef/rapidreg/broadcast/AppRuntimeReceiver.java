@@ -1,21 +1,12 @@
 package org.unicef.rapidreg.broadcast;
 
-import android.app.ActivityManager;
 import android.content.BroadcastReceiver;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.util.Log;
 
-import org.unicef.rapidreg.AppRuntime;
-import org.unicef.rapidreg.IntentSender;
-import org.unicef.rapidreg.PrimeroAppConfiguration;
-import org.unicef.rapidreg.PrimeroApplication;
 import org.unicef.rapidreg.login.AccountManager;
-import org.unicef.rapidreg.login.LoginActivity;
-
-import java.util.List;
 
 public class AppRuntimeReceiver extends BroadcastReceiver {
     private static final String TAG = AppRuntimeReceiver.class.getSimpleName();
@@ -31,7 +22,8 @@ public class AppRuntimeReceiver extends BroadcastReceiver {
 
     private Intent previousIntent;
 
-    public AppRuntimeReceiver() {}
+    public AppRuntimeReceiver() {
+    }
 
     @Override
     public void onReceive(Context context, Intent intent) {

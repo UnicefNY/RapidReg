@@ -178,7 +178,7 @@ public class CPSyncPresenter extends BaseSyncPresenter {
                         }
                     } catch (Exception e) {
                         e.printStackTrace();
-//                        throw new RuntimeException(e);
+                        throw new RuntimeException(e);
                     }
                     return tracingResponsePair;
                 })
@@ -539,7 +539,7 @@ public class CPSyncPresenter extends BaseSyncPresenter {
         tracingsJsonObject.remove("histories");
         String newRev = tracingsJsonObject.get("_rev").getAsString();
         item.setInternalRev(newRev);
-        item.setRegistrationDate(Utils.getRegisterDateAsDdMmYyyy(tracingsJsonObject.get("inquiry_date").getAsString()));
+        item.setRegistrationDate(Utils.getRegisterDateByYyyyMmDd(tracingsJsonObject.get("inquiry_date").getAsString()));
         item.setCreatedBy(tracingsJsonObject.get("created_by").getAsString());
         item.setOwnedBy(tracingsJsonObject.get("owned_by").getAsString());
         item.setServerUrl(TextUtils.lintUrl(PrimeroAppConfiguration.getApiBaseUrl()));
