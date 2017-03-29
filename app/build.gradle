@@ -31,7 +31,7 @@ android {
                     }
                     def formattedDate = new Date().format('MMdd')
                     def newName = output.outputFile.name
-                    newName = newName.replace("app-", "$project.ext.appName-$defaultConfig.versionName")
+                    newName = newName.replace("app-", "$project.ext.appName-$defaultConfig.versionName"+formattedDate)
                     newName = newName.replace("debug", "")
 
                     output.outputFile = new File(output.outputFile.parent, newName)
@@ -48,7 +48,11 @@ android {
                     project.ext { appName = 'RapidReg' }
                     def formattedDate = new Date().format('yyyyMMdd')
                     def newName = output.outputFile.name
-                    newName = newName.replace("app-", "$project.ext.appName-$defaultConfig.versionName"+)
+//                    def buildNumber = System.getenv("BUILD_NUMBER")
+//                    if(buildNumber!=null){
+//
+//                    }
+                    newName = newName.replace("app-", "$project.ext.appName-$defaultConfig.versionName" + buildNumber + formattedDate)
                     newName = newName.replace("release", "")
                     output.outputFile = new File(output.outputFile.parent, newName)
                 }
