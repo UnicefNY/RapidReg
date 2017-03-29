@@ -23,7 +23,7 @@ android {
     }
     buildTypes {
         debug {
-            applicationIdSuffix "v2.6"
+            applicationIdSuffix ".debug"
             applicationVariants.all { variant ->
                 variant.outputs.each { output ->
                     project.ext { 
@@ -31,7 +31,9 @@ android {
                     }
                     def formattedDate = new Date().format('MMdd')
                     def newName = output.outputFile.name
-                    newName = newName.replace("app-", "$project.ext.appName-")
+                    newName = newName.replace("app-", "$project.ext.appName-$defaultConfig.versionName")
+                    newName = newName.replace("debug", "")
+
                     output.outputFile = new File(output.outputFile.parent, newName)
                 }
             }
@@ -46,7 +48,8 @@ android {
                     project.ext { appName = 'RapidReg' }
                     def formattedDate = new Date().format('yyyyMMdd')
                     def newName = output.outputFile.name
-                    newName = newName.replace("app-", "$project.ext.appName-")
+                    newName = newName.replace("app-", "$project.ext.appName-$defaultConfig.versionName"+)
+                    newName = newName.replace("release", "")
                     output.outputFile = new File(output.outputFile.parent, newName)
                 }
             }
