@@ -7,11 +7,16 @@ android {
     buildToolsVersion "23.0.3"
 
     defaultConfig {
+        def buildNumber = System.getenv("BUILD_NUMBER") == null ? '' : System.getenv("BUILD_NUMBER")
+        if (buildNumber != '') {
+            buildNumber = '0000'+ buildNumber
+            buildNumber = buildNumber.reverse().take(4).reverse()
+        }
         applicationId "org.unicef.rapidreg"
         minSdkVersion 15
         targetSdkVersion 19
         versionCode 2
-        versionName "v2.6"
+        versionName "2.6" + "." + buildNumber + new Date().format('MMdd')
     }
     signingConfigs {
         release {
@@ -29,14 +34,8 @@ android {
                     project.ext {
                         appName = 'RapidReg'
                     }
-                    def formattedDate = new Date().format('MMdd')
                     def newName = output.outputFile.name
-                    def buildNumber = System.getenv("BUILD_NUMBER") == null ? '' : System.getenv("BUILD_NUMBER")
-                    if (buildNumber != '') {
-                        buildNumber = '0000'+ buildNumber
-                        buildNumber = buildNumber.reverse().take(4).reverse()
-                    }
-                    newName = newName.replace("app-", "$project.ext.appName-$defaultConfig.versionName"+"."+"$buildNumber$formattedDate")
+                    newName = newName.replace("app-", "$project.ext.appName-v$defaultConfig.versionName")
                     newName = newName.replace("debug", "")
 
                     output.outputFile = new File(output.outputFile.parent, newName)
@@ -51,14 +50,8 @@ android {
             applicationVariants.all { variant ->
                 variant.outputs.each { output ->
                     project.ext { appName = 'RapidReg' }
-                    def formattedDate = new Date().format('yyyyMMdd')
                     def newName = output.outputFile.name
-                    def buildNumber = System.getenv("BUILD_NUMBER") == null ? '' : System.getenv("BUILD_NUMBER")
-                    if (buildNumber != '') {
-                        buildNumber = '0000'+ buildNumber
-                        buildNumber = buildNumber.reverse().take(4).reverse()
-                    }
-                    newName = newName.replace("app-", "$project.ext.appName-$defaultConfig.versionName" + "." + "$buildNumber$formattedDate")
+                    newName = newName.replace("app-", "$project.ext.appName-v$defaultConfig.versionName")
                     newName = newName.replace("release", "")
                     output.outputFile = new File(output.outputFile.parent, newName)
                 }
