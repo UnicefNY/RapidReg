@@ -86,7 +86,7 @@ public class RecordService {
     }
 
     public String getCurrentRegistrationDateAsString() {
-        return new SimpleDateFormat("dd/MM/yyyy").format(new java.util.Date());
+        return new SimpleDateFormat("yyyy/MM/dd").format(new java.util.Date());
     }
 
     public String getSurvivorCode(ItemValuesMap itemValues) {

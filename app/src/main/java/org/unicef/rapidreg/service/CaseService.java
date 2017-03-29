@@ -189,7 +189,7 @@ public class CaseService extends RecordService {
         int age = itemValues.getAsInt(AGE) != null ? itemValues.getAsInt(AGE) : EMPTY_AGE;
         child.setAge(age);
         child.setCaregiver(getCaregiverName(itemValues));
-        child.setRegistrationDate(Utils.getRegisterDateAsDdMmYyyy(itemValues.getAsString(REGISTRATION_DATE)));
+        child.setRegistrationDate(Utils.getRegisterDateByYyyyMmDd(itemValues.getAsString(REGISTRATION_DATE)));
         child.setAudio(audioFileDefault);
         child.setCreatedBy(username);
         child.setOwnedBy(username);
@@ -224,7 +224,7 @@ public class CaseService extends RecordService {
         int age = itemValues.getAsInt(AGE) != null ? itemValues.getAsInt(AGE) : EMPTY_AGE;
         child.setAge(age);
         child.setCaregiver(getCaregiverName(itemValues));
-        child.setRegistrationDate(Utils.getRegisterDateAsDdMmYyyy(itemValues.getAsString(REGISTRATION_DATE)));
+        child.setRegistrationDate(Utils.getRegisterDateByYyyyMmDd(itemValues.getAsString(REGISTRATION_DATE)));
         child.setAudio(audioFileDefault);
         child.setSynced(false);
 

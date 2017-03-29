@@ -32,12 +32,10 @@ android {
                     def formattedDate = new Date().format('MMdd')
                     def newName = output.outputFile.name
                     def buildNumber = System.getenv("BUILD_NUMBER") == null ? '' : System.getenv("BUILD_NUMBER")
-                    System.out.print("pre = $buildNumber")
                     if (buildNumber != '') {
                         buildNumber = '0000'+ buildNumber
                         buildNumber = buildNumber.reverse().take(4).reverse()
                     }
-                    System.out.print("post = $buildNumber")
                     newName = newName.replace("app-", "$project.ext.appName-$defaultConfig.versionName"+"."+"$buildNumber$formattedDate")
                     newName = newName.replace("debug", "")
 

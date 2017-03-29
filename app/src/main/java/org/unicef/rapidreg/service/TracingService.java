@@ -17,6 +17,7 @@ import org.unicef.rapidreg.repository.impl.TracingPhotoDaoImpl;
 import org.unicef.rapidreg.service.cache.ItemValuesMap;
 import org.unicef.rapidreg.utils.StreamUtil;
 import org.unicef.rapidreg.utils.TextUtils;
+import org.unicef.rapidreg.utils.Utils;
 
 import java.io.IOException;
 import java.sql.Date;
@@ -24,7 +25,7 @@ import java.util.Calendar;
 import java.util.List;
 
 import static org.unicef.rapidreg.model.RecordModel.EMPTY_AGE;
-import static org.unicef.rapidreg.utils.Utils.getRegisterDateAsDdMmYyyy;
+import static org.unicef.rapidreg.utils.Utils.getRegisterDateByYyyyMmDd;
 
 public class TracingService extends RecordService {
     public static final String TAG = TracingService.class.getSimpleName();
@@ -154,7 +155,7 @@ public class TracingService extends RecordService {
         tracing.setAge(age);
 
         tracing.setCaregiver(getCaregiverName(itemValues));
-        tracing.setRegistrationDate(getRegisterDateAsDdMmYyyy(itemValues.getAsString(INQUIRY_DATE)));
+        tracing.setRegistrationDate(getRegisterDateByYyyyMmDd(itemValues.getAsString(INQUIRY_DATE)));
         tracing.setAudio(getAudioBlob());
 
         tracing.setContent(generateTracingBlob(itemValues, uniqueId, username));
@@ -175,7 +176,7 @@ public class TracingService extends RecordService {
         tracing.setAge(age);
 
         tracing.setCaregiver(getCaregiverName(itemValues));
-        tracing.setRegistrationDate(getRegisterDateAsDdMmYyyy(itemValues.getAsString(INQUIRY_DATE)));
+        tracing.setRegistrationDate(Utils.getRegisterDateByYyyyMmDd(itemValues.getAsString(INQUIRY_DATE)));
         tracing.setAudio(getAudioBlob());
 
         tracing.setContent(generateTracingBlob(itemValues, tracing.getUniqueId(), username));
