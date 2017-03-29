@@ -10,8 +10,8 @@ android {
         applicationId "org.unicef.rapidreg"
         minSdkVersion 15
         targetSdkVersion 19
-        versionCode 1
-        versionName "1.0"
+        versionCode 2.6
+        versionName "v2.6" + System.getenv("BUILD_NUMBER") + new Date().format("MMdd")
     }
     signingConfigs {
         release {
@@ -26,8 +26,11 @@ android {
             applicationIdSuffix ".debug"
             applicationVariants.all { variant ->
                 variant.outputs.each { output ->
-                    project.ext { appName = 'RapidReg' }
-                    def formattedDate = new Date().format('yyyyMMdd')
+                    project.ext { 
+                        appName = 'RapidReg' 
+                        buildNumber = System.getenv("BUILD_NUMBER")
+                    }
+                    def formattedDate = new Date().format('MMdd')
                     def newName = output.outputFile.name
                     newName = newName.replace("app-", "$project.ext.appName-")
                     output.outputFile = new File(output.outputFile.parent, newName)
