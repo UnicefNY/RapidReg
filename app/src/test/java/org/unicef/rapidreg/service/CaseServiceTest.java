@@ -137,7 +137,7 @@ public class CaseServiceTest {
         ItemValuesMap itemValues = new ItemValuesMap();
         itemValues.addStringItem(CASE_ID, "existedUniqueId");
         itemValues.addNumberItem(AGE, 18);
-        itemValues.addStringItem(REGISTRATION_DATE, "25/12/2016");
+        itemValues.addStringItem(REGISTRATION_DATE, "2016/12/25");
 
         Case expected = new Case();
         when(caseDao.getCaseByUniqueId("existedUniqueId")).thenReturn(expected);
@@ -153,8 +153,8 @@ public class CaseServiceTest {
 
         assertFalse("Sync status should be false", actual.isSynced());
         assertThat("Age should be 18", actual.getAge(), is(18));
-        assertThat("Registration date should be 25/12/2016", actual.getRegistrationDate(), is
-                (Utils.getRegisterDateAsDdMmYyyy("25/12/2016")));
+        assertThat("Registration date should be 2016/12/25", actual.getRegistrationDate(), is
+                (Utils.getRegisterDateByYyyyMmDd("2016/12/25")));
     }
 
     @Test

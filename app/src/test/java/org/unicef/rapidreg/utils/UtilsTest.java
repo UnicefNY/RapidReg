@@ -75,7 +75,6 @@ public class UtilsTest {
     public void should_get_date_when_get_registration_data_string() throws Exception {
         String registrationDateString = "23/02/2017";
         Date date = new Date(new SimpleDateFormat("dd/MM/yyyy").parse(registrationDateString).getTime());
-
         assertThat("Should return same date", Utils.getRegisterDateAsDdMmYyyy(registrationDateString), is(date));
     }
 

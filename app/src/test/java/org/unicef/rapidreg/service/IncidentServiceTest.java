@@ -164,7 +164,7 @@ public class IncidentServiceTest {
         User user = new User("userName");
         when(PrimeroAppConfiguration.getCurrentUser()).thenReturn(user);
         ItemValuesMap itemValuesMap = new ItemValuesMap();
-        itemValuesMap.addStringItem(DATE_OF_INTERVIEW, "11/11/1111");
+        itemValuesMap.addStringItem(DATE_OF_INTERVIEW, "1111/1111/11");
 
         Incident incident = incidentServiceSpy.save(itemValuesMap);
         when(incidentDao.save(any(Incident.class))).thenReturn(incident);
@@ -172,8 +172,8 @@ public class IncidentServiceTest {
         assertThat(incident.getAge(), is(-1));
         assertThat(incident.getUniqueId(), is(uniqueId));
         assertThat(incident.getServerUrl(), is(TextUtils.lintUrl(url)));
-        assertThat(incident.getRegistrationDate(), is(Utils.getRegisterDateAsDdMmYyyy("11/11/1111")));
-        assertThat(incident.getRegistrationDate(), is(Utils.getRegisterDateAsDdMmYyyy("11/11/1111")));
+        assertThat(incident.getRegistrationDate(), is(Utils.getRegisterDateByYyyyMmDd("1111/1111/11")));
+        assertThat(incident.getRegistrationDate(), is(Utils.getRegisterDateByYyyyMmDd("1111/1111/11")));
 
     }
 
@@ -205,7 +205,7 @@ public class IncidentServiceTest {
         ItemValuesMap itemValues = new ItemValuesMap();
         itemValues.addStringItem(INCIDENT_ID, "existedUniqueId");
         itemValues.addNumberItem(AGE, 18);
-        itemValues.addStringItem(DATE_OF_INTERVIEW, "25/12/2016");
+        itemValues.addStringItem(DATE_OF_INTERVIEW, "2016/12/25");
 
         Incident expected = new Incident();
         PowerMockito.when(incidentDao.getIncidentByUniqueId("existedUniqueId")).thenReturn
@@ -221,8 +221,8 @@ public class IncidentServiceTest {
 
         assertFalse("Sync status should be false", actual.isSynced());
         assertThat("Age should be 18", actual.getAge(), is(18));
-        assertThat("Registration date should be 25/12/2016", actual.getRegistrationDate(), is
-                (Utils.getRegisterDateAsDdMmYyyy("25/12/2016")));
+        assertThat("Registration date should be 2016/12/25", actual.getRegistrationDate(), is
+                (Utils.getRegisterDateByYyyyMmDd("2016/12/25")));
     }
 
     @Test
