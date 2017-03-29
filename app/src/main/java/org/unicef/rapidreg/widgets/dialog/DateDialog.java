@@ -59,8 +59,9 @@ public class DateDialog extends BaseDialog {
     @Override
     public String getResult() {
         int month = datePicker.getMonth() + 1;
+        int dayOfMonth = datePicker.getDayOfMonth();
         return String.format("%s/%s/%s", datePicker.getYear(), month < 10 ? "0" + month : month,
-                datePicker.getDayOfMonth());
+                dayOfMonth < 10 ? "0" + dayOfMonth : dayOfMonth);
     }
 
     public static class VerifyDateField {
