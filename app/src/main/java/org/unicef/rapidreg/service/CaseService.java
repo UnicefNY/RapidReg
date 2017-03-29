@@ -170,11 +170,7 @@ public class CaseService extends RecordService {
         itemValues.addStringItem(RECORD_CREATED_BY, username);
         itemValues.addStringItem(PREVIOUS_OWNER, username);
 
-        if (!itemValues.has(REGISTRATION_DATE)) {
-            String registrationDateVal = getCurrentRegistrationDateAsString();
-            itemValues.addStringItem(REGISTRATION_DATE, registrationDateVal);
-            itemValues.addStringItem(CASE_OPENING_DATE, registrationDateVal);
-        }
+        setCurrentDateIfRegistrationNotExist(itemValues);
 
         Gson gson = new Gson();
         Date date = new Date(System.currentTimeMillis());
@@ -214,6 +210,7 @@ public class CaseService extends RecordService {
     }
 
     public Case update(ItemValuesMap itemValues, List<String> photoBitPaths) throws IOException {
+        setCurrentDateIfRegistrationNotExist(itemValues);
         Gson gson = new Gson();
         Blob caseBlob = new Blob(gson.toJson(itemValues.getValues()).getBytes());
         Blob audioFileDefault = getAudioBlob();
@@ -236,6 +233,14 @@ public class CaseService extends RecordService {
         updatePhoto(child, photoBitPaths);
 
         return child;
+    }
+
+    private void setCurrentDateIfRegistrationNotExist(ItemValuesMap itemValues) {
+        if (!itemValues.has(REGISTRATION_DATE)) {
+            String registrationDateVal = getCurrentRegistrationDateAsString();
+            itemValues.addStringItem(REGISTRATION_DATE, registrationDateVal);
+            itemValues.addStringItem(CASE_OPENING_DATE, registrationDateVal);
+        }
     }
 
     public void updatePhoto(Case child, List<String> photoPaths) throws IOException {
