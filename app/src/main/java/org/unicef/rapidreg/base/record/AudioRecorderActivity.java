@@ -1,15 +1,19 @@
 package org.unicef.rapidreg.base.record;
 
-
+import android.content.pm.PackageManager;
 import android.media.MediaPlayer;
 import android.media.MediaRecorder;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.unicef.rapidreg.IntentSender;
 import org.unicef.rapidreg.R;
@@ -23,11 +27,16 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class AudioRecorderActivity extends AppCompatActivity {
+    private static final int PERMISSION_GRANTED = 1;
+    private static final int NO_PERMISSION = 0;
+    private static final int PERMISSION_DENIED = -1;
+
     public static final String TAG = AudioRecorderActivity.class.getSimpleName();
     public static final int RECORDER_MAX_DURATION_MS = 60000;
     public static final String CURRENT_STATE = "current_state";
     public static final int START_RECORDING = 0;
     public static final int START_PLAYING = 1;
+    private static final int REQUEST_RECORD_AUDIO_PERMISSION = 777;
 
     private static String mFileName = RecordService.AUDIO_FILE_PATH;
 
@@ -105,8 +114,17 @@ public class AudioRecorderActivity extends AppCompatActivity {
     }
 
     public void recordAudio() {
-        onRecord(mStartRecording);
-        mStartRecording = !mStartRecording;
+        switch (isPermissionGranted(android.Manifest.permission.RECORD_AUDIO)) {
+            case PERMISSION_DENIED:
+                Toast.makeText(this, "Record audio is not allowed!", Toast.LENGTH_SHORT);
+                return;
+            case NO_PERMISSION:
+                ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.RECORD_AUDIO}, REQUEST_RECORD_AUDIO_PERMISSION);
+                return;
+            case PERMISSION_GRANTED:
+                onRecord(mStartRecording);
+                mStartRecording = !mStartRecording;
+        }
     }
 
     public void playAudio() {
@@ -200,12 +218,9 @@ public class AudioRecorderActivity extends AppCompatActivity {
             Log.e(TAG, "prepare() failed");
         }
         mRecorder.start();
-        mRecorder.setOnInfoListener(new MediaRecorder.OnInfoListener() {
-            @Override
-            public void onInfo(MediaRecorder mr, int what, int extra) {
-                if (what == MediaRecorder.MEDIA_RECORDER_INFO_MAX_DURATION_REACHED) {
-                    exitAudioRecorder();
-                }
+        mRecorder.setOnInfoListener((mr, what, extra) -> {
+            if (what == MediaRecorder.MEDIA_RECORDER_INFO_MAX_DURATION_REACHED) {
+                exitAudioRecorder();
             }
         });
     }
@@ -233,6 +248,34 @@ public class AudioRecorderActivity extends AppCompatActivity {
             new IntentSender().showLoginActivity(this);
             finish();
             return;
+        }
+    }
+
+    private int isPermissionGranted(String permission) {
+        if (ContextCompat.checkSelfPermission(this, permission) == PackageManager.PERMISSION_GRANTED) {
+            return PERMISSION_GRANTED;
+        }
+
+        if (ActivityCompat.shouldShowRequestPermissionRationale(this, permission)) {
+            return PERMISSION_DENIED;
+        }
+
+        return NO_PERMISSION;
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        switch (requestCode) {
+            case REQUEST_RECORD_AUDIO_PERMISSION:
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    recordAudio();
+                } else {
+                    Toast.makeText(this, "Record audio is not allowed!", Toast.LENGTH_SHORT);
+                }
+                return;
         }
     }
 }
