@@ -7,7 +7,10 @@ import android.widget.ViewSwitcher;
 
 import org.unicef.rapidreg.forms.Field;
 import org.unicef.rapidreg.service.cache.ItemValuesMap;
+import org.unicef.rapidreg.utils.Utils;
 import org.unicef.rapidreg.widgets.PrimeroDatePicker;
+
+import java.util.Calendar;
 
 public class DateDialog extends BaseDialog {
     private String result;
@@ -23,17 +26,19 @@ public class DateDialog extends BaseDialog {
         datePicker = new PrimeroDatePicker(getContext());
         datePicker.setCalendarViewShown(false);
         if (!"".equals(result)) {
-            String[] date = result.split("/");
-            int year = Integer.valueOf(date[2]);
-            int month = Integer.valueOf(date[1]) - 1;
-            int day = Integer.valueOf(date[0]);
-            datePicker.updateDate(year, month, day);
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(Utils.getRegisterDateByYyyyMmDd(result));
+            datePicker.updateDate(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar
+                    .DAY_OF_MONTH));
         }
         getBuilder().setView(datePicker);
     }
 
     @Override
     public String getResult() {
-        return String.format("%s/%s/%s",  datePicker.getDayOfMonth(),datePicker.getMonth() + 1, datePicker.getYear());
+        int month = datePicker.getMonth() + 1;
+        int dayOfMonth = datePicker.getDayOfMonth();
+        return String.format("%s/%s/%s", datePicker.getYear(), month < 10 ? "0" + month : month,
+                dayOfMonth < 10 ? "0" + dayOfMonth : dayOfMonth);
     }
 }

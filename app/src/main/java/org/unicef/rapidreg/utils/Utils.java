@@ -8,6 +8,9 @@ import android.view.View;
 
 import org.unicef.rapidreg.R;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -51,6 +54,16 @@ public class Utils {
         View titleDivider = dialog.findViewById(titleDividerId);
         if (titleDivider != null) {
             titleDivider.setBackgroundColor(ContextCompat.getColor(context, R.color.primero_blue));
+        }
+    }
+
+    public static Date getRegisterDateByYyyyMmDd(String registrationDateString) {
+        SimpleDateFormat registrationDateFormat = new SimpleDateFormat("yyyy/MM/dd");
+        try {
+            java.util.Date date = registrationDateFormat.parse(registrationDateString);
+            return new Date(date.getTime());
+        } catch (ParseException e) {
+            return new Date(System.currentTimeMillis());
         }
     }
 
